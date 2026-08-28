@@ -17,25 +17,39 @@ namespace Takt.Shared.Models.Code;
 /// </summary>
 public class TaktTableArchiveOptions
 {
-    /// <summary>目标租户（3 位）</summary>
+    /// <summary>
+    /// 目标租户（3 位）
+    /// </summary>
     public string TargetTenantCode { get; set; } = string.Empty;
 
-    /// <summary>目标数据库展示名</summary>
+    /// <summary>
+    /// 目标数据库展示名
+    /// </summary>
     public string TargetDatabaseName { get; set; } = string.Empty;
 
-    /// <summary>源物理表名</summary>
+    /// <summary>
+    /// 源物理表名
+    /// </summary>
     public string TableName { get; set; } = string.Empty;
 
-    /// <summary>归档键列名</summary>
+    /// <summary>
+    /// 归档键列名
+    /// </summary>
     public string ArchiveKeyColumn { get; set; } = string.Empty;
 
-    /// <summary>归档键类型（字典 sys_archive_key_kind；yyyyMMddHHmmss/yyyyMM/yyyy 等；默认 3）</summary>
+    /// <summary>
+    /// 归档键类型（字典 sys_archive_key_kind；yyyyMMddHHmmss/yyyyMM/yyyy 等；默认 3）
+    /// </summary>
     public int ArchiveKeyKind { get; set; } = 3;
 
-    /// <summary>归档年份</summary>
+    /// <summary>
+    /// 归档年份
+    /// </summary>
     public int ArchiveYear { get; set; }
 
-    /// <summary>公司编码过滤（4 位；热表含 company_code 时生效）</summary>
+    /// <summary>
+    /// 公司编码过滤（4 位；热表含 company_code 时生效）
+    /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 }
 
@@ -44,16 +58,24 @@ public class TaktTableArchiveOptions
 /// </summary>
 public class TaktTableArchivePreview
 {
-    /// <summary>源物理表名</summary>
+    /// <summary>
+    /// 源物理表名
+    /// </summary>
     public string TableName { get; set; } = string.Empty;
 
-    /// <summary>归档目标表名</summary>
+    /// <summary>
+    /// 归档目标表名
+    /// </summary>
     public string ArchiveTableName { get; set; } = string.Empty;
 
-    /// <summary>归档年份</summary>
+    /// <summary>
+    /// 归档年份
+    /// </summary>
     public int ArchiveYear { get; set; }
 
-    /// <summary>将迁移行数</summary>
+    /// <summary>
+    /// 将迁移行数
+    /// </summary>
     public int SourceRowCount { get; set; }
 }
 
@@ -62,21 +84,33 @@ public class TaktTableArchivePreview
 /// </summary>
 public class TaktTableArchiveResult
 {
-    /// <summary>源物理表名</summary>
+    /// <summary>
+    /// 源物理表名
+    /// </summary>
     public string TableName { get; set; } = string.Empty;
 
-    /// <summary>归档目标表名</summary>
+    /// <summary>
+    /// 归档目标表名
+    /// </summary>
     public string ArchiveTableName { get; set; } = string.Empty;
 
-    /// <summary>归档年份</summary>
+    /// <summary>
+    /// 归档年份
+    /// </summary>
     public int ArchiveYear { get; set; }
 
-    /// <summary>归档前匹配行数</summary>
+    /// <summary>
+    /// 归档前匹配行数
+    /// </summary>
     public int SourceRowCount { get; set; }
 
-    /// <summary>迁移行数（DELETE OUTPUT 影响行）</summary>
+    /// <summary>
+    /// 迁移行数（DELETE OUTPUT 影响行）
+    /// </summary>
     public int ArchivedRowCount { get; set; }
 
-    /// <summary>从热表删除行数（与 ArchivedRowCount 相同）</summary>
+    /// <summary>
+    /// 从热表删除行数（与 ArchivedRowCount 相同）
+    /// </summary>
     public int DeletedRowCount { get; set; }
 }

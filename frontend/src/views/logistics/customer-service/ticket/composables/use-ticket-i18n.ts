@@ -20,7 +20,6 @@ export const CUSTOMERSERVICETICKET_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOM
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERSERVICETICKET_LIST_FIELDS = [
-  'plantCode',
   'serviceTicketCode',
   'clientId',
   'clientCode',
@@ -45,7 +44,8 @@ export const CUSTOMERSERVICETICKET_LIST_FIELDS = [
   'actualStartTime',
   'actualEndTime',
   'acceptanceResult',
-  'acceptedBy',
+  'acceptedByEmployeeId',
+  'acceptedByEmployeeName',
   'acceptedAt',
 ] as const
 
@@ -54,11 +54,11 @@ export const CUSTOMERSERVICETICKET_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  plantCode: 'required',
+  plantCode: 'optional',
   serviceTicketCode: 'required',
   clientId: 'required',
-  clientCode: 'required',
-  clientName1: 'required',
+  clientCode: 'optional',
+  clientName1: 'optional',
   serviceRequestId: 'optional',
   serviceRequestCode: 'optional',
   serviceOrderId: 'optional',
@@ -79,7 +79,8 @@ export const CUSTOMERSERVICETICKET_PLACEHOLDER = {
   actualStartTime: 'optional',
   actualEndTime: 'optional',
   acceptanceResult: 'optional',
-  acceptedBy: 'optional',
+  acceptedByEmployeeId: 'optional',
+  acceptedByEmployeeName: 'optional',
   acceptedAt: 'optional',
   extField: 'optional',
   remark: 'optional',
@@ -116,7 +117,8 @@ export const CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS = [
   'actualStartTimeEnd',
   'actualEndTimeStart',
   'actualEndTimeEnd',
-  'acceptedBy',
+  'acceptedByEmployeeId',
+  'acceptedByEmployeeName',
   'acceptedAtStart',
   'acceptedAtEnd',
   'createdAtStart',

@@ -471,7 +471,7 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
                 || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
                 || (x.FaultDescription != null && x.FaultDescription.Contains(keywords))
-                || (x.ReportedBy != null && x.ReportedBy.Contains(keywords))
+                || (x.ReportedByEmployeeName != null && x.ReportedByEmployeeName.Contains(keywords))
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
                 || (x.MaintenanceWorkOrderCode != null && x.MaintenanceWorkOrderCode.Contains(keywords))
                 || (x.NotificationImages != null && x.NotificationImages.Contains(keywords))
@@ -540,10 +540,10 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
             exp = exp.And(x => x.FaultDescription != null && x.FaultDescription.Contains(faultDescription));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ReportedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReportedByEmployeeName))
         {
-            var reportedBy = queryDto.ReportedBy;
-            exp = exp.And(x => x.ReportedBy != null && x.ReportedBy.Contains(reportedBy));
+            var reportedBy = queryDto.ReportedByEmployeeName;
+            exp = exp.And(x => x.ReportedByEmployeeName != null && x.ReportedByEmployeeName.Contains(reportedBy));
         }
 
         if (queryDto?.CostCenterId.HasValue == true)
@@ -694,7 +694,7 @@ public class TaktMaintenanceNotificationService : TaktServiceBase, ITaktMaintena
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ReportedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.ReportedByEmployeeName))
         {
             return true;
         }

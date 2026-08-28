@@ -46,13 +46,13 @@
           <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
               :value="(record as MaterialMovingTrend).currencyCode"
-              dict-type="accounting_currency_code"
+              dict-type="accounting_financial_currency_code"
             />
           </template>
           <template v-else-if="column.key === 'valuation'">
             <TaktDictTag
               :value="(record as MaterialMovingTrend).valuation"
-              dict-type="logistics_valuation_class_category"
+              dict-type="logistics_materials_valuation_class"
             />
           </template>
           <template v-else-if="column.key === 'trend'">

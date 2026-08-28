@@ -55,7 +55,7 @@ export interface CalendarQuery extends TaktPagedQuery {
   calendarDateEnd?: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -127,7 +127,7 @@ export interface CalendarCreate {
   calendarDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -196,7 +196,7 @@ export interface CalendarTemplate {
   calendarDate?: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -258,7 +258,7 @@ export interface CalendarImport {
   calendarDate?: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -312,7 +312,7 @@ export interface CalendarExport {
   calendarDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 

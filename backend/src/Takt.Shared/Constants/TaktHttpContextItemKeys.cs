@@ -17,12 +17,18 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktHttpContextItemKeys
 {
-    /// <summary>当前请求显式暂存的操作人用户 ID（long）</summary>
+    /// <summary>
+    /// 当前请求显式暂存的操作人用户 ID（long）
+    /// </summary>
     public const string AuditOperatorUserId = "Takt.Audit.OperatorUserId";
 
-    /// <summary>当前请求显式暂存的操作人登录名</summary>
+    /// <summary>
+    /// 当前请求显式暂存的操作人登录名
+    /// </summary>
     public const string AuditOperatorUserName = "Takt.Audit.OperatorUserName";
 
-    /// <summary>当前请求审计 Remark（如登出时用户名未知的原因说明）</summary>
+    /// <summary>
+    /// 当前请求审计 Remark（如登出时用户名未知的原因说明）
+    /// </summary>
     public const string AuditContextRemark = "Takt.Audit.ContextRemark";
 }

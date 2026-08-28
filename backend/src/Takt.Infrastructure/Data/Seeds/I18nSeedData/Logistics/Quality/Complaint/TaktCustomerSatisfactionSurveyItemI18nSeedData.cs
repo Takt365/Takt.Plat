@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurveyItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktCustomerSatisfactionSurveyItemI18nSeedData : ITaktSeedDataCoord
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.surveyid", "zh-HK", "调查表ID_hk", "调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）"),
 
             // entity.customersatisfactionsurveyitem.customersatisfactionsurveycode
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "en-US", "调查表编码_us", "调查表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "en-US", "调查表编码_us", "调查表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customersatisfactionsurveyitem.customersatisfactionsurveycode
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "ja-JP", "调查表编码_jp", "调查表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "ja-JP", "调查表编码_jp", "调查表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customersatisfactionsurveyitem.customersatisfactionsurveycode
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "zh-CN", "调查表编码", "调查表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "zh-CN", "调查表编码", "调查表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customersatisfactionsurveyitem.customersatisfactionsurveycode
-            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "zh-HK", "调查表编码_hk", "调查表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customersatisfactionsurveyitem.customersatisfactionsurveycode", "zh-HK", "调查表编码_hk", "调查表编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customersatisfactionsurveyitem.linenumber
             new TranslationSeedItem("entity.customersatisfactionsurveyitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

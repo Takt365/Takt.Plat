@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mds
 // 文件名称：TaktMasterDemandScheduleLineI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMasterDemandScheduleLine 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktMasterDemandScheduleLineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.masterdemandscheduleline.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.masterdemandscheduleline.demandsourcetype
-            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "en-US", "需求来源_us", "需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "en-US", "需求来源_us", "需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）"),
             // entity.masterdemandscheduleline.demandsourcetype
-            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "ja-JP", "需求来源_jp", "需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "ja-JP", "需求来源_jp", "需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）"),
             // entity.masterdemandscheduleline.demandsourcetype
-            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "zh-CN", "需求来源", "需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "zh-CN", "需求来源", "需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）"),
             // entity.masterdemandscheduleline.demandsourcetype
-            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "zh-HK", "需求来源_hk", "需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.demandsourcetype", "zh-HK", "需求来源_hk", "需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）"),
 
             // entity.masterdemandscheduleline.salesorderid
             new TranslationSeedItem("entity.masterdemandscheduleline.salesorderid", "en-US", "来源销售订单ID_us", "来源销售订单 ID（可选）"),
@@ -199,13 +199,13 @@ public class TaktMasterDemandScheduleLineI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.masterdemandscheduleline.demandquantity", "zh-HK", "需求数量_hk", "需求数量（基本单位）"),
 
             // entity.masterdemandscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterdemandscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterdemandscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterdemandscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterdemandscheduleline.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.masterdemandscheduleline.isobsolete
             new TranslationSeedItem("entity.masterdemandscheduleline.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

@@ -331,9 +331,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
                 || (x.ProductionLocation != null && x.ProductionLocation.Contains(keywords))
                 || (x.PurchasingLocation != null && x.PurchasingLocation.Contains(keywords))
                 || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
-                || SqlFunc.ToString(x.IsInspection).Contains(keywords)
+                || SqlFunc.ToString(x.RequiresInspection).Contains(keywords)
                 || SqlFunc.ToString(x.IsBatch).Contains(keywords)
-                || (x.IsEndOfLife != null && x.IsEndOfLife.Contains(keywords))
+                || (x.DiscontinuedStatus != null && x.DiscontinuedStatus.Contains(keywords))
                 || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -492,9 +492,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(queryDto.StorageLocation));
         }
 
-        if (queryDto?.IsInspection.HasValue == true)
+        if (queryDto?.RequiresInspection.HasValue == true)
         {
-            exp = exp.And(x => x.IsInspection == queryDto.IsInspection);
+            exp = exp.And(x => x.RequiresInspection == queryDto.RequiresInspection);
         }
 
         if (queryDto?.IsBatch.HasValue == true)
@@ -502,9 +502,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.IsBatch == queryDto.IsBatch);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IsEndOfLife))
+        if (!string.IsNullOrEmpty(queryDto?.DiscontinuedStatus))
         {
-            exp = exp.And(x => x.IsEndOfLife != null && x.IsEndOfLife.Contains(queryDto.IsEndOfLife));
+            exp = exp.And(x => x.DiscontinuedStatus != null && x.DiscontinuedStatus.Contains(queryDto.DiscontinuedStatus));
         }
 
         if (queryDto?.MaterialStatus.HasValue == true)
@@ -695,7 +695,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         {
             return true;
         }
-        if (queryDto.IsInspection.HasValue)
+        if (queryDto.RequiresInspection.HasValue)
         {
             return true;
         }
@@ -703,7 +703,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.IsEndOfLife))
+        if (!string.IsNullOrWhiteSpace(queryDto.DiscontinuedStatus))
         {
             return true;
         }

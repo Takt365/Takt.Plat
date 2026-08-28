@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -23,6 +23,10 @@ import type {
  * @description 对应后端 TaktBillOfMaterialDto
  */
 export interface BillOfMaterial extends CompanyDtoBase {
+  /**
+   * BillOfMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  billOfMaterialId: string;
 
   /**
    * BOM编码（业务单据号，便于检索，非唯一键）
@@ -40,7 +44,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   parentMaterialCode: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -50,7 +54,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -70,7 +74,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -85,12 +89,12 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomDescription?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
 
@@ -115,7 +119,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -145,7 +149,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   parentMaterialCode?: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -155,7 +159,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -185,7 +189,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -200,12 +204,12 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomDescription?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus?: number;
 
@@ -254,7 +258,7 @@ export interface BillOfMaterialCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -274,7 +278,7 @@ export interface BillOfMaterialCreate {
   parentMaterialCode: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -284,7 +288,7 @@ export interface BillOfMaterialCreate {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -304,7 +308,7 @@ export interface BillOfMaterialCreate {
   expiryDate?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -319,7 +323,7 @@ export interface BillOfMaterialCreate {
   bomDescription?: string;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
 
@@ -373,7 +377,7 @@ export interface BillOfMaterialStatus {
   billOfMaterialId: string;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
 
@@ -392,7 +396,7 @@ export interface BillOfMaterialSort {
   billOfMaterialId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -421,7 +425,7 @@ export interface BillOfMaterialTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -441,7 +445,7 @@ export interface BillOfMaterialTemplate {
   parentMaterialCode?: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -451,7 +455,7 @@ export interface BillOfMaterialTemplate {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -471,7 +475,7 @@ export interface BillOfMaterialTemplate {
   expiryDate?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -486,7 +490,7 @@ export interface BillOfMaterialTemplate {
   bomDescription?: string;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus?: number;
 
@@ -530,7 +534,7 @@ export interface BillOfMaterialImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -550,7 +554,7 @@ export interface BillOfMaterialImport {
   parentMaterialCode?: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -560,7 +564,7 @@ export interface BillOfMaterialImport {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -580,7 +584,7 @@ export interface BillOfMaterialImport {
   expiryDate?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -595,7 +599,7 @@ export interface BillOfMaterialImport {
   bomDescription?: string;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus?: number;
 
@@ -639,6 +643,11 @@ export interface BillOfMaterialExport {
   plantCode: string;
 
   /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * BOM编码（业务单据号，便于检索，非唯一键）
    */
   bomCode: string;
@@ -654,7 +663,7 @@ export interface BillOfMaterialExport {
   parentMaterialCode: string;
 
   /**
-   * 父物料描述（回填：随物料）
+   * 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   parentMaterialDescription?: string;
 
@@ -664,7 +673,7 @@ export interface BillOfMaterialExport {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+   * BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -684,7 +693,7 @@ export interface BillOfMaterialExport {
   expiryDate?: string;
 
   /**
-   * 父物料单位（字典 logistics_unit_of_measure_code）
+   * 父物料单位（字典 logistics_materials_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -699,12 +708,12 @@ export interface BillOfMaterialExport {
   bomDescription?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
   /**
-   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
 

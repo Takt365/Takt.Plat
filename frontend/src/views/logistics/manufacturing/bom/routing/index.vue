@@ -77,13 +77,13 @@
         <template v-if="column.key === 'purpose'">
           <TaktDictTag
             :value="getRoutingDictValue(record, 'purpose')"
-            dict-type="logistics_routing_purpose"
+            dict-type="logistics_manufacturing_routing_purpose"
           />
         </template>
         <template v-else-if="column.key === 'routingStatus'">
           <TaktDictTag
             :value="getRoutingDictValue(record, 'routingStatus')"
-            dict-type="logistics_routing_status"
+            dict-type="logistics_manufacturing_routing_status"
           />
         </template>
       </template>
@@ -179,7 +179,7 @@
       <a-form-item :label="pi.queryLabel('purpose')">
         <TaktSelect
           v-model:value="advancedQueryForm.purpose"
-          dict-type="logistics_routing_purpose"
+          dict-type="logistics_manufacturing_routing_purpose"
           :placeholder="pi.queryPh('purpose', 'select')"
           allow-clear
         />
@@ -210,7 +210,7 @@
       <a-form-item :label="pi.queryLabel('routingStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.routingStatus"
-          dict-type="logistics_routing_status"
+          dict-type="logistics_manufacturing_routing_status"
           :placeholder="pi.queryPh('routingStatus', 'select')"
           allow-clear
         />

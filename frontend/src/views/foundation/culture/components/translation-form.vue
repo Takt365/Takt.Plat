@@ -35,7 +35,7 @@
                   v-model:value="formState.i18nKey"
                   :placeholder="pi.ph('i18nKey')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>

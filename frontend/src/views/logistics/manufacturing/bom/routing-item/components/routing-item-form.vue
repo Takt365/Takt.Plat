@@ -75,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.baseUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('baseUnit')"
                 />
               </a-form-item>
@@ -111,7 +111,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.timeUnit"
-                  dict-type="logistics_time_unit"
+                  dict-type="logistics_manufacturing_time_unit"
                   :placeholder="pi.ph('timeUnit')"
                 />
               </a-form-item>
@@ -135,7 +135,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pointsUnit"
-                  dict-type="logistics_points_unit"
+                  dict-type="logistics_manufacturing_points_unit"
                   :placeholder="pi.ph('pointsUnit')"
                 />
               </a-form-item>
@@ -147,7 +147,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pointsToMinutesRate"
-                  dict-type="logistics_points_to_minutes_rate"
+                  dict-type="logistics_manufacturing_points_to_minutes_rate"
                   :placeholder="pi.ph('pointsToMinutesRate')"
                 />
               </a-form-item>
@@ -229,7 +229,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
-                  dict-type="logistics_process_segment_type"
+                  dict-type="logistics_manufacturing_process_segment_type"
                   :placeholder="pi.ph('processSegmentType')"
                 />
               </a-form-item>
@@ -374,7 +374,7 @@
       <template #cell-paramUnit="{ record }">
         <TaktSelect
           v-model:value="record.paramUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemArgumentPi.ph('paramUnit')"

@@ -94,7 +94,7 @@ public class TaktMaintenanceNotificationDto : TaktApprovalDtoBase
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）
@@ -251,7 +251,7 @@ public class TaktMaintenanceNotificationQueryDto : TaktPagedQuery
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）
@@ -435,7 +435,7 @@ public class TaktMaintenanceNotificationCreateDto
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）
@@ -608,7 +608,7 @@ public class TaktMaintenanceNotificationTemplateDto
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）
@@ -733,7 +733,7 @@ public class TaktMaintenanceNotificationImportDto
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）
@@ -864,7 +864,7 @@ public class TaktMaintenanceNotificationExportDto
     /// <summary>
     /// 报告人（人员编码）
     /// </summary>
-    public string? ReportedBy { get; set; } = string.Empty;
+    public string? ReportedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）

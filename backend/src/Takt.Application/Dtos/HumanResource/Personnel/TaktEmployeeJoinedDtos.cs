@@ -105,12 +105,12 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 
@@ -249,12 +249,12 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
@@ -427,12 +427,12 @@ public class TaktEmployeeJoinedCreateDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 
@@ -573,12 +573,12 @@ public class TaktEmployeeJoinedTemplateDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
@@ -695,12 +695,12 @@ public class TaktEmployeeJoinedImportDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
@@ -823,12 +823,12 @@ public class TaktEmployeeJoinedExportDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 

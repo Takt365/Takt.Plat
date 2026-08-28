@@ -68,7 +68,7 @@ public class TaktWarehouseDto : TaktCompanyDtoBase
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -76,7 +76,7 @@ public class TaktWarehouseDto : TaktCompanyDtoBase
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
 
@@ -166,7 +166,7 @@ public class TaktWarehouseQueryDto : TaktPagedQuery
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -174,7 +174,7 @@ public class TaktWarehouseQueryDto : TaktPagedQuery
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int? WarehouseType { get; set; }
 
@@ -278,7 +278,7 @@ public class TaktWarehouseCreateDto
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -286,7 +286,7 @@ public class TaktWarehouseCreateDto
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
 
@@ -452,7 +452,7 @@ public class TaktWarehouseTemplateDto
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -460,7 +460,7 @@ public class TaktWarehouseTemplateDto
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int? WarehouseType { get; set; }
 
@@ -549,7 +549,7 @@ public class TaktWarehouseImportDto
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -557,7 +557,7 @@ public class TaktWarehouseImportDto
     public int? IsVirtual { get; set; }
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int? WarehouseType { get; set; }
 
@@ -652,7 +652,7 @@ public class TaktWarehouseExportDto
     /// <summary>
     /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
     /// </summary>
-    public string? ManagerUserCode { get; set; } = string.Empty;
+    public string? ManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
@@ -660,7 +660,7 @@ public class TaktWarehouseExportDto
     public int IsVirtual { get; set; } = 0;
 
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     public int WarehouseType { get; set; } = 0;
 

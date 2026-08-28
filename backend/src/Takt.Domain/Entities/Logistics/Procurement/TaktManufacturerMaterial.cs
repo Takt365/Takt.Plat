@@ -56,7 +56,7 @@ public class TaktManufacturerMaterial : TaktTenantCoreEntityBase
     public string? SupplierShortName { get; set; }
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "HERS")]
     public string MaterialType { get; set; } = "HERS";

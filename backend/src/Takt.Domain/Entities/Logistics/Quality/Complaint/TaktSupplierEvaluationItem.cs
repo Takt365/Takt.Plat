@@ -34,7 +34,7 @@ public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
     public long EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编码（冗余字段，便于查询）
+    /// 评价表编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SupplierEvaluationCode { get; set; } = string.Empty;

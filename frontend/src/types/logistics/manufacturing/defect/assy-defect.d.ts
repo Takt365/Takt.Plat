@@ -29,7 +29,7 @@ export interface AssyDefect extends CompanyDtoBase {
   assyDefectId: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -44,7 +44,7 @@ export interface AssyDefect extends CompanyDtoBase {
   teamCode: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -124,7 +124,7 @@ export interface AssyDefectQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -144,7 +144,7 @@ export interface AssyDefectQuery extends TaktPagedQuery {
   teamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -238,7 +238,7 @@ export interface AssyDefectCreate {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -253,7 +253,7 @@ export interface AssyDefectCreate {
   teamCode: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -362,7 +362,7 @@ export interface AssyDefectTemplate {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -377,7 +377,7 @@ export interface AssyDefectTemplate {
   teamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -466,7 +466,7 @@ export interface AssyDefectImport {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -481,7 +481,7 @@ export interface AssyDefectImport {
   teamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -570,7 +570,7 @@ export interface AssyDefectExport {
   cultureCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -585,7 +585,7 @@ export interface AssyDefectExport {
   teamCode: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 

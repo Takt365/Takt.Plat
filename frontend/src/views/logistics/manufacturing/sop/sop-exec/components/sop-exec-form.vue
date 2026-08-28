@@ -118,7 +118,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
-                  dict-type="logistics_process_segment_type"
+                  dict-type="logistics_manufacturing_process_segment_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') })"
                 />
               </a-form-item>
@@ -238,7 +238,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.selfCheckResult"
-                  dict-type="logistics_sop_check_result_type"
+                  dict-type="logistics_manufacturing_sop_check_result"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.selfcheckresult') })"
                 />
               </a-form-item>
@@ -250,7 +250,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.execStatus"
-                  dict-type="logistics_sop_exec_status"
+                  dict-type="logistics_manufacturing_sop_exec_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') })"
                 />
               </a-form-item>
@@ -361,7 +361,7 @@
                 readonly
               />
             </template>
-            <template v-else-if="column.key ===">
+            <template v-else-if="column.key === 'companyDefaultCulture'">
               <a-input
                 v-model:value="record.companyDefaultCulture"
                 :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
@@ -416,7 +416,7 @@
             <template v-else-if="column.key === 'stepResult'">
               <TaktSelect
                 v-model:value="record.stepResult"
-                dict-type="logistics_sop_check_result_type"
+                dict-type="logistics_manufacturing_sop_check_result"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.stepresult') })"
               />
             </template>
@@ -484,7 +484,7 @@
                 readonly
               />
             </template>
-            <template v-else-if="column.key ===">
+            <template v-else-if="column.key === 'companyDefaultCulture'">
               <a-input
                 v-model:value="record.companyDefaultCulture"
                 :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
@@ -542,7 +542,7 @@
             <template v-else-if="column.key === 'scanResult'">
               <TaktSelect
                 v-model:value="record.scanResult"
-                dict-type="logistics_sop_scan_result_type"
+                dict-type="logistics_manufacturing_sop_scan_result"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scanresult') })"
               />
             </template>
@@ -610,7 +610,7 @@
                 readonly
               />
             </template>
-            <template v-else-if="column.key ===">
+            <template v-else-if="column.key === 'companyDefaultCulture'">
               <a-input
                 v-model:value="record.companyDefaultCulture"
                 :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
@@ -774,8 +774,8 @@ const sopExecStepFormColumns = computed(() => [
   },
   {
     title: t('common.page.entity.companydefaultculture'),
-    dataIndex:,
-    key:,
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
     width: 140,
   },
   {
@@ -849,8 +849,8 @@ const sopExecScanFormColumns = computed(() => [
   },
   {
     title: t('common.page.entity.companydefaultculture'),
-    dataIndex:,
-    key:,
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
     width: 140,
   },
   {
@@ -924,8 +924,8 @@ const sopArgumentFormColumns = computed(() => [
   },
   {
     title: t('common.page.entity.companydefaultculture'),
-    dataIndex:,
-    key:,
+    dataIndex: 'companyDefaultCulture',
+    key: 'companyDefaultCulture',
     width: 140,
   },
   {

@@ -74,19 +74,19 @@
         <template v-if="column.key === 'budgetType'">
           <TaktDictTag
             :value="getBudgetActualDictValue(record, 'budgetType')"
-            dict-type="accounting_budget_type"
+            dict-type="accounting_financial_budget_type"
           />
         </template>
         <template v-else-if="column.key === 'measureType'">
           <TaktDictTag
             :value="getBudgetActualDictValue(record, 'measureType')"
-            dict-type="accounting_budget_measure_type"
+            dict-type="accounting_financial_budget_measure_type"
           />
         </template>
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getBudgetActualDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'budgetActualStatus'">
@@ -214,7 +214,7 @@
       <a-form-item :label="pi.queryLabel('budgetType')">
         <TaktSelect
           v-model:value="advancedQueryForm.budgetType"
-          dict-type="accounting_budget_type"
+          dict-type="accounting_financial_budget_type"
           :placeholder="pi.queryPh('budgetType', 'select')"
           allow-clear
         />
@@ -224,7 +224,7 @@
       <a-form-item :label="pi.queryLabel('measureType')">
         <TaktSelect
           v-model:value="advancedQueryForm.measureType"
-          dict-type="accounting_budget_measure_type"
+          dict-type="accounting_financial_budget_measure_type"
           :placeholder="pi.queryPh('measureType', 'select')"
           allow-clear
         />
@@ -306,7 +306,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />

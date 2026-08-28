@@ -77,7 +77,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.dataScope"
-                  dict-type="sys_data_scope_type"
+                  dict-type="sys_data_scope"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.datascope') })"
                 />
               </a-form-item>

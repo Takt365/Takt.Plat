@@ -8,31 +8,53 @@
 <!-- ======================================== -->
 
 <template>
-  <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+  <a-form
+    ref="formRef"
+    class="takt-generated-form"
+    :model="formState"
+    layout="horizontal"
+    label-align="right"
+  >
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldcheck')"><TaktSelect v-model:value="formState.isOldCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldprocurement')"><TaktSelect v-model:value="formState.isOldProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isnewcheck')"><TaktSelect v-model:value="formState.isNewCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isnewprocurement')"><TaktSelect v-model:value="formState.isNewProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecOldRequiresInspection')">
+          <TaktSelect v-model:value="formState.ecOldRequiresInspection" dict-type="sys_yes_no" :placeholder="pi.ph('ecOldRequiresInspection')" />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecOldPurchaseType')">
+          <TaktSelect v-model:value="formState.ecOldPurchaseType" dict-type="sys_yes_no" :placeholder="pi.ph('ecOldPurchaseType')" />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecNewRequiresInspection')">
+          <TaktSelect v-model:value="formState.ecNewRequiresInspection" dict-type="sys_yes_no" :placeholder="pi.ph('ecNewRequiresInspection')" />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecNewPurchaseType')">
+          <TaktSelect v-model:value="formState.ecNewPurchaseType" dict-type="sys_yes_no" :placeholder="pi.ph('ecNewPurchaseType')" />
+        </a-form-item>
+      </a-col>
     </a-row>
   </a-form>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
 import type { EcKakunin, EcKakuninUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-kakunin';
+import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n';
 
 const props = defineProps<{ formData?: EcKakunin | null; loading?: boolean }>();
-const { t } = useI18n();
+const pi = useEcDetailI18n();
 const formRef = ref();
-const formState = reactive<EcKakuninUpdate & { ecCode?: string; ecModel?: string }>({
+const formState = reactive<EcKakuninUpdate & { ecCode?: string; ecModelCode?: string }>({
   ecDetailId: '',
-  isOldProcurement: 0,
-  isOldCheck: 0,
-  isNewProcurement: 0,
-  isNewCheck: 0,
+  ecOldPurchaseType: 0,
+  ecOldRequiresInspection: 0,
+  ecNewPurchaseType: 0,
+  ecNewRequiresInspection: 0,
 });
 
 watch(() => props.formData, (val) => {
@@ -40,28 +62,28 @@ watch(() => props.formData, (val) => {
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
     ecCode: val.ecCode,
-    ecModel: val.ecModel,
-    isOldProcurement: val.isOldProcurement ?? 0,
-    isOldCheck: val.isOldCheck ?? 0,
-    isNewProcurement: val.isNewProcurement ?? 0,
-    isNewCheck: val.isNewCheck ?? 0,
+    ecModelCode: val.ecModelCode,
+    ecOldPurchaseType: val.ecOldPurchaseType ?? 0,
+    ecOldRequiresInspection: val.ecOldRequiresInspection ?? 0,
+    ecNewPurchaseType: val.ecNewPurchaseType ?? 0,
+    ecNewRequiresInspection: val.ecNewRequiresInspection ?? 0,
   });
 }, { immediate: true });
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcKakuninUpdate {
-  const { ecCode, ecModel, ...rest } = formState;
+  const { ecCode, ecModelCode, ...rest } = formState;
   return rest;
 }
 function resetFields() {
   Object.assign(formState, {
     ecDetailId: '',
-    isOldProcurement: 0,
-    isOldCheck: 0,
-    isNewProcurement: 0,
-    isNewCheck: 0,
+    ecOldPurchaseType: 0,
+    ecOldRequiresInspection: 0,
+    ecNewPurchaseType: 0,
+    ecNewRequiresInspection: 0,
     ecCode: '',
-    ecModel: '',
+    ecModelCode: '',
   });
 }
 defineExpose({ validate, getValues, resetFields });

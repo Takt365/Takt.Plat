@@ -37,12 +37,12 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "process_definition_id", ColumnDescription = "流程定义ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ProcessDefinitionId { get; set; }
     /// <summary>
-    /// 流程键（冗余字段，便于查询）
+    /// 流程键（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "process_key", ColumnDescription = "流程键", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string ProcessKey { get; set; } = string.Empty;
     /// <summary>
-    /// 流程名称（冗余字段，便于查询）
+    /// 流程名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "process_name", ColumnDescription = "流程名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string ProcessName { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "current_activity_id", ColumnDescription = "当前节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? CurrentActivityId { get; set; }
     /// <summary>
-    /// 当前节点名称（冗余字段，便于查询）
+    /// 当前节点名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "current_activity_name", ColumnDescription = "当前节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? CurrentActivityName { get; set; }
@@ -72,7 +72,7 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "start_user_id", ColumnDescription = "发起人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long StartUserId { get; set; }
     /// <summary>
-    /// 发起人姓名（冗余字段，便于查询）
+    /// 发起人姓名（冗余：按 StartUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "start_user_name", ColumnDescription = "发起人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? StartUserName { get; set; }
@@ -122,7 +122,7 @@ public class TaktFlowInstance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "form_id", ColumnDescription = "表单ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FormId { get; set; }
     /// <summary>
-    /// 关联表单编码（冗余字段，便于查询）
+    /// 关联表单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "form_code", ColumnDescription = "表单编码", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FormCode { get; set; }

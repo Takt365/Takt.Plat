@@ -47,7 +47,7 @@ public class TaktDictDataDto : TaktTenantCultureDtoBase
     public string? DictTypeName { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
@@ -62,7 +62,7 @@ public class TaktDictDataDto : TaktTenantCultureDtoBase
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 
@@ -131,7 +131,7 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     public long? DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -146,7 +146,7 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -227,7 +227,7 @@ public class TaktDictDataCreateDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
@@ -244,9 +244,9 @@ public class TaktDictDataCreateDto
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
-    [Required(ErrorMessage = "国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）不能为空")]
+    [Required(ErrorMessage = "国际化键不能为空")]
     public string I18nKey { get; set; } = string.Empty;
 
     /// <summary>
@@ -356,7 +356,7 @@ public class TaktDictDataTemplateDto
     public long? DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -371,7 +371,7 @@ public class TaktDictDataTemplateDto
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -434,7 +434,7 @@ public class TaktDictDataImportDto
     public long? DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -449,7 +449,7 @@ public class TaktDictDataImportDto
     public string? DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -518,7 +518,7 @@ public class TaktDictDataExportDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
@@ -533,7 +533,7 @@ public class TaktDictDataExportDto
     public string DictValue { get; set; } = string.Empty;
 
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 

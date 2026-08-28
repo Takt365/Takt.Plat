@@ -59,7 +59,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomVersion { get; set; } = "1.0";
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     [SugarColumn(ColumnName = "bom_type", ColumnDescription = "BOM类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BomType { get; set; } = 0;
@@ -83,7 +83,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_unit", ColumnDescription = "父物料单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string ParentMaterialUnit { get; set; } = "PC";
@@ -107,7 +107,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     [SugarColumn(ColumnName = "bom_status", ColumnDescription = "BOM状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BomStatus { get; set; } = 0;

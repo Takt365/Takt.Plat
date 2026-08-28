@@ -87,7 +87,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 
@@ -249,7 +249,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
@@ -392,7 +392,7 @@ public class TaktDeptCreateDto
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 
@@ -621,7 +621,7 @@ public class TaktDeptTemplateDto
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
@@ -750,7 +750,7 @@ public class TaktDeptImportDto
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
@@ -900,7 +900,7 @@ public class TaktDeptExportDto
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 

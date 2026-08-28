@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Training
 // 文件名称：TaktTrainingPlanService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：培训计划应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
     }
 
     /// <summary>
-    /// 获取培训计划列表（分页）
+    /// 获取培训计划列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTrainingPlanDto>> GetTrainingPlanListAsync(TaktTrainingPlanQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktTrainingPlanDto>.Create(
+                new List<TaktTrainingPlanDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _trainingPlanRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,8 +105,8 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlanName ?? e.Id.ToString(),
+            DictValue = e.PlanCode,
+            DictLabel = e.PlanName ?? e.PlanCode,
         }).ToList();
     }
 
@@ -265,7 +273,15 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportTrainingPlanAsync(TaktTrainingPlanQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktTrainingPlanQueryDto());
+        var queryDto = query ?? new TaktTrainingPlanQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktTrainingPlanExportDto>(),
+                sheetName ?? "培训计划数据",
+                fileName ?? "培训计划导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _trainingPlanRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -294,130 +310,229 @@ public class TaktTrainingPlanService : TaktServiceBase, ITaktTrainingPlanService
     {
         var exp = Expressionable.Create<TaktTrainingPlan>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlanCode != null && x.PlanCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PlanCode != null && x.PlanCode.Contains(keywords))
                 || (x.PlanName != null && x.PlanName.Contains(keywords))
-                || SqlFunc.ToString(x.PlanYear).Contains(keywords)
                 || (x.PlanType != null && x.PlanType.Contains(keywords))
                 || (x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(keywords))
                 || (x.TrainingObjectives != null && x.TrainingObjectives.Contains(keywords))
-                || SqlFunc.ToString(x.PlannedHeadcount).Contains(keywords)
-                || SqlFunc.ToString(x.TrainingBudget).Contains(keywords)
                 || (x.TrainingPlanDescription != null && x.TrainingPlanDescription.Contains(keywords))
-                || SqlFunc.ToString(x.TrainingPlanStatus).Contains(keywords)
-                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.StartDate).Contains(keywords)
-                || SqlFunc.ToString(x.EndDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlanCode != null && x.PlanCode.Contains(queryDto.PlanCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PlanName != null && x.PlanName.Contains(queryDto.PlanName));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanCode))
+        {
+            var planCode = queryDto.PlanCode;
+            exp = exp.And(x => x.PlanCode != null && x.PlanCode.Contains(planCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanName))
+        {
+            var planName = queryDto.PlanName;
+            exp = exp.And(x => x.PlanName != null && x.PlanName.Contains(planName));
         }
 
         if (queryDto?.PlanYear.HasValue == true)
         {
-            exp = exp.And(x => x.PlanYear == queryDto.PlanYear);
+            var planYear = queryDto.PlanYear.Value;
+            exp = exp.And(x => x.PlanYear == planYear);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanType))
         {
-            exp = exp.And(x => x.PlanType != null && x.PlanType.Contains(queryDto.PlanType));
+            var planType = queryDto.PlanType;
+            exp = exp.And(x => x.PlanType != null && x.PlanType.Contains(planType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ApplicableDepartment))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicableDepartment))
         {
-            exp = exp.And(x => x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(queryDto.ApplicableDepartment));
+            var applicableDepartment = queryDto.ApplicableDepartment;
+            exp = exp.And(x => x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(applicableDepartment));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TrainingObjectives))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TrainingObjectives))
         {
-            exp = exp.And(x => x.TrainingObjectives != null && x.TrainingObjectives.Contains(queryDto.TrainingObjectives));
+            var trainingObjectives = queryDto.TrainingObjectives;
+            exp = exp.And(x => x.TrainingObjectives != null && x.TrainingObjectives.Contains(trainingObjectives));
         }
 
         if (queryDto?.PlannedHeadcount.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedHeadcount == queryDto.PlannedHeadcount);
+            var plannedHeadcount = queryDto.PlannedHeadcount.Value;
+            exp = exp.And(x => x.PlannedHeadcount == plannedHeadcount);
         }
 
         if (queryDto?.TrainingBudget.HasValue == true)
         {
-            exp = exp.And(x => x.TrainingBudget == queryDto.TrainingBudget);
+            var trainingBudget = queryDto.TrainingBudget.Value;
+            exp = exp.And(x => x.TrainingBudget == trainingBudget);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TrainingPlanDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TrainingPlanDescription))
         {
-            exp = exp.And(x => x.TrainingPlanDescription != null && x.TrainingPlanDescription.Contains(queryDto.TrainingPlanDescription));
+            var trainingPlanDescription = queryDto.TrainingPlanDescription;
+            exp = exp.And(x => x.TrainingPlanDescription != null && x.TrainingPlanDescription.Contains(trainingPlanDescription));
         }
 
         if (queryDto?.TrainingPlanStatus.HasValue == true)
         {
-            exp = exp.And(x => x.TrainingPlanStatus == queryDto.TrainingPlanStatus);
+            var trainingPlanStatus = queryDto.TrainingPlanStatus.Value;
+            exp = exp.And(x => x.TrainingPlanStatus == trainingPlanStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.StartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate >= queryDto.StartDateStart);
+            var startDateStart = queryDto.StartDateStart.Value;
+            exp = exp.And(x => x.StartDate >= startDateStart);
         }
 
         if (queryDto?.StartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate <= queryDto.StartDateEnd);
+            var startDateEnd = queryDto.StartDateEnd.Value;
+            exp = exp.And(x => x.StartDate <= startDateEnd);
         }
 
         if (queryDto?.EndDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EndDate >= queryDto.EndDateStart);
+            var endDateStart = queryDto.EndDateStart.Value;
+            exp = exp.And(x => x.EndDate >= endDateStart);
         }
 
         if (queryDto?.EndDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EndDate <= queryDto.EndDateEnd);
+            var endDateEnd = queryDto.EndDateEnd.Value;
+            exp = exp.And(x => x.EndDate <= endDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktTrainingPlanQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanName))
+        {
+            return true;
+        }
+        if (queryDto.PlanYear.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicableDepartment))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TrainingObjectives))
+        {
+            return true;
+        }
+        if (queryDto.PlannedHeadcount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TrainingBudget.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TrainingPlanDescription))
+        {
+            return true;
+        }
+        if (queryDto.TrainingPlanStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.StartDateStart.HasValue || queryDto.StartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EndDateStart.HasValue || queryDto.EndDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

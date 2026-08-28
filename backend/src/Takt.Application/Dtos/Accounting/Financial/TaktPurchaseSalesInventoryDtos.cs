@@ -52,7 +52,7 @@ public class TaktPurchaseSalesInventoryDto : TaktCompanyDtoBase
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
@@ -132,7 +132,7 @@ public class TaktPurchaseSalesInventoryDto : TaktCompanyDtoBase
     public decimal ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -194,7 +194,7 @@ public class TaktPurchaseSalesInventoryQueryDto : TaktPagedQuery
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -274,7 +274,7 @@ public class TaktPurchaseSalesInventoryQueryDto : TaktPagedQuery
     public decimal? ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -364,9 +364,9 @@ public class TaktPurchaseSalesInventoryCreateDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
-    [Required(ErrorMessage = "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
+    [Required(ErrorMessage = "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
@@ -445,9 +445,9 @@ public class TaktPurchaseSalesInventoryCreateDto
     public decimal ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -580,7 +580,7 @@ public class TaktPurchaseSalesInventoryTemplateDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -660,7 +660,7 @@ public class TaktPurchaseSalesInventoryTemplateDto
     public decimal? ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -723,7 +723,7 @@ public class TaktPurchaseSalesInventoryImportDto
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -803,7 +803,7 @@ public class TaktPurchaseSalesInventoryImportDto
     public decimal? ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -866,7 +866,7 @@ public class TaktPurchaseSalesInventoryExportDto
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
@@ -946,7 +946,7 @@ public class TaktPurchaseSalesInventoryExportDto
     public decimal ClosingUnitCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

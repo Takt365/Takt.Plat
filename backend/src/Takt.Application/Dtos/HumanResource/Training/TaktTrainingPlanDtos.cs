@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Training
 // 文件名称：TaktTrainingPlanDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrainingPlan 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Training;
 // ========================================
 
 /// <summary>
-/// 培训计划（年度/季度/专项）
+/// 培训计划（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// 对应前端 TaktTrainingPlanDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -35,9 +35,63 @@ public class TaktTrainingPlanDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TrainingPlanId { get; set; }
 
+    /// <summary>
+    /// 计划编码（租户+公司内唯一）
+    /// </summary>
+    public string PlanCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划名称
+    /// </summary>
+    public string PlanName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划年度
+    /// </summary>
+    public int PlanYear { get; set; } = 0;
+
+    /// <summary>
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
+    /// </summary>
+    public string PlanType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 适用部门
+    /// </summary>
+    public string ApplicableDepartment { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划开始日期
+    /// </summary>
+    public DateTime StartDate { get; set; }
+
+    /// <summary>
+    /// 计划结束日期
+    /// </summary>
+    public DateTime EndDate { get; set; }
+
+    /// <summary>
+    /// 培训目标
+    /// </summary>
+    public string TrainingObjectives { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划培训人数
+    /// </summary>
+    public int PlannedHeadcount { get; set; } = 0;
+
+    /// <summary>
+    /// 培训预算（元）
+    /// </summary>
+    public decimal TrainingBudget { get; set; }
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string TrainingPlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
 
@@ -59,7 +113,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -67,6 +121,11 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -84,7 +143,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     public int? PlanYear { get; set; }
 
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     public string? PlanType { get; set; } = string.Empty;
 
@@ -134,12 +193,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? TrainingPlanStatus { get; set; }
 
@@ -231,6 +285,10 @@ public class TaktTrainingPlanCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -250,9 +308,9 @@ public class TaktTrainingPlanCreateDto
     public int PlanYear { get; set; } = 0;
 
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
-    [Required(ErrorMessage = "计划类型（年度/季度/月度/专项）不能为空")]
+    [Required(ErrorMessage = "计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）不能为空")]
     public string PlanType { get; set; } = string.Empty;
 
     /// <summary>
@@ -294,13 +352,7 @@ public class TaktTrainingPlanCreateDto
     public string TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    [Required(ErrorMessage = "关联工厂不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
 
@@ -354,9 +406,9 @@ public class TaktTrainingPlanStatusDto
     public long TrainingPlanId { get; set; }
 
     /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "业务状态（1=启用 0=禁用）不能为空")]
+    [Required(ErrorMessage = "计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）不能为空")]
     public int TrainingPlanStatus { get; set; } = 0;
 }
 
@@ -385,6 +437,11 @@ public class TaktTrainingPlanTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划编码（租户+公司内唯一）
     /// </summary>
     public string? PlanCode { get; set; } = string.Empty;
@@ -400,7 +457,7 @@ public class TaktTrainingPlanTemplateDto
     public int? PlanYear { get; set; }
 
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     public string? PlanType { get; set; } = string.Empty;
 
@@ -440,12 +497,7 @@ public class TaktTrainingPlanTemplateDto
     public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? TrainingPlanStatus { get; set; }
 
@@ -481,6 +533,10 @@ public class TaktTrainingPlanImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -498,7 +554,7 @@ public class TaktTrainingPlanImportDto
     public int? PlanYear { get; set; }
 
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     public string? PlanType { get; set; } = string.Empty;
 
@@ -538,12 +594,7 @@ public class TaktTrainingPlanImportDto
     public string? TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int? TrainingPlanStatus { get; set; }
 
@@ -576,6 +627,21 @@ public class TaktTrainingPlanExportDto
     public long TrainingPlanId { get; set; }
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划编码（租户+公司内唯一）
     /// </summary>
     public string PlanCode { get; set; } = string.Empty;
@@ -591,7 +657,7 @@ public class TaktTrainingPlanExportDto
     public int PlanYear { get; set; } = 0;
 
     /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     public string PlanType { get; set; } = string.Empty;
 
@@ -631,12 +697,7 @@ public class TaktTrainingPlanExportDto
     public string TrainingPlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 业务状态（1=启用 0=禁用）
+    /// 计划业务状态（字典 sys_normal_disable；1=启用 0=禁用）
     /// </summary>
     public int TrainingPlanStatus { get; set; } = 0;
 

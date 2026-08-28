@@ -158,7 +158,7 @@
       <a-form-item :label="pi.queryLabel('pcbaBoardType')">
         <TaktSelect
           v-model:value="advancedQueryForm.pcbaBoardType"
-          dict-type="logistics_pcba_function_category"
+          dict-type="logistics_manufacturing_pcba_function"
           :placeholder="pi.queryPh('pcbaBoardType', 'select')"
           allow-clear
         />
@@ -168,7 +168,7 @@
       <a-form-item :label="pi.queryLabel('visualInspectionLine')">
         <TaktSelect
           v-model:value="advancedQueryForm.visualInspectionLine"
-          dict-type="logistics_visual_inspection_line_category"
+          dict-type="logistics_manufacturing_visual_inspection_line_category"
           :placeholder="pi.queryPh('visualInspectionLine', 'select')"
           allow-clear
         />
@@ -178,7 +178,7 @@
       <a-form-item :label="pi.queryLabel('aoiLine')">
         <TaktSelect
           v-model:value="advancedQueryForm.aoiLine"
-          dict-type="logistics_aoi_inspection_line_category"
+          dict-type="logistics_manufacturing_aoi_inspection_line_category"
           :placeholder="pi.queryPh('aoiLine', 'select')"
           allow-clear
         />
@@ -228,7 +228,7 @@
       <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />
@@ -266,7 +266,7 @@
       <a-form-item :label="pi.queryLabel('inspectionStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.inspectionStatus"
-          dict-type="logistics_pcba_inspection_status"
+          dict-type="logistics_manufacturing_pcba_inspection_status"
           :placeholder="pi.queryPh('inspectionStatus', 'select')"
           allow-clear
         />
@@ -345,7 +345,7 @@
       <a-form-item :label="pi.queryLabel('defectLocation')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectLocation"
-          dict-type="logistics_pcb_location_category"
+          dict-type="logistics_manufacturing_pcb_location_category"
           :placeholder="pi.queryPh('defectLocation', 'select')"
           allow-clear
         />

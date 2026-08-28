@@ -46,12 +46,12 @@ public class TaktInventoryReserve : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? MaterialDescription { get; set; }
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     [SugarColumn(ColumnName = "valuation", ColumnDescription = "评估类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string Valuation { get; set; } = string.Empty;
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     [SugarColumn(ColumnName = "provision_scope", ColumnDescription = "计提范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProvisionScope { get; set; } = 1;
@@ -126,7 +126,7 @@ public class TaktInventoryReserve : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "carrying_amount", ColumnDescription = "账面价值", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal CarryingAmount { get; set; } = 0;
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";

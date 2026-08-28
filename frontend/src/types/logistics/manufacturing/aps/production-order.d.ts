@@ -25,7 +25,7 @@ import type {
 export interface ProductionOrder extends CompanyDtoBase {
 
   /**
-   * 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+   * 工单类别（字典 logistics_manufacturing_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
    */
   prodOrderType?: string;
 
@@ -50,7 +50,7 @@ export interface ProductionOrder extends CompanyDtoBase {
   producedQty?: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，存 DictValue）
    */
   unitOfMeasure?: string;
 
@@ -110,7 +110,7 @@ export interface ProductionOrder extends CompanyDtoBase {
   plannedEndTime?: string;
 
   /**
-   * 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+   * 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
    */
   orderStatus?: number;
 
@@ -148,7 +148,7 @@ export interface ProductionOrderExport {
   plantCode: string;
 
   /**
-   * 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+   * 工单类别（字典 logistics_manufacturing_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
    */
   prodOrderType: string;
 
@@ -173,7 +173,7 @@ export interface ProductionOrderExport {
   producedQty: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，存 DictValue）
    */
   unitOfMeasure: string;
 
@@ -233,7 +233,7 @@ export interface ProductionOrderExport {
   plannedEndTime?: string;
 
   /**
-   * 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+   * 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
    */
   orderStatus: number;
 

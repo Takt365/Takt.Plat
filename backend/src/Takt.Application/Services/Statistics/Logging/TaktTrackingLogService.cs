@@ -31,7 +31,9 @@ namespace Takt.Application.Services.Statistics.Logging;
 /// </summary>
 public class TaktTrackingLogService : TaktServiceBase, ITaktTrackingLogService
 {
-    /// <summary>客户端单次批量上报上限</summary>
+    /// <summary>
+    /// 客户端单次批量上报上限
+    /// </summary>
     private const int MaxTrackBatchSize = 50;
 
     private readonly ITaktCompanyRepository<TaktTrackingLog> _trackingLogRepository;

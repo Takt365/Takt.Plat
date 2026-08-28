@@ -81,7 +81,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public int InDatabase { get; set; } = 0;
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     public string GenTemplateCategory { get; set; } = string.Empty;
 
@@ -106,7 +106,7 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -186,17 +186,17 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int GenMethod { get; set; } = 0;
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     public string GenPath { get; set; } = string.Empty;
 
@@ -227,22 +227,22 @@ public class TaktGenTableDto : TaktTenantCoreDtoBase
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
     public string SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int FrontUi { get; set; } = 0;
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int FrontFormLayout { get; set; } = 0;
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int FrontBtnStyle { get; set; } = 0;
 
@@ -350,7 +350,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public int? InDatabase { get; set; }
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     public string? GenTemplateCategory { get; set; } = string.Empty;
 
@@ -375,7 +375,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -455,17 +455,17 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int? GenMethod { get; set; }
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     public string? GenPath { get; set; } = string.Empty;
 
@@ -491,22 +491,22 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
     public string? SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int? FrontUi { get; set; }
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int? FrontFormLayout { get; set; }
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int? FrontBtnStyle { get; set; }
 
@@ -623,9 +623,9 @@ public class TaktGenTableCreateDto
     public int InDatabase { get; set; } = 0;
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
-    [Required(ErrorMessage = "生成模板类型（字典 gen_template_type；crud/sub/tree）不能为空")]
+    [Required(ErrorMessage = "生成模板类型（字典 code_generator_template_type；crud/sub/tree）不能为空")]
     public string GenTemplateCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -651,7 +651,7 @@ public class TaktGenTableCreateDto
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -732,19 +732,19 @@ public class TaktGenTableCreateDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int GenMethod { get; set; } = 0;
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
-    [Required(ErrorMessage = "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）不能为空")]
+    [Required(ErrorMessage = "生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）不能为空")]
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
@@ -770,23 +770,23 @@ public class TaktGenTableCreateDto
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
-    [Required(ErrorMessage = "排序类型（字典 sys_sort_type；asc=升序 desc=降序）不能为空")]
+    [Required(ErrorMessage = "排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）不能为空")]
     public string SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int FrontUi { get; set; } = 0;
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int FrontFormLayout { get; set; } = 0;
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int FrontBtnStyle { get; set; } = 0;
 
@@ -923,7 +923,7 @@ public class TaktGenTableTemplateDto
     public int? InDatabase { get; set; }
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     public string? GenTemplateCategory { get; set; } = string.Empty;
 
@@ -948,7 +948,7 @@ public class TaktGenTableTemplateDto
     public string? PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -1028,17 +1028,17 @@ public class TaktGenTableTemplateDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int? GenMethod { get; set; }
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     public string? GenPath { get; set; } = string.Empty;
 
@@ -1064,22 +1064,22 @@ public class TaktGenTableTemplateDto
     public string? SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
     public string? SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int? FrontUi { get; set; }
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int? FrontFormLayout { get; set; }
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int? FrontBtnStyle { get; set; }
 
@@ -1186,7 +1186,7 @@ public class TaktGenTableImportDto
     public int? InDatabase { get; set; }
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     public string? GenTemplateCategory { get; set; } = string.Empty;
 
@@ -1211,7 +1211,7 @@ public class TaktGenTableImportDto
     public string? PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -1291,17 +1291,17 @@ public class TaktGenTableImportDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int? GenMethod { get; set; }
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     public string? GenPath { get; set; } = string.Empty;
 
@@ -1327,22 +1327,22 @@ public class TaktGenTableImportDto
     public string? SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
     public string? SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int? FrontUi { get; set; }
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int? FrontFormLayout { get; set; }
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int? FrontBtnStyle { get; set; }
 
@@ -1455,7 +1455,7 @@ public class TaktGenTableExportDto
     public int InDatabase { get; set; } = 0;
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     public string GenTemplateCategory { get; set; } = string.Empty;
 
@@ -1480,7 +1480,7 @@ public class TaktGenTableExportDto
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     public string? MenuButtonGroup { get; set; } = string.Empty;
 
@@ -1560,17 +1560,17 @@ public class TaktGenTableExportDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
     public int GenMethod { get; set; } = 0;
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     public string GenPath { get; set; } = string.Empty;
 
@@ -1596,22 +1596,22 @@ public class TaktGenTableExportDto
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
     public string SortType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     public int FrontUi { get; set; } = 0;
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     public int FrontFormLayout { get; set; } = 0;
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     public int FrontBtnStyle { get; set; } = 0;
 

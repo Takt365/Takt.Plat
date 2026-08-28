@@ -44,11 +44,11 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     private const string MenuFile = "FOUNDATION_FILE";
     private const string MenuEmployee = "HUMAN_RESOURCE_PERSONNEL_EMPLOYEE";
     private const string MenuAnnouncement = "ROUTINE_ANNOUNCEMENT";
-    private const string MenuConference = "ROUTINE_CONFERENCE_CENTER";
-    private const string MenuDocument = "ROUTINE_DOCUMENT_CENTER_DOCUMENT";
-    private const string MenuNews = "ROUTINE_NEWS_CENTER_NEWS";
+    private const string MenuMeeting = "ROUTINE_MEETING_CENTER_MEETING";
+    private const string MenuDocument = "ROUTINE_DOCUMENT_CENTER";
+    private const string MenuNews = "ROUTINE_NEWS_CENTER";
     private const string MenuHelpDeskTicket = "ROUTINE_HELP_DESK_TICKET";
-    private const string MenuConfigurableReport = "STATISTICS_REPORT_CONFIGURABLE";
+    private const string MenuConfigurableQuickQuery = "STATISTICS_QUICK_QUERY_CONFIGURABLE";
     private const string MenuFlowForm = "WORKFLOW_FORM";
     private const string MenuAsset = "ACCOUNTING_FINANCIAL_ASSET";
     private const string MenuServiceContract = "LOGISTICS_CUSTOMER_SERVICE_CONTRACT";
@@ -247,7 +247,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "none",
                 "None",
                 SegmentsGenderEmployeeCode,
-                "内置：TaktEmployee.EmployeeCode；Gender=1男（字典 sys_user_gender_category）",
+                "内置：TaktEmployee.EmployeeCode；Gender=1男（字典 sys_user_gender）",
                 SequenceLength: 5,
                 Separator: string.Empty),
             new NumberingSeedTemplate(
@@ -259,7 +259,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "none",
                 "None",
                 SegmentsGenderEmployeeCode,
-                "内置：TaktEmployee.EmployeeCode；Gender=2女（字典 sys_user_gender_category）",
+                "内置：TaktEmployee.EmployeeCode；Gender=2女（字典 sys_user_gender）",
                 SequenceLength: 5,
                 Separator: string.Empty),
             new NumberingSeedTemplate(
@@ -271,7 +271,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "none",
                 "None",
                 SegmentsGenderEmployeeCode,
-                "内置：TaktEmployee.EmployeeCode；Gender=0未知（字典 sys_user_gender_category）",
+                "内置：TaktEmployee.EmployeeCode；Gender=0未知（字典 sys_user_gender）",
                 SequenceLength: 5,
                 Separator: string.Empty),
             new NumberingSeedTemplate(
@@ -357,43 +357,43 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             new NumberingSeedTemplate(
                 "RT-CONF0",
                 "内部会议编码",
-                MenuConference,
+                MenuMeeting,
                 IsoR,
                 "INTN",
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktConference.ConferenceCode；ConferenceType=0（字典 routine_conference_type）"),
+                "内置：TaktMeeting.MeetingCode；MeetingType=0（字典 routine_meeting_center_type）"),
             new NumberingSeedTemplate(
                 "RT-CONF1",
                 "外部会议编码",
-                MenuConference,
+                MenuMeeting,
                 IsoR,
                 "EXTR",
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktConference.ConferenceCode；ConferenceType=1（字典 routine_conference_type）"),
+                "内置：TaktMeeting.MeetingCode；MeetingType=1（字典 routine_meeting_center_type）"),
             new NumberingSeedTemplate(
                 "RT-CONF2",
                 "视频会议编码",
-                MenuConference,
+                MenuMeeting,
                 IsoR,
                 "VIDO",
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktConference.ConferenceCode；ConferenceType=2（字典 routine_conference_type）"),
+                "内置：TaktMeeting.MeetingCode；MeetingType=2（字典 routine_meeting_center_type）"),
             new NumberingSeedTemplate(
                 "RT-CONF3",
                 "混合会议编码",
-                MenuConference,
+                MenuMeeting,
                 IsoR,
                 "HYBR",
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktConference.ConferenceCode；ConferenceType=3（字典 routine_conference_type）"),
+                "内置：TaktMeeting.MeetingCode；MeetingType=3（字典 routine_meeting_center_type）"),
             new NumberingSeedTemplate(
                 "RT-DOC0",
                 "制度文档编码",
@@ -403,7 +403,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktDocument.DocumentCode；DocumentCategory=0（字典 routine_document_category）"),
+                "内置：TaktDocument.DocumentCode；DocumentCategory=0（字典 routine_document_center_category）"),
             new NumberingSeedTemplate(
                 "RT-DOC1",
                 "流程文档编码",
@@ -413,7 +413,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktDocument.DocumentCode；DocumentCategory=1（字典 routine_document_category）"),
+                "内置：TaktDocument.DocumentCode；DocumentCategory=1（字典 routine_document_center_category）"),
             new NumberingSeedTemplate(
                 "RT-DOC2",
                 "模板文档编码",
@@ -423,7 +423,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktDocument.DocumentCode；DocumentCategory=2（字典 routine_document_category）"),
+                "内置：TaktDocument.DocumentCode；DocumentCategory=2（字典 routine_document_center_category）"),
             new NumberingSeedTemplate(
                 "RT-DOC3",
                 "规范文档编码",
@@ -433,7 +433,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktDocument.DocumentCode；DocumentCategory=3（字典 routine_document_category）"),
+                "内置：TaktDocument.DocumentCode；DocumentCategory=3（字典 routine_document_center_category）"),
             new NumberingSeedTemplate(
                 "RT-DOC4",
                 "其他文档编码",
@@ -443,7 +443,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktDocument.DocumentCode；DocumentCategory=4（字典 routine_document_category）"),
+                "内置：TaktDocument.DocumentCode；DocumentCategory=4（字典 routine_document_center_category）"),
             new NumberingSeedTemplate(
                 "RT-NEWS0",
                 "公司新闻编码",
@@ -517,13 +517,13 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             new NumberingSeedTemplate(
                 "ST-RPT",
                 "自定义报表编码",
-                MenuConfigurableReport,
+                MenuConfigurableQuickQuery,
                 IsoD,
                 "RPT",
                 "yyyy",
                 "Annually",
                 SegmentsWithDepartment,
-                "内置：TaktConfigurable.ReportCode；前端表单选择编码规则后取号"),
+                "内置：TaktConfigurable.ConfigurableCode；前端表单选择编码规则后取号"),
             new NumberingSeedTemplate(
                 "WF-FORM0",
                 "通用表单编码",

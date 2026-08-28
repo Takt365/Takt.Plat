@@ -29,7 +29,7 @@ export interface DictType extends TenantCoreDtoBase {
   dictTypeId: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode: string;
 
@@ -39,7 +39,7 @@ export interface DictType extends TenantCoreDtoBase {
   dictTypeName: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource: number;
 
@@ -83,7 +83,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode?: string;
 
@@ -93,7 +93,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   dictTypeName?: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
@@ -151,7 +151,7 @@ export interface DictTypeCreate {
   tenantCode: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode: string;
 
@@ -161,7 +161,7 @@ export interface DictTypeCreate {
   dictTypeName: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource: number;
 
@@ -277,7 +277,7 @@ export interface DictTypeTemplate {
   tenantCode?: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode?: string;
 
@@ -287,7 +287,7 @@ export interface DictTypeTemplate {
   dictTypeName?: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
@@ -335,7 +335,7 @@ export interface DictTypeImport {
   tenantCode?: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode?: string;
 
@@ -345,7 +345,7 @@ export interface DictTypeImport {
   dictTypeName?: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource?: number;
 
@@ -393,7 +393,7 @@ export interface DictTypeExport {
   dictTypeId: string;
 
   /**
-   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+   * 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，Length=140；如 accounting_controlling_cost_center_type）
    */
   dictTypeCode: string;
 
@@ -403,7 +403,7 @@ export interface DictTypeExport {
   dictTypeName: string;
 
   /**
-   * 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+   * 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
    */
   dataSource: number;
 

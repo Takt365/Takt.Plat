@@ -50,7 +50,7 @@ export interface BalanceSheet extends CompanyDtoBase {
   accountTitleName?: string;
 
   /**
-   * 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+   * 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
    */
   lineCategory?: number;
 
@@ -95,7 +95,7 @@ export interface BalanceSheet extends CompanyDtoBase {
   priorPeriodAmount?: number;
 
   /**
-   * 币种（字典 accounting_currency_code；报告货币）
+   * 币种（字典 accounting_financial_currency_code；报告货币）
    */
   currencyCode?: string;
 
@@ -163,7 +163,7 @@ export interface BalanceSheetExport {
   accountTitleName?: string;
 
   /**
-   * 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+   * 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
    */
   lineCategory: number;
 
@@ -208,7 +208,7 @@ export interface BalanceSheetExport {
   priorPeriodAmount: number;
 
   /**
-   * 币种（字典 accounting_currency_code；报告货币）
+   * 币种（字典 accounting_financial_currency_code；报告货币）
    */
   currencyCode: string;
 

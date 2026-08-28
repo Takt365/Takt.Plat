@@ -30,7 +30,7 @@ public class TaktPcbaOutput : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;

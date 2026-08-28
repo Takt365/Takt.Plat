@@ -38,7 +38,7 @@
       <template #cell-pcbaBoardType="{ record }">
         <TaktSelect
           v-model:value="record.pcbaBoardType"
-          dict-type="logistics_pcba_function_category"
+          dict-type="logistics_manufacturing_pcba_function"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('pcbaBoardType')"
@@ -49,7 +49,7 @@
       <template #cell-visualInspectionLine="{ record }">
         <TaktSelect
           v-model:value="record.visualInspectionLine"
-          dict-type="logistics_visual_inspection_line_category"
+          dict-type="logistics_manufacturing_visual_inspection_line_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('visualInspectionLine')"
@@ -60,7 +60,7 @@
       <template #cell-aoiLine="{ record }">
         <TaktSelect
           v-model:value="record.aoiLine"
-          dict-type="logistics_aoi_inspection_line_category"
+          dict-type="logistics_manufacturing_aoi_inspection_line_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('aoiLine')"
@@ -71,7 +71,7 @@
       <template #cell-shiftNo="{ record }">
         <TaktSelect
           v-model:value="record.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('shiftNo')"
@@ -93,7 +93,7 @@
       <template #cell-inspectionStatus="{ record }">
         <TaktSelect
           v-model:value="record.inspectionStatus"
-          dict-type="logistics_pcba_inspection_status"
+          dict-type="logistics_manufacturing_pcba_inspection_status"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('inspectionStatus')"
@@ -115,7 +115,7 @@
       <template #cell-defectLocation="{ record }">
         <TaktSelect
           v-model:value="record.defectLocation"
-          dict-type="logistics_pcb_location_category"
+          dict-type="logistics_manufacturing_pcb_location_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('defectLocation')"

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：request.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,11 +29,6 @@ export interface CustomerServiceRequest extends CompanyDtoBase {
   customerServiceRequestId: string;
 
   /**
-   * 工厂代码
-   */
-  plantCode: string;
-
-  /**
    * 服务请求单号（组合唯一索引）
    */
   serviceRequestCode: string;
@@ -49,12 +44,12 @@ export interface CustomerServiceRequest extends CompanyDtoBase {
   clientName?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -69,7 +64,7 @@ export interface CustomerServiceRequest extends CompanyDtoBase {
   serviceContractName?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -154,7 +149,7 @@ export interface CustomerServiceRequest extends CompanyDtoBase {
   closedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -179,7 +174,7 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -189,7 +184,7 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -204,12 +199,12 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -219,7 +214,7 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -324,7 +319,7 @@ export interface CustomerServiceRequestQuery extends TaktPagedQuery {
   closedAtEnd?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
@@ -373,7 +368,7 @@ export interface CustomerServiceRequestCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -388,12 +383,12 @@ export interface CustomerServiceRequestCreate {
   clientId: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -403,7 +398,7 @@ export interface CustomerServiceRequestCreate {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -546,7 +541,7 @@ export interface CustomerServiceRequestSort {
   customerServiceRequestId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -575,7 +570,7 @@ export interface CustomerServiceRequestTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -590,12 +585,12 @@ export interface CustomerServiceRequestTemplate {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -605,7 +600,7 @@ export interface CustomerServiceRequestTemplate {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -724,7 +719,7 @@ export interface CustomerServiceRequestImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -739,12 +734,12 @@ export interface CustomerServiceRequestImport {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -754,7 +749,7 @@ export interface CustomerServiceRequestImport {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -868,9 +863,14 @@ export interface CustomerServiceRequestExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 服务请求单号（组合唯一索引）
@@ -883,12 +883,12 @@ export interface CustomerServiceRequestExport {
   clientId: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -898,7 +898,7 @@ export interface CustomerServiceRequestExport {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -983,7 +983,7 @@ export interface CustomerServiceRequestExport {
   closedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 

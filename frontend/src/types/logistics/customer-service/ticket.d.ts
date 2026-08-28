@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：ticket.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,11 +29,6 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   customerServiceTicketId: string;
 
   /**
-   * 工厂代码
-   */
-  plantCode: string;
-
-  /**
    * 服务工单编码（组合唯一索引）
    */
   serviceTicketCode: string;
@@ -49,12 +44,12 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   clientName?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -69,7 +64,7 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   serviceRequestName?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -84,7 +79,7 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   serviceOrderName?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -99,7 +94,7 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   serviceContractName?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -174,9 +169,14 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间
@@ -184,7 +184,7 @@ export interface CustomerServiceTicket extends CompanyDtoBase {
   acceptedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -219,7 +219,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -229,7 +229,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -244,12 +244,12 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -259,7 +259,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   serviceRequestId?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -269,7 +269,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   serviceOrderId?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -279,7 +279,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -374,9 +374,14 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间（范围查询-开始）
@@ -389,7 +394,7 @@ export interface CustomerServiceTicketQuery extends TaktPagedQuery {
   acceptedAtEnd?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder?: number;
 
@@ -438,7 +443,7 @@ export interface CustomerServiceTicketCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -453,12 +458,12 @@ export interface CustomerServiceTicketCreate {
   clientId: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -468,7 +473,7 @@ export interface CustomerServiceTicketCreate {
   serviceRequestId?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -478,7 +483,7 @@ export interface CustomerServiceTicketCreate {
   serviceOrderId?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -488,7 +493,7 @@ export interface CustomerServiceTicketCreate {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -563,9 +568,14 @@ export interface CustomerServiceTicketCreate {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间
@@ -631,7 +641,7 @@ export interface CustomerServiceTicketSort {
   customerServiceTicketId: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 
@@ -660,7 +670,7 @@ export interface CustomerServiceTicketTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -675,12 +685,12 @@ export interface CustomerServiceTicketTemplate {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -690,7 +700,7 @@ export interface CustomerServiceTicketTemplate {
   serviceRequestId?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -700,7 +710,7 @@ export interface CustomerServiceTicketTemplate {
   serviceOrderId?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -710,7 +720,7 @@ export interface CustomerServiceTicketTemplate {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -785,9 +795,14 @@ export interface CustomerServiceTicketTemplate {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间
@@ -829,7 +844,7 @@ export interface CustomerServiceTicketImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -844,12 +859,12 @@ export interface CustomerServiceTicketImport {
   clientId?: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode?: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1?: string;
 
@@ -859,7 +874,7 @@ export interface CustomerServiceTicketImport {
   serviceRequestId?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -869,7 +884,7 @@ export interface CustomerServiceTicketImport {
   serviceOrderId?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -879,7 +894,7 @@ export interface CustomerServiceTicketImport {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -954,9 +969,14 @@ export interface CustomerServiceTicketImport {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间
@@ -993,9 +1013,14 @@ export interface CustomerServiceTicketExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 服务工单编码（组合唯一索引）
@@ -1008,12 +1033,12 @@ export interface CustomerServiceTicketExport {
   clientId: string;
 
   /**
-   * 客户端编码（冗余字段，便于查询）
+   * 客户端编码（冗余：按对应 Id 取主数据名称联动）
    */
   clientCode: string;
 
   /**
-   * 客户端名称（冗余字段，便于查询）
+   * 客户端名称（冗余：按对应 Id 取主数据名称联动）
    */
   clientName1: string;
 
@@ -1023,7 +1048,7 @@ export interface CustomerServiceTicketExport {
   serviceRequestId?: string;
 
   /**
-   * 关联服务请求单号（冗余字段，便于查询）
+   * 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
    */
   serviceRequestCode?: string;
 
@@ -1033,7 +1058,7 @@ export interface CustomerServiceTicketExport {
   serviceOrderId?: string;
 
   /**
-   * 关联服务订单编码（冗余字段，便于查询）
+   * 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceOrderCode?: string;
 
@@ -1043,7 +1068,7 @@ export interface CustomerServiceTicketExport {
   serviceContractId?: string;
 
   /**
-   * 关联服务合同编码（冗余字段，便于查询）
+   * 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
    */
   serviceContractCode?: string;
 
@@ -1118,9 +1143,14 @@ export interface CustomerServiceTicketExport {
   acceptanceResult?: number;
 
   /**
-   * 验收人
+   * 验收人（选项 TaktEmployees/options；DictValue=Id）
    */
-  acceptedBy?: string;
+  acceptedByEmployeeId?: string;
+
+  /**
+   * 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+   */
+  acceptedByEmployeeName?: string;
 
   /**
    * 验收时间
@@ -1128,7 +1158,7 @@ export interface CustomerServiceTicketExport {
   acceptedAt?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 排序号（回填）（越小越靠前）
    */
   sortOrder: number;
 

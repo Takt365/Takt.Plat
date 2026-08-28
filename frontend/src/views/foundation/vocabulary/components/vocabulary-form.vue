@@ -78,7 +78,7 @@
                   v-model:value="formState.replaceText"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vocabulary.replacetext') })"
                   show-count
-                  :maxlength="100"
+                  :maxlength="6"
                   allow-clear
                 />
               </a-form-item>
@@ -204,7 +204,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  replaceText: '*',
+  replaceText: '*Takt*',
   status: 1
 }
 

@@ -36,6 +36,14 @@ public interface ITaktEcAttachmentService
     Task<TaktEcAttachmentDto?> GetEcAttachmentByIdAsync(long id);
 
     /// <summary>
+    /// 预览设变附件（按 AccessUrl 打开 TaktFile 物理流）
+    /// </summary>
+    /// <param name="id">设变附件ID</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>可读流与文件名</returns>
+    Task<TaktFileDownloadStreamResult> PreviewEcAttachmentAsync(long id, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// 获取设变附件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>

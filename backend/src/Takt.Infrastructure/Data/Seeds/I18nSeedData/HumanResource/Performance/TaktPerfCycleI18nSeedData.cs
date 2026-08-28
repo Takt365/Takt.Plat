@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfCycleI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfCycle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPerfCycleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfcycle.cyclename", "zh-HK", "周期名称_hk", "周期名称"),
 
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "en-US", "周期类型_us", "周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "en-US", "周期类型_us", "周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "ja-JP", "周期类型_jp", "周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "ja-JP", "周期类型_jp", "周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-CN", "周期类型", "周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-CN", "周期类型", "周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfcycle.cycletype
-            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-HK", "周期类型_hk", "周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfcycle.cycletype", "zh-HK", "周期类型_hk", "周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
 
             // entity.perfcycle.cycleyear
             new TranslationSeedItem("entity.perfcycle.cycleyear", "en-US", "周期年度_us", "周期年度"),
@@ -217,13 +217,13 @@ public class TaktPerfCycleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfcycle.description", "zh-HK", "周期说明_hk", "周期说明"),
 
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "en-US", "状态_us", "状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "en-US", "状态_us", "状态（字典 humanresource_performance_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "ja-JP", "状态_jp", "状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "ja-JP", "状态_jp", "状态（字典 humanresource_performance_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-CN", "状态", "状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-CN", "状态", "状态（字典 humanresource_performance_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
             // entity.perfcycle.cycleschedulestatus
-            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-HK", "状态_hk", "状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
+            new TranslationSeedItem("entity.perfcycle.cycleschedulestatus", "zh-HK", "状态_hk", "状态（字典 humanresource_performance_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）"),
         };
     }
 

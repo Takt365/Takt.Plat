@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-26
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcDetail 生成，请按需审阅）
 // 
@@ -57,144 +57,144 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    public string EcModel { get; set; } = string.Empty;
+    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int IsEndOfLine { get; set; } = 0;
+    public string DiscontinuedStatus { get; set; } = "Z0";
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsOldProcurement { get; set; } = 0;
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsOldCheck { get; set; } = 0;
+    public int EcOldRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsNewProcurement { get; set; } = 0;
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsNewCheck { get; set; } = 0;
+    public int EcNewRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -256,149 +256,149 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    public string? EcModel { get; set; } = string.Empty;
+    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int? IsEndOfLine { get; set; }
+    public string? DiscontinuedStatus { get; set; }
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsOldProcurement { get; set; }
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsOldCheck { get; set; }
+    public int? EcOldRequiresInspection { get; set; }
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsNewProcurement { get; set; }
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsNewCheck { get; set; }
+    public int? EcNewRequiresInspection { get; set; }
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）（范围查询-开始）
+    /// BOM生效日期（范围查询-开始）
     /// </summary>
     public DateTime? EcBomDateStart { get; set; }
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）（范围查询-结束）
+    /// BOM生效日期（范围查询-结束）
     /// </summary>
     public DateTime? EcBomDateEnd { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -424,6 +424,11 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
+
+    /// <summary>
+    /// 制二课主表页签（1=采购 F 且仓库 C003 2=其它；仅 TaktEcSeizounikas/masters 使用）
+    /// </summary>
+    public int? PcbaTab { get; set; }
 }
 
 // ========================================
@@ -472,145 +477,145 @@ public class TaktEcDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    [Required(ErrorMessage = "机种（Ec_model）不能为空")]
-    public string EcModel { get; set; } = string.Empty;
+    [Required(ErrorMessage = "机种不能为空")]
+    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int IsEndOfLine { get; set; } = 0;
+    public string DiscontinuedStatus { get; set; } = "Z0";
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsOldProcurement { get; set; } = 0;
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsOldCheck { get; set; } = 0;
+    public int EcOldRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsNewProcurement { get; set; } = 0;
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsNewCheck { get; set; } = 0;
+    public int EcNewRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -718,144 +723,144 @@ public class TaktEcDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    public string? EcModel { get; set; } = string.Empty;
+    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int? IsEndOfLine { get; set; }
+    public string? DiscontinuedStatus { get; set; }
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsOldProcurement { get; set; }
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsOldCheck { get; set; }
+    public int? EcOldRequiresInspection { get; set; }
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsNewProcurement { get; set; }
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsNewCheck { get; set; }
+    public int? EcNewRequiresInspection { get; set; }
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     public DateTime? EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -916,144 +921,144 @@ public class TaktEcDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    public string? EcModel { get; set; } = string.Empty;
+    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int? IsEndOfLine { get; set; }
+    public string? DiscontinuedStatus { get; set; }
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsOldProcurement { get; set; }
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsOldCheck { get; set; }
+    public int? EcOldRequiresInspection { get; set; }
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int? IsNewProcurement { get; set; }
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int? IsNewCheck { get; set; }
+    public int? EcNewRequiresInspection { get; set; }
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     public DateTime? EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1120,144 +1125,144 @@ public class TaktEcDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     public string? EcBomLineCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种
     /// </summary>
-    public string EcModel { get; set; } = string.Empty;
+    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品物料编码
     /// </summary>
-    public string? EcBomItem { get; set; } = string.Empty;
+    public string? EcFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品物料描述
     /// </summary>
-    public string? EcBomItemText { get; set; } = string.Empty;
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    public string? EcBomSubItem { get; set; } = string.Empty;
+    public string? EcParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    public string? EcBomSubItemText { get; set; } = string.Empty;
+    public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public int IsEndOfLine { get; set; } = 0;
+    public string DiscontinuedStatus { get; set; } = "Z0";
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    public string? EcOldItem { get; set; } = string.Empty;
+    public string? EcOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    public string? EcOldText { get; set; } = string.Empty;
+    public string? EcOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    public decimal? EcOldUsage { get; set; }
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    public string? EcOldPosition { get; set; } = string.Empty;
+    public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库
     /// </summary>
     public string? EcOldWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsOldProcurement { get; set; } = 0;
+    public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsOldCheck { get; set; } = 0;
+    public int EcOldRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    public string? EcNewItem { get; set; } = string.Empty;
+    public string? EcNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    public string? EcNewText { get; set; } = string.Empty;
+    public string? EcNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    public decimal? EcNewUsage { get; set; }
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    public string? EcNewPosition { get; set; } = string.Empty;
+    public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库
     /// </summary>
     public string? EcNewWarehouse { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    public int IsNewProcurement { get; set; } = 0;
+    public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    public int IsNewCheck { get; set; } = 0;
+    public int EcNewRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -153,23 +153,41 @@ public class TaktSupplierEvaluationI18nSeedData : ITaktSeedDataCoordinator
             // entity.supplierevaluation.evaluationtype
             new TranslationSeedItem("entity.supplierevaluation.evaluationtype", "zh-HK", "评价类型_hk", "评价类型（0=常规评价，1=准入评价，2=年度评审，3=专项评价）"),
 
-            // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "en-US", "评价人_us", "评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "ja-JP", "评价人_jp", "评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "zh-CN", "评价人", "评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.supplierevaluation.evaluatorby
-            new TranslationSeedItem("entity.supplierevaluation.evaluatorby", "zh-HK", "评价人_hk", "评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.supplierevaluation.evaluatorbyemployeeid
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeeid", "en-US", "评价人ID_us", "评价人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluatorbyemployeeid
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeeid", "ja-JP", "评价人ID_jp", "评价人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluatorbyemployeeid
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeeid", "zh-CN", "评价人ID", "评价人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluatorbyemployeeid
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeeid", "zh-HK", "评价人ID_hk", "评价人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "en-US", "评价部门_us", "评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "ja-JP", "评价部门_jp", "评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "zh-CN", "评价部门", "评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.supplierevaluation.evaluationdept
-            new TranslationSeedItem("entity.supplierevaluation.evaluationdept", "zh-HK", "评价部门_hk", "评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
+            // entity.supplierevaluation.evaluatorbyemployeename
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeename", "en-US", "评价人名称_us", "评价人名称（冗余：按 EvaluatorByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.supplierevaluation.evaluatorbyemployeename
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeename", "ja-JP", "评价人名称_jp", "评价人名称（冗余：按 EvaluatorByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.supplierevaluation.evaluatorbyemployeename
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeename", "zh-CN", "评价人名称", "评价人名称（冗余：按 EvaluatorByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.supplierevaluation.evaluatorbyemployeename
+            new TranslationSeedItem("entity.supplierevaluation.evaluatorbyemployeename", "zh-HK", "评价人名称_hk", "评价人名称（冗余：按 EvaluatorByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+
+            // entity.supplierevaluation.evaluationdeptid
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptid", "en-US", "评价部门ID_us", "评价部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluationdeptid
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptid", "ja-JP", "评价部门ID_jp", "评价部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluationdeptid
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptid", "zh-CN", "评价部门ID", "评价部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.supplierevaluation.evaluationdeptid
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptid", "zh-HK", "评价部门ID_hk", "评价部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.supplierevaluation.evaluationdeptname
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptname", "en-US", "评价部门名称_us", "评价部门名称（冗余：按 EvaluationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.supplierevaluation.evaluationdeptname
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptname", "ja-JP", "评价部门名称_jp", "评价部门名称（冗余：按 EvaluationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.supplierevaluation.evaluationdeptname
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptname", "zh-CN", "评价部门名称", "评价部门名称（冗余：按 EvaluationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.supplierevaluation.evaluationdeptname
+            new TranslationSeedItem("entity.supplierevaluation.evaluationdeptname", "zh-HK", "评价部门名称_hk", "评价部门名称（冗余：按 EvaluationDeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.supplierevaluation.overallrating
             new TranslationSeedItem("entity.supplierevaluation.overallrating", "en-US", "总体评级_us", "总体评级（字典 logistics_quality_supplier_rating）"),

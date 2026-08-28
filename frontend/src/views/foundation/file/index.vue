@@ -95,8 +95,8 @@
         <template v-else-if="column.key === 'isPublic'">
           <a-switch
             :checked="getFileField(record, 'isPublic') === 0"
-            :checked-children="t('dict.sys.is.public.type.0')"
-            :un-checked-children="t('dict.sys.is.public.type.1')"
+            :checked-children="t('dict.sys.public.type.0')"
+            :un-checked-children="t('dict.sys.public.type.1')"
             @change="(checked: unknown) => handleFilePublicChange(record, Boolean(checked))"
           />
         </template>
@@ -430,9 +430,12 @@ import { isFileStatusEnabled, TAKT_FILE_STATUS_LOCKED } from '@/utils/takt-file-
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { RiEyeLine, RiDeleteBinLine } from '@remixicon/vue'
+import { usePermissionStore } from '@/stores/identity/permission'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+/** 文件下载权限（与 Foundation 按钮 download 种子、TaktFiles/{id}/download 一致） */
+const permissionStore = usePermissionStore()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktFile')
 /** 列表快捷查询占位文案 */
@@ -848,6 +851,9 @@ function getFileDisplayName(record: File): string {
 function canDownloadFile(record: File): boolean {
   const id = getFileId(record)
   if (!id) {
+    return false
+  }
+  if (!permissionStore.hasPermission('foundation:file:download')) {
     return false
   }
   return isFileStatusEnabled(getFileField(record, 'fileStatus'))

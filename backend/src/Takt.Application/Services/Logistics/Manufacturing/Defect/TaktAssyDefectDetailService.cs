@@ -422,7 +422,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
                 || (x.DefectSymptom != null && x.DefectSymptom.Contains(keywords))
                 || (x.DefectLocation != null && x.DefectLocation.Contains(keywords))
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
-                || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
+                || (x.RepairOperatorName != null && x.RepairOperatorName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -524,10 +524,10 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exp = exp.And(x => x.DefectReason != null && x.DefectReason.Contains(defectReason));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperatorName))
         {
-            var repairOperator = queryDto.RepairOperator;
-            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(repairOperator));
+            var repairOperator = queryDto.RepairOperatorName;
+            exp = exp.And(x => x.RepairOperatorName != null && x.RepairOperatorName.Contains(repairOperator));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -636,7 +636,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperator))
+        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperatorName))
         {
             return true;
         }

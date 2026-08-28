@@ -73,12 +73,13 @@ export const BILLOFMATERIALSUBSTITUTE_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
-  billOfMaterialId: 'required',
-  bomCode: 'required',
-  primaryMaterialCode: 'required',
+  plantCode: 'optional',
+  billOfMaterialId: 'optional',
+  bomCode: 'optional',
+  primaryMaterialCode: 'optional',
   lineNumber: 'select',
   substituteMaterialId: 'select',
-  substituteMaterialCode: 'required',
+  substituteMaterialCode: 'optional',
   substituteGroup: 'optional',
   substitutePriority: 'select',
   usageQuantity: 'select',
@@ -88,7 +89,6 @@ export const BILLOFMATERIALSUBSTITUTE_PLACEHOLDER = {
   effectiveDate: 'optional',
   expiryDate: 'optional',
   isObsolete: 'select',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -97,6 +97,7 @@ export type BillOfMaterialSubstituteField = keyof typeof BILLOFMATERIALSUBSTITUT
 /** 高级查询可 trim 的字符串字段 */
 export const BILLOFMATERIALSUBSTITUTE_QUERY_STRING_FIELDS = [
   'cultureCode',
+  'plantCode',
   'billOfMaterialId',
   'bomCode',
   'primaryMaterialCode',

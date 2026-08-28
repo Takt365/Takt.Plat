@@ -53,17 +53,17 @@ public class TaktPlant : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "code_alias", ColumnDescription = "编码代号", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "TKC")]
     public string CodeAlias { get; set; } = "TKC";
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "150")]
     public string EnterpriseNature { get; set; } = "150";
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "C")]
     public string IndustryAttribute { get; set; } = "C";
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_scale", ColumnDescription = "企业规模", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "M")]
     public string EnterpriseScale { get; set; } = "M";
@@ -168,10 +168,16 @@ public class TaktPlant : TaktTenantCultureEntityBase
     [SugarColumn(ColumnName = "legal_representative", ColumnDescription = "法定代表人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string LegalRepresentative { get; set; } = string.Empty;
     /// <summary>
-    /// 工厂负责人
+    /// 工厂负责人（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_manager", ColumnDescription = "工厂负责人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string PlantManager { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "plant_manager_user_id", ColumnDescription = "工厂负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PlantManagerUserId { get; set; }
+    /// <summary>
+    /// 工厂负责人名称（冗余：按 PlantManagerUserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_manager_user_name", ColumnDescription = "工厂负责人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PlantManagerUserName { get; set; }
     /// <summary>
     /// 注册资本（万元）
     /// </summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.indirectlabor", "zh-HK", "间接人员_hk", "间接人员"),
 
             // entity.pcbaoutputdetail.shiftno
-            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaoutputdetail.shiftno
-            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaoutputdetail.shiftno
-            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaoutputdetail.shiftno
-            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.pcbaoutputdetail.stdminutes
             new TranslationSeedItem("entity.pcbaoutputdetail.stdminutes", "en-US", "标准工时_us", "标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）"),
@@ -217,13 +217,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.pcbboardtype", "zh-HK", "PCB板别_hk", "PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）"),
 
             // entity.pcbaoutputdetail.panelside
-            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "en-US", "面板别_us", "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "en-US", "面板别_us", "面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）"),
             // entity.pcbaoutputdetail.panelside
-            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "ja-JP", "面板别_jp", "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "ja-JP", "面板别_jp", "面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）"),
             // entity.pcbaoutputdetail.panelside
-            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-CN", "面板别", "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-CN", "面板别", "面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）"),
             // entity.pcbaoutputdetail.panelside
-            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-HK", "面板别_hk", "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.panelside", "zh-HK", "面板别_hk", "面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）"),
 
             // entity.pcbaoutputdetail.batchqty
             new TranslationSeedItem("entity.pcbaoutputdetail.batchqty", "en-US", "批次数量_us", "批次数量"),
@@ -253,13 +253,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-HK", "累计完成数_hk", "累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）"),
 
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "en-US", "完成状态_us", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "en-US", "完成状态_us", "完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "ja-JP", "完成状态_jp", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "ja-JP", "完成状态_jp", "完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-CN", "完成状态", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-CN", "完成状态", "完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态_hk", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态_hk", "完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
 
             // entity.pcbaoutputdetail.serialcode
             new TranslationSeedItem("entity.pcbaoutputdetail.serialcode", "en-US", "序列号_us", "序列号（明细级）"),

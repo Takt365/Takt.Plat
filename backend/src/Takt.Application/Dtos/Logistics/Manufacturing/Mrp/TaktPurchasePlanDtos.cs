@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePlan 生成，请按需审阅）
 // 
@@ -68,7 +68,7 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public string? ProductionPlanName { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -93,20 +93,20 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人员工名称（填充字段）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? PlannerName { get; set; }
+    public string? PlannerEmployeeName { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）
@@ -204,7 +204,7 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -244,15 +244,15 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）
@@ -406,7 +406,7 @@ public class TaktPurchasePlanCreateDto
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -431,16 +431,15 @@ public class TaktPurchasePlanCreateDto
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [Required(ErrorMessage = "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）
@@ -595,7 +594,7 @@ public class TaktPurchasePlanTemplateDto
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -620,15 +619,15 @@ public class TaktPurchasePlanTemplateDto
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）
@@ -730,7 +729,7 @@ public class TaktPurchasePlanImportDto
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -755,15 +754,15 @@ public class TaktPurchasePlanImportDto
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）
@@ -871,7 +870,7 @@ public class TaktPurchasePlanExportDto
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ProductionPlanCode { get; set; } = string.Empty;
 
@@ -896,15 +895,15 @@ public class TaktPurchasePlanExportDto
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量）

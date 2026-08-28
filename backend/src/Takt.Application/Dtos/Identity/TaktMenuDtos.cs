@@ -46,7 +46,7 @@ public class TaktMenuDto : TaktTenantCoreDtoBase
     public string MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 
@@ -179,7 +179,7 @@ public class TaktMenuQueryDto : TaktPagedQuery
     public string? MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -316,9 +316,9 @@ public class TaktMenuCreateDto
     public string MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
-    [Required(ErrorMessage = "本地化键（用于多语言支持）不能为空")]
+    [Required(ErrorMessage = "国际化键（用于多语言支持）不能为空")]
     public string I18nKey { get; set; } = string.Empty;
 
     /// <summary>
@@ -508,7 +508,7 @@ public class TaktMenuTemplateDto
     public string? MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -620,7 +620,7 @@ public class TaktMenuImportDto
     public string? MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
     public string? I18nKey { get; set; } = string.Empty;
 
@@ -739,7 +739,7 @@ public class TaktMenuExportDto
     public string MenuName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持）
     /// </summary>
     public string I18nKey { get; set; } = string.Empty;
 

@@ -40,7 +40,7 @@ export interface CostCenter extends CompanyDtoBase {
    */
   parentId: string;
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType: number;
   /**
@@ -130,7 +130,7 @@ export interface CostCenterQuery extends TaktPagedQuery {
   parentId?: string;
 
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType?: number;
 
@@ -257,7 +257,7 @@ export interface CostCenterCreate {
   parentId: string;
 
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType: number;
 
@@ -404,7 +404,7 @@ export interface CostCenterTemplate {
   parentId?: string;
 
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType?: number;
 
@@ -506,7 +506,7 @@ export interface CostCenterImport {
   parentId?: string;
 
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType?: number;
 
@@ -600,7 +600,7 @@ export interface CostCenterExport {
   parentId: string;
 
   /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   * 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
    */
   costCenterType: number;
 

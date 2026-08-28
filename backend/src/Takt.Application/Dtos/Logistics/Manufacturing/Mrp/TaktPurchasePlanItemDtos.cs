@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanItemDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlanItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePlanItem 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     public string? PurchasePlanName { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchasePlanCode { get; set; } = string.Empty;
 
@@ -104,7 +104,7 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -202,7 +202,7 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     public long? PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchasePlanCode { get; set; } = string.Empty;
 
@@ -249,7 +249,7 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -370,7 +370,7 @@ public class TaktPurchasePlanItemCreateDto
     public long PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchasePlanCode { get; set; } = string.Empty;
 
@@ -419,9 +419,9 @@ public class TaktPurchasePlanItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -570,7 +570,7 @@ public class TaktPurchasePlanItemTemplateDto
     public long? PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchasePlanCode { get; set; } = string.Empty;
 
@@ -617,7 +617,7 @@ public class TaktPurchasePlanItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -720,7 +720,7 @@ public class TaktPurchasePlanItemImportDto
     public long? PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchasePlanCode { get; set; } = string.Empty;
 
@@ -767,7 +767,7 @@ public class TaktPurchasePlanItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -876,7 +876,7 @@ public class TaktPurchasePlanItemExportDto
     public long PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 采购计划编码（冗余字段，便于查询）
+    /// 采购计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchasePlanCode { get; set; } = string.Empty;
 
@@ -923,7 +923,7 @@ public class TaktPurchasePlanItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 

@@ -158,7 +158,7 @@
       <a-form-item :label="pi.queryLabel('pcbaBoardType')">
         <TaktSelect
           v-model:value="advancedQueryForm.pcbaBoardType"
-          dict-type="logistics_pcba_function_category"
+          dict-type="logistics_manufacturing_pcba_function"
           :placeholder="pi.queryPh('pcbaBoardType', 'select')"
           allow-clear
         />
@@ -209,7 +209,7 @@
       <a-form-item :label="pi.queryLabel('defectEngineering')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectEngineering"
-          dict-type="logistics_defect_category"
+          dict-type="logistics_manufacturing_defect_category"
           :placeholder="pi.queryPh('defectEngineering', 'select')"
           allow-clear
         />
@@ -239,7 +239,7 @@
       <a-form-item :label="pi.queryLabel('defectResponsibility')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectResponsibility"
-          dict-type="logistics_defect_responsibility_category"
+          dict-type="logistics_manufacturing_defect_responsibility_category"
           :placeholder="pi.queryPh('defectResponsibility', 'select')"
           allow-clear
         />
@@ -249,7 +249,7 @@
       <a-form-item :label="pi.queryLabel('defectNature')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectNature"
-          dict-type="logistics_defect_nature_category"
+          dict-type="logistics_manufacturing_defect_nature"
           :placeholder="pi.queryPh('defectNature', 'select')"
           allow-clear
         />

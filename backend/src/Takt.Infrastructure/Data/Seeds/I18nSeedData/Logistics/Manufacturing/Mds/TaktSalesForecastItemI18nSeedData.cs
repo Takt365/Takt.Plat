@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesForecastItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSalesForecastItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesforecastitem.salesforecastid", "zh-HK", "销售预测ID_hk", "销售预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.salesforecastitem.salesforecastcode
-            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "en-US", "销售预测编码_us", "销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "en-US", "销售预测编码_us", "销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesforecastitem.salesforecastcode
-            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "ja-JP", "销售预测编码_jp", "销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "ja-JP", "销售预测编码_jp", "销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesforecastitem.salesforecastcode
-            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "zh-CN", "销售预测编码", "销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "zh-CN", "销售预测编码", "销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesforecastitem.salesforecastcode
-            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "zh-HK", "销售预测编码_hk", "销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesforecastitem.salesforecastcode", "zh-HK", "销售预测编码_hk", "销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.salesforecastitem.linenumber
             new TranslationSeedItem("entity.salesforecastitem.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),

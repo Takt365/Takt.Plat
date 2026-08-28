@@ -89,7 +89,7 @@ export interface SerialSummary extends CompanyDtoBase {
   destination?: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
@@ -197,7 +197,7 @@ export interface SerialSummaryExport {
   destination: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 

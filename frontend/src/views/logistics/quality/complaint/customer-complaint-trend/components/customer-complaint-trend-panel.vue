@@ -93,7 +93,7 @@ import { useI18n } from 'vue-i18n'
 import {
   exportCustomerComplaintMonthlyTrendAnalysis,
   getCustomerComplaintMonthlyTrendAnalysis,
-} from '@/api/logistics/quality/complaint/customer-complaint'
+} from '@/api/logistics/quality/complaint/customer-complaint-trend'
 import type { CustomerComplaintMonthlyTrend } from '@/types/logistics/quality/complaint/customer-complaint-trend'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {

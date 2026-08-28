@@ -30,7 +30,9 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 /// </summary>
 public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionService
 {
-    /// <summary>BOM 成本明细按年分表基表名</summary>
+    /// <summary>
+    /// BOM 成本明细按年分表基表名
+    /// </summary>
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
     private readonly ITaktCompanyRepository<TaktBomMaterialCost> _bomMaterialCostRepository;

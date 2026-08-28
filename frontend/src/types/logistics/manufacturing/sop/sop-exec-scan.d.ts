@@ -59,7 +59,7 @@ export interface SopExecScan extends CompanyDtoBase {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（1=PASS，2=NG；字典 logistics_manufacturing_sop_scan_result）
    */
   scanResult?: number;
 
@@ -122,7 +122,7 @@ export interface SopExecScanExport {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（1=PASS，2=NG；字典 logistics_manufacturing_sop_scan_result）
    */
   scanResult: number;
 

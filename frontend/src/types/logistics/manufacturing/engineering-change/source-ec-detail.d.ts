@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：source-ec-detail.d.ts
-// 创建时间：2026-08-22
+// 创建时间：2026-08-26
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,54 +49,54 @@ export interface SourceEcDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct: string;
+  sourceFinishedGoods: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart: string;
+  sourceParentMaterialCode: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -104,24 +104,24 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期
@@ -184,54 +184,54 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct?: string;
+  sourceFinishedGoods?: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart?: string;
+  sourceParentMaterialCode?: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -239,24 +239,24 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期（范围查询-开始）
@@ -338,54 +338,54 @@ export interface SourceEcDetailCreate {
   lineNumber: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct: string;
+  sourceFinishedGoods: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart: string;
+  sourceParentMaterialCode: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -393,24 +393,24 @@ export interface SourceEcDetailCreate {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期
@@ -511,54 +511,54 @@ export interface SourceEcDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct?: string;
+  sourceFinishedGoods?: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart?: string;
+  sourceParentMaterialCode?: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -566,24 +566,24 @@ export interface SourceEcDetailTemplate {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期
@@ -650,54 +650,54 @@ export interface SourceEcDetailImport {
   lineNumber?: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct?: string;
+  sourceFinishedGoods?: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart?: string;
+  sourceParentMaterialCode?: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -705,24 +705,24 @@ export interface SourceEcDetailImport {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期
@@ -789,54 +789,54 @@ export interface SourceEcDetailExport {
   lineNumber: number;
 
   /**
-   * 完成品
+   * 完成品物料编码
    */
-  sourceFinishedProduct: string;
+  sourceFinishedGoods: string;
 
   /**
-   * 上阶物料
+   * 上阶物料编码
    */
-  sourceParentPart: string;
+  sourceParentMaterialCode: string;
 
   /**
-   * 旧物料号
+   * 旧物料编码
    */
-  sourceLegacyPartCode?: string;
+  sourceOldMaterialCode?: string;
 
   /**
-   * 旧物料
+   * 旧物料描述
    */
-  sourceLegacyPartName?: string;
+  sourceOldMaterialDescription?: string;
 
   /**
    * 旧物料用量
    */
-  sourceLegacyUsage?: number;
+  sourceOldUsageQuantity?: number;
 
   /**
    * 旧物料安装位置
    */
-  sourceLegacyMountingPosition?: string;
+  sourceOldItemPosition?: string;
 
   /**
-   * 新物料
+   * 新物料编码
    */
-  sourceReplacementPartCode?: string;
+  sourceNewMaterialCode?: string;
 
   /**
-   * 新物料
+   * 新物料描述
    */
-  sourceReplacementPartName?: string;
+  sourceNewMaterialDescription?: string;
 
   /**
    * 新物料用量
    */
-  sourceReplacementUsage?: number;
+  sourceNewUsageQuantity?: number;
 
   /**
    * 新物料安装位置
    */
-  sourceReplacementMountingPosition?: string;
+  sourceNewItemPosition?: string;
 
   /**
    * BOM番号
@@ -844,24 +844,24 @@ export interface SourceEcDetailExport {
   sourceBomCode?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   sourceDistinction?: string;
 
   /**
-   * 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   sourceInstruction?: string;
 
   /**
-   * 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  sourceLegacyPartDisposition?: string;
+  sourceOldPartDisposition?: string;
 
   /**
    * BOM生效日期

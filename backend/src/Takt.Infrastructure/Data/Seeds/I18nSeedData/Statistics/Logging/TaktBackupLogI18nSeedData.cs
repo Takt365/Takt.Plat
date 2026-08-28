@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktBackupLogI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBackupLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktBackupLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.backuplog.sourceid", "zh-HK", "来源业务键_hk", "来源业务键（备份配置 Id、任务号等，统一字符串）"),
 
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "en-US", "来源编码_us", "来源编码快照（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "en-US", "来源编码_us", "来源编码快照（冗余：按对应 Id 取主数据名称联动）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "ja-JP", "来源编码_jp", "来源编码快照（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "ja-JP", "来源编码_jp", "来源编码快照（冗余：按对应 Id 取主数据名称联动）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-CN", "来源编码", "来源编码快照（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-CN", "来源编码", "来源编码快照（冗余：按对应 Id 取主数据名称联动）"),
             // entity.backuplog.sourcecode
-            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-HK", "来源编码_hk", "来源编码快照（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.backuplog.sourcecode", "zh-HK", "来源编码_hk", "来源编码快照（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.backuplog.targetname
             new TranslationSeedItem("entity.backuplog.targetname", "en-US", "目标名称_us", "目标名称（库展示名、目标标签等）"),

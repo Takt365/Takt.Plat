@@ -28,6 +28,22 @@ export default {
       importSuccess: 'Successfully imported {count} EC record(s)',
       importPartial: 'Import finished: {success} succeeded, {fail} failed',
     },
+    attachment: {
+      docCode: {
+        formatInvalid: 'Invalid document code format ({hint})',
+        duplicate: 'Document code "{code}" already exists',
+        hint: {
+          empty: 'Enter document code',
+          ec: 'Must match EC number',
+          eppFpp: 'P-xxxx (P- + 4 digits, e.g. P-0001)',
+          tl: 'DTS-xxxx (DTS- + 4 digits, e.g. DTS-0001)',
+          quadDash: 'xxxx-xxxx (4 digits each, e.g. 1234-5678)',
+        },
+      },
+      fileName: {
+        duplicate: 'File name "{name}" already exists',
+      },
+    },
     tabs: {
       oldNewMaterial: 'Old / New Material',
     },

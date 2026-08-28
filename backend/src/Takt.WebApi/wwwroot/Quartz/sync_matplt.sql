@@ -45,7 +45,7 @@ CREATE TABLE #st_source (
   [storage_location] NVARCHAR(100),
   [is_inspection] INT,
   [is_batch] INT,
-  [is_end_of_life] NVARCHAR(20),
+  [discontinued_status] NVARCHAR(20),
   [material_status] NVARCHAR(100),
   [tenant_code] NVARCHAR(50),
   [company_code] NVARCHAR(50),
@@ -93,7 +93,7 @@ SELECT
   ISNULL(NULLIF(LTRIM(RTRIM(S.[storage_location])), ''), ''),
   CASE WHEN LTRIM(RTRIM(S.[is_inspection])) = 'X' THEN 1 ELSE 0 END,
   CASE WHEN LTRIM(RTRIM(S.[is_batch])) = 'X' THEN 1 ELSE 0 END,
-  COALESCE(NULLIF(LTRIM(RTRIM(S.[is_end_of_life])), ''), 'Z0'),
+  COALESCE(NULLIF(LTRIM(RTRIM(S.[discontinued_status])), ''), 'Z0'),
   '1',
   @tenant_code,
   @company_code,
@@ -133,7 +133,7 @@ FROM (
     [D_SAP_ZCA1D_Z031] AS purchasing_location,
     [D_SAP_ZCA1D_Z032] AS storage_location,
     [D_SAP_ZCA1D_Z033] AS current_stock,
-    [D_SAP_ZCA1D_Z034] AS is_end_of_life,
+    [D_SAP_ZCA1D_Z034] AS discontinued_status,
     ROW_NUMBER() OVER (ORDER BY [D_SAP_ZCA1D_Z001], [D_SAP_ZCA1D_Z002]) AS rn
   FROM [Sap_Data].[dbo].[PP_SapMaterial]
 ) S
@@ -238,9 +238,9 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[production_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[production_location], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[purchasing_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[purchasing_location], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[storage_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[storage_location], N'')))
-  OR T.[is_inspection] <> S.[is_inspection]
+  OR T.[requires_inspection] <> S.[is_inspection]
   OR T.[is_batch] <> S.[is_batch]
-  OR LTRIM(RTRIM(ISNULL(T.[is_end_of_life], N''))) <> LTRIM(RTRIM(ISNULL(S.[is_end_of_life], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[discontinued_status], N''))) <> LTRIM(RTRIM(ISNULL(S.[discontinued_status], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[material_status], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_status], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> LTRIM(RTRIM(ISNULL(S.[remark], N'')))
 ) THEN
@@ -273,9 +273,9 @@ WHEN MATCHED AND (
   T.[production_location]=S.[production_location],
   T.[purchasing_location]=S.[purchasing_location],
   T.[storage_location]=S.[storage_location],
-  T.[is_inspection]=S.[is_inspection],
+  T.[requires_inspection]=S.[is_inspection],
   T.[is_batch]=S.[is_batch],
-  T.[is_end_of_life]=S.[is_end_of_life],
+  T.[discontinued_status]=S.[discontinued_status],
   T.[material_status]=S.[material_status],
   T.[remark]=S.[remark],
   T.[culture_code]=@culture_code,
@@ -290,7 +290,7 @@ WHEN NOT MATCHED THEN
     [rounding_value],[planned_delivery_time_days],[in_house_production_days],[manufacturer],
     [manufacturer_material_code],[currency_code],[price_control],[price_unit],[valuation],
     [moving_price],[difference_code],[profit_center],[current_stock],[production_location],
-    [purchasing_location],[storage_location],[is_inspection],[is_batch],[is_end_of_life],
+    [purchasing_location],[storage_location],[requires_inspection],[is_batch],[discontinued_status],
     [material_status],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],
     [created_at],[updated_by],[updated_at],[is_deleted]
   )
@@ -301,7 +301,7 @@ WHEN NOT MATCHED THEN
     S.[rounding_value],S.[planned_delivery_time_days],S.[in_house_production_days],S.[manufacturer],
     S.[manufacturer_material_code],S.[currency],S.[price_control],S.[price_unit],S.[valuation],
     S.[moving_price],S.[difference_code],S.[profit_center],S.[current_stock],S.[production_location],
-    S.[purchasing_location],S.[storage_location],S.[is_inspection],S.[is_batch],S.[is_end_of_life],
+    S.[purchasing_location],S.[storage_location],S.[is_inspection],S.[is_batch],S.[discontinued_status],
     S.[material_status],S.[tenant_code],S.[company_code],@culture_code,S.[ext_field],S.[remark],S.[updated_by],@now,S.[updated_by],@now,0
   )
 OUTPUT

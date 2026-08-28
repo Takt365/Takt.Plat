@@ -498,9 +498,9 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                 || (x.ReversalFiscalYear != null && x.ReversalFiscalYear.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SupplyingCountry != null && x.SupplyingCountry.Contains(keywords))
-                || (x.EnteredBy != null && x.EnteredBy.Contains(keywords))
+                || (x.EnteredByEmployeeName != null && x.EnteredByEmployeeName.Contains(keywords))
                 || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
-                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -632,10 +632,10 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             exp = exp.And(x => x.TaxExchangeRate == taxExchangeRate);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EnteredBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EnteredByEmployeeName))
         {
-            var enteredBy = queryDto.EnteredBy;
-            exp = exp.And(x => x.EnteredBy != null && x.EnteredBy.Contains(enteredBy));
+            var enteredBy = queryDto.EnteredByEmployeeName;
+            exp = exp.And(x => x.EnteredByEmployeeName != null && x.EnteredByEmployeeName.Contains(enteredBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.TransactionCode))
@@ -644,10 +644,10 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             exp = exp.And(x => x.TransactionCode != null && x.TransactionCode.Contains(transactionCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
         {
-            var postedBy = queryDto.PostedBy;
-            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+            var postedBy = queryDto.PostedByEmployeeName;
+            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -824,7 +824,7 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EnteredBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.EnteredByEmployeeName))
         {
             return true;
         }
@@ -832,7 +832,7 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
         {
             return true;
         }

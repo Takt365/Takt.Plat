@@ -39,7 +39,7 @@ public class TaktTrainingPlan : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "plan_year", ColumnDescription = "计划年度", ColumnDataType = "int", IsNullable = false)]
     public int PlanYear { get; set; } = 0;
     /// <summary>
-    /// 计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
+    /// 计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）
     /// </summary>
     [SugarColumn(ColumnName = "plan_type", ColumnDescription = "计划类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlanType { get; set; } = string.Empty;

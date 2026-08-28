@@ -347,13 +347,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentPaths')">
-      <a-form-item :label="t('entity.customercomplainthandling.attachmentpaths')">
+      <div v-show="isFieldVisible('fileName')">
+      <a-form-item :label="t('entity.customercomplainthandling.filename')">
         <a-input
-          v-model:value="advancedQueryForm.attachmentPaths"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.attachmentpaths') })"
+          v-model:value="advancedQueryForm.fileName"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.filename') })"
           show-count
-          :maxlength="2000"
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('accessUrl')">
+      <a-form-item :label="t('entity.customercomplainthandling.accessurl')">
+        <a-input
+          v-model:value="advancedQueryForm.accessUrl"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.accessurl') })"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -543,7 +554,8 @@ const advancedQueryForm = ref({
   handlingCost: undefined as number | undefined,
   customerFeedback: '',
   customerSatisfaction: undefined as number | undefined,
-  attachmentPaths: '',
+  fileName: '',
+  accessUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -574,7 +586,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'handlingCost', label: t('entity.customercomplainthandling.handlingcost') },
   { key: 'customerFeedback', label: t('entity.customercomplainthandling.customerfeedback') },
   { key: 'customerSatisfaction', label: t('entity.customercomplainthandling.customersatisfaction') },
-  { key: 'attachmentPaths', label: t('entity.customercomplainthandling.attachmentpaths') },
+  { key: 'fileName', label: t('entity.customercomplainthandling.filename') },
+  { key: 'accessUrl', label: t('entity.customercomplainthandling.accessurl') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
@@ -649,7 +662,8 @@ function buildListQuery(overrides?: Partial<CustomerComplaintHandlingQuery>): Cu
   if (form.customerSatisfaction !== undefined && form.customerSatisfaction !== null) {
     query.customerSatisfaction = form.customerSatisfaction
   }
-  assignTrimmed('attachmentPaths', form.attachmentPaths)
+  assignTrimmed('fileName', form.fileName)
+  assignTrimmed('accessUrl', form.accessUrl)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -855,13 +869,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerComplaintHandlingField(record, 'customerSatisfaction') ?? ''
   },
   {
-    title: t('entity.customercomplainthandling.attachmentpaths'),
-    dataIndex: 'attachmentPaths',
-    key: 'attachmentPaths',
+    title: t('entity.customercomplainthandling.filename'),
+    dataIndex: 'fileName',
+    key: 'fileName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintHandlingField(record, 'attachmentPaths') ?? ''
+    customRender: ({ record }: { record: any }) => getCustomerComplaintHandlingField(record, 'fileName') ?? ''
+  },
+  {
+    title: t('entity.customercomplainthandling.accessurl'),
+    dataIndex: 'accessUrl',
+    key: 'accessUrl',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCustomerComplaintHandlingField(record, 'accessUrl') ?? ''
   },
   {
     title: t('entity.customercomplainthandling.complaint'),
@@ -994,7 +1017,8 @@ function handleReset() {
   handlingCost: undefined as number | undefined,
   customerFeedback: '',
   customerSatisfaction: undefined as number | undefined,
-  attachmentPaths: '',
+  fileName: '',
+  accessUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1192,7 +1216,8 @@ function handleAdvancedQueryReset() {
   handlingCost: undefined as number | undefined,
   customerFeedback: '',
   customerSatisfaction: undefined as number | undefined,
-  attachmentPaths: '',
+  fileName: '',
+  accessUrl: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

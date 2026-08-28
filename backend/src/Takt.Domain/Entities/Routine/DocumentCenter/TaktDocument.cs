@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Routine.DocumentCenter;
 public class TaktDocument : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）
+    /// 文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文管中心）
     /// </summary>
     [SugarColumn(ColumnName = "document_code", ColumnDescription = "文档编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string DocumentCode { get; set; } = string.Empty;
@@ -40,12 +40,12 @@ public class TaktDocument : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "document_title", ColumnDescription = "文档标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string DocumentTitle { get; set; } = string.Empty;
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "document_category", ColumnDescription = "文档分类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DocumentCategory { get; set; } = 0;
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     [SugarColumn(ColumnName = "confidential_level", ColumnDescription = "密级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ConfidentialLevel { get; set; } = 0;
@@ -101,7 +101,7 @@ public class TaktDocument : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
     /// <summary>
-    /// 发布人姓名（冗余字段，便于查询）
+    /// 发布人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_name", ColumnDescription = "发布人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string PublisherName { get; set; } = string.Empty;
@@ -112,7 +112,7 @@ public class TaktDocument : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 归属部门名称（冗余字段，便于查询）
+    /// 归属部门名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "归属部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }

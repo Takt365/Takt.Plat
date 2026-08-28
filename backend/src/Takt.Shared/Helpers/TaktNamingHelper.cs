@@ -1,14 +1,14 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktNamingHelper.cs
-// 功能描述：通用命名约定：实体类名与 Takt 前缀、Excel 导入导出 sheet/file 默认值、entity.xxx._self 资源键推导等。
+// 功能描述：通用命名约定：实体类名与 Takt 前缀、Excel 导入导出 sheet/file 默认值、entity.xxx._self / org.dept.* 资源键推导等。
 // ========================================
 
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 通用命名辅助（如 Excel 模板/导入/导出：fileName 默认为领域实体类名；sheetName 默认为去掉 <c>Takt</c> 后的英文业务名；与种子 <c>entity.xxx._self</c> 规则对齐）。
+/// 通用命名辅助（如 Excel 模板/导入/导出：fileName 默认为领域实体类名；sheetName 默认为去掉 <c>Takt</c> 后的英文业务名；与种子 <c>entity.xxx._self</c>、<c>org.dept.{编码}</c> 规则对齐）。
 /// </summary>
 public static class TaktNamingHelper
 {
@@ -33,6 +33,26 @@ public static class TaktNamingHelper
     {
         var tail = DefaultSheetNameEnglish(entityTypeName);
         return $"entity.{tail.ToLowerInvariant()}._self";
+    }
+
+    /// <summary>
+    /// 部门显示名翻译键，与 TaktDeptI18nSeedData 的 org.dept.{编码小写} 一致（如 D0420 → org.dept.d0420）。
+    /// </summary>
+    /// <param name="deptCode">TaktDept.DeptCode，如 D0420、T000、1000</param>
+    /// <returns>org.dept.{编码小写}</returns>
+    /// <exception cref="ArgumentException">deptCode 为空，或含非字母数字字符</exception>
+    public static string OrgDeptResourceKey(string deptCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
+        var code = deptCode.Trim().ToLowerInvariant();
+        for (var i = 0; i < code.Length; i++)
+        {
+            if (!char.IsLetterOrDigit(code[i]))
+            {
+                throw new ArgumentException("部门编码只能包含字母和数字。", nameof(deptCode));
+            }
+        }
+        return $"org.dept.{code}";
     }
 
     /// <summary>

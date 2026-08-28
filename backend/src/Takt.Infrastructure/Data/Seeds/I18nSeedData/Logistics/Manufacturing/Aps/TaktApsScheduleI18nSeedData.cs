@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsScheduleI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsSchedule 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -243,23 +243,23 @@ public class TaktApsScheduleI18nSeedData : ITaktSeedDataCoordinator
             // entity.apsschedule.schedulestatus
             new TranslationSeedItem("entity.apsschedule.schedulestatus", "zh-HK", "排程状态_hk", "排程状态（0=草稿，1=计算中，2=已计算，3=已发布，4=执行中，5=已完成，6=已取消）"),
 
-            // entity.apsschedule.plannerid
-            new TranslationSeedItem("entity.apsschedule.plannerid", "en-US", "计划员ID_us", "计划员ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.apsschedule.plannerid
-            new TranslationSeedItem("entity.apsschedule.plannerid", "ja-JP", "计划员ID_jp", "计划员ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.apsschedule.plannerid
-            new TranslationSeedItem("entity.apsschedule.plannerid", "zh-CN", "计划员ID", "计划员ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.apsschedule.plannerid
-            new TranslationSeedItem("entity.apsschedule.plannerid", "zh-HK", "计划员ID_hk", "计划员ID（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.apsschedule.planneremployeeid
+            new TranslationSeedItem("entity.apsschedule.planneremployeeid", "en-US", "计划员员工ID_us", "计划员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.apsschedule.planneremployeeid
+            new TranslationSeedItem("entity.apsschedule.planneremployeeid", "ja-JP", "计划员员工ID_jp", "计划员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.apsschedule.planneremployeeid
+            new TranslationSeedItem("entity.apsschedule.planneremployeeid", "zh-CN", "计划员员工ID", "计划员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.apsschedule.planneremployeeid
+            new TranslationSeedItem("entity.apsschedule.planneremployeeid", "zh-HK", "计划员员工ID_hk", "计划员（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.apsschedule.plannername
-            new TranslationSeedItem("entity.apsschedule.plannername", "en-US", "计划员姓名_us", "计划员姓名"),
+            new TranslationSeedItem("entity.apsschedule.plannername", "en-US", "计划员名称_us", "计划员名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.apsschedule.plannername
-            new TranslationSeedItem("entity.apsschedule.plannername", "ja-JP", "计划员姓名_jp", "计划员姓名"),
+            new TranslationSeedItem("entity.apsschedule.plannername", "ja-JP", "计划员名称_jp", "计划员名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.apsschedule.plannername
-            new TranslationSeedItem("entity.apsschedule.plannername", "zh-CN", "计划员姓名", "计划员姓名"),
+            new TranslationSeedItem("entity.apsschedule.plannername", "zh-CN", "计划员名称", "计划员名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.apsschedule.plannername
-            new TranslationSeedItem("entity.apsschedule.plannername", "zh-HK", "计划员姓名_hk", "计划员姓名"),
+            new TranslationSeedItem("entity.apsschedule.plannername", "zh-HK", "计划员名称_hk", "计划员名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.apsschedule.publishtime
             new TranslationSeedItem("entity.apsschedule.publishtime", "en-US", "发布时间_us", "发布时间"),

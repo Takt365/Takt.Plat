@@ -74,7 +74,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.contractType"
-                  dict-type="hr_employee_contract_type"
+                  dict-type="humanresource_personnel_employee_contract_type"
                   :placeholder="pi.ph('contractType')"
                 />
               </a-form-item>
@@ -152,7 +152,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.contractStatus"
-                  dict-type="hr_employee_contract_status"
+                  dict-type="humanresource_personnel_employee_contract_status"
                   :placeholder="pi.ph('contractStatus')"
                 />
               </a-form-item>

@@ -58,12 +58,12 @@
                 :label="pi.label('purchaseInquiryId')"
                 name="purchaseInquiryId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.purchaseInquiryId"
+                  api-url="TaktPurchaseInquiries/options"
                   :placeholder="pi.ph('purchaseInquiryId')"
-                  show-count
-                  :maxlength="20"
                   allow-clear
+                  @change="handlePurchaseInquiryChange"
                 />
               </a-form-item>
             </a-col>
@@ -88,7 +88,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.businessType"
-                  dict-type="logistics_countersign_business_type"
+                  dict-type="accounting_financial_countersign_business_type"
                   :placeholder="pi.ph('businessType')"
                 />
               </a-form-item>
@@ -124,12 +124,14 @@
                 :label="pi.label('countersignDepts')"
                 name="countersignDepts"
               >
-                <a-input
+                <TaktTreeSelect
                   v-model:value="formState.countersignDepts"
-                  :placeholder="pi.ph('countersignDepts')"
-                  show-count
-                  :maxlength="20"
+                  api-url="TaktDepts/tree-options"
+                  :lazy="true"
+                  multiple
                   allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="pi.ph('countersignDepts')"
                 />
               </a-form-item>
             </a-col>
@@ -194,30 +196,81 @@
                   v-model:value="formState.applicantBy"
                   api-url="TaktEmployees/options"
                   :placeholder="pi.ph('applicantBy')"
+                  @change="handleApplicantChange"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('applicationDept')"
-                name="applicationDept"
+                :label="pi.label('applicantName')"
+                name="applicantName"
               >
-                <TaktSelect
-                  v-model:value="formState.applicationDept"
-                  api-url="TaktDepts/tree-options"
-                  :placeholder="pi.ph('applicationDept')"
+                <a-input
+                  v-model:value="formState.applicantName"
+                  :placeholder="pi.ph('applicantName')"
+                  show-count
+                  :maxlength="80"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('costBearerDept')"
-                name="costBearerDept"
+                :label="pi.label('applicationDeptId')"
+                name="applicationDeptId"
               >
-                <TaktSelect
-                  v-model:value="formState.costBearerDept"
+                <TaktTreeSelect
+                  v-model:value="formState.applicationDeptId"
                   api-url="TaktDepts/tree-options"
-                  :placeholder="pi.ph('costBearerDept')"
+                  :lazy="true"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="pi.ph('applicationDeptId')"
+                  @change="handleApplicationDeptChange"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('applicationDeptName')"
+                name="applicationDeptName"
+              >
+                <a-input
+                  v-model:value="formState.applicationDeptName"
+                  :placeholder="pi.ph('applicationDeptName')"
+                  show-count
+                  :maxlength="40"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costBearerDeptId')"
+                name="costBearerDeptId"
+              >
+                <TaktTreeSelect
+                  v-model:value="formState.costBearerDeptId"
+                  api-url="TaktDepts/tree-options"
+                  :lazy="true"
+                  allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  :placeholder="pi.ph('costBearerDeptId')"
+                  @change="handleCostBearerDeptChange"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costBearerDeptName')"
+                name="costBearerDeptName"
+              >
+                <a-input
+                  v-model:value="formState.costBearerDeptName"
+                  :placeholder="pi.ph('costBearerDeptName')"
+                  show-count
+                  :maxlength="40"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -235,6 +288,20 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('budgetItemId')"
+                name="budgetItemId"
+              >
+                <TaktSelect
+                  v-model:value="formState.budgetItemId"
+                  api-url="TaktBudgetActuals/options"
+                  :placeholder="pi.ph('budgetItemId')"
+                  allow-clear
+                  @change="handleBudgetItemChange"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('budgetItem')"
                 name="budgetItem"
               >
@@ -243,7 +310,7 @@
                   :placeholder="pi.ph('budgetItem')"
                   show-count
                   :maxlength="200"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -256,6 +323,7 @@
                   v-model:value="formState.budgetAmount"
                   :placeholder="pi.ph('budgetAmount')"
                   style="width: 100%"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -335,17 +403,46 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('attachments')"
-                name="attachments"
+                :label="pi.label('fileName')"
+                name="fileName"
               >
                 <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="pi.ph('attachments')"
+                  v-model:value="formState.fileName"
+                  :placeholder="pi.ph('fileName')"
                   show-count
-                  :maxlength="20"
-                  allow-clear
+                  :maxlength="200"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('accessUrl')"
+                name="accessUrl"
+              >
+                <takt-upload-file
+                  tabs-type="files"
+                  :files-auto-upload="true"
+                  :files-multiple="false"
+                  :files-max-count="1"
+                  :files-disabled="!!loading || fileUploading"
+                  :files-max-size="taktFileMaxSizeMb"
+                  :files-accept="taktFileAccept"
+                  :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+                  :files-custom-request="handleFilesCustomRequest"
+                  v-model:files-file-list="filesFileList"
+                  @files:remove="handleFileRemove"
+                />
+                <a-input
+                  v-if="formState.accessUrl"
+                  v-model:value="formState.accessUrl"
+                  class="mt-2"
+                  :placeholder="pi.ph('accessUrl')"
+                  show-count
+                  :maxlength="1000"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -460,7 +557,7 @@
       <template #cell-allocationCategory="{ record }">
         <TaktSelect
           v-model:value="record.allocationCategory"
-          dict-type="logistics_allocation_category"
+          dict-type="logistics_sales_allocation_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="countersignDetailPi.ph('allocationCategory')"
@@ -501,14 +598,24 @@
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { message } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import type { UploadFile, UploadProps } from 'ant-design-vue'
 import { useCountersignI18n } from '../composables/use-countersign-i18n'
+import { getFileById } from '@/api/foundation/file'
+import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
+import {
+  buildTaktFileAcceptAttribute,
+  loadTaktFileUploadBasePolicy,
+  resolveTaktFileMaxSizeMb,
+} from '@/utils/takt-file-upload-policy'
 
 /** 实体字段 i18n */
 const pi = useCountersignI18n()
 
 import type { CountersignCreate } from '@/types/accounting/financial/countersign'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
@@ -549,7 +656,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchaseInquiryId","purchaseInquiryCode","businessType","businessKey","stepNo","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicationDept","costBearerDept","isBudget","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","attachments","countersignStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchaseInquiryId","purchaseInquiryCode","businessType","businessKey","stepNo","countersignDepts","financeDept","budgetReviewComment","executiveOffice","applicantBy","applicantName","applicationDeptId","applicationDeptName","costBearerDeptId","costBearerDeptName","isBudget","budgetItemId","budgetItem","budgetAmount","applicationAmount","countersignTitle","applicationReason","budgetUsageDescription","targetAndExpectedBenefit","fileName","accessUrl","countersignStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -701,15 +808,229 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
   Object.assign(target, FORM_FIELD_DEFAULTS)
+  if (!Array.isArray(target.countersignDepts)) {
+    target.countersignDepts = parseCountersignDeptIds(target.countersignDepts)
+  }
+}
+
+/** 选项变更时回填冗余名称 / 金额 */
+type SelectOptionLike = { label?: string; dictLabel?: string; extValue?: string } | null
+
+/**
+ * 从选项解析展示文案
+ * @param value 选中值
+ * @param option 选项或选项数组
+ * @param preferExtValue 为 true 时优先 ExtValue
+ * @returns {string} 冗余名称
+ */
+function resolveOptionName(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+  preferExtValue = false,
+): string {
+  if (value === undefined || value === null || value === '') {
+    return ''
+  }
+  const opt = Array.isArray(option) ? option[0] : option
+  const rec = opt && typeof opt === 'object' ? (opt as { label?: string; dictLabel?: string; extValue?: string }) : undefined
+  if (preferExtValue && rec?.extValue) {
+    return String(rec.extValue).trim()
+  }
+  return String(rec?.label ?? rec?.dictLabel ?? '').trim()
+}
+
+/**
+ * 解析会签部门 JSON 为树选择多选值
+ * @param raw 后端 JSON 字符串或已解析数组
+ * @returns {string[]} 部门 Id
+ */
+function parseCountersignDeptIds(raw: unknown): string[] {
+  if (Array.isArray(raw)) {
+    return raw.map((item) => String(item)).filter((item) => item.length > 0)
+  }
+  if (typeof raw !== 'string' || !raw.trim()) {
+    return []
+  }
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (Array.isArray(parsed)) {
+      return parsed.map((item) => String(item)).filter((item) => item.length > 0)
+    }
+  } catch {
+    return raw.trim() ? [raw.trim()] : []
+  }
+  return []
+}
+
+/**
+ * 来源采购询价变更：回填询价编码（ExtValue / DictLabel）
+ * @param value 询价 Id
+ * @param option 选项
+ */
+function handlePurchaseInquiryChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.purchaseInquiryCode = resolveOptionName(value, option, true)
+}
+
+/**
+ * 申请人变更：回填员工姓名
+ * @param value 员工 Id
+ * @param option 选项
+ */
+function handleApplicantChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.applicantName = resolveOptionName(value, option, true)
+}
+
+/**
+ * 申请部门变更：回填部门名称
+ * @param value 部门 Id
+ * @param option 选项
+ */
+function handleApplicationDeptChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.applicationDeptName = resolveOptionName(value, option)
+}
+
+/**
+ * 经费负担部门变更：回填部门名称
+ * @param value 部门 Id
+ * @param option 选项
+ */
+function handleCostBearerDeptChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.costBearerDeptName = resolveOptionName(value, option)
+}
+
+/**
+ * 预算项目变更：回填项目名称与预算金额
+ * @param value 预算实绩 Id
+ * @param option 选项（ExtValue=BudgetAmount）
+ */
+function handleBudgetItemChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.budgetItem = resolveOptionName(value, option)
+  if (value === undefined || value === null || value === '') {
+    formState.budgetAmount = 0
+    return
+  }
+  const opt = Array.isArray(option) ? option[0] : option
+  const rec = opt && typeof opt === 'object' ? (opt as { extValue?: string }) : undefined
+  const amount = Number(rec?.extValue)
+  formState.budgetAmount = Number.isFinite(amount) ? amount : 0
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
 const dictDataStore = useDictDataStore()
 
-/** 表单挂载时预加载全量字典 */
+/** 文件上传中 */
+const fileUploading = ref(false)
+/** takt-upload-file 文件列表 */
+const filesFileList = ref<UploadFile[]>([])
+/** 上传 accept */
+const taktFileAccept = ref('')
+/** 上传体积上限 MB */
+const taktFileMaxSizeMb = ref(500)
+
+/**
+ * 按 fileName / accessUrl 同步上传列表展示
+ */
+function syncFilesFileListFromFormState() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url) {
+    filesFileList.value = []
+    return
+  }
+  filesFileList.value = [{
+    uid: '-1',
+    name: String(formState.fileName ?? url.split('/').pop() ?? 'file'),
+    status: 'done',
+    url,
+  }]
+}
+
+/**
+ * 将 TaktFile 上传结果回填至表单（文件名由上传结果回填，禁止手输）
+ * @param file 本地文件
+ * @param result 上传结果
+ */
+async function applyUploadResultToForm(file: globalThis.File, result: Awaited<ReturnType<typeof uploadTaktFileSmart>>) {
+  let accessUrl = result.accessUrl?.trim() ?? ''
+  if (!accessUrl && result.fileId) {
+    const detail = await getFileById(result.fileId)
+    accessUrl = detail.accessUrl?.trim() ?? ''
+  }
+  if (!accessUrl) {
+    throw new Error('accessUrl empty')
+  }
+  formState.accessUrl = accessUrl
+  formState.fileName = result.fileOriginalName?.trim()
+    || result.fileName?.trim()
+    || file.name
+  syncFilesFileListFromFormState()
+  formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/** takt-upload-file 自定义上传：落库 TaktFile 后回写 accessUrl / fileName */
+const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
+  if (props.loading || fileUploading.value) {
+    options.onError?.(new Error('upload disabled'))
+    return
+  }
+  const originFile = options.file as globalThis.File
+  fileUploading.value = true
+  void (async () => {
+    try {
+      const result = await uploadTaktFileSmart(originFile)
+      await applyUploadResultToForm(originFile, result)
+      options.onSuccess?.(result)
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error))
+      message.error(t('common.feedback.failed'))
+      options.onError?.(err)
+    } finally {
+      fileUploading.value = false
+    }
+  })()
+}
+
+/** 移除已上传文件 */
+function handleFileRemove() {
+  formState.accessUrl = ''
+  formState.fileName = ''
+  filesFileList.value = []
+}
+
+/** 表单挂载时预加载全量字典与上传策略 */
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
+  void (async () => {
+    try {
+      const policy = await loadTaktFileUploadBasePolicy()
+      taktFileAccept.value = buildTaktFileAcceptAttribute(policy.allowedExtensions ?? [])
+      taktFileMaxSizeMb.value = resolveTaktFileMaxSizeMb(policy)
+    } catch {
+      // 回退默认值；实际上传校验仍由后端 API 返回
+    }
+  })()
 })
+
+watch(
+  () => [formState.fileName, formState.accessUrl],
+  () => {
+    syncFilesFileListFromFormState()
+  },
+)
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 countersignId 才视为编辑） */
 watch(
@@ -720,13 +1041,17 @@ watch(
       Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).countersignDetails
       applyScopeDefaults(next)
+      next.countersignDepts = parseCountersignDeptIds(next.countersignDepts)
       Object.assign(formState, next)
     syncChildRowsFromFormData(val)
+      syncFilesFileListFromFormState()
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
       if (val && typeof val === 'object' && Object.keys(val).length > 0) {
-        Object.assign(formState, val)
+        const next = { ...val } as Record<string, unknown>
+        next.countersignDepts = parseCountersignDeptIds(next.countersignDepts)
+        Object.assign(formState, next)
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
@@ -839,6 +1164,12 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('countersignDepts' in payload) {
+    const rawDepts = payload.countersignDepts
+    if (Array.isArray(rawDepts)) {
+      payload.countersignDepts = rawDepts.length > 0 ? JSON.stringify(rawDepts.map((item) => String(item))) : ''
+    }
+  }
   if ('stepNo' in payload) {
     const rawstepNo = payload.stepNo
     if (rawstepNo === undefined || rawstepNo === null || rawstepNo === '') {
@@ -905,7 +1236,9 @@ function getValues(): Record<string, any> {
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
-    Object.assign(formState, props.formData)
+    const next = { ...props.formData } as Record<string, unknown>
+    next.countersignDepts = parseCountersignDeptIds(next.countersignDepts)
+    Object.assign(formState, next)
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.countersignId)

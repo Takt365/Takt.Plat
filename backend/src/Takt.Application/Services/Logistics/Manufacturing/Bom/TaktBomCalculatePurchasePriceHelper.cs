@@ -27,11 +27,11 @@ public static class TaktBomCalculatePurchasePriceHelper
     /// </summary>
     public const string GrossPriceType = "PB00";
     /// <summary>
-    /// 数量等级基础（字典 logistics_scale_basis；C=数量规模）
+    /// 数量等级基础（字典 logistics_procurement_scale_basis；C=数量规模）
     /// </summary>
     public const string QuantityScaleBasis = "C";
     /// <summary>
-    /// 价值等级基础（字典 logistics_scale_basis；B=价值等级）
+    /// 价值等级基础（字典 logistics_procurement_scale_basis；B=价值等级）
     /// </summary>
     public const string ValueScaleBasis = "B";
     /// <summary>

@@ -27,7 +27,9 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 /// </summary>
 public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTrendService
 {
-    /// <summary>BOM 成本明细按年分表基表名（与 SugarTable 一致）</summary>
+    /// <summary>
+    /// BOM 成本明细按年分表基表名（与 SugarTable 一致）
+    /// </summary>
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
 
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
@@ -598,13 +600,19 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
     /// </summary>
     private sealed class ModelProductMeta
     {
-        /// <summary>机种编码</summary>
+        /// <summary>
+        /// 机种编码
+        /// </summary>
         public string ModelCode { get; set; } = string.Empty;
 
-        /// <summary>产品描述</summary>
+        /// <summary>
+        /// 产品描述
+        /// </summary>
         public string Description { get; set; } = string.Empty;
 
-        /// <summary>币种</summary>
+        /// <summary>
+        /// 币种
+        /// </summary>
         public string CurrencyCode { get; set; } = string.Empty;
     }
 
@@ -1049,49 +1057,79 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
     /// </summary>
     private sealed class ModelCostTrendAnalysisBuilt
     {
-        /// <summary>过滤并排序后的全量行</summary>
+        /// <summary>
+        /// 过滤并排序后的全量行
+        /// </summary>
         public List<TaktBomModelCostTrendDto> OrderedRows { get; init; } = new();
 
-        /// <summary>期间列顺序</summary>
+        /// <summary>
+        /// 期间列顺序
+        /// </summary>
         public List<string> PeriodOrder { get; init; } = new();
 
-        /// <summary>机种下产品编码</summary>
+        /// <summary>
+        /// 机种下产品编码
+        /// </summary>
         public List<string> ProductCodes { get; init; } = new();
 
-        /// <summary>机种各月材料成本</summary>
+        /// <summary>
+        /// 机种各月材料成本
+        /// </summary>
         public Dictionary<string, decimal> ModelPeriodMaterialCosts { get; init; } = new(StringComparer.Ordinal);
 
-        /// <summary>机种环比涨跌</summary>
+        /// <summary>
+        /// 机种环比涨跌
+        /// </summary>
         public string ModelTrend { get; init; } = "none";
 
-        /// <summary>机种环比基准月</summary>
+        /// <summary>
+        /// 机种环比基准月
+        /// </summary>
         public string? ModelBasePeriod { get; init; }
 
-        /// <summary>机种环比对比月</summary>
+        /// <summary>
+        /// 机种环比对比月
+        /// </summary>
         public string? ModelComparePeriod { get; init; }
 
-        /// <summary>机种环比差额</summary>
+        /// <summary>
+        /// 机种环比差额
+        /// </summary>
         public decimal? ModelVarianceAmount { get; init; }
 
-        /// <summary>机种环比变动率</summary>
+        /// <summary>
+        /// 机种环比变动率
+        /// </summary>
         public decimal? ModelVariancePercent { get; init; }
 
-        /// <summary>基准期间</summary>
+        /// <summary>
+        /// 基准期间
+        /// </summary>
         public string? BasePeriod { get; init; }
 
-        /// <summary>对比期间</summary>
+        /// <summary>
+        /// 对比期间
+        /// </summary>
         public string? ComparePeriod { get; init; }
 
-        /// <summary>上涨行数</summary>
+        /// <summary>
+        /// 上涨行数
+        /// </summary>
         public int UpCount { get; init; }
 
-        /// <summary>下跌行数</summary>
+        /// <summary>
+        /// 下跌行数
+        /// </summary>
         public int DownCount { get; init; }
 
-        /// <summary>持平行数</summary>
+        /// <summary>
+        /// 持平行数
+        /// </summary>
         public int FlatCount { get; init; }
 
-        /// <summary>无趋势行数</summary>
+        /// <summary>
+        /// 无趋势行数
+        /// </summary>
         public int NoneCount { get; init; }
 
         /// <summary>

@@ -360,7 +360,7 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
                 || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.ServiceScope != null && x.ServiceScope.Contains(keywords))
-                || (x.AccountManager != null && x.AccountManager.Contains(keywords))
+                || (x.AccountManagerEmployeeName != null && x.AccountManagerEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -456,10 +456,10 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
             exp = exp.And(x => x.SlaResolveHours == slaResolveHours);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AccountManager))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountManagerEmployeeName))
         {
-            var accountManager = queryDto.AccountManager;
-            exp = exp.And(x => x.AccountManager != null && x.AccountManager.Contains(accountManager));
+            var accountManager = queryDto.AccountManagerEmployeeName;
+            exp = exp.And(x => x.AccountManagerEmployeeName != null && x.AccountManagerEmployeeName.Contains(accountManager));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -606,7 +606,7 @@ public class TaktCustomerServiceContractService : TaktServiceBase, ITaktCustomer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AccountManager))
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountManagerEmployeeName))
         {
             return true;
         }

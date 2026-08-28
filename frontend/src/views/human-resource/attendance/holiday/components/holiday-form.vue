@@ -60,7 +60,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.holidayType"
-                  dict-type="hr_holiday_category"
+                  dict-type="humanresource_attendance_holiday_category"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.type') })"
                 />
               </a-form-item>
@@ -98,7 +98,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.isWorkingDay"
-                  dict-type="hr_holiday_working_day_type"
+                  dict-type="humanresource_attendance_holiday_working_day_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') })"
                 />
               </a-form-item>

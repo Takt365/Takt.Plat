@@ -36,7 +36,7 @@ public class TaktDictTypeDto : TaktTenantCoreDtoBase
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
@@ -46,7 +46,7 @@ public class TaktDictTypeDto : TaktTenantCoreDtoBase
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int DataSource { get; set; } = 0;
 
@@ -94,7 +94,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -104,7 +104,7 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
@@ -164,9 +164,9 @@ public class TaktDictTypeCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
-    [Required(ErrorMessage = "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）不能为空")]
+    [Required(ErrorMessage = "字典类型编码不能为空")]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -176,7 +176,7 @@ public class TaktDictTypeCreateDto
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int DataSource { get; set; } = 0;
 
@@ -324,7 +324,7 @@ public class TaktDictTypeTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -334,7 +334,7 @@ public class TaktDictTypeTemplateDto
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
@@ -381,7 +381,7 @@ public class TaktDictTypeImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
     public string? DictTypeCode { get; set; } = string.Empty;
 
@@ -391,7 +391,7 @@ public class TaktDictTypeImportDto
     public string? DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int? DataSource { get; set; }
 
@@ -444,7 +444,7 @@ public class TaktDictTypeExportDto
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
     public string DictTypeCode { get; set; } = string.Empty;
 
@@ -454,7 +454,7 @@ public class TaktDictTypeExportDto
     public string DictTypeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     public int DataSource { get; set; } = 0;
 

@@ -20,43 +20,69 @@ namespace Takt.Application.Services.Code.Generator.GenEngine;
 /// </summary>
 public class TaktGenControllerActionDescriptor
 {
-    /// <summary>Action 摘要说明（如：获取xxx列表（分页））</summary>
+    /// <summary>
+    /// Action 摘要说明（如：获取xxx列表（分页））
+    /// </summary>
     public string Summary { get; set; } = string.Empty;
 
-    /// <summary>HTTP 方法（如 HttpGet、HttpPost）</summary>
+    /// <summary>
+    /// HTTP 方法（如 HttpGet、HttpPost）
+    /// </summary>
     public string HttpMethod { get; set; } = string.Empty;
 
-    /// <summary>路由（如 list、{id}、batch）</summary>
+    /// <summary>
+    /// 路由（如 list、{id}、batch）
+    /// </summary>
     public string Route { get; set; } = string.Empty;
 
-    /// <summary>权限键（如 logistics:materials:plant:list，四段小写冒号分隔：领域:目录:实体:key）</summary>
+    /// <summary>
+    /// 权限键（如 logistics:materials:plant:list，四段小写冒号分隔：领域:目录:实体:key）
+    /// </summary>
     public string PermissionKey { get; set; } = string.Empty;
 
-    /// <summary>权限显示名（如：查询列表）</summary>
+    /// <summary>
+    /// 权限显示名（如：查询列表）
+    /// </summary>
     public string PermissionName { get; set; } = string.Empty;
 
-    /// <summary>方法名（如 GetListAsync）</summary>
+    /// <summary>
+    /// 方法名（如 GetListAsync）
+    /// </summary>
     public string MethodName { get; set; } = string.Empty;
 
-    /// <summary>方法参数签名（如 [FromQuery] xxxQueryDto queryDto）</summary>
+    /// <summary>
+    /// 方法参数签名（如 [FromQuery] xxxQueryDto queryDto）
+    /// </summary>
     public string Signature { get; set; } = string.Empty;
 
-    /// <summary>返回类型（如 TaktPagedResult&lt;EntityDto&gt;、IActionResult）</summary>
+    /// <summary>
+    /// 返回类型（如 TaktPagedResult&lt;EntityDto&gt;、IActionResult）
+    /// </summary>
     public string ResponseType { get; set; } = string.Empty;
 
-    /// <summary>方法体代码（多行字符串）</summary>
+    /// <summary>
+    /// 方法体代码（多行字符串）
+    /// </summary>
     public string Body { get; set; } = string.Empty;
 
-    /// <summary>前端 API 方法名（驼峰，如 getList、getById、create、update、remove、deleteBatch）</summary>
+    /// <summary>
+    /// 前端 API 方法名（驼峰，如 getList、getById、create、update、remove、deleteBatch）
+    /// </summary>
     public string FrontendMethodName { get; set; } = string.Empty;
 
-    /// <summary>前端方法参数签名（如 params: DeptQuery、id: string、data: DeptCreate、id: string, data: DeptUpdate、ids: string[]）</summary>
+    /// <summary>
+    /// 前端方法参数签名（如 params: DeptQuery、id: string、data: DeptCreate、id: string, data: DeptUpdate、ids: string[]）
+    /// </summary>
     public string FrontendSignature { get; set; } = string.Empty;
 
-    /// <summary>前端返回类型（如 Promise&lt;TaktPagedResult&lt;Dept&gt;&gt;、Promise&lt;Dept&gt;、Promise&lt;void&gt;）</summary>
+    /// <summary>
+    /// 前端返回类型（如 Promise&lt;TaktPagedResult&lt;Dept&gt;&gt;、Promise&lt;Dept&gt;、Promise&lt;void&gt;）
+    /// </summary>
     public string FrontendReturnType { get; set; } = string.Empty;
 
-    /// <summary>前端请求体键（params、data、data: ids 或空，供 request 配置）</summary>
+    /// <summary>
+    /// 前端请求体键（params、data、data: ids 或空，供 request 配置）
+    /// </summary>
     public string FrontendRequestKey { get; set; } = string.Empty;
 }
 
@@ -65,25 +91,39 @@ public class TaktGenControllerActionDescriptor
 /// </summary>
 public class TaktGenServiceMethodDescriptor
 {
-    /// <summary>方法摘要说明（如：获取xxx列表（分页））</summary>
+    /// <summary>
+    /// 方法摘要说明（如：获取xxx列表（分页））
+    /// </summary>
     public string Summary { get; set; } = string.Empty;
 
-    /// <summary>XML 注释中的 param/returns 片段（供接口声明用）</summary>
+    /// <summary>
+    /// XML 注释中的 param/returns 片段（供接口声明用）
+    /// </summary>
     public string ParamsXml { get; set; } = string.Empty;
 
-    /// <summary>方法名（如 GetListAsync、QueryExpression）</summary>
+    /// <summary>
+    /// 方法名（如 GetListAsync、QueryExpression）
+    /// </summary>
     public string MethodName { get; set; } = string.Empty;
 
-    /// <summary>方法参数签名（如 xxxQueryDto queryDto）</summary>
+    /// <summary>
+    /// 方法参数签名（如 xxxQueryDto queryDto）
+    /// </summary>
     public string Signature { get; set; } = string.Empty;
 
-    /// <summary>返回类型（如 Task&lt;TaktPagedResult&lt;EntityDto&gt;&gt;）</summary>
+    /// <summary>
+    /// 返回类型（如 Task&lt;TaktPagedResult&lt;EntityDto&gt;&gt;）
+    /// </summary>
     public string ReturnType { get; set; } = string.Empty;
 
-    /// <summary>方法体代码（多行字符串）</summary>
+    /// <summary>
+    /// 方法体代码（多行字符串）
+    /// </summary>
     public string Body { get; set; } = string.Empty;
 
-    /// <summary>是否为私有方法（如 QueryExpression）</summary>
+    /// <summary>
+    /// 是否为私有方法（如 QueryExpression）
+    /// </summary>
     public bool IsPrivate { get; set; }
 }
 
@@ -92,35 +132,51 @@ public class TaktGenServiceMethodDescriptor
 /// </summary>
 public class TaktDtoCategoryDescriptor
 {
-    /// <summary>类别名（如 Dto、QueryDto、CreateDto、StatusDto）</summary>
+    /// <summary>
+    /// 类别名（如 Dto、QueryDto、CreateDto、StatusDto）
+    /// </summary>
     public string Name { get; set; } = string.Empty;
 
-    /// <summary>主体形态：Full=Id+列，NoId=仅列，OnlyId=仅Id（需基类），Query=继承 TaktPagedQuery+列</summary>
+    /// <summary>
+    /// 主体形态：Full=Id+列，NoId=仅列，OnlyId=仅Id（需基类），Query=继承 TaktPagedQuery+列
+    /// </summary>
     public string BodyKind { get; set; } = "NoId";
 
-    /// <summary>基类全名（可选）；相对名如 CreateDto 会在构建时解析为 EntityClassName+CreateDto</summary>
+    /// <summary>
+    /// 基类全名（可选）；相对名如 CreateDto 会在构建时解析为 EntityClassName+CreateDto
+    /// </summary>
     public string? BaseClass { get; set; }
 
-    /// <summary>前端 TypeScript 接口名（如 Dept、DeptQuery、DeptCreate、DeptUpdate、DeptStatus）</summary>
+    /// <summary>
+    /// 前端 TypeScript 接口名（如 Dept、DeptQuery、DeptCreate、DeptUpdate、DeptStatus）
+    /// </summary>
     public string TsInterfaceName { get; set; } = string.Empty;
 
-    /// <summary>前端 extends 类型名（如 TaktTenantEntityBase、TaktPagedQuery、DeptCreate；空表示不继承）</summary>
+    /// <summary>
+    /// 前端 extends 类型名（如 TaktTenantEntityBase、TaktPagedQuery、DeptCreate；空表示不继承）
+    /// </summary>
     public string TsExtendsName { get; set; } = string.Empty;
 }
 
-/// <summary>翻译 SQL 单行数据，供 menu_and_translation.sql 模板使用，每行 Id 由 SnowFlakeSingle.Instance.NextId() 生成。ResourceGroup：菜单标题为 menu，其他字段为 page。</summary>
+/// <summary>
+/// 翻译 SQL 单行数据，供 menu_and_translation.sql 模板使用，每行 Id 由 SnowFlakeSingle.Instance.NextId() 生成。ResourceGroup：菜单标题为 menu，其他字段为 page。
+/// </summary>
 public class TaktSqlTranslationRowItem
 {
     public long Id { get; set; }
     public string Culture { get; set; } = string.Empty;
     public string ResourceKey { get; set; } = string.Empty;
     public string TranslationValue { get; set; } = string.Empty;
-    /// <summary>资源分组：menu=菜单翻译，page=页面字段翻译</summary>
+    /// <summary>
+    /// 资源分组：menu=菜单翻译，page=页面字段翻译
+    /// </summary>
     public string ResourceGroup { get; set; } = "page";
     public int SortOrder { get; set; }
 }
 
-/// <summary>按钮菜单 SQL 单行（<c>takt_identity_menu</c>，<c>menu_type=2</c>），供 menu_and_translation.sql；<c>parent_id</c> 为页面菜单 TaktGenTableTemplateModel.SqlMenuId。</summary>
+/// <summary>
+/// 按钮菜单 SQL 单行（<c>takt_identity_menu</c>，<c>menu_type=2</c>），供 menu_and_translation.sql；<c>parent_id</c> 为页面菜单 TaktGenTableTemplateModel.SqlMenuId。
+/// </summary>
 public class TaktSqlMenuButtonRowItem
 {
     public long Id { get; set; }
@@ -174,178 +230,294 @@ public class TaktGenTemplateContext
 /// </summary>
 public class TaktGenTableTemplateModel
 {
-    /// <summary>数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000）</summary>
+    /// <summary>
+    /// 数据源（前面是数据库名称，后面是 TenantCode，如：Takt_000_Dev:000）
+    /// </summary>
     public string? DataSource { get; set; }
 
-    /// <summary>数据表名称</summary>
+    /// <summary>
+    /// 数据表名称
+    /// </summary>
     public string TableName { get; set; } = string.Empty;
 
-    /// <summary>表描述（表注释）</summary>
+    /// <summary>
+    /// 表描述（表注释）
+    /// </summary>
     public string? TableComment { get; set; }
 
-    /// <summary>表注释展示值（TableComment ?? GenBusinessName，模板中直接用 Table.Comment）</summary>
+    /// <summary>
+    /// 表注释展示值（TableComment ?? GenBusinessName，模板中直接用 Table.Comment）
+    /// </summary>
     public string Comment => string.IsNullOrWhiteSpace(TableComment) ? (GenBusinessName ?? string.Empty) : TableComment;
 
-    /// <summary>关联父表名（用于主子表）</summary>
+    /// <summary>
+    /// 关联父表名（用于主子表）
+    /// </summary>
     public string? SubTableName { get; set; }
 
-    /// <summary>本表关联父表的外键名（用于主子表）</summary>
+    /// <summary>
+    /// 本表关联父表的外键名（用于主子表）
+    /// </summary>
     public string? SubTableFkName { get; set; }
 
-    /// <summary>树编码字段（用于树形结构）</summary>
+    /// <summary>
+    /// 树编码字段（用于树形结构）
+    /// </summary>
     public string? TreeCode { get; set; }
 
-    /// <summary>树父编码字段（用于树形结构）</summary>
+    /// <summary>
+    /// 树父编码字段（用于树形结构）
+    /// </summary>
     public string? TreeParentCode { get; set; }
 
-    /// <summary>树名称字段（用于树形结构）</summary>
+    /// <summary>
+    /// 树名称字段（用于树形结构）
+    /// </summary>
     public string? TreeName { get; set; }
 
-    /// <summary>是否在数据库中（1=是库表，0=不是库表）</summary>
+    /// <summary>
+    /// 是否在数据库中（1=是库表，0=不是库表）
+    /// </summary>
     public int InDatabase { get; set; }
 
-    /// <summary>生成模板类型（crud=单表，tree=树表，sub=主子表）</summary>
+    /// <summary>
+    /// 生成模板类型（crud=单表，tree=树表，sub=主子表）
+    /// </summary>
     public string GenTemplateCategory { get; set; } = "crud";
 
-    /// <summary>命名空间前缀（用于生成类名、方法名等的前缀）</summary>
+    /// <summary>
+    /// 命名空间前缀（用于生成类名、方法名等的前缀）
+    /// </summary>
     public string? NamePrefix { get; set; }
 
-    /// <summary>实体命名空间</summary>
+    /// <summary>
+    /// 实体命名空间
+    /// </summary>
     public string? EntityNamespace { get; set; }
 
-    /// <summary>实体类名称（首字母大写，驼峰命名）</summary>
+    /// <summary>
+    /// 实体类名称（首字母大写，驼峰命名）
+    /// </summary>
     public string EntityClassName { get; set; } = string.Empty;
 
-    /// <summary>实体名帕斯卡（前端用，如 TaktDept→Dept）</summary>
+    /// <summary>
+    /// 实体名帕斯卡（前端用，如 TaktDept→Dept）
+    /// </summary>
     public string EntityNamePascal { get; set; } = string.Empty;
 
-    /// <summary>实体名驼峰（前端用，如 Dept→dept）</summary>
+    /// <summary>
+    /// 实体名驼峰（前端用，如 Dept→dept）
+    /// </summary>
     public string EntityNameCamel { get; set; } = string.Empty;
 
-    /// <summary>实体名 kebab（前端用，如 StandardWageRate→standard-wage-rate，用于表单组件文件名等）</summary>
+    /// <summary>
+    /// 实体名 kebab（前端用，如 StandardWageRate→standard-wage-rate，用于表单组件文件名等）
+    /// </summary>
     public string EntityNameKebab { get; set; } = string.Empty;
 
-    /// <summary>API 基础路径（如 /api/TaktDepts）</summary>
+    /// <summary>
+    /// API 基础路径（如 /api/TaktDepts）
+    /// </summary>
     public string ApiBasePath { get; set; } = string.Empty;
 
-    /// <summary>传输对象 Dto 命名空间</summary>
+    /// <summary>
+    /// 传输对象 Dto 命名空间
+    /// </summary>
     public string? DtoNamespace { get; set; }
 
-    /// <summary>传输对象 Dto 类名</summary>
+    /// <summary>
+    /// 传输对象 Dto 类名
+    /// </summary>
     public string? DtoClassName { get; set; }
 
-    /// <summary>传输对象 Dto 类别列表（由 GenFunction 自动推断，供模板循环）</summary>
+    /// <summary>
+    /// 传输对象 Dto 类别列表（由 GenFunction 自动推断，供模板循环）
+    /// </summary>
     public List<string> DtoCategories { get; set; } = new();
 
-    /// <summary>传输对象 Dto 类别描述列表（含名称、基类、BodyKind，供模板按数据循环生成，不写死类型名）</summary>
+    /// <summary>
+    /// 传输对象 Dto 类别描述列表（含名称、基类、BodyKind，供模板按数据循环生成，不写死类型名）
+    /// </summary>
     public List<TaktDtoCategoryDescriptor> DtoCategoryDescriptors { get; set; } = new();
 
-    /// <summary>服务命名空间</summary>
+    /// <summary>
+    /// 服务命名空间
+    /// </summary>
     public string? ServiceNamespace { get; set; }
 
-    /// <summary>服务接口类名称</summary>
+    /// <summary>
+    /// 服务接口类名称
+    /// </summary>
     public string? IServiceClassName { get; set; }
 
-    /// <summary>服务类名称</summary>
+    /// <summary>
+    /// 服务类名称
+    /// </summary>
     public string? ServiceClassName { get; set; }
 
-    /// <summary>控制器命名空间</summary>
+    /// <summary>
+    /// 控制器命名空间
+    /// </summary>
     public string? ControllerNamespace { get; set; }
 
-    /// <summary>控制器类名称</summary>
+    /// <summary>
+    /// 控制器类名称
+    /// </summary>
     public string? ControllerClassName { get; set; }
 
-    /// <summary>仓储接口命名空间</summary>
+    /// <summary>
+    /// 仓储接口命名空间
+    /// </summary>
     public string? RepositoryInterfaceNamespace { get; set; }
 
-    /// <summary>仓储接口类名称</summary>
+    /// <summary>
+    /// 仓储接口类名称
+    /// </summary>
     public string? IRepositoryClassName { get; set; }
 
-    /// <summary>仓储命名空间</summary>
+    /// <summary>
+    /// 仓储命名空间
+    /// </summary>
     public string? RepositoryNamespace { get; set; }
 
-    /// <summary>仓储类名称</summary>
+    /// <summary>
+    /// 仓储类名称
+    /// </summary>
     public string? RepositoryClassName { get; set; }
 
-    /// <summary>模块名（功能模块名称）</summary>
+    /// <summary>
+    /// 模块名（功能模块名称）
+    /// </summary>
     public string? GenModuleName { get; set; }
 
-    /// <summary>ApiModule 顶级业务领域键（GenModuleName 首段 PascalCase，如 accounting_financial→Accounting）</summary>
+    /// <summary>
+    /// ApiModule 顶级业务领域键（GenModuleName 首段 PascalCase，如 accounting_financial→Accounting）
+    /// </summary>
     public string ApiModuleKey { get; set; } = "Default";
 
-    /// <summary>ApiModule 顶级业务领域名称（与 ApiModuleKey 对应的中文显示名，须与 SwaggerDoc/OpenAPI 分组 Title 一致，如 Accounting→会计核算）</summary>
+    /// <summary>
+    /// ApiModule 顶级业务领域名称（与 ApiModuleKey 对应的中文显示名，须与 SwaggerDoc/OpenAPI 分组 Title 一致，如 Accounting→会计核算）
+    /// </summary>
     public string ApiModuleName { get; set; } = "通用";
 
-    /// <summary>前端模块路径（GenModuleName 转小写且下划线改 /，如 accounting_financial→accounting/financial，用于 import 路径）</summary>
+    /// <summary>
+    /// 前端模块路径（GenModuleName 转小写且下划线改 /，如 accounting_financial→accounting/financial，用于 import 路径）
+    /// </summary>
     public string FrontendModulePath { get; set; } = string.Empty;
 
-    /// <summary>API 文件中 import request 的相对路径（根据模块深度，如 ../request 或 ../../request）</summary>
+    /// <summary>
+    /// API 文件中 import request 的相对路径（根据模块深度，如 ../request 或 ../../request）
+    /// </summary>
     public string RequestImportPath { get; set; } = "../request";
 
-    /// <summary>业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）</summary>
+    /// <summary>
+    /// 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
+    /// </summary>
     public string GenBusinessName { get; set; } = string.Empty;
 
-    /// <summary>功能名（用于接口与注释的中文名称，如：公司、部门）</summary>
+    /// <summary>
+    /// 功能名（用于接口与注释的中文名称，如：公司、部门）
+    /// </summary>
     public string? GenFunctionName { get; set; }
 
-    /// <summary>生成功能（查询，新增，更新，删除，模板，导入，导出）</summary>
+    /// <summary>
+    /// 生成功能（查询，新增，更新，删除，模板，导入，导出）
+    /// </summary>
     public string? GenFunction { get; set; }
 
-    /// <summary>是否生成查询相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成查询相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsQuery { get; set; }
 
-    /// <summary>是否生成新增相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成新增相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsCreate { get; set; }
 
-    /// <summary>是否生成更新相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成更新相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsUpdate { get; set; }
 
-    /// <summary>是否生成删除相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成删除相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsDelete { get; set; }
 
-    /// <summary>是否生成状态相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成状态相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsStatus { get; set; }
 
-    /// <summary>是否生成排序相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成排序相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsSort { get; set; }
 
-    /// <summary>是否生成模板相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成模板相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsTemplate { get; set; }
 
-    /// <summary>是否生成导入相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成导入相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsImport { get; set; }
 
-    /// <summary>是否生成导出相关（0=否，1=是，由 GenFunction 解析）</summary>
+    /// <summary>
+    /// 是否生成导出相关（0=否，1=是，由 GenFunction 解析）
+    /// </summary>
     public int IsExport { get; set; }
 
-    /// <summary>生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）</summary>
+    /// <summary>
+    /// 生成代码方式（0=zip 压缩包，1=自定义路径，2=当前项目）
+    /// </summary>
     public int GenMethod { get; set; } = 0;
 
-    /// <summary>是否生成仓储层（1=是，0=否）</summary>
+    /// <summary>
+    /// 是否生成仓储层（1=是，0=否）
+    /// </summary>
     public int IsRepository { get; set; } = 1;
 
-    /// <summary>生成路径（默认为项目根目录）</summary>
+    /// <summary>
+    /// 生成路径（默认为项目根目录）
+    /// </summary>
     public string GenPath { get; set; } = "/";
 
-    /// <summary>上级菜单 ID</summary>
+    /// <summary>
+    /// 上级菜单 ID
+    /// </summary>
     public long ParentMenuId { get; set; }
 
-    /// <summary>是否生成菜单（1=是，0=否）</summary>
+    /// <summary>
+    /// 是否生成菜单（1=是，0=否）
+    /// </summary>
     public int IsGenMenu { get; set; }
 
-    /// <summary>是否生成翻译（1=是，0=否）</summary>
+    /// <summary>
+    /// 是否生成翻译（1=是，0=否）
+    /// </summary>
     public int IsGenTranslation { get; set; }
 
-    /// <summary>排序字段（实体列名，帕斯卡）</summary>
+    /// <summary>
+    /// 排序字段（实体列名，帕斯卡）
+    /// </summary>
     public string SortField { get; set; } = string.Empty;
 
-    /// <summary>排序类型（asc=升序，desc=降序）</summary>
+    /// <summary>
+    /// 排序方向（asc=升序，desc=降序）
+    /// </summary>
     public string SortType { get; set; } = "asc";
 
-    /// <summary>排序字段驼峰（供前端 API 使用，如 CreatedAt→createdAt）</summary>
+    /// <summary>
+    /// 排序字段驼峰（供前端 API 使用，如 CreatedAt→createdAt）
+    /// </summary>
     public string TsSortField { get; set; } = string.Empty;
 
-    /// <summary>与 TaktGenTable.PermsPrefix 一致，来自生成表配置（数据库原样）。</summary>
+    /// <summary>
+    /// 与 TaktGenTable.PermsPrefix 一致，来自生成表配置（数据库原样）。
+    /// </summary>
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
@@ -354,73 +526,119 @@ public class TaktGenTableTemplateModel
     /// </summary>
     public string PermsPrefixCanonical { get; set; } = string.Empty;
 
-    /// <summary>菜单权限组</summary>
+    /// <summary>
+    /// 菜单权限组
+    /// </summary>
     public string? MenuButtonGroup { get; set; }
 
-    /// <summary>前端UI框架（1=element plus，2=ant design vue）</summary>
+    /// <summary>
+    /// 前端UI框架（1=element plus，2=ant design vue）
+    /// </summary>
     public int FrontUi { get; set; } = 1;
 
-    /// <summary>前端表单布局（12=一行一列，24=一行两列）</summary>
+    /// <summary>
+    /// 前端表单布局（12=一行一列，24=一行两列）
+    /// </summary>
     public int FrontFormLayout { get; set; } = 24;
 
-    /// <summary>前端操作按钮样式（0=文本，1=标准）</summary>
+    /// <summary>
+    /// 前端操作按钮样式（0=文本，1=标准）
+    /// </summary>
     public int FrontBtnStyle { get; set; } = 1;
 
-    /// <summary>是否生成代码（1=是，0=否）</summary>
+    /// <summary>
+    /// 是否生成代码（1=是，0=否）
+    /// </summary>
     public int IsGenCode { get; set; } = 1;
 
-    /// <summary>代码生成次数（每次生成成功后自增）</summary>
+    /// <summary>
+    /// 代码生成次数（每次生成成功后自增）
+    /// </summary>
     public int GenCodeCount { get; set; } = 0;
 
-    /// <summary>是否使用 tabs（1=是，0=否）</summary>
+    /// <summary>
+    /// 是否使用 tabs（1=是，0=否）
+    /// </summary>
     public int IsUseTabs { get; set; } = 1;
 
-    /// <summary>tabs 标签中字段的数量</summary>
+    /// <summary>
+    /// tabs 标签中字段的数量
+    /// </summary>
     public int TabsFieldCount { get; set; } = 10;
 
-    /// <summary>作者</summary>
+    /// <summary>
+    /// 作者
+    /// </summary>
     public string GenAuthor { get; set; } = string.Empty;
 
-    /// <summary>SQL 创建人（生成菜单/翻译 SQL 时写入 create_by，如 admin、user01；由生成时当前登录用户名或 GenAuthor 填充）</summary>
+    /// <summary>
+    /// SQL 创建人（生成菜单/翻译 SQL 时写入 create_by，如 admin、user01；由生成时当前登录用户名或 GenAuthor 填充）
+    /// </summary>
     public string SqlCreateBy { get; set; } = "admin";
 
-    /// <summary>菜单 SQL 的雪花 ID（IsGenMenu=1 时由 SnowFlakeSingle.Instance.NextId() 生成，供 INSERT id 列）</summary>
+    /// <summary>
+    /// 菜单 SQL 的雪花 ID（IsGenMenu=1 时由 SnowFlakeSingle.Instance.NextId() 生成，供 INSERT id 列）
+    /// </summary>
     public long? SqlMenuId { get; set; }
 
-    /// <summary>翻译 SQL 行列表（IsGenTranslation=1 时按模板顺序预生成，每行含雪花 Id、culture、resource_key、translation_value、sort_order）</summary>
+    /// <summary>
+    /// 翻译 SQL 行列表（IsGenTranslation=1 时按模板顺序预生成，每行含雪花 Id、culture、resource_key、translation_value、sort_order）
+    /// </summary>
     public List<TaktSqlTranslationRowItem> SqlTranslationRows { get; set; } = new();
 
-    /// <summary>按钮菜单 SQL 行列表</summary>
+    /// <summary>
+    /// 按钮菜单 SQL 行列表
+    /// </summary>
     public List<TaktSqlMenuButtonRowItem> SqlMenuButtonRows { get; set; } = new();
 
-    /// <summary>其他生成选项（JSON 格式）</summary>
+    /// <summary>
+    /// 其他生成选项（JSON 格式）
+    /// </summary>
     public string? OtherGenOptions { get; set; }
 
-    /// <summary>实体基类层级（tenant/company/approval，来自 OtherGenOptions.entityBaseTier）</summary>
+    /// <summary>
+    /// 实体基类层级（tenant/company/approval，来自 OtherGenOptions.entityBaseTier）
+    /// </summary>
     public string EntityBaseTier { get; set; } = TaktGenEntityBaseProfile.TierTenant;
 
-    /// <summary>C# 实体基类名（如 TaktTenantEntityBase）</summary>
+    /// <summary>
+    /// C# 实体基类名（如 TaktTenantEntityBase）
+    /// </summary>
     public string EntityBaseClass { get; set; } = "TaktTenantEntityBase";
 
-    /// <summary>响应 Dto 基类名（如 TaktTenantDtoBase）</summary>
+    /// <summary>
+    /// 响应 Dto 基类名（如 TaktTenantDtoBase）
+    /// </summary>
     public string DtoEntityBaseClass { get; set; } = "TaktTenantDtoBase";
 
-    /// <summary>前端 TS 实体基类接口名（如 TaktTenantEntityBase）</summary>
+    /// <summary>
+    /// 前端 TS 实体基类接口名（如 TaktTenantEntityBase）
+    /// </summary>
     public string TsEntityBaseInterface { get; set; } = "TaktTenantEntityBase";
 
-    /// <summary>仓储接口名（ITaktTenantRepository / ITaktCompanyRepository / ITaktApprovalRepository）</summary>
+    /// <summary>
+    /// 仓储接口名（ITaktTenantRepository / ITaktCompanyRepository / ITaktApprovalRepository）
+    /// </summary>
     public string RepositoryInterfaceName { get; set; } = "ITaktTenantRepository";
 
-    /// <summary>ApiModule 枚举成员名（如 HumanResource、Statistics）</summary>
+    /// <summary>
+    /// ApiModule 枚举成员名（如 HumanResource、Statistics）
+    /// </summary>
     public string ApiModuleEnum { get; set; } = "Routine";
 
-    /// <summary>控制器 Action 列表，由 GenFunction 解析生成，模板仅循环渲染</summary>
+    /// <summary>
+    /// 控制器 Action 列表，由 GenFunction 解析生成，模板仅循环渲染
+    /// </summary>
     public List<TaktGenControllerActionDescriptor> ControllerActions { get; set; } = new();
 
-    /// <summary>服务方法列表（接口+实现），由 GenFunction 解析生成，模板仅循环渲染</summary>
+    /// <summary>
+    /// 服务方法列表（接口+实现），由 GenFunction 解析生成，模板仅循环渲染
+    /// </summary>
     public List<TaktGenServiceMethodDescriptor> ServiceMethods { get; set; } = new();
 
-    /// <summary>私有方法列表（如 QueryExpression），由 GenFunction 解析生成</summary>
+    /// <summary>
+    /// 私有方法列表（如 QueryExpression），由 GenFunction 解析生成
+    /// </summary>
     public List<TaktGenServiceMethodDescriptor> ServicePrivateMethods { get; set; } = new();
 
     /// <summary>
@@ -522,7 +740,9 @@ public class TaktGenTableTemplateModel
         }
     }
 
-    /// <summary>根据 BodyKind 返回前端 extends 类型名。</summary>
+    /// <summary>
+    /// 根据 BodyKind 返回前端 extends 类型名。
+    /// </summary>
     private static string GetTsExtendsName(
         string bodyKind,
         string entityNamePascal,
@@ -541,7 +761,9 @@ public class TaktGenTableTemplateModel
         };
     }
 
-    /// <summary>DTO 类别名转前端 TypeScript 接口名（如 Dto→Dept，QueryDto→DeptQuery）。</summary>
+    /// <summary>
+    /// DTO 类别名转前端 TypeScript 接口名（如 Dto→Dept，QueryDto→DeptQuery）。
+    /// </summary>
     private static string GetTsInterfaceName(string dtoName, string entityNamePascal)
     {
         if (string.IsNullOrEmpty(dtoName)) return entityNamePascal;
@@ -560,7 +782,9 @@ public class TaktGenTableTemplateModel
         };
     }
 
-    /// <summary>仅当数组项为字符串时用于推断 DTO 形状。IsCreate/IsUpdate/IsExport/IsQuery/IsUnique 与前端一致；仅 IsList 影响前端。</summary>
+    /// <summary>
+    /// 仅当数组项为字符串时用于推断 DTO 形状。IsCreate/IsUpdate/IsExport/IsQuery/IsUnique 与前端一致；仅 IsList 影响前端。
+    /// </summary>
     /// <param name="name">DTO 类别名（如 Dto、QueryDto、CreateDto、UpdateDto）</param>
     /// <param name="entityClassName">实体类名（用于解析 UpdateDto 基类等）</param>
     /// <returns>含 Name、BodyKind、BaseClass 的描述符</returns>
@@ -583,7 +807,9 @@ public class TaktGenTableTemplateModel
         return new TaktDtoCategoryDescriptor { Name = name, BodyKind = bodyKind, BaseClass = baseClass };
     }
 
-    /// <summary>实体类名转前端帕斯卡名（去掉 Takt 前缀，如 TaktDept→Dept）。</summary>
+    /// <summary>
+    /// 实体类名转前端帕斯卡名（去掉 Takt 前缀，如 TaktDept→Dept）。
+    /// </summary>
     private static string ToEntityNamePascal(string? entityClassName)
     {
         if (string.IsNullOrEmpty(entityClassName)) return string.Empty;
@@ -592,14 +818,18 @@ public class TaktGenTableTemplateModel
         return entityClassName;
     }
 
-    /// <summary>帕斯卡名转驼峰（首字母小写，如 Dept→dept）。</summary>
+    /// <summary>
+    /// 帕斯卡名转驼峰（首字母小写，如 Dept→dept）。
+    /// </summary>
     private static string ToEntityNameCamel(string pascal)
     {
         if (string.IsNullOrEmpty(pascal)) return string.Empty;
         return char.ToLowerInvariant(pascal[0]) + pascal[1..];
     }
 
-    /// <summary>根据 GenModuleName 生成 API 中 import request 的相对路径（api/{modulePath}/xx.ts 需若干 ../ 回到 api 再取 request）。</summary>
+    /// <summary>
+    /// 根据 GenModuleName 生成 API 中 import request 的相对路径（api/{modulePath}/xx.ts 需若干 ../ 回到 api 再取 request）。
+    /// </summary>
     private static string BuildRequestImportPath(string? genModuleName)
     {
         if (string.IsNullOrWhiteSpace(genModuleName)) return "../request";
@@ -607,7 +837,9 @@ public class TaktGenTableTemplateModel
         return string.Concat(System.Linq.Enumerable.Repeat("../", segmentCount)) + "request";
     }
 
-    /// <summary>帕斯卡名转 kebab（如 StandardWageRate→standard-wage-rate，用于前端表单组件文件名）。</summary>
+    /// <summary>
+    /// 帕斯卡名转 kebab（如 StandardWageRate→standard-wage-rate，用于前端表单组件文件名）。
+    /// </summary>
     private static string ToEntityNameKebab(string? pascal)
     {
         if (string.IsNullOrWhiteSpace(pascal)) return "entity";
@@ -628,14 +860,18 @@ public class TaktGenTableTemplateModel
         return sb.ToString();
     }
 
-    /// <summary>排序字段帕斯卡转驼峰（供前端 API，如 CreatedAt→createdAt）。</summary>
+    /// <summary>
+    /// 排序字段帕斯卡转驼峰（供前端 API，如 CreatedAt→createdAt）。
+    /// </summary>
     private static string ToTsSortField(string? sortField)
     {
         if (string.IsNullOrEmpty(sortField)) return string.Empty;
         return char.ToLowerInvariant(sortField[0]) + sortField[1..];
     }
 
-    /// <summary>从 TaktGenTable.PermsPrefix 解析时，若误将第四段 key 写入前缀则剥离用。</summary>
+    /// <summary>
+    /// 从 TaktGenTable.PermsPrefix 解析时，若误将第四段 key 写入前缀则剥离用。
+    /// </summary>
     private static readonly HashSet<string> KnownPermissionKeySuffixes = new(StringComparer.OrdinalIgnoreCase)
     {
         "list", "query", "create", "update", "delete", "import", "export", "page",
@@ -734,7 +970,9 @@ public class TaktGenTableTemplateModel
     public static string ResolvePermsPrefixCanonical(string? permsPrefix, string? genModuleName, string? entityClassName)
         => BuildPermsPrefixCanonical(permsPrefix, genModuleName, entityClassName);
 
-    /// <summary>控制器类名转 API 基础路径（去掉 Controller 后缀，如 TaktDeptsController→/api/TaktDepts）。</summary>
+    /// <summary>
+    /// 控制器类名转 API 基础路径（去掉 Controller 后缀，如 TaktDeptsController→/api/TaktDepts）。
+    /// </summary>
     private static string ToApiBasePath(string? controllerClassName)
     {
         if (string.IsNullOrEmpty(controllerClassName)) return "/api";
@@ -758,7 +996,9 @@ public class TaktGenTableTemplateModel
         { "Controlling", "控制" }
     };
 
-    /// <summary>从 GenModuleName 解析 [ApiModule] 的顶级键与名称（首段 PascalCase + 预定义中文名）。</summary>
+    /// <summary>
+    /// 从 GenModuleName 解析 [ApiModule] 的顶级键与名称（首段 PascalCase + 预定义中文名）。
+    /// </summary>
     private static (string Key, string Name) GetApiModuleTopLevel(string? genModuleName)
     {
         if (string.IsNullOrWhiteSpace(genModuleName))
@@ -771,7 +1011,9 @@ public class TaktGenTableTemplateModel
         return (key, name);
     }
 
-    /// <summary>从 GenModuleName 解析 TaktModule 枚举成员名</summary>
+    /// <summary>
+    /// 从 GenModuleName 解析 TaktModule 枚举成员名
+    /// </summary>
     private static string ResolveApiModuleEnum(string? genModuleName)
     {
         var (key, _) = GetApiModuleTopLevel(genModuleName);
@@ -792,7 +1034,9 @@ public class TaktGenTableTemplateModel
         };
     }
 
-    /// <summary>GenFunction 别名 → 模板引擎标准键（PascalCase，与 BuildControllerActions / DtoCategoryDescriptors 一致）。</summary>
+    /// <summary>
+    /// GenFunction 别名 → 模板引擎标准键（PascalCase，与 BuildControllerActions / DtoCategoryDescriptors 一致）。
+    /// </summary>
     private static readonly Dictionary<string, string> GenFunctionKeyAliases = new(StringComparer.OrdinalIgnoreCase)
     {
         ["query"] = "Query",
@@ -817,7 +1061,9 @@ public class TaktGenTableTemplateModel
         ["导出"] = "Export",
     };
 
-    /// <summary>将字典 value（小写 query/create）、中文标签或 PascalCase 统一为标准功能键。</summary>
+    /// <summary>
+    /// 将字典 value（小写 query/create）、中文标签或 PascalCase 统一为标准功能键。
+    /// </summary>
     /// <param name="raw">原始功能键</param>
     /// <returns>标准键 Query/Create/…；无法识别时返回 trim 后原值</returns>
     private static string CanonicalizeGenFunctionKey(string raw)
@@ -828,7 +1074,9 @@ public class TaktGenTableTemplateModel
         return GenFunctionKeyAliases.TryGetValue(trimmed, out var canonical) ? canonical : trimmed;
     }
 
-    /// <summary>去重并规范 GenFunction 键列表。</summary>
+    /// <summary>
+    /// 去重并规范 GenFunction 键列表。
+    /// </summary>
     private static List<string> NormalizeGenFunctionKeys(IEnumerable<string> rawKeys) =>
         rawKeys
             .Select(CanonicalizeGenFunctionKey)
@@ -836,7 +1084,9 @@ public class TaktGenTableTemplateModel
             .Distinct(StringComparer.Ordinal)
             .ToList();
 
-    /// <summary>解析 GenFunction 为功能键列表。支持：JSON 对象（取 key 与 string value）；JSON 数组；逗号分隔。字典 gen_function_type 的 value 为小写 query/create，解析后统一为 Query/Create。</summary>
+    /// <summary>
+    /// 解析 GenFunction 为功能键列表。支持：JSON 对象（取 key 与 string value）；JSON 数组；逗号分隔。字典 code_generator_function 的 value 为小写 query/create，解析后统一为 Query/Create。
+    /// </summary>
     /// <param name="genFunction">GenFunction 原始字符串（JSON 对象/数组或逗号分隔）</param>
     /// <returns>标准功能键列表（Query、Create、Update、Delete 等）</returns>
     private static List<string> ParseGenFunctionKeys(string? genFunction)
@@ -880,13 +1130,17 @@ public class TaktGenTableTemplateModel
         return NormalizeGenFunctionKeys(split);
     }
 
-    /// <summary>功能键列表中是否包含"Query"或"View"，用于生成查询相关 Action/方法。</summary>
+    /// <summary>
+    /// 功能键列表中是否包含"Query"或"View"，用于生成查询相关 Action/方法。
+    /// </summary>
     /// <param name="keys">GenFunction 解析得到的功能键列表</param>
     /// <returns>包含查询/查看时返回 true</returns>
     private static bool HasQueryKey(List<string> keys) =>
         keys.Exists(k => k.Equals("Query", StringComparison.Ordinal) || k.Equals("View", StringComparison.Ordinal));
 
-    /// <summary>根据 GenFunction 功能键列表，向表模型追加控制器 Action 描述符（GetList、GetById、Create、Update、Delete 等）。</summary>
+    /// <summary>
+    /// 根据 GenFunction 功能键列表，向表模型追加控制器 Action 描述符（GetList、GetById、Create、Update、Delete 等）。
+    /// </summary>
     /// <param name="m">表级模板模型</param>
     /// <param name="keys">功能键列表（如 查询、新增、更新、删除）</param>
     private static void BuildControllerActions(TaktGenTableTemplateModel m, List<string> keys)
@@ -1117,7 +1371,9 @@ public class TaktGenTableTemplateModel
         }
     }
 
-    /// <summary>根据 GenFunction 功能键列表，向表模型追加服务方法描述符（接口+实现）及私有方法（如 QueryExpression）。</summary>
+    /// <summary>
+    /// 根据 GenFunction 功能键列表，向表模型追加服务方法描述符（接口+实现）及私有方法（如 QueryExpression）。
+    /// </summary>
     /// <param name="m">表级模板模型</param>
     /// <param name="keys">功能键列表（如 查询、新增、更新、删除）</param>
     private static void BuildServiceMethods(TaktGenTableTemplateModel m, List<string> keys)
@@ -1481,86 +1737,138 @@ public class TaktGenTableTemplateModel
 /// </summary>
 public class TaktGenColumnTemplateModel
 {
-    /// <summary>数据库列名称（snake_case）</summary>
+    /// <summary>
+    /// 数据库列名称（snake_case）
+    /// </summary>
     public string DatabaseColumnName { get; set; } = string.Empty;
 
-    /// <summary>列描述（字段注释）</summary>
+    /// <summary>
+    /// 列描述（字段注释）
+    /// </summary>
     public string? ColumnComment { get; set; }
 
-    /// <summary>列注释展示值（ColumnComment ?? CsharpColumnName，模板中直接用 col.Comment）</summary>
+    /// <summary>
+    /// 列注释展示值（ColumnComment ?? CsharpColumnName，模板中直接用 col.Comment）
+    /// </summary>
     public string Comment => string.IsNullOrWhiteSpace(ColumnComment) ? (CsharpColumnName ?? string.Empty) : ColumnComment;
 
-    /// <summary>数据库数据类型（如 varchar、int、datetime）</summary>
+    /// <summary>
+    /// 数据库数据类型（如 varchar、int、datetime）
+    /// </summary>
     public string DatabaseDataType { get; set; } = "nvarchar";
 
-    /// <summary>C# 类型（如 string、int、DateTime、decimal）</summary>
+    /// <summary>
+    /// C# 类型（如 string、int、DateTime、decimal）
+    /// </summary>
     public string CsharpDataType { get; set; } = "string";
 
-    /// <summary>C# 列名（帕斯卡命名）</summary>
+    /// <summary>
+    /// C# 列名（帕斯卡命名）
+    /// </summary>
     public string CsharpColumnName { get; set; } = string.Empty;
 
-    /// <summary>前端列名（驼峰命名，供 TypeScript/API 使用）</summary>
+    /// <summary>
+    /// 前端列名（驼峰命名，供 TypeScript/API 使用）
+    /// </summary>
     public string TsColumnName { get; set; } = string.Empty;
 
-    /// <summary>前端类型（string、number、boolean，供 TypeScript 使用）</summary>
+    /// <summary>
+    /// 前端类型（string、number、boolean，供 TypeScript 使用）
+    /// </summary>
     public string TsDataType { get; set; } = "string";
 
-    /// <summary>C# 长度（字符串长度或数值整数位）</summary>
+    /// <summary>
+    /// C# 长度（字符串长度或数值整数位）
+    /// </summary>
     public int Length { get; set; }
 
-    /// <summary>C# 小数位数</summary>
+    /// <summary>
+    /// C# 小数位数
+    /// </summary>
     public int DecimalDigits { get; set; }
 
-    /// <summary>是否主键（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否主键（0=否，1=是）
+    /// </summary>
     public int IsPk { get; set; }
 
-    /// <summary>是否自增（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否自增（0=否，1=是）
+    /// </summary>
     public int IsIncrement { get; set; }
 
-    /// <summary>是否必填（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否必填（0=否，1=是）
+    /// </summary>
     public int IsRequired { get; set; }
 
-    /// <summary>是否为新增字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否为新增字段（0=否，1=是）
+    /// </summary>
     public int IsCreate { get; set; }
 
-    /// <summary>是否更新字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否更新字段（0=否，1=是）
+    /// </summary>
     public int IsUpdate { get; set; }
 
-    /// <summary>是否查重字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否查重字段（0=否，1=是）
+    /// </summary>
     public int IsUnique { get; set; }
 
-    /// <summary>是否列表字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否列表字段（0=否，1=是）
+    /// </summary>
     public int IsList { get; set; }
 
-    /// <summary>是否导出字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否导出字段（0=否，1=是）
+    /// </summary>
     public int IsExport { get; set; }
 
-    /// <summary>是否排序字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否排序字段（0=否，1=是）
+    /// </summary>
     public int IsSort { get; set; }
 
-    /// <summary>是否查询字段（0=否，1=是）</summary>
+    /// <summary>
+    /// 是否查询字段（0=否，1=是）
+    /// </summary>
     public int IsQuery { get; set; }
 
-    /// <summary>查询方式（EQ=等于，NE=不等于，GT=大于，LT=小于，LIKE=模糊，BETWEEN=范围）</summary>
+    /// <summary>
+    /// 查询方式（EQ=等于，NE=不等于，GT=大于，LT=小于，LIKE=模糊，BETWEEN=范围）
+    /// </summary>
     public string QueryType { get; set; } = "LIKE";
 
-    /// <summary>显示类型（input、textarea、select、date、switch 等）</summary>
+    /// <summary>
+    /// 显示类型（input、textarea、select、date、switch 等）
+    /// </summary>
     public string HtmlType { get; set; } = "input";
 
-    /// <summary>字典类型（关联数据字典）</summary>
+    /// <summary>
+    /// 字典类型（关联数据字典）
+    /// </summary>
     public string? DictType { get; set; }
 
-    /// <summary>行号（项号/序号，固定步长=10）</summary>
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
     public int LineNumber { get; set; }
 
-    /// <summary>帕斯卡转驼峰（供前端列名使用）。</summary>
+    /// <summary>
+    /// 帕斯卡转驼峰（供前端列名使用）。
+    /// </summary>
     private static string ToTsColumnName(string pascal)
     {
         if (string.IsNullOrEmpty(pascal)) return string.Empty;
         return char.ToLowerInvariant(pascal[0]) + pascal[1..];
     }
 
-    /// <summary>C# 类型转 TypeScript 类型（string、number、boolean）。</summary>
+    /// <summary>
+    /// C# 类型转 TypeScript 类型（string、number、boolean）。
+    /// </summary>
     private static string ToTsDataType(string csharpType)
     {
         if (string.IsNullOrEmpty(csharpType)) return "string";
@@ -1613,13 +1921,19 @@ public class TaktGenColumnTemplateModel
 /// </summary>
 public static class TaktGenEntityBaseProfile
 {
-    /// <summary>租户级</summary>
+    /// <summary>
+    /// 租户级
+    /// </summary>
     public const string TierTenant = "tenant";
 
-    /// <summary>公司级</summary>
+    /// <summary>
+    /// 公司级
+    /// </summary>
     public const string TierCompany = "company";
 
-    /// <summary>审批级</summary>
+    /// <summary>
+    /// 审批级
+    /// </summary>
     public const string TierApproval = "approval";
 
     private static readonly string[] TenantImportColumns =

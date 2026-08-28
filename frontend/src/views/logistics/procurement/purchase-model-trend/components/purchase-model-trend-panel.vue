@@ -46,7 +46,7 @@
           <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
               :value="(record as PurchaseModelTrend).currencyCode"
-              dict-type="accounting_currency_code"
+              dict-type="accounting_financial_currency_code"
             />
           </template>
           <template v-else-if="column.key === 'trend'">

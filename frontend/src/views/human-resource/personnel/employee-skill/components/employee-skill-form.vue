@@ -73,7 +73,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.skillLevel"
-                  dict-type="hr_employee_skill_level"
+                  dict-type="humanresource_personnel_employee_skill_level"
                   :placeholder="pi.ph('skillLevel')"
                 />
               </a-form-item>

@@ -37,7 +37,7 @@ public class TaktSocialInsuranceDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int PayStatus { get; set; } = 0;
 
@@ -69,7 +69,7 @@ public class TaktSocialInsuranceQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+    /// 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
@@ -141,7 +141,7 @@ public class TaktSocialInsuranceQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int? PayStatus { get; set; }
 
@@ -192,7 +192,7 @@ public class TaktSocialInsuranceCreateDto
 
 
     /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+    /// 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
@@ -267,7 +267,7 @@ public class TaktSocialInsuranceCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int PayStatus { get; set; } = 0;
 
@@ -321,9 +321,9 @@ public class TaktSocialInsuranceStatusDto
     public long SocialInsuranceId { get; set; }
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
-    [Required(ErrorMessage = "缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）不能为空")]
+    [Required(ErrorMessage = "缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）不能为空")]
     public int PayStatus { get; set; } = 0;
 }
 
@@ -352,7 +352,7 @@ public class TaktSocialInsuranceTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+    /// 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
@@ -424,7 +424,7 @@ public class TaktSocialInsuranceTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int? PayStatus { get; set; }
 
@@ -462,7 +462,7 @@ public class TaktSocialInsuranceImportDto
 
 
     /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+    /// 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
@@ -534,7 +534,7 @@ public class TaktSocialInsuranceImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int? PayStatus { get; set; }
 
@@ -572,7 +572,7 @@ public class TaktSocialInsuranceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+    /// 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
@@ -644,7 +644,7 @@ public class TaktSocialInsuranceExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+    /// 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
     /// </summary>
     public int PayStatus { get; set; } = 0;
 

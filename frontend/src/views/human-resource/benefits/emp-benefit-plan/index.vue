@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getEmpBenefitPlanId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,8 +74,8 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'empBenefitStatus'">
           <TaktDictTag
-            :value="getEmpBenefitPlanField(record, 'empBenefitStatus')"
-            dict-type="hr_emp_benefit_plan_status"
+            :value="getEmpBenefitPlanDictValue(record, 'empBenefitStatus')"
+            dict-type="humanresource_benefits_emp_benefit_plan_status"
           />
         </template>
       </template>
@@ -118,22 +119,41 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.empbenefitplan.employeeid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('employeeId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeeid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('employeeId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employeeName')">
-      <a-form-item :label="t('entity.empbenefitplan.employeename')">
+      <a-form-item :label="pi.queryLabel('employeeName')">
         <a-input
           v-model:value="advancedQueryForm.employeeName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeename') })"
+          :placeholder="pi.queryPh('employeeName', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -141,21 +161,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('benefitItemId')">
-      <a-form-item :label="t('entity.empbenefitplan.benefititemid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('benefitItemId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.benefitItemId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.benefititemid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktBenefitItems/options"
+          :placeholder="pi.queryPh('benefitItemId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planCode')">
-      <a-form-item :label="t('entity.empbenefitplan.plancode')">
+      <a-form-item :label="pi.queryLabel('planCode')">
         <a-input
           v-model:value="advancedQueryForm.planCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.plancode') })"
+          :placeholder="pi.queryPh('planCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -163,71 +182,60 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('enrollmentDateStart')">
-      <a-form-item :label="t('entity.empbenefitplan.enrollmentdatestart')">
+      <a-form-item :label="pi.queryLabel('enrollmentDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.enrollmentDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.enrollmentdatestart') })"
+          :placeholder="pi.queryPh('enrollmentDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('enrollmentDateEnd')">
-      <a-form-item :label="t('entity.empbenefitplan.enrollmentdateend')">
+      <a-form-item :label="pi.queryLabel('enrollmentDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.enrollmentDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.enrollmentdateend') })"
+          :placeholder="pi.queryPh('enrollmentDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateStart')">
-      <a-form-item :label="t('entity.empbenefitplan.expirydatestart')">
+      <a-form-item :label="pi.queryLabel('expiryDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.expirydatestart') })"
+          :placeholder="pi.queryPh('expiryDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expiryDateEnd')">
-      <a-form-item :label="t('entity.empbenefitplan.expirydateend')">
+      <a-form-item :label="pi.queryLabel('expiryDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.expiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.expirydateend') })"
+          :placeholder="pi.queryPh('expiryDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('empBenefitStatus')">
-      <a-form-item :label="t('entity.empbenefitplan.empbenefitstatus')">
+      <a-form-item :label="pi.queryLabel('empBenefitStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.empBenefitStatus"
-          dict-type="hr_emp_benefit_plan_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.empbenefitstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.empbenefitplan.relatedplant')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.relatedplant') })"
-          show-count
-          :maxlength="4"
+          dict-type="humanresource_benefits_emp_benefit_plan_status"
+          :placeholder="pi.queryPh('empBenefitStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -235,10 +243,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -260,7 +268,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -274,10 +282,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -291,14 +299,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.empbenefitplan._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.empbenefitplan._self"
+        v-if="importVisible"
+        :entity-i18n-key="EMPBENEFITPLAN_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -341,15 +350,28 @@ import type { EmpBenefitPlan, EmpBenefitPlanQuery } from '@/types/human-resource
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useEmpBenefitPlanI18n,
+  EMPBENEFITPLAN_LIST_FIELDS,
+  EMPBENEFITPLAN_QUERY_STRING_FIELDS,
+  EMPBENEFITPLAN_QUERY_FIELDS,
+  EMPBENEFITPLAN_SELF_I18N_KEY,
+} from './composables/use-emp-benefit-plan-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEmpBenefitPlanI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type EmpBenefitPlanRowRecord = EmpBenefitPlan | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEmpBenefitPlan')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.empbenefitplan._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -365,9 +387,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<EmpBenefitPlan | null>(null)
+const selectedRow = ref<EmpBenefitPlanRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<EmpBenefitPlan[]>([])
+const selectedRows = ref<EmpBenefitPlanRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -384,39 +406,46 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of EMPBENEFITPLAN_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.empBenefitStatus !== undefined && form.empBenefitStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EMPBENEFITPLAN_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EMPBENEFITPLAN_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    empBenefitStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  employeeId: '',
-  employeeName: '',
-  benefitItemId: '',
-  planCode: '',
-  enrollmentDateStart: '',
-  enrollmentDateEnd: '',
-  expiryDateStart: '',
-  expiryDateEnd: '',
-  empBenefitStatus: undefined as number | undefined,
-  plantCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'employeeId', label: t('entity.empbenefitplan.employeeid') },
-  { key: 'employeeName', label: t('entity.empbenefitplan.employeename') },
-  { key: 'benefitItemId', label: t('entity.empbenefitplan.benefititemid') },
-  { key: 'planCode', label: t('entity.empbenefitplan.plancode') },
-  { key: 'enrollmentDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.enrollmentdate')) },
-  { key: 'enrollmentDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.enrollmentdate')) },
-  { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.expirydate')) },
-  { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.expirydate')) },
-  { key: 'empBenefitStatus', label: t('entity.empbenefitplan.empbenefitstatus') },
-  { key: 'plantCode', label: t('entity.empbenefitplan.relatedplant') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  EMPBENEFITPLAN_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -435,8 +464,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {EmpBenefitPlanQuery} 查询 DTO
  */
@@ -457,114 +487,48 @@ function buildListQuery(overrides?: Partial<EmpBenefitPlanQuery>): EmpBenefitPla
       query[key] = v as never
     }
   }
-  assignTrimmed('employeeId', form.employeeId)
-  assignTrimmed('employeeName', form.employeeName)
-  assignTrimmed('benefitItemId', form.benefitItemId)
-  assignTrimmed('planCode', form.planCode)
-  assignTrimmed('enrollmentDateStart', form.enrollmentDateStart)
-  assignTrimmed('enrollmentDateEnd', form.enrollmentDateEnd)
-  assignTrimmed('expiryDateStart', form.expiryDateStart)
-  assignTrimmed('expiryDateEnd', form.expiryDateEnd)
+  for (const key of EMPBENEFITPLAN_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.empBenefitStatus !== undefined && form.empBenefitStatus !== null) {
     query.empBenefitStatus = form.empBenefitStatus
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildEmpBenefitPlanListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'empBenefitPlanId',
-    key: 'empBenefitPlanId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'empBenefitPlanId') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'employeeId') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.employeename'),
-    dataIndex: 'employeeName',
-    key: 'employeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'employeeName') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.benefititemid'),
-    dataIndex: 'benefitItemId',
-    key: 'benefitItemId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'benefitItemId') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.plancode'),
-    dataIndex: 'planCode',
-    key: 'planCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'planCode') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.enrollmentdate'),
-    dataIndex: 'enrollmentDate',
-    key: 'enrollmentDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'enrollmentDate') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.expirydate'),
-    dataIndex: 'expiryDate',
-    key: 'expiryDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'expiryDate') ?? ''
-  },
-  {
-    title: t('entity.empbenefitplan.empbenefitstatus'),
-    dataIndex: 'empBenefitStatus',
-    key: 'empBenefitStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.empbenefitplan.relatedplant'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'plantCode') ?? ''
-  },
+  buildEmpBenefitPlanListColumn('empBenefitPlanId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...EMPBENEFITPLAN_LIST_FIELDS.map((key) => buildEmpBenefitPlanListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -573,7 +537,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'human:resource:benefits:emp:benefit:plan:update',
-        onClick: (record: EmpBenefitPlan) => handleEdit(record)
+        onClick: (record: EmpBenefitPlanRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -581,43 +545,56 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'human:resource:benefits:emp:benefit:plan:delete',
-        onClick: (record: EmpBenefitPlan) => handleDeleteOne(record)
+        onClick: (record: EmpBenefitPlanRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEmpBenefitPlanId = (record: any): string => record?.[entityIdName] ?? ''
+const getEmpBenefitPlanId = (record: EmpBenefitPlanRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getEmpBenefitPlanField = (record: any, field: string): any => record?.[field]
+const getEmpBenefitPlanDictValue = (
+  record: EmpBenefitPlanRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EmpBenefitPlan[]) => {
+  onChange: (keys: (string | number)[], rows: EmpBenefitPlanRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: EmpBenefitPlan, selected: boolean) => {
+  onSelect: (record: EmpBenefitPlanRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getEmpBenefitPlanId(selectedRow.value) === getEmpBenefitPlanId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EmpBenefitPlan[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EmpBenefitPlanRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: EmpBenefitPlan) => ({
+const onClickRow = (record: EmpBenefitPlanRowRecord) => ({
   onClick: () => {
     const key = getEmpBenefitPlanId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -638,6 +615,11 @@ const onClickRow = (record: EmpBenefitPlan) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getEmpBenefitPlanList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -663,46 +645,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  employeeId: '',
-  employeeName: '',
-  benefitItemId: '',
-  planCode: '',
-  enrollmentDateStart: '',
-  enrollmentDateEnd: '',
-  expiryDateStart: '',
-  expiryDateEnd: '',
-  empBenefitStatus: undefined as number | undefined,
-  plantCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.empbenefitplan._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: EmpBenefitPlan) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.empbenefitplan._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: EmpBenefitPlanRowRecord) {
+  const id = getEmpBenefitPlanId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getEmpBenefitPlanById(id)
+    formData.value = detail ?? ({ ...record } as Partial<EmpBenefitPlan>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.empbenefitplan._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -720,10 +699,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmpBenefitPlan(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.empbenefitplan._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEmpBenefitPlan(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.empbenefitplan._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -751,15 +730,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEmpBenefitPlan(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEmpBenefitPlan(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -770,6 +752,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportEmpBenefitPlan(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -793,24 +778,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.empbenefitplan._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[EmpBenefitPlan] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.empbenefitplan._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EmpBenefitPlan) {
+async function handleDeleteOne(record: EmpBenefitPlanRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.empbenefitplan._self'), name: t('common.tip.this.target', { target: t('entity.empbenefitplan._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmpBenefitPlanById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.empbenefitplan._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -818,18 +803,18 @@ async function handleDeleteOne(record: EmpBenefitPlan) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.empbenefitplan._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.empbenefitplan._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmpBenefitPlanBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.empbenefitplan._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -847,22 +832,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  employeeId: '',
-  employeeName: '',
-  benefitItemId: '',
-  planCode: '',
-  enrollmentDateStart: '',
-  enrollmentDateEnd: '',
-  expiryDateStart: '',
-  expiryDateEnd: '',
-  empBenefitStatus: undefined as number | undefined,
-  plantCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

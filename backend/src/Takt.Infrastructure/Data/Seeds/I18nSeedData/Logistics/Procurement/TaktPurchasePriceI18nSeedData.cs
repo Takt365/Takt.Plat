@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseprice.code", "zh-HK", "定价记录号_hk", "定价记录号（唯一索引；长度 20）"),
 
             // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "en-US", "条件类型_us", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "en-US", "条件类型_us", "条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
             // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "ja-JP", "条件类型_jp", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "ja-JP", "条件类型_jp", "条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
             // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-CN", "条件类型", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-CN", "条件类型", "条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
             // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-HK", "条件类型_hk", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-HK", "条件类型_hk", "条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
 
             // entity.purchaseprice.suppliercode
             new TranslationSeedItem("entity.purchaseprice.suppliercode", "en-US", "供应商_us", "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
@@ -145,13 +145,13 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseprice.purchasegroup", "zh-HK", "采购组_hk", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
 
             // entity.purchaseprice.taxcode
-            new TranslationSeedItem("entity.purchaseprice.taxcode", "en-US", "税码_us", "税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
+            new TranslationSeedItem("entity.purchaseprice.taxcode", "en-US", "税码_us", "税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
             // entity.purchaseprice.taxcode
-            new TranslationSeedItem("entity.purchaseprice.taxcode", "ja-JP", "税码_jp", "税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
+            new TranslationSeedItem("entity.purchaseprice.taxcode", "ja-JP", "税码_jp", "税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
             // entity.purchaseprice.taxcode
-            new TranslationSeedItem("entity.purchaseprice.taxcode", "zh-CN", "税码", "税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
+            new TranslationSeedItem("entity.purchaseprice.taxcode", "zh-CN", "税码", "税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
             // entity.purchaseprice.taxcode
-            new TranslationSeedItem("entity.purchaseprice.taxcode", "zh-HK", "税码_hk", "税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
+            new TranslationSeedItem("entity.purchaseprice.taxcode", "zh-HK", "税码_hk", "税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）"),
 
             // entity.purchaseprice.grbasedinvoiceinspection
             new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "en-US", "基于收货的发票检验_us", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
@@ -163,13 +163,13 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseprice.grbasedinvoiceinspection", "zh-HK", "基于收货的发票检验_hk", "基于收货的发票检验（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.purchaseprice.pricingdatecontrol
-            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "en-US", "定价日期控制_us", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
+            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "en-US", "定价日期控制_us", "定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
             // entity.purchaseprice.pricingdatecontrol
-            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "ja-JP", "定价日期控制_jp", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
+            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "ja-JP", "定价日期控制_jp", "定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
             // entity.purchaseprice.pricingdatecontrol
-            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "zh-CN", "定价日期控制", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
+            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "zh-CN", "定价日期控制", "定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
             // entity.purchaseprice.pricingdatecontrol
-            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "zh-HK", "定价日期控制_hk", "定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
+            new TranslationSeedItem("entity.purchaseprice.pricingdatecontrol", "zh-HK", "定价日期控制_hk", "定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）"),
 
             // entity.purchaseprice.validfrom
             new TranslationSeedItem("entity.purchaseprice.validfrom", "en-US", "有效起始日_us", "有效起始日"),

@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 public class TaktAssyBatchDefect : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -103,7 +103,7 @@ public class TaktAssyBatchDefect : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "report_count", ColumnDescription = "日报笔数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReportCount { get; set; } = 0;
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     [SugarColumn(ColumnName = "batch_status", ColumnDescription = "批次状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int BatchStatus { get; set; } = 1;

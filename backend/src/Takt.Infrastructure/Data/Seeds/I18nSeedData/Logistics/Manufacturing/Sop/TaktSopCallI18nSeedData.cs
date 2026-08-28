@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopCallI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopCall 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktSopCallI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcall.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）"),
 
             // entity.sopcall.calltype
-            new TranslationSeedItem("entity.sopcall.calltype", "en-US", "呼叫类型_us", "呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）"),
+            new TranslationSeedItem("entity.sopcall.calltype", "en-US", "呼叫类型_us", "呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）"),
             // entity.sopcall.calltype
-            new TranslationSeedItem("entity.sopcall.calltype", "ja-JP", "呼叫类型_jp", "呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）"),
+            new TranslationSeedItem("entity.sopcall.calltype", "ja-JP", "呼叫类型_jp", "呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）"),
             // entity.sopcall.calltype
-            new TranslationSeedItem("entity.sopcall.calltype", "zh-CN", "呼叫类型", "呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）"),
+            new TranslationSeedItem("entity.sopcall.calltype", "zh-CN", "呼叫类型", "呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）"),
             // entity.sopcall.calltype
-            new TranslationSeedItem("entity.sopcall.calltype", "zh-HK", "呼叫类型_hk", "呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）"),
+            new TranslationSeedItem("entity.sopcall.calltype", "zh-HK", "呼叫类型_hk", "呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）"),
 
             // entity.sopcall.callerid
             new TranslationSeedItem("entity.sopcall.callerid", "en-US", "呼叫人ID_us", "呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）"),
@@ -125,6 +125,15 @@ public class TaktSopCallI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcall.callerid", "zh-CN", "呼叫人ID", "呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.sopcall.callerid
             new TranslationSeedItem("entity.sopcall.callerid", "zh-HK", "呼叫人ID_hk", "呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.sopcall.callername
+            new TranslationSeedItem("entity.sopcall.callername", "en-US", "呼叫人名称_us", "呼叫人名称（冗余：按 CallerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.callername
+            new TranslationSeedItem("entity.sopcall.callername", "ja-JP", "呼叫人名称_jp", "呼叫人名称（冗余：按 CallerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.callername
+            new TranslationSeedItem("entity.sopcall.callername", "zh-CN", "呼叫人名称", "呼叫人名称（冗余：按 CallerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.callername
+            new TranslationSeedItem("entity.sopcall.callername", "zh-HK", "呼叫人名称_hk", "呼叫人名称（冗余：按 CallerId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.sopcall.calledat
             new TranslationSeedItem("entity.sopcall.calledat", "en-US", "呼叫时间_us", "呼叫时间"),
@@ -143,6 +152,15 @@ public class TaktSopCallI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcall.respondedby", "zh-CN", "响应人ID", "响应人 ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.sopcall.respondedby
             new TranslationSeedItem("entity.sopcall.respondedby", "zh-HK", "响应人ID_hk", "响应人 ID（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.sopcall.respondedbyname
+            new TranslationSeedItem("entity.sopcall.respondedbyname", "en-US", "响应人名称_us", "响应人名称（冗余：按 RespondedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.respondedbyname
+            new TranslationSeedItem("entity.sopcall.respondedbyname", "ja-JP", "响应人名称_jp", "响应人名称（冗余：按 RespondedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.respondedbyname
+            new TranslationSeedItem("entity.sopcall.respondedbyname", "zh-CN", "响应人名称", "响应人名称（冗余：按 RespondedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopcall.respondedbyname
+            new TranslationSeedItem("entity.sopcall.respondedbyname", "zh-HK", "响应人名称_hk", "响应人名称（冗余：按 RespondedBy 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.sopcall.respondedat
             new TranslationSeedItem("entity.sopcall.respondedat", "en-US", "响应时间_us", "响应时间"),
@@ -163,13 +181,13 @@ public class TaktSopCallI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcall.responseseconds", "zh-HK", "响应时长秒_hk", "响应时长（秒）"),
 
             // entity.sopcall.callstatus
-            new TranslationSeedItem("entity.sopcall.callstatus", "en-US", "呼叫状态_us", "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
+            new TranslationSeedItem("entity.sopcall.callstatus", "en-US", "呼叫状态_us", "呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
             // entity.sopcall.callstatus
-            new TranslationSeedItem("entity.sopcall.callstatus", "ja-JP", "呼叫状态_jp", "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
+            new TranslationSeedItem("entity.sopcall.callstatus", "ja-JP", "呼叫状态_jp", "呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
             // entity.sopcall.callstatus
-            new TranslationSeedItem("entity.sopcall.callstatus", "zh-CN", "呼叫状态", "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
+            new TranslationSeedItem("entity.sopcall.callstatus", "zh-CN", "呼叫状态", "呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
             // entity.sopcall.callstatus
-            new TranslationSeedItem("entity.sopcall.callstatus", "zh-HK", "呼叫状态_hk", "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
+            new TranslationSeedItem("entity.sopcall.callstatus", "zh-HK", "呼叫状态_hk", "呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）"),
 
             // entity.sopcall.workstation
             new TranslationSeedItem("entity.sopcall.workstation", "en-US", "工位_us", "工位"),

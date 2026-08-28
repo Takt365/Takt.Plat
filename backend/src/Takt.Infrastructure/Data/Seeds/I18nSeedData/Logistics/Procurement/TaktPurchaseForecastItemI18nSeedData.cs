@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseForecastItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseForecastItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPurchaseForecastItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastid", "zh-HK", "采购预测ID_hk", "采购预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.purchaseforecastitem.purchaseforecastcode
-            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "en-US", "采购预测编码_us", "采购预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "en-US", "采购预测编码_us", "采购预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseforecastitem.purchaseforecastcode
-            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "ja-JP", "采购预测编码_jp", "采购预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "ja-JP", "采购预测编码_jp", "采购预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseforecastitem.purchaseforecastcode
-            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "zh-CN", "采购预测编码", "采购预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "zh-CN", "采购预测编码", "采购预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseforecastitem.purchaseforecastcode
-            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "zh-HK", "采购预测编码_hk", "采购预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseforecastitem.purchaseforecastcode", "zh-HK", "采购预测编码_hk", "采购预测编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.purchaseforecastitem.linenumber
             new TranslationSeedItem("entity.purchaseforecastitem.linenumber", "en-US", "行号_us", "行号（固定步长=10）"),

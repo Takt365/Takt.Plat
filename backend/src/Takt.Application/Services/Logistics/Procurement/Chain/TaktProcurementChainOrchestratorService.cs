@@ -447,7 +447,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         IReadOnlyList<TaktPurchaseInquiryItem> items,
         string businessKey)
     {
-        if (!inquiry.InquiryId.HasValue || inquiry.InquiryId.Value <= 0)
+        if (!inquiry.InquiryEmployeeId.HasValue || inquiry.InquiryEmployeeId.Value <= 0)
         {
             throw new TaktBusinessException("询价单缺少询价人员工，无法提交会签");
         }
@@ -457,7 +457,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         var createDto = new TaktCountersignCreateDto
         {
             CountersignCode = countersignCode,
-            ApplicantBy = inquiry.InquiryId.Value,
+            ApplicantBy = inquiry.InquiryEmployeeId.Value,
             ApplicationAmount = inquiry.TotalAmount,
             BudgetAmount = inquiry.TotalAmount,
             CountersignTitle = $"采购询价审批-{inquiry.PurchaseInquiryCode}",
@@ -492,7 +492,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         IReadOnlyList<TaktPurchaseRequestItem> items,
         string businessKey)
     {
-        if (!request.RequestId.HasValue || request.RequestId.Value <= 0)
+        if (!request.RequestEmployeeId.HasValue || request.RequestEmployeeId.Value <= 0)
         {
             throw new TaktBusinessException("采购申请缺少申请人员工，无法提交会签");
         }
@@ -502,7 +502,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         var createDto = new TaktCountersignCreateDto
         {
             CountersignCode = countersignCode,
-            ApplicantBy = request.RequestId.Value,
+            ApplicantBy = request.RequestEmployeeId.Value,
             ApplicationAmount = request.TotalAmount,
             BudgetAmount = request.TotalAmount,
             CountersignTitle = $"采购申请审批-{request.PurchaseRequestCode}",
@@ -545,10 +545,15 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         {
             CountersignCode = countersignCode,
             ApplicantBy = expense.ApplicantBy,
+            ApplicantName = expense.ApplicantName,
             ApplicationAmount = expense.ExpenseAmount,
             BudgetAmount = expense.ExpenseAmount,
-            ApplicationDept = expense.ApplicationDept,
-            CostBearerDept = expense.CostBearerDept,
+            ApplicationDeptId = expense.ApplicationDeptId,
+            ApplicationDeptName = expense.ApplicationDeptName,
+            CostBearerDeptId = expense.CostBearerDeptId,
+            CostBearerDeptName = expense.CostBearerDeptName,
+            FileName = expense.FileName,
+            AccessUrl = expense.AccessUrl,
             CountersignTitle = $"费用报销审批-{expense.ExpenseCode}",
             ApplicationReason = expense.ApplicationReason,
             CountersignStatus = 0,
@@ -640,8 +645,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             PurchaseRequestCode = requestCode,
             RequestDate = DateTime.Now,
             RequiredArrivalDate = inquiry.QuoteDeadlineDate,
-            RequestId = inquiry.InquiryId,
-            RequestBy = inquiry.InquiryBy,
+            RequestEmployeeId = inquiry.InquiryEmployeeId,
+            RequestEmployeeName = inquiry.InquiryEmployeeName ?? string.Empty,
             TotalQuantity = inquiry.TotalQuantity,
             TotalAmount = inquiry.TotalAmount,
             RequestReason = inquiry.InquiryReason ?? countersign.ApplicationReason,
@@ -750,7 +755,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseType = expenseType,
             SupplierCode = order.SupplierCode,
             SupplierName1 = order.SupplierName1,
-            ApplicantBy = request.RequestId ?? inquiry.InquiryId ?? 0,
+            ApplicantBy = request.RequestEmployeeId ?? inquiry.InquiryEmployeeId ?? 0,
             ExpenseAmount = order.TotalAmount,
             TaxAmount = order.TaxAmount,
             ExpenseDate = DateTime.Now,
@@ -798,9 +803,11 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseType = expenseType,
             SupplierCode = inquiry.SupplierCode,
             SupplierName1 = inquiry.SupplierName1,
-            ApplicantBy = request.RequestId ?? inquiry.InquiryId ?? 0,
-            ApplicationDept = prCountersign.ApplicationDept,
-            CostBearerDept = prCountersign.CostBearerDept,
+            ApplicantBy = request.RequestEmployeeId ?? inquiry.InquiryEmployeeId ?? 0,
+            ApplicationDeptId = prCountersign.ApplicationDeptId,
+            ApplicationDeptName = prCountersign.ApplicationDeptName,
+            CostBearerDeptId = prCountersign.CostBearerDeptId,
+            CostBearerDeptName = prCountersign.CostBearerDeptName,
             CountersignId = prCountersign.Id,
             ExpenseAmount = request.TotalAmount,
             TaxAmount = 0,
@@ -842,8 +849,13 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseTitle = countersign.CountersignTitle ?? $"会签费用-{countersign.CountersignCode}",
             ExpenseType = TaktProcurementConstants.ExpenseTypeMiscPurchase,
             ApplicantBy = countersign.ApplicantBy,
-            ApplicationDept = countersign.ApplicationDept,
-            CostBearerDept = countersign.CostBearerDept,
+            ApplicantName = countersign.ApplicantName,
+            ApplicationDeptId = countersign.ApplicationDeptId,
+            ApplicationDeptName = countersign.ApplicationDeptName,
+            CostBearerDeptId = countersign.CostBearerDeptId,
+            CostBearerDeptName = countersign.CostBearerDeptName,
+            FileName = countersign.FileName,
+            AccessUrl = countersign.AccessUrl,
             CountersignId = countersign.Id,
             ExpenseAmount = countersign.ApplicationAmount,
             TaxAmount = 0,

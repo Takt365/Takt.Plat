@@ -109,11 +109,4 @@ public interface ITaktBillOfMaterialService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialAsync(TaktBillOfMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
-    /// <summary>
-    /// BOM 递归展开（运行时多层展开，单层存储）
-    /// </summary>
-    /// <param name="query">展开参数</param>
-    /// <returns>展开结果；BOM 不存在时返回 null</returns>
-    Task<TaktBillOfMaterialExplosionDto?> GetBillOfMaterialExplosionAsync(TaktBillOfMaterialExplosionQueryDto query);
-
 }

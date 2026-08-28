@@ -49,7 +49,7 @@ export interface EmployeeFamily extends CompanyDtoBase {
   memberName: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 
@@ -134,7 +134,7 @@ export interface EmployeeFamilyQuery extends TaktPagedQuery {
   memberName?: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -238,7 +238,7 @@ export interface EmployeeFamilyCreate {
   memberName: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 
@@ -342,7 +342,7 @@ export interface EmployeeFamilyTemplate {
   memberName?: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -431,7 +431,7 @@ export interface EmployeeFamilyImport {
   memberName?: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -520,7 +520,7 @@ export interface EmployeeFamilyExport {
   memberName: string;
 
   /**
-   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+   * 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 

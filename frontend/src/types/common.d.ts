@@ -274,7 +274,7 @@ export interface TaktSelectOption {
   dictValue: string | number;
 
   /**
-   * 国际化翻译键（用于多语言翻译，与 TaktDictData.i18nKey 一致）
+   * 国际化键（用于多语言翻译，与 TaktDictData.i18nKey 一致）
    */
   i18nKey?: string;
 

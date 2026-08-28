@@ -37,7 +37,7 @@ public class TaktAssyBatchDefectDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -112,7 +112,7 @@ public class TaktAssyBatchDefectDto : TaktCompanyDtoBase
     public int ReportCount { get; set; } = 0;
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int BatchStatus { get; set; } = 0;
 
@@ -149,7 +149,7 @@ public class TaktAssyBatchDefectQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -229,7 +229,7 @@ public class TaktAssyBatchDefectQueryDto : TaktPagedQuery
     public int? ReportCount { get; set; }
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int? BatchStatus { get; set; }
 
@@ -285,9 +285,9 @@ public class TaktAssyBatchDefectCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -363,7 +363,7 @@ public class TaktAssyBatchDefectCreateDto
     public int ReportCount { get; set; } = 0;
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int BatchStatus { get; set; } = 0;
 
@@ -417,9 +417,9 @@ public class TaktAssyBatchDefectStatusDto
     public long AssyBatchDefectId { get; set; }
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
-    [Required(ErrorMessage = "批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）不能为空")]
+    [Required(ErrorMessage = "批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）不能为空")]
     public int BatchStatus { get; set; } = 0;
 }
 
@@ -453,7 +453,7 @@ public class TaktAssyBatchDefectTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -528,7 +528,7 @@ public class TaktAssyBatchDefectTemplateDto
     public int? ReportCount { get; set; }
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int? BatchStatus { get; set; }
 
@@ -570,7 +570,7 @@ public class TaktAssyBatchDefectImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -645,7 +645,7 @@ public class TaktAssyBatchDefectImportDto
     public int? ReportCount { get; set; }
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int? BatchStatus { get; set; }
 
@@ -688,7 +688,7 @@ public class TaktAssyBatchDefectExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -763,7 +763,7 @@ public class TaktAssyBatchDefectExportDto
     public int ReportCount { get; set; } = 0;
 
     /// <summary>
-    /// 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+    /// 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
     /// </summary>
     public int BatchStatus { get; set; } = 0;
 

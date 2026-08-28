@@ -267,30 +267,58 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
     private Expression<Func<TaktEcDetail, bool>> BuildDetailQueryExpression(TaktEcDeptViewQueryDto queryDto)
     {
         var exp = Expressionable.Create<TaktEcDetail>();
+        if (DeptCode == TaktEcDeptCodes.Pmc)
+        {
+            exp = exp.And(TaktEcSeikanQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Mp)
+        {
+            exp = exp.And(TaktEcKoubaiQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Iqc)
+        {
+            exp = exp.And(TaktEcUkekenQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Mc)
+        {
+            exp = exp.And(TaktEcBukanQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Assy)
+        {
+            exp = exp.And(TaktEcSeizouikkaQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Qa)
+        {
+            exp = exp.And(TaktEcHinkanQueryHelper.VisibleDetailExpression());
+        }
+        else if (DeptCode == TaktEcDeptCodes.Te)
+        {
+            exp = exp.And(TaktEcSeizougijutsuQueryHelper.VisibleDetailExpression());
+        }
         if (!string.IsNullOrEmpty(queryDto.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
-                || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords))
+                || (x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(keywords)));
         }
         if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcModel))
+        if (!string.IsNullOrEmpty(queryDto.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcOldItem))
+        if (!string.IsNullOrEmpty(queryDto.EcOldMaterialCode))
         {
-            exp = exp.And(x => x.EcOldItem != null && x.EcOldItem.Contains(queryDto.EcOldItem));
+            exp = exp.And(x => x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(queryDto.EcOldMaterialCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNewItem))
+        if (!string.IsNullOrEmpty(queryDto.EcNewMaterialCode))
         {
-            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
+            exp = exp.And(x => x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(queryDto.EcNewMaterialCode));
         }
         if (queryDto.IsImplemented.HasValue)
         {

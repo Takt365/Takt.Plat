@@ -439,8 +439,9 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
                 || (x.DefectLevel != null && x.DefectLevel.Contains(keywords))
                 || (x.CauseAnalysis != null && x.CauseAnalysis.Contains(keywords))
                 || (x.ImprovementAction != null && x.ImprovementAction.Contains(keywords))
-                || (x.ImprovementResponsible != null && x.ImprovementResponsible.Contains(keywords))
-                || (x.AttachmentPaths != null && x.AttachmentPaths.Contains(keywords))
+                || (x.ImprovementResponsibleName != null && x.ImprovementResponsibleName.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -536,16 +537,22 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
             exp = exp.And(x => x.ImprovementAction != null && x.ImprovementAction.Contains(improvementAction));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementResponsible))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementResponsibleName))
         {
-            var improvementResponsible = queryDto.ImprovementResponsible;
-            exp = exp.And(x => x.ImprovementResponsible != null && x.ImprovementResponsible.Contains(improvementResponsible));
+            var improvementResponsible = queryDto.ImprovementResponsibleName;
+            exp = exp.And(x => x.ImprovementResponsibleName != null && x.ImprovementResponsibleName.Contains(improvementResponsible));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AttachmentPaths))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
         {
-            var attachmentPaths = queryDto.AttachmentPaths;
-            exp = exp.And(x => x.AttachmentPaths != null && x.AttachmentPaths.Contains(attachmentPaths));
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
+        {
+            var accessUrl = queryDto.AccessUrl;
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(accessUrl));
         }
 
         if (queryDto?.ImprovementStatus.HasValue == true)
@@ -680,11 +687,15 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ImprovementResponsible))
+        if (!string.IsNullOrWhiteSpace(queryDto.ImprovementResponsibleName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AttachmentPaths))
+        if (!string.IsNullOrWhiteSpace(queryDto.FileName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccessUrl))
         {
             return true;
         }

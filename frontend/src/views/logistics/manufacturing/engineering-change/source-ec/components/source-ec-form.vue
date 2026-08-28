@@ -543,20 +543,19 @@
       class="w-full min-w-0"
     >
       <template #cell-sourceCompatibility="{ record }">
-        <TaktSelect
+        <a-input
           v-model:value="record.sourceCompatibility"
-          dict-type="logistics_ec_source_compatibility"
           class="w-full"
-          :get-popup-container="getSelectPopupContainer"
           :placeholder="sourceEcDetailPi.ph('sourceCompatibility')"
           :disabled="loading"
+          :maxlength="4"
           allow-clear
         />
       </template>
       <template #cell-sourceDistinction="{ record }">
         <TaktSelect
           v-model:value="record.sourceDistinction"
-          dict-type="logistics_ec_source_distinction"
+          dict-type="logistics_manufacturing_ec_source_distinction"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="sourceEcDetailPi.ph('sourceDistinction')"
@@ -567,7 +566,7 @@
       <template #cell-sourceInstruction="{ record }">
         <TaktSelect
           v-model:value="record.sourceInstruction"
-          dict-type="logistics_ec_source_instruction"
+          dict-type="logistics_manufacturing_ec_source_instruction"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="sourceEcDetailPi.ph('sourceInstruction')"
@@ -575,13 +574,13 @@
           allow-clear
         />
       </template>
-      <template #cell-sourceLegacyPartDisposition="{ record }">
+      <template #cell-sourceOldPartDisposition="{ record }">
         <TaktSelect
-          v-model:value="record.sourceLegacyPartDisposition"
-          dict-type="logistics_ec_legacy_part_disposition"
+          v-model:value="record.sourceOldPartDisposition"
+          dict-type="logistics_manufacturing_ec_old_part_disposition"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="sourceEcDetailPi.ph('sourceLegacyPartDisposition')"
+          :placeholder="sourceEcDetailPi.ph('sourceOldPartDisposition')"
           :disabled="loading"
           allow-clear
         />
@@ -700,62 +699,62 @@ const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'sourceFinishedProduct',
-    title: sourceEcDetailPi.label('sourceFinishedProduct'),
+    key: 'sourceFinishedGoods',
+    title: sourceEcDetailPi.label('sourceFinishedGoods'),
     editor: 'input',
     width: 140,
   },
   {
-    key: 'sourceParentPart',
-    title: sourceEcDetailPi.label('sourceParentPart'),
+    key: 'sourceParentMaterialCode',
+    title: sourceEcDetailPi.label('sourceParentMaterialCode'),
     editor: 'input',
     width: 140,
   },
   {
-    key: 'sourceLegacyPartCode',
-    title: sourceEcDetailPi.label('sourceLegacyPartCode'),
+    key: 'sourceOldMaterialCode',
+    title: sourceEcDetailPi.label('sourceOldMaterialCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyPartCode'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceOldMaterialCode'),
   },
   {
-    key: 'sourceLegacyPartName',
-    title: sourceEcDetailPi.label('sourceLegacyPartName'),
+    key: 'sourceOldMaterialDescription',
+    title: sourceEcDetailPi.label('sourceOldMaterialDescription'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyPartName'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceOldMaterialDescription'),
   },
   {
-    key: 'sourceLegacyUsage',
-    title: sourceEcDetailPi.label('sourceLegacyUsage'),
+    key: 'sourceOldUsageQuantity',
+    title: sourceEcDetailPi.label('sourceOldUsageQuantity'),
     width: 140,
   },
   {
-    key: 'sourceLegacyMountingPosition',
-    title: sourceEcDetailPi.label('sourceLegacyMountingPosition'),
+    key: 'sourceOldItemPosition',
+    title: sourceEcDetailPi.label('sourceOldItemPosition'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceLegacyMountingPosition'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceOldItemPosition'),
   },
   {
-    key: 'sourceReplacementPartCode',
-    title: sourceEcDetailPi.label('sourceReplacementPartCode'),
+    key: 'sourceNewMaterialCode',
+    title: sourceEcDetailPi.label('sourceNewMaterialCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementPartCode'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceNewMaterialCode'),
   },
   {
-    key: 'sourceReplacementPartName',
-    title: sourceEcDetailPi.label('sourceReplacementPartName'),
+    key: 'sourceNewMaterialDescription',
+    title: sourceEcDetailPi.label('sourceNewMaterialDescription'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementPartName'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceNewMaterialDescription'),
   },
   {
-    key: 'sourceReplacementUsage',
-    title: sourceEcDetailPi.label('sourceReplacementUsage'),
+    key: 'sourceNewUsageQuantity',
+    title: sourceEcDetailPi.label('sourceNewUsageQuantity'),
     width: 140,
   },
   {
-    key: 'sourceReplacementMountingPosition',
-    title: sourceEcDetailPi.label('sourceReplacementMountingPosition'),
+    key: 'sourceNewItemPosition',
+    title: sourceEcDetailPi.label('sourceNewItemPosition'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceReplacementMountingPosition'),
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceNewItemPosition'),
   },
   {
     key: 'sourceBomCode',
@@ -766,7 +765,8 @@ const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'sourceCompatibility',
     title: sourceEcDetailPi.label('sourceCompatibility'),
-    width: 140,
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceCompatibility'),
   },
   {
     key: 'sourceDistinction',
@@ -779,8 +779,8 @@ const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'sourceLegacyPartDisposition',
-    title: sourceEcDetailPi.label('sourceLegacyPartDisposition'),
+    key: 'sourceOldPartDisposition',
+    title: sourceEcDetailPi.label('sourceOldPartDisposition'),
     width: 140,
   },
   {
@@ -806,21 +806,21 @@ function syncChildRowsFromFormData(val: Partial<SourceEcCreate & { sourceEcId?: 
 function createDefaultSourceEcDetailRow(): Record<string, unknown> {
   return {
     lineNumber: allocateNextSourceEcDetailLineNumber(),
-    sourceFinishedProduct: '',
-    sourceParentPart: '',
-    sourceLegacyPartCode: '',
-    sourceLegacyPartName: '',
-    sourceLegacyUsage: 0,
-    sourceLegacyMountingPosition: '',
-    sourceReplacementPartCode: '',
-    sourceReplacementPartName: '',
-    sourceReplacementUsage: 0,
-    sourceReplacementMountingPosition: '',
+    sourceFinishedGoods: '',
+    sourceParentMaterialCode: '',
+    sourceOldMaterialCode: '',
+    sourceOldMaterialDescription: '',
+    sourceOldUsageQuantity: 0,
+    sourceOldItemPosition: '',
+    sourceNewMaterialCode: '',
+    sourceNewMaterialDescription: '',
+    sourceNewUsageQuantity: 0,
+    sourceNewItemPosition: '',
     sourceBomCode: '',
     sourceCompatibility: '',
     sourceDistinction: '',
     sourceInstruction: '',
-    sourceLegacyPartDisposition: '',
+    sourceOldPartDisposition: '',
     sourceBomEffectiveDate: '',
     isObsolete: 0,
   }

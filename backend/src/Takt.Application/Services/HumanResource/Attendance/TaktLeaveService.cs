@@ -279,6 +279,7 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingBy).Contains(keywords)
+                || (x.HandlingByName != null && x.HandlingByName.Contains(keywords))
                 || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || SqlFunc.ToString(x.LeaveStatus).Contains(keywords)
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
@@ -334,6 +335,11 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
         if (queryDto?.HandlingBy.HasValue == true)
         {
             exp = exp.And(x => x.HandlingBy == queryDto.HandlingBy);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.HandlingByName))
+        {
+            exp = exp.And(x => x.HandlingByName != null && x.HandlingByName.Contains(queryDto.HandlingByName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.HandlingComment))

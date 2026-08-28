@@ -65,15 +65,27 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_type", ColumnDescription = "评价类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationType { get; set; } = 0;
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "evaluator_by", ColumnDescription = "评价人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? EvaluatorBy { get; set; }
+    [SugarColumn(ColumnName = "evaluator_by_employee_id", ColumnDescription = "评价人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EvaluatorByEmployeeId { get; set; }
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 评价人名称（冗余：按 EvaluatorByEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "evaluation_dept", ColumnDescription = "评价部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? EvaluationDept { get; set; }
+    [SugarColumn(ColumnName = "evaluator_by_employee_name", ColumnDescription = "评价人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EvaluatorByEmployeeName { get; set; }
+    /// <summary>
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "evaluation_dept_id", ColumnDescription = "评价部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EvaluationDeptId { get; set; }
+    /// <summary>
+    /// 评价部门名称（冗余：按 EvaluationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "evaluation_dept_name", ColumnDescription = "评价部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? EvaluationDeptName { get; set; }
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
     /// </summary>

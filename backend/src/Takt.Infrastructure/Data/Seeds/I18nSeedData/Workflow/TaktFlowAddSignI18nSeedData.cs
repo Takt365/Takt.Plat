@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowAddSignI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowAddSign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktFlowAddSignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowaddsign.signuserid", "zh-HK", "加签人ID_hk", "加签人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.flowaddsign.signusername
-            new TranslationSeedItem("entity.flowaddsign.signusername", "en-US", "加签人姓名_us", "加签人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowaddsign.signusername", "en-US", "加签人姓名_us", "加签人姓名（冗余：按 SignUserId 取 TaktUser.UserName 联动）"),
             // entity.flowaddsign.signusername
-            new TranslationSeedItem("entity.flowaddsign.signusername", "ja-JP", "加签人姓名_jp", "加签人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowaddsign.signusername", "ja-JP", "加签人姓名_jp", "加签人姓名（冗余：按 SignUserId 取 TaktUser.UserName 联动）"),
             // entity.flowaddsign.signusername
-            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-CN", "加签人姓名", "加签人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-CN", "加签人姓名", "加签人姓名（冗余：按 SignUserId 取 TaktUser.UserName 联动）"),
             // entity.flowaddsign.signusername
-            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-HK", "加签人姓名_hk", "加签人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowaddsign.signusername", "zh-HK", "加签人姓名_hk", "加签人姓名（冗余：按 SignUserId 取 TaktUser.UserName 联动）"),
 
             // entity.flowaddsign.signtype
             new TranslationSeedItem("entity.flowaddsign.signtype", "en-US", "加签方式_us", "加签方式（字典 sys_flow_add_sign_type；DictValue=sequential、all、one）"),

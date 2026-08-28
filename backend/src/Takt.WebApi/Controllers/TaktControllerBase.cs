@@ -493,7 +493,7 @@ public abstract class TaktControllerBase : ControllerBase
     /// <summary>
     /// 获取本地化字符串
     /// </summary>
-    /// <param name="key">本地化键</param>
+    /// <param name="key">国际化键</param>
     /// <param name="resourceType">资源类型（Frontend=前端，Backend=后端），默认为Backend</param>
     /// <returns>本地化字符串；本地化服务未注入时返回 key</returns>
     protected string GetLocalizedString(string key, string resourceType = "Backend")
@@ -513,7 +513,7 @@ public abstract class TaktControllerBase : ControllerBase
     /// <summary>
     /// 获取本地化字符串（带参数）
     /// </summary>
-    /// <param name="key">本地化键</param>
+    /// <param name="key">国际化键</param>
     /// <param name="resourceType">资源类型（Frontend=前端，Backend=后端），默认为Backend</param>
     /// <param name="arguments">参数数组</param>
     /// <returns>本地化字符串；本地化服务未注入时返回 key</returns>

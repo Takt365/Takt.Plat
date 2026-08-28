@@ -23,7 +23,9 @@ namespace Takt.Infrastructure.Quartz;
 /// </summary>
 public static class TaktQuartzJobExecutionLogger
 {
-    /// <summary>落库 ErrorInfo 最大长度（与实体列截断策略一致）</summary>
+    /// <summary>
+    /// 落库 ErrorInfo 最大长度（与实体列截断策略一致）
+    /// </summary>
     public const int MaxErrorInfoLength = 2000;
 
     /// <summary>

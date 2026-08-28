@@ -56,7 +56,7 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -81,7 +81,7 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -146,7 +146,7 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -223,7 +223,7 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）
@@ -284,7 +284,7 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -309,7 +309,7 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -379,7 +379,7 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -461,7 +461,7 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -535,9 +535,9 @@ public class TaktSalesInvoiceCreateDto
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
-    [Required(ErrorMessage = "凭证货币（字典 accounting_currency_code）不能为空")]
+    [Required(ErrorMessage = "凭证货币（字典 accounting_financial_currency_code）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -561,7 +561,7 @@ public class TaktSalesInvoiceCreateDto
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -627,7 +627,7 @@ public class TaktSalesInvoiceCreateDto
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -704,7 +704,7 @@ public class TaktSalesInvoiceCreateDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -822,7 +822,7 @@ public class TaktSalesInvoiceTemplateDto
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -847,7 +847,7 @@ public class TaktSalesInvoiceTemplateDto
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -912,7 +912,7 @@ public class TaktSalesInvoiceTemplateDto
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -989,7 +989,7 @@ public class TaktSalesInvoiceTemplateDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -1054,7 +1054,7 @@ public class TaktSalesInvoiceImportDto
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -1079,7 +1079,7 @@ public class TaktSalesInvoiceImportDto
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -1144,7 +1144,7 @@ public class TaktSalesInvoiceImportDto
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -1221,7 +1221,7 @@ public class TaktSalesInvoiceImportDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -1292,7 +1292,7 @@ public class TaktSalesInvoiceExportDto
     public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -1317,7 +1317,7 @@ public class TaktSalesInvoiceExportDto
     public string? ConditionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     public string? ShippingConditions { get; set; } = string.Empty;
 
@@ -1382,7 +1382,7 @@ public class TaktSalesInvoiceExportDto
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? StatisticsCurrencyCode { get; set; } = string.Empty;
 
@@ -1459,7 +1459,7 @@ public class TaktSalesInvoiceExportDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

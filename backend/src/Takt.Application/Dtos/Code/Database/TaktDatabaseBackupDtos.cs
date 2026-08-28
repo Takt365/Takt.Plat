@@ -701,9 +701,13 @@ public class TaktDatabaseBackupRunDto
 {
     public string TargetTenantCode { get; set; } = string.Empty;
     public string TargetDatabaseName { get; set; } = string.Empty;
-    /// <summary>1=Full Sync 2=Delta Sync</summary>
+    /// <summary>
+    /// 1=Full Sync 2=Delta Sync
+    /// </summary>
     public int BackupType { get; set; } = 1;
-    /// <summary>1=本地服务器端 2=文件服务器 3=FTP 4=客户端</summary>
+    /// <summary>
+    /// 1=本地服务器端 2=文件服务器 3=FTP 4=客户端
+    /// </summary>
     public int BackupPathType { get; set; } = 4;
     public string BackupPath { get; set; } = string.Empty;
     public string? BackupHost { get; set; }
@@ -731,10 +735,14 @@ public class TaktDatabaseBackupScheduleByIdDto
 /// </summary>
 public class TaktDatabaseBackupPathOptionsDto
 {
-    /// <summary>已废弃：不再作为默认回填路径</summary>
+    /// <summary>
+    /// 已废弃：不再作为默认回填路径
+    /// </summary>
     public string DefaultRoot { get; set; } = string.Empty;
 
-    /// <summary>已废弃：不再限制浏览/写入</summary>
+    /// <summary>
+    /// 已废弃：不再限制浏览/写入
+    /// </summary>
     public List<string> AllowedRoots { get; set; } = new();
 }
 
@@ -743,7 +751,9 @@ public class TaktDatabaseBackupPathOptionsDto
 /// </summary>
 public class TaktDatabaseBackupBrowseLocalDto
 {
-    /// <summary>当前目录；空则返回本机驱动器列表</summary>
+    /// <summary>
+    /// 当前目录；空则返回本机驱动器列表
+    /// </summary>
     public string? CurrentPath { get; set; }
 }
 
@@ -752,7 +762,9 @@ public class TaktDatabaseBackupBrowseLocalDto
 /// </summary>
 public class TaktDatabaseBackupMkdirLocalDto
 {
-    /// <summary>要创建的完整路径，例如 D:\Backup\2026</summary>
+    /// <summary>
+    /// 要创建的完整路径，例如 D:\Backup\2026
+    /// </summary>
     public string Path { get; set; } = string.Empty;
 }
 
@@ -761,13 +773,21 @@ public class TaktDatabaseBackupMkdirLocalDto
 /// </summary>
 public class TaktDatabaseBackupBrowseNetworkDto
 {
-    /// <summary>UNC 路径</summary>
+    /// <summary>
+    /// UNC 路径
+    /// </summary>
     public string Path { get; set; } = string.Empty;
-    /// <summary>用户名（可选；空则用进程账号）</summary>
+    /// <summary>
+    /// 用户名（可选；空则用进程账号）
+    /// </summary>
     public string? UserName { get; set; }
-    /// <summary>密码（可选；空且有 DatabaseBackupId 时用库内已存密码）</summary>
+    /// <summary>
+    /// 密码（可选；空且有 DatabaseBackupId 时用库内已存密码）
+    /// </summary>
     public string? Password { get; set; }
-    /// <summary>已有备份配置主键；浏览时可解密已存密码</summary>
+    /// <summary>
+    /// 已有备份配置主键；浏览时可解密已存密码
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DatabaseBackupId { get; set; }
 }
@@ -777,17 +797,29 @@ public class TaktDatabaseBackupBrowseNetworkDto
 /// </summary>
 public class TaktDatabaseBackupBrowseFtpDto
 {
-    /// <summary>服务器名称</summary>
+    /// <summary>
+    /// 服务器名称
+    /// </summary>
     public string Host { get; set; } = string.Empty;
-    /// <summary>端口，默认 21</summary>
+    /// <summary>
+    /// 端口，默认 21
+    /// </summary>
     public int? Port { get; set; }
-    /// <summary>远程目录</summary>
+    /// <summary>
+    /// 远程目录
+    /// </summary>
     public string? Path { get; set; }
-    /// <summary>用户名</summary>
+    /// <summary>
+    /// 用户名
+    /// </summary>
     public string UserName { get; set; } = string.Empty;
-    /// <summary>密码（可空；空且有 DatabaseBackupId 时用库内已存密码）</summary>
+    /// <summary>
+    /// 密码（可空；空且有 DatabaseBackupId 时用库内已存密码）
+    /// </summary>
     public string? Password { get; set; }
-    /// <summary>已有备份配置主键；浏览时可解密已存密码</summary>
+    /// <summary>
+    /// 已有备份配置主键；浏览时可解密已存密码
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DatabaseBackupId { get; set; }
 }

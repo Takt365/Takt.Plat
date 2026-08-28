@@ -51,17 +51,17 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public string CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     public string EnterpriseScale { get; set; } = string.Empty;
 
@@ -158,7 +158,7 @@ public class TaktCompanyDto : TaktTenantDtoBase
     /// <summary>
     /// 公司负责人
     /// </summary>
-    public string CompanyManager { get; set; } = string.Empty;
+    public string CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -201,22 +201,22 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     public string ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string OutputTaxCode { get; set; } = string.Empty;
 
@@ -226,12 +226,12 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public string BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     public string PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     public string FiscalYearVariant { get; set; } = string.Empty;
 
@@ -298,17 +298,17 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -405,7 +405,7 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     /// <summary>
     /// 公司负责人
     /// </summary>
-    public string? CompanyManager { get; set; } = string.Empty;
+    public string? CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -458,22 +458,22 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     public string? ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? OutputTaxCode { get; set; } = string.Empty;
 
@@ -483,12 +483,12 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     public string? PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     public string? FiscalYearVariant { get; set; } = string.Empty;
 
@@ -575,21 +575,21 @@ public class TaktCompanyCreateDto
     public string CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
-    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature_type）不能为空")]
+    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature）不能为空")]
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
-    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute_type）不能为空")]
+    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute）不能为空")]
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
-    [Required(ErrorMessage = "企业规模（字典 sys_enterprise_scale_type）不能为空")]
+    [Required(ErrorMessage = "企业规模（字典 sys_enterprise_scale）不能为空")]
     public string EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
@@ -702,7 +702,7 @@ public class TaktCompanyCreateDto
     /// 公司负责人
     /// </summary>
     [Required(ErrorMessage = "公司负责人不能为空")]
-    public string CompanyManager { get; set; } = string.Empty;
+    public string CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -749,27 +749,27 @@ public class TaktCompanyCreateDto
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
-    [Required(ErrorMessage = "帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）不能为空")]
+    [Required(ErrorMessage = "帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）不能为空")]
     public string ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
-    [Required(ErrorMessage = "进项税码（字典 accounting_tax_code）不能为空")]
+    [Required(ErrorMessage = "进项税码（字典 accounting_financial_tax_code）不能为空")]
     public string InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
-    [Required(ErrorMessage = "销项税码（字典 accounting_tax_code）不能为空")]
+    [Required(ErrorMessage = "销项税码（字典 accounting_financial_tax_code）不能为空")]
     public string OutputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -779,15 +779,15 @@ public class TaktCompanyCreateDto
     public string BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
-    [Required(ErrorMessage = "记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）不能为空")]
+    [Required(ErrorMessage = "记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）不能为空")]
     public string PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
-    [Required(ErrorMessage = "会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）不能为空")]
+    [Required(ErrorMessage = "会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）不能为空")]
     public string FiscalYearVariant { get; set; } = string.Empty;
 
     /// <summary>
@@ -937,17 +937,17 @@ public class TaktCompanyTemplateDto
     public string? CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -1044,7 +1044,7 @@ public class TaktCompanyTemplateDto
     /// <summary>
     /// 公司负责人
     /// </summary>
-    public string? CompanyManager { get; set; } = string.Empty;
+    public string? CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -1087,22 +1087,22 @@ public class TaktCompanyTemplateDto
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     public string? ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? OutputTaxCode { get; set; } = string.Empty;
 
@@ -1112,12 +1112,12 @@ public class TaktCompanyTemplateDto
     public string? BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     public string? PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     public string? FiscalYearVariant { get; set; } = string.Empty;
 
@@ -1194,17 +1194,17 @@ public class TaktCompanyImportDto
     public string? CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -1301,7 +1301,7 @@ public class TaktCompanyImportDto
     /// <summary>
     /// 公司负责人
     /// </summary>
-    public string? CompanyManager { get; set; } = string.Empty;
+    public string? CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -1344,22 +1344,22 @@ public class TaktCompanyImportDto
     public string? AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     public string? ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string? OutputTaxCode { get; set; } = string.Empty;
 
@@ -1369,12 +1369,12 @@ public class TaktCompanyImportDto
     public string? BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     public string? PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     public string? FiscalYearVariant { get; set; } = string.Empty;
 
@@ -1457,17 +1457,17 @@ public class TaktCompanyExportDto
     public string CompanyShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     public string EnterpriseScale { get; set; } = string.Empty;
 
@@ -1564,7 +1564,7 @@ public class TaktCompanyExportDto
     /// <summary>
     /// 公司负责人
     /// </summary>
-    public string CompanyManager { get; set; } = string.Empty;
+    public string CompanyManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -1607,22 +1607,22 @@ public class TaktCompanyExportDto
     public string AccountHolder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     public string ChartOfAccounts { get; set; } = string.Empty;
 
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string InputTaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     public string OutputTaxCode { get; set; } = string.Empty;
 
@@ -1632,12 +1632,12 @@ public class TaktCompanyExportDto
     public string BusinessPlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     public string PostingPeriodVariant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     public string FiscalYearVariant { get; set; } = string.Empty;
 

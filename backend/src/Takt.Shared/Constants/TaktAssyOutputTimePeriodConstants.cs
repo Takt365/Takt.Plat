@@ -47,7 +47,7 @@ public static class TaktAssyOutputTimePeriodConstants
     };
 
     /// <summary>
-    /// 清洁时段停线原因字典标签（logistics_stop_reason_category · 清洁）
+    /// 清洁时段停线原因字典标签（logistics_manufacturing_stop_reason · 清洁）
     /// </summary>
     public const string CleaningStopReasonDictLabel = "清洁";
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceTicketDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceTicket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerServiceTicket 生成，请按需审阅）
 // 
@@ -52,12 +52,12 @@ public class TaktCustomerServiceTicketDto : TaktCompanyDtoBase
     public string? ClientName { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientName1 { get; set; } = string.Empty;
 
@@ -73,7 +73,7 @@ public class TaktCustomerServiceTicketDto : TaktCompanyDtoBase
     public string? ServiceRequestName { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -89,7 +89,7 @@ public class TaktCustomerServiceTicketDto : TaktCompanyDtoBase
     public string? ServiceOrderName { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -105,7 +105,7 @@ public class TaktCustomerServiceTicketDto : TaktCompanyDtoBase
     public string? ServiceContractName { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -181,9 +181,15 @@ public class TaktCustomerServiceTicketDto : TaktCompanyDtoBase
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -257,12 +263,12 @@ public class TaktCustomerServiceTicketQueryDto : TaktPagedQuery
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -273,7 +279,7 @@ public class TaktCustomerServiceTicketQueryDto : TaktPagedQuery
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -284,7 +290,7 @@ public class TaktCustomerServiceTicketQueryDto : TaktPagedQuery
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -295,7 +301,7 @@ public class TaktCustomerServiceTicketQueryDto : TaktPagedQuery
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -391,9 +397,15 @@ public class TaktCustomerServiceTicketQueryDto : TaktPagedQuery
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间（范围查询-开始）
@@ -473,14 +485,14 @@ public class TaktCustomerServiceTicketCreateDto
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
-    [Required(ErrorMessage = "客户端名称（冗余字段，便于查询）不能为空")]
+    [Required(ErrorMessage = "客户端名称（冗余：按对应 Id 取主数据名称联动）不能为空")]
     public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
@@ -490,7 +502,7 @@ public class TaktCustomerServiceTicketCreateDto
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -501,7 +513,7 @@ public class TaktCustomerServiceTicketCreateDto
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -512,7 +524,7 @@ public class TaktCustomerServiceTicketCreateDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -589,9 +601,15 @@ public class TaktCustomerServiceTicketCreateDto
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -719,12 +737,12 @@ public class TaktCustomerServiceTicketTemplateDto
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -735,7 +753,7 @@ public class TaktCustomerServiceTicketTemplateDto
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -746,7 +764,7 @@ public class TaktCustomerServiceTicketTemplateDto
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -757,7 +775,7 @@ public class TaktCustomerServiceTicketTemplateDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -833,9 +851,15 @@ public class TaktCustomerServiceTicketTemplateDto
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -891,12 +915,12 @@ public class TaktCustomerServiceTicketImportDto
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -907,7 +931,7 @@ public class TaktCustomerServiceTicketImportDto
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -918,7 +942,7 @@ public class TaktCustomerServiceTicketImportDto
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -929,7 +953,7 @@ public class TaktCustomerServiceTicketImportDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -1005,9 +1029,15 @@ public class TaktCustomerServiceTicketImportDto
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -1069,12 +1099,12 @@ public class TaktCustomerServiceTicketExportDto
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientName1 { get; set; } = string.Empty;
 
@@ -1085,7 +1115,7 @@ public class TaktCustomerServiceTicketExportDto
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceRequestCode { get; set; } = string.Empty;
 
@@ -1096,7 +1126,7 @@ public class TaktCustomerServiceTicketExportDto
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceOrderCode { get; set; } = string.Empty;
 
@@ -1107,7 +1137,7 @@ public class TaktCustomerServiceTicketExportDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -1183,9 +1213,15 @@ public class TaktCustomerServiceTicketExportDto
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间

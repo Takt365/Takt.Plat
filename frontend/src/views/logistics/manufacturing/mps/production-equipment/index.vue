@@ -82,7 +82,7 @@
         <template v-else-if="column.key === 'equipCategory'">
           <TaktDictTag
             :value="getProductionEquipmentDictValue(record, 'equipCategory')"
-            dict-type="logistics_equip_category"
+            dict-type="logistics_maintenance_equip_category"
           />
         </template>
         <template v-else-if="column.key === 'ejectionType'">
@@ -170,7 +170,7 @@
       <a-form-item :label="pi.queryLabel('equipCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.equipCategory"
-          dict-type="logistics_equip_category"
+          dict-type="logistics_maintenance_equip_category"
           :placeholder="pi.queryPh('equipCategory', 'select')"
           allow-clear
         />

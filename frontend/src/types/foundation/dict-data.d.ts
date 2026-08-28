@@ -32,27 +32,27 @@ export interface DictData extends TenantCultureDtoBase {
    */
   dictTypeId: string;
   /**
-   * 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+   * 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；Length=140）
    */
   dictTypeCode: string;
   /**
-   * 字典项标签
+   * 字典项标签（Length=40）
    */
   dictLabel: string;
   /**
-   * 字典项值
+   * 字典项值（Length=40）
    */
   dictValue: string;
   /**
-   * 国际化翻译键
+   * 国际化键（Length=140）
    */
   i18nKey: string;
   /**
-   * 扩展标签
+   * 扩展标签（Length=140）
    */
   extLabel?: string;
   /**
-   * 扩展值
+   * 扩展值（Length=140）
    */
   extValue?: string;
   /**
@@ -139,7 +139,7 @@ export interface DictDataExport {
   dictTypeId: string;
 
   /**
-   * 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+   * 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；Length=140）
    */
   dictTypeCode: string;
 
@@ -154,7 +154,7 @@ export interface DictDataExport {
   dictValue: string;
 
   /**
-   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+   * 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0）
    */
   i18nKey: string;
 

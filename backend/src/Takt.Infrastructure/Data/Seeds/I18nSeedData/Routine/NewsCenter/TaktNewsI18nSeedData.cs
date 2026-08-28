@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
-// 功能描述：TaktNews 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
+// 功能描述：TaktNews 实体字段国际化种子（已对齐前端 locales：src/locales/routine/news-center/news）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -91,13 +91,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news._self", "zh-HK", "新闻中心主信息_hk", "实体名称"),
 
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "en-US", "新闻编码_us", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）"),
+            new TranslationSeedItem("entity.news.code", "en-US", "新闻编码_us", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻中心）"),
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "ja-JP", "新闻编码_jp", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）"),
+            new TranslationSeedItem("entity.news.code", "ja-JP", "新闻编码_jp", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻中心）"),
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "zh-CN", "新闻编码", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）"),
+            new TranslationSeedItem("entity.news.code", "zh-CN", "新闻编码", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻中心）"),
             // entity.news.code
-            new TranslationSeedItem("entity.news.code", "zh-HK", "新闻编码_hk", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）"),
+            new TranslationSeedItem("entity.news.code", "zh-HK", "新闻编码_hk", "新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻中心）"),
 
             // entity.news.category
             new TranslationSeedItem("entity.news.category", "en-US", "新闻分类_us", "新闻分类（字典 sys_news_type；0=公司新闻 1=行业动态 2=技术分享 3=产品发布 4=活动资讯 5=其他）"),
@@ -244,13 +244,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.deptid", "zh-HK", "发布部门ID_hk", "发布部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
 
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "en-US", "发布部门名称_us", "发布部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.deptname", "en-US", "发布部门名称_us", "发布部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "ja-JP", "发布部门名称_jp", "发布部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.deptname", "ja-JP", "发布部门名称_jp", "发布部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "zh-CN", "发布部门名称", "发布部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.deptname", "zh-CN", "发布部门名称", "发布部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.deptname
-            new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称_hk", "发布部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称_hk", "发布部门名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.news.publisherid
             new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID（选项 TaktUsers/options；DictValue=Id）"),
@@ -262,13 +262,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名_us", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名_us", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "zh-CN", "发布人姓名", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.publishername", "zh-CN", "发布人姓名", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.news.publishername
-            new TranslationSeedItem("entity.news.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.news.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.news.publishtime
             new TranslationSeedItem("entity.news.publishtime", "en-US", "发布时间_us", "发布时间"),

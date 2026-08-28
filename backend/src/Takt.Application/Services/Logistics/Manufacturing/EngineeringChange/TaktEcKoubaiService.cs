@@ -30,6 +30,8 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
 {
     private readonly ITaktCompanyRepository<TaktEcKoubai> _ecKoubaiRepository;
+    private readonly TaktEcGijutsuStatusSynchronizer _ecGijutsuStatusSynchronizer;
+    private readonly TaktEcExecPersistence _ecExecPersistence;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +39,16 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
     /// 构造函数
     /// </summary>
     /// <param name="ecKoubaiRepository">设变采购执行仓储</param>
+    /// <param name="ecGijutsuStatusSynchronizer">设变技术课状态同步</param>
+    /// <param name="ecExecPersistence">设变部门执行持久化</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcKoubaiService(
         ITaktCompanyRepository<TaktEcKoubai> ecKoubaiRepository,
+        TaktEcGijutsuStatusSynchronizer ecGijutsuStatusSynchronizer,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +56,8 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
         : base(userContext, localizationService)
     {
         _ecKoubaiRepository = ecKoubaiRepository;
+        _ecGijutsuStatusSynchronizer = ecGijutsuStatusSynchronizer;
+        _ecExecPersistence = ecExecPersistence;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -131,11 +139,12 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecKoubaiRepository.CreateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcKoubaiByIdAsync(entity.Id) ?? entity.Adapt<TaktEcKoubaiDto>();
     }
 
     /// <summary>
-    /// 更新设变采购执行
+    /// 更新设变采购执行（同设变单号+新物料且采购类型 F 的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变采购执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -157,6 +166,8 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
             throw new TaktBusinessException("设变采购执行的EcnDetailId已存在");
         }
         await _ecKoubaiRepository.UpdateAsync(entity);
+        await _ecExecPersistence.FanOutKoubaiFillableByEcAndNewMaterialAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcKoubaiByIdAsync(id) ?? throw new TaktBusinessException("设变采购执行不存在");
     }
 
@@ -182,6 +193,7 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
         }
         entity.IsObsolete = 1;
         await _ecKoubaiRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
     }
 
     /// <summary>
@@ -220,6 +232,7 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
         }
         entity.IsObsolete = dto.IsObsolete;
         await _ecKoubaiRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcKoubaiByIdAsync(dto.EcKoubaiId) ?? throw new TaktBusinessException("设变采购执行不存在");
     }
 
@@ -280,6 +293,7 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecKoubaiRepository.CreateAsync(entity);
+                await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
                 success += 1;
             }
             catch (Exception ex)
@@ -337,6 +351,7 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
         {
             exp = exp.And(x => x.IsObsolete == 0);
         }
+        exp = exp.And(TaktEcKoubaiQueryHelper.VisibleExecExpression());
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
@@ -437,8 +452,6 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
-
-
         return exp.ToExpression();
     }
 }

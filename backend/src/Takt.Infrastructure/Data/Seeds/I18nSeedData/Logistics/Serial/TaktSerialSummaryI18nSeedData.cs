@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialSummaryI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialSummary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialsummary.destination", "zh-HK", "仕向地_hk", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
 
             // entity.serialsummary.destinationport
-            new TranslationSeedItem("entity.serialsummary.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialsummary.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialsummary.destinationport
-            new TranslationSeedItem("entity.serialsummary.destinationport", "ja-JP", "目的地港_jp", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialsummary.destinationport", "ja-JP", "目的地港_jp", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialsummary.destinationport
-            new TranslationSeedItem("entity.serialsummary.destinationport", "zh-CN", "目的地港", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialsummary.destinationport", "zh-CN", "目的地港", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialsummary.destinationport
-            new TranslationSeedItem("entity.serialsummary.destinationport", "zh-HK", "目的地港_hk", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialsummary.destinationport", "zh-HK", "目的地港_hk", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
 
             // entity.serialsummary.outbounddate
             new TranslationSeedItem("entity.serialsummary.outbounddate", "en-US", "出库日期_us", "出库日期（未出库时为空）"),

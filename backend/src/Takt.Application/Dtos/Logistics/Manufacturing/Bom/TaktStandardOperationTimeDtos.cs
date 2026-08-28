@@ -57,7 +57,7 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -67,12 +67,12 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal PointsToMinutesRate { get; set; }
 
@@ -144,7 +144,7 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -154,12 +154,12 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal? PointsToMinutesRate { get; set; }
 
@@ -305,9 +305,9 @@ public class TaktStandardOperationTimeCreateDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
-    [Required(ErrorMessage = "工时单位（字典 logistics_time_unit；默认 MIN）不能为空")]
+    [Required(ErrorMessage = "工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）不能为空")]
     public string TimeUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -316,13 +316,13 @@ public class TaktStandardOperationTimeCreateDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
-    [Required(ErrorMessage = "点数单位（字典 logistics_points_unit；默认 SHORT）不能为空")]
+    [Required(ErrorMessage = "点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）不能为空")]
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal PointsToMinutesRate { get; set; }
 
@@ -423,7 +423,7 @@ public class TaktStandardOperationTimeTemplateDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -433,12 +433,12 @@ public class TaktStandardOperationTimeTemplateDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal? PointsToMinutesRate { get; set; }
 
@@ -515,7 +515,7 @@ public class TaktStandardOperationTimeImportDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -525,12 +525,12 @@ public class TaktStandardOperationTimeImportDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal? PointsToMinutesRate { get; set; }
 
@@ -603,7 +603,7 @@ public class TaktStandardOperationTimeExportDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -613,12 +613,12 @@ public class TaktStandardOperationTimeExportDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     public decimal PointsToMinutesRate { get; set; }
 

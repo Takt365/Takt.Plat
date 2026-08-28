@@ -42,7 +42,7 @@ public class TaktCountersignDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; }
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;

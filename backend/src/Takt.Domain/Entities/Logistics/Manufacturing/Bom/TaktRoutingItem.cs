@@ -33,7 +33,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public long RoutingId { get; set; }
 
     /// <summary>
-    /// 工艺路线编码（冗余字段，便于查询）
+    /// 工艺路线编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string RoutingCode { get; set; } = string.Empty;
@@ -45,7 +45,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "PC")]
     public string BaseUnit { get; set; } = "PC";
@@ -63,7 +63,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public decimal StandardMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     [SugarColumn(ColumnName = "time_unit", ColumnDescription = "工时单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "MIN")]
     public string TimeUnit { get; set; } = "MIN";
@@ -75,13 +75,13 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     [SugarColumn(ColumnName = "points_unit", ColumnDescription = "点数单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "SHORT")]
     public string PointsUnit { get; set; } = "SHORT";
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     [SugarColumn(ColumnName = "points_to_minutes_rate", ColumnDescription = "转换汇率", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "1")]
     public string PointsToMinutesRate { get; set; } = "1";
@@ -123,7 +123,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public string? ProcessDescription { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     [SugarColumn(ColumnName = "process_segment_type", ColumnDescription = "工艺段类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProcessSegmentType { get; set; } = 1;

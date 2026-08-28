@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.HelpDesk
 // 文件名称：TaktTicketService.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工单应用服务实现
 // 
@@ -315,6 +315,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.TicketCode != null && x.TicketCode.Contains(keywords))
                 || (x.TicketTitle != null && x.TicketTitle.Contains(keywords))
                 || (x.TicketContent != null && x.TicketContent.Contains(keywords))
@@ -324,6 +325,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
                 || (x.AssigneeName != null && x.AssigneeName.Contains(keywords))
                 || (x.AssetCode != null && x.AssetCode.Contains(keywords))
                 || (x.ApplicantDeptName != null && x.ApplicantDeptName.Contains(keywords))
+                || (x.ApplicantName != null && x.ApplicantName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -333,6 +335,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             var cultureCode = queryDto.CultureCode;
             exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.TicketCode))
@@ -455,6 +463,12 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             exp = exp.And(x => x.ApplicantBy == applicantBy);
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicantName))
+        {
+            var applicantName = queryDto.ApplicantName;
+            exp = exp.And(x => x.ApplicantName != null && x.ApplicantName.Contains(applicantName));
+        }
+
         if (queryDto?.TicketStatus.HasValue == true)
         {
             var ticketStatus = queryDto.TicketStatus.Value;
@@ -544,12 +558,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             var createdAtEnd = queryDto.CreatedAtEnd.Value;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
-        {
-            var plantCode = queryDto.PlantCode;
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
-        }
-
 
         return exp.ToExpression();
     }
@@ -570,6 +578,10 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
             return true;
         }
@@ -650,6 +662,10 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             return true;
         }
         if (queryDto.ApplicantBy.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicantName))
         {
             return true;
         }

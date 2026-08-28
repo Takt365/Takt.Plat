@@ -219,7 +219,7 @@ export const RegexPatterns = {
   /** 菜单编码（字母开头，允许字母、数字、下划线、横线，3-200位） */
   MENU_CODE: /^[a-zA-Z][a-zA-Z0-9_-]{2,199}$/,
   
-  /** 本地化键（小写字母、数字、点号，格式如：menu.user.management，必须以字母或数字结尾，3-200位） */
+  /** 国际化键（小写字母、数字、点号，格式如：menu.user.management，必须以字母或数字结尾，3-200位） */
   L10N_KEY: /^[a-z][a-z0-9.]{1,198}[a-z0-9]$/,
   
   /** 角色编码（字母开头，允许字母、数字、下划线、横线，3-50位） */
@@ -1204,8 +1204,8 @@ export class RegexHelper {
   }
 
   /**
-   * 验证本地化键
-   * @param key 本地化键
+   * 验证国际化键
+   * @param key 国际化键
    * @returns 是否有效
    */
   static isValidL10nKey(key: string): boolean {

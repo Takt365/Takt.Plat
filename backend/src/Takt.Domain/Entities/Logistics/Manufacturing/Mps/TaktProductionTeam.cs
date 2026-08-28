@@ -39,19 +39,25 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     [SugarColumn(ColumnName = "team_category", ColumnDescription = "班组分类编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = false, DefaultValue = "A")]
     public string TeamCategory { get; set; } = "A";
 
     /// <summary>
-    /// 班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）
+    /// 班组长（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "team_leader_name", ColumnDescription = "班组长姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "team_leader_employee_id", ColumnDescription = "班组长ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? TeamLeaderEmployeeId { get; set; }
+    /// <summary>
+    /// 班组长名称（冗余：按 TeamLeaderEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "team_leader_name", ColumnDescription = "班组长名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? TeamLeaderName { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;

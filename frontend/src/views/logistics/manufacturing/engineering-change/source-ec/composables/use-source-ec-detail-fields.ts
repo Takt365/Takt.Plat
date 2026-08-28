@@ -21,37 +21,34 @@ export const SOURCE_EC_DETAIL_ACTION_COLUMN_KEY = 'action'
 
 /** 设变来源子表业务字段（与 SourceEcDetail 实体字段一致，不含 id / 外键 / 导航） */
 export const SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS = [
-  'sourceFinishedProduct',
-  'sourceParentPart',
-  'sourceLegacyPartCode',
-  'sourceLegacyPartName',
-  'sourceLegacyUsage',
-  'sourceLegacyMountingPosition',
-  'sourceReplacementPartCode',
-  'sourceReplacementPartName',
-  'sourceReplacementUsage',
-  'sourceReplacementMountingPosition',
+  'sourceFinishedGoods',
+  'sourceParentMaterialCode',
+  'sourceOldMaterialCode',
+  'sourceOldMaterialDescription',
+  'sourceOldUsageQuantity',
+  'sourceOldItemPosition',
+  'sourceNewMaterialCode',
+  'sourceNewMaterialDescription',
+  'sourceNewUsageQuantity',
+  'sourceNewItemPosition',
   'sourceBomCode',
   'SourceCompatibility',
   'sourceDistinction',
   'SourceInstruction',
-  'sourceLegacyPartDisposition',
+  'sourceOldPartDisposition',
   'sourceBomEffectiveDate',
 ] as const
 
 export type SourceEcDetailBusinessFieldKey = (typeof SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS)[number]
 
 /** 旧物料处理字典类型 */
-export const SOURCE_EC_LEGACY_PART_DISPOSITION_DICT_TYPE = 'logistics_ec_legacy_part_disposition'
+export const SOURCE_EC_OLD_PART_DISPOSITION_DICT_TYPE = 'logistics_manufacturing_ec_old_part_disposition'
 
 /** 安排指示字典类型 */
-export const SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE = 'logistics_ec_source_instruction'
+export const SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE = 'logistics_manufacturing_ec_source_instruction'
 
 /** 第二供应商区分字典类型 */
-export const SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE = 'logistics_ec_source_distinction'
-
-/** 兼容性字典类型 */
-export const SOURCE_EC_SOURCE_COMPATIBILITY_DICT_TYPE = 'logistics_ec_source_compatibility'
+export const SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE = 'logistics_manufacturing_ec_source_distinction'
 
 type TranslateFn = (key: string, ...args: unknown[]) => string
 
@@ -66,21 +63,21 @@ interface SourceEcDetailFieldMeta {
 
 /** 子表业务字段 UI 元数据（列宽 / 编辑器 / 长度与后端实体一致） */
 export const SOURCE_EC_DETAIL_FIELD_META: readonly SourceEcDetailFieldMeta[] = [
-  { key: 'sourceFinishedProduct', editor: 'input', width: 120, required: true, maxLength: 20 },
-  { key: 'sourceParentPart', editor: 'input', width: 120, required: true, maxLength: 20 },
-  { key: 'sourceLegacyPartCode', editor: 'input', width: 120, maxLength: 20 },
-  { key: 'sourceLegacyPartName', editor: 'input', width: 120, maxLength: 40 },
-  { key: 'sourceLegacyUsage', editor: 'inputNumber', width: 120 },
-  { key: 'sourceLegacyMountingPosition', editor: 'input', width: 120, maxLength: 40 },
-  { key: 'sourceReplacementPartCode', editor: 'input', width: 120, maxLength: 20 },
-  { key: 'sourceReplacementPartName', editor: 'input', width: 120, maxLength: 40 },
-  { key: 'sourceReplacementUsage', editor: 'inputNumber', width: 120 },
-  { key: 'sourceReplacementMountingPosition', editor: 'input', width: 140, maxLength: 40 },
+  { key: 'sourceFinishedGoods', editor: 'input', width: 120, required: true, maxLength: 20 },
+  { key: 'sourceParentMaterialCode', editor: 'input', width: 120, required: true, maxLength: 20 },
+  { key: 'sourceOldMaterialCode', editor: 'input', width: 120, maxLength: 20 },
+  { key: 'sourceOldMaterialDescription', editor: 'input', width: 120, maxLength: 40 },
+  { key: 'sourceOldUsageQuantity', editor: 'inputNumber', width: 120 },
+  { key: 'sourceOldItemPosition', editor: 'input', width: 120, maxLength: 40 },
+  { key: 'sourceNewMaterialCode', editor: 'input', width: 120, maxLength: 20 },
+  { key: 'sourceNewMaterialDescription', editor: 'input', width: 120, maxLength: 40 },
+  { key: 'sourceNewUsageQuantity', editor: 'inputNumber', width: 120 },
+  { key: 'sourceNewItemPosition', editor: 'input', width: 140, maxLength: 40 },
   { key: 'sourceBomCode', editor: 'input', width: 100, maxLength: 4 },
   { key: 'SourceCompatibility', editor: 'input', width: 100, maxLength: 4 },
   { key: 'sourceDistinction', editor: 'input', width: 100, maxLength: 4 },
   { key: 'SourceInstruction', editor: 'input', width: 120, maxLength: 4 },
-  { key: 'sourceLegacyPartDisposition', editor: 'input', width: 120, maxLength: 4 },
+  { key: 'sourceOldPartDisposition', editor: 'input', width: 120, maxLength: 4 },
   { key: 'sourceBomEffectiveDate', editor: 'datePicker', width: 120, valueFormat: 'YYYY-MM-DD' },
 ]
 
@@ -134,10 +131,10 @@ export function buildSourceEcDetailListBusinessColumns(
       column.sorter = (a: SourceEcDetail, b: SourceEcDetail) =>
         compareSourceEcDetailDateField(getField(a, meta.key), getField(b, meta.key))
     }
-    if (meta.key === 'sourceLegacyPartDisposition') {
+    if (meta.key === 'sourceOldPartDisposition') {
       column.customRender = ({ record }: { record: SourceEcDetail }) =>
         h(TaktDictTag, {
-          dictType: SOURCE_EC_LEGACY_PART_DISPOSITION_DICT_TYPE,
+          dictType: SOURCE_EC_OLD_PART_DISPOSITION_DICT_TYPE,
           value: getField(record, meta.key),
         })
     } else if (meta.key === 'SourceInstruction') {
@@ -150,12 +147,6 @@ export function buildSourceEcDetailListBusinessColumns(
       column.customRender = ({ record }: { record: SourceEcDetail }) =>
         h(TaktDictTag, {
           dictType: SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE,
-          value: getField(record, meta.key),
-        })
-    } else if (meta.key === 'SourceCompatibility') {
-      column.customRender = ({ record }: { record: SourceEcDetail }) =>
-        h(TaktDictTag, {
-          dictType: SOURCE_EC_SOURCE_COMPATIBILITY_DICT_TYPE,
           value: getField(record, meta.key),
         })
     } else {
@@ -202,21 +193,21 @@ export function buildSourceEcDetailEditableColumns(
  */
 export function createEmptySourceEcDetailRow(): Record<string, unknown> {
   return {
-    sourceFinishedProduct: '',
-    sourceParentPart: '',
-    sourceLegacyPartCode: '',
-    sourceLegacyPartName: '',
-    sourceLegacyUsage: undefined,
-    sourceLegacyMountingPosition: '',
-    sourceReplacementPartCode: '',
-    sourceReplacementPartName: '',
-    sourceReplacementUsage: undefined,
-    sourceReplacementMountingPosition: '',
+    sourceFinishedGoods: '',
+    sourceParentMaterialCode: '',
+    sourceOldMaterialCode: '',
+    sourceOldMaterialDescription: '',
+    sourceOldUsageQuantity: undefined,
+    sourceOldItemPosition: '',
+    sourceNewMaterialCode: '',
+    sourceNewMaterialDescription: '',
+    sourceNewUsageQuantity: undefined,
+    sourceNewItemPosition: '',
     sourceBomCode: '',
     SourceCompatibility: '',
     sourceDistinction: '',
     SourceInstruction: '',
-    sourceLegacyPartDisposition: '',
+    sourceOldPartDisposition: '',
     sourceBomEffectiveDate: '',
   }
 }

@@ -75,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.bonusType"
-                  dict-type="hr_comp_bonus_type"
+                  dict-type="humanresource_compensation_bonus_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.bonustype') })"
                 />
               </a-form-item>
@@ -87,7 +87,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.calcMethod"
-                  dict-type="hr_comp_bonus_calc_method_type"
+                  dict-type="humanresource_compensation_bonus_calc_method"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.calcmethod') })"
                 />
               </a-form-item>

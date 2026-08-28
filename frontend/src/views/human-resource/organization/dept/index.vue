@@ -125,7 +125,7 @@
           <template v-else-if="column.key === 'costCategory'">
             <TaktDictTag
               :value="getDeptDictValue(record, 'costCategory')"
-              dict-type="hr_dept_cost_category"
+              dict-type="humanresource_organization_dept_cost_category"
             />
           </template>
           <template v-else-if="column.key === 'isBuiltIn'">
@@ -295,7 +295,7 @@
       <a-form-item :label="pi.queryLabel('costCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.costCategory"
-          dict-type="hr_dept_cost_category"
+          dict-type="humanresource_organization_dept_cost_category"
           :placeholder="pi.queryPh('costCategory', 'select')"
           allow-clear
         />

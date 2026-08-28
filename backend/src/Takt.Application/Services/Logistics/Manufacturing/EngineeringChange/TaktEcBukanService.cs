@@ -21,6 +21,7 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
+using Takt.Shared.Constants;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -30,6 +31,8 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
 {
     private readonly ITaktCompanyRepository<TaktEcBukan> _ecBukanRepository;
+    private readonly TaktEcGijutsuStatusSynchronizer _ecGijutsuStatusSynchronizer;
+    private readonly TaktEcExecPersistence _ecExecPersistence;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +40,16 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
     /// 构造函数
     /// </summary>
     /// <param name="ecBukanRepository">设变部管执行仓储</param>
+    /// <param name="ecGijutsuStatusSynchronizer">设变技术课状态同步</param>
+    /// <param name="ecExecPersistence">设变部门执行持久化</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcBukanService(
         ITaktCompanyRepository<TaktEcBukan> ecBukanRepository,
+        TaktEcGijutsuStatusSynchronizer ecGijutsuStatusSynchronizer,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +57,8 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         : base(userContext, localizationService)
     {
         _ecBukanRepository = ecBukanRepository;
+        _ecGijutsuStatusSynchronizer = ecGijutsuStatusSynchronizer;
+        _ecExecPersistence = ecExecPersistence;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -131,11 +140,12 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecBukanRepository.CreateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcBukanByIdAsync(entity.Id) ?? entity.Adapt<TaktEcBukanDto>();
     }
 
     /// <summary>
-    /// 更新设变部管执行
+    /// 更新设变部管执行（同设变单号+机种+新物料且采购类型 F、仓库非 C003 的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变部管执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -157,6 +167,12 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
             throw new TaktBusinessException("设变部管执行的EcnDetailId已存在");
         }
         await _ecBukanRepository.UpdateAsync(entity);
+        await _ecExecPersistence.FanOutBukanFillableByEcModelAndNewMaterialAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
+        await _ecExecPersistence.TryCascadeAfterGateDeptCompletedByDetailIdAsync(
+            entity.EcnDetailId,
+            TaktEcDeptCodes.Mc,
+            entity);
         return await GetEcBukanByIdAsync(id) ?? throw new TaktBusinessException("设变部管执行不存在");
     }
 
@@ -182,6 +198,7 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         }
         entity.IsObsolete = 1;
         await _ecBukanRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
     }
 
     /// <summary>
@@ -220,6 +237,7 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         }
         entity.IsObsolete = dto.IsObsolete;
         await _ecBukanRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcBukanByIdAsync(dto.EcBukanId) ?? throw new TaktBusinessException("设变部管执行不存在");
     }
 
@@ -280,6 +298,7 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecBukanRepository.CreateAsync(entity);
+                await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
                 success += 1;
             }
             catch (Exception ex)
@@ -337,6 +356,7 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         {
             exp = exp.And(x => x.IsObsolete == 0);
         }
+        exp = exp.And(TaktEcBukanQueryHelper.VisibleExecExpression());
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpense 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.title", "zh-HK", "费用标题_hk", "费用标题"),
 
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "en-US", "费用类型_us", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "en-US", "费用类型_us", "费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "ja-JP", "费用类型_jp", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "ja-JP", "费用类型_jp", "费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "zh-CN", "费用类型", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "zh-CN", "费用类型", "费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "zh-HK", "费用类型_hk", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "zh-HK", "费用类型_hk", "费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
 
             // entity.expense.suppliercode
             new TranslationSeedItem("entity.expense.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）"),
@@ -136,31 +136,58 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.suppliername1", "zh-HK", "供应商名称1_hk", "供应商名称（整单唯一）"),
 
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "en-US", "申请人_us", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.expense.applicantby", "en-US", "申请人ID_us", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "ja-JP", "申请人_jp", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.expense.applicantby", "ja-JP", "申请人ID_jp", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "zh-CN", "申请人", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.expense.applicantby", "zh-CN", "申请人ID", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "zh-HK", "申请人_hk", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.expense.applicantby", "zh-HK", "申请人ID_hk", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.expense.applicationdept
-            new TranslationSeedItem("entity.expense.applicationdept", "en-US", "申请部门_us", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.applicationdept
-            new TranslationSeedItem("entity.expense.applicationdept", "ja-JP", "申请部门_jp", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.applicationdept
-            new TranslationSeedItem("entity.expense.applicationdept", "zh-CN", "申请部门", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.applicationdept
-            new TranslationSeedItem("entity.expense.applicationdept", "zh-HK", "申请部门_hk", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            // entity.expense.applicantname
+            new TranslationSeedItem("entity.expense.applicantname", "en-US", "申请人名称_us", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.expense.applicantname
+            new TranslationSeedItem("entity.expense.applicantname", "ja-JP", "申请人名称_jp", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.expense.applicantname
+            new TranslationSeedItem("entity.expense.applicantname", "zh-CN", "申请人名称", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.expense.applicantname
+            new TranslationSeedItem("entity.expense.applicantname", "zh-HK", "申请人名称_hk", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
 
-            // entity.expense.costbearerdept
-            new TranslationSeedItem("entity.expense.costbearerdept", "en-US", "经费负担部门_us", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.costbearerdept
-            new TranslationSeedItem("entity.expense.costbearerdept", "ja-JP", "经费负担部门_jp", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.costbearerdept
-            new TranslationSeedItem("entity.expense.costbearerdept", "zh-CN", "经费负担部门", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.expense.costbearerdept
-            new TranslationSeedItem("entity.expense.costbearerdept", "zh-HK", "经费负担部门_hk", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            // entity.expense.applicationdeptid
+            new TranslationSeedItem("entity.expense.applicationdeptid", "en-US", "申请部门ID_us", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.applicationdeptid
+            new TranslationSeedItem("entity.expense.applicationdeptid", "ja-JP", "申请部门ID_jp", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.applicationdeptid
+            new TranslationSeedItem("entity.expense.applicationdeptid", "zh-CN", "申请部门ID", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.applicationdeptid
+            new TranslationSeedItem("entity.expense.applicationdeptid", "zh-HK", "申请部门ID_hk", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.expense.applicationdeptname
+            new TranslationSeedItem("entity.expense.applicationdeptname", "en-US", "申请部门名称_us", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.applicationdeptname
+            new TranslationSeedItem("entity.expense.applicationdeptname", "ja-JP", "申请部门名称_jp", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.applicationdeptname
+            new TranslationSeedItem("entity.expense.applicationdeptname", "zh-CN", "申请部门名称", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.applicationdeptname
+            new TranslationSeedItem("entity.expense.applicationdeptname", "zh-HK", "申请部门名称_hk", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+
+            // entity.expense.costbearerdeptid
+            new TranslationSeedItem("entity.expense.costbearerdeptid", "en-US", "经费负担部门ID_us", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.costbearerdeptid
+            new TranslationSeedItem("entity.expense.costbearerdeptid", "ja-JP", "经费负担部门ID_jp", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.costbearerdeptid
+            new TranslationSeedItem("entity.expense.costbearerdeptid", "zh-CN", "经费负担部门ID", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.expense.costbearerdeptid
+            new TranslationSeedItem("entity.expense.costbearerdeptid", "zh-HK", "经费负担部门ID_hk", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.expense.costbearerdeptname
+            new TranslationSeedItem("entity.expense.costbearerdeptname", "en-US", "经费负担部门名称_us", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.costbearerdeptname
+            new TranslationSeedItem("entity.expense.costbearerdeptname", "ja-JP", "经费负担部门名称_jp", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.costbearerdeptname
+            new TranslationSeedItem("entity.expense.costbearerdeptname", "zh-CN", "经费负担部门名称", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.expense.costbearerdeptname
+            new TranslationSeedItem("entity.expense.costbearerdeptname", "zh-HK", "经费负担部门名称_hk", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.expense.costcenter
             new TranslationSeedItem("entity.expense.costcenter", "en-US", "成本中心_us", "成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
@@ -208,13 +235,13 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.amount", "zh-HK", "费用金额_hk", "费用金额"),
 
             // entity.expense.taxrate
-            new TranslationSeedItem("entity.expense.taxrate", "en-US", "税率_us", "税率（字典 accounting_tax_rate_param；整单统一税率）"),
+            new TranslationSeedItem("entity.expense.taxrate", "en-US", "税率_us", "税率（字典 accounting_financial_tax_rate_param；整单统一税率）"),
             // entity.expense.taxrate
-            new TranslationSeedItem("entity.expense.taxrate", "ja-JP", "税率_jp", "税率（字典 accounting_tax_rate_param；整单统一税率）"),
+            new TranslationSeedItem("entity.expense.taxrate", "ja-JP", "税率_jp", "税率（字典 accounting_financial_tax_rate_param；整单统一税率）"),
             // entity.expense.taxrate
-            new TranslationSeedItem("entity.expense.taxrate", "zh-CN", "税率", "税率（字典 accounting_tax_rate_param；整单统一税率）"),
+            new TranslationSeedItem("entity.expense.taxrate", "zh-CN", "税率", "税率（字典 accounting_financial_tax_rate_param；整单统一税率）"),
             // entity.expense.taxrate
-            new TranslationSeedItem("entity.expense.taxrate", "zh-HK", "税率_hk", "税率（字典 accounting_tax_rate_param；整单统一税率）"),
+            new TranslationSeedItem("entity.expense.taxrate", "zh-HK", "税率_hk", "税率（字典 accounting_financial_tax_rate_param；整单统一税率）"),
 
             // entity.expense.taxamount
             new TranslationSeedItem("entity.expense.taxamount", "en-US", "税额_us", "税额（整单合计）"),
@@ -243,14 +270,23 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             // entity.expense.applicationreason
             new TranslationSeedItem("entity.expense.applicationreason", "zh-HK", "申请原因_hk", "申请原因"),
 
-            // entity.expense.attachments
-            new TranslationSeedItem("entity.expense.attachments", "en-US", "附件_us", "附件 JSON"),
-            // entity.expense.attachments
-            new TranslationSeedItem("entity.expense.attachments", "ja-JP", "附件_jp", "附件 JSON"),
-            // entity.expense.attachments
-            new TranslationSeedItem("entity.expense.attachments", "zh-CN", "附件", "附件 JSON"),
-            // entity.expense.attachments
-            new TranslationSeedItem("entity.expense.attachments", "zh-HK", "附件_hk", "附件 JSON"),
+            // entity.expense.filename
+            new TranslationSeedItem("entity.expense.filename", "en-US", "文件名称_us", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.expense.filename
+            new TranslationSeedItem("entity.expense.filename", "ja-JP", "文件名称_jp", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.expense.filename
+            new TranslationSeedItem("entity.expense.filename", "zh-CN", "文件名称", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.expense.filename
+            new TranslationSeedItem("entity.expense.filename", "zh-HK", "文件名称_hk", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+
+            // entity.expense.accessurl
+            new TranslationSeedItem("entity.expense.accessurl", "en-US", "访问地址_us", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.expense.accessurl
+            new TranslationSeedItem("entity.expense.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.expense.accessurl
+            new TranslationSeedItem("entity.expense.accessurl", "zh-CN", "访问地址", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.expense.accessurl
+            new TranslationSeedItem("entity.expense.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
 
             // entity.expense.status
             new TranslationSeedItem("entity.expense.status", "en-US", "费用单状态_us", "费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）"),

@@ -40,16 +40,6 @@ export interface EcGroup extends CompanyDtoBase {
   ecGroupDescription?: string;
 
   /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
-   * 设变组负责人用户 名称（填充字段）
-   */
-  responsibleUserName?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -75,7 +65,6 @@ export interface EcGroup extends CompanyDtoBase {
   groupStatus: number;
 
 }
-
 
 /**
  * EcGroup 分页查询 DTO
@@ -113,11 +102,6 @@ export interface EcGroupQuery extends TaktPagedQuery {
    * 设变组描述
    */
   ecGroupDescription?: string;
-
-  /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话
@@ -166,7 +150,6 @@ export interface EcGroupQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建EcGroup DTO
  * 对应前端 EcGroupCreate
@@ -212,11 +195,6 @@ export interface EcGroupCreate {
   ecGroupDescription?: string;
 
   /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -248,7 +226,6 @@ export interface EcGroupCreate {
 
 }
 
-
 /**
  * 更新EcGroup DTO
  * 继承 TaktEcGroupCreateDto，添加 EcGroupId 字段
@@ -262,7 +239,6 @@ export interface EcGroupUpdate extends EcGroupCreate {
   ecGroupId: string;
 
 }
-
 
 /**
  * EcGroup 状态更新 DTO
@@ -282,7 +258,6 @@ export interface EcGroupStatus {
 
 }
 
-
 /**
  * EcGroup 排序更新 DTO
  * 对应前端 EcGroupSort
@@ -300,7 +275,6 @@ export interface EcGroupSort {
   sortOrder: number;
 
 }
-
 
 /**
  * EcGroup 导入模板行 DTO
@@ -339,11 +313,6 @@ export interface EcGroupTemplate {
   ecGroupDescription?: string;
 
   /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -374,7 +343,6 @@ export interface EcGroupTemplate {
   remark?: string;
 
 }
-
 
 /**
  * EcGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -421,11 +389,6 @@ export interface EcGroupImport {
   ecGroupDescription?: string;
 
   /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -456,7 +419,6 @@ export interface EcGroupImport {
   remark?: string;
 
 }
-
 
 /**
  * EcGroup 导出 DTO（独立实现，不继承响应 Dto）
@@ -493,11 +455,6 @@ export interface EcGroupExport {
    * 设变组描述
    */
   ecGroupDescription?: string;
-
-  /**
-   * 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话

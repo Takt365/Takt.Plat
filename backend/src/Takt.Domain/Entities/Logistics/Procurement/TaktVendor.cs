@@ -55,17 +55,17 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "vendor_short_name", ColumnDescription = "经销商简称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? VendorShortName { get; set; }
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_type", ColumnDescription = "经销商类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int VendorType { get; set; } = 0;
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "150")]
     public string EnterpriseNature { get; set; } = "150";
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "C")]
     public string IndustryAttribute { get; set; } = "C";
@@ -75,12 +75,12 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "vendor_tax_number", ColumnDescription = "经销商标识", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? VendorTaxNumber { get; set; }
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? TaxCode { get; set; }
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
     public int TaxRate { get; set; } = 13;
@@ -145,7 +145,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "contact_email", ColumnDescription = "联系人邮箱", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ContactEmail { get; set; }
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种代码", ColumnDataType = "nvarchar", Length = 3, IsNullable = true, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
@@ -165,12 +165,12 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "clearing_with_customer", ColumnDescription = "具有客户的清算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ClearingWithCustomer { get; set; } = 0;
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "付款方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PaymentMethod { get; set; } = 1;
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "prepayship")]
     public string PaymentTerms { get; set; } = "prepayship";
@@ -195,7 +195,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "gr_based_invoice_inspection", ColumnDescription = "基于收货的发票验证", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int GrBasedInvoiceInspection { get; set; } = 0;
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     [SugarColumn(ColumnName = "incoterms1", ColumnDescription = "国际贸易条件1", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "FOB")]
     public string Incoterms1 { get; set; } = "FOB";
@@ -210,7 +210,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "automatic_purchase_order", ColumnDescription = "自动产生的采购订单", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AutomaticPurchaseOrder { get; set; } = 0;
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     [SugarColumn(ColumnName = "pricing_date_control", ColumnDescription = "定价日期控制", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PricingDateControl { get; set; } = 1;
@@ -235,7 +235,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchasing_organization", ColumnDescription = "采购组织", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string PurchasingOrganization { get; set; } = string.Empty;
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     [SugarColumn(ColumnName = "credit_level", ColumnDescription = "信用等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CreditLevel { get; set; } = 0;
@@ -255,7 +255,7 @@ public class TaktVendor : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "agent_region", ColumnDescription = "代理区域", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? AgentRegion { get; set; }
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     [SugarColumn(ColumnName = "vendor_level", ColumnDescription = "经销商等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int VendorLevel { get; set; } = 0;

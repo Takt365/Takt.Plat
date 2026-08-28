@@ -84,19 +84,19 @@
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getPurchaseInquiryDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
             :value="getPurchaseInquiryDictValue(record, 'taxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'paymentMode'">
           <TaktDictTag
             :value="getPurchaseInquiryDictValue(record, 'paymentMode')"
-            dict-type="logistics_payment_mode"
+            dict-type="logistics_procurement_payment_mode"
           />
         </template>
         <template v-else-if="column.key === 'chainScheme'">

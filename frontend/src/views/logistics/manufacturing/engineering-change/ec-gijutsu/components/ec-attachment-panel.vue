@@ -8,9 +8,6 @@
 
 <template>
   <div class="ec-attachment-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.ecattachment._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -46,7 +43,10 @@
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
     />
-    <div class="ec-attachment-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="ec-attachment-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -54,6 +54,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getEcAttachmentId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -64,7 +65,8 @@
         v-model:page-size="pageSize"
         :total="total"
         scroll-layout="masterDetailLr"
-        table-mode="single"
+        table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
@@ -84,6 +86,9 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterEcId"
+        :current-ec-code="currentMasterEcCode"
+        :sibling-doc-codes="attachmentSiblingDocCodes"
+        :sibling-file-names="attachmentSiblingFileNames"
         :loading="formLoading"
       />
     </TaktModal>
@@ -99,10 +104,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('ecCode')">
-      <a-form-item :label="t('entity.ecattachment.ecCode')">
+      <a-form-item :label="ai.label('ecCode')">
         <a-input
           v-model:value="advancedQueryForm.ecCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: ai.label('ecCode') })"
           show-count
           :maxlength="10"
           allow-clear
@@ -110,30 +115,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.ecattachment.linenumber')">
+      <a-form-item :label="ai.label('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.linenumber') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: ai.label('lineNumber') })"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('attachmentType')">
-      <a-form-item :label="t('entity.ecattachment.attachmenttype')">
+      <a-form-item :label="ai.label('attachmentType')">
         <TaktSelect
           v-model:value="advancedQueryForm.attachmentType"
-          dict-type="logistics_ec_attachment_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') })"
+          dict-type="logistics_manufacturing_ec_attachment_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: ai.label('attachmentType') })"
           allow-clear
           class="w-full"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('docCode')">
-      <a-form-item :label="t('entity.ecattachment.docCode')">
+      <a-form-item :label="ai.label('docCode')">
         <a-input
           v-model:value="advancedQueryForm.docCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: ai.label('docCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -141,10 +146,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fileName')">
-      <a-form-item :label="t('entity.ecattachment.filename')">
+      <a-form-item :label="ai.label('fileName')">
         <a-input
           v-model:value="advancedQueryForm.fileName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.filename') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: ai.label('fileName') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -152,10 +157,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('accessUrl')">
-      <a-form-item :label="t('entity.ecattachment.accessurl')">
+      <a-form-item :label="ai.label('accessUrl')">
         <a-input
           v-model:value="advancedQueryForm.accessUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.accessurl') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: ai.label('accessUrl') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -210,7 +215,7 @@
     </TaktQueryDrawer>
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ecattachment._self') })"
+      :title="t('common.dialog.title.import', { entity: ai.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -235,7 +240,7 @@
       id-column-key="ecAttachmentId"
       action-column-key="action"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -247,10 +252,12 @@
  * 设变子表 ecAttachment 右栏面板
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
-import { ref, computed, watch, nextTick, h } from 'vue'
+import { ref, computed, watch, nextTick, h, onMounted, onBeforeUnmount } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -259,6 +266,7 @@ import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import EcAttachmentForm from './ec-attachment-form.vue'
 import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useEcMasterContext } from '../composables/use-ec-master-context'
+import { useEcAttachmentPreview } from '../composables/use-ec-attachment-preview'
 import {
   getEcAttachmentList,
   getEcAttachmentById,
@@ -271,18 +279,59 @@ import {
   exportEcAttachment,
 } from '@/api/logistics/manufacturing/engineering-change/ec-attachment'
 import type { EcAttachment, EcAttachmentQuery } from '@/types/logistics/manufacturing/engineering-change/ec-attachment'
+import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
 
 const { t } = useI18n()
+const ai = useEcAttachmentI18n()
 const { selectedMasterRow } = useEcMasterContext()
+const {
+  canPreviewAttachment,
+  hasPreviewableAccessUrl,
+  handleAttachmentDocCodeClick,
+} = useEcAttachmentPreview()
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEcAttachment')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ecattachment._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: ai.self() }),
 )
 
 const loading = ref(false)
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度裁掉横向滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: false })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<EcAttachment[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -296,6 +345,29 @@ const formTitle = ref('')
 const formData = ref<Partial<EcAttachment>>({})
 const formLoading = ref(false)
 const formRef = ref()
+
+/** 当前编辑行以外的文件编码（当前页列表查重；最终以后端为准） */
+const attachmentSiblingDocCodes = computed(() => {
+  const editingId = String(formData.value?.ecAttachmentId ?? '')
+  return dataSource.value
+    .filter((row) => String(row.ecAttachmentId ?? '') !== editingId)
+    .map((row) => String(row.docCode ?? '').trim())
+    .filter(Boolean)
+})
+
+/** 当前编辑行以外的文件名称（当前页列表查重；最终以后端为准） */
+const attachmentSiblingFileNames = computed(() => {
+  const editingId = String(formData.value?.ecAttachmentId ?? '')
+  return dataSource.value
+    .filter((row) => String(row.ecAttachmentId ?? '') !== editingId)
+    .map((row) => String(row.fileName ?? '').trim())
+    .filter(Boolean)
+})
+
+/** 主表当前设变号码 */
+const currentMasterEcCode = computed(() =>
+  String((selectedMasterRow.value?.ecCode ?? selectedMasterRow.value?.ecNo) ?? '').trim(),
+)
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
@@ -314,16 +386,17 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'ecCode', label: t('entity.ecattachment.ecCode') },
-  { key: 'lineNumber', label: t('entity.ecattachment.linenumber') },
-  { key: 'attachmentType', label: t('entity.ecattachment.attachmenttype') },
-  { key: 'docCode', label: t('entity.ecattachment.docCode') },
-  { key: 'fileName', label: t('entity.ecattachment.filename') },
-  { key: 'accessUrl', label: t('entity.ecattachment.accessurl') },
+  { key: 'ecCode', label: ai.label('ecCode') },
+  { key: 'lineNumber', label: ai.label('lineNumber') },
+  { key: 'attachmentType', label: ai.label('attachmentType') },
+  { key: 'docCode', label: ai.label('docCode') },
+  { key: 'fileName', label: ai.label('fileName') },
+  { key: 'accessUrl', label: ai.label('accessUrl') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+  { key: 'remark', label: t('common.page.entity.remark') },
+])
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -379,6 +452,33 @@ function getEcAttachmentField(record: EcAttachment | Record<string, unknown>, fi
   return (record as EcAttachment)?.[field as keyof EcAttachment]
 }
 
+/**
+ * 文件编码列：有访问地址且具备 preview 权限时渲染为超链接（鉴权 preview API，不跳转 /uploads 页面）
+ * @param record 附件行
+ */
+function renderAttachmentDocCodeCell(record: EcAttachment): ReturnType<typeof h> | string {
+  const code = String(getEcAttachmentField(record, 'docCode') ?? '').trim()
+  const canOpen =
+    canPreviewAttachment.value &&
+    hasPreviewableAccessUrl(getEcAttachmentField(record, 'accessUrl')) &&
+    !!code
+  if (canOpen) {
+    return h(
+      'a',
+      {
+        href: '#',
+        class: 'text-primary hover:underline',
+        title: t('common.page.button.preview'),
+        onClick: (e: MouseEvent) => {
+          handleAttachmentDocCodeClick(record as unknown as Record<string, unknown>, e)
+        },
+      },
+      code,
+    )
+  }
+  return code
+}
+
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
@@ -392,7 +492,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'ecAttachmentId') ?? ''),
   },
   {
-    title: t('entity.ecattachment.ecCode'),
+    title: ai.label('ecCode'),
     dataIndex: 'ecCode',
     key: 'ecCode',
     width: 120,
@@ -402,7 +502,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'ecCode') ?? ''),
   },
   {
-    title: t('entity.ecattachment.linenumber'),
+    title: ai.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -412,29 +512,28 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.ecattachment.attachmenttype'),
+    title: ai.label('attachmentType'),
     dataIndex: 'attachmentType',
     key: 'attachmentType',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcAttachment }) => h(TaktDictTag, {
-      dictType: 'logistics_ec_attachment_type',
+      dictType: 'logistics_manufacturing_ec_attachment_type',
       value: String(getEcAttachmentField(record, 'attachmentType') ?? ''),
     }),
   },
   {
-    title: t('entity.ecattachment.docCode'),
+    title: ai.label('docCode'),
     dataIndex: 'docCode',
     key: 'docCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: EcAttachment }) =>
-      String(getEcAttachmentField(record, 'docCode') ?? ''),
+    customRender: ({ record }: { record: EcAttachment }) => renderAttachmentDocCodeCell(record),
   },
   {
-    title: t('entity.ecattachment.filename'),
+    title: ai.label('fileName'),
     dataIndex: 'fileName',
     key: 'fileName',
     width: 120,
@@ -444,7 +543,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'fileName') ?? ''),
   },
   {
-    title: t('entity.ecattachment.accessurl'),
+    title: ai.label('accessUrl'),
     dataIndex: 'accessUrl',
     key: 'accessUrl',
     width: 120,
@@ -454,14 +553,16 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'accessUrl') ?? ''),
   },
   {
-    title: t('entity.ecattachment.ec'),
-    dataIndex: 'ec',
-    key: 'ec',
-    width: 120,
+    title: ai.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
+    width: 100,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: EcAttachment }) =>
-      String(getEcAttachmentField(record, 'ec') ?? ''),
+    customRender: ({ record }: { record: EcAttachment }) => h(TaktDictTag, {
+      dictType: 'sys_yes_no',
+      value: String(getEcAttachmentField(record, 'isObsolete') ?? ''),
+    }),
   },
   CreateActionColumn({
     actions: [
@@ -480,8 +581,10 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
         onClick: (record: EcAttachment) => void handleDeleteOne(record),
-      }],
-  })])
+      },
+    ],
+  }),
+])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -598,6 +701,36 @@ watch(masterEcId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -614,15 +747,18 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ecattachment._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: ai.self() })
+  const ecCode = String((selectedMasterRow.value?.ecCode ?? selectedMasterRow.value?.ecNo) ?? '').trim()
   formData.value = {
-    ecCode: String(selectedMasterRow.value?.ecCode ?? ''),
+    ecCode,
+    attachmentType: 'EC',
+    docCode: ecCode,
   }
   formVisible.value = true
 }
 
 async function handleEdit(record: EcAttachment) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ecattachment._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: ai.self() })
   formLoading.value = true
   try {
     const detail = await getEcAttachmentById(getEcAttachmentId(record))
@@ -639,7 +775,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
     }))
   }
 }
@@ -658,10 +794,10 @@ async function handleFormSubmit() {
     const id = formData.value?.ecAttachmentId
     if (id) {
       await updateEcAttachment(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.updated', { target: ai.self() }))
     } else {
       await createEcAttachment(payload)
-      message.success(t('common.feedback.created', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.created', { target: ai.self() }))
     }
     formVisible.value = false
     formData.value = {}
@@ -682,14 +818,14 @@ async function handleDeleteOne(record: EcAttachment) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.ecattachment._self'),
-      name: t('common.tip.this.target', { target: t('entity.ecattachment._self') }),
+      entity: ai.self(),
+      name: t('common.tip.this.target', { target: ai.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEcAttachmentById(getEcAttachmentId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.deleted', { target: ai.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -702,14 +838,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -717,7 +853,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getEcAttachmentId(r)).filter(Boolean)
       await deleteEcAttachmentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.deleted', { target: ai.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -792,10 +928,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ecattachment._self') }))
+    message.success(t('common.feedback.export.success', { target: ai.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.ecattachment._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: ai.self() }))
   } finally {
     loading.value = false
   }

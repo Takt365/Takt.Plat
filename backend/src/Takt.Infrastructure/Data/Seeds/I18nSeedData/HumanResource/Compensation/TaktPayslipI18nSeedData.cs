@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayslipI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayslip 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -235,13 +235,13 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip.issuedate", "zh-HK", "发放日期_hk", "发放日期"),
 
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 humanresource_compensation_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态_jp", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "ja-JP", "发放状态_jp", "发放状态（字典 humanresource_compensation_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "zh-CN", "发放状态", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "zh-CN", "发放状态", "发放状态（字典 humanresource_compensation_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
             // entity.payslip.issuestatus
-            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态_hk", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
+            new TranslationSeedItem("entity.payslip.issuestatus", "zh-HK", "发放状态_hk", "发放状态（字典 humanresource_compensation_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),
         };
     }
 

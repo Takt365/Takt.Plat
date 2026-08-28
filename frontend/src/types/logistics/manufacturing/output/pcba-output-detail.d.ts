@@ -74,7 +74,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -104,7 +104,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   pcbBoardType: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -124,7 +124,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
@@ -294,7 +294,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -324,7 +324,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   pcbBoardType?: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
@@ -344,7 +344,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
@@ -528,7 +528,7 @@ export interface PcbaOutputDetailCreate {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -558,7 +558,7 @@ export interface PcbaOutputDetailCreate {
   pcbBoardType: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -578,7 +578,7 @@ export interface PcbaOutputDetailCreate {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
@@ -712,7 +712,7 @@ export interface PcbaOutputDetailStatus {
   pcbaOutputDetailId: string;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
@@ -805,7 +805,7 @@ export interface PcbaOutputDetailTemplate {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -835,7 +835,7 @@ export interface PcbaOutputDetailTemplate {
   pcbBoardType?: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
@@ -855,7 +855,7 @@ export interface PcbaOutputDetailTemplate {
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
@@ -1029,7 +1029,7 @@ export interface PcbaOutputDetailImport {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -1059,7 +1059,7 @@ export interface PcbaOutputDetailImport {
   pcbBoardType?: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide?: string;
 
@@ -1079,7 +1079,7 @@ export interface PcbaOutputDetailImport {
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
@@ -1253,7 +1253,7 @@ export interface PcbaOutputDetailExport {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -1283,7 +1283,7 @@ export interface PcbaOutputDetailExport {
   pcbBoardType: string;
 
   /**
-   * 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+   * 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
    */
   panelSide: string;
 
@@ -1303,7 +1303,7 @@ export interface PcbaOutputDetailExport {
   totalCompletedQty: number;
 
   /**
-   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+   * 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 

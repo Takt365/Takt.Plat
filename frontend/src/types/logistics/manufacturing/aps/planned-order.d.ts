@@ -55,7 +55,7 @@ export interface PlannedOrder extends CompanyDtoBase {
   plannedQuantity?: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
@@ -143,7 +143,7 @@ export interface PlannedOrderExport {
   plannedQuantity: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 

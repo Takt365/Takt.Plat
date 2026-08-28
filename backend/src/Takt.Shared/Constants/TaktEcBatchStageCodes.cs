@@ -17,17 +17,29 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktEcBatchStageCodes
 {
-    /// <summary>预定投入/预定批次（生管 Pmc）</summary>
+    /// <summary>
+    /// 预定投入/预定批次（生管 Pmc）
+    /// </summary>
     public const string Scheduled = "Scheduled";
-    /// <summary>出库日期/出库批次（部管 Mc）</summary>
+    /// <summary>
+    /// 出库日期/出库批次（部管 Mc）
+    /// </summary>
     public const string Outbound = "Outbound";
-    /// <summary>生产日期/生产批次（制二 Pcba）</summary>
+    /// <summary>
+    /// 生产日期/生产批次（制二 Pcba）
+    /// </summary>
     public const string PcbaProduction = "PcbaProduction";
-    /// <summary>生产日期/生产批次（制一 Assy）</summary>
+    /// <summary>
+    /// 生产日期/生产批次（制一 Assy）
+    /// </summary>
     public const string AssyProduction = "AssyProduction";
-    /// <summary>检样日期（品管 Qa，仅日期）</summary>
+    /// <summary>
+    /// 检样日期（品管 Qa，仅日期）
+    /// </summary>
     public const string SampleInspection = "SampleInspection";
-    /// <summary>转置表列顺序</summary>
+    /// <summary>
+    /// 转置表列顺序
+    /// </summary>
     public static readonly string[] TransposedOrder =
     [
         Scheduled, Outbound, PcbaProduction, AssyProduction, SampleInspection

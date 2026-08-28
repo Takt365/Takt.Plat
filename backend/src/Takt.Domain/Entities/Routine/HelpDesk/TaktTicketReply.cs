@@ -33,7 +33,7 @@ public class TaktTicketReply : TaktCompanyEntityBase
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     [SugarColumn(ColumnName = "author_type", ColumnDescription = "作者类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AuthorType { get; set; } = 0;
@@ -46,7 +46,7 @@ public class TaktTicketReply : TaktCompanyEntityBase
     public long AuthorId { get; set; }
 
     /// <summary>
-    /// 作者姓名（冗余字段，便于查询）
+    /// 作者姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "author_name", ColumnDescription = "作者姓名", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? AuthorName { get; set; }

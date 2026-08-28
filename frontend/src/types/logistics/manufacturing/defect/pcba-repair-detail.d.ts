@@ -49,7 +49,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -74,7 +74,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -89,12 +89,12 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   defectQty: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 
@@ -154,7 +154,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -179,7 +179,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -194,12 +194,12 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   defectQty?: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 
@@ -281,7 +281,7 @@ export interface PcbaRepairDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -306,7 +306,7 @@ export interface PcbaRepairDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -321,12 +321,12 @@ export interface PcbaRepairDetailCreate {
   defectQty: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 
@@ -424,7 +424,7 @@ export interface PcbaRepairDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -449,7 +449,7 @@ export interface PcbaRepairDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -464,12 +464,12 @@ export interface PcbaRepairDetailTemplate {
   defectQty?: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 
@@ -541,7 +541,7 @@ export interface PcbaRepairDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -566,7 +566,7 @@ export interface PcbaRepairDetailImport {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -581,12 +581,12 @@ export interface PcbaRepairDetailImport {
   defectQty?: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 
@@ -645,7 +645,7 @@ export interface PcbaRepairDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -670,7 +670,7 @@ export interface PcbaRepairDetailExport {
   defectSymptom?: string;
 
   /**
-   * 检出工程（字典 logistics_defect_category，存 DictValue，与组立不良区分共用）
+   * 检出工程（字典 logistics_manufacturing_defect_category，存 DictValue，与组立不良区分共用）
    */
   defectEngineering?: string;
 
@@ -685,12 +685,12 @@ export interface PcbaRepairDetailExport {
   defectQty: number;
 
   /**
-   * 责任归属（字典 logistics_defect_responsibility_category，存 DictValue）
+   * 责任归属（字典 logistics_manufacturing_defect_responsibility_category，存 DictValue）
    */
   defectResponsibility?: string;
 
   /**
-   * 不良性质（字典 logistics_defect_nature_category，存 DictValue）
+   * 不良性质（字典 logistics_manufacturing_defect_nature，存 DictValue）
    */
   defectNature?: string;
 

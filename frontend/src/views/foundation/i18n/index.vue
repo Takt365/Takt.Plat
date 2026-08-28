@@ -140,6 +140,7 @@
         <a-input
           v-model:value="translationAdvancedForm.i18nKey"
           :placeholder="t('common.page.form.placeholder.input', { field: t('entity.translation.i18nkey') })"
+          :maxlength="140"
         />
       </a-form-item>
       <a-form-item :label="t('entity.translation.culturecode')">

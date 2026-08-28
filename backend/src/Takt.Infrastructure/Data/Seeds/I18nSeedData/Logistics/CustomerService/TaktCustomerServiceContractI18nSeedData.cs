@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceContractI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerServiceContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktCustomerServiceContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicecontract.clientid", "zh-HK", "客户端ID_hk", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
 
             // entity.customerservicecontract.clientcode
-            new TranslationSeedItem("entity.customerservicecontract.clientcode", "en-US", "客户端编码_us", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientcode", "en-US", "客户端编码_us", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientcode
-            new TranslationSeedItem("entity.customerservicecontract.clientcode", "ja-JP", "客户端编码_jp", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientcode", "ja-JP", "客户端编码_jp", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientcode
-            new TranslationSeedItem("entity.customerservicecontract.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientcode
-            new TranslationSeedItem("entity.customerservicecontract.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customerservicecontract.clientname1
-            new TranslationSeedItem("entity.customerservicecontract.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientname1
-            new TranslationSeedItem("entity.customerservicecontract.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientname1
-            new TranslationSeedItem("entity.customerservicecontract.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicecontract.clientname1
-            new TranslationSeedItem("entity.customerservicecontract.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicecontract.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customerservicecontract.contracttype
             new TranslationSeedItem("entity.customerservicecontract.contracttype", "en-US", "合同类型_us", "合同类型（0=维保，1=单次，2=框架，3=SLA，4=其他）"),
@@ -234,14 +234,23 @@ public class TaktCustomerServiceContractI18nSeedData : ITaktSeedDataCoordinator
             // entity.customerservicecontract.slaresolvehours
             new TranslationSeedItem("entity.customerservicecontract.slaresolvehours", "zh-HK", "SLA解决时限（小时）_hk", "SLA 解决时限（小时）"),
 
-            // entity.customerservicecontract.accountmanager
-            new TranslationSeedItem("entity.customerservicecontract.accountmanager", "en-US", "客户经理_us", "客户经理（人员代码）"),
-            // entity.customerservicecontract.accountmanager
-            new TranslationSeedItem("entity.customerservicecontract.accountmanager", "ja-JP", "客户经理_jp", "客户经理（人员代码）"),
-            // entity.customerservicecontract.accountmanager
-            new TranslationSeedItem("entity.customerservicecontract.accountmanager", "zh-CN", "客户经理", "客户经理（人员代码）"),
-            // entity.customerservicecontract.accountmanager
-            new TranslationSeedItem("entity.customerservicecontract.accountmanager", "zh-HK", "客户经理_hk", "客户经理（人员代码）"),
+            // entity.customerservicecontract.accountmanageremployeeid
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeeid", "en-US", "客户经理员工ID_us", "客户经理（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customerservicecontract.accountmanageremployeeid
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeeid", "ja-JP", "客户经理员工ID_jp", "客户经理（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customerservicecontract.accountmanageremployeeid
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeeid", "zh-CN", "客户经理员工ID", "客户经理（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customerservicecontract.accountmanageremployeeid
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeeid", "zh-HK", "客户经理员工ID_hk", "客户经理（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.customerservicecontract.accountmanageremployeename
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeename", "en-US", "客户经理名称_us", "客户经理名称（冗余：按 AccountManagerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customerservicecontract.accountmanageremployeename
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeename", "ja-JP", "客户经理名称_jp", "客户经理名称（冗余：按 AccountManagerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customerservicecontract.accountmanageremployeename
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeename", "zh-CN", "客户经理名称", "客户经理名称（冗余：按 AccountManagerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customerservicecontract.accountmanageremployeename
+            new TranslationSeedItem("entity.customerservicecontract.accountmanageremployeename", "zh-HK", "客户经理名称_hk", "客户经理名称（冗余：按 AccountManagerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.customerservicecontract.sortorder
             new TranslationSeedItem("entity.customerservicecontract.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),

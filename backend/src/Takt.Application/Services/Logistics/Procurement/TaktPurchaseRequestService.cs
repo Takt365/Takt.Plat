@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请应用服务实现
 // 
@@ -509,7 +509,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
                 || (x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(keywords))
                 || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
-                || (x.RequestBy != null && x.RequestBy.Contains(keywords))
+                || (x.RequestEmployeeName != null && x.RequestEmployeeName.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
@@ -586,16 +586,16 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             exp = exp.And(x => x.CountersignCode != null && x.CountersignCode.Contains(countersignCode));
         }
 
-        if (queryDto?.RequestId.HasValue == true)
+        if (queryDto?.RequestEmployeeId.HasValue == true)
         {
-            var requestId = queryDto.RequestId.Value;
-            exp = exp.And(x => x.RequestId == requestId);
+            var requestEmployeeId = queryDto.RequestEmployeeId.Value;
+            exp = exp.And(x => x.RequestEmployeeId == requestEmployeeId);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.RequestBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RequestEmployeeName))
         {
-            var requestBy = queryDto.RequestBy;
-            exp = exp.And(x => x.RequestBy != null && x.RequestBy.Contains(requestBy));
+            var requestEmployeeName = queryDto.RequestEmployeeName;
+            exp = exp.And(x => x.RequestEmployeeName != null && x.RequestEmployeeName.Contains(requestEmployeeName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
@@ -786,11 +786,11 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         {
             return true;
         }
-        if (queryDto.RequestId.HasValue)
+        if (queryDto.RequestEmployeeId.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.RequestBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.RequestEmployeeName))
         {
             return true;
         }

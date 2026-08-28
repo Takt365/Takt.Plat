@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 
 /// <summary>
 /// 角色-部门关联实体
-/// 当角色 DataScope=4（字典 sys_data_scope_type 自定义数据范围）时，定义角色可访问的部门数据范围
+/// 当角色 DataScope=4（字典 sys_data_scope 自定义数据范围）时，定义角色可访问的部门数据范围
 /// </summary>
 [SugarTable("takt_human_resource_organization_role_dept", "角色-部门关联表")]
 [SugarIndex("ix_role_dept_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]

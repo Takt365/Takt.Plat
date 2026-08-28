@@ -324,13 +324,26 @@ function convertValueType(value: string | number, expectedType: 'number' | 'stri
   return value
 }
 
+/**
+ * 树节点展示文案：有 i18nKey 则走动态翻译（部门名为 org.dept.{编码}）
+ * @param node 树选项
+ * @returns {string} 文案
+ */
+function resolveTreeOptionLabel(node: { i18nKey?: string; dictLabel?: string; title?: string }): string {
+  const key = node.i18nKey?.trim()
+  if (key) {
+    return t(key)
+  }
+  return String(node.dictLabel ?? node.title ?? '')
+}
+
 // 将后端树形数据转换为 TreeSelect 组件需要的格式
 function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
   const { label: labelField, value: valueField, children: childrenField } = treeFieldNames.value
   const expectedValueType = props.apiUrl ? 'string' as const : inferValueType(props.modelValue)
 
   function convertNode(node: TreeNodeLike): AntTreeSelectNode {
-    const label = String(node.dictLabel ?? (node as { title?: string }).title ?? '')
+    const label = resolveTreeOptionLabel(node)
     let value = (node.dictValue ?? (node as { value?: string | number }).value ?? '') as string | number
     // apiUrl：后端树选项主键已为 string，与 TaktSelect 一致走 string 转换
     value = props.apiUrl
@@ -367,7 +380,7 @@ function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
 function normalizeApiLazyOptions(rows: TaktTreeSelectOption[]): TreeNodeLike[] {
   return mapLazyTreeNodes(rows, {
     getKey: (r) => String(r.dictValue ?? ''),
-    getTitle: (r) => String(r.dictLabel ?? ''),
+    getTitle: (r) => resolveTreeOptionLabel(r),
     isLeaf: (r) => taktIsLeafFlag(r.isLeaf),
   }).map((n) => {
     const { key: _k, title: _t, children: _c, ...rest } = n
@@ -480,9 +493,10 @@ const updateValue = (value: TreeModelValue) => {
 const handleUpdateValue = updateValue
 
 // 处理值变化
-const handleChange = (value: TreeModelValue, _labelList: unknown[], _extra: unknown) => {
+const handleChange = (value: TreeModelValue, labelList: unknown[], _extra: unknown) => {
   updateValue(value)
-  emit('change', value, null)
+  const label = Array.isArray(labelList) && labelList.length > 0 ? String(labelList[0] ?? '').trim() : ''
+  emit('change', value, label ? { dictLabel: label, label } : null)
 }
 
 // 处理搜索

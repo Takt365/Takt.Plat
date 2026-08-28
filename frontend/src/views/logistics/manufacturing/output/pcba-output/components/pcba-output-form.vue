@@ -60,7 +60,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
-                  dict-type="logistics_prod_category"
+                  dict-type="logistics_manufacturing_prod_category"
                   :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
@@ -305,7 +305,7 @@
       <template #cell-shiftNo="{ record }">
         <TaktSelect
           v-model:value="record.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaOutputDetailPi.ph('shiftNo')"
@@ -316,7 +316,7 @@
       <template #cell-panelSide="{ record }">
         <TaktSelect
           v-model:value="record.panelSide"
-          dict-type="logistics_pcba_side_category"
+          dict-type="logistics_manufacturing_pcba_side_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaOutputDetailPi.ph('panelSide')"

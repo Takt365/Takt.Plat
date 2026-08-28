@@ -113,7 +113,7 @@ public class TaktMasterProductionScheduleLineDto : TaktCompanyDtoBase
     public decimal AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -232,7 +232,7 @@ public class TaktMasterProductionScheduleLineQueryDto : TaktPagedQuery
     public decimal? AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -361,9 +361,9 @@ public class TaktMasterProductionScheduleLineCreateDto
     public decimal AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -523,7 +523,7 @@ public class TaktMasterProductionScheduleLineTemplateDto
     public decimal? AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -637,7 +637,7 @@ public class TaktMasterProductionScheduleLineImportDto
     public decimal? AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -757,7 +757,7 @@ public class TaktMasterProductionScheduleLineExportDto
     public decimal AtpQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 

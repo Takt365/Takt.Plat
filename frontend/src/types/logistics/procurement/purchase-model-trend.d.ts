@@ -32,7 +32,7 @@ export interface PurchaseModelTrendQuery extends TaktPagedQuery {
   materialType?: string;
   /** 供应商编码 */
   supplierCode?: string;
-  /** 价格类型（字典 logistics_price_type，如 PB00） */
+  /** 价格类型（字典 logistics_procurement_price_type，如 PB00） */
   priceType?: string;
   /** 仅启用主表 */
   onlyEnabled?: boolean;

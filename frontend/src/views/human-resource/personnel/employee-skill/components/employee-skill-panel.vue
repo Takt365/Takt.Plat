@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:skill:create"
+      update-permission="human:resource:personnel:employee:skill:update"
+      delete-permission="human:resource:personnel:employee:skill:delete"
+      import-permission="human:resource:personnel:employee:skill:import"
+      export-permission="human:resource:personnel:employee:skill:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -181,7 +181,7 @@
       <a-form-item :label="pi.queryLabel('skillLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.skillLevel"
-          dict-type="hr_employee_skill_level"
+          dict-type="humanresource_personnel_employee_skill_level"
           :placeholder="pi.queryPh('skillLevel', 'select')"
           allow-clear
         />
@@ -659,7 +659,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:skill:update',
         onClick: (record: EmployeeSkill) => void handleEdit(record),
       },
       {
@@ -667,7 +667,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:skill:delete',
         onClick: (record: EmployeeSkill) => void handleDeleteOne(record),
       },
     ],

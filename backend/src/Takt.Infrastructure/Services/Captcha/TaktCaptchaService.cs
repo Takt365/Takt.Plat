@@ -193,7 +193,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// 校验滑块验证码：校验过期、最短完成时间、用户提交的 position（百分比）与目标像素偏差
     /// </summary>
     /// <param name="request">验证请求（UserInput 为 JSON 或含 position 的对象）</param>
-    /// <returns>验证结果（Message 为本地化键）</returns>
+    /// <returns>验证结果（Message 为国际化键）</returns>
     private TaktCaptchaVerifyResult VerifySliderCaptcha(TaktCaptchaVerifyRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.CaptchaId))

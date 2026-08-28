@@ -81,16 +81,17 @@ public class TaktCostCentersController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取成本中心树形选项列表（DictValue 为 CostCenterCode，DictLabel 为成本中心名称）
+    /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue=Id，DictLabel=成本中心名称）
     /// </summary>
+    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
     /// <returns>树形选项</returns>
     [TaktPermission("accounting:controlling:cost:center:query", "成本中心树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetCostCenterTreeOptionsAsync()
+    public async Task<IActionResult> GetCostCenterTreeOptionsAsync([FromQuery] long parentId = 0)
     {
         try
         {
-            var result = await _costCenterService.GetCostCenterTreeOptionsAsync();
+            var result = await _costCenterService.GetCostCenterTreeOptionsAsync(parentId);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

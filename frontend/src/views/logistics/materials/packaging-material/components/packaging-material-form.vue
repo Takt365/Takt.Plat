@@ -249,7 +249,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.weightUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('weightUnit')"
                 />
               </a-form-item>
@@ -273,7 +273,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.volumeUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('volumeUnit')"
                 />
               </a-form-item>
@@ -299,7 +299,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.packagingType"
-                  dict-type="logistics_material_type"
+                  dict-type="logistics_materials_material_type"
                   :placeholder="pi.ph('packagingType')"
                 />
               </a-form-item>
@@ -321,7 +321,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.packingUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('packingUnit')"
                 />
               </a-form-item>

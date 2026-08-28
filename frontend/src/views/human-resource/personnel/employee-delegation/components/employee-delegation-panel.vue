@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:delegation:create"
+      update-permission="human:resource:personnel:employee:delegation:update"
+      delete-permission="human:resource:personnel:employee:delegation:delete"
+      import-permission="human:resource:personnel:employee:delegation:import"
+      export-permission="human:resource:personnel:employee:delegation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -202,7 +202,7 @@
       <a-form-item :label="pi.queryLabel('delegationType')">
         <TaktSelect
           v-model:value="advancedQueryForm.delegationType"
-          dict-type="hr_employee_delegation_type"
+          dict-type="humanresource_personnel_employee_delegation_type"
           :placeholder="pi.queryPh('delegationType', 'select')"
           allow-clear
         />
@@ -212,7 +212,7 @@
       <a-form-item :label="pi.queryLabel('scopeType')">
         <TaktSelect
           v-model:value="advancedQueryForm.scopeType"
-          dict-type="hr_employee_delegation_scope_type"
+          dict-type="humanresource_personnel_employee_delegation_scope"
           :placeholder="pi.queryPh('scopeType', 'select')"
           allow-clear
         />
@@ -723,7 +723,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:delegation:update',
         onClick: (record: EmployeeDelegation) => void handleEdit(record),
       },
       {
@@ -731,7 +731,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:delegation:delete',
         onClick: (record: EmployeeDelegation) => void handleDeleteOne(record),
       },
     ],

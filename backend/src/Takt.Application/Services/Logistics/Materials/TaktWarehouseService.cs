@@ -488,7 +488,7 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
                 || (x.Address != null && x.Address.Contains(keywords))
                 || (x.ContactPerson != null && x.ContactPerson.Contains(keywords))
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
-                || (x.ManagerUserCode != null && x.ManagerUserCode.Contains(keywords))
+                || (x.ManagerUserName != null && x.ManagerUserName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -542,10 +542,10 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
             exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ManagerUserCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManagerUserName))
         {
-            var managerUserCode = queryDto.ManagerUserCode;
-            exp = exp.And(x => x.ManagerUserCode != null && x.ManagerUserCode.Contains(managerUserCode));
+            var managerUserCode = queryDto.ManagerUserName;
+            exp = exp.And(x => x.ManagerUserName != null && x.ManagerUserName.Contains(managerUserCode));
         }
 
         if (queryDto?.IsVirtual.HasValue == true)
@@ -652,7 +652,7 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ManagerUserCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.ManagerUserName))
         {
             return true;
         }

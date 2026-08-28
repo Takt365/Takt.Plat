@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktEquipmentOperationRateI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipmentOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipmentoperationrate.equipmentname", "zh-HK", "设备名称_hk", "设备名称"),
 
             // entity.equipmentoperationrate.equipmenttype
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "en-US", "登录设备_us", "登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "en-US", "登录设备_us", "登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
             // entity.equipmentoperationrate.equipmenttype
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "ja-JP", "登录设备_jp", "登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "ja-JP", "登录设备_jp", "登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
             // entity.equipmentoperationrate.equipmenttype
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "zh-CN", "登录设备", "登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "zh-CN", "登录设备", "登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
             // entity.equipmentoperationrate.equipmenttype
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "zh-HK", "登录设备_hk", "登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "zh-HK", "登录设备_hk", "登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
 
             // entity.equipmentoperationrate.teamcode
             new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
@@ -172,13 +172,13 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.equipmentoperationrate.shiftno
-            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.equipmentoperationrate.shiftno
-            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.equipmentoperationrate.shiftno
-            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.equipmentoperationrate.shiftno
-            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.equipmentoperationrate.plannedruntime
             new TranslationSeedItem("entity.equipmentoperationrate.plannedruntime", "en-US", "负荷时间(分钟)_us", "负荷时间（分钟）。设备在计划内应运行的总时间，即 计划作业时间 - 计划停机时间。"),
@@ -280,31 +280,31 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipmentoperationrate.downtimereason", "zh-HK", "停机原因描述_hk", "停机原因描述（自由文本，与 DowntimeReasonType 配合）"),
 
             // entity.equipmentoperationrate.equipmentoperator
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "en-US", "设备操作员_us", "设备操作员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "en-US", "设备操作员_us", "设备操作员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentoperator
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "ja-JP", "设备操作员_jp", "设备操作员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "ja-JP", "设备操作员_jp", "设备操作员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentoperator
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "zh-CN", "设备操作员", "设备操作员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "zh-CN", "设备操作员", "设备操作员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentoperator
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "zh-HK", "设备操作员_hk", "设备操作员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentoperator", "zh-HK", "设备操作员_hk", "设备操作员（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.equipmentoperationrate.equipmentmaintainer
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "en-US", "设备维护员_us", "设备维护员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "en-US", "设备维护员_us", "设备维护员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentmaintainer
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "ja-JP", "设备维护员_jp", "设备维护员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "ja-JP", "设备维护员_jp", "设备维护员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentmaintainer
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "zh-CN", "设备维护员", "设备维护员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "zh-CN", "设备维护员", "设备维护员（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.equipmentmaintainer
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "zh-HK", "设备维护员_hk", "设备维护员（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.equipmentmaintainer", "zh-HK", "设备维护员_hk", "设备维护员（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.equipmentoperationrate.teamleader
-            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "en-US", "班组长_us", "班组长（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "en-US", "班组长_us", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.teamleader
-            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "ja-JP", "班组长_jp", "班组长（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "ja-JP", "班组长_jp", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.teamleader
-            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "zh-CN", "班组长", "班组长（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "zh-CN", "班组长", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.equipmentoperationrate.teamleader
-            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "zh-HK", "班组长_hk", "班组长（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "zh-HK", "班组长_hk", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.equipmentoperationrate.ratestatus
             new TranslationSeedItem("entity.equipmentoperationrate.ratestatus", "en-US", "状态_us", "状态（0=正常，1=停用）"),

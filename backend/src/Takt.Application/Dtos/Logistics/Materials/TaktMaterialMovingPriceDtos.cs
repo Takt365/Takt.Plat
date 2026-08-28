@@ -46,7 +46,7 @@ public class TaktMaterialMovingPriceDto : TaktCompanyDtoBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ public class TaktMaterialMovingPriceDto : TaktCompanyDtoBase
     public decimal StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     public string PriceControl { get; set; } = string.Empty;
 
@@ -71,12 +71,12 @@ public class TaktMaterialMovingPriceDto : TaktCompanyDtoBase
     public decimal MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -123,7 +123,7 @@ public class TaktMaterialMovingPriceQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -138,7 +138,7 @@ public class TaktMaterialMovingPriceQueryDto : TaktPagedQuery
     public decimal? StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     public string? PriceControl { get; set; } = string.Empty;
 
@@ -148,12 +148,12 @@ public class TaktMaterialMovingPriceQueryDto : TaktPagedQuery
     public decimal? MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -220,9 +220,9 @@ public class TaktMaterialMovingPriceCreateDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
-    [Required(ErrorMessage = "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
+    [Required(ErrorMessage = "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
@@ -236,9 +236,9 @@ public class TaktMaterialMovingPriceCreateDto
     public decimal StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
-    [Required(ErrorMessage = "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）不能为空")]
+    [Required(ErrorMessage = "价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）不能为空")]
     public string PriceControl { get; set; } = string.Empty;
 
     /// <summary>
@@ -247,14 +247,14 @@ public class TaktMaterialMovingPriceCreateDto
     public decimal MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -329,7 +329,7 @@ public class TaktMaterialMovingPriceTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -344,7 +344,7 @@ public class TaktMaterialMovingPriceTemplateDto
     public decimal? StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     public string? PriceControl { get; set; } = string.Empty;
 
@@ -354,12 +354,12 @@ public class TaktMaterialMovingPriceTemplateDto
     public decimal? MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -411,7 +411,7 @@ public class TaktMaterialMovingPriceImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
@@ -426,7 +426,7 @@ public class TaktMaterialMovingPriceImportDto
     public decimal? StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     public string? PriceControl { get; set; } = string.Empty;
 
@@ -436,12 +436,12 @@ public class TaktMaterialMovingPriceImportDto
     public decimal? MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -499,7 +499,7 @@ public class TaktMaterialMovingPriceExportDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
@@ -514,7 +514,7 @@ public class TaktMaterialMovingPriceExportDto
     public decimal StockAmount { get; set; }
 
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     public string PriceControl { get; set; } = string.Empty;
 
@@ -524,12 +524,12 @@ public class TaktMaterialMovingPriceExportDto
     public decimal MovingPrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

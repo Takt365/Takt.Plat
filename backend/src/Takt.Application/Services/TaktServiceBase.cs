@@ -233,7 +233,7 @@ public abstract class TaktServiceBase
     /// <summary>
     /// 获取本地化消息（非异常场景）
     /// </summary>
-    /// <param name="key">本地化键</param>
+    /// <param name="key">国际化键</param>
     /// <param name="arguments">格式化参数</param>
     /// <returns>本地化字符串；服务未注入时返回 key</returns>
     protected string GetLocalizedMessage(string key, params object[] arguments)

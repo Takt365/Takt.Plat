@@ -44,7 +44,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     [SugarColumn(ColumnName = "industry_sector", ColumnDescription = "行业领域", ColumnDataType = "nvarchar", Length = 1, IsNullable = false)]
     public string IndustrySector { get; set; } = string.Empty;
@@ -59,12 +59,12 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_group", ColumnDescription = "物料组", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string MaterialGroup { get; set; } = string.Empty;
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ROH")]
     public string MaterialType { get; set; } = "ROH";
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "基本单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
     public string BaseUnit { get; set; } = "PC";
@@ -79,12 +79,12 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_type", ColumnDescription = "采购类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = false, DefaultValue = "f")]
     public string PurchaseType { get; set; } = "f";
     /// <summary>
-    /// 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
+    /// 特殊采购（字典 logistics_procurement_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
     /// </summary>
     [SugarColumn(ColumnName = "special_procurement", ColumnDescription = "特殊采购", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SpecialProcurement { get; set; } = 0;
     /// <summary>
-    /// 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
+    /// 是否散装（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_bulk", ColumnDescription = "是否散装", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBulk { get; set; } = 0;
@@ -119,22 +119,22 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "manufacturer_material_code", ColumnDescription = "制造商物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ManufacturerMaterialCode { get; set; }
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string CurrencyCode { get; set; } = string.Empty;
     /// <summary>
-    /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+    /// 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
     /// </summary>
     [SugarColumn(ColumnName = "price_control", ColumnDescription = "价格控制", ColumnDataType = "nvarchar", Length = 1, IsNullable = false, DefaultValue = "V")]
     public string PriceControl { get; set; } = "V";
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "price_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PriceUnit { get; set; } = 1000;
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     [SugarColumn(ColumnName = "valuation", ColumnDescription = "评估类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string Valuation { get; set; } = string.Empty;
@@ -174,20 +174,20 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "storage_location", ColumnDescription = "库位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string StorageLocation { get; set; } = string.Empty;
     /// <summary>
-    /// 检验（字典 sys_yes_no；0=否，1=是）
+    /// 是否需检验（字典 sys_yes_no；0=否，1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_inspection", ColumnDescription = "检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsInspection { get; set; } = 0;
+    [SugarColumn(ColumnName = "requires_inspection", ColumnDescription = "是否需检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int RequiresInspection { get; set; } = 0;
     /// <summary>
     /// 批次标识（字典 sys_yes_no；0=否，1=是）
     /// </summary>
     [SugarColumn(ColumnName = "is_batch", ColumnDescription = "批次标识", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBatch { get; set; } = 0;
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    [SugarColumn(ColumnName = "is_end_of_life", ColumnDescription = "停产状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
-    public string IsEndOfLife { get; set; } = "Z0";
+    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "停产状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
+    public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
     /// 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
     /// </summary>

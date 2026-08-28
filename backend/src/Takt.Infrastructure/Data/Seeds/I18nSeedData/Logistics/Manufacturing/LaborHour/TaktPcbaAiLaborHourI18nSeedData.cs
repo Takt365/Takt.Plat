@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.LaborHour
 // 文件名称：TaktPcbaAiLaborHourI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaAiLaborHour 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPcbaAiLaborHourI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaailaborhour.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.pcbaailaborhour.shiftno
-            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaailaborhour.shiftno
-            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaailaborhour.shiftno
-            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbaailaborhour.shiftno
-            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbaailaborhour.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.pcbaailaborhour.stdcapacity
             new TranslationSeedItem("entity.pcbaailaborhour.stdcapacity", "en-US", "标准产能_us", "标准产能（统计：TaktPcbaOutput.StdCapacity 合计）"),

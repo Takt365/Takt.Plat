@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerComplaintHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktCustomerComplaintHandlingI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.customercomplainthandling.complaintid", "zh-HK", "客诉ID_hk", "客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）"),
 
             // entity.customercomplainthandling.complaintcode
-            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "en-US", "客诉单号_us", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "en-US", "客诉单号_us", "客诉单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customercomplainthandling.complaintcode
-            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "ja-JP", "客诉单号_jp", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "ja-JP", "客诉单号_jp", "客诉单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customercomplainthandling.complaintcode
-            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "zh-CN", "客诉单号", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "zh-CN", "客诉单号", "客诉单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customercomplainthandling.complaintcode
-            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "zh-HK", "客诉单号_hk", "客诉单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customercomplainthandling.complaintcode", "zh-HK", "客诉单号_hk", "客诉单号（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customercomplainthandling.complaintitemid
             new TranslationSeedItem("entity.customercomplainthandling.complaintitemid", "en-US", "客诉明细ID_us", "客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）"),
@@ -180,32 +180,59 @@ public class TaktCustomerComplaintHandlingI18nSeedData : ITaktSeedDataCoordinato
             // entity.customercomplainthandling.preventiveaction
             new TranslationSeedItem("entity.customercomplainthandling.preventiveaction", "zh-HK", "预防措施_hk", "预防措施"),
 
-            // entity.customercomplainthandling.responsibledept
-            new TranslationSeedItem("entity.customercomplainthandling.responsibledept", "en-US", "责任部门_us", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.customercomplainthandling.responsibledept
-            new TranslationSeedItem("entity.customercomplainthandling.responsibledept", "ja-JP", "责任部门_jp", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.customercomplainthandling.responsibledept
-            new TranslationSeedItem("entity.customercomplainthandling.responsibledept", "zh-CN", "责任部门", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.customercomplainthandling.responsibledept
-            new TranslationSeedItem("entity.customercomplainthandling.responsibledept", "zh-HK", "责任部门_hk", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
+            // entity.customercomplainthandling.responsibledeptid
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptid", "en-US", "责任部门ID_us", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsibledeptid
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptid", "ja-JP", "责任部门ID_jp", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsibledeptid
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptid", "zh-CN", "责任部门ID", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsibledeptid
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptid", "zh-HK", "责任部门ID_hk", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
 
-            // entity.customercomplainthandling.responsibleby
-            new TranslationSeedItem("entity.customercomplainthandling.responsibleby", "en-US", "责任人_us", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.responsibleby
-            new TranslationSeedItem("entity.customercomplainthandling.responsibleby", "ja-JP", "责任人_jp", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.responsibleby
-            new TranslationSeedItem("entity.customercomplainthandling.responsibleby", "zh-CN", "责任人", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.responsibleby
-            new TranslationSeedItem("entity.customercomplainthandling.responsibleby", "zh-HK", "责任人_hk", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.customercomplainthandling.responsibledeptname
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptname", "en-US", "责任部门名称_us", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.customercomplainthandling.responsibledeptname
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptname", "ja-JP", "责任部门名称_jp", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.customercomplainthandling.responsibledeptname
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptname", "zh-CN", "责任部门名称", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.customercomplainthandling.responsibledeptname
+            new TranslationSeedItem("entity.customercomplainthandling.responsibledeptname", "zh-HK", "责任部门名称_hk", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
 
-            // entity.customercomplainthandling.handlerby
-            new TranslationSeedItem("entity.customercomplainthandling.handlerby", "en-US", "处理人_us", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.handlerby
-            new TranslationSeedItem("entity.customercomplainthandling.handlerby", "ja-JP", "处理人_jp", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.handlerby
-            new TranslationSeedItem("entity.customercomplainthandling.handlerby", "zh-CN", "处理人", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.customercomplainthandling.handlerby
-            new TranslationSeedItem("entity.customercomplainthandling.handlerby", "zh-HK", "处理人_hk", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.customercomplainthandling.responsiblepersonid
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonid", "en-US", "责任人ID_us", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsiblepersonid
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonid", "ja-JP", "责任人ID_jp", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsiblepersonid
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonid", "zh-CN", "责任人ID", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.responsiblepersonid
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonid", "zh-HK", "责任人ID_hk", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.customercomplainthandling.responsiblepersonname
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonname", "en-US", "责任人名称_us", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.responsiblepersonname
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonname", "ja-JP", "责任人名称_jp", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.responsiblepersonname
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonname", "zh-CN", "责任人名称", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.responsiblepersonname
+            new TranslationSeedItem("entity.customercomplainthandling.responsiblepersonname", "zh-HK", "责任人名称_hk", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+
+            // entity.customercomplainthandling.handlerid
+            new TranslationSeedItem("entity.customercomplainthandling.handlerid", "en-US", "处理人ID_us", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.handlerid
+            new TranslationSeedItem("entity.customercomplainthandling.handlerid", "ja-JP", "处理人ID_jp", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.handlerid
+            new TranslationSeedItem("entity.customercomplainthandling.handlerid", "zh-CN", "处理人ID", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.customercomplainthandling.handlerid
+            new TranslationSeedItem("entity.customercomplainthandling.handlerid", "zh-HK", "处理人ID_hk", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.customercomplainthandling.handlername
+            new TranslationSeedItem("entity.customercomplainthandling.handlername", "en-US", "处理人名称_us", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.handlername
+            new TranslationSeedItem("entity.customercomplainthandling.handlername", "ja-JP", "处理人名称_jp", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.handlername
+            new TranslationSeedItem("entity.customercomplainthandling.handlername", "zh-CN", "处理人名称", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.customercomplainthandling.handlername
+            new TranslationSeedItem("entity.customercomplainthandling.handlername", "zh-HK", "处理人名称_hk", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.customercomplainthandling.handlingat
             new TranslationSeedItem("entity.customercomplainthandling.handlingat", "en-US", "处理时间_us", "处理时间"),
@@ -261,14 +288,23 @@ public class TaktCustomerComplaintHandlingI18nSeedData : ITaktSeedDataCoordinato
             // entity.customercomplainthandling.customersatisfaction
             new TranslationSeedItem("entity.customercomplainthandling.customersatisfaction", "zh-HK", "客户满意度_hk", "客户满意度（字典 logistics_quality_customer_satisfaction）"),
 
-            // entity.customercomplainthandling.attachmentpaths
-            new TranslationSeedItem("entity.customercomplainthandling.attachmentpaths", "en-US", "附件路径_us", "附件路径（JSON格式，存储相关文件URL列表）"),
-            // entity.customercomplainthandling.attachmentpaths
-            new TranslationSeedItem("entity.customercomplainthandling.attachmentpaths", "ja-JP", "附件路径_jp", "附件路径（JSON格式，存储相关文件URL列表）"),
-            // entity.customercomplainthandling.attachmentpaths
-            new TranslationSeedItem("entity.customercomplainthandling.attachmentpaths", "zh-CN", "附件路径", "附件路径（JSON格式，存储相关文件URL列表）"),
-            // entity.customercomplainthandling.attachmentpaths
-            new TranslationSeedItem("entity.customercomplainthandling.attachmentpaths", "zh-HK", "附件路径_hk", "附件路径（JSON格式，存储相关文件URL列表）"),
+            // entity.customercomplainthandling.filename
+            new TranslationSeedItem("entity.customercomplainthandling.filename", "en-US", "文件名称_us", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.customercomplainthandling.filename
+            new TranslationSeedItem("entity.customercomplainthandling.filename", "ja-JP", "文件名称_jp", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.customercomplainthandling.filename
+            new TranslationSeedItem("entity.customercomplainthandling.filename", "zh-CN", "文件名称", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.customercomplainthandling.filename
+            new TranslationSeedItem("entity.customercomplainthandling.filename", "zh-HK", "文件名称_hk", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+
+            // entity.customercomplainthandling.accessurl
+            new TranslationSeedItem("entity.customercomplainthandling.accessurl", "en-US", "访问地址_us", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.customercomplainthandling.accessurl
+            new TranslationSeedItem("entity.customercomplainthandling.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.customercomplainthandling.accessurl
+            new TranslationSeedItem("entity.customercomplainthandling.accessurl", "zh-CN", "访问地址", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.customercomplainthandling.accessurl
+            new TranslationSeedItem("entity.customercomplainthandling.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
 
             // entity.customercomplainthandling.handlingstatus
             new TranslationSeedItem("entity.customercomplainthandling.handlingstatus", "en-US", "处理状态_us", "处理状态（字典 logistics_quality_complaint_handling_status）"),

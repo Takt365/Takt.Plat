@@ -30,24 +30,24 @@ namespace Takt.Domain.Entities.Foundation;
 public class TaktMessage : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "from_user_id", ColumnDescription = "发送者用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FromUserId { get; set; }
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "from_user_name", ColumnDescription = "发送者用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string FromUserName { get; set; } = string.Empty;
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "to_user_id", ColumnDescription = "接收者用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ToUserId { get; set; }
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "to_user_name", ColumnDescription = "接收者用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string ToUserName { get; set; } = string.Empty;

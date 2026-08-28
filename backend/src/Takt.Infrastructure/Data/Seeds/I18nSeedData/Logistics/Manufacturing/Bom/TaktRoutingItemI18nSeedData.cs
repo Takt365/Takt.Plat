@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRoutingItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.routingid", "zh-HK", "工艺路线ID_hk", "工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.routingitem.routingcode
-            new TranslationSeedItem("entity.routingitem.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.routingitem.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.routingitem.linenumber
             new TranslationSeedItem("entity.routingitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -118,13 +118,13 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "en-US", "计量单位_us", "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "en-US", "计量单位_us", "作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "ja-JP", "计量单位_jp", "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "ja-JP", "计量单位_jp", "作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "zh-CN", "计量单位", "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "zh-CN", "计量单位", "作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.routingitem.baseunit
-            new TranslationSeedItem("entity.routingitem.baseunit", "zh-HK", "计量单位_hk", "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.routingitem.baseunit", "zh-HK", "计量单位_hk", "作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.routingitem.basequantity
             new TranslationSeedItem("entity.routingitem.basequantity", "en-US", "基本数量_us", "基本数量"),
@@ -145,13 +145,13 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.standardminutes", "zh-HK", "标准工时_hk", "标准工时（分钟）"),
 
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "en-US", "工时单位_us", "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "en-US", "工时单位_us", "工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "ja-JP", "工时单位_jp", "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "ja-JP", "工时单位_jp", "工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "zh-CN", "工时单位", "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "zh-CN", "工时单位", "工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
             // entity.routingitem.timeunit
-            new TranslationSeedItem("entity.routingitem.timeunit", "zh-HK", "工时单位_hk", "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
+            new TranslationSeedItem("entity.routingitem.timeunit", "zh-HK", "工时单位_hk", "工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）"),
 
             // entity.routingitem.standardshorts
             new TranslationSeedItem("entity.routingitem.standardshorts", "en-US", "标准点数_us", "标准点数"),
@@ -163,22 +163,22 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.standardshorts", "zh-HK", "标准点数_hk", "标准点数"),
 
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "en-US", "点数单位_us", "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "en-US", "点数单位_us", "点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "ja-JP", "点数单位_jp", "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "ja-JP", "点数单位_jp", "点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-CN", "点数单位", "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-CN", "点数单位", "点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
             // entity.routingitem.pointsunit
-            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-HK", "点数单位_hk", "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
+            new TranslationSeedItem("entity.routingitem.pointsunit", "zh-HK", "点数单位_hk", "点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）"),
 
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "en-US", "转换汇率_us", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "en-US", "转换汇率_us", "点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "ja-JP", "转换汇率_jp", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "ja-JP", "转换汇率_jp", "点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
             // entity.routingitem.pointstominutesrate
-            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-HK", "转换汇率_hk", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
+            new TranslationSeedItem("entity.routingitem.pointstominutesrate", "zh-HK", "转换汇率_hk", "点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）"),
 
             // entity.routingitem.convertedminutes
             new TranslationSeedItem("entity.routingitem.convertedminutes", "en-US", "转换工时_us", "转换后标准工时（分钟）"),
@@ -235,13 +235,13 @@ public class TaktRoutingItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routingitem.processdescription", "zh-HK", "工序说明_hk", "工序说明"),
 
             // entity.routingitem.processsegmenttype
-            new TranslationSeedItem("entity.routingitem.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.routingitem.processsegmenttype
-            new TranslationSeedItem("entity.routingitem.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.routingitem.processsegmenttype
-            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.routingitem.processsegmenttype
-            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.routingitem.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）"),
 
             // entity.routingitem.extjson
             new TranslationSeedItem("entity.routingitem.extjson", "en-US", "工序扩展JSON_us", "工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）"),

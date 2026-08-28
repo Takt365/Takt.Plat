@@ -75,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.inboundType"
-                  dict-type="logistics_inbound_type"
+                  dict-type="logistics_materials_inbound_type"
                   :placeholder="pi.ph('inboundType')"
                 />
               </a-form-item>

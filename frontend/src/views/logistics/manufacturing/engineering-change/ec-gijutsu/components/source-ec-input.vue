@@ -2,17 +2,24 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：source-ec-input.vue -->
-<!-- 功能描述：来源设变录入：查询尚未导入设变主的来源设变，加载草稿至 ec-form（不落库）；defineExpose 提供 resetFields -->
+<!-- 功能描述：来源设变录入：查询尚未导入设变主的来源设变，加载草稿至 ec-form（不落库）；列表表高为当前窗体视口 × 5/4；defineExpose 提供 resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="flex flex-col gap-3 min-h-0">
+  <div
+    ref="rootEl"
+    class="flex flex-col gap-3 min-h-0"
+  >
     <!-- 工厂与查询 -->
-    <a-form layout="inline" class="flex flex-wrap gap-y-2">
+    <a-form
+      layout="inline"
+      label-align="right"
+      class="flex flex-wrap gap-y-2"
+    >
       <a-form-item
-        :label="t('common.page.entity.plantcode')"
+        :label="pi.label('plantCode')"
       >
         <a-input
           :value="mappedPlantCode"
@@ -35,23 +42,29 @@
       </a-form-item>
     </a-form>
     <!-- 未导入来源设变列表 -->
-    <TaktSingleTable
-      class="min-h-0"
-      entity-scope="company"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'sourceEcId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="listLoading"
-      :stripe="true"
-      :row-key="getSourceEcId"
-      :row-selection="rowSelection"
-      :include-audit-fields="false"
-      scroll-layout="editable"
-      :show-pagination="false"
-      @change="handleTableChange"
-    />
+    <div
+      class="source-ec-input-table-wrap min-h-0"
+      :style="{ minHeight: `${sourceEcTableScrollYPx}px` }"
+    >
+      <TaktSingleTable
+        class="min-h-0"
+        entity-scope="company"
+        :columns="columns"
+        :visible-column-keys="visibleColumnKeys"
+        :id-column-key="'sourceEcId'"
+        table-mode="single"
+        :data-source="dataSource"
+        :loading="listLoading"
+        :stripe="true"
+        :row-key="getSourceEcId"
+        :row-selection="rowSelection"
+        :include-audit-fields="false"
+        scroll-layout="editable"
+        :scroll="sourceEcTableScroll"
+        :show-pagination="false"
+        @change="handleTableChange"
+      />
+    </div>
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -79,16 +92,28 @@
 /**
  * 来源设变录入：展示尚未导入设变主的来源设变，加载草稿至 ec-form（不落库）
  */
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import {
+  computeFormHostRatioScrollYPx,
+  TAKT_TABLE_SCROLL_Y_MIN,
+} from '@/utils/table-scroll'
 import { getEcGijutsuDraftFromSourceEc, getEcGijutsuSourcePlantCode, getUnimportedSourceEcGijutsuList } from '@/api/logistics/manufacturing/engineering-change/ec-gijutsu'
 import type { EcGijutsuSourceEcInputItem } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu-source-input'
 import type { EcGijutsuFormData } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
 import { useUserStore } from '@/stores/identity/user'
 import { useTenantStore } from '@/stores/identity/tenant'
+import {
+  getSourceEcInputField,
+  SOURCE_EC_INPUT_EXTRA_FIELDS,
+  SOURCE_EC_INPUT_SOURCE_FIELDS,
+  useSourceEcInputI18n,
+  type SourceEcInputListField,
+  type SourceEcInputSourceField,
+} from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-source-ec-input-fields'
 
 const emit = defineEmits<{
   /** 草稿已就绪，父级打开 ec-form */
@@ -96,6 +121,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const pi = useSourceEcInputI18n()
 const userStore = useUserStore()
 const tenantStore = useTenantStore()
 
@@ -121,93 +147,131 @@ const total = ref(0)
 const selectedSourceEcId = ref('')
 /** 默认可见列（弹窗内嵌列表，不含主键列） */
 const visibleColumnKeys = ref<string[]>([
-  'sourceEcCode',
-  'sourceModel',
-  'sourceTitle',
-  'sourceStatus',
-  'sourceIssueDate',
-  'sourceTcjOwner',
-  'detailCount'])
+  ...SOURCE_EC_INPUT_SOURCE_FIELDS,
+  ...SOURCE_EC_INPUT_EXTRA_FIELDS,
+])
 
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-function getSourceEcField(record: EcGijutsuSourceEcInputItem, field: keyof EcGijutsuSourceEcInputItem): unknown {
-  return record?.[field]
+/** 根节点（用于定位最近弹窗窗体） */
+const rootEl = ref<HTMLElement | null>(null)
+/** 窗体 ResizeObserver */
+let formHostResizeObserver: ResizeObserver | null = null
+
+/** 来源设变列表 scroll.y = 当前窗体视口高度 × 5/4 */
+function computeSourceEcTableScrollYPx(): number {
+  return Math.max(
+    TAKT_TABLE_SCROLL_Y_MIN,
+    computeFormHostRatioScrollYPx(rootEl.value, 5, 4),
+  )
 }
 
-/** 表格列（与设变来源列表页字段读取方式一致） */
+/** 来源设变列表纵向滚动高度（px） */
+const sourceEcTableScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
+
+/** 来源设变列表 scroll 配置 */
+const sourceEcTableScroll = computed(() => ({ y: sourceEcTableScrollYPx.value }))
+
+/** 按当前窗体视口重算列表高度 */
+function recalcSourceEcTableScrollY(): void {
+  sourceEcTableScrollYPx.value = computeSourceEcTableScrollYPx()
+}
+
+/**
+ * 绑定窗体 ResizeObserver（优先 .ant-modal-content）
+ */
+function bindFormHostResizeObserver(): void {
+  formHostResizeObserver?.disconnect()
+  formHostResizeObserver = null
+  const host = rootEl.value
+  if (host == null || typeof ResizeObserver === 'undefined') {
+    return
+  }
+  const target =
+    (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal-body') as HTMLElement | null)
+    ?? host
+  formHostResizeObserver = new ResizeObserver(() => {
+    recalcSourceEcTableScrollY()
+  })
+  formHostResizeObserver.observe(target)
+}
+
+onMounted(() => {
+  void nextTick(() => {
+    recalcSourceEcTableScrollY()
+    bindFormHostResizeObserver()
+  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', recalcSourceEcTableScrollY)
+  }
+})
+
+onBeforeUnmount(() => {
+  formHostResizeObserver?.disconnect()
+  formHostResizeObserver = null
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', recalcSourceEcTableScrollY)
+  }
+})
+
+/** 来源设变列表列宽 */
+const SOURCE_EC_INPUT_COLUMN_WIDTH: Partial<Record<SourceEcInputListField, number>> = {
+  sourceEcCode: 120,
+  sourceModel: 120,
+  sourceTitle: 180,
+  sourceStatus: 120,
+  sourceIssueDate: 120,
+  sourceTcjOwner: 120,
+  detailCount: 90,
+}
+
+/**
+ * 构建来源设变实体列
+ * @param field 字段名
+ */
+function buildSourceEcInputSourceColumn(field: SourceEcInputSourceField) {
+  const width = SOURCE_EC_INPUT_COLUMN_WIDTH[field] ?? 120
+  const base = {
+    title: pi.label(field),
+    dataIndex: field,
+    key: field,
+    width,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) =>
+      getSourceEcInputField(record, field) ?? '',
+  }
+  if (field === 'sourceEcCode') {
+    return {
+      ...base,
+      sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
+        String(getSourceEcInputField(a, field) ?? '').localeCompare(String(getSourceEcInputField(b, field) ?? '')),
+    }
+  }
+  if (field === 'sourceIssueDate') {
+    return {
+      ...base,
+      sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
+        new Date(String(getSourceEcInputField(a, field) ?? 0)).getTime()
+        - new Date(String(getSourceEcInputField(b, field) ?? 0)).getTime(),
+    }
+  }
+  return base
+}
+
+/** 表格列（与 TaktSourceEc / TaktEcGijutsuSourceEcInputItemDto 对齐） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('entity.sourceec.no'),
-    dataIndex: 'sourceEcCode',
-    key: 'sourceEcCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
-      String(getSourceEcField(a, 'sourceEcCode') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcCode') ?? '')),
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceEcCode') ?? '',
-  },
-  {
-    title: t('entity.sourceec.sourcemodel'),
-    dataIndex: 'sourceModel',
-    key: 'sourceModel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceModel') ?? '',
-  },
-  {
-    title: t('entity.sourceec.sourcetitle'),
-    dataIndex: 'sourceTitle',
-    key: 'sourceTitle',
-    width: 180,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceTitle') ?? '',
-  },
-  {
-    title: t('entity.sourceec.sourcestatus'),
-    dataIndex: 'sourceStatus',
-    key: 'sourceStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceStatus') ?? '',
-  },
-  {
-    title: t('entity.sourceec.sourceissuedate'),
-    dataIndex: 'sourceIssueDate',
-    key: 'sourceIssueDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
-      new Date(String(getSourceEcField(a, 'sourceIssueDate') ?? 0)).getTime()
-      - new Date(String(getSourceEcField(b, 'sourceIssueDate') ?? 0)).getTime(),
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceIssueDate') ?? '',
-  },
-  {
-    title: t('entity.sourceec.sourcetcjowner'),
-    dataIndex: 'sourceTcjOwner',
-    key: 'sourceTcjOwner',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceTcjOwner') ?? '',
-  },
+  ...SOURCE_EC_INPUT_SOURCE_FIELDS.map((field) => buildSourceEcInputSourceColumn(field)),
   {
     title: t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.detailCount'),
     dataIndex: 'detailCount',
     key: 'detailCount',
-    width: 90,
+    width: SOURCE_EC_INPUT_COLUMN_WIDTH.detailCount ?? 90,
     resizable: true,
     align: 'right',
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'detailCount') ?? '',
-  }])
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) =>
+      getSourceEcInputField(record, 'detailCount') ?? '',
+  },
+])
 
 /** 行选择配置（单选） */
 const rowSelection = computed(() => ({
@@ -340,6 +404,7 @@ async function handleLoadToForm(): Promise<void> {
       ecDetails: draft.ecDetails ?? [],
       attachments: [],
     }
+    delete (formDraft as Record<string, unknown>).notifications
     emit('draft-ready', formDraft)
   } catch (error: unknown) {
     const err = error as { message?: string }
@@ -370,3 +435,10 @@ defineExpose({
   loadData,
 })
 </script>
+
+<style scoped lang="css">
+/* 来源设变录入列表：min-height 由 JS 按窗体视口 × 5/4 绑定 */
+.source-ec-input-table-wrap {
+  min-height: 0;
+}
+</style>

@@ -47,7 +47,7 @@ public class TaktTicketReplyDto : TaktCompanyDtoBase
     public string? TicketName { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 
@@ -122,7 +122,7 @@ public class TaktTicketReplyQueryDto : TaktPagedQuery
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
@@ -214,7 +214,7 @@ public class TaktTicketReplyCreateDto
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 
@@ -313,7 +313,7 @@ public class TaktTicketReplyTemplateDto
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
@@ -387,7 +387,7 @@ public class TaktTicketReplyImportDto
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
@@ -457,7 +457,7 @@ public class TaktTicketReplyExportDto
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
+    /// 作者类型（字典 routine_help_desk_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 

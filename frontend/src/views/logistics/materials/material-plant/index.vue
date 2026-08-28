@@ -82,19 +82,19 @@
         <template v-else-if="column.key === 'industrySector'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'industrySector')"
-            dict-type="logistics_industry_sector"
+            dict-type="logistics_materials_industry_sector"
           />
         </template>
         <template v-else-if="column.key === 'materialType'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'materialType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'baseUnit'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'baseUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'purchaseType'">
@@ -106,42 +106,42 @@
         <template v-else-if="column.key === 'specialProcurement'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'specialProcurement')"
-            dict-type="logistics_special_procurement_type"
+            dict-type="logistics_procurement_special_procurement_type"
           />
         </template>
         <template v-else-if="column.key === 'isBulk'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'isBulk')"
-            dict-type="logistics_bulk_material_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'priceControl'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'priceControl')"
-            dict-type="logistics_price_control_type"
+            dict-type="logistics_materials_price_control"
           />
         </template>
         <template v-else-if="column.key === 'priceUnit'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'priceUnit')"
-            dict-type="logistics_price_unit_param"
+            dict-type="logistics_materials_price_unit_param"
           />
         </template>
         <template v-else-if="column.key === 'valuation'">
           <TaktDictTag
             :value="getMaterialPlantDictValue(record, 'valuation')"
-            dict-type="logistics_valuation_class_category"
+            dict-type="logistics_materials_valuation_class"
           />
         </template>
-        <template v-else-if="column.key === 'isInspection'">
+        <template v-else-if="column.key === 'requiresInspection'">
           <TaktDictTag
-            :value="getMaterialPlantDictValue(record, 'isInspection')"
+            :value="getMaterialPlantDictValue(record, 'requiresInspection')"
             dict-type="sys_yes_no"
           />
         </template>
@@ -151,10 +151,10 @@
             dict-type="sys_yes_no"
           />
         </template>
-        <template v-else-if="column.key === 'isEndOfLife'">
+        <template v-else-if="column.key === 'discontinuedStatus'">
           <TaktDictTag
-            :value="getMaterialPlantDictValue(record, 'isEndOfLife')"
-            dict-type="logistics_material_eol_status"
+            :value="getMaterialPlantDictValue(record, 'discontinuedStatus')"
+            dict-type="logistics_materials_material_discontinued_status"
           />
         </template>
       </template>
@@ -243,7 +243,7 @@
       <a-form-item :label="pi.queryLabel('industrySector')">
         <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
-          dict-type="logistics_industry_sector"
+          dict-type="logistics_materials_industry_sector"
           :placeholder="pi.queryPh('industrySector', 'select')"
           allow-clear
         />
@@ -274,7 +274,7 @@
       <a-form-item :label="pi.queryLabel('materialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('materialType', 'select')"
           allow-clear
         />
@@ -284,7 +284,7 @@
       <a-form-item :label="pi.queryLabel('baseUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('baseUnit', 'select')"
           allow-clear
         />
@@ -314,7 +314,7 @@
       <a-form-item :label="pi.queryLabel('specialProcurement')">
         <TaktSelect
           v-model:value="advancedQueryForm.specialProcurement"
-          dict-type="logistics_special_procurement_type"
+          dict-type="logistics_procurement_special_procurement_type"
           :placeholder="pi.queryPh('specialProcurement', 'select')"
           allow-clear
         />
@@ -324,7 +324,7 @@
       <a-form-item :label="pi.queryLabel('isBulk')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBulk"
-          dict-type="logistics_bulk_material_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBulk', 'select')"
           allow-clear
         />
@@ -390,7 +390,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
@@ -400,7 +400,7 @@
       <a-form-item :label="pi.queryLabel('priceControl')">
         <TaktSelect
           v-model:value="advancedQueryForm.priceControl"
-          dict-type="logistics_price_control_type"
+          dict-type="logistics_materials_price_control"
           :placeholder="pi.queryPh('priceControl', 'select')"
           allow-clear
         />
@@ -410,7 +410,7 @@
       <a-form-item :label="pi.queryLabel('priceUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.priceUnit"
-          dict-type="logistics_price_unit_param"
+          dict-type="logistics_materials_price_unit_param"
           :placeholder="pi.queryPh('priceUnit', 'select')"
           allow-clear
         />
@@ -420,7 +420,7 @@
       <a-form-item :label="pi.queryLabel('valuation')">
         <TaktSelect
           v-model:value="advancedQueryForm.valuation"
-          dict-type="logistics_valuation_class_category"
+          dict-type="logistics_materials_valuation_class"
           :placeholder="pi.queryPh('valuation', 'select')"
           allow-clear
         />
@@ -495,12 +495,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isInspection')">
-      <a-form-item :label="pi.queryLabel('isInspection')">
+      <div v-show="isFieldVisible('requiresInspection')">
+      <a-form-item :label="pi.queryLabel('requiresInspection')">
         <TaktSelect
-          v-model:value="advancedQueryForm.isInspection"
+          v-model:value="advancedQueryForm.requiresInspection"
           dict-type="sys_yes_no"
-          :placeholder="pi.queryPh('isInspection', 'select')"
+          :placeholder="pi.queryPh('requiresInspection', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -515,12 +515,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isEndOfLife')">
-      <a-form-item :label="pi.queryLabel('isEndOfLife')">
+      <div v-show="isFieldVisible('discontinuedStatus')">
+      <a-form-item :label="pi.queryLabel('discontinuedStatus')">
         <TaktSelect
-          v-model:value="advancedQueryForm.isEndOfLife"
-          dict-type="logistics_material_eol_status"
-          :placeholder="pi.queryPh('isEndOfLife', 'select')"
+          v-model:value="advancedQueryForm.discontinuedStatus"
+          dict-type="logistics_materials_material_discontinued_status"
+          :placeholder="pi.queryPh('discontinuedStatus', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -775,7 +775,7 @@ function hasListQueryFiltersBesidesDefaultScope(
   if (form.currentStock !== undefined && form.currentStock !== null) {
     return true
   }
-  if (form.isInspection !== undefined && form.isInspection !== null) {
+  if (form.requiresInspection !== undefined && form.requiresInspection !== null) {
     return true
   }
   if (form.isBatch !== undefined && form.isBatch !== null) {
@@ -807,7 +807,7 @@ function createEmptyAdvancedQueryForm() {
     priceUnit: undefined as number | undefined,
     movingPrice: undefined as number | undefined,
     currentStock: undefined as number | undefined,
-    isInspection: undefined as number | undefined,
+    requiresInspection: undefined as number | undefined,
     isBatch: undefined as number | undefined,
     materialStatus: undefined as number | undefined,    createdAtStart: month.start,
     createdAtEnd: month.end,
@@ -889,8 +889,8 @@ function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQ
   if (form.currentStock !== undefined && form.currentStock !== null) {
     query.currentStock = form.currentStock
   }
-  if (form.isInspection !== undefined && form.isInspection !== null) {
-    query.isInspection = form.isInspection
+  if (form.requiresInspection !== undefined && form.requiresInspection !== null) {
+    query.requiresInspection = form.requiresInspection
   }
   if (form.isBatch !== undefined && form.isBatch !== null) {
     query.isBatch = form.isBatch

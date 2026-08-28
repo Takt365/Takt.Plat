@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceTicketService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务工单应用服务实现
 // 
@@ -409,11 +409,11 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
         }
         if (string.IsNullOrEmpty(entity.ServiceContractCode))
         {
-            entity.ServiceContractCode = master.ServiceContractCode;
+            entity.ServiceContractCode = master.ServiceContractCode ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.AssignedEmployeeName))
         {
-            entity.AssignedEmployeeName = master.AssignedEmployeeName;
+            entity.AssignedEmployeeName = master.AssignedEmployeeName ?? string.Empty;
         }
     }
 
@@ -461,7 +461,7 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
         }
         if (string.IsNullOrEmpty(entity.ServiceRequestCode))
         {
-            entity.ServiceRequestCode = master.ServiceRequestCode;
+            entity.ServiceRequestCode = master.ServiceRequestCode ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.ServiceOrderCode))
         {
@@ -469,7 +469,7 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
         }
         if (string.IsNullOrEmpty(entity.ServiceContractCode))
         {
-            entity.ServiceContractCode = master.ServiceContractCode;
+            entity.ServiceContractCode = master.ServiceContractCode ?? string.Empty;
         }
     }
 
@@ -550,7 +550,7 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
                 || (x.SolutionDescription != null && x.SolutionDescription.Contains(keywords))
                 || (x.ServiceLocation != null && x.ServiceLocation.Contains(keywords))
                 || (x.AssignedEmployeeName != null && x.AssignedEmployeeName.Contains(keywords))
-                || (x.AcceptedBy != null && x.AcceptedBy.Contains(keywords))
+                || (x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -688,10 +688,16 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
             exp = exp.And(x => x.AcceptanceResult == acceptanceResult);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedBy))
+        if (queryDto?.AcceptedByEmployeeId.HasValue == true)
         {
-            var acceptedBy = queryDto.AcceptedBy;
-            exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(acceptedBy));
+            var acceptedByEmployeeId = queryDto.AcceptedByEmployeeId.Value;
+            exp = exp.And(x => x.AcceptedByEmployeeId == acceptedByEmployeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedByEmployeeName))
+        {
+            var acceptedByEmployeeName = queryDto.AcceptedByEmployeeName;
+            exp = exp.And(x => x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(acceptedByEmployeeName));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -890,7 +896,11 @@ public class TaktCustomerServiceTicketService : TaktServiceBase, ITaktCustomerSe
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedBy))
+        if (queryDto.AcceptedByEmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedByEmployeeName))
         {
             return true;
         }

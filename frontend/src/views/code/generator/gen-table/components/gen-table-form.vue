@@ -160,7 +160,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.genTemplateCategory"
-                  dict-type="gen_template_type"
+                  dict-type="code_generator_template_type"
                   :placeholder="pi.ph('genTemplateCategory')"
                 />
               </a-form-item>
@@ -238,7 +238,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.menuButtonGroup"
-                  dict-type="gen_button_category"
+                  dict-type="code_generator_button_category"
                   :placeholder="pi.ph('menuButtonGroup')"
                 />
               </a-form-item>
@@ -478,7 +478,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.genFunction"
-                  dict-type="gen_function_type"
+                  dict-type="code_generator_function"
                   :placeholder="pi.ph('genFunction')"
                 />
               </a-form-item>
@@ -490,7 +490,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.genMethod"
-                  dict-type="gen_method_type"
+                  dict-type="code_generator_method"
                   :placeholder="pi.ph('genMethod')"
                 />
               </a-form-item>
@@ -502,7 +502,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.genPath"
-                  dict-type="gen_path_type"
+                  dict-type="code_generator_path_type"
                   :placeholder="pi.ph('genPath')"
                 />
               </a-form-item>
@@ -576,7 +576,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.frontUi"
-                  dict-type="gen_frontend_ui_type"
+                  dict-type="code_generator_frontend_ui_type"
                   :placeholder="pi.ph('frontUi')"
                 />
               </a-form-item>
@@ -588,7 +588,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.frontFormLayout"
-                  dict-type="gen_frontend_form_layout_config"
+                  dict-type="code_generator_frontend_form_layout"
                   :placeholder="pi.ph('frontFormLayout')"
                 />
               </a-form-item>
@@ -610,7 +610,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.frontBtnStyle"
-                  dict-type="gen_button_style_config"
+                  dict-type="code_generator_button_style"
                   :placeholder="pi.ph('frontBtnStyle')"
                 />
               </a-form-item>
@@ -789,7 +789,7 @@
       <template #cell-csharpDataType="{ record }">
         <TaktSelect
           v-model:value="record.csharpDataType"
-          dict-type="gen_csharp_data_type"
+          dict-type="code_generator_csharp_data_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('csharpDataType')"
@@ -910,7 +910,7 @@
       <template #cell-queryType="{ record }">
         <TaktSelect
           v-model:value="record.queryType"
-          dict-type="gen_query_type"
+          dict-type="code_generator_query_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('queryType')"
@@ -921,7 +921,7 @@
       <template #cell-htmlType="{ record }">
         <TaktSelect
           v-model:value="record.htmlType"
-          dict-type="gen_display_type"
+          dict-type="code_generator_display_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="genTableColumnPi.ph('htmlType')"

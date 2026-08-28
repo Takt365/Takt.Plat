@@ -154,7 +154,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.todoStatus"
-                  dict-type="hr_personnel_onboarding_status"
+                  dict-type="humanresource_personnel_onboarding_status"
                   :placeholder="pi.ph('todoStatus')"
                 />
               </a-form-item>

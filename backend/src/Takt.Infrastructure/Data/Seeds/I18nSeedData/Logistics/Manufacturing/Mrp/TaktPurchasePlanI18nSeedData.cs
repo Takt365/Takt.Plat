@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktPurchasePlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseplan.productionplanid", "zh-HK", "来源生产计划ID_hk", "来源生产计划ID（产出追溯，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.purchaseplan.productionplancode
-            new TranslationSeedItem("entity.purchaseplan.productionplancode", "en-US", "来源生产计划编码_us", "来源生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseplan.productionplancode", "en-US", "来源生产计划编码_us", "来源生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseplan.productionplancode
-            new TranslationSeedItem("entity.purchaseplan.productionplancode", "ja-JP", "来源生产计划编码_jp", "来源生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseplan.productionplancode", "ja-JP", "来源生产计划编码_jp", "来源生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseplan.productionplancode
-            new TranslationSeedItem("entity.purchaseplan.productionplancode", "zh-CN", "来源生产计划编码", "来源生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseplan.productionplancode", "zh-CN", "来源生产计划编码", "来源生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseplan.productionplancode
-            new TranslationSeedItem("entity.purchaseplan.productionplancode", "zh-HK", "来源生产计划编码_hk", "来源生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseplan.productionplancode", "zh-HK", "来源生产计划编码_hk", "来源生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.purchaseplan.plandate
             new TranslationSeedItem("entity.purchaseplan.plandate", "en-US", "计划编制日期_us", "计划编制日期"),
@@ -171,23 +171,23 @@ public class TaktPurchasePlanI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseplan.purchasegroupcode
             new TranslationSeedItem("entity.purchaseplan.purchasegroupcode", "zh-HK", "采购组编码_hk", "采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
 
-            // entity.purchaseplan.plannerid
-            new TranslationSeedItem("entity.purchaseplan.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseplan.plannerid
-            new TranslationSeedItem("entity.purchaseplan.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseplan.plannerid
-            new TranslationSeedItem("entity.purchaseplan.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseplan.plannerid
-            new TranslationSeedItem("entity.purchaseplan.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseplan.planneremployeeid
+            new TranslationSeedItem("entity.purchaseplan.planneremployeeid", "en-US", "计划人员工ID_us", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseplan.planneremployeeid
+            new TranslationSeedItem("entity.purchaseplan.planneremployeeid", "ja-JP", "计划人员工ID_jp", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseplan.planneremployeeid
+            new TranslationSeedItem("entity.purchaseplan.planneremployeeid", "zh-CN", "计划人员工ID", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseplan.planneremployeeid
+            new TranslationSeedItem("entity.purchaseplan.planneremployeeid", "zh-HK", "计划人员工ID_hk", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.purchaseplan.planby
-            new TranslationSeedItem("entity.purchaseplan.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseplan.planby
-            new TranslationSeedItem("entity.purchaseplan.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseplan.planby
-            new TranslationSeedItem("entity.purchaseplan.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseplan.planby
-            new TranslationSeedItem("entity.purchaseplan.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.purchaseplan.plannername
+            new TranslationSeedItem("entity.purchaseplan.plannername", "en-US", "计划人名称_us", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseplan.plannername
+            new TranslationSeedItem("entity.purchaseplan.plannername", "ja-JP", "计划人名称_jp", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseplan.plannername
+            new TranslationSeedItem("entity.purchaseplan.plannername", "zh-CN", "计划人名称", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseplan.plannername
+            new TranslationSeedItem("entity.purchaseplan.plannername", "zh-HK", "计划人名称_hk", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.purchaseplan.totalquantity
             new TranslationSeedItem("entity.purchaseplan.totalquantity", "en-US", "计划总数量_us", "计划总数量（基本单位数量）"),

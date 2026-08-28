@@ -45,7 +45,7 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit，默认 MIN）
    */
   timeUnit?: string;
 
@@ -55,12 +55,12 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit，默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
   pointsToMinutesRate?: number;
 
@@ -128,7 +128,7 @@ export interface StandardOperationTimeExport {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit，默认 MIN）
    */
   timeUnit: string;
 
@@ -138,12 +138,12 @@ export interface StandardOperationTimeExport {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit，默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
   pointsToMinutesRate: number;
 

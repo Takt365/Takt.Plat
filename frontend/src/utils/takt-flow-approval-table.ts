@@ -22,7 +22,7 @@ export const TaktFlowApprovalTable = {
   /** 公告 */
   announcement: 'takt_routine_announcement',
   /** 会议 */
-  conference: 'takt_routine_conference_center',
+  meeting: 'takt_routine_meeting_center',
 } as const
 
 /** 审批表名联合类型 */

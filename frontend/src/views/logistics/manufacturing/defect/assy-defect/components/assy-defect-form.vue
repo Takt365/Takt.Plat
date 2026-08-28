@@ -60,7 +60,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
-                  dict-type="logistics_prod_category"
+                  dict-type="logistics_manufacturing_prod_category"
                   :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
@@ -98,7 +98,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
+                  dict-type="logistics_manufacturing_shift_category"
                   :placeholder="pi.ph('shiftNo')"
                 />
               </a-form-item>
@@ -322,7 +322,7 @@
       <template #cell-defectCategory="{ record }">
         <TaktSelect
           v-model:value="record.defectCategory"
-          dict-type="logistics_defect_category"
+          dict-type="logistics_manufacturing_defect_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="assyDefectDetailPi.ph('defectCategory')"
@@ -333,7 +333,7 @@
       <template #cell-defectLocation="{ record }">
         <TaktSelect
           v-model:value="record.defectLocation"
-          dict-type="logistics_assy_location_category"
+          dict-type="logistics_manufacturing_assy_location_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="assyDefectDetailPi.ph('defectLocation')"

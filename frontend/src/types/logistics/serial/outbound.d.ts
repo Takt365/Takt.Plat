@@ -54,12 +54,12 @@ export interface SerialOutbound extends CompanyDtoBase {
   destination: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 
@@ -134,12 +134,12 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   destination?: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
@@ -231,12 +231,12 @@ export interface SerialOutboundCreate {
   destination: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 
@@ -330,12 +330,12 @@ export interface SerialOutboundTemplate {
   destination?: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
@@ -422,12 +422,12 @@ export interface SerialOutboundImport {
   destination?: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort?: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType?: number;
 
@@ -506,12 +506,12 @@ export interface SerialOutboundExport {
   destination: string;
 
   /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+   * 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
    */
   destinationPort: string;
 
   /**
-   * 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+   * 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
    */
   outboundType: number;
 

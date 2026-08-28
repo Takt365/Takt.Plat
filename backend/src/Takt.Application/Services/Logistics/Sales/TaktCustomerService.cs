@@ -389,7 +389,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
                 || (x.Incoterms2 != null && x.Incoterms2.Contains(keywords))
                 || (x.ShippingConditions != null && x.ShippingConditions.Contains(keywords))
                 || (x.CustomerPricingProcedure != null && x.CustomerPricingProcedure.Contains(keywords))
-                || (x.SalesBy != null && x.SalesBy.Contains(keywords))
+                || (x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -677,10 +677,10 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             exp = exp.And(x => x.DiscountRate == discountRate);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesEmployeeName))
         {
-            var salesBy = queryDto.SalesBy;
-            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(salesBy));
+            var salesBy = queryDto.SalesEmployeeName;
+            exp = exp.And(x => x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(salesBy));
         }
 
         if (queryDto?.CustomerLevel.HasValue == true)
@@ -937,7 +937,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesEmployeeName))
         {
             return true;
         }

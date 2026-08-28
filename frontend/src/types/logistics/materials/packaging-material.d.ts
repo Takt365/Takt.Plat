@@ -99,7 +99,7 @@ export interface PackagingMaterial extends CompanyDtoBase {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit: string;
 
@@ -109,7 +109,7 @@ export interface PackagingMaterial extends CompanyDtoBase {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit: string;
 
@@ -119,12 +119,12 @@ export interface PackagingMaterial extends CompanyDtoBase {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit: string;
 
@@ -249,7 +249,7 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit?: string;
 
@@ -259,7 +259,7 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit?: string;
 
@@ -269,12 +269,12 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType?: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit?: string;
 
@@ -418,7 +418,7 @@ export interface PackagingMaterialCreate {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit: string;
 
@@ -428,7 +428,7 @@ export interface PackagingMaterialCreate {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit: string;
 
@@ -438,12 +438,12 @@ export interface PackagingMaterialCreate {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit: string;
 
@@ -606,7 +606,7 @@ export interface PackagingMaterialTemplate {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit?: string;
 
@@ -616,7 +616,7 @@ export interface PackagingMaterialTemplate {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit?: string;
 
@@ -626,12 +626,12 @@ export interface PackagingMaterialTemplate {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType?: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit?: string;
 
@@ -760,7 +760,7 @@ export interface PackagingMaterialImport {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit?: string;
 
@@ -770,7 +770,7 @@ export interface PackagingMaterialImport {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit?: string;
 
@@ -780,12 +780,12 @@ export interface PackagingMaterialImport {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType?: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit?: string;
 
@@ -909,7 +909,7 @@ export interface PackagingMaterialExport {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
    */
   weightUnit: string;
 
@@ -919,7 +919,7 @@ export interface PackagingMaterialExport {
   businessVolume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
    */
   volumeUnit: string;
 
@@ -929,12 +929,12 @@ export interface PackagingMaterialExport {
   sizeDimension?: string;
 
   /**
-   * 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+   * 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
    */
   packagingType: string;
 
   /**
-   * 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+   * 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
    */
   packingUnit: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionTeam 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,31 +109,40 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam.teamname", "zh-HK", "班组名称_hk", "班组名称（显示名称，如：SMT一班、手插二班等）"),
 
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+
+            // entity.productionteam.teamleaderemployeeid
+            new TranslationSeedItem("entity.productionteam.teamleaderemployeeid", "en-US", "班组长ID_us", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionteam.teamleaderemployeeid
+            new TranslationSeedItem("entity.productionteam.teamleaderemployeeid", "ja-JP", "班组长ID_jp", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionteam.teamleaderemployeeid
+            new TranslationSeedItem("entity.productionteam.teamleaderemployeeid", "zh-CN", "班组长ID", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionteam.teamleaderemployeeid
+            new TranslationSeedItem("entity.productionteam.teamleaderemployeeid", "zh-HK", "班组长ID_hk", "班组长（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "en-US", "班组长姓名_us", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "en-US", "班组长名称_us", "班组长名称（冗余：按 TeamLeaderEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "ja-JP", "班组长姓名_jp", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "ja-JP", "班组长名称_jp", "班组长名称（冗余：按 TeamLeaderEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-CN", "班组长姓名", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-CN", "班组长名称", "班组长名称（冗余：按 TeamLeaderEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.productionteam.teamleadername
-            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-HK", "班组长姓名_hk", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),
+            new TranslationSeedItem("entity.productionteam.teamleadername", "zh-HK", "班组长名称_hk", "班组长名称（冗余：按 TeamLeaderEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.productionteam.shiftno
-            new TranslationSeedItem("entity.productionteam.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.productionteam.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.productionteam.teamstatus
             new TranslationSeedItem("entity.productionteam.teamstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable；0=禁用，1=启用）"),

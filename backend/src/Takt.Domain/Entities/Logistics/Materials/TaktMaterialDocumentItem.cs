@@ -35,7 +35,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public long MaterialDocumentId { get; set; }
 
     /// <summary>
-    /// 物料凭证（冗余字段，便于查询）
+    /// 物料凭证（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_document_code", ColumnDescription = "物料凭证", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string MaterialDocumentCode { get; set; } = string.Empty;
@@ -65,7 +65,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public string? LineDepth { get; set; }
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     [SugarColumn(ColumnName = "movement_type", ColumnDescription = "移动类型", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "101")]
     public string MovementType { get; set; } = "101";
@@ -107,7 +107,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public string? RestrictedStockFlag { get; set; }
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     [SugarColumn(ColumnName = "special_stock", ColumnDescription = "特殊库存", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? SpecialStock { get; set; }
@@ -131,7 +131,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public string? DebitCreditIndicator { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? CurrencyCode { get; set; }
@@ -155,7 +155,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public decimal Quantity { get; set; } = 0;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "基本计量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? BaseUnit { get; set; }
@@ -431,10 +431,16 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "用户名", ColumnDataType = "nvarchar", Length = 12, IsNullable = true)]
-    public string? PostedBy { get; set; }
+    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PostedByEmployeeId { get; set; }
+    /// <summary>
+    /// 过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "posted_by_employee_name", ColumnDescription = "过账人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PostedByEmployeeName { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

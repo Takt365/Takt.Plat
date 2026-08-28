@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
+ * 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_manufacturing_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
  * 对应前端 TaktEcAttachmentDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EcAttachment
@@ -49,7 +49,7 @@ export interface EcAttachment extends CompanyDtoBase {
   lineNumber?: number;
 
   /**
-   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
+   * 文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType?: string;
 
@@ -59,7 +59,7 @@ export interface EcAttachment extends CompanyDtoBase {
   docCode?: string;
 
   /**
-   * 文件名称
+   * 文件名称（等于文件编码 DocCode + 原扩展名，与源文件名无关）
    */
   fileName?: string;
 
@@ -117,7 +117,7 @@ export interface EcAttachmentExport {
   lineNumber: number;
 
   /**
-   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
+   * 文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType: string;
 
@@ -127,7 +127,7 @@ export interface EcAttachmentExport {
   docCode: string;
 
   /**
-   * 文件名称
+   * 文件名称（等于文件编码 DocCode + 原扩展名，与源文件名无关）
    */
   fileName: string;
 

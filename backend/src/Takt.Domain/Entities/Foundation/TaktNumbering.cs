@@ -54,7 +54,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "prefix_code", ColumnDescription = "前缀编码", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
     public string? PrefixCode { get; set; }
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     [SugarColumn(ColumnName = "date_format", ColumnDescription = "日期格式", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? DateFormat { get; set; }

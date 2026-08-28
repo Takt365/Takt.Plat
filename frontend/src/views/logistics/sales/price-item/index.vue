@@ -77,55 +77,55 @@
         <template v-if="column.key === 'priceType'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'priceType')"
-            dict-type="logistics_price_type"
+            dict-type="logistics_procurement_price_type"
           />
         </template>
         <template v-else-if="column.key === 'scaleType'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'scaleType')"
-            dict-type="logistics_scale_type"
+            dict-type="logistics_procurement_scale"
           />
         </template>
         <template v-else-if="column.key === 'scaleBasis'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'scaleBasis')"
-            dict-type="logistics_scale_basis"
+            dict-type="logistics_procurement_scale_basis"
           />
         </template>
         <template v-else-if="column.key === 'scaleUnit'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'scaleUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'scaleCurrencyCode'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'scaleCurrencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'calculationType'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'calculationType')"
-            dict-type="logistics_calculation_type"
+            dict-type="logistics_procurement_calculation_type"
           />
         </template>
         <template v-else-if="column.key === 'conditionCurrencyCode'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'conditionCurrencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'priceUnit'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'priceUnit')"
-            dict-type="logistics_price_unit_param"
+            dict-type="logistics_materials_price_unit_param"
           />
         </template>
         <template v-else-if="column.key === 'unitOfMeasure'">
           <TaktDictTag
             :value="getSalesPriceItemDictValue(record, 'unitOfMeasure')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'isObsolete'">

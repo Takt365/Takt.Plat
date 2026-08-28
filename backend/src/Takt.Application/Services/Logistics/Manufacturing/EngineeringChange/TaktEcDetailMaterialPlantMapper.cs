@@ -4,7 +4,7 @@
 // 文件名称：TaktEcDetailMaterialPlantMapper.cs
 // 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：按工厂物料 TaktMaterialPlant 补全设变明细物料描述、库存、仓库、采购/检验及 EOL 字段
+// 功能描述：按工厂物料 TaktMaterialPlant、型号目的地 TaktModelDestination 补全设变明细机种/描述/库存/仓库/采购/检验及停产状态
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,45 +16,72 @@ using Takt.Domain.Entities.Logistics.Materials;
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变明细与工厂物料（TaktMaterialPlant）字段映射
+/// 设变明细与工厂物料、型号目的地字段映射
 /// </summary>
 public static class TaktEcDetailMaterialPlantMapper
 {
     /// <summary>
-    /// 按物料编码从工厂物料字典补全设变明细创建 DTO 的物料衍生字段
+    /// 按完成品物料编码从型号目的地列表构建「物料编码 → 机种编码」查找表（同物料取 SortOrder 最小的一条）
+    /// </summary>
+    /// <param name="destinations">型号目的地列表</param>
+    /// <returns>物料编码 → 机种编码（忽略大小写）</returns>
+    public static Dictionary<string, string> BuildModelCodeByMaterialLookup(
+        IEnumerable<TaktModelDestination> destinations)
+    {
+        ArgumentNullException.ThrowIfNull(destinations);
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var group in destinations
+            .Where(x => !string.IsNullOrWhiteSpace(x.MaterialCode) && !string.IsNullOrWhiteSpace(x.ModelCode))
+            .GroupBy(x => x.MaterialCode.Trim(), StringComparer.OrdinalIgnoreCase))
+        {
+            var first = group.OrderBy(x => x.SortOrder).ThenBy(x => x.Id).First();
+            result[group.Key] = first.ModelCode.Trim();
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 按物料编码从工厂物料、型号目的地补全设变明细创建 DTO 的衍生字段
     /// </summary>
     /// <param name="dto">设变明细创建 DTO</param>
     /// <param name="materialsByCode">物料编码 → 工厂物料（当前工厂）</param>
+    /// <param name="modelCodeByFinishedGoods">完成品物料编码 → 机种编码（TaktModelDestination）；为空时不改 EcModelCode</param>
     public static void EnrichCreateDto(
         TaktEcDetailCreateDto dto,
-        IReadOnlyDictionary<string, TaktMaterialPlant> materialsByCode)
+        IReadOnlyDictionary<string, TaktMaterialPlant> materialsByCode,
+        IReadOnlyDictionary<string, string>? modelCodeByFinishedGoods = null)
     {
         ArgumentNullException.ThrowIfNull(dto);
         ArgumentNullException.ThrowIfNull(materialsByCode);
-        if (TryGetMaterial(materialsByCode, dto.EcBomItem, out var bomItem))
+        if (modelCodeByFinishedGoods != null
+            && TryGetModelCode(modelCodeByFinishedGoods, dto.EcFinishedGoods, out var modelCode))
         {
-            dto.EcBomItemText = ResolveMaterialText(bomItem);
-            dto.IsEndOfLine = ResolveIsEndOfLine(bomItem);
+            dto.EcModelCode = modelCode;
         }
-        if (TryGetMaterial(materialsByCode, dto.EcBomSubItem, out var bomSubItem))
+        if (TryGetMaterial(materialsByCode, dto.EcFinishedGoods, out var finishedGoods))
         {
-            dto.EcBomSubItemText = ResolveMaterialText(bomSubItem);
+            dto.EcFinishedGoodsDescription = ResolveMaterialText(finishedGoods);
+            dto.DiscontinuedStatus = ResolveDiscontinuedStatus(finishedGoods);
         }
-        if (TryGetMaterial(materialsByCode, dto.EcOldItem, out var oldMaterial))
+        if (TryGetMaterial(materialsByCode, dto.EcParentMaterialCode, out var parentMaterial))
         {
-            dto.EcOldText = ResolveMaterialText(oldMaterial);
+            dto.EcParentMaterialDescription = ResolveMaterialText(parentMaterial);
+        }
+        if (TryGetMaterial(materialsByCode, dto.EcOldMaterialCode, out var oldMaterial))
+        {
+            dto.EcOldMaterialDescription = ResolveMaterialText(oldMaterial);
             dto.EcOldStock = oldMaterial.CurrentStock;
             dto.EcOldWarehouse = ResolveWarehouse(oldMaterial);
-            dto.IsOldCheck = oldMaterial.IsInspection;
-            dto.IsOldProcurement = ResolveIsProcurement(oldMaterial);
+            dto.EcOldRequiresInspection = oldMaterial.RequiresInspection;
+            dto.EcOldPurchaseType = ResolvePurchaseType(oldMaterial);
         }
-        if (TryGetMaterial(materialsByCode, dto.EcNewItem, out var newMaterial))
+        if (TryGetMaterial(materialsByCode, dto.EcNewMaterialCode, out var newMaterial))
         {
-            dto.EcNewText = ResolveMaterialText(newMaterial);
+            dto.EcNewMaterialDescription = ResolveMaterialText(newMaterial);
             dto.EcNewStock = newMaterial.CurrentStock;
             dto.EcNewWarehouse = ResolveWarehouse(newMaterial);
-            dto.IsNewCheck = newMaterial.IsInspection;
-            dto.IsNewProcurement = ResolveIsProcurement(newMaterial);
+            dto.EcNewRequiresInspection = newMaterial.RequiresInspection;
+            dto.EcNewPurchaseType = ResolvePurchaseType(newMaterial);
         }
     }
 
@@ -74,7 +101,7 @@ public static class TaktEcDetailMaterialPlantMapper
     }
 
     /// <summary>
-    /// 解析物料显示文本（名称优先，其次描述）
+    /// 解析物料显示文本（描述优先，否则物料编码）
     /// </summary>
     /// <param name="material">工厂物料</param>
     /// <returns>物料描述</returns>
@@ -85,39 +112,35 @@ public static class TaktEcDetailMaterialPlantMapper
         {
             return material.MaterialDescription.Trim();
         }
-        if (!string.IsNullOrWhiteSpace(material.MaterialDescription))
-        {
-            return material.MaterialDescription.Trim();
-        }
         return material.MaterialCode;
     }
 
     /// <summary>
-    /// 完成品 EOL：停产状态非 Z0（计划物料）视为 EOL
+    /// 完成品物料状态：直接取工厂物料 DiscontinuedStatus，空则 Z0
     /// </summary>
     /// <param name="material">完成品工厂物料</param>
-    /// <returns>0 或 1</returns>
-    private static int ResolveIsEndOfLine(TaktMaterialPlant material)
+    /// <returns>字典 DictValue（如 Z0/01）</returns>
+    private static string ResolveDiscontinuedStatus(TaktMaterialPlant material)
     {
         ArgumentNullException.ThrowIfNull(material);
-        var eol = material.IsEndOfLife?.Trim();
-        if (string.IsNullOrEmpty(eol))
-        {
-            return 0;
-        }
-        return string.Equals(eol, "Z0", StringComparison.OrdinalIgnoreCase) ? 0 : 1;
+        var status = material.DiscontinuedStatus?.Trim();
+        return string.IsNullOrEmpty(status) ? "Z0" : status;
     }
 
     /// <summary>
-    /// 是否采购：采购类型 F=1（外部采购），E=0（自制生产）
+    /// 采购类型：取工厂物料 PurchaseType（F/E）
     /// </summary>
     /// <param name="material">工厂物料</param>
-    /// <returns>0 或 1</returns>
-    private static int ResolveIsProcurement(TaktMaterialPlant material)
+    /// <returns>F 或 E 或空</returns>
+    private static string? ResolvePurchaseType(TaktMaterialPlant material)
     {
         ArgumentNullException.ThrowIfNull(material);
         var purchaseType = material.PurchaseType?.Trim().ToUpperInvariant();
-        return purchaseType == "F" ? 1 : 0;
+        if (purchaseType is "F" or "E")
+        {
+            return purchaseType;
+        }
+        return string.IsNullOrEmpty(purchaseType) ? null : purchaseType;
     }
 
     /// <summary>
@@ -158,5 +181,31 @@ public static class TaktEcDetailMaterialPlantMapper
             return false;
         }
         return materialsByCode.TryGetValue(materialCode.Trim(), out material!);
+    }
+
+    /// <summary>
+    /// 按完成品物料编码查找机种编码
+    /// </summary>
+    /// <param name="modelCodeByFinishedGoods">完成品 → 机种</param>
+    /// <param name="finishedGoods">完成品物料编码</param>
+    /// <param name="modelCode">机种编码</param>
+    /// <returns>是否找到</returns>
+    private static bool TryGetModelCode(
+        IReadOnlyDictionary<string, string> modelCodeByFinishedGoods,
+        string? finishedGoods,
+        out string modelCode)
+    {
+        modelCode = string.Empty;
+        if (string.IsNullOrWhiteSpace(finishedGoods))
+        {
+            return false;
+        }
+        if (!modelCodeByFinishedGoods.TryGetValue(finishedGoods.Trim(), out var found)
+            || string.IsNullOrWhiteSpace(found))
+        {
+            return false;
+        }
+        modelCode = found.Trim();
+        return true;
     }
 }

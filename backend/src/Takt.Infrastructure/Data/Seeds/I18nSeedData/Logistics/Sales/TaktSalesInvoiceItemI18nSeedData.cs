@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID_hk", "销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）"),
 
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "en-US", "开票凭证_us", "开票凭证（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "en-US", "开票凭证_us", "开票凭证（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "ja-JP", "开票凭证_jp", "开票凭证（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "ja-JP", "开票凭证_jp", "开票凭证（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-CN", "开票凭证", "开票凭证（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-CN", "开票凭证", "开票凭证（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-HK", "开票凭证_hk", "开票凭证（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-HK", "开票凭证_hk", "开票凭证（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.salesinvoiceitem.linenumber
             new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "en-US", "项目_us", "项目（开票凭证项目；行号步长生成器用 int，固定步长=10）"),
@@ -585,14 +585,23 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.salesinvoiceitem.exchangeratedate
             new TranslationSeedItem("entity.salesinvoiceitem.exchangeratedate", "zh-HK", "换算日期_hk", "换算日期"),
 
-            // entity.salesinvoiceitem.postedby
-            new TranslationSeedItem("entity.salesinvoiceitem.postedby", "en-US", "已创建的_us", "已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.salesinvoiceitem.postedby
-            new TranslationSeedItem("entity.salesinvoiceitem.postedby", "ja-JP", "已创建的_jp", "已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.salesinvoiceitem.postedby
-            new TranslationSeedItem("entity.salesinvoiceitem.postedby", "zh-CN", "已创建的", "已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.salesinvoiceitem.postedby
-            new TranslationSeedItem("entity.salesinvoiceitem.postedby", "zh-HK", "已创建的_hk", "已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.salesinvoiceitem.postedbyemployeeid
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeeid", "en-US", "过账人ID_us", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.salesinvoiceitem.postedbyemployeeid
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeeid", "ja-JP", "过账人ID_jp", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.salesinvoiceitem.postedbyemployeeid
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeeid", "zh-CN", "过账人ID", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.salesinvoiceitem.postedbyemployeeid
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeeid", "zh-HK", "过账人ID_hk", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.salesinvoiceitem.postedbyemployeename
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeename", "en-US", "过账人名称_us", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.salesinvoiceitem.postedbyemployeename
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeename", "ja-JP", "过账人名称_jp", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.salesinvoiceitem.postedbyemployeename
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeename", "zh-CN", "过账人名称", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.salesinvoiceitem.postedbyemployeename
+            new TranslationSeedItem("entity.salesinvoiceitem.postedbyemployeename", "zh-HK", "过账人名称_hk", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.salesinvoiceitem.isobsolete
             new TranslationSeedItem("entity.salesinvoiceitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

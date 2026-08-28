@@ -31,13 +31,21 @@ public static class TaktServHelper
     private static readonly IHardwareInfo _hardwareInfo = new HardwareInfo();
     private static bool _initialized = false;
     private static readonly object _lockObject = new object();
-    /// <summary>CPU 性能计数器两次 Refresh 间隔（毫秒）；WMI/perf 差值采样必须 ≥1000</summary>
+    /// <summary>
+    /// CPU 性能计数器两次 Refresh 间隔（毫秒）；WMI/perf 差值采样必须 ≥1000
+    /// </summary>
     private const int CpuUsageSampleDelayMs = 1000;
-    /// <summary>互联网 Ping 探测目标</summary>
+    /// <summary>
+    /// 互联网 Ping 探测目标
+    /// </summary>
     private const string InternetPingHost = "8.8.8.8";
-    /// <summary>互联网 Ping 超时（毫秒）</summary>
+    /// <summary>
+    /// 互联网 Ping 超时（毫秒）
+    /// </summary>
     private const int InternetPingTimeoutMs = 2000;
-    /// <summary>DNS 探测主机名</summary>
+    /// <summary>
+    /// DNS 探测主机名
+    /// </summary>
     private const string DnsProbeHost = "www.microsoft.com";
 
     /// <summary>
@@ -116,7 +124,9 @@ public static class TaktServHelper
         }
     }
 
-    /// <summary>从 RuntimeInformation.OSDescription 提取数字版本段（如 10.0.26200）</summary>
+    /// <summary>
+    /// 从 RuntimeInformation.OSDescription 提取数字版本段（如 10.0.26200）
+    /// </summary>
     private static readonly Regex OsDescriptionVersionRegex = new(
         @"(\d+\.\d+\.\d+(?:\.\d+)?)",
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
@@ -830,9 +840,13 @@ public static class TaktServHelper
     /// </summary>
     private sealed class NetworkConnectivitySnapshot
     {
-        /// <summary>互联网 Ping 是否成功</summary>
+        /// <summary>
+        /// 互联网 Ping 是否成功
+        /// </summary>
         public bool HasInternet { get; init; }
-        /// <summary>DNS 解析是否成功</summary>
+        /// <summary>
+        /// DNS 解析是否成功
+        /// </summary>
         public bool DnsWorks { get; init; }
     }
 

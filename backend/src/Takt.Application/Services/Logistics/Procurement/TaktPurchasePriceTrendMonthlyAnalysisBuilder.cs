@@ -27,7 +27,9 @@ namespace Takt.Application.Services.Logistics.Procurement;
 /// </summary>
 public class TaktPurchasePriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITaktPurchasePriceTrendMonthlyAnalysisBuilder
 {
-    /// <summary>物料/供应商名称按编码分批查询，避免超长 IN 列表</summary>
+    /// <summary>
+    /// 物料/供应商名称按编码分批查询，避免超长 IN 列表
+    /// </summary>
     private const int MaterialNameLookupBatchSize = 500;
 
     private readonly ITaktCompanyRepository<TaktPurchasePrice> _purchasePriceRepository;
@@ -620,7 +622,9 @@ public class TaktPurchasePriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITa
     /// </summary>
     private sealed class PurchasePriceTrendRowKeyComparer : IEqualityComparer<PurchasePriceTrendRowKey>
     {
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static PurchasePriceTrendRowKeyComparer Instance { get; } = new();
 
         /// <summary>
@@ -657,10 +661,14 @@ public class TaktPurchasePriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITa
     /// </summary>
     private sealed class PurchasePriceTrendSourceRow
     {
-        /// <summary>采购价格主表</summary>
+        /// <summary>
+        /// 采购价格主表
+        /// </summary>
         public TaktPurchasePrice Master { get; init; } = null!;
 
-        /// <summary>采购价格明细</summary>
+        /// <summary>
+        /// 采购价格明细
+        /// </summary>
         public TaktPurchasePriceItem Item { get; init; } = null!;
     }
 }

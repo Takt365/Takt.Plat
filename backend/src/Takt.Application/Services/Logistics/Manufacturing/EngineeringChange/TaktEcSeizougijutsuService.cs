@@ -30,6 +30,8 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuService
 {
     private readonly ITaktCompanyRepository<TaktEcSeizougijutsu> _ecSeizougijutsuRepository;
+    private readonly TaktEcGijutsuStatusSynchronizer _ecGijutsuStatusSynchronizer;
+    private readonly TaktEcExecPersistence _ecExecPersistence;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +39,16 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
     /// 构造函数
     /// </summary>
     /// <param name="ecSeizougijutsuRepository">设变制技执行仓储</param>
+    /// <param name="ecGijutsuStatusSynchronizer">设变技术课状态同步</param>
+    /// <param name="ecExecPersistence">设变部门执行持久化</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcSeizougijutsuService(
         ITaktCompanyRepository<TaktEcSeizougijutsu> ecSeizougijutsuRepository,
+        TaktEcGijutsuStatusSynchronizer ecGijutsuStatusSynchronizer,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +56,8 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
         : base(userContext, localizationService)
     {
         _ecSeizougijutsuRepository = ecSeizougijutsuRepository;
+        _ecGijutsuStatusSynchronizer = ecGijutsuStatusSynchronizer;
+        _ecExecPersistence = ecExecPersistence;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -131,11 +139,12 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecSeizougijutsuRepository.CreateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizougijutsuByIdAsync(entity.Id) ?? entity.Adapt<TaktEcSeizougijutsuDto>();
     }
 
     /// <summary>
-    /// 更新设变制技执行
+    /// 更新设变制技执行（同设变单号+机种+完成品的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变制技执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -157,6 +166,8 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             throw new TaktBusinessException("设变制技执行的EcnDetailId已存在");
         }
         await _ecSeizougijutsuRepository.UpdateAsync(entity);
+        await _ecExecPersistence.FanOutSeizougijutsuFillableByEcModelAndFinishedGoodsAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizougijutsuByIdAsync(id) ?? throw new TaktBusinessException("设变制技执行不存在");
     }
 
@@ -182,6 +193,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
         }
         entity.IsObsolete = 1;
         await _ecSeizougijutsuRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
     }
 
     /// <summary>
@@ -220,6 +232,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
         }
         entity.IsObsolete = dto.IsObsolete;
         await _ecSeizougijutsuRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizougijutsuByIdAsync(dto.EcSeizougijutsuId) ?? throw new TaktBusinessException("设变制技执行不存在");
     }
 
@@ -280,6 +293,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecSeizougijutsuRepository.CreateAsync(entity);
+                await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
                 success += 1;
             }
             catch (Exception ex)
@@ -337,6 +351,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
         {
             exp = exp.And(x => x.IsObsolete == 0);
         }
+        exp = exp.And(TaktEcSeizougijutsuQueryHelper.VisibleExecExpression());
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

@@ -129,9 +129,14 @@ import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import EmployeeOnboardingForm from './employee-onboarding-form.vue'
 import { useTalentOfferMasterContext } from '../composables/use-offer-master-context'
 import {
-  ,
-} from '@/api/human-resource/talent/employee-onboarding'
-import type { EmployeeOnboarding, EmployeeOnboardingQuery } from '@/types/human-resource/talent/employee-onboarding'
+  getEmployeeOnboardingList,
+  getEmployeeOnboardingById,
+  createEmployeeOnboarding,
+  updateEmployeeOnboarding,
+  deleteEmployeeOnboardingById,
+  deleteEmployeeOnboardingBatch,
+} from '@/api/human-resource/personnel/employee-onboarding'
+import type { EmployeeOnboarding, EmployeeOnboardingQuery } from '@/types/human-resource/personnel/employee-onboarding'
 
 import {
   useEmployeeOnboardingI18n,
@@ -348,7 +353,7 @@ async function loadData() {
   }
   loading.value = true
   try {
-    const res = await (buildListQuery())
+    const res = await getEmployeeOnboardingList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: unknown) {
@@ -429,7 +434,7 @@ async function handleEdit(record: EmployeeOnboarding) {
   formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await (getEmployeeOnboardingId(record))
+    const detail = await getEmployeeOnboardingById(getEmployeeOnboardingId(record))
     formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
   } finally {
@@ -461,10 +466,10 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.()
     const id = formData.value?.employeeOnboardingId
     if (id) {
-      await (id, payload)
+      await updateEmployeeOnboarding(id, payload)
       message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await (payload)
+      await createEmployeeOnboarding(payload)
       message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
@@ -488,7 +493,7 @@ async function handleDeleteOne(record: EmployeeOnboarding) {
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await (getEmployeeOnboardingId(record))
+      await deleteEmployeeOnboardingById(getEmployeeOnboardingId(record))
       message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
@@ -513,7 +518,7 @@ async function handleDelete() {
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getEmployeeOnboardingId(r)).filter(Boolean)
-      await (ids)
+      await deleteEmployeeOnboardingBatch(ids)
       message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },

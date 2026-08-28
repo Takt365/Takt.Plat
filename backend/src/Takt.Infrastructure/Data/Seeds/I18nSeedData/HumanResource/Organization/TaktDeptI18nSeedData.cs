@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktDeptI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.costcentercode", "zh-HK", "成本中心编码_hk", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options；默认与部门编码一致，长度 6）"),
 
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "en-US", "费用类别_us", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "en-US", "费用类别_us", "费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "ja-JP", "费用类别_jp", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "ja-JP", "费用类别_jp", "费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "zh-CN", "费用类别", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "zh-CN", "费用类别", "费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）"),
             // entity.dept.costcategory
-            new TranslationSeedItem("entity.dept.costcategory", "zh-HK", "费用类别_hk", "费用类别（字典 hr_dept_cost_category；1=直接 2=间接）"),
+            new TranslationSeedItem("entity.dept.costcategory", "zh-HK", "费用类别_hk", "费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）"),
 
             // entity.dept.headuserid
             new TranslationSeedItem("entity.dept.headuserid", "en-US", "部门负责人ID_us", "部门负责人（选项 TaktUsers/options，DictValue=Id）"),

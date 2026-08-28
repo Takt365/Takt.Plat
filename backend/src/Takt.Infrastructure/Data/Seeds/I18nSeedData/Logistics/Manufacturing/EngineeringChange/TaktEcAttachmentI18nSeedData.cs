@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,31 +118,31 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecattachment.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "en-US", "文件类别_us", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "en-US", "文件类别_us", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "ja-JP", "文件类别_jp", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "ja-JP", "文件类别_jp", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-CN", "文件类别", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-CN", "文件类别", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
             // entity.ecattachment.attachmenttype
-            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
+            new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
 
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "en-US", "文件编码_us", "文件编码（如联络编码等）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "en-US", "文件编码_us", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "ja-JP", "文件编码_jp", "文件编码（如联络编码等）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "ja-JP", "文件编码_jp", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "zh-CN", "文件编码", "文件编码（如联络编码等）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-CN", "文件编码", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "zh-HK", "文件编码_hk", "文件编码（如联络编码等）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-HK", "文件编码_hk", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
 
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）"),
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "ja-JP", "文件名称_jp", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "ja-JP", "文件名称_jp", "文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）"),
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "zh-CN", "文件名称", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "zh-CN", "文件名称", "文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）"),
             // entity.ecattachment.filename
-            new TranslationSeedItem("entity.ecattachment.filename", "zh-HK", "文件名称_hk", "文件名称"),
+            new TranslationSeedItem("entity.ecattachment.filename", "zh-HK", "文件名称_hk", "文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）"),
 
             // entity.ecattachment.accessurl
             new TranslationSeedItem("entity.ecattachment.accessurl", "en-US", "访问地址_us", "访问地址（URL）"),

@@ -186,7 +186,7 @@
       <a-form-item :label="pi.queryLabel('defectCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectCategory"
-          dict-type="logistics_defect_category"
+          dict-type="logistics_manufacturing_defect_category"
           :placeholder="pi.queryPh('defectCategory', 'select')"
           allow-clear
         />
@@ -258,7 +258,7 @@
       <a-form-item :label="pi.queryLabel('defectLocation')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectLocation"
-          dict-type="logistics_assy_location_category"
+          dict-type="logistics_manufacturing_assy_location_category"
           :placeholder="pi.queryPh('defectLocation', 'select')"
           allow-clear
         />

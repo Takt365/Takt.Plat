@@ -804,7 +804,7 @@ public sealed class TaktFileUploadEngine : TaktServiceBase, ITaktFileUploadEngin
     /// <returns>以 / 分隔的相对路径</returns>
     private string BuildStoredRelativePath(TaktFileUploadScope scope, string storedFileName)
     {
-        var dateSegment = GenerateDatePath(DateTime.Now);
+        var dateSegment = GenerateDatePath(DateTime.Now).Replace('\\', '/');
         var segments = new List<string>
         {
             _uploadOptions.UploadRelativePath,

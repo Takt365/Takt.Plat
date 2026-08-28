@@ -50,12 +50,12 @@ public static class TaktDefectStatHelper
     }
 
     /// <summary>
-    /// 生产状态：进行中（字典 logistics_prod_status=1）
+    /// 生产状态：进行中（字典 logistics_manufacturing_prod_status=1）
     /// </summary>
     public const int ProdStatusInProgress = 1;
 
     /// <summary>
-    /// 生产状态：已完成（字典 logistics_prod_status=2）
+    /// 生产状态：已完成（字典 logistics_manufacturing_prod_status=2）
     /// </summary>
     public const int ProdStatusCompleted = 2;
 
@@ -64,7 +64,7 @@ public static class TaktDefectStatHelper
     /// </summary>
     /// <param name="batchOrderQty">批次工单总数量</param>
     /// <param name="prodActualQty">累计生实实绩</param>
-    /// <returns>字典 logistics_prod_status 值</returns>
+    /// <returns>字典 logistics_manufacturing_prod_status 值</returns>
     public static int ResolveBatchProdStatus(decimal batchOrderQty, decimal prodActualQty)
     {
         return batchOrderQty > 0 && prodActualQty == batchOrderQty
@@ -77,7 +77,7 @@ public static class TaktDefectStatHelper
     /// </summary>
     /// <param name="prodOrderQty">工单数量</param>
     /// <param name="prodActualQty">累计生实实绩</param>
-    /// <returns>字典 logistics_prod_status 值</returns>
+    /// <returns>字典 logistics_manufacturing_prod_status 值</returns>
     public static int ResolveOrderProdStatus(decimal prodOrderQty, decimal prodActualQty)
     {
         return prodOrderQty > 0 && prodActualQty == prodOrderQty

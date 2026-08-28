@@ -117,7 +117,7 @@ public class TaktBomMaterialCostItemDto : TaktCompanyDtoBase
     public int MovingPriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string MovingPriceCurrencyCode { get; set; } = string.Empty;
 
@@ -147,7 +147,7 @@ public class TaktBomMaterialCostItemDto : TaktCompanyDtoBase
     public int PurchasePriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string PurchaseCurrencyCode { get; set; } = string.Empty;
 
@@ -279,7 +279,7 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     public int? MovingPriceUnit { get; set; }
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? MovingPriceCurrencyCode { get; set; } = string.Empty;
 
@@ -309,7 +309,7 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     public int? PurchasePriceUnit { get; set; }
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? PurchaseCurrencyCode { get; set; } = string.Empty;
 
@@ -463,9 +463,9 @@ public class TaktBomMaterialCostItemCreateDto
     public int MovingPriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
-    [Required(ErrorMessage = "移动价格货币（字典 accounting_currency_code；如 CNY/USD）不能为空")]
+    [Required(ErrorMessage = "移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）不能为空")]
     public string MovingPriceCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -497,9 +497,9 @@ public class TaktBomMaterialCostItemCreateDto
     public int PurchasePriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
-    [Required(ErrorMessage = "采购货币（字典 accounting_currency_code；如 CNY/USD）不能为空")]
+    [Required(ErrorMessage = "采购货币（字典 accounting_financial_currency_code；如 CNY/USD）不能为空")]
     public string PurchaseCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -649,7 +649,7 @@ public class TaktBomMaterialCostItemTemplateDto
     public int? MovingPriceUnit { get; set; }
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? MovingPriceCurrencyCode { get; set; } = string.Empty;
 
@@ -679,7 +679,7 @@ public class TaktBomMaterialCostItemTemplateDto
     public int? PurchasePriceUnit { get; set; }
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? PurchaseCurrencyCode { get; set; } = string.Empty;
 
@@ -806,7 +806,7 @@ public class TaktBomMaterialCostItemImportDto
     public int? MovingPriceUnit { get; set; }
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? MovingPriceCurrencyCode { get; set; } = string.Empty;
 
@@ -836,7 +836,7 @@ public class TaktBomMaterialCostItemImportDto
     public int? PurchasePriceUnit { get; set; }
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string? PurchaseCurrencyCode { get; set; } = string.Empty;
 
@@ -964,7 +964,7 @@ public class TaktBomMaterialCostItemExportDto
     public int MovingPriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string MovingPriceCurrencyCode { get; set; } = string.Empty;
 
@@ -994,7 +994,7 @@ public class TaktBomMaterialCostItemExportDto
     public int PurchasePriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     public string PurchaseCurrencyCode { get; set; } = string.Empty;
 

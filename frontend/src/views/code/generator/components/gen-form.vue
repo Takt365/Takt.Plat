@@ -122,7 +122,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.genTemplateCategory ?? ''"
-                      dict-type="gen_template_type"
+                      dict-type="code_generator_template_type"
                       :placeholder="gentableSelectPh('gentemplatecategory')"
                       allow-clear
                       style="width: 100%"
@@ -702,7 +702,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.genMethod ?? ''"
-                      dict-type="gen_method_type"
+                      dict-type="code_generator_method"
                       :placeholder="tf('placeholder.genmethod')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.genMethod = parseSelectToOptionalNumber(v) }"
@@ -725,7 +725,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.genPath ?? ''"
-                      dict-type="gen_path_type"
+                      dict-type="code_generator_path_type"
                       :placeholder="tf('placeholder.genpath')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.genPath = v === '' || v == null ? undefined : String(v) }"
@@ -869,7 +869,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.frontUi ?? ''"
-                      dict-type="gen_frontend_ui_type"
+                      dict-type="code_generator_frontend_ui_type"
                       :placeholder="tf('placeholder.frontui')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontUi = parseSelectToOptionalNumber(v) }"
@@ -888,7 +888,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.frontFormLayout ?? ''"
-                      dict-type="gen_frontend_form_layout_config"
+                      dict-type="code_generator_frontend_form_layout"
                       :placeholder="tf('placeholder.frontformlayout')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontFormLayout = parseSelectToOptionalNumber(v) }"
@@ -906,7 +906,7 @@
                   >
                     <TaktSelect
                       :model-value="formState.frontBtnStyle ?? ''"
-                      dict-type="gen_button_style_config"
+                      dict-type="code_generator_button_style"
                       :placeholder="tf('placeholder.frontbtnstyle')"
                       style="width: 100%"
                       @update:model-value="(v: unknown) => { formState.frontBtnStyle = parseSelectToOptionalNumber(v) }"
@@ -1181,12 +1181,12 @@
                   }"
                 />
               </template>
-              <!-- 查询方式：仅当「是否查询」为是时显示，字典 gen_query_type -->
+              <!-- 查询方式：仅当「是否查询」为是时显示，字典 code_generator_query_type -->
               <template v-else-if="column.key === 'queryType'">
                 <TaktSelect
                   v-if="record.isQuery === 1"
                   :model-value="record.queryType ?? undefined"
-                  dict-type="gen_query_type"
+                  dict-type="code_generator_query_type"
                   :placeholder="gentableColumnSelectPh('querytype')"
                   allow-clear
                   class="column-cell-select"
@@ -1198,11 +1198,11 @@
                   class="column-cell-muted"
                 >—</span>
               </template>
-              <!-- 显示类型：字典 gen_display_type（下拉框/复选框/单选框时需配合字典列绑定选项） -->
+              <!-- 显示类型：字典 code_generator_display_type（下拉框/复选框/单选框时需配合字典列绑定选项） -->
               <template v-else-if="column.key === 'htmlType'">
                 <TaktSelect
                   :model-value="record.htmlType ?? undefined"
-                  dict-type="gen_display_type"
+                  dict-type="code_generator_display_type"
                   :placeholder="gentableColumnSelectPh('htmltype')"
                   allow-clear
                   class="column-cell-select"
@@ -1573,7 +1573,7 @@ const columnRowSelection = computed(() => ({
 let clientTempColumnSeq = 0
 /** 字段列表加载中 */
 const columnLoading = ref(false)
-/** 字典数据 Pinia（gen_function_type、sys_yes_no 等） */
+/** 字典数据 Pinia（code_generator_function、sys_yes_no 等） */
 const dictDataStore = useDictDataStore()
 /** 当前用户 Pinia（默认 genAuthor） */
 const userStore = useUserStore()
@@ -1663,9 +1663,9 @@ function parseTreeSelectToOptionalString(v: unknown): string | undefined {
 }
 
 /** 菜单权限组：选项与选中值仅用于 formState.menuButtonGroup，与生成功能同为字典多选 */
-const menuButtonGroupOptions = computed(() => getDictSelectOptions('gen_button_category'))
+const menuButtonGroupOptions = computed(() => getDictSelectOptions('code_generator_button_category'))
 /** 生成功能：选项与选中值仅用于 formState.genFunction */
-const genFunctionOptions = computed(() => getDictSelectOptions('gen_function_type'))
+const genFunctionOptions = computed(() => getDictSelectOptions('code_generator_function'))
 
 /** 列中是否含 Status 字段（控制生成功能 Status 是否可选） */
 const hasStatusColumn = computed(() => {
@@ -1748,7 +1748,7 @@ const subTableNameOptions = computed(() => {
     }))
 })
 
-/** 菜单权限组多选：仅与 formState.menuButtonGroup 双向同步，选中值为字典 gen_button_category 的 value */
+/** 菜单权限组多选：仅与 formState.menuButtonGroup 双向同步，选中值为字典 code_generator_button_category 的 value */
 const menuButtonGroupSelect = computed({
   get() {
     const s = formState.value.menuButtonGroup
@@ -1761,7 +1761,7 @@ const menuButtonGroupSelect = computed({
   }
 })
 
-/** 生成功能多选：仅与 formState.genFunction 双向同步，供「生成功能」a-checkbox-group 使用，选中值为字典 gen_function_type 的 value */
+/** 生成功能多选：仅与 formState.genFunction 双向同步，供「生成功能」a-checkbox-group 使用，选中值为字典 code_generator_function 的 value */
 const genFunctionSelect = computed({
   get() {
     const s = formState.value.genFunction
@@ -1845,8 +1845,8 @@ onMounted(async () => {
   document.addEventListener('fullscreenchange', recalcColumnTableScrollY)
   await dictDataStore.loadAllDictDataAsync()
   if (!formState.value.genTableId) {
-    const genOpts = getDictSelectOptions('gen_function_type')
-    const btnOpts = getDictSelectOptions('gen_button_category')
+    const genOpts = getDictSelectOptions('code_generator_function')
+    const btnOpts = getDictSelectOptions('code_generator_button_category')
     if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
     if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
   }
@@ -2005,9 +2005,9 @@ const DB_TYPE_TO_CSHARP: Record<string, string> = {
   varchar: 'string'
 }
 
-/** 全部 C#类型选项（来自字典 gen_csharp_data_type） */
+/** 全部 C#类型选项（来自字典 code_generator_csharp_data_type） */
 const columnCsharpTypeOptions = computed(() =>
-  getDictSelectOptions('gen_csharp_data_type').map((o: TaktDictSelectOption) => ({ label: o.label, value: o.value }))
+  getDictSelectOptions('code_generator_csharp_data_type').map((o: TaktDictSelectOption) => ({ label: o.label, value: o.value }))
 )
 
 /**
@@ -3023,8 +3023,8 @@ watch(
       formState.value = defaultFormState()
       formState.value.genPath = '/'
       formState.value.genAuthor = readCurrentUserDisplayName()
-      const genOpts = getDictSelectOptions('gen_function_type')
-      const btnOpts = getDictSelectOptions('gen_button_category')
+      const genOpts = getDictSelectOptions('code_generator_function')
+      const btnOpts = getDictSelectOptions('code_generator_button_category')
       if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
       if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
       genFunctionCheckAll.value = true
@@ -3189,8 +3189,8 @@ function reset() {
   formState.value = defaultFormState()
   formState.value.genPath = '/'
   formState.value.genAuthor = readCurrentUserDisplayName()
-  const genOpts = getDictSelectOptions('gen_function_type')
-  const btnOpts = getDictSelectOptions('gen_button_category')
+  const genOpts = getDictSelectOptions('code_generator_function')
+  const btnOpts = getDictSelectOptions('code_generator_button_category')
   if (genOpts.length > 0) formState.value.genFunction = genOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
   if (btnOpts.length > 0) formState.value.menuButtonGroup = btnOpts.map((o: TaktDictSelectOption) => String(o.value)).join(',')
   columnList.value = []

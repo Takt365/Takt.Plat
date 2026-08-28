@@ -93,7 +93,7 @@
         <template v-else-if="column.key === 'ticketSource'">
           <TaktDictTag
             :value="getTicketDictValue(record, 'ticketSource')"
-            dict-type="routine_ticket_source_type"
+            dict-type="routine_help_desk_ticket_source"
           />
         </template>
         <template v-else-if="column.key === 'ticketStatus'">
@@ -149,6 +149,16 @@
           v-model:value="advancedQueryForm.cultureCode"
           dict-type="sys_culture_code"
           :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -241,7 +251,7 @@
       <a-form-item :label="pi.queryLabel('ticketSource')">
         <TaktSelect
           v-model:value="advancedQueryForm.ticketSource"
-          dict-type="routine_ticket_source_type"
+          dict-type="routine_help_desk_ticket_source"
           :placeholder="pi.queryPh('ticketSource', 'select')"
           allow-clear
         />
@@ -465,6 +475,17 @@
           v-model:value="advancedQueryForm.applicantBy"
           api-url="TaktUsers/options"
           :placeholder="pi.queryPh('applicantBy', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicantName')">
+      <a-form-item :label="pi.queryLabel('applicantName')">
+        <a-input
+          v-model:value="advancedQueryForm.applicantName"
+          :placeholder="pi.queryPh('applicantName', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>

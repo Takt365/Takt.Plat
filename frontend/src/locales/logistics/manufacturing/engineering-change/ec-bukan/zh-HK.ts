@@ -4,7 +4,7 @@
 // 文件名称：zh-HK.ts
 // 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变部门转置页静态文案；引用键 logistics.manufacturing.engineering-change.ec-bukan.page.*
+// 功能描述：設變部門轉置頁靜態文案；引用鍵 logistics.manufacturing.engineering-change.ec-bukan.page.*
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,15 +13,5 @@
 export default {
   page: {
     notProcessed: '未處理',
-    dept: {
-      eng: '技術',
-      mp: '採購',
-      pmc: '生管',
-      iqc: '受檢',
-      mc: '部管',
-      pcba: '制二',
-      assy: '制一',
-      qa: '品管',
-    },
   },
 };

@@ -116,7 +116,7 @@
           v-model:value="advancedQueryForm.i18nKey"
           :placeholder="pi.queryPh('i18nKey', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>

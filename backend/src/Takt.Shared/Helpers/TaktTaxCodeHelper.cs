@@ -4,7 +4,7 @@
 // 文件名称：TaktTaxCodeHelper.cs
 // 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
-// 功能描述：税码 accounting_tax_code → 税率百分比整数（与字典 ExtValue / 标签百分比对齐）
+// 功能描述：税码 accounting_financial_tax_code → 税率百分比整数（与字典 ExtValue / 标签百分比对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,12 +16,12 @@ using System.Text.RegularExpressions;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 税码与税率换算（纯静态；与字典 accounting_tax_code 的 ExtValue=税率百分比 对齐）
+/// 税码与税率换算（纯静态；与字典 accounting_financial_tax_code 的 ExtValue=税率百分比 对齐）
 /// </summary>
 public static class TaktTaxCodeHelper
 {
     /// <summary>
-    /// 内置税码→税率%（与种子 accounting_tax_code 一致；17.5% 等非整按四舍五入为 int）
+    /// 内置税码→税率%（与种子 accounting_financial_tax_code 一致；17.5% 等非整按四舍五入为 int）
     /// </summary>
     private static readonly Dictionary<string, int> BuiltInTaxCodeRates =
         new(StringComparer.OrdinalIgnoreCase)

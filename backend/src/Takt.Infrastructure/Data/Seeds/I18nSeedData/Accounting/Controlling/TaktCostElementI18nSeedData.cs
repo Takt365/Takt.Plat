@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.name", "zh-HK", "成本要素名称_hk", "成本要素名称"),
 
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "en-US", "成本要素类型_us", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
+            new TranslationSeedItem("entity.costelement.type", "en-US", "成本要素类型_us", "成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "ja-JP", "成本要素类型_jp", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
+            new TranslationSeedItem("entity.costelement.type", "ja-JP", "成本要素类型_jp", "成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "zh-CN", "成本要素类型", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
+            new TranslationSeedItem("entity.costelement.type", "zh-CN", "成本要素类型", "成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
             // entity.costelement.type
-            new TranslationSeedItem("entity.costelement.type", "zh-HK", "成本要素类型_hk", "成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
+            new TranslationSeedItem("entity.costelement.type", "zh-HK", "成本要素类型_hk", "成本要素类型（字典 accounting_controlling_cost_element_type；0=初级，1=次级；由 KATYP 推导）"),
 
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "en-US", "成本要素类别_us", "成本要素类别（字典 accounting_cost_element_category-KATYP，整型存 1/3/4/11…）"),
+            new TranslationSeedItem("entity.costelement.category", "en-US", "成本要素类别_us", "成本要素类别（字典 accounting_controlling_cost_element_category-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "ja-JP", "成本要素类别_jp", "成本要素类别（字典 accounting_cost_element_category-KATYP，整型存 1/3/4/11…）"),
+            new TranslationSeedItem("entity.costelement.category", "ja-JP", "成本要素类别_jp", "成本要素类别（字典 accounting_controlling_cost_element_category-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "zh-CN", "成本要素类别", "成本要素类别（字典 accounting_cost_element_category-KATYP，整型存 1/3/4/11…）"),
+            new TranslationSeedItem("entity.costelement.category", "zh-CN", "成本要素类别", "成本要素类别（字典 accounting_controlling_cost_element_category-KATYP，整型存 1/3/4/11…）"),
             // entity.costelement.category
-            new TranslationSeedItem("entity.costelement.category", "zh-HK", "成本要素类别_hk", "成本要素类别（字典 accounting_cost_element_category-KATYP，整型存 1/3/4/11…）"),
+            new TranslationSeedItem("entity.costelement.category", "zh-HK", "成本要素类别_hk", "成本要素类别（字典 accounting_controlling_cost_element_category-KATYP，整型存 1/3/4/11…）"),
 
             // entity.costelement.parentid
             new TranslationSeedItem("entity.costelement.parentid", "en-US", "父级ID_us", "父级 ID"),

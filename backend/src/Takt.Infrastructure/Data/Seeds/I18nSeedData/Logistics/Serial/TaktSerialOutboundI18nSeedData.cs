@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialOutboundI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialOutbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,22 +127,22 @@ public class TaktSerialOutboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbound.destination", "zh-HK", "仕向地_hk", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
 
             // entity.serialoutbound.destinationport
-            new TranslationSeedItem("entity.serialoutbound.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialoutbound.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialoutbound.destinationport
-            new TranslationSeedItem("entity.serialoutbound.destinationport", "ja-JP", "目的地港_jp", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialoutbound.destinationport", "ja-JP", "目的地港_jp", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialoutbound.destinationport
-            new TranslationSeedItem("entity.serialoutbound.destinationport", "zh-CN", "目的地港", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialoutbound.destinationport", "zh-CN", "目的地港", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
             // entity.serialoutbound.destinationport
-            new TranslationSeedItem("entity.serialoutbound.destinationport", "zh-HK", "目的地港_hk", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
+            new TranslationSeedItem("entity.serialoutbound.destinationport", "zh-HK", "目的地港_hk", "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),
 
             // entity.serialoutbound.outboundtype
-            new TranslationSeedItem("entity.serialoutbound.outboundtype", "en-US", "出库类型_us", "出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
+            new TranslationSeedItem("entity.serialoutbound.outboundtype", "en-US", "出库类型_us", "出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
             // entity.serialoutbound.outboundtype
-            new TranslationSeedItem("entity.serialoutbound.outboundtype", "ja-JP", "出库类型_jp", "出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
+            new TranslationSeedItem("entity.serialoutbound.outboundtype", "ja-JP", "出库类型_jp", "出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
             // entity.serialoutbound.outboundtype
-            new TranslationSeedItem("entity.serialoutbound.outboundtype", "zh-CN", "出库类型", "出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
+            new TranslationSeedItem("entity.serialoutbound.outboundtype", "zh-CN", "出库类型", "出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
             // entity.serialoutbound.outboundtype
-            new TranslationSeedItem("entity.serialoutbound.outboundtype", "zh-HK", "出库类型_hk", "出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
+            new TranslationSeedItem("entity.serialoutbound.outboundtype", "zh-HK", "出库类型_hk", "出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）"),
 
             // entity.serialoutbound.warehousecode
             new TranslationSeedItem("entity.serialoutbound.warehousecode", "en-US", "仓库编码_us", "仓库编码（选项 TaktWarehouses/options；DictValue=Id）"),

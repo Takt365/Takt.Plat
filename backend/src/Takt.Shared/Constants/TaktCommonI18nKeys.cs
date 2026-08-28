@@ -17,7 +17,9 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktCommonI18nKeys
 {
-    /// <summary>通用按钮文案键前缀（菜单按钮种子、工具栏 t() 共用）。</summary>
+    /// <summary>
+    /// 通用按钮文案键前缀（菜单按钮种子、工具栏 t() 共用）。
+    /// </summary>
     public const string PageButtonPrefix = "common.page.button.";
 
     /// <summary>

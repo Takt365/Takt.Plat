@@ -46,7 +46,7 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 
@@ -119,7 +119,7 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     public DateTime? InboundDateEnd { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
@@ -200,7 +200,7 @@ public class TaktSerialInboundCreateDto
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 
@@ -303,7 +303,7 @@ public class TaktSerialInboundTemplateDto
     public DateTime? InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
@@ -375,7 +375,7 @@ public class TaktSerialInboundImportDto
     public DateTime? InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int? InboundType { get; set; }
 
@@ -453,7 +453,7 @@ public class TaktSerialInboundExportDto
     public DateTime InboundDate { get; set; }
 
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     public int InboundType { get; set; } = 0;
 

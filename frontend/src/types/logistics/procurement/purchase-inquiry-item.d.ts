@@ -49,7 +49,7 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   lineNumber?: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+   * 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
    */
   allocationCategory?: string;
 
@@ -69,7 +69,7 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit?: string;
 
@@ -79,7 +79,7 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   inquiryQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
    */
   purchasePerUnit?: number;
 
@@ -152,7 +152,7 @@ export interface PurchaseInquiryItemExport {
   lineNumber: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+   * 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
    */
   allocationCategory: string;
 
@@ -172,7 +172,7 @@ export interface PurchaseInquiryItemExport {
   materialSpecification?: string;
 
   /**
-   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit: string;
 
@@ -182,7 +182,7 @@ export interface PurchaseInquiryItemExport {
   inquiryQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
    */
   purchasePerUnit: number;
 

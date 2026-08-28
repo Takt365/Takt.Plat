@@ -61,7 +61,7 @@
                 <TaktSelect
                   v-model:value="formState.numberingRuleCode"
                   api-url="TaktNumberings/options"
-                  :api-params="{ documentType: '新闻' }"
+                  :api-params="{ documentType: '新闻中心' }"
                   :placeholder="t('common.page.form.placeholder.selectonly')"
                   :disabled="!!formData?.newsId || loading"
                 />

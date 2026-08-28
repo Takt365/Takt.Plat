@@ -40,12 +40,12 @@ export interface InventoryReserve extends CompanyDtoBase {
   materialDescription?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
   /**
-   * 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+   * 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
    */
   provisionScope?: number;
 
@@ -120,7 +120,7 @@ export interface InventoryReserve extends CompanyDtoBase {
   carryingAmount?: number;
 
   /**
-   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -183,12 +183,12 @@ export interface InventoryReserveExport {
   materialDescription?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
   /**
-   * 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+   * 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
    */
   provisionScope: number;
 
@@ -263,7 +263,7 @@ export interface InventoryReserveExport {
   carryingAmount: number;
 
   /**
-   * 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code，DictValue=CNY/USD 等）
    */
   currencyCode: string;
 

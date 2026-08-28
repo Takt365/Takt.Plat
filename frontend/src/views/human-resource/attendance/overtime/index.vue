@@ -229,7 +229,7 @@
       <a-form-item :label="pi.queryLabel('overtimeType')">
         <TaktSelect
           v-model:value="advancedQueryForm.overtimeType"
-          dict-type="hr_overtime_type"
+          dict-type="humanresource_attendance_overtime_type"
           :placeholder="pi.queryPh('overtimeType', 'select')"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialSubstitute 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterialSubstitute 生成，请按需审阅）
 // 
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 
@@ -231,7 +231,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -376,9 +376,9 @@ public class TaktBillOfMaterialSubstituteCreateDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
-    [Required(ErrorMessage = "单位（字典 logistics_unit_of_measure_code）不能为空")]
+    [Required(ErrorMessage = "单位（字典 logistics_materials_unit_of_measure_code）不能为空")]
     public string MaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -544,7 +544,7 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -664,7 +664,7 @@ public class TaktBillOfMaterialSubstituteImportDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -790,7 +790,7 @@ public class TaktBillOfMaterialSubstituteExportDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 

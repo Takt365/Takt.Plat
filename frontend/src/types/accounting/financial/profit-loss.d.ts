@@ -50,7 +50,7 @@ export interface ProfitLoss extends CompanyDtoBase {
   accountTitleName?: string;
 
   /**
-   * 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+   * 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
    */
   lineCategory?: number;
 
@@ -80,7 +80,7 @@ export interface ProfitLoss extends CompanyDtoBase {
   isExpense?: number;
 
   /**
-   * 币种（字典 accounting_currency_code）
+   * 币种（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -148,7 +148,7 @@ export interface ProfitLossExport {
   accountTitleName?: string;
 
   /**
-   * 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+   * 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
    */
   lineCategory: number;
 
@@ -178,7 +178,7 @@ export interface ProfitLossExport {
   isExpense: number;
 
   /**
-   * 币种（字典 accounting_currency_code）
+   * 币种（字典 accounting_financial_currency_code）
    */
   currencyCode: string;
 

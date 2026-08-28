@@ -62,7 +62,7 @@ public class TaktPurchaseForecast : TaktApprovalEntityBase
     public string SalesProduct { get; set; } = "Product";
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     [SugarColumn(ColumnName = "product_category_code", ColumnDescription = "产品类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string ProductCategoryCode { get; set; } = string.Empty;
@@ -104,17 +104,16 @@ public class TaktPurchaseForecast : TaktApprovalEntityBase
     public string? SupplierName1 { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "planner_employee_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
-
+    public long? PlannerEmployeeId { get; set; }
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string PlanBy { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "planner_name", ColumnDescription = "计划人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PlannerName { get; set; }
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）

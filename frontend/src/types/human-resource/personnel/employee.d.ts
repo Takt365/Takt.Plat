@@ -39,7 +39,7 @@ export interface Employee extends CompanyDtoBase {
   employeeName: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -64,27 +64,27 @@ export interface Employee extends CompanyDtoBase {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 
@@ -209,7 +209,7 @@ export interface EmployeeQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -239,27 +239,27 @@ export interface EmployeeQuery extends TaktPagedQuery {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
@@ -333,7 +333,7 @@ export interface EmployeeCreate {
   employeeName: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -358,27 +358,27 @@ export interface EmployeeCreate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 
@@ -562,7 +562,7 @@ export interface EmployeeStatus {
   employeeId: string;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
@@ -606,7 +606,7 @@ export interface EmployeeTemplate {
   employeeName?: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -631,27 +631,27 @@ export interface EmployeeTemplate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
@@ -785,7 +785,7 @@ export interface EmployeeImport {
   employeeName?: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -810,27 +810,27 @@ export interface EmployeeImport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
@@ -964,7 +964,7 @@ export interface EmployeeExport {
   employeeName: string;
 
   /**
-   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+   * 性别（字典 sys_user_gender；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -989,27 +989,27 @@ export interface EmployeeExport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+   * 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code；DictValue 1～56）
+   * 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+   * 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
    */
   politicalAffiliation: number;
 
   /**
-   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+   * 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+   * 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 

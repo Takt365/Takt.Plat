@@ -186,7 +186,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.salesQuotationId"
                 />
@@ -199,7 +199,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxCode"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxCode')"
                   :disabled="!!formData?.salesQuotationId"
                 />
@@ -212,7 +212,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
@@ -261,7 +261,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.quotationStatus"
-                  dict-type="logistics_quotation_status"
+                  dict-type="logistics_sales_quotation_status"
                   :placeholder="pi.ph('quotationStatus')"
                 />
               </a-form-item>
@@ -376,7 +376,7 @@
       <template #cell-salesUnit="{ record }">
         <TaktSelect
           v-model:value="record.salesUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="salesQuotationItemPi.ph('salesUnit')"
@@ -387,7 +387,7 @@
       <template #cell-salesPerUnit="{ record }">
         <TaktSelect
           v-model:value="record.salesPerUnit"
-          dict-type="logistics_price_unit_param"
+          dict-type="logistics_materials_price_unit_param"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="salesQuotationItemPi.ph('salesPerUnit')"
@@ -398,7 +398,7 @@
       <template #cell-discountRate="{ record }">
         <TaktSelect
           v-model:value="record.discountRate"
-          dict-type="logistics_discount_rate_param"
+          dict-type="logistics_sales_discount_rate_param"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="salesQuotationItemPi.ph('discountRate')"

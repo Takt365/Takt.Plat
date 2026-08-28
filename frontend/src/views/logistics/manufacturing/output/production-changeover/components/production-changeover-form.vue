@@ -68,7 +68,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
-                  dict-type="logistics_prod_category"
+                  dict-type="logistics_manufacturing_prod_category"
                   :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
@@ -80,7 +80,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.changeoverCategory"
-                  dict-type="logistics_changeover_category"
+                  dict-type="logistics_manufacturing_changeover_category"
                   :placeholder="pi.ph('changeoverCategory')"
                 />
               </a-form-item>

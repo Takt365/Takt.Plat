@@ -57,7 +57,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -72,7 +72,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -82,12 +82,12 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     public string PointsToMinutesRate { get; set; } = string.Empty;
 
@@ -122,7 +122,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -197,7 +197,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -212,7 +212,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -222,12 +222,12 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     public string? PointsToMinutesRate { get; set; } = string.Empty;
 
@@ -262,7 +262,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -343,9 +343,9 @@ public class TaktRoutingItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -359,9 +359,9 @@ public class TaktRoutingItemCreateDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
-    [Required(ErrorMessage = "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）不能为空")]
+    [Required(ErrorMessage = "工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）不能为空")]
     public string TimeUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -370,15 +370,15 @@ public class TaktRoutingItemCreateDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
-    [Required(ErrorMessage = "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）不能为空")]
+    [Required(ErrorMessage = "点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）不能为空")]
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
-    [Required(ErrorMessage = "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）不能为空")]
+    [Required(ErrorMessage = "点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）不能为空")]
     public string PointsToMinutesRate { get; set; } = string.Empty;
 
     /// <summary>
@@ -407,7 +407,7 @@ public class TaktRoutingItemCreateDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -556,7 +556,7 @@ public class TaktRoutingItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -571,7 +571,7 @@ public class TaktRoutingItemTemplateDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -581,12 +581,12 @@ public class TaktRoutingItemTemplateDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     public string? PointsToMinutesRate { get; set; } = string.Empty;
 
@@ -616,7 +616,7 @@ public class TaktRoutingItemTemplateDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -689,7 +689,7 @@ public class TaktRoutingItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -704,7 +704,7 @@ public class TaktRoutingItemImportDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -714,12 +714,12 @@ public class TaktRoutingItemImportDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     public string? PointsToMinutesRate { get; set; } = string.Empty;
 
@@ -749,7 +749,7 @@ public class TaktRoutingItemImportDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -828,7 +828,7 @@ public class TaktRoutingItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -843,7 +843,7 @@ public class TaktRoutingItemExportDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -853,12 +853,12 @@ public class TaktRoutingItemExportDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+    /// 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
     /// </summary>
     public string PointsToMinutesRate { get; set; } = string.Empty;
 
@@ -893,7 +893,7 @@ public class TaktRoutingItemExportDto
     public string? ProcessDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 

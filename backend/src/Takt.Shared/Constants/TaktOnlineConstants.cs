@@ -17,24 +17,38 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktOnlineConstants
 {
-    /// <summary>Hub Heartbeat 周期（秒，与 frontend 30_000ms 一致）</summary>
+    /// <summary>
+    /// Hub Heartbeat 周期（秒，与 frontend 30_000ms 一致）
+    /// </summary>
     public const int ReportingIntervalSeconds = 30;
 
-    /// <summary>服务端去重：距上次累计不足该秒数则跳过（略小于上报周期）</summary>
+    /// <summary>
+    /// 服务端去重：距上次累计不足该秒数则跳过（略小于上报周期）
+    /// </summary>
     public const int MinReportingGapSeconds = 25;
 
-    /// <summary>延迟强退默认等待秒数（3 分钟）</summary>
+    /// <summary>
+    /// 延迟强退默认等待秒数（3 分钟）
+    /// </summary>
     public const int DelayedKickSeconds = 180;
 
-    /// <summary>延迟强退允许的最大秒数（10 分钟）</summary>
+    /// <summary>
+    /// 延迟强退允许的最大秒数（10 分钟）
+    /// </summary>
     public const int MaxDelayedKickSeconds = 600;
 
-    /// <summary>强退落库消息类型（字典 sys_message_type DictValue）</summary>
+    /// <summary>
+    /// 强退落库消息类型（字典 sys_message_type DictValue）
+    /// </summary>
     public const string KickMessageType = "system";
 
-    /// <summary>延迟强退预告消息分组（字典 sys_message_group DictValue）</summary>
+    /// <summary>
+    /// 延迟强退预告消息分组（字典 sys_message_group DictValue）
+    /// </summary>
     public const string KickScheduleMessageGroup = "reminder";
 
-    /// <summary>立即/到期强退执行消息分组（字典 sys_message_group DictValue）</summary>
+    /// <summary>
+    /// 立即/到期强退执行消息分组（字典 sys_message_group DictValue）
+    /// </summary>
     public const string KickExecuteMessageGroup = "message";
 }

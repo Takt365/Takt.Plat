@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:address:create"
+      update-permission="human:resource:personnel:employee:address:update"
+      delete-permission="human:resource:personnel:employee:address:delete"
+      import-permission="human:resource:personnel:employee:address:import"
+      export-permission="human:resource:personnel:employee:address:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -170,7 +170,7 @@
       <a-form-item :label="pi.queryLabel('addressType')">
         <TaktSelect
           v-model:value="advancedQueryForm.addressType"
-          dict-type="hr_employee_address_type"
+          dict-type="humanresource_personnel_employee_address_type"
           :placeholder="pi.queryPh('addressType', 'select')"
           allow-clear
         />
@@ -656,7 +656,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:address:update',
         onClick: (record: EmployeeAddress) => void handleEdit(record),
       },
       {
@@ -664,7 +664,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:address:delete',
         onClick: (record: EmployeeAddress) => void handleDeleteOne(record),
       },
     ],

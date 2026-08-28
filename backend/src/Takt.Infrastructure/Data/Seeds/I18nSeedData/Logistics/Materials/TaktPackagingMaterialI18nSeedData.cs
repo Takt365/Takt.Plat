@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPackagingMaterialI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPackagingMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -217,13 +217,13 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.netweight", "zh-HK", "净重_hk", "净重（不含包装物的净重量，单位：千克）"),
 
             // entity.packagingmaterial.weightunit
-            new TranslationSeedItem("entity.packagingmaterial.weightunit", "en-US", "重量单位_us", "重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
+            new TranslationSeedItem("entity.packagingmaterial.weightunit", "en-US", "重量单位_us", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
             // entity.packagingmaterial.weightunit
-            new TranslationSeedItem("entity.packagingmaterial.weightunit", "ja-JP", "重量单位_jp", "重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
+            new TranslationSeedItem("entity.packagingmaterial.weightunit", "ja-JP", "重量单位_jp", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
             // entity.packagingmaterial.weightunit
-            new TranslationSeedItem("entity.packagingmaterial.weightunit", "zh-CN", "重量单位", "重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
+            new TranslationSeedItem("entity.packagingmaterial.weightunit", "zh-CN", "重量单位", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
             // entity.packagingmaterial.weightunit
-            new TranslationSeedItem("entity.packagingmaterial.weightunit", "zh-HK", "重量单位_hk", "重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
+            new TranslationSeedItem("entity.packagingmaterial.weightunit", "zh-HK", "重量单位_hk", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）"),
 
             // entity.packagingmaterial.businessvolume
             new TranslationSeedItem("entity.packagingmaterial.businessvolume", "en-US", "业务量_us", "业务量/容积（一个包装单位的体积，单位：立方米）"),
@@ -235,13 +235,13 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.businessvolume", "zh-HK", "业务量_hk", "业务量/容积（一个包装单位的体积，单位：立方米）"),
 
             // entity.packagingmaterial.volumeunit
-            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "en-US", "体积单位_us", "体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
+            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "en-US", "体积单位_us", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
             // entity.packagingmaterial.volumeunit
-            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "ja-JP", "体积单位_jp", "体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
+            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "ja-JP", "体积单位_jp", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
             // entity.packagingmaterial.volumeunit
-            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "zh-CN", "体积单位", "体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
+            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "zh-CN", "体积单位", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
             // entity.packagingmaterial.volumeunit
-            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "zh-HK", "体积单位_hk", "体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
+            new TranslationSeedItem("entity.packagingmaterial.volumeunit", "zh-HK", "体积单位_hk", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）"),
 
             // entity.packagingmaterial.sizedimension
             new TranslationSeedItem("entity.packagingmaterial.sizedimension", "en-US", "大小/量纲_us", "大小/量纲（尺寸量纲或大小规格）"),
@@ -253,22 +253,22 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.sizedimension", "zh-HK", "大小/量纲_hk", "大小/量纲（尺寸量纲或大小规格）"),
 
             // entity.packagingmaterial.packagingtype
-            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "en-US", "包装类型_us", "包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）"),
+            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "en-US", "包装类型_us", "包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）"),
             // entity.packagingmaterial.packagingtype
-            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "ja-JP", "包装类型_jp", "包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）"),
+            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "ja-JP", "包装类型_jp", "包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）"),
             // entity.packagingmaterial.packagingtype
-            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "zh-CN", "包装类型", "包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）"),
+            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "zh-CN", "包装类型", "包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）"),
             // entity.packagingmaterial.packagingtype
-            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "zh-HK", "包装类型_hk", "包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）"),
+            new TranslationSeedItem("entity.packagingmaterial.packagingtype", "zh-HK", "包装类型_hk", "包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）"),
 
             // entity.packagingmaterial.packingunit
-            new TranslationSeedItem("entity.packagingmaterial.packingunit", "en-US", "包装单位_us", "包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
+            new TranslationSeedItem("entity.packagingmaterial.packingunit", "en-US", "包装单位_us", "包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
             // entity.packagingmaterial.packingunit
-            new TranslationSeedItem("entity.packagingmaterial.packingunit", "ja-JP", "包装单位_jp", "包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
+            new TranslationSeedItem("entity.packagingmaterial.packingunit", "ja-JP", "包装单位_jp", "包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
             // entity.packagingmaterial.packingunit
-            new TranslationSeedItem("entity.packagingmaterial.packingunit", "zh-CN", "包装单位", "包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
+            new TranslationSeedItem("entity.packagingmaterial.packingunit", "zh-CN", "包装单位", "包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
             // entity.packagingmaterial.packingunit
-            new TranslationSeedItem("entity.packagingmaterial.packingunit", "zh-HK", "包装单位_hk", "包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
+            new TranslationSeedItem("entity.packagingmaterial.packingunit", "zh-HK", "包装单位_hk", "包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）"),
 
             // entity.packagingmaterial.quantityperpacking
             new TranslationSeedItem("entity.packagingmaterial.quantityperpacking", "en-US", "每包装数量_us", "每包装数量（一个包装包含的基本单位数量）"),

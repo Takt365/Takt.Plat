@@ -37,7 +37,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string ProdOrderType { get; set; } = string.Empty;
 
@@ -67,7 +67,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -139,7 +139,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 
@@ -176,7 +176,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -206,7 +206,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -288,7 +288,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public DateTime? PlannedEndTimeEnd { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -344,9 +344,9 @@ public class TaktProductionOrderCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
-    [Required(ErrorMessage = "工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）不能为空")]
+    [Required(ErrorMessage = "工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）不能为空")]
     public string ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
@@ -378,9 +378,9 @@ public class TaktProductionOrderCreateDto
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；存 DictValue）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -441,7 +441,7 @@ public class TaktProductionOrderCreateDto
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 
@@ -495,9 +495,9 @@ public class TaktProductionOrderStatusDto
     public long ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 logistics_prod_status；1=进行中 2=已完成）不能为空")]
+    [Required(ErrorMessage = "状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）不能为空")]
     public int OrderStatus { get; set; } = 0;
 }
 
@@ -531,7 +531,7 @@ public class TaktProductionOrderTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -561,7 +561,7 @@ public class TaktProductionOrderTemplateDto
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -623,7 +623,7 @@ public class TaktProductionOrderTemplateDto
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -665,7 +665,7 @@ public class TaktProductionOrderImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -695,7 +695,7 @@ public class TaktProductionOrderImportDto
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -757,7 +757,7 @@ public class TaktProductionOrderImportDto
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -800,7 +800,7 @@ public class TaktProductionOrderExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string ProdOrderType { get; set; } = string.Empty;
 
@@ -830,7 +830,7 @@ public class TaktProductionOrderExportDto
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -892,7 +892,7 @@ public class TaktProductionOrderExportDto
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 

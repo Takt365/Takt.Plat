@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture._self", "zh-HK", "区域文化信息_hk", "实体名称"),
 
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "en-US", "本地化名称_us", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "en-US", "本地化名称_us", "本地化名称（用该语言显示的自身名称，如：中文、English；nvarchar Length=40）"),
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "ja-JP", "本地化名称_jp", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "ja-JP", "本地化名称_jp", "本地化名称（用该语言显示的自身名称，如：中文、English；nvarchar Length=40）"),
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "zh-CN", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "zh-CN", "本地化名称", "本地化名称（用该语言显示的自身名称，如：中文、English；nvarchar Length=40）"),
             // entity.culture.nativename
-            new TranslationSeedItem("entity.culture.nativename", "zh-HK", "本地化名称_hk", "本地化名称（用该语言显示的自身名称，如：中文、English）"),
+            new TranslationSeedItem("entity.culture.nativename", "zh-HK", "本地化名称_hk", "本地化名称（用该语言显示的自身名称，如：中文、English；nvarchar Length=40）"),
 
             // entity.culture.icon
             new TranslationSeedItem("entity.culture.icon", "en-US", "语言图标_us", "语言图标（flag-icons：fi-cn / fi-us / fi-jp，前端解析为 fi fi-xx）"),

@@ -72,7 +72,7 @@ public class TaktPersonnelOperationRateDto : TaktCompanyDtoBase
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -259,7 +259,7 @@ public class TaktPersonnelOperationRateQueryDto : TaktPagedQuery
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -456,7 +456,7 @@ public class TaktPersonnelOperationRateCreateDto
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -686,7 +686,7 @@ public class TaktPersonnelOperationRateTemplateDto
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -868,7 +868,7 @@ public class TaktPersonnelOperationRateImportDto
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -1051,7 +1051,7 @@ public class TaktPersonnelOperationRateExportDto
     public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 

@@ -34,7 +34,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     public long SurveyId { get; set; }
 
     /// <summary>
-    /// 调查表编码（冗余字段，便于查询）
+    /// 调查表编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;

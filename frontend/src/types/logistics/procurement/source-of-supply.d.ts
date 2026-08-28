@@ -55,7 +55,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   isBlocked?: number;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 采购单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -163,7 +163,7 @@ export interface SourceOfSupplyExport {
   isBlocked: number;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 采购单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 

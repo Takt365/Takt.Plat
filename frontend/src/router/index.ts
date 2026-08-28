@@ -40,6 +40,15 @@ const constantRoutes: RouteRecordRaw[] = [
     meta: { titleKey: 'login.page.login.title', requiresAuth: false },
   },
   {
+    path: '/meeting-notification/confirm',
+    name: 'MeetingNotificationConfirm',
+    component: () => import('@/views/routine/meeting-center/meeting-notification/confirm.vue'),
+    meta: {
+      titleKey: 'routine.meeting-center.meeting-notification.page.confirm.title',
+      requiresAuth: false,
+    },
+  },
+  {
     path: '/auth/callback',
     name: 'OAuthCallback',
     component: () => import('@/views/login/components/callback.vue'),

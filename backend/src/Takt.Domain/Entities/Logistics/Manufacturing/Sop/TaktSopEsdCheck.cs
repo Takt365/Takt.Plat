@@ -46,6 +46,11 @@ public class TaktSopEsdCheck : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+    /// <summary>
+    /// 员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EmployeeName { get; set; }
 
     /// <summary>
     /// 监测设备编码

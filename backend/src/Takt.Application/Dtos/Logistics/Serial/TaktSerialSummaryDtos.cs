@@ -87,7 +87,7 @@ public class TaktSerialSummaryDto : TaktCompanyDtoBase
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 
@@ -204,7 +204,7 @@ public class TaktSerialSummaryQueryDto : TaktPagedQuery
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
@@ -342,9 +342,9 @@ public class TaktSerialSummaryCreateDto
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
-    [Required(ErrorMessage = "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）不能为空")]
+    [Required(ErrorMessage = "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）不能为空")]
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
@@ -481,7 +481,7 @@ public class TaktSerialSummaryTemplateDto
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
@@ -593,7 +593,7 @@ public class TaktSerialSummaryImportDto
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
@@ -706,7 +706,7 @@ public class TaktSerialSummaryExportDto
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 

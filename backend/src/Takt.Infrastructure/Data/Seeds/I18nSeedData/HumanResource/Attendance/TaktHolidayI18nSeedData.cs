@@ -100,13 +100,13 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.holiday.name", "zh-HK", "假日名称_hk", "假日名称"),
 
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "en-US", "假日类型_us", "假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）"),
+            new TranslationSeedItem("entity.holiday.type", "en-US", "假日类型_us", "假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "ja-JP", "假日类型_jp", "假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）"),
+            new TranslationSeedItem("entity.holiday.type", "ja-JP", "假日类型_jp", "假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "zh-CN", "假日类型", "假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）"),
+            new TranslationSeedItem("entity.holiday.type", "zh-CN", "假日类型", "假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）"),
             // entity.holiday.type
-            new TranslationSeedItem("entity.holiday.type", "zh-HK", "假日类型_hk", "假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）"),
+            new TranslationSeedItem("entity.holiday.type", "zh-HK", "假日类型_hk", "假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）"),
 
             // entity.holiday.startdate
             new TranslationSeedItem("entity.holiday.startdate", "en-US", "假日开始日期_us", "假日开始日期"),
@@ -127,13 +127,13 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.holiday.enddate", "zh-HK", "假日结束日期_hk", "假日结束日期"),
 
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
 
             // entity.holiday.greeting
             new TranslationSeedItem("entity.holiday.greeting", "en-US", "假日问候语_us", "假日问候语（简短，用于界面问候展示）"),

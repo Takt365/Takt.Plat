@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,31 +127,31 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.codealias", "zh-HK", "编码代号_hk", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
 
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质_us", "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质_us", "企业性质（字典 sys_enterprise_nature；DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "ja-JP", "企业性质_jp", "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "ja-JP", "企业性质_jp", "企业性质（字典 sys_enterprise_nature；DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "zh-CN", "企业性质", "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-CN", "企业性质", "企业性质（字典 sys_enterprise_nature；DictValue=150 等）"),
             // entity.plant.enterprisenature
-            new TranslationSeedItem("entity.plant.enterprisenature", "zh-HK", "企业性质_hk", "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）"),
+            new TranslationSeedItem("entity.plant.enterprisenature", "zh-HK", "企业性质_hk", "企业性质（字典 sys_enterprise_nature；DictValue=150 等）"),
 
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "en-US", "行业属性_us", "行业属性（字典 sys_industry_attribute_type；DictValue=C 等）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "en-US", "行业属性_us", "行业属性（字典 sys_industry_attribute；DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "ja-JP", "行业属性_jp", "行业属性（字典 sys_industry_attribute_type；DictValue=C 等）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "ja-JP", "行业属性_jp", "行业属性（字典 sys_industry_attribute；DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "zh-CN", "行业属性", "行业属性（字典 sys_industry_attribute_type；DictValue=C 等）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-CN", "行业属性", "行业属性（字典 sys_industry_attribute；DictValue=C 等）"),
             // entity.plant.industryattribute
-            new TranslationSeedItem("entity.plant.industryattribute", "zh-HK", "行业属性_hk", "行业属性（字典 sys_industry_attribute_type；DictValue=C 等）"),
+            new TranslationSeedItem("entity.plant.industryattribute", "zh-HK", "行业属性_hk", "行业属性（字典 sys_industry_attribute；DictValue=C 等）"),
 
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "en-US", "企业规模_us", "企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "en-US", "企业规模_us", "企业规模（字典 sys_enterprise_scale；DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "ja-JP", "企业规模_jp", "企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "ja-JP", "企业规模_jp", "企业规模（字典 sys_enterprise_scale；DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "zh-CN", "企业规模", "企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-CN", "企业规模", "企业规模（字典 sys_enterprise_scale；DictValue=M 等）"),
             // entity.plant.enterprisescale
-            new TranslationSeedItem("entity.plant.enterprisescale", "zh-HK", "企业规模_hk", "企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）"),
+            new TranslationSeedItem("entity.plant.enterprisescale", "zh-HK", "企业规模_hk", "企业规模（字典 sys_enterprise_scale；DictValue=M 等）"),
 
             // entity.plant.businessscope
             new TranslationSeedItem("entity.plant.businessscope", "en-US", "经营范围_us", "经营范围"),
@@ -333,14 +333,23 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             // entity.plant.legalrepresentative
             new TranslationSeedItem("entity.plant.legalrepresentative", "zh-HK", "法定代表人_hk", "法定代表人"),
 
-            // entity.plant.manager
-            new TranslationSeedItem("entity.plant.manager", "en-US", "工厂负责人_us", "工厂负责人"),
-            // entity.plant.manager
-            new TranslationSeedItem("entity.plant.manager", "ja-JP", "工厂负责人_jp", "工厂负责人"),
-            // entity.plant.manager
-            new TranslationSeedItem("entity.plant.manager", "zh-CN", "工厂负责人", "工厂负责人"),
-            // entity.plant.manager
-            new TranslationSeedItem("entity.plant.manager", "zh-HK", "工厂负责人_hk", "工厂负责人"),
+            // entity.plant.manageruserid
+            new TranslationSeedItem("entity.plant.manageruserid", "en-US", "工厂负责人用户ID_us", "工厂负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.plant.manageruserid
+            new TranslationSeedItem("entity.plant.manageruserid", "ja-JP", "工厂负责人用户ID_jp", "工厂负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.plant.manageruserid
+            new TranslationSeedItem("entity.plant.manageruserid", "zh-CN", "工厂负责人用户ID", "工厂负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.plant.manageruserid
+            new TranslationSeedItem("entity.plant.manageruserid", "zh-HK", "工厂负责人用户ID_hk", "工厂负责人（选项 TaktUsers/options；DictValue=Id）"),
+
+            // entity.plant.managerusername
+            new TranslationSeedItem("entity.plant.managerusername", "en-US", "工厂负责人名称_us", "工厂负责人名称（冗余：按 PlantManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.plant.managerusername
+            new TranslationSeedItem("entity.plant.managerusername", "ja-JP", "工厂负责人名称_jp", "工厂负责人名称（冗余：按 PlantManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.plant.managerusername
+            new TranslationSeedItem("entity.plant.managerusername", "zh-CN", "工厂负责人名称", "工厂负责人名称（冗余：按 PlantManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.plant.managerusername
+            new TranslationSeedItem("entity.plant.managerusername", "zh-HK", "工厂负责人名称_hk", "工厂负责人名称（冗余：按 PlantManagerUserId 取 TaktUser.UserName 联动）"),
 
             // entity.plant.registeredcapital
             new TranslationSeedItem("entity.plant.registeredcapital", "en-US", "注册资本_us", "注册资本（万元）"),

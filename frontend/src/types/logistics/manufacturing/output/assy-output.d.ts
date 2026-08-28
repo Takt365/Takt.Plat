@@ -29,7 +29,7 @@ export interface AssyOutput extends CompanyDtoBase {
   assyOutputId: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -54,7 +54,7 @@ export interface AssyOutput extends CompanyDtoBase {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -139,7 +139,7 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -169,7 +169,7 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -268,7 +268,7 @@ export interface AssyOutputCreate {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -293,7 +293,7 @@ export interface AssyOutputCreate {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -407,7 +407,7 @@ export interface AssyOutputTemplate {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -432,7 +432,7 @@ export interface AssyOutputTemplate {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -526,7 +526,7 @@ export interface AssyOutputImport {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -551,7 +551,7 @@ export interface AssyOutputImport {
   indirectLabor?: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -645,7 +645,7 @@ export interface AssyOutputExport {
   cultureCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -670,7 +670,7 @@ export interface AssyOutputExport {
   indirectLabor: number;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 

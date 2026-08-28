@@ -39,7 +39,7 @@ export interface Role extends TenantCoreDtoBase {
   roleName: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 
@@ -113,7 +113,7 @@ export interface RoleQuery extends TaktPagedQuery {
   roleName?: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
@@ -186,7 +186,7 @@ export interface RoleCreate {
   roleName: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 
@@ -309,7 +309,7 @@ export interface RoleTemplate {
   roleName?: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
@@ -382,7 +382,7 @@ export interface RoleImport {
   roleName?: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope?: number;
 
@@ -450,7 +450,7 @@ export interface RoleExport {
   roleName: string;
 
   /**
-   * 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+   * 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
    */
   dataScope: number;
 

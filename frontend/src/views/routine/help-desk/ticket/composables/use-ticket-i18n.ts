@@ -45,6 +45,7 @@ export const TICKET_LIST_FIELDS = [
   'applicantDeptId',
   'applicantDeptName',
   'applicantBy',
+  'applicantName',
   'ticketStatus',
 ] as const
 
@@ -53,6 +54,7 @@ export const TICKET_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
+  plantCode: 'optional',
   ticketCode: 'required',
   ticketTitle: 'required',
   ticketContent: 'optional',
@@ -78,11 +80,11 @@ export const TICKET_PLACEHOLDER = {
   applicantDeptId: 'optional',
   applicantDeptName: 'optional',
   applicantBy: 'select',
+  applicantName: 'optional',
   ticketStatus: 'select',
   childTickets: 'optional',
   extField: 'optional',
   remark: 'optional',
-  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -91,6 +93,7 @@ export type TicketField = keyof typeof TICKET_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const TICKET_QUERY_STRING_FIELDS = [
   'cultureCode',
+  'plantCode',
   'ticketCode',
   'ticketTitle',
   'ticketContent',
@@ -117,6 +120,7 @@ export const TICKET_QUERY_STRING_FIELDS = [
   'applicantDeptId',
   'applicantDeptName',
   'applicantBy',
+  'applicantName',
   'createdAtStart',
   'createdAtEnd',
   'extField',

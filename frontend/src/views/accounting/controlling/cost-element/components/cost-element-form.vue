@@ -106,7 +106,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.costElementType"
-                  dict-type="accounting_cost_element_type"
+                  dict-type="accounting_controlling_cost_element_type"
                   :placeholder="pi.ph('costElementType')"
                 />
               </a-form-item>
@@ -118,7 +118,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.costElementCategory"
-                  dict-type="accounting_cost_element_category"
+                  dict-type="accounting_controlling_cost_element_category"
                   :placeholder="pi.ph('costElementCategory')"
                 />
               </a-form-item>

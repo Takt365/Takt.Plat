@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceNotificationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceNotification 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -189,14 +189,23 @@ public class TaktMaintenanceNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.maintenancenotification.breakdownendtime
             new TranslationSeedItem("entity.maintenancenotification.breakdownendtime", "zh-HK", "故障结束时间_hk", "故障结束时间"),
 
-            // entity.maintenancenotification.reportedby
-            new TranslationSeedItem("entity.maintenancenotification.reportedby", "en-US", "报告人_us", "报告人（人员编码）"),
-            // entity.maintenancenotification.reportedby
-            new TranslationSeedItem("entity.maintenancenotification.reportedby", "ja-JP", "报告人_jp", "报告人（人员编码）"),
-            // entity.maintenancenotification.reportedby
-            new TranslationSeedItem("entity.maintenancenotification.reportedby", "zh-CN", "报告人", "报告人（人员编码）"),
-            // entity.maintenancenotification.reportedby
-            new TranslationSeedItem("entity.maintenancenotification.reportedby", "zh-HK", "报告人_hk", "报告人（人员编码）"),
+            // entity.maintenancenotification.reportedbyemployeeid
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeeid", "en-US", "报告人员工ID_us", "报告人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenancenotification.reportedbyemployeeid
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeeid", "ja-JP", "报告人员工ID_jp", "报告人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenancenotification.reportedbyemployeeid
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeeid", "zh-CN", "报告人员工ID", "报告人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenancenotification.reportedbyemployeeid
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeeid", "zh-HK", "报告人员工ID_hk", "报告人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.maintenancenotification.reportedbyemployeename
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeename", "en-US", "报告人名称_us", "报告人名称（冗余：按 ReportedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenancenotification.reportedbyemployeename
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeename", "ja-JP", "报告人名称_jp", "报告人名称（冗余：按 ReportedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenancenotification.reportedbyemployeename
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeename", "zh-CN", "报告人名称", "报告人名称（冗余：按 ReportedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenancenotification.reportedbyemployeename
+            new TranslationSeedItem("entity.maintenancenotification.reportedbyemployeename", "zh-HK", "报告人名称_hk", "报告人名称（冗余：按 ReportedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.maintenancenotification.costcenterid
             new TranslationSeedItem("entity.maintenancenotification.costcenterid", "en-US", "责任成本中心ID_us", "责任成本中心ID（序列化为string以避免Javascript精度问题）"),

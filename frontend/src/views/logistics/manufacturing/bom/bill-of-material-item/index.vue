@@ -77,7 +77,7 @@
         <template v-if="column.key === 'materialUnit'">
           <TaktDictTag
             :value="getBillOfMaterialItemDictValue(record, 'materialUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'isOptional'">
@@ -141,6 +141,16 @@
           v-model:value="advancedQueryForm.cultureCode"
           dict-type="sys_culture_code"
           :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -209,7 +219,7 @@
       <a-form-item :label="pi.queryLabel('materialUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('materialUnit', 'select')"
           allow-clear
         />
@@ -969,6 +979,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   cultureCode: '',
+  plantCode: '',
   billOfMaterialId: '',
   bomCode: '',
   lineNumber: undefined as number | undefined,
@@ -1188,6 +1199,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   cultureCode: '',
+  plantCode: '',
   billOfMaterialId: '',
   bomCode: '',
   lineNumber: undefined as number | undefined,

@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcSeizougijutsusController : TaktControllerBase
 {
     private readonly ITaktEcSeizougijutsuService _ecSeizougijutsuService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecSeizougijutsuService">设变制技执行服务</param>
-    public TaktEcSeizougijutsusController(ITaktEcSeizougijutsuService ecSeizougijutsuService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcSeizougijutsusController(
+        ITaktEcSeizougijutsuService ecSeizougijutsuService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecSeizougijutsuService = ecSeizougijutsuService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:list", "设变制技执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:list", "设变制技执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcSeizougijutsuListAsync([FromQuery] TaktEcSeizougijutsuQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:list", "设变制技执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcSeizougijutsuMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Te);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变制技执行
     /// </summary>
     /// <param name="id">设变制技执行ID</param>
     /// <returns>设变制技执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:query", "设变制技执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:query", "设变制技执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcSeizougijutsuByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// 获取设变制技执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:query", "设变制技执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:query", "设变制技执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcSeizougijutsuOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变制技执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:create", "创建设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:create", "创建设变制技执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcSeizougijutsuAsync([FromBody] TaktEcSeizougijutsuCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// <param name="id">设变制技执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变制技执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:update", "更新设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:update", "更新设变制技执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcSeizougijutsuAsync(long id, [FromBody] TaktEcSeizougijutsuUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变制技执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:delete", "删除设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:delete", "删除设变制技执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcSeizougijutsuByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:delete", "批量删除设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:delete", "批量删除设变制技执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcSeizougijutsuBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变制技执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:update", "更新设变制技执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:update", "更新设变制技执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcSeizougijutsuObsoleteAsync([FromBody] TaktEcSeizougijutsuObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:import", "获取设变制技执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:import", "获取设变制技执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcSeizougijutsuTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:import", "导入设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:import", "导入设变制技执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcSeizougijutsuAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// 导出设变制技执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizougijutsu:export", "导出设变制技执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:export", "导出设变制技执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcSeizougijutsuAsync([FromQuery] TaktEcSeizougijutsuQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

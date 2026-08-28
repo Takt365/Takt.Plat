@@ -89,7 +89,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.gender"
-                  dict-type="sys_user_gender_category"
+                  dict-type="sys_user_gender"
                   :placeholder="pi.ph('gender')"
                 />
               </a-form-item>
@@ -157,7 +157,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.nativePlace"
-                  dict-type="hr_native_place_code"
+                  dict-type="humanresource_personnel_native_place_code"
                   :placeholder="pi.ph('nativePlace')"
                 />
               </a-form-item>
@@ -179,7 +179,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.ethnicity"
-                  dict-type="hr_ethnic_code"
+                  dict-type="humanresource_personnel_ethnic_code"
                   :placeholder="pi.ph('ethnicity')"
                 />
               </a-form-item>
@@ -191,7 +191,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.politicalAffiliation"
-                  dict-type="hr_political_affiliation"
+                  dict-type="humanresource_personnel_political_affiliation"
                   :placeholder="pi.ph('politicalAffiliation')"
                 />
               </a-form-item>
@@ -203,7 +203,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.maritalStatus"
-                  dict-type="hr_marital_status"
+                  dict-type="humanresource_personnel_marital_status"
                   :placeholder="pi.ph('maritalStatus')"
                 />
               </a-form-item>
@@ -215,7 +215,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.employeeStatus"
-                  dict-type="hr_employee_status"
+                  dict-type="humanresource_personnel_employee_status"
                   :placeholder="pi.ph('employeeStatus')"
                 />
               </a-form-item>
@@ -373,7 +373,7 @@
       <template #cell-relationType="{ record }">
         <TaktSelect
           v-model:value="record.relationType"
-          dict-type="hr_employee_family_relation_type"
+          dict-type="humanresource_personnel_employee_family_relation_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="employeeFamilyPi.ph('relationType')"

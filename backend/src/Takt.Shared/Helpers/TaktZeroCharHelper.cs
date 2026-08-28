@@ -21,22 +21,34 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public static class TaktZeroCharHelper
 {
-    /// <summary>零宽空格（比特 0 / 中文等逐字分隔）。</summary>
+    /// <summary>
+    /// 零宽空格（比特 0 / 中文等逐字分隔）。
+    /// </summary>
     public const char ZeroBit = '\u200B';
 
-    /// <summary>零宽非连接符（比特 1 / 英文等按词分隔）。</summary>
+    /// <summary>
+    /// 零宽非连接符（比特 1 / 英文等按词分隔）。
+    /// </summary>
     public const char OneBit = '\u200C';
 
-    /// <summary>明文：节拍技术有限公司（中文法定公司名场景）。</summary>
+    /// <summary>
+    /// 明文：节拍技术有限公司（中文法定公司名场景）。
+    /// </summary>
     public const string PlainCompanyNameZh = "节拍技术有限公司";
 
-    /// <summary>明文：Takt Technologies Co., Ltd.（英文法定公司名场景）。</summary>
+    /// <summary>
+    /// 明文：Takt Technologies Co., Ltd.（英文法定公司名场景）。
+    /// </summary>
     public const string PlainCompanyNameEn = "Takt Technologies Co., Ltd.";
 
-    /// <summary>明文：Takt（短品牌场景）。</summary>
+    /// <summary>
+    /// 明文：Takt（短品牌场景）。
+    /// </summary>
     public const string PlainBrandTakt = "Takt";
 
-    /// <summary>明文：Takt365（产品/站点品牌场景）。</summary>
+    /// <summary>
+    /// 明文：Takt365（产品/站点品牌场景）。
+    /// </summary>
     public const string PlainBrandTakt365 = "Takt365";
 
     /// <summary>

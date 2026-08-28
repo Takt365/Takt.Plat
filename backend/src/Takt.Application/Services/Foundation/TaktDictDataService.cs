@@ -307,7 +307,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     /// <returns>全部字典数据 DTO</returns>
     public async Task<TaktDataDictAllDto> GetDataDictAllAsync()
     {
-        // 区域专用字典（如 accounting_tax_code 的 zh-CN/ja-JP）须全量下发，由前端按业务 DefaultCulture 过滤显示
+        // 区域专用字典（如 accounting_financial_tax_code 的 zh-CN/ja-JP）须全量下发，由前端按业务 DefaultCulture 过滤显示
         var list = await _dictDataRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
             x => x.SortOrder,

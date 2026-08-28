@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktTrackingLogI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrackingLog 实体字段国际化种子（已对齐前端 locales：src/locales/statistics/logging/tracking-log）
 // 
@@ -100,13 +100,13 @@ public class TaktTrackingLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trackinglog.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "en-US", "用户名_us", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.trackinglog.username", "en-US", "用户名_us", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "ja-JP", "用户名_jp", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.trackinglog.username", "ja-JP", "用户名_jp", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "zh-CN", "用户名", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.trackinglog.username", "zh-CN", "用户名", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.trackinglog.username
-            new TranslationSeedItem("entity.trackinglog.username", "zh-HK", "用户名_hk", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.trackinglog.username", "zh-HK", "用户名_hk", "用户名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.trackinglog.eventtrackingtype
             new TranslationSeedItem("entity.trackinglog.eventtrackingtype", "en-US", "事件类型_us", "事件类型（如 longtask）"),

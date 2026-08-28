@@ -82,19 +82,19 @@
         <template v-else-if="column.key === 'enterpriseNature'">
           <TaktDictTag
             :value="getPlantDictValue(record, 'enterpriseNature')"
-            dict-type="sys_enterprise_nature_type"
+            dict-type="sys_enterprise_nature"
           />
         </template>
         <template v-else-if="column.key === 'industryAttribute'">
           <TaktDictTag
             :value="getPlantDictValue(record, 'industryAttribute')"
-            dict-type="sys_industry_attribute_type"
+            dict-type="sys_industry_attribute"
           />
         </template>
         <template v-else-if="column.key === 'enterpriseScale'">
           <TaktDictTag
             :value="getPlantDictValue(record, 'enterpriseScale')"
-            dict-type="sys_enterprise_scale_type"
+            dict-type="sys_enterprise_scale"
           />
         </template>
         <template v-else-if="column.key === 'registrationRegion'">
@@ -214,7 +214,7 @@
       <a-form-item :label="pi.queryLabel('enterpriseNature')">
         <TaktSelect
           v-model:value="advancedQueryForm.enterpriseNature"
-          dict-type="sys_enterprise_nature_type"
+          dict-type="sys_enterprise_nature"
           :placeholder="pi.queryPh('enterpriseNature', 'select')"
           allow-clear
         />
@@ -224,7 +224,7 @@
       <a-form-item :label="pi.queryLabel('industryAttribute')">
         <TaktSelect
           v-model:value="advancedQueryForm.industryAttribute"
-          dict-type="sys_industry_attribute_type"
+          dict-type="sys_industry_attribute"
           :placeholder="pi.queryPh('industryAttribute', 'select')"
           allow-clear
         />
@@ -234,7 +234,7 @@
       <a-form-item :label="pi.queryLabel('enterpriseScale')">
         <TaktSelect
           v-model:value="advancedQueryForm.enterpriseScale"
-          dict-type="sys_enterprise_scale_type"
+          dict-type="sys_enterprise_scale"
           :placeholder="pi.queryPh('enterpriseScale', 'select')"
           allow-clear
         />

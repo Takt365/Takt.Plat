@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopAckI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopAck 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -125,6 +125,15 @@ public class TaktSopAckI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopack.acknowledgedby", "zh-CN", "确认人ID", "确认人 ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.sopack.acknowledgedby
             new TranslationSeedItem("entity.sopack.acknowledgedby", "zh-HK", "确认人ID_hk", "确认人 ID（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.sopack.acknowledgedbyname
+            new TranslationSeedItem("entity.sopack.acknowledgedbyname", "en-US", "确认人名称_us", "确认人名称（冗余：按 AcknowledgedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopack.acknowledgedbyname
+            new TranslationSeedItem("entity.sopack.acknowledgedbyname", "ja-JP", "确认人名称_jp", "确认人名称（冗余：按 AcknowledgedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopack.acknowledgedbyname
+            new TranslationSeedItem("entity.sopack.acknowledgedbyname", "zh-CN", "确认人名称", "确认人名称（冗余：按 AcknowledgedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopack.acknowledgedbyname
+            new TranslationSeedItem("entity.sopack.acknowledgedbyname", "zh-HK", "确认人名称_hk", "确认人名称（冗余：按 AcknowledgedBy 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.sopack.acknowledgedat
             new TranslationSeedItem("entity.sopack.acknowledgedat", "en-US", "确认时间_us", "确认时间"),

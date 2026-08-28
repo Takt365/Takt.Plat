@@ -81,25 +81,25 @@
         <template v-else-if="column.key === 'materialType'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'materialType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'industrySector'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'industrySector')"
-            dict-type="logistics_industry_sector"
+            dict-type="logistics_materials_industry_sector"
           />
         </template>
         <template v-else-if="column.key === 'baseUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'baseUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'orderUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'orderUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'documentType'">
@@ -135,13 +135,13 @@
         <template v-else-if="column.key === 'weightUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'weightUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'volumeUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'volumeUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'containerRequirements'">
@@ -213,7 +213,7 @@
         <template v-else-if="column.key === 'dimensionUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'dimensionUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'productHierarchy'">
@@ -225,25 +225,25 @@
         <template v-else-if="column.key === 'allowedPackagingWeightUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'allowedPackagingWeightUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'allowedPackagingVolumeUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'allowedPackagingVolumeUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'batchManagementRequired'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'batchManagementRequired')"
-            dict-type="logistics_batch_management_type"
+            dict-type="sys_yes_no"
           />
         </template>
         <template v-else-if="column.key === 'packagingMaterialType'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'packagingMaterialType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'packagingMaterialGroup'">
@@ -309,7 +309,7 @@
         <template v-else-if="column.key === 'contentUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'contentUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'labelingMaterialGrouping'">
@@ -423,7 +423,7 @@
         <template v-else-if="column.key === 'maximumPackingDimensionUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'maximumPackingDimensionUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'countryOfOrigin'">
@@ -441,7 +441,7 @@
         <template v-else-if="column.key === 'quarantinePeriodUnit'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'quarantinePeriodUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'qualityInspectionGroup'">
@@ -465,7 +465,7 @@
         <template v-else-if="column.key === 'logisticsUnitOfMeasure'">
           <TaktDictTag
             :value="getGeneralMaterialDictValue(record, 'logisticsUnitOfMeasure')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'catchWeightProfile'">
@@ -754,7 +754,7 @@
       <a-form-item :label="pi.queryLabel('materialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('materialType', 'select')"
           allow-clear
         />
@@ -764,7 +764,7 @@
       <a-form-item :label="pi.queryLabel('industrySector')">
         <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
-          dict-type="logistics_industry_sector"
+          dict-type="logistics_materials_industry_sector"
           :placeholder="pi.queryPh('industrySector', 'select')"
           allow-clear
         />
@@ -795,7 +795,7 @@
       <a-form-item :label="pi.queryLabel('baseUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('baseUnit', 'select')"
           allow-clear
         />
@@ -805,7 +805,7 @@
       <a-form-item :label="pi.queryLabel('orderUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.orderUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('orderUnit', 'select')"
           allow-clear
         />
@@ -981,7 +981,7 @@
       <a-form-item :label="pi.queryLabel('weightUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.weightUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('weightUnit', 'select')"
           allow-clear
         />
@@ -1000,7 +1000,7 @@
       <a-form-item :label="pi.queryLabel('volumeUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.volumeUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('volumeUnit', 'select')"
           allow-clear
         />
@@ -1222,7 +1222,7 @@
       <a-form-item :label="pi.queryLabel('dimensionUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.dimensionUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('dimensionUnit', 'select')"
           allow-clear
         />
@@ -1284,7 +1284,7 @@
       <a-form-item :label="pi.queryLabel('allowedPackagingWeightUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.allowedPackagingWeightUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('allowedPackagingWeightUnit', 'select')"
           allow-clear
         />
@@ -1303,7 +1303,7 @@
       <a-form-item :label="pi.queryLabel('allowedPackagingVolumeUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.allowedPackagingVolumeUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('allowedPackagingVolumeUnit', 'select')"
           allow-clear
         />
@@ -1364,7 +1364,7 @@
       <a-form-item :label="pi.queryLabel('batchManagementRequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.batchManagementRequired"
-          dict-type="logistics_batch_management_type"
+          dict-type="sys_yes_no"
           :placeholder="pi.queryPh('batchManagementRequired', 'select')"
           allow-clear
         />
@@ -1374,7 +1374,7 @@
       <a-form-item :label="pi.queryLabel('packagingMaterialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.packagingMaterialType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('packagingMaterialType', 'select')"
           allow-clear
         />
@@ -1664,7 +1664,7 @@
       <a-form-item :label="pi.queryLabel('contentUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.contentUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('contentUnit', 'select')"
           allow-clear
         />
@@ -2200,7 +2200,7 @@
       <a-form-item :label="pi.queryLabel('maximumPackingDimensionUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.maximumPackingDimensionUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('maximumPackingDimensionUnit', 'select')"
           allow-clear
         />
@@ -2239,7 +2239,7 @@
       <a-form-item :label="pi.queryLabel('quarantinePeriodUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.quarantinePeriodUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('quarantinePeriodUnit', 'select')"
           allow-clear
         />
@@ -2279,7 +2279,7 @@
       <a-form-item :label="pi.queryLabel('logisticsUnitOfMeasure')">
         <TaktSelect
           v-model:value="advancedQueryForm.logisticsUnitOfMeasure"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('logisticsUnitOfMeasure', 'select')"
           allow-clear
         />

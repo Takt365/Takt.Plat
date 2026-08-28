@@ -50,6 +50,11 @@ Domain → Shared
 ❌ 控制器注入仓储  
 ✅ 异常 try/catch + HandleException；业务错误 ThrowBusinessExceptionLocalized
 
+## 种子（§全新写法）
+
+- 幂等 CreateOrUpdate；只表达**当前**菜单/数据目标态
+- ❌ `SoftDeleteObsolete*`、按历史 MenuCode 软删「兼容清理」（见 `00-project` §1.9）
+
 ## 实体禁枚举（§1.8.1）
 
 ```

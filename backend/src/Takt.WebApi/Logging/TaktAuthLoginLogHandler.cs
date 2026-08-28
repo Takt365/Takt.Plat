@@ -27,37 +27,59 @@ namespace Takt.WebApi.Logging;
 /// </summary>
 public sealed class TaktAuthLoginLogWriteRequest
 {
-    /// <summary>流程阶段（TaktAuthLoginPhases）</summary>
+    /// <summary>
+    /// 流程阶段（TaktAuthLoginPhases）
+    /// </summary>
     public required string Phase { get; init; }
 
-    /// <summary>登录方式（TaktConstants.LoginType）</summary>
+    /// <summary>
+    /// 登录方式（TaktConstants.LoginType）
+    /// </summary>
     public required string LoginType { get; init; }
 
-    /// <summary>登录结果（TaktConstants.LoginResult）</summary>
+    /// <summary>
+    /// 登录结果（TaktConstants.LoginResult）
+    /// </summary>
     public required string LoginResult { get; init; }
 
-    /// <summary>租户编码</summary>
+    /// <summary>
+    /// 租户编码
+    /// </summary>
     public string TenantCode { get; init; } = string.Empty;
 
-    /// <summary>公司编码</summary>
+    /// <summary>
+    /// 公司编码
+    /// </summary>
     public string? CompanyCode { get; init; }
 
-    /// <summary>用户名或 client_id</summary>
+    /// <summary>
+    /// 用户名或 client_id
+    /// </summary>
     public string UserName { get; init; } = string.Empty;
 
-    /// <summary>结果说明</summary>
+    /// <summary>
+    /// 结果说明
+    /// </summary>
     public string? Message { get; init; }
 
-    /// <summary>用户 ID（可选）</summary>
+    /// <summary>
+    /// 用户 ID（可选）
+    /// </summary>
     public long? UserId { get; init; }
 
-    /// <summary>耗时（毫秒，可选）</summary>
+    /// <summary>
+    /// 耗时（毫秒，可选）
+    /// </summary>
     public long? ElapsedMs { get; init; }
 
-    /// <summary>是否写入登录日志表（默认 true；RBAC 诊断步骤建议 false）</summary>
+    /// <summary>
+    /// 是否写入登录日志表（默认 true；RBAC 诊断步骤建议 false）
+    /// </summary>
     public bool PersistToLoginLog { get; init; } = true;
 
-    /// <summary>结构化诊断字段（权限数、菜单采样等）</summary>
+    /// <summary>
+    /// 结构化诊断字段（权限数、菜单采样等）
+    /// </summary>
     public IReadOnlyDictionary<string, object?>? Detail { get; init; }
 }
 
@@ -66,31 +88,49 @@ public sealed class TaktAuthLoginLogWriteRequest
 /// </summary>
 public sealed class TaktAuthFlowStepRequest
 {
-    /// <summary>流程阶段（TaktAuthLoginPhases）</summary>
+    /// <summary>
+    /// 流程阶段（TaktAuthLoginPhases）
+    /// </summary>
     public required string Phase { get; init; }
 
-    /// <summary>说明</summary>
+    /// <summary>
+    /// 说明
+    /// </summary>
     public string? Message { get; init; }
 
-    /// <summary>用户 ID</summary>
+    /// <summary>
+    /// 用户 ID
+    /// </summary>
     public long? UserId { get; init; }
 
-    /// <summary>用户名</summary>
+    /// <summary>
+    /// 用户名
+    /// </summary>
     public string? UserName { get; init; }
 
-    /// <summary>租户编码</summary>
+    /// <summary>
+    /// 租户编码
+    /// </summary>
     public string? TenantCode { get; init; }
 
-    /// <summary>公司编码</summary>
+    /// <summary>
+    /// 公司编码
+    /// </summary>
     public string? CompanyCode { get; init; }
 
-    /// <summary>耗时（毫秒）</summary>
+    /// <summary>
+    /// 耗时（毫秒）
+    /// </summary>
     public long? ElapsedMs { get; init; }
 
-    /// <summary>是否成功</summary>
+    /// <summary>
+    /// 是否成功
+    /// </summary>
     public bool IsSuccess { get; init; } = true;
 
-    /// <summary>诊断明细</summary>
+    /// <summary>
+    /// 诊断明细
+    /// </summary>
     public IReadOnlyDictionary<string, object?>? Detail { get; init; }
 }
 

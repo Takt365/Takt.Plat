@@ -44,7 +44,7 @@ export interface MasterDemandScheduleLine extends CompanyDtoBase {
   mdsCode?: string;
 
   /**
-   * 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+   * 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
    */
   demandSourceType?: number;
 
@@ -89,7 +89,7 @@ export interface MasterDemandScheduleLine extends CompanyDtoBase {
   demandQuantity?: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
@@ -132,7 +132,7 @@ export interface MasterDemandScheduleLineExport {
   mdsCode: string;
 
   /**
-   * 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+   * 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
    */
   demandSourceType: number;
 
@@ -177,7 +177,7 @@ export interface MasterDemandScheduleLineExport {
   demandQuantity: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 

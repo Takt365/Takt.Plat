@@ -76,7 +76,7 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -148,7 +148,7 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期
@@ -163,7 +163,7 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）
@@ -254,7 +254,7 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -331,7 +331,7 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期（范围查询-开始）
@@ -351,7 +351,7 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -447,9 +447,9 @@ public class TaktPurchaseInvoiceCreateDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
-    [Required(ErrorMessage = "货币（字典 accounting_currency_code）不能为空")]
+    [Required(ErrorMessage = "货币（字典 accounting_financial_currency_code）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -520,7 +520,7 @@ public class TaktPurchaseInvoiceCreateDto
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期
@@ -535,7 +535,7 @@ public class TaktPurchaseInvoiceCreateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -649,7 +649,7 @@ public class TaktPurchaseInvoiceTemplateDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -721,7 +721,7 @@ public class TaktPurchaseInvoiceTemplateDto
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期
@@ -736,7 +736,7 @@ public class TaktPurchaseInvoiceTemplateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -821,7 +821,7 @@ public class TaktPurchaseInvoiceImportDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -893,7 +893,7 @@ public class TaktPurchaseInvoiceImportDto
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期
@@ -908,7 +908,7 @@ public class TaktPurchaseInvoiceImportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -999,7 +999,7 @@ public class TaktPurchaseInvoiceExportDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -1071,7 +1071,7 @@ public class TaktPurchaseInvoiceExportDto
     /// <summary>
     /// 输入者
     /// </summary>
-    public string? EnteredBy { get; set; } = string.Empty;
+    public string? EnteredByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 换算日期
@@ -1086,7 +1086,7 @@ public class TaktPurchaseInvoiceExportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

@@ -69,7 +69,7 @@ export interface SopExecScan extends CompanyDtoBase {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult: number;
 
@@ -144,7 +144,7 @@ export interface SopExecScanQuery extends TaktPagedQuery {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -238,7 +238,7 @@ export interface SopExecScanCreate {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult: number;
 
@@ -332,7 +332,7 @@ export interface SopExecScanTemplate {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -411,7 +411,7 @@ export interface SopExecScanImport {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -485,7 +485,7 @@ export interface SopExecScanExport {
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+   * 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
    */
   scanResult: number;
 

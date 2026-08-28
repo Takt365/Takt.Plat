@@ -31,7 +31,7 @@
 }
 
 /* @takt-generated variants-begin */
-/* 共 137 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
+/* 共 141 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
 
 /* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
 .takt-button-query {
@@ -103,6 +103,14 @@
   --takt-btn-border: var(--takt-cn-qinglian);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-cn-qinglian);
+}
+
+/* source · var(--takt-cn-lanqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-source {
+  --takt-btn-bg: var(--takt-cn-lanqing);
+  --takt-btn-border: var(--takt-cn-lanqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lanqing);
 }
 
 /* export · var(--takt-jp-iroha) · fg var(--takt-btn-fg-solid) */
@@ -327,6 +335,30 @@
   --takt-btn-border: var(--takt-cn-zitan);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-cn-zitan);
+}
+
+/* room · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */
+.takt-button-room {
+  --takt-btn-bg: var(--takt-cn-qingse);
+  --takt-btn-border: var(--takt-cn-qingse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qingse);
+}
+
+/* agenda · var(--takt-cn-zangqing) · fg var(--takt-btn-fg-solid) */
+.takt-button-minutes {
+  --takt-btn-bg: var(--takt-cn-zangqing);
+  --takt-btn-border: var(--takt-cn-zangqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zangqing);
+}
+
+/* attendee · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
+.takt-button-attendee {
+  --takt-btn-bg: var(--takt-cn-lvse);
+  --takt-btn-border: var(--takt-cn-lvse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lvse);
 }
 
 /* design · var(--takt-cn-qingse) · fg var(--takt-btn-fg-solid) */

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecScanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExecScan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSopExecScanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecscan.expectedmaterialcode", "zh-HK", "期望物料编码_hk", "期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "en-US", "扫码结果_us", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "en-US", "扫码结果_us", "扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "ja-JP", "扫码结果_jp", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "ja-JP", "扫码结果_jp", "扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-CN", "扫码结果", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-CN", "扫码结果", "扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）"),
             // entity.sopexecscan.scanresult
-            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-HK", "扫码结果_hk", "扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）"),
+            new TranslationSeedItem("entity.sopexecscan.scanresult", "zh-HK", "扫码结果_hk", "扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）"),
 
             // entity.sopexecscan.matchmessage
             new TranslationSeedItem("entity.sopexecscan.matchmessage", "en-US", "比对说明_us", "比对说明"),

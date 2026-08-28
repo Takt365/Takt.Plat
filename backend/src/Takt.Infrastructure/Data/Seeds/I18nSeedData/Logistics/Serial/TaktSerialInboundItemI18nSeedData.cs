@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialInboundItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialInboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialinbounditem.inboundid", "zh-HK", "入库ID_hk", "入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）"),
 
             // entity.serialinbounditem.inboundcode
-            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "en-US", "入库单号_us", "入库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "en-US", "入库单号_us", "入库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialinbounditem.inboundcode
-            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "ja-JP", "入库单号_jp", "入库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "ja-JP", "入库单号_jp", "入库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialinbounditem.inboundcode
-            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "zh-CN", "入库单号", "入库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "zh-CN", "入库单号", "入库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialinbounditem.inboundcode
-            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "zh-HK", "入库单号_hk", "入库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundcode", "zh-HK", "入库单号_hk", "入库单号（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.serialinbounditem.linenumber
             new TranslationSeedItem("entity.serialinbounditem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

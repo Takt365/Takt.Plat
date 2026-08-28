@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGroupI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -116,15 +116,6 @@ public class TaktEcGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgroup.description", "zh-CN", "设变组描述", "设变组描述"),
             // entity.ecgroup.description
             new TranslationSeedItem("entity.ecgroup.description", "zh-HK", "设变组描述_hk", "设变组描述"),
-
-            // entity.ecgroup.responsibleuserid
-            new TranslationSeedItem("entity.ecgroup.responsibleuserid", "en-US", "负责人用户ID_us", "设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.ecgroup.responsibleuserid
-            new TranslationSeedItem("entity.ecgroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.ecgroup.responsibleuserid
-            new TranslationSeedItem("entity.ecgroup.responsibleuserid", "zh-CN", "负责人用户ID", "设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.ecgroup.responsibleuserid
-            new TranslationSeedItem("entity.ecgroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.ecgroup.contactphone
             new TranslationSeedItem("entity.ecgroup.contactphone", "en-US", "联系电话_us", "联系电话"),

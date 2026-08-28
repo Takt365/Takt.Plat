@@ -89,12 +89,12 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     public string? ShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -223,12 +223,12 @@ public class TaktSalaryItemCreateDto
     public string? ShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method：固定金额/按比例/按公式）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -409,12 +409,12 @@ public class TaktSalaryItemTemplateDto
     public string? ShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -523,12 +523,12 @@ public class TaktSalaryItemImportDto
     public string? ShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
     /// </summary>
     public int? ItemType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method：固定金额/按比例/按公式）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -637,12 +637,12 @@ public class TaktSalaryItemExportDto
     public string? ShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
     /// </summary>
     public int ItemType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method：固定金额/按比例/按公式）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 

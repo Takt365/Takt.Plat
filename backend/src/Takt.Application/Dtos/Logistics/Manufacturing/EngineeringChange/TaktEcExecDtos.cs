@@ -1238,13 +1238,21 @@ public class TaktEcExecExportDto
 /// </summary>
 public class TaktEcExecTransposedCellDto
 {
-    /// <summary>部门编码</summary>
+    /// <summary>
+    /// 部门编码
+    /// </summary>
     public string DeptCode { get; set; } = string.Empty;
-    /// <summary>是否实施（0=否 1=是）</summary>
+    /// <summary>
+    /// 是否实施（0=否 1=是）
+    /// </summary>
     public int IsImplemented { get; set; }
-    /// <summary>完成日期</summary>
+    /// <summary>
+    /// 完成日期
+    /// </summary>
     public DateTime? CompletedDate { get; set; }
-    /// <summary>展示文本（已实施 yyyyMMdd；未实施 null）</summary>
+    /// <summary>
+    /// 展示文本（已实施 yyyyMMdd；未实施 null）
+    /// </summary>
     public string? DisplayText { get; set; }
 }
 
@@ -1253,25 +1261,43 @@ public class TaktEcExecTransposedCellDto
 /// </summary>
 public class TaktEcExecTransposedDto
 {
-    /// <summary>设变明细 ID</summary>
+    /// <summary>
+    /// 设变明细 ID
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
-    /// <summary>设变主表 ID</summary>
+    /// <summary>
+    /// 设变主表 ID
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcId { get; set; }
-    /// <summary>明细行号</summary>
+    /// <summary>
+    /// 明细行号
+    /// </summary>
     public int LineNumber { get; set; }
-    /// <summary>发行日期（主表 EcIssueDate）</summary>
+    /// <summary>
+    /// 发行日期（主表 EcIssueDate）
+    /// </summary>
     public DateTime EcIssueDate { get; set; }
-    /// <summary>技术担当/负责人（主表 EcLeader）</summary>
+    /// <summary>
+    /// 技术担当/负责人（主表 EcLeader）
+    /// </summary>
     public string EcLeader { get; set; } = string.Empty;
-    /// <summary>设变单号</summary>
+    /// <summary>
+    /// 设变单号
+    /// </summary>
     public string EcNo { get; set; } = string.Empty;
-    /// <summary>机种（EcModel）</summary>
-    public string EcModel { get; set; } = string.Empty;
-    /// <summary>成品（EcNewItem）</summary>
-    public string? EcNewItem { get; set; }
-    /// <summary>各部门单元格；键为 DeptCode</summary>
+    /// <summary>
+    /// 机种（EcModelCode）
+    /// </summary>
+    public string EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 成品（EcNewMaterialCode）
+    /// </summary>
+    public string? EcNewMaterialCode { get; set; }
+    /// <summary>
+    /// 各部门单元格；键为 DeptCode
+    /// </summary>
     public Dictionary<string, TaktEcExecTransposedCellDto> DeptCells { get; set; } = new();
 
     /// <summary>
@@ -1285,21 +1311,37 @@ public class TaktEcExecTransposedDto
 /// </summary>
 public class TaktEcExecTransposedQueryDto : TaktPagedQuery
 {
-    /// <summary>设变单号</summary>
+    /// <summary>
+    /// 设变单号
+    /// </summary>
     public string? EcNo { get; set; }
-    /// <summary>机种</summary>
-    public string? EcModel { get; set; }
-    /// <summary>成品（新料号）</summary>
-    public string? EcNewItem { get; set; }
-    /// <summary>技术担当</summary>
+    /// <summary>
+    /// 机种
+    /// </summary>
+    public string? EcModelCode { get; set; }
+    /// <summary>
+    /// 成品（新料号）
+    /// </summary>
+    public string? EcNewMaterialCode { get; set; }
+    /// <summary>
+    /// 技术担当
+    /// </summary>
     public string? EcLeader { get; set; }
-    /// <summary>发行日期（范围-开始）</summary>
+    /// <summary>
+    /// 发行日期（范围-开始）
+    /// </summary>
     public DateTime? EcIssueDateStart { get; set; }
-    /// <summary>发行日期（范围-结束）</summary>
+    /// <summary>
+    /// 发行日期（范围-结束）
+    /// </summary>
     public DateTime? EcIssueDateEnd { get; set; }
-    /// <summary>部门编码（与 IsImplemented 组合筛选某部门实施状态）</summary>
+    /// <summary>
+    /// 部门编码（与 IsImplemented 组合筛选某部门实施状态）
+    /// </summary>
     public string? DeptCode { get; set; }
-    /// <summary>是否实施（须配合 DeptCode）</summary>
+    /// <summary>
+    /// 是否实施（须配合 DeptCode）
+    /// </summary>
     public int? IsImplemented { get; set; }
 
     /// <summary>
@@ -1318,9 +1360,13 @@ public class TaktEcExecTransposedQueryDto : TaktPagedQuery
 /// </summary>
 public class TaktEcExecTransposedResultDto
 {
-    /// <summary>分页数据</summary>
+    /// <summary>
+    /// 分页数据
+    /// </summary>
     public TaktPagedResult<TaktEcExecTransposedDto> Paged { get; set; } = null!;
-    /// <summary>部门列顺序（表头从左到右）</summary>
+    /// <summary>
+    /// 部门列顺序（表头从左到右）
+    /// </summary>
     public IReadOnlyList<string> DeptCodeOrder { get; set; } = Array.Empty<string>();
 }
 
@@ -1333,13 +1379,21 @@ public class TaktEcExecTransposedResultDto
 /// </summary>
 public class TaktEcExecBatchTransposedStageDto
 {
-    /// <summary>阶段编码（TaktEcBatchStageCodes）</summary>
+    /// <summary>
+    /// 阶段编码（TaktEcBatchStageCodes）
+    /// </summary>
     public string StageCode { get; set; } = string.Empty;
-    /// <summary>阶段日期</summary>
+    /// <summary>
+    /// 阶段日期
+    /// </summary>
     public DateTime? StageDate { get; set; }
-    /// <summary>批次号/批次说明</summary>
+    /// <summary>
+    /// 批次号/批次说明
+    /// </summary>
     public string? BatchNo { get; set; }
-    /// <summary>日期展示文本（yyyyMMdd）</summary>
+    /// <summary>
+    /// 日期展示文本（yyyyMMdd）
+    /// </summary>
     public string? DateDisplayText { get; set; }
 
     /// <summary>
@@ -1353,31 +1407,55 @@ public class TaktEcExecBatchTransposedStageDto
 /// </summary>
 public class TaktEcExecBatchTransposedDto
 {
-    /// <summary>设变明细 ID</summary>
+    /// <summary>
+    /// 设变明细 ID
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
-    /// <summary>设变主表 ID</summary>
+    /// <summary>
+    /// 设变主表 ID
+    /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcId { get; set; }
-    /// <summary>明细行号</summary>
+    /// <summary>
+    /// 明细行号
+    /// </summary>
     public int LineNumber { get; set; }
-    /// <summary>设变单号</summary>
+    /// <summary>
+    /// 设变单号
+    /// </summary>
     public string EcNo { get; set; } = string.Empty;
-    /// <summary>技联 No.（附件 TL DocNo）</summary>
+    /// <summary>
+    /// 技联 No.（附件 TL DocNo）
+    /// </summary>
     public string? TechnicalLiaisonNo { get; set; }
-    /// <summary>P番 No.（附件 FPP DocNo）</summary>
+    /// <summary>
+    /// P番 No.（附件 FPP DocNo）
+    /// </summary>
     public string? PNo { get; set; }
-    /// <summary>TCJ 技联 No.（附件 TCJ DocNo）</summary>
+    /// <summary>
+    /// TCJ 技联 No.（附件 TCJ DocNo）
+    /// </summary>
     public string? TcjLiaisonNo { get; set; }
-    /// <summary>发行日期（主表 EcIssueDate）</summary>
+    /// <summary>
+    /// 发行日期（主表 EcIssueDate）
+    /// </summary>
     public DateTime EcIssueDate { get; set; }
-    /// <summary>机种（EcModel）</summary>
-    public string EcModel { get; set; } = string.Empty;
-    /// <summary>成品（EcNewItem）</summary>
-    public string? EcNewItem { get; set; }
-    /// <summary>登入日期（主表 EcEntryDate）</summary>
+    /// <summary>
+    /// 机种（EcModelCode）
+    /// </summary>
+    public string EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 成品（EcNewMaterialCode）
+    /// </summary>
+    public string? EcNewMaterialCode { get; set; }
+    /// <summary>
+    /// 登入日期（主表 EcEntryDate）
+    /// </summary>
     public DateTime EcEntryDate { get; set; }
-    /// <summary>各批次阶段单元格；键为 StageCode</summary>
+    /// <summary>
+    /// 各批次阶段单元格；键为 StageCode
+    /// </summary>
     public Dictionary<string, TaktEcExecBatchTransposedStageDto> StageCells { get; set; } = new();
 
     /// <summary>
@@ -1391,17 +1469,29 @@ public class TaktEcExecBatchTransposedDto
 /// </summary>
 public class TaktEcExecBatchTransposedQueryDto : TaktPagedQuery
 {
-    /// <summary>设变单号</summary>
+    /// <summary>
+    /// 设变单号
+    /// </summary>
     public string? EcNo { get; set; }
-    /// <summary>机种</summary>
-    public string? EcModel { get; set; }
-    /// <summary>成品（新料号）</summary>
-    public string? EcNewItem { get; set; }
-    /// <summary>发行日期（范围-开始）</summary>
+    /// <summary>
+    /// 机种
+    /// </summary>
+    public string? EcModelCode { get; set; }
+    /// <summary>
+    /// 成品（新料号）
+    /// </summary>
+    public string? EcNewMaterialCode { get; set; }
+    /// <summary>
+    /// 发行日期（范围-开始）
+    /// </summary>
     public DateTime? EcIssueDateStart { get; set; }
-    /// <summary>发行日期（范围-结束）</summary>
+    /// <summary>
+    /// 发行日期（范围-结束）
+    /// </summary>
     public DateTime? EcIssueDateEnd { get; set; }
-    /// <summary>批次号（预定/出库/生产批次模糊）</summary>
+    /// <summary>
+    /// 批次号（预定/出库/生产批次模糊）
+    /// </summary>
     public string? BatchNo { get; set; }
 
     /// <summary>
@@ -1420,8 +1510,12 @@ public class TaktEcExecBatchTransposedQueryDto : TaktPagedQuery
 /// </summary>
 public class TaktEcExecBatchTransposedResultDto
 {
-    /// <summary>分页数据</summary>
+    /// <summary>
+    /// 分页数据
+    /// </summary>
     public TaktPagedResult<TaktEcExecBatchTransposedDto> Paged { get; set; } = null!;
-    /// <summary>阶段列顺序（表头从左到右）</summary>
+    /// <summary>
+    /// 阶段列顺序（表头从左到右）
+    /// </summary>
     public IReadOnlyList<string> StageCodeOrder { get; set; } = Array.Empty<string>();
 }

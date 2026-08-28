@@ -33,7 +33,7 @@ public class TaktProductionPlanItem : TaktCompanyEntityBase
     public long ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 生产计划编码（冗余字段，便于查询）
+    /// 生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "production_plan_code", ColumnDescription = "生产计划编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string ProductionPlanCode { get; set; } = string.Empty;
@@ -101,7 +101,7 @@ public class TaktProductionPlanItem : TaktCompanyEntityBase
     public string? ModelName { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PlanUnit { get; set; } = "PC";

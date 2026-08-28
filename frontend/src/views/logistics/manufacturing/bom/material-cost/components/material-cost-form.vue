@@ -74,7 +74,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialType"
-                  dict-type="logistics_material_type"
+                  dict-type="logistics_materials_material_type"
                   :placeholder="pi.ph('materialType')"
                 />
               </a-form-item>
@@ -86,7 +86,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.productCode"
-                  dict-type="logistics_material_type"
+                  dict-type="logistics_materials_material_type"
                   :placeholder="pi.ph('productCode')"
                   :disabled="!!formData?.bomMaterialCostId"
                 />
@@ -147,7 +147,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.bomMaterialCostId"
                 />

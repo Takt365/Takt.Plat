@@ -96,6 +96,7 @@
             <a-input
               v-if="editingKey === `${record.dictDataId}-dictLabel`"
               v-model:value="editingRecord.dictLabel"
+              :maxlength="40"
               size="small"
               @blur="handleSaveCell(record, 'dictLabel')"
               @press-enter="handleSaveCell(record, 'dictLabel')"
@@ -109,11 +110,12 @@
               {{ record.dictLabel || '-' }}
             </span>
           </template>
-          <!-- 字典本地化键 - 可编辑 -->
+          <!-- 字典国际化键 - 可编辑 -->
           <template v-else-if="column.key === 'i18nKey'">
             <a-input
               v-if="editingKey === `${record.dictDataId}-i18nKey`"
               v-model:value="editingRecord.i18nKey"
+              :maxlength="140"
               size="small"
               @blur="handleSaveCell(record, 'i18nKey')"
               @press-enter="handleSaveCell(record, 'i18nKey')"
@@ -132,6 +134,7 @@
             <a-input
               v-if="editingKey === `${record.dictDataId}-dictValue`"
               v-model:value="editingRecord.dictValue"
+              :maxlength="40"
               size="small"
               @blur="handleSaveCell(record, 'dictValue')"
               @press-enter="handleSaveCell(record, 'dictValue')"
@@ -190,6 +193,7 @@
             <a-input
               v-if="editingKey === `${record.dictDataId}-extLabel`"
               v-model:value="editingRecord.extLabel"
+              :maxlength="140"
               size="small"
               @blur="handleSaveCell(record, 'extLabel')"
               @press-enter="handleSaveCell(record, 'extLabel')"
@@ -208,6 +212,7 @@
             <a-input
               v-if="editingKey === `${record.dictDataId}-extValue`"
               v-model:value="editingRecord.extValue"
+              :maxlength="140"
               size="small"
               @blur="handleSaveCell(record, 'extValue')"
               @press-enter="handleSaveCell(record, 'extValue')"

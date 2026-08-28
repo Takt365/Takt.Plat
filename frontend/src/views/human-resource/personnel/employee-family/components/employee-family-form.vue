@@ -73,7 +73,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.relationType"
-                  dict-type="hr_employee_family_relation_type"
+                  dict-type="humanresource_personnel_employee_family_relation_type"
                   :placeholder="pi.ph('relationType')"
                 />
               </a-form-item>

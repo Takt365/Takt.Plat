@@ -43,10 +43,10 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）
     /// </summary>
-    [SugarColumn(ColumnName = "change_status", ColumnDescription = "变更状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int ChangeStatus { get; set; } = 1;
+    [SugarColumn(ColumnName = "change_status", ColumnDescription = "变更状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
+    public int ChangeStatus { get; set; } = 5;
 
     /// <summary>
     /// 设变标题
@@ -55,13 +55,13 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public string EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     [SugarColumn(ColumnName = "ec_content", ColumnDescription = "设变内容", ColumnDataType = "ntext", IsNullable = false)]
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     [SugarColumn(ColumnName = "ec_leader", ColumnDescription = "负责人", Length = 50, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcLeader { get; set; } = string.Empty;
@@ -73,7 +73,7 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public decimal EcLossAmount { get; set; } = 0;
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）
     /// </summary>
     [SugarColumn(ColumnName = "ec_distinction", ColumnDescription = "区分", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int EcDistinction { get; set; } = 4;
@@ -85,7 +85,13 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "完成品物料状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
+    public string DiscontinuedStatus { get; set; } = "Z0";
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）
     /// </summary>
     [SugarColumn(ColumnName = "ec_status", ColumnDescription = "设变状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EcStatus { get; set; } = 1;

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/source-ec/components -->
 <!-- 文件名称：source-ec-detail-panel.vue -->
-<!-- 功能描述：设变来源明细列表主表实体右侧明细 sourceEcDetail 独立 CRUD（按主表选中 sourceEcId 分页） -->
+<!-- 功能描述：设变来源明细只读列表（按主表选中 sourceEcId 分页查询/导出） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -16,40 +16,23 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="logistics:manufacturing:engineering:change:source:ec:create"
-      update-permission="logistics:manufacturing:engineering:change:source:ec:update"
-      delete-permission="logistics:manufacturing:engineering:change:source:ec:delete"
-      import-permission="logistics:manufacturing:engineering:change:source:ec:import"
       export-permission="logistics:manufacturing:engineering:change:source:ec:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
+      :show-create="false"
+      :show-update="false"
+      :show-delete="false"
       :show-expand="false"
       :show-refresh="true"
-
-      :show-import="true"
+      :show-import="false"
       :show-export="true"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
-      :import-disabled="!hasMasterSelection"
       :export-disabled="!hasMasterSelection"
-      :import-loading="loading"
       :export-loading="loading"
-      @import="handleImport"
+      :refresh-loading="loading"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
-      :create-disabled="!hasMasterSelection"
-      :update-disabled="updateDisabled"
-      :delete-disabled="deleteDisabled"
-      :create-loading="loading"
-      :update-loading="loading"
-      :delete-loading="loading"
-      :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
       @refresh="handleRefresh"
     />
     <div
@@ -97,22 +80,6 @@
         </template>
       </TaktSingleTable>
     </div>
-    <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
-      width="720px"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
-    >
-      <SourceEcDetailForm
-        ref="formRef"
-        :form-data="formData"
-        :master-id="masterSourceEcId"
-        :master-row="selectedMasterRow"
-        :loading="formLoading"
-      />
-    </TaktModal>
 
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -164,106 +131,106 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceFinishedProduct')">
-      <a-form-item :label="pi.queryLabel('sourceFinishedProduct')">
+      <div v-show="isFieldVisible('sourceFinishedGoods')">
+      <a-form-item :label="pi.queryLabel('sourceFinishedGoods')">
         <a-input
-          v-model:value="advancedQueryForm.sourceFinishedProduct"
-          :placeholder="pi.queryPh('sourceFinishedProduct', 'required')"
+          v-model:value="advancedQueryForm.sourceFinishedGoods"
+          :placeholder="pi.queryPh('sourceFinishedGoods', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceParentPart')">
-      <a-form-item :label="pi.queryLabel('sourceParentPart')">
+      <div v-show="isFieldVisible('sourceParentMaterialCode')">
+      <a-form-item :label="pi.queryLabel('sourceParentMaterialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceParentPart"
-          :placeholder="pi.queryPh('sourceParentPart', 'required')"
+          v-model:value="advancedQueryForm.sourceParentMaterialCode"
+          :placeholder="pi.queryPh('sourceParentMaterialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyPartCode')">
-      <a-form-item :label="pi.queryLabel('sourceLegacyPartCode')">
+      <div v-show="isFieldVisible('sourceOldMaterialCode')">
+      <a-form-item :label="pi.queryLabel('sourceOldMaterialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceLegacyPartCode"
-          :placeholder="pi.queryPh('sourceLegacyPartCode', 'required')"
+          v-model:value="advancedQueryForm.sourceOldMaterialCode"
+          :placeholder="pi.queryPh('sourceOldMaterialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyPartName')">
-      <a-form-item :label="pi.queryLabel('sourceLegacyPartName')">
+      <div v-show="isFieldVisible('sourceOldMaterialDescription')">
+      <a-form-item :label="pi.queryLabel('sourceOldMaterialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.sourceLegacyPartName"
-          :placeholder="pi.queryPh('sourceLegacyPartName', 'required')"
+          v-model:value="advancedQueryForm.sourceOldMaterialDescription"
+          :placeholder="pi.queryPh('sourceOldMaterialDescription', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyUsage')">
-      <a-form-item :label="pi.queryLabel('sourceLegacyUsage')">
+      <div v-show="isFieldVisible('sourceOldUsageQuantity')">
+      <a-form-item :label="pi.queryLabel('sourceOldUsageQuantity')">
         <a-input-number
-          v-model:value="advancedQueryForm.sourceLegacyUsage"
-          :placeholder="pi.queryPh('sourceLegacyUsage', 'required')"
+          v-model:value="advancedQueryForm.sourceOldUsageQuantity"
+          :placeholder="pi.queryPh('sourceOldUsageQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyMountingPosition')">
-      <a-form-item :label="pi.queryLabel('sourceLegacyMountingPosition')">
+      <div v-show="isFieldVisible('sourceOldItemPosition')">
+      <a-form-item :label="pi.queryLabel('sourceOldItemPosition')">
         <a-input
-          v-model:value="advancedQueryForm.sourceLegacyMountingPosition"
-          :placeholder="pi.queryPh('sourceLegacyMountingPosition', 'required')"
+          v-model:value="advancedQueryForm.sourceOldItemPosition"
+          :placeholder="pi.queryPh('sourceOldItemPosition', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceReplacementPartCode')">
-      <a-form-item :label="pi.queryLabel('sourceReplacementPartCode')">
+      <div v-show="isFieldVisible('sourceNewMaterialCode')">
+      <a-form-item :label="pi.queryLabel('sourceNewMaterialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceReplacementPartCode"
-          :placeholder="pi.queryPh('sourceReplacementPartCode', 'required')"
+          v-model:value="advancedQueryForm.sourceNewMaterialCode"
+          :placeholder="pi.queryPh('sourceNewMaterialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceReplacementPartName')">
-      <a-form-item :label="pi.queryLabel('sourceReplacementPartName')">
+      <div v-show="isFieldVisible('sourceNewMaterialDescription')">
+      <a-form-item :label="pi.queryLabel('sourceNewMaterialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.sourceReplacementPartName"
-          :placeholder="pi.queryPh('sourceReplacementPartName', 'required')"
+          v-model:value="advancedQueryForm.sourceNewMaterialDescription"
+          :placeholder="pi.queryPh('sourceNewMaterialDescription', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceReplacementUsage')">
-      <a-form-item :label="pi.queryLabel('sourceReplacementUsage')">
+      <div v-show="isFieldVisible('sourceNewUsageQuantity')">
+      <a-form-item :label="pi.queryLabel('sourceNewUsageQuantity')">
         <a-input-number
-          v-model:value="advancedQueryForm.sourceReplacementUsage"
-          :placeholder="pi.queryPh('sourceReplacementUsage', 'required')"
+          v-model:value="advancedQueryForm.sourceNewUsageQuantity"
+          :placeholder="pi.queryPh('sourceNewUsageQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceReplacementMountingPosition')">
-      <a-form-item :label="pi.queryLabel('sourceReplacementMountingPosition')">
+      <div v-show="isFieldVisible('sourceNewItemPosition')">
+      <a-form-item :label="pi.queryLabel('sourceNewItemPosition')">
         <a-input
-          v-model:value="advancedQueryForm.sourceReplacementMountingPosition"
-          :placeholder="pi.queryPh('sourceReplacementMountingPosition', 'required')"
+          v-model:value="advancedQueryForm.sourceNewItemPosition"
+          :placeholder="pi.queryPh('sourceNewItemPosition', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -283,10 +250,10 @@
       </div>
       <div v-show="isFieldVisible('sourceCompatibility')">
       <a-form-item :label="pi.queryLabel('sourceCompatibility')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.sourceCompatibility"
-          dict-type="logistics_ec_source_compatibility"
-          :placeholder="pi.queryPh('sourceCompatibility', 'select')"
+          :placeholder="pi.queryPh('sourceCompatibility', 'optional')"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -295,7 +262,7 @@
       <a-form-item :label="pi.queryLabel('sourceDistinction')">
         <TaktSelect
           v-model:value="advancedQueryForm.sourceDistinction"
-          dict-type="logistics_ec_source_distinction"
+          dict-type="logistics_manufacturing_ec_source_distinction"
           :placeholder="pi.queryPh('sourceDistinction', 'select')"
           allow-clear
         />
@@ -305,18 +272,18 @@
       <a-form-item :label="pi.queryLabel('sourceInstruction')">
         <TaktSelect
           v-model:value="advancedQueryForm.sourceInstruction"
-          dict-type="logistics_ec_source_instruction"
+          dict-type="logistics_manufacturing_ec_source_instruction"
           :placeholder="pi.queryPh('sourceInstruction', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyPartDisposition')">
-      <a-form-item :label="pi.queryLabel('sourceLegacyPartDisposition')">
+      <div v-show="isFieldVisible('sourceOldPartDisposition')">
+      <a-form-item :label="pi.queryLabel('sourceOldPartDisposition')">
         <TaktSelect
-          v-model:value="advancedQueryForm.sourceLegacyPartDisposition"
-          dict-type="logistics_ec_legacy_part_disposition"
-          :placeholder="pi.queryPh('sourceLegacyPartDisposition', 'select')"
+          v-model:value="advancedQueryForm.sourceOldPartDisposition"
+          dict-type="logistics_manufacturing_ec_old_part_disposition"
+          :placeholder="pi.queryPh('sourceOldPartDisposition', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -415,34 +382,11 @@
       </div>
       </template>
     </TaktQueryDrawer>
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: pi.self() })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        v-if="importVisible"
-        :entity-i18n-key="SOURCEECDETAIL_SELF_I18N_KEY"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       id-column-key="sourceEcDetailId"
-      action-column-key="action"
       entity-scope="company"
       table-mode="masterDetailDetail"
       @update:checked-keys="handleColumnKeysChange"
@@ -453,11 +397,11 @@
 
 <script setup lang="ts">
 /**
- * 设变来源明细列表子表 sourceEcDetail 右栏面板
+ * 设变来源明细只读右栏（查询/导出）
  * @module views/logistics/manufacturing/engineering-change/source-ec/components
  */
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
@@ -465,7 +409,6 @@ import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import {
   filterMergedColumnsByDefaultVisible,
   filterTableColumnsByVisibleKeys,
@@ -473,19 +416,10 @@ import {
   normalizeUserTableColumns,
 } from '@/utils/table-columns'
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
-import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
-import SourceEcDetailForm from './source-ec-detail-form.vue'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useSourceEcMasterContext } from '../composables/use-source-ec-master-context'
 import {
   getSourceEcDetailList,
-  getSourceEcDetailById,
-  createSourceEcDetail,
-  updateSourceEcDetail,
-  deleteSourceEcDetailById,
-  deleteSourceEcDetailBatch,
-  getSourceEcDetailTemplate,
-  importSourceEcDetail,
   exportSourceEcDetail,
 } from '@/api/logistics/manufacturing/engineering-change/source-ec-detail'
 import type { SourceEcDetail, SourceEcDetailQuery } from '@/types/logistics/manufacturing/engineering-change/source-ec-detail'
@@ -496,7 +430,6 @@ import {
   SOURCEECDETAIL_SUMMARY_SUM_FIELDS,
   SOURCEECDETAIL_QUERY_STRING_FIELDS,
   SOURCEECDETAIL_QUERY_FIELDS,
-  SOURCEECDETAIL_SELF_I18N_KEY,
 } from '../composables/use-source-ec-detail-i18n'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
@@ -556,11 +489,6 @@ const queryKeyword = ref('')
 const selectedRow = ref<SourceEcDetail | null>(null)
 const selectedRows = ref<SourceEcDetail[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
-const formVisible = ref(false)
-const formTitle = ref('')
-const formData = ref<Partial<SourceEcDetail>>({})
-const formLoading = ref(false)
-const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
@@ -581,10 +509,10 @@ function hasAnyListQueryFilter(): boolean {
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     return true
   }
-  if (form.sourceLegacyUsage !== undefined && form.sourceLegacyUsage !== null) {
+  if (form.sourceOldUsageQuantity !== undefined && form.sourceOldUsageQuantity !== null) {
     return true
   }
-  if (form.sourceReplacementUsage !== undefined && form.sourceReplacementUsage !== null) {
+  if (form.sourceNewUsageQuantity !== undefined && form.sourceNewUsageQuantity !== null) {
     return true
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
@@ -605,8 +533,8 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     lineNumber: undefined as number | undefined,
-    sourceLegacyUsage: undefined as number | undefined,
-    sourceReplacementUsage: undefined as number | undefined,
+    sourceOldUsageQuantity: undefined as number | undefined,
+    sourceNewUsageQuantity: undefined as number | undefined,
     isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -645,7 +573,6 @@ function handleColumnKeysChange(keys: string[]) {
 function handleColumnSettingReset() {
   visibleColumnKeys.value = [...SOURCEECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
-const importVisible = ref(false)
 
 const entityIdName = 'sourceEcDetailId'
 const masterSourceEcId = computed((): string => {
@@ -653,8 +580,6 @@ const masterSourceEcId = computed((): string => {
   return id != null ? String(id) : ''
 })
 const hasMasterSelection = computed(() => masterSourceEcId.value !== '')
-const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
-const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
 function getSourceEcDetailId(record: SourceEcDetail | Record<string, unknown>): string {
   return String((record as SourceEcDetail)?.[entityIdName] ?? '')
@@ -707,104 +632,104 @@ const columns = computed<TableColumnsType>(() => [
       String(getSourceEcDetailField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('sourceFinishedProduct'),
-    dataIndex: 'sourceFinishedProduct',
-    key: 'sourceFinishedProduct',
+    title: pi.label('sourceFinishedGoods'),
+    dataIndex: 'sourceFinishedGoods',
+    key: 'sourceFinishedGoods',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceFinishedProduct') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceFinishedGoods') ?? ''),
   },
   {
-    title: pi.label('sourceParentPart'),
-    dataIndex: 'sourceParentPart',
-    key: 'sourceParentPart',
+    title: pi.label('sourceParentMaterialCode'),
+    dataIndex: 'sourceParentMaterialCode',
+    key: 'sourceParentMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceParentPart') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceParentMaterialCode') ?? ''),
   },
   {
-    title: pi.label('sourceLegacyPartCode'),
-    dataIndex: 'sourceLegacyPartCode',
-    key: 'sourceLegacyPartCode',
+    title: pi.label('sourceOldMaterialCode'),
+    dataIndex: 'sourceOldMaterialCode',
+    key: 'sourceOldMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceLegacyPartCode') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceOldMaterialCode') ?? ''),
   },
   {
-    title: pi.label('sourceLegacyPartName'),
-    dataIndex: 'sourceLegacyPartName',
-    key: 'sourceLegacyPartName',
+    title: pi.label('sourceOldMaterialDescription'),
+    dataIndex: 'sourceOldMaterialDescription',
+    key: 'sourceOldMaterialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceLegacyPartName') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceOldMaterialDescription') ?? ''),
   },
   {
-    title: pi.label('sourceLegacyUsage'),
-    dataIndex: 'sourceLegacyUsage',
-    key: 'sourceLegacyUsage',
+    title: pi.label('sourceOldUsageQuantity'),
+    dataIndex: 'sourceOldUsageQuantity',
+    key: 'sourceOldUsageQuantity',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceLegacyUsage') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceOldUsageQuantity') ?? ''),
   },
   {
-    title: pi.label('sourceLegacyMountingPosition'),
-    dataIndex: 'sourceLegacyMountingPosition',
-    key: 'sourceLegacyMountingPosition',
+    title: pi.label('sourceOldItemPosition'),
+    dataIndex: 'sourceOldItemPosition',
+    key: 'sourceOldItemPosition',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceLegacyMountingPosition') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceOldItemPosition') ?? ''),
   },
   {
-    title: pi.label('sourceReplacementPartCode'),
-    dataIndex: 'sourceReplacementPartCode',
-    key: 'sourceReplacementPartCode',
+    title: pi.label('sourceNewMaterialCode'),
+    dataIndex: 'sourceNewMaterialCode',
+    key: 'sourceNewMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceReplacementPartCode') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceNewMaterialCode') ?? ''),
   },
   {
-    title: pi.label('sourceReplacementPartName'),
-    dataIndex: 'sourceReplacementPartName',
-    key: 'sourceReplacementPartName',
+    title: pi.label('sourceNewMaterialDescription'),
+    dataIndex: 'sourceNewMaterialDescription',
+    key: 'sourceNewMaterialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceReplacementPartName') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceNewMaterialDescription') ?? ''),
   },
   {
-    title: pi.label('sourceReplacementUsage'),
-    dataIndex: 'sourceReplacementUsage',
-    key: 'sourceReplacementUsage',
+    title: pi.label('sourceNewUsageQuantity'),
+    dataIndex: 'sourceNewUsageQuantity',
+    key: 'sourceNewUsageQuantity',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceReplacementUsage') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceNewUsageQuantity') ?? ''),
   },
   {
-    title: pi.label('sourceReplacementMountingPosition'),
-    dataIndex: 'sourceReplacementMountingPosition',
-    key: 'sourceReplacementMountingPosition',
+    title: pi.label('sourceNewItemPosition'),
+    dataIndex: 'sourceNewItemPosition',
+    key: 'sourceNewItemPosition',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceReplacementMountingPosition') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceNewItemPosition') ?? ''),
   },
   {
     title: pi.label('sourceBomCode'),
@@ -847,14 +772,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSourceEcDetailField(record, 'sourceInstruction') ?? ''),
   },
   {
-    title: pi.label('sourceLegacyPartDisposition'),
-    dataIndex: 'sourceLegacyPartDisposition',
-    key: 'sourceLegacyPartDisposition',
+    title: pi.label('sourceOldPartDisposition'),
+    dataIndex: 'sourceOldPartDisposition',
+    key: 'sourceOldPartDisposition',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceLegacyPartDisposition') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceOldPartDisposition') ?? ''),
   },
   {
     title: pi.label('sourceBomEffectiveDate'),
@@ -876,26 +801,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: SourceEcDetail }) =>
       String(getSourceEcDetailField(record, 'isObsolete') ?? ''),
   },
-  CreateActionColumn({
-    actions: [
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineering:change:source:ec:update',
-        onClick: (record: SourceEcDetail) => void handleEdit(record),
-      },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineering:change:source:ec:delete',
-        onClick: (record: SourceEcDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
 ])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
@@ -1033,11 +938,11 @@ function buildListQuery(overrides?: Partial<SourceEcDetailQuery>): SourceEcDetai
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  if (form.sourceLegacyUsage !== undefined && form.sourceLegacyUsage !== null) {
-    query.sourceLegacyUsage = form.sourceLegacyUsage
+  if (form.sourceOldUsageQuantity !== undefined && form.sourceOldUsageQuantity !== null) {
+    query.sourceOldUsageQuantity = form.sourceOldUsageQuantity
   }
-  if (form.sourceReplacementUsage !== undefined && form.sourceReplacementUsage !== null) {
-    query.sourceReplacementUsage = form.sourceReplacementUsage
+  if (form.sourceNewUsageQuantity !== undefined && form.sourceNewUsageQuantity !== null) {
+    query.sourceNewUsageQuantity = form.sourceNewUsageQuantity
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete
@@ -1123,148 +1028,10 @@ function handleQueryReset() {
   void loadData()
 }
 
-function handleCreate() {
-  if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
-  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
-  formData.value = {}
-  formVisible.value = true
-}
-
-async function handleEdit(record: SourceEcDetail) {
-  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
-  formLoading.value = true
-  try {
-    const detail = await getSourceEcDetailById(getSourceEcDetailId(record))
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
-}
-
-function handleUpdate() {
-  if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', {
-      action: t('common.page.button.edit'),
-      entity: pi.self(),
-    }))
-  }
-}
-
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.()
-    const id = formData.value?.sourceEcDetailId
-    if (id) {
-      await updateSourceEcDetail(id, payload)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createSourceEcDetail(payload)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
-    formVisible.value = false
-    await loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-function handleFormCancel() {
-  formVisible.value = false
-}
-
-async function handleDeleteOne(record: SourceEcDetail) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', {
-      entity: pi.self(),
-      name: t('common.tip.this.target', { target: pi.self() }),
-    }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteSourceEcDetailById(getSourceEcDetailId(record))
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
-    },
-  })
-}
-
-async function handleDelete() {
-  if (!hasMasterSelection.value || selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', {
-      action: t('common.page.button.delete'),
-      entity: pi.self(),
-    }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', {
-      entity: pi.self(),
-      count: selectedRows.value.length,
-    }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r) => getSourceEcDetailId(r)).filter(Boolean)
-      await deleteSourceEcDetailBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
-    },
-  })
-}
-
 function handleRefresh() {
   void loadData()
 }
 
-/** 打开导入对话框 */
-function handleImport() {
-  if (!hasMasterSelection.value) {
-      message.warning(t('common.status.empty'))
-      return
-    }
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getSourceEcDetailTemplate(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
-async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
-  const raw = await importSourceEcDetail(file, sheetName)
-  return normalizeImportResult(raw)
-}
-
-/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
-function handleImportSuccess(result: TaktImportResult) {
-  void loadData()
-  if (result.fail === 0 && result.success > 0) {
-    setTimeout(() => { importVisible.value = false }, 2000)
-  }
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}
 async function handleExport() {
   if (!hasMasterSelection.value) {
     message.warning(t('common.status.empty'))

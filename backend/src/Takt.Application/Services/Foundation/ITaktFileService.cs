@@ -44,6 +44,14 @@ public interface ITaktFileService
     Task<TaktFileDownloadStreamResult> DownloadFileByIdAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// 按访问地址打开物理文件流（租户/公司内匹配 AccessUrl，再走按 ID 下载）
+    /// </summary>
+    /// <param name="accessUrl">TaktFile.AccessUrl</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>可读流与下载文件名</returns>
+    Task<TaktFileDownloadStreamResult> DownloadFileByAccessUrlAsync(string accessUrl, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// 获取文件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>

@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcKoubaisController : TaktControllerBase
 {
     private readonly ITaktEcKoubaiService _ecKoubaiService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecKoubaiService">设变采购执行服务</param>
-    public TaktEcKoubaisController(ITaktEcKoubaiService ecKoubaiService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcKoubaisController(
+        ITaktEcKoubaiService ecKoubaiService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecKoubaiService = ecKoubaiService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:list", "设变采购执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:list", "设变采购执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcKoubaiListAsync([FromQuery] TaktEcKoubaiQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcKoubaisController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:list", "设变采购执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcKoubaiMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Mp);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变采购执行
     /// </summary>
     /// <param name="id">设变采购执行ID</param>
     /// <returns>设变采购执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:query", "设变采购执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:query", "设变采购执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcKoubaiByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// 获取设变采购执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:query", "设变采购执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:query", "设变采购执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcKoubaiOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变采购执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:create", "创建设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:create", "创建设变采购执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcKoubaiAsync([FromBody] TaktEcKoubaiCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// <param name="id">设变采购执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变采购执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:update", "更新设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:update", "更新设变采购执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcKoubaiAsync(long id, [FromBody] TaktEcKoubaiUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变采购执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:delete", "删除设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:delete", "删除设变采购执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcKoubaiByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:delete", "批量删除设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:delete", "批量删除设变采购执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcKoubaiBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变采购执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:update", "更新设变采购执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:update", "更新设变采购执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcKoubaiObsoleteAsync([FromBody] TaktEcKoubaiObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:import", "获取设变采购执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:import", "获取设变采购执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcKoubaiTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:import", "导入设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:import", "导入设变采购执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcKoubaiAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// 导出设变采购执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:koubai:export", "导出设变采购执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:export", "导出设变采购执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcKoubaiAsync([FromQuery] TaktEcKoubaiQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

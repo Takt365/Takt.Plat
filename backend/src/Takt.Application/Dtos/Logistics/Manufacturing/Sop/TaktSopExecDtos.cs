@@ -73,7 +73,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? RoutingItemName { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -137,12 +137,12 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 
@@ -241,7 +241,7 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -295,12 +295,12 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public DateTime? EndedAtEnd { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int? ExecStatus { get; set; }
 
@@ -390,7 +390,7 @@ public class TaktSopExecCreateDto
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -435,12 +435,12 @@ public class TaktSopExecCreateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 
@@ -530,9 +530,9 @@ public class TaktSopExecStatusDto
     public long SopExecId { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
-    [Required(ErrorMessage = "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）不能为空")]
+    [Required(ErrorMessage = "执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）不能为空")]
     public int ExecStatus { get; set; } = 0;
 }
 
@@ -593,7 +593,7 @@ public class TaktSopExecTemplateDto
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -637,12 +637,12 @@ public class TaktSopExecTemplateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int? ExecStatus { get; set; }
 
@@ -732,7 +732,7 @@ public class TaktSopExecImportDto
     public long? RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -776,12 +776,12 @@ public class TaktSopExecImportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int? ExecStatus { get; set; }
 
@@ -877,7 +877,7 @@ public class TaktSopExecExportDto
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -921,12 +921,12 @@ public class TaktSopExecExportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     public int ExecStatus { get; set; } = 0;
 

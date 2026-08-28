@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintHandlingDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaintHandling 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaintHandling 生成，请按需审阅）
 // 
@@ -35,7 +35,6 @@ public class TaktCustomerComplaintHandlingDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerComplaintHandlingId { get; set; }
 
-
     /// <summary>
     /// 客诉处理记录编码（唯一索引）
     /// </summary>
@@ -53,7 +52,7 @@ public class TaktCustomerComplaintHandlingDto : TaktCompanyDtoBase
     public string? ComplaintName { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ComplaintCode { get; set; } = string.Empty;
 
@@ -99,19 +98,37 @@ public class TaktCustomerComplaintHandlingDto : TaktCompanyDtoBase
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -144,9 +161,14 @@ public class TaktCustomerComplaintHandlingDto : TaktCompanyDtoBase
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）
@@ -177,7 +199,7 @@ public class TaktCustomerComplaintHandlingQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -203,7 +225,7 @@ public class TaktCustomerComplaintHandlingQueryDto : TaktPagedQuery
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ComplaintCode { get; set; } = string.Empty;
 
@@ -244,19 +266,37 @@ public class TaktCustomerComplaintHandlingQueryDto : TaktPagedQuery
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间（范围查询-开始）
@@ -304,9 +344,14 @@ public class TaktCustomerComplaintHandlingQueryDto : TaktPagedQuery
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）
@@ -359,9 +404,8 @@ public class TaktCustomerComplaintHandlingCreateDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -377,9 +421,8 @@ public class TaktCustomerComplaintHandlingCreateDto
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
-    [Required(ErrorMessage = "客诉单号（冗余字段，便于查询）不能为空")]
     public string ComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -420,19 +463,37 @@ public class TaktCustomerComplaintHandlingCreateDto
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -465,9 +526,14 @@ public class TaktCustomerComplaintHandlingCreateDto
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）
@@ -555,7 +621,7 @@ public class TaktCustomerComplaintHandlingTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -571,7 +637,7 @@ public class TaktCustomerComplaintHandlingTemplateDto
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ComplaintCode { get; set; } = string.Empty;
 
@@ -612,19 +678,37 @@ public class TaktCustomerComplaintHandlingTemplateDto
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -657,9 +741,14 @@ public class TaktCustomerComplaintHandlingTemplateDto
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）
@@ -699,7 +788,7 @@ public class TaktCustomerComplaintHandlingImportDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -715,7 +804,7 @@ public class TaktCustomerComplaintHandlingImportDto
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ComplaintCode { get; set; } = string.Empty;
 
@@ -756,19 +845,37 @@ public class TaktCustomerComplaintHandlingImportDto
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -801,9 +908,14 @@ public class TaktCustomerComplaintHandlingImportDto
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）
@@ -849,6 +961,11 @@ public class TaktCustomerComplaintHandlingExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 客诉处理记录编码（唯一索引）
     /// </summary>
     public string ComplaintHandlingCode { get; set; } = string.Empty;
@@ -860,7 +977,7 @@ public class TaktCustomerComplaintHandlingExportDto
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ComplaintCode { get; set; } = string.Empty;
 
@@ -901,19 +1018,37 @@ public class TaktCustomerComplaintHandlingExportDto
     public string? PreventiveAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
 
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -946,9 +1081,14 @@ public class TaktCustomerComplaintHandlingExportDto
     public int? CustomerSatisfaction { get; set; }
 
     /// <summary>
-    /// 附件路径（JSON格式，存储相关文件URL列表）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理状态（字典 logistics_quality_complaint_handling_status）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaintItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaintItem 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public string? ComplaintName { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
@@ -107,9 +107,15 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期
@@ -122,9 +128,14 @@ public class TaktCustomerComplaintItemDto : TaktCompanyDtoBase
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
@@ -181,7 +192,7 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
@@ -241,9 +252,15 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期（范围查询-开始）
@@ -266,9 +283,14 @@ public class TaktCustomerComplaintItemQueryDto : TaktPagedQuery
     public DateTime? ActualCompletionDateEnd { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
@@ -337,9 +359,9 @@ public class TaktCustomerComplaintItemCreateDto
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
-    [Required(ErrorMessage = "客诉单号（冗余字段，便于查询）不能为空")]
+    [Required(ErrorMessage = "客诉单号（冗余：按对应 Id 取主数据名称联动）不能为空")]
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -400,9 +422,15 @@ public class TaktCustomerComplaintItemCreateDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期
@@ -415,9 +443,14 @@ public class TaktCustomerComplaintItemCreateDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
@@ -544,7 +577,7 @@ public class TaktCustomerComplaintItemTemplateDto
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
@@ -604,9 +637,15 @@ public class TaktCustomerComplaintItemTemplateDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期
@@ -619,9 +658,14 @@ public class TaktCustomerComplaintItemTemplateDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
@@ -677,7 +721,7 @@ public class TaktCustomerComplaintItemImportDto
     public long? ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? CustomerComplaintCode { get; set; } = string.Empty;
 
@@ -737,9 +781,15 @@ public class TaktCustomerComplaintItemImportDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期
@@ -752,9 +802,14 @@ public class TaktCustomerComplaintItemImportDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
@@ -816,7 +871,7 @@ public class TaktCustomerComplaintItemExportDto
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string CustomerComplaintCode { get; set; } = string.Empty;
 
@@ -876,9 +931,15 @@ public class TaktCustomerComplaintItemExportDto
     public string? ImprovementAction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? ImprovementResponsible { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? ImprovementResponsibleName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划完成日期
@@ -891,9 +952,14 @@ public class TaktCustomerComplaintItemExportDto
     public DateTime? ActualCompletionDate { get; set; }
 
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentPaths { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）

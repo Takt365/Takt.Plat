@@ -71,7 +71,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.allocationCategory"
-                  dict-type="logistics_allocation_category"
+                  dict-type="logistics_sales_allocation_category"
                   :placeholder="pi.ph('allocationCategory')"
                 />
               </a-form-item>

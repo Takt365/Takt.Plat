@@ -38,7 +38,7 @@ public class TaktDurationLog : TaktCompanyEntityBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 用户名（冗余字段，便于查询）
+    /// 用户名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string UserName { get; set; } = string.Empty;

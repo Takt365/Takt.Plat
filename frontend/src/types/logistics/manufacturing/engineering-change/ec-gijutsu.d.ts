@@ -52,7 +52,7 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecContent: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -62,7 +62,7 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction: number;
 
@@ -72,7 +72,12 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecEntryDate: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
 
@@ -154,7 +159,7 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecContent?: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -164,7 +169,7 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction?: number;
 
@@ -179,7 +184,12 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecEntryDateEnd?: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus?: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
 
@@ -261,7 +271,7 @@ export interface EcGijutsuCreate {
   ecContent: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -271,7 +281,7 @@ export interface EcGijutsuCreate {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction: number;
 
@@ -281,7 +291,12 @@ export interface EcGijutsuCreate {
   ecEntryDate: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
 
@@ -389,7 +404,7 @@ export interface EcGijutsuTemplate {
   ecContent?: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -399,7 +414,7 @@ export interface EcGijutsuTemplate {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction?: number;
 
@@ -409,7 +424,12 @@ export interface EcGijutsuTemplate {
   ecEntryDate?: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus?: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
 
@@ -491,7 +511,7 @@ export interface EcGijutsuImport {
   ecContent?: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -501,7 +521,7 @@ export interface EcGijutsuImport {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction?: number;
 
@@ -511,7 +531,12 @@ export interface EcGijutsuImport {
   ecEntryDate?: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus?: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
 
@@ -585,7 +610,7 @@ export interface EcGijutsuExport {
   ecContent: string;
 
   /**
-   * 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -595,7 +620,7 @@ export interface EcGijutsuExport {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
    */
   ecDistinction: number;
 
@@ -605,7 +630,12 @@ export interface EcGijutsuExport {
   ecEntryDate: string;
 
   /**
-   * 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
 

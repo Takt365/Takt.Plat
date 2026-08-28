@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）"),
 
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编码_us", "评价表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编码_us", "评价表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "ja-JP", "评价表编码_jp", "评价表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "ja-JP", "评价表编码_jp", "评价表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-CN", "评价表编码", "评价表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-CN", "评价表编码", "评价表编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-HK", "评价表编码_hk", "评价表编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-HK", "评价表编码_hk", "评价表编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.supplierevaluationitem.linenumber
             new TranslationSeedItem("entity.supplierevaluationitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

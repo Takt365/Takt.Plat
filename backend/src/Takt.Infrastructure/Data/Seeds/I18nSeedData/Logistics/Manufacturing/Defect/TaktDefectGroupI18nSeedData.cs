@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDefectGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -125,15 +125,6 @@ public class TaktDefectGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.defectgroup.description", "zh-CN", "不良组描述", "不良组描述"),
             // entity.defectgroup.description
             new TranslationSeedItem("entity.defectgroup.description", "zh-HK", "不良组描述_hk", "不良组描述"),
-
-            // entity.defectgroup.responsibleuserid
-            new TranslationSeedItem("entity.defectgroup.responsibleuserid", "en-US", "负责人用户ID_us", "不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.defectgroup.responsibleuserid
-            new TranslationSeedItem("entity.defectgroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.defectgroup.responsibleuserid
-            new TranslationSeedItem("entity.defectgroup.responsibleuserid", "zh-CN", "负责人用户ID", "不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.defectgroup.responsibleuserid
-            new TranslationSeedItem("entity.defectgroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.defectgroup.contactphone
             new TranslationSeedItem("entity.defectgroup.contactphone", "en-US", "联系电话_us", "联系电话"),

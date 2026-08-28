@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.usagequantity", "zh-HK", "用量_hk", "用量（quantity）"),
 
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "en-US", "单位_us", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-CN", "单位", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialitem.materialunit
-            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_materials_unit_of_measure_code）"),
 
             // entity.billofmaterialitem.scraprate
             new TranslationSeedItem("entity.billofmaterialitem.scraprate", "en-US", "损耗率_us", "损耗率（0-100，scrap_rate）"),

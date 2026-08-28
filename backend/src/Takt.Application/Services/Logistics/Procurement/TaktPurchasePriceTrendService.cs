@@ -27,7 +27,9 @@ namespace Takt.Application.Services.Logistics.Procurement;
 /// </summary>
 public class TaktPurchasePriceTrendService : TaktServiceBase, ITaktPurchasePriceTrendService
 {
-    /// <summary>物料/供应商名称按编码分批查询，避免超长 IN 列表</summary>
+    /// <summary>
+    /// 物料/供应商名称按编码分批查询，避免超长 IN 列表
+    /// </summary>
     private const int MaterialNameLookupBatchSize = 500;
 
     private readonly ITaktCompanyRepository<TaktPurchasePrice> _purchasePriceRepository;

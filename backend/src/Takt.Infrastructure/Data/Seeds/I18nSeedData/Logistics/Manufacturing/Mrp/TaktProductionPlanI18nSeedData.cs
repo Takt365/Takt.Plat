@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktProductionPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionplan.salesforecastid", "zh-HK", "来源销售预测ID_hk", "来源销售预测ID（Demand 层追溯，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.productionplan.salesforecastcode
-            new TranslationSeedItem("entity.productionplan.salesforecastcode", "en-US", "来源销售预测编码_us", "来源销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplan.salesforecastcode", "en-US", "来源销售预测编码_us", "来源销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplan.salesforecastcode
-            new TranslationSeedItem("entity.productionplan.salesforecastcode", "ja-JP", "来源销售预测编码_jp", "来源销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplan.salesforecastcode", "ja-JP", "来源销售预测编码_jp", "来源销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplan.salesforecastcode
-            new TranslationSeedItem("entity.productionplan.salesforecastcode", "zh-CN", "来源销售预测编码", "来源销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplan.salesforecastcode", "zh-CN", "来源销售预测编码", "来源销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplan.salesforecastcode
-            new TranslationSeedItem("entity.productionplan.salesforecastcode", "zh-HK", "来源销售预测编码_hk", "来源销售预测编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplan.salesforecastcode", "zh-HK", "来源销售预测编码_hk", "来源销售预测编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.productionplan.plandate
             new TranslationSeedItem("entity.productionplan.plandate", "en-US", "计划编制日期_us", "计划编制日期"),
@@ -162,23 +162,23 @@ public class TaktProductionPlanI18nSeedData : ITaktSeedDataCoordinator
             // entity.productionplan.planperiodend
             new TranslationSeedItem("entity.productionplan.planperiodend", "zh-HK", "计划周期结束日期_hk", "计划周期结束日期"),
 
-            // entity.productionplan.plannerid
-            new TranslationSeedItem("entity.productionplan.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.productionplan.plannerid
-            new TranslationSeedItem("entity.productionplan.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.productionplan.plannerid
-            new TranslationSeedItem("entity.productionplan.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.productionplan.plannerid
-            new TranslationSeedItem("entity.productionplan.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionplan.planneremployeeid
+            new TranslationSeedItem("entity.productionplan.planneremployeeid", "en-US", "计划人员工ID_us", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionplan.planneremployeeid
+            new TranslationSeedItem("entity.productionplan.planneremployeeid", "ja-JP", "计划人员工ID_jp", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionplan.planneremployeeid
+            new TranslationSeedItem("entity.productionplan.planneremployeeid", "zh-CN", "计划人员工ID", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.productionplan.planneremployeeid
+            new TranslationSeedItem("entity.productionplan.planneremployeeid", "zh-HK", "计划人员工ID_hk", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.productionplan.planby
-            new TranslationSeedItem("entity.productionplan.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.productionplan.planby
-            new TranslationSeedItem("entity.productionplan.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.productionplan.planby
-            new TranslationSeedItem("entity.productionplan.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.productionplan.planby
-            new TranslationSeedItem("entity.productionplan.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.productionplan.plannername
+            new TranslationSeedItem("entity.productionplan.plannername", "en-US", "计划人名称_us", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.productionplan.plannername
+            new TranslationSeedItem("entity.productionplan.plannername", "ja-JP", "计划人名称_jp", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.productionplan.plannername
+            new TranslationSeedItem("entity.productionplan.plannername", "zh-CN", "计划人名称", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.productionplan.plannername
+            new TranslationSeedItem("entity.productionplan.plannername", "zh-HK", "计划人名称_hk", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.productionplan.totalquantity
             new TranslationSeedItem("entity.productionplan.totalquantity", "en-US", "计划总数量_us", "计划总数量（基本单位数量）"),

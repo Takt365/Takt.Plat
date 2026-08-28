@@ -94,7 +94,7 @@ export interface MasterProductionScheduleLine extends CompanyDtoBase {
   atpQuantity?: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
@@ -187,7 +187,7 @@ export interface MasterProductionScheduleLineExport {
   atpQuantity: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 

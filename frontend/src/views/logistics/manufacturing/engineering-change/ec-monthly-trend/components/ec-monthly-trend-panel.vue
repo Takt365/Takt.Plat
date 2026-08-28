@@ -47,6 +47,9 @@
               {{ formatPercent(getVariancePercent(record)) }}
             </span>
           </template>
+          <template v-else-if="column.key === 'deptCode'">
+            {{ deptLabel(record.deptCode) }}
+          </template>
           <template v-else>
             {{ text }}
           </template>
@@ -107,7 +110,9 @@ import {
   getTaktDefaultPageSize,
 } from '@/utils/takt-paged'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { taktOrgDeptI18nKey } from '@/utils/naming'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
+import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n'
 
 type EcTrendRow = EcMonthlyTrend | EcImplementationMonthlyTrend
 
@@ -137,6 +142,17 @@ const hasRows = defineModel<boolean>('hasRows', { default: false })
 
 const localePrefix = 'logistics.manufacturing.engineering-change.ec-monthly-trend.page'
 const { t } = useI18n()
+const gi = useEcGijutsuI18n()
+
+/**
+ * 部门显示名（TaktDeptI18nSeedData：org.dept.{编码小写}）
+ * @param code 部门编码
+ * @returns {string} 文案
+ */
+function deptLabel(code: string | null | undefined): string {
+  const key = taktOrgDeptI18nKey(code)
+  return key ? t(key) : ''
+}
 
 /** 行数据 */
 const rows = ref<EcTrendRow[]>([])
@@ -187,7 +203,7 @@ const columns = computed<TableColumnsType>(() => {
   if (props.activeTab === 'implement') {
     const cols: TableColumnsType = [
       {
-        title: t('common.page.entity.plantcode'),
+        title: gi.label('plantCode'),
         dataIndex: 'plantCode',
         key: 'plantCode',
         width: 100,
@@ -240,7 +256,7 @@ const columns = computed<TableColumnsType>(() => {
   }
   const cols: TableColumnsType = [
     {
-      title: t('common.page.entity.plantcode'),
+      title: gi.label('plantCode'),
       dataIndex: 'plantCode',
       key: 'plantCode',
       width: 100,
@@ -248,7 +264,7 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.ecgijutsu.ecCode'),
+      title: gi.label('ecCode'),
       dataIndex: 'ecCode',
       key: 'ecCode',
       width: 140,

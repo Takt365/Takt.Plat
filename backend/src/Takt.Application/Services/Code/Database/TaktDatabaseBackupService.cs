@@ -34,7 +34,9 @@ namespace Takt.Application.Services.Code.Database;
 /// </summary>
 public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupService
 {
-    /// <summary>Quartz Handler 类名（与 TaktDatabaseBackupJobHandler.HandlerKey 一致）</summary>
+    /// <summary>
+    /// Quartz Handler 类名（与 TaktDatabaseBackupJobHandler.HandlerKey 一致）
+    /// </summary>
     public const string QuartzHandlerClassName = "TaktDatabaseBackupJobHandler";
 
     private const int BackupStatusPending = 0;

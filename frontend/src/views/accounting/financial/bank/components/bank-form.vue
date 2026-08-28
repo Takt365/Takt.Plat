@@ -379,7 +379,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sddRtrans"
-                  dict-type="accounting_sepa_rtrans_type"
+                  dict-type="accounting_financial_sepa_rtrans_type"
                   :placeholder="pi.ph('sddRtrans')"
                 />
               </a-form-item>

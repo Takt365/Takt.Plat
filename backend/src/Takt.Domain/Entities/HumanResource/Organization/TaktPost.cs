@@ -75,7 +75,7 @@ public class TaktPost : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "requirements", ColumnDescription = "任职要求", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false, DefaultValue = "")]
     public string Requirements { get; set; } = string.Empty;
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     [SugarColumn(ColumnName = "education_required", ColumnDescription = "学历要求", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EducationRequired { get; set; } = 1;

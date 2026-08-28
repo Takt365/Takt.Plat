@@ -79,7 +79,7 @@
         <template v-if="column.key === 'unitOfMeasure'">
           <TaktDictTag
             :value="getApsOrderField(record, 'unitOfMeasure')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'orderStatus'">
@@ -193,7 +193,7 @@
       <a-form-item :label="t('entity.apsorder.unitofmeasure')">
         <TaktSelect
           v-model:value="advancedQueryForm.unitOfMeasure"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsorder.unitofmeasure') })"
           allow-clear
         />

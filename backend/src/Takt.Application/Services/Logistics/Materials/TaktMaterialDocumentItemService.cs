@@ -385,9 +385,9 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
         {
             entity.MaterialDocumentCode = master.MaterialDocumentCode;
         }
-        if (string.IsNullOrEmpty(entity.PostedBy))
+        if (string.IsNullOrEmpty(entity.PostedByEmployeeName))
         {
-            entity.PostedBy = master.PostedBy;
+            entity.PostedByEmployeeName = master.PostedByEmployeeName;
         }
     }
     // ========================================
@@ -469,7 +469,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
                 || (x.ManufacturerPartMaterialCode != null && x.ManufacturerPartMaterialCode.Contains(keywords))
                 || (x.MkpfReferenceCode != null && x.MkpfReferenceCode.Contains(keywords))
                 || (x.ImDeliveryCode != null && x.ImDeliveryCode.Contains(keywords))
-                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -889,10 +889,10 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
             exp = exp.And(x => x.ImDeliveryItem == imDeliveryItem);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
         {
-            var postedBy = queryDto.PostedBy;
-            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+            var postedBy = queryDto.PostedByEmployeeName;
+            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -1213,7 +1213,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
         {
             return true;
         }

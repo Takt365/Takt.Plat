@@ -64,7 +64,7 @@ export interface SalesOrderItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -79,7 +79,7 @@ export interface SalesOrderItem extends CompanyDtoBase {
   shippedQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit?: number;
 
@@ -119,7 +119,7 @@ export interface SalesOrderItem extends CompanyDtoBase {
   salesAmount?: number;
 
   /**
-   * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   * 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus?: number;
 
@@ -187,7 +187,7 @@ export interface SalesOrderItemExport {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -202,7 +202,7 @@ export interface SalesOrderItemExport {
   shippedQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit: number;
 
@@ -242,7 +242,7 @@ export interface SalesOrderItemExport {
   salesAmount: number;
 
   /**
-   * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   * 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus: number;
 

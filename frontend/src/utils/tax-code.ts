@@ -4,13 +4,13 @@
 // 文件名称：tax-code.ts
 // 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
-// 功能描述：与后端 TaktTaxCodeHelper 对齐：税码 accounting_tax_code → 税率百分比整数
+// 功能描述：与后端 TaktTaxCodeHelper 对齐：税码 accounting_financial_tax_code → 税率百分比整数
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-/** 内置税码→税率%（与种子 accounting_tax_code.ExtValue 一致） */
+/** 内置税码→税率%（与种子 accounting_financial_tax_code.ExtValue 一致） */
 const BUILT_IN_TAX_CODE_RATES: Readonly<Record<string, number>> = {
   J0: 0,
   J1: 17,

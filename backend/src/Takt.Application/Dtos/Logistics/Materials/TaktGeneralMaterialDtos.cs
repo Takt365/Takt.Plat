@@ -56,12 +56,12 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string IndustrySector { get; set; } = string.Empty;
 
@@ -76,12 +76,12 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -166,7 +166,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -176,7 +176,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -286,7 +286,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -316,7 +316,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -326,7 +326,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -356,12 +356,12 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -486,7 +486,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -746,7 +746,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -766,7 +766,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -786,7 +786,7 @@ public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 
@@ -1098,12 +1098,12 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -1118,12 +1118,12 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -1208,7 +1208,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -1218,7 +1218,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -1328,7 +1328,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -1358,7 +1358,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -1368,7 +1368,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -1398,12 +1398,12 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -1548,7 +1548,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -1808,7 +1808,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -1828,7 +1828,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -1848,7 +1848,7 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 
@@ -2164,15 +2164,15 @@ public class TaktGeneralMaterialCreateDto
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    [Required(ErrorMessage = "物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）不能为空")]
+    [Required(ErrorMessage = "物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）不能为空")]
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
-    [Required(ErrorMessage = "行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）不能为空")]
+    [Required(ErrorMessage = "行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）不能为空")]
     public string IndustrySector { get; set; } = string.Empty;
 
     /// <summary>
@@ -2187,13 +2187,13 @@ public class TaktGeneralMaterialCreateDto
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -2278,7 +2278,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -2288,7 +2288,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -2398,7 +2398,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -2428,7 +2428,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -2438,7 +2438,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -2468,12 +2468,12 @@ public class TaktGeneralMaterialCreateDto
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -2598,7 +2598,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -2858,7 +2858,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -2878,7 +2878,7 @@ public class TaktGeneralMaterialCreateDto
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -2898,7 +2898,7 @@ public class TaktGeneralMaterialCreateDto
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 
@@ -3248,12 +3248,12 @@ public class TaktGeneralMaterialTemplateDto
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -3268,12 +3268,12 @@ public class TaktGeneralMaterialTemplateDto
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -3358,7 +3358,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -3368,7 +3368,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -3478,7 +3478,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -3508,7 +3508,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -3518,7 +3518,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -3548,12 +3548,12 @@ public class TaktGeneralMaterialTemplateDto
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -3678,7 +3678,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -3938,7 +3938,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -3958,7 +3958,7 @@ public class TaktGeneralMaterialTemplateDto
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -3978,7 +3978,7 @@ public class TaktGeneralMaterialTemplateDto
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 
@@ -4280,12 +4280,12 @@ public class TaktGeneralMaterialImportDto
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -4300,12 +4300,12 @@ public class TaktGeneralMaterialImportDto
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -4390,7 +4390,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -4400,7 +4400,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -4510,7 +4510,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -4540,7 +4540,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -4550,7 +4550,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -4580,12 +4580,12 @@ public class TaktGeneralMaterialImportDto
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -4710,7 +4710,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -4970,7 +4970,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -4990,7 +4990,7 @@ public class TaktGeneralMaterialImportDto
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -5010,7 +5010,7 @@ public class TaktGeneralMaterialImportDto
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 
@@ -5318,12 +5318,12 @@ public class TaktGeneralMaterialExportDto
     public string? ClientDeletionFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     public string IndustrySector { get; set; } = string.Empty;
 
@@ -5338,12 +5338,12 @@ public class TaktGeneralMaterialExportDto
     public string? OldMaterialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? OrderUnit { get; set; } = string.Empty;
 
@@ -5428,7 +5428,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -5438,7 +5438,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -5548,7 +5548,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? DimensionUnit { get; set; } = string.Empty;
 
@@ -5578,7 +5578,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     public string? AllowedPackagingWeightUnit { get; set; } = string.Empty;
 
@@ -5588,7 +5588,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     public string? AllowedPackagingVolumeUnit { get; set; } = string.Empty;
 
@@ -5618,12 +5618,12 @@ public class TaktGeneralMaterialExportDto
     public string? ConfigurableMaterial { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     public string? BatchManagementRequired { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     public string? PackagingMaterialType { get; set; } = string.Empty;
 
@@ -5748,7 +5748,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     public string? ContentUnit { get; set; } = string.Empty;
 
@@ -6008,7 +6008,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     public string? MaximumPackingDimensionUnit { get; set; } = string.Empty;
 
@@ -6028,7 +6028,7 @@ public class TaktGeneralMaterialExportDto
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     public string? QuarantinePeriodUnit { get; set; } = string.Empty;
 
@@ -6048,7 +6048,7 @@ public class TaktGeneralMaterialExportDto
     public string? FormName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? LogisticsUnitOfMeasure { get; set; } = string.Empty;
 

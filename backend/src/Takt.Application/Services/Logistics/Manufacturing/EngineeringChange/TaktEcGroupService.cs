@@ -128,9 +128,9 @@ public class TaktEcGroupService : TaktServiceBase, ITaktEcGroupService
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _ecGroupRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
         entity = await _ecGroupRepository.CreateAsync(entity);
         return await GetEcGroupByIdAsync(entity.Id) ?? entity.Adapt<TaktEcGroupDto>();
@@ -301,9 +301,9 @@ public class TaktEcGroupService : TaktServiceBase, ITaktEcGroupService
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _ecGroupRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                         x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
                 }
                 await _ecGroupRepository.CreateAsync(entity);
                 success += 1;
@@ -363,7 +363,6 @@ public class TaktEcGroupService : TaktServiceBase, ITaktEcGroupService
                 || (x.EcGroupCode != null && x.EcGroupCode.Contains(keywords))
                 || (x.EcGroupName != null && x.EcGroupName.Contains(keywords))
                 || (x.EcGroupDescription != null && x.EcGroupDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
@@ -394,11 +393,6 @@ public class TaktEcGroupService : TaktServiceBase, ITaktEcGroupService
         if (!string.IsNullOrEmpty(queryDto?.EcGroupDescription))
         {
             exp = exp.And(x => x.EcGroupDescription != null && x.EcGroupDescription.Contains(queryDto.EcGroupDescription));
-        }
-
-        if (queryDto?.ResponsibleUserId.HasValue == true)
-        {
-            exp = exp.And(x => x.ResponsibleUserId == queryDto.ResponsibleUserId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ContactPhone))

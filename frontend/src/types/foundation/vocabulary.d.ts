@@ -44,7 +44,7 @@ export interface Vocabulary extends TenantCoreDtoBase {
   filterLevel: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText: string;
 
@@ -83,7 +83,7 @@ export interface VocabularyQuery extends TaktPagedQuery {
   filterLevel?: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText?: string;
 
@@ -141,7 +141,7 @@ export interface VocabularyCreate {
   filterLevel: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText: string;
 
@@ -221,7 +221,7 @@ export interface VocabularyTemplate {
   filterLevel?: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText?: string;
 
@@ -269,7 +269,7 @@ export interface VocabularyImport {
   filterLevel?: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText?: string;
 
@@ -317,7 +317,7 @@ export interface VocabularyExport {
   filterLevel: number;
 
   /**
-   * 替换文本（默认 *）
+   * 替换文本（默认 *Takt*）
    */
   replaceText: string;
 

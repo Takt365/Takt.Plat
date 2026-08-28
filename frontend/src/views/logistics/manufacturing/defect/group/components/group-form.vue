@@ -108,18 +108,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('responsibleUserId')"
-                name="responsibleUserId"
-              >
-                <TaktSelect
-                  v-model:value="formState.responsibleUserId"
-                  api-url="TaktUsers/options"
-                  :placeholder="pi.ph('responsibleUserId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="pi.label('contactPhone')"
                 name="contactPhone"
               >

@@ -58,7 +58,7 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_blocked", ColumnDescription = "冻结", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBlocked { get; set; } = 0;
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PurchaseUnit { get; set; } = "PC";

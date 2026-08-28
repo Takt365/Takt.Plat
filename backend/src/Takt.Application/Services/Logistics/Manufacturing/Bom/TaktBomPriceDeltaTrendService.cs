@@ -30,11 +30,17 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 /// </summary>
 public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDeltaTrendService
 {
-    /// <summary>移动价格候选查询分批上限（仅替代价查找；列表产品行数不设上限）</summary>
+    /// <summary>
+    /// 移动价格候选查询分批上限（仅替代价查找；列表产品行数不设上限）
+    /// </summary>
     private const int MovingPriceLookupMaxRows = 20000;
-    /// <summary>列表期间列上限（防横向/JSON 溢出）</summary>
+    /// <summary>
+    /// 列表期间列上限（防横向/JSON 溢出）
+    /// </summary>
     private const int MaxPeriodMonths = 24;
-    /// <summary>列表页组文字段截断长度（导出保留全文）</summary>
+    /// <summary>
+    /// 列表页组文字段截断长度（导出保留全文）
+    /// </summary>
     private const int MaxGroupTextLength = 2000;
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
     private const string MovingPriceYearShardBaseTable = "takt_logistics_materials_material_moving_price";

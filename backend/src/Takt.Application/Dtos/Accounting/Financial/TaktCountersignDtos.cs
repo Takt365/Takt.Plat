@@ -41,23 +41,18 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价 名称（填充字段）
-    /// </summary>
-    public string? PurchaseInquiryName { get; set; }
-
-    /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     public string BusinessType { get; set; } = string.Empty;
 
@@ -72,7 +67,7 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public int StepNo { get; set; } = 0;
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -98,14 +93,31 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -113,12 +125,18 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public int IsBudget { get; set; } = 0;
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal BudgetAmount { get; set; }
 
@@ -148,9 +166,14 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -201,18 +224,18 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     public string? BusinessType { get; set; } = string.Empty;
 
@@ -227,7 +250,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public int? StepNo { get; set; }
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -253,14 +276,31 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -268,12 +308,18 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public int? IsBudget { get; set; }
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal? BudgetAmount { get; set; }
 
@@ -303,9 +349,14 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -412,20 +463,20 @@ public class TaktCountersignCreateDto
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
-    [Required(ErrorMessage = "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）不能为空")]
+    [Required(ErrorMessage = "会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）不能为空")]
     public string BusinessType { get; set; } = string.Empty;
 
     /// <summary>
@@ -439,7 +490,7 @@ public class TaktCountersignCreateDto
     public int StepNo { get; set; } = 0;
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -465,14 +516,31 @@ public class TaktCountersignCreateDto
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -480,12 +548,18 @@ public class TaktCountersignCreateDto
     public int IsBudget { get; set; } = 0;
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal BudgetAmount { get; set; }
 
@@ -515,9 +589,14 @@ public class TaktCountersignCreateDto
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -625,18 +704,18 @@ public class TaktCountersignTemplateDto
     public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     public string? BusinessType { get; set; } = string.Empty;
 
@@ -651,7 +730,7 @@ public class TaktCountersignTemplateDto
     public int? StepNo { get; set; }
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -677,14 +756,31 @@ public class TaktCountersignTemplateDto
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -692,12 +788,18 @@ public class TaktCountersignTemplateDto
     public int? IsBudget { get; set; }
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal? BudgetAmount { get; set; }
 
@@ -727,9 +829,14 @@ public class TaktCountersignTemplateDto
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -784,18 +891,18 @@ public class TaktCountersignImportDto
     public string? CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     public string? BusinessType { get; set; } = string.Empty;
 
@@ -810,7 +917,7 @@ public class TaktCountersignImportDto
     public int? StepNo { get; set; }
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -836,14 +943,31 @@ public class TaktCountersignImportDto
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -851,12 +975,18 @@ public class TaktCountersignImportDto
     public int? IsBudget { get; set; }
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal? BudgetAmount { get; set; }
 
@@ -886,9 +1016,14 @@ public class TaktCountersignImportDto
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -949,18 +1084,18 @@ public class TaktCountersignExportDto
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     public string BusinessType { get; set; } = string.Empty;
 
@@ -975,7 +1110,7 @@ public class TaktCountersignExportDto
     public int StepNo { get; set; } = 0;
 
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     public string? CountersignDepts { get; set; } = string.Empty;
 
@@ -1001,14 +1136,31 @@ public class TaktCountersignExportDto
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 预算否（字典 sys_yes_no）
@@ -1016,12 +1168,18 @@ public class TaktCountersignExportDto
     public int IsBudget { get; set; } = 0;
 
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? BudgetItemId { get; set; }
+
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
     /// </summary>
     public string? BudgetItem { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     public decimal BudgetAmount { get; set; }
 
@@ -1051,9 +1209,14 @@ public class TaktCountersignExportDto
     public string? TargetAndExpectedBenefit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）

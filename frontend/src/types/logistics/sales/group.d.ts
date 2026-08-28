@@ -44,16 +44,6 @@ export interface SalesGroup extends CompanyDtoBase {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
-   * 销售组负责人用户 名称（填充字段）
-   */
-  responsibleUserName?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -79,7 +69,6 @@ export interface SalesGroup extends CompanyDtoBase {
   groupStatus: number;
 
 }
-
 
 /**
  * SalesGroup 分页查询 DTO
@@ -122,11 +111,6 @@ export interface SalesGroupQuery extends TaktPagedQuery {
    * 销售组描述
    */
   salesGroupDescription?: string;
-
-  /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话
@@ -175,7 +159,6 @@ export interface SalesGroupQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建SalesGroup DTO
  * 对应前端 SalesGroupCreate
@@ -218,11 +201,6 @@ export interface SalesGroupCreate {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -254,7 +232,6 @@ export interface SalesGroupCreate {
 
 }
 
-
 /**
  * 更新SalesGroup DTO
  * 继承 TaktSalesGroupCreateDto，添加 SalesGroupId 字段
@@ -268,7 +245,6 @@ export interface SalesGroupUpdate extends SalesGroupCreate {
   salesGroupId: string;
 
 }
-
 
 /**
  * SalesGroup 状态更新 DTO
@@ -288,7 +264,6 @@ export interface SalesGroupStatus {
 
 }
 
-
 /**
  * SalesGroup 排序更新 DTO
  * 对应前端 SalesGroupSort
@@ -307,7 +282,6 @@ export interface SalesGroupSort {
 
 }
 
-
 /**
  * SalesGroup 内置更新 DTO
  * 对应前端 SalesGroupBuiltIn
@@ -325,7 +299,6 @@ export interface SalesGroupBuiltIn {
   isBuiltIn: number;
 
 }
-
 
 /**
  * SalesGroup 导入模板行 DTO
@@ -369,11 +342,6 @@ export interface SalesGroupTemplate {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -404,7 +372,6 @@ export interface SalesGroupTemplate {
   remark?: string;
 
 }
-
 
 /**
  * SalesGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -448,11 +415,6 @@ export interface SalesGroupImport {
   salesGroupDescription?: string;
 
   /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -483,7 +445,6 @@ export interface SalesGroupImport {
   remark?: string;
 
 }
-
 
 /**
  * SalesGroup 导出 DTO（独立实现，不继承响应 Dto）
@@ -525,11 +486,6 @@ export interface SalesGroupExport {
    * 销售组描述
    */
   salesGroupDescription?: string;
-
-  /**
-   * 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话

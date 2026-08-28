@@ -51,7 +51,7 @@ public class TaktTicketEvaluation : TaktCompanyEntityBase
     public long EvaluatorId { get; set; }
 
     /// <summary>
-    /// 评价人姓名（冗余字段，便于查询）
+    /// 评价人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "evaluator_name", ColumnDescription = "评价人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? EvaluatorName { get; set; }

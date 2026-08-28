@@ -220,7 +220,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.payStatus"
-                  dict-type="hr_social_insurance_pay_status"
+                  dict-type="humanresource_benefits_social_insurance_pay_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.socialinsurance.paystatus') })"
                 />
               </a-form-item>

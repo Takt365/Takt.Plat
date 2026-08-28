@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:attachment:create"
+      update-permission="human:resource:personnel:employee:attachment:update"
+      delete-permission="human:resource:personnel:employee:attachment:delete"
+      import-permission="human:resource:personnel:employee:attachment:import"
+      export-permission="human:resource:personnel:employee:attachment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -152,11 +152,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachmentName')">
-      <a-form-item :label="pi.queryLabel('attachmentName')">
+      <div v-show="isFieldVisible('fileName')">
+      <a-form-item :label="pi.queryLabel('fileName')">
         <a-input
-          v-model:value="advancedQueryForm.attachmentName"
-          :placeholder="pi.queryPh('attachmentName', 'required')"
+          v-model:value="advancedQueryForm.fileName"
+          :placeholder="pi.queryPh('fileName', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -509,14 +509,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getEmployeeAttachmentField(record, 'employeeName') ?? ''),
   },
   {
-    title: pi.label('attachmentName'),
-    dataIndex: 'attachmentName',
-    key: 'attachmentName',
+    title: pi.label('fileName'),
+    dataIndex: 'fileName',
+    key: 'fileName',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EmployeeAttachment }) =>
-      String(getEmployeeAttachmentField(record, 'attachmentName') ?? ''),
+      String(getEmployeeAttachmentField(record, 'fileName') ?? ''),
   },
   {
     title: pi.label('accessUrl'),
@@ -535,7 +535,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:attachment:update',
         onClick: (record: EmployeeAttachment) => void handleEdit(record),
       },
       {
@@ -543,7 +543,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:attachment:delete',
         onClick: (record: EmployeeAttachment) => void handleDeleteOne(record),
       },
     ],

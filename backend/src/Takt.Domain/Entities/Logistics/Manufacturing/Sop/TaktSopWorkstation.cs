@@ -58,7 +58,7 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     public int WorkstationType { get; set; } = 1;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     [SugarColumn(ColumnName = "process_segment_type", ColumnDescription = "工艺段类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProcessSegmentType { get; set; } = 1;

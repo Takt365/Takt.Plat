@@ -84,7 +84,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.salesUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('salesUnit')"
                 />
               </a-form-item>
@@ -108,7 +108,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.salesPerUnit"
-                  dict-type="logistics_price_unit_param"
+                  dict-type="logistics_materials_price_unit_param"
                   :placeholder="pi.ph('salesPerUnit')"
                 />
               </a-form-item>
@@ -132,7 +132,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.discountRate"
-                  dict-type="logistics_discount_rate_param"
+                  dict-type="logistics_sales_discount_rate_param"
                   :placeholder="pi.ph('discountRate')"
                 />
               </a-form-item>

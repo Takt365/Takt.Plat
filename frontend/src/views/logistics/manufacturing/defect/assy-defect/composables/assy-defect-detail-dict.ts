@@ -9,6 +9,6 @@
 // ========================================
 
 /** 不良区分字典 */
-export const ASSY_DEFECT_DETAIL_DEFECT_CATEGORY_DICT = 'logistics_defect_category'
+export const ASSY_DEFECT_DETAIL_DEFECT_CATEGORY_DICT = 'logistics_manufacturing_defect_category'
 /** 不良个所字典 */
-export const ASSY_DEFECT_DETAIL_DEFECT_LOCATION_DICT = 'logistics_assy_location_category'
+export const ASSY_DEFECT_DETAIL_DEFECT_LOCATION_DICT = 'logistics_manufacturing_assy_location_category'

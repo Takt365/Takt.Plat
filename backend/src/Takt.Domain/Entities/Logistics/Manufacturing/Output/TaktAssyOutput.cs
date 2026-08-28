@@ -34,7 +34,7 @@ public class TaktAssyOutput : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -64,7 +64,7 @@ public class TaktAssyOutput : TaktCompanyEntityBase
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;

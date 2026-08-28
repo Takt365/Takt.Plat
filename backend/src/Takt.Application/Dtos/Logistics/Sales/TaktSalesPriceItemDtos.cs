@@ -57,17 +57,17 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -77,7 +77,7 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -87,12 +87,12 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     public string CalculationType { get; set; } = string.Empty;
 
@@ -117,17 +117,17 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -212,17 +212,17 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -232,7 +232,7 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -242,12 +242,12 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     public string? CalculationType { get; set; } = string.Empty;
 
@@ -272,17 +272,17 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -373,18 +373,18 @@ public class TaktSalesPriceItemCreateDto
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    [Required(ErrorMessage = "条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）不能为空")]
+    [Required(ErrorMessage = "条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）不能为空")]
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -394,7 +394,7 @@ public class TaktSalesPriceItemCreateDto
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -404,14 +404,14 @@ public class TaktSalesPriceItemCreateDto
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
-    [Required(ErrorMessage = "计算类型（字典 logistics_calculation_type；默认 A=百分数）不能为空")]
+    [Required(ErrorMessage = "计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）不能为空")]
     public string CalculationType { get; set; } = string.Empty;
 
     /// <summary>
@@ -435,20 +435,20 @@ public class TaktSalesPriceItemCreateDto
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    [Required(ErrorMessage = "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）不能为空")]
+    [Required(ErrorMessage = "条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）不能为空")]
     public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -592,17 +592,17 @@ public class TaktSalesPriceItemTemplateDto
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -612,7 +612,7 @@ public class TaktSalesPriceItemTemplateDto
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -622,12 +622,12 @@ public class TaktSalesPriceItemTemplateDto
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     public string? CalculationType { get; set; } = string.Empty;
 
@@ -652,17 +652,17 @@ public class TaktSalesPriceItemTemplateDto
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -750,17 +750,17 @@ public class TaktSalesPriceItemImportDto
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -770,7 +770,7 @@ public class TaktSalesPriceItemImportDto
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -780,12 +780,12 @@ public class TaktSalesPriceItemImportDto
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     public string? CalculationType { get; set; } = string.Empty;
 
@@ -810,17 +810,17 @@ public class TaktSalesPriceItemImportDto
     public decimal? TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? PriceUnit { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -914,17 +914,17 @@ public class TaktSalesPriceItemExportDto
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     public string? ScaleBasis { get; set; } = string.Empty;
 
@@ -934,7 +934,7 @@ public class TaktSalesPriceItemExportDto
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     public string? ScaleUnit { get; set; } = string.Empty;
 
@@ -944,12 +944,12 @@ public class TaktSalesPriceItemExportDto
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     public string CalculationType { get; set; } = string.Empty;
 
@@ -974,17 +974,17 @@ public class TaktSalesPriceItemExportDto
     public decimal TaxAmount { get; set; }
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int PriceUnit { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 

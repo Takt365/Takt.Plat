@@ -58,6 +58,19 @@ export function getEcAttachmentById(id: string): Promise<EcAttachment> {
 }
 
 /**
+ * 预览设变附件（权限 logistics:manufacturing:engineering:change:gijutsu:preview）
+ * @param {string} id 设变附件ID
+ * @returns {Promise<Blob>} 文件二进制
+ */
+export function previewEcAttachment(id: string): Promise<Blob> {
+  return request<Blob>({
+    url: `${EC_ATTACHMENT_API_BASE}/${id}/preview`,
+    method: 'get',
+    responseType: 'blob',
+  });
+}
+
+/**
  * 创建设变附件
  * @param {EcAttachmentCreate} dto 创建DTO
  * @returns {Promise<EcAttachment>} 设变附件DTO

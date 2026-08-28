@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRouting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing.name", "zh-HK", "工艺路线名称_hk", "工艺路线名称"),
 
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "en-US", "用途_us", "用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "en-US", "用途_us", "用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "ja-JP", "用途_jp", "用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "ja-JP", "用途_jp", "用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "zh-CN", "用途", "用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "zh-CN", "用途", "用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
             // entity.routing.purpose
-            new TranslationSeedItem("entity.routing.purpose", "zh-HK", "用途_hk", "用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
+            new TranslationSeedItem("entity.routing.purpose", "zh-HK", "用途_hk", "用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
 
             // entity.routing.materialcode
             new TranslationSeedItem("entity.routing.materialcode", "en-US", "物料编码_us", "适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
@@ -145,13 +145,13 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing.version", "zh-HK", "版本号_hk", "版本号"),
 
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "en-US", "状态_us", "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
+            new TranslationSeedItem("entity.routing.status", "en-US", "状态_us", "状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "ja-JP", "状态_jp", "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
+            new TranslationSeedItem("entity.routing.status", "ja-JP", "状态_jp", "状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "zh-CN", "状态", "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
+            new TranslationSeedItem("entity.routing.status", "zh-CN", "状态", "状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
             // entity.routing.status
-            new TranslationSeedItem("entity.routing.status", "zh-HK", "状态_hk", "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
+            new TranslationSeedItem("entity.routing.status", "zh-HK", "状态_hk", "状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）"),
 
             // entity.routing.effectivedate
             new TranslationSeedItem("entity.routing.effectivedate", "en-US", "生效日期_us", "生效日期"),

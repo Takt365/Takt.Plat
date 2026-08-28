@@ -35,7 +35,6 @@ public class TaktQualityGroupDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityGroupId { get; set; }
 
-
     /// <summary>
     /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
     /// </summary>
@@ -55,17 +54,6 @@ public class TaktQualityGroupDto : TaktCompanyDtoBase
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
-    /// 质量组负责人用户 名称（填充字段）
-    /// </summary>
-    public string? ResponsibleUserName { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -143,12 +131,6 @@ public class TaktQualityGroupQueryDto : TaktPagedQuery
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -247,12 +229,6 @@ public class TaktQualityGroupCreateDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -404,12 +380,6 @@ public class TaktQualityGroupTemplateDto
     public string? QualityGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -485,12 +455,6 @@ public class TaktQualityGroupImportDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -569,12 +533,6 @@ public class TaktQualityGroupExportDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话

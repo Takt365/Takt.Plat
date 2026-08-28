@@ -33,9 +33,13 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
     private const string TaskTypeHttp = TaktConstants.QuartzTaskType.Http;
     private const int TriggerTypeSimple = 0;
     private const int TriggerTypeCron = 1;
-    /// <summary>日链 / 回填类：仅目标库</summary>
+    /// <summary>
+    /// 日链 / 回填类：仅目标库
+    /// </summary>
     private const string SyncTargetOnlyParams = "{\"targetDatabase\":\"zTakt_000_Dev\"}";
-    /// <summary>zTakt_900 暂存同步：源库 + 目标库</summary>
+    /// <summary>
+    /// zTakt_900 暂存同步：源库 + 目标库
+    /// </summary>
     private const string SyncStagingParams =
         "{\"sourceDatabase\":\"zTakt_900_Dev\",\"targetDatabase\":\"zTakt_000_Dev\"}";
 
@@ -185,6 +189,18 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Application",
                 ClassName: TaktEcFlowConstants.QuartzHandlerEcTaskOverdueScan,
                 Description: "扫描设变执行任务超时/阻塞并 SignalR 预警（默认暂停，启用后每 30 分钟）"),
+            new(
+                TaskCode: "QT_MEETING_REMINDER_SCAN",
+                TaskName: "会议开始前提醒邮件",
+                JobName: "meeting_reminder_scan",
+                TaskType: TaskTypeAssembly,
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 */5 * * * ?",
+                TaskStatus: TaskStatusPaused,
+                AssemblyName: "Takt.Application",
+                ClassName: TaktMeetingConstants.QuartzHandlerMeetingReminderScan,
+                Description: "扫描已排期会议并按 ReminderMinutes 向参会人发送提醒邮件（默认暂停，启用后每 5 分钟）"),
             // ========== 日链自动同步（①→⑤；默认暂停，启用后按 Cron）==========
             new(
                 TaskCode: "QT_SYNC_MATPLT",

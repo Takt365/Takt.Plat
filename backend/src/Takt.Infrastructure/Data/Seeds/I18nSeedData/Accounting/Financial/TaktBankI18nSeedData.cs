@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktBankI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBank 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktBankI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bank.address2", "zh-HK", "地址2_hk", "地址2（详细地址行2）"),
 
             // entity.bank.swiftbic
-            new TranslationSeedItem("entity.bank.swiftbic", "en-US", "SWIFT/BIC_us", "SWIFT/BIC（；CHAR 11）"),
+            new TranslationSeedItem("entity.bank.swiftbic", "en-US", "银行识别码_us", "银行识别码（SWIFT/BIC；CHAR 11）"),
             // entity.bank.swiftbic
-            new TranslationSeedItem("entity.bank.swiftbic", "ja-JP", "SWIFT/BIC_jp", "SWIFT/BIC（；CHAR 11）"),
+            new TranslationSeedItem("entity.bank.swiftbic", "ja-JP", "银行识别码_jp", "银行识别码（SWIFT/BIC；CHAR 11）"),
             // entity.bank.swiftbic
-            new TranslationSeedItem("entity.bank.swiftbic", "zh-CN", "SWIFT/BIC", "SWIFT/BIC（；CHAR 11）"),
+            new TranslationSeedItem("entity.bank.swiftbic", "zh-CN", "银行识别码", "银行识别码（SWIFT/BIC；CHAR 11）"),
             // entity.bank.swiftbic
-            new TranslationSeedItem("entity.bank.swiftbic", "zh-HK", "SWIFT/BIC_hk", "SWIFT/BIC（；CHAR 11）"),
+            new TranslationSeedItem("entity.bank.swiftbic", "zh-HK", "银行识别码_hk", "银行识别码（SWIFT/BIC；CHAR 11）"),
 
             // entity.bank.group
             new TranslationSeedItem("entity.bank.group", "en-US", "银行组_us", "银行组（；CHAR 2）"),
@@ -298,13 +298,13 @@ public class TaktBankI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bank.sddcore", "zh-HK", "核心个人_hk", "核心个人（字典 sys_yes_no）"),
 
             // entity.bank.sddrtrans
-            new TranslationSeedItem("entity.bank.sddrtrans", "en-US", "SEPA拒付交易支持标识_us", "SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）"),
+            new TranslationSeedItem("entity.bank.sddrtrans", "en-US", "SEPA拒付交易支持标识_us", "SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）"),
             // entity.bank.sddrtrans
-            new TranslationSeedItem("entity.bank.sddrtrans", "ja-JP", "SEPA拒付交易支持标识_jp", "SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）"),
+            new TranslationSeedItem("entity.bank.sddrtrans", "ja-JP", "SEPA拒付交易支持标识_jp", "SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）"),
             // entity.bank.sddrtrans
-            new TranslationSeedItem("entity.bank.sddrtrans", "zh-CN", "SEPA拒付交易支持标识", "SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）"),
+            new TranslationSeedItem("entity.bank.sddrtrans", "zh-CN", "SEPA拒付交易支持标识", "SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）"),
             // entity.bank.sddrtrans
-            new TranslationSeedItem("entity.bank.sddrtrans", "zh-HK", "SEPA拒付交易支持标识_hk", "SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）"),
+            new TranslationSeedItem("entity.bank.sddrtrans", "zh-HK", "SEPA拒付交易支持标识_hk", "SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）"),
 
             // entity.bank.bicplusnumber
             new TranslationSeedItem("entity.bank.bicplusnumber", "en-US", "BIC+编码_us", "BIC+ 编码（CHAR 12）"),

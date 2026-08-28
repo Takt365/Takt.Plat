@@ -28,7 +28,9 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 /// </summary>
 public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterialCostTrendService
 {
-    /// <summary>BOM 成本明细按年分表基表名（与 SugarTable 一致）</summary>
+    /// <summary>
+    /// BOM 成本明细按年分表基表名（与 SugarTable 一致）
+    /// </summary>
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
 
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
@@ -530,37 +532,59 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
     /// </summary>
     private sealed class ComponentMovingPriceAnalysisBuilt
     {
-        /// <summary>过滤并排序后的全量行</summary>
+        /// <summary>
+        /// 过滤并排序后的全量行
+        /// </summary>
         public List<TaktBomMaterialCostTrendComponentMovingPriceDto> OrderedRows { get; init; } = new();
 
-        /// <summary>期间列顺序</summary>
+        /// <summary>
+        /// 期间列顺序
+        /// </summary>
         public List<string> PeriodOrder { get; init; } = new();
 
-        /// <summary>机种下产品编码</summary>
+        /// <summary>
+        /// 机种下产品编码
+        /// </summary>
         public List<string> ProductCodes { get; init; } = new();
 
-        /// <summary>基准期间</summary>
+        /// <summary>
+        /// 基准期间
+        /// </summary>
         public string? BasePeriod { get; init; }
 
-        /// <summary>对比期间</summary>
+        /// <summary>
+        /// 对比期间
+        /// </summary>
         public string? ComparePeriod { get; init; }
 
-        /// <summary>上涨行数（过滤前全量趋势统计）</summary>
+        /// <summary>
+        /// 上涨行数（过滤前全量趋势统计）
+        /// </summary>
         public int UpCount { get; init; }
 
-        /// <summary>下跌行数</summary>
+        /// <summary>
+        /// 下跌行数
+        /// </summary>
         public int DownCount { get; init; }
 
-        /// <summary>持平行数</summary>
+        /// <summary>
+        /// 持平行数
+        /// </summary>
         public int FlatCount { get; init; }
 
-        /// <summary>关注月新增行数</summary>
+        /// <summary>
+        /// 关注月新增行数
+        /// </summary>
         public int NewCount { get; init; }
 
-        /// <summary>关注月剔除行数</summary>
+        /// <summary>
+        /// 关注月剔除行数
+        /// </summary>
         public int RemovedCount { get; init; }
 
-        /// <summary>无趋势行数</summary>
+        /// <summary>
+        /// 无趋势行数
+        /// </summary>
         public int NoneCount { get; init; }
 
         /// <summary>
@@ -579,13 +603,19 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
     /// </summary>
     private sealed class ModelProductMeta
     {
-        /// <summary>机种编码</summary>
+        /// <summary>
+        /// 机种编码
+        /// </summary>
         public string ModelCode { get; set; } = string.Empty;
 
-        /// <summary>产品描述</summary>
+        /// <summary>
+        /// 产品描述
+        /// </summary>
         public string Description { get; set; } = string.Empty;
 
-        /// <summary>币种</summary>
+        /// <summary>
+        /// 币种
+        /// </summary>
         public string CurrencyCode { get; set; } = string.Empty;
     }
 

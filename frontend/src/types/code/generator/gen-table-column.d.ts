@@ -59,7 +59,7 @@ export interface GenTableColumn extends TenantCoreDtoBase {
   databaseDataType: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -129,12 +129,12 @@ export interface GenTableColumn extends TenantCoreDtoBase {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 
@@ -189,7 +189,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   databaseDataType?: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -259,12 +259,12 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   isQuery?: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType?: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType?: string;
 
@@ -333,7 +333,7 @@ export interface GenTableColumnCreate {
   databaseDataType: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -403,12 +403,12 @@ export interface GenTableColumnCreate {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 
@@ -482,7 +482,7 @@ export interface GenTableColumnTemplate {
   databaseDataType?: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -552,12 +552,12 @@ export interface GenTableColumnTemplate {
   isQuery?: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType?: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType?: string;
 
@@ -616,7 +616,7 @@ export interface GenTableColumnImport {
   databaseDataType?: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType?: string;
 
@@ -686,12 +686,12 @@ export interface GenTableColumnImport {
   isQuery?: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType?: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType?: string;
 
@@ -750,7 +750,7 @@ export interface GenTableColumnExport {
   databaseDataType: string;
 
   /**
-   * C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+   * C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
    */
   csharpDataType: string;
 
@@ -820,12 +820,12 @@ export interface GenTableColumnExport {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   * 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 
   /**
-   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   htmlType: string;
 

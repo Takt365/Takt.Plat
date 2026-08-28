@@ -324,7 +324,7 @@ public static class TaktExcelHelper
     }
 
     /// <summary>
-    /// 导出动态字典行（自定义报表/SQVI 查询结果）
+    /// 导出动态字典行（定制报表 查询结果）
     /// </summary>
     /// <param name="rows">数据行</param>
     /// <param name="columnKeys">列键（与行字典键一致）</param>

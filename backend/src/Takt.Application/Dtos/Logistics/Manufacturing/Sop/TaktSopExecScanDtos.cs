@@ -79,7 +79,7 @@ public class TaktSopExecScanDto : TaktCompanyDtoBase
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int ScanResult { get; set; } = 0;
 
@@ -160,7 +160,7 @@ public class TaktSopExecScanQueryDto : TaktPagedQuery
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int? ScanResult { get; set; }
 
@@ -259,7 +259,7 @@ public class TaktSopExecScanCreateDto
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int ScanResult { get; set; } = 0;
 
@@ -363,7 +363,7 @@ public class TaktSopExecScanTemplateDto
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int? ScanResult { get; set; }
 
@@ -443,7 +443,7 @@ public class TaktSopExecScanImportDto
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int? ScanResult { get; set; }
 
@@ -529,7 +529,7 @@ public class TaktSopExecScanExportDto
     public string? ExpectedMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     public int ScanResult { get; set; } = 0;
 

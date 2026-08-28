@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktEmpBenefitPlanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmpBenefitPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktEmpBenefitPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.empbenefitplan.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
             // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "en-US", "状态_us", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "en-US", "状态_us", "状态（字典 humanresource_benefits_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
             // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "ja-JP", "状态_jp", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "ja-JP", "状态_jp", "状态（字典 humanresource_benefits_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
             // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-CN", "状态", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-CN", "状态", "状态（字典 humanresource_benefits_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
             // entity.empbenefitplan.empbenefitstatus
-            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-HK", "状态_hk", "状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
+            new TranslationSeedItem("entity.empbenefitplan.empbenefitstatus", "zh-HK", "状态_hk", "状态（字典 humanresource_benefits_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）"),
         };
     }
 

@@ -29,9 +29,13 @@ namespace Takt.Application.Services.Foundation;
 /// </summary>
 public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 {
-    /// <summary>任务状态：正常（字典 sys_quartz_task_status）</summary>
+    /// <summary>
+    /// 任务状态：正常（字典 sys_quartz_task_status）
+    /// </summary>
     private const int TaskStatusNormal = 0;
-    /// <summary>任务状态：暂停（字典 sys_quartz_task_status）</summary>
+    /// <summary>
+    /// 任务状态：暂停（字典 sys_quartz_task_status）
+    /// </summary>
     private const int TaskStatusPaused = 1;
     private readonly ITaktCompanyRepository<TaktQuartzTask> _quartzTaskRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;

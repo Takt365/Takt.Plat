@@ -35,9 +35,116 @@ public class TaktAssetDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }
 
+    /// <summary>
+    /// 资产代码
+    /// </summary>
+    public string AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产名称
+    /// </summary>
+    public string AssetName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产分类（字典 accounting_financial_asset_category）
+    /// </summary>
+    public string AssetCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
+    /// </summary>
+    public string AssetType { get; set; } = "NORM";
+
+    /// <summary>
+    /// 资产原值
+    /// </summary>
+    public decimal AssetOriginalValue { get; set; }
+
+    /// <summary>
+    /// 资产净值
+    /// </summary>
+    public decimal AssetNetValue { get; set; }
+
+    /// <summary>
+    /// 累计折旧
+    /// </summary>
+    public decimal AccumulatedDepreciation { get; set; }
+
+    /// <summary>
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostCenterId { get; set; }
+
+    /// <summary>
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
+    /// </summary>
+    public string? CostCenterName { get; set; }
+
+    /// <summary>
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? DeptName { get; set; }
+
+    /// <summary>
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    public string? UserName { get; set; }
+
+    /// <summary>
+    /// 资产位置
+    /// </summary>
+    public string? AssetLocation { get; set; }
+
+    /// <summary>
+    /// 购买日期
+    /// </summary>
+    public DateTime? PurchaseDate { get; set; }
+
+    /// <summary>
+    /// 启用日期
+    /// </summary>
+    public DateTime? StartDate { get; set; }
+
+    /// <summary>
+    /// 报废日期
+    /// </summary>
+    public DateTime? ScrapDate { get; set; }
+
+    /// <summary>
+    /// 处置日期
+    /// </summary>
+    public DateTime? DisposalDate { get; set; }
+
+    /// <summary>
+    /// 预计使用月数
+    /// </summary>
+    public int ExpectedLifeMonths { get; set; }
+
+    /// <summary>
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
+    /// </summary>
+    public int DepreciationMethod { get; set; }
+
+    /// <summary>
+    /// 每月折旧金额
+    /// </summary>
+    public decimal MonthlyDepreciation { get; set; }
+
+    /// <summary>
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
     public int AssetStatus { get; set; } = 1;
 }
@@ -78,12 +185,12 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
+    /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
     public string? AssetCategory { get; set; }
 
     /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type）
     /// </summary>
     public string? AssetType { get; set; }
 
@@ -103,35 +210,35 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public decimal? AccumulatedDepreciation { get; set; }
 
     /// <summary>
-    /// 成本中心ID
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心名称
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门ID
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用者ID
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 使用者名称
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -186,7 +293,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -201,7 +308,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     public int? AssetStatus { get; set; }
 
@@ -264,12 +371,12 @@ public class TaktAssetCreateDto
     public string AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
+    /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
     public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type）
     /// </summary>
     public string AssetType { get; set; } = "NORM";
 
@@ -289,35 +396,35 @@ public class TaktAssetCreateDto
     public decimal AccumulatedDepreciation { get; set; }
 
     /// <summary>
-    /// 成本中心ID
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心名称
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门ID
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用者ID
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 使用者名称
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -352,7 +459,7 @@ public class TaktAssetCreateDto
     public int ExpectedLifeMonths { get; set; } = 0;
 
     /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method）
     /// </summary>
     public int DepreciationMethod { get; set; } = 0;
 
@@ -368,7 +475,7 @@ public class TaktAssetCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     public int AssetStatus { get; set; } = 1;    /// <summary>
     /// 扩展字段JSON
@@ -420,7 +527,7 @@ public class TaktAssetStatusDto
     public long AssetId { get; set; }
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     [Required(ErrorMessage = "资产状态不能为空")]
     public int AssetStatus { get; set; } = 0;
@@ -461,12 +568,12 @@ public class TaktAssetTemplateDto
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
+    /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
     public string? AssetCategory { get; set; }
 
     /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type）
     /// </summary>
     public string? AssetType { get; set; }
 
@@ -486,35 +593,35 @@ public class TaktAssetTemplateDto
     public decimal? AccumulatedDepreciation { get; set; }
 
     /// <summary>
-    /// 成本中心ID
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心名称
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门ID
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用者ID
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 使用者名称
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -549,7 +656,7 @@ public class TaktAssetTemplateDto
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -564,7 +671,7 @@ public class TaktAssetTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -610,12 +717,12 @@ public class TaktAssetImportDto
     public string? AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
+    /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
     public string? AssetCategory { get; set; }
 
     /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type）
     /// </summary>
     public string? AssetType { get; set; }
 
@@ -635,35 +742,35 @@ public class TaktAssetImportDto
     public decimal? AccumulatedDepreciation { get; set; }
 
     /// <summary>
-    /// 成本中心ID
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心名称
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门ID
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用者ID
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 使用者名称
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -698,7 +805,7 @@ public class TaktAssetImportDto
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -713,7 +820,7 @@ public class TaktAssetImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
@@ -759,12 +866,12 @@ public class TaktAssetExportDto
     public string AssetName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
+    /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
     public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type）
     /// </summary>
     public string AssetType { get; set; } = "NORM";
 
@@ -784,35 +891,35 @@ public class TaktAssetExportDto
     public decimal AccumulatedDepreciation { get; set; }
 
     /// <summary>
-    /// 成本中心ID
+    /// 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心名称
+    /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
     public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门ID
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用者ID
+    /// 使用者（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
 
     /// <summary>
-    /// 使用者名称
+    /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -847,7 +954,7 @@ public class TaktAssetExportDto
     public int ExpectedLifeMonths { get; set; } = 0;
 
     /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method）
     /// </summary>
     public int DepreciationMethod { get; set; } = 0;
 
@@ -862,7 +969,7 @@ public class TaktAssetExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产状态（字典 accounting_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status）
     /// </summary>
     public int AssetStatus { get; set; } = 1;
 

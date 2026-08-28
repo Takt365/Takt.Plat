@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:contract:create"
+      update-permission="human:resource:personnel:employee:contract:update"
+      delete-permission="human:resource:personnel:employee:contract:delete"
+      import-permission="human:resource:personnel:employee:contract:import"
+      export-permission="human:resource:personnel:employee:contract:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -181,7 +181,7 @@
       <a-form-item :label="pi.queryLabel('contractType')">
         <TaktSelect
           v-model:value="advancedQueryForm.contractType"
-          dict-type="hr_employee_contract_type"
+          dict-type="humanresource_personnel_employee_contract_type"
           :placeholder="pi.queryPh('contractType', 'select')"
           allow-clear
         />
@@ -282,7 +282,7 @@
       <a-form-item :label="pi.queryLabel('contractStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.contractStatus"
-          dict-type="hr_employee_contract_status"
+          dict-type="humanresource_personnel_employee_contract_status"
           :placeholder="pi.queryPh('contractStatus', 'select')"
           allow-clear
         />
@@ -722,7 +722,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:contract:update',
         onClick: (record: EmployeeContract) => void handleEdit(record),
       },
       {
@@ -730,7 +730,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:contract:delete',
         onClick: (record: EmployeeContract) => void handleDeleteOne(record),
       },
     ],

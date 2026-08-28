@@ -96,10 +96,16 @@ public class TaktMaintenanceNotification : TaktApprovalEntityBase
     public DateTime? BreakdownEndTime { get; set; }
 
     /// <summary>
-    /// 报告人（人员编码）
+    /// 报告人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "reported_by", ColumnDescription = "报告人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ReportedBy { get; set; }
+    [SugarColumn(ColumnName = "reported_by_employee_id", ColumnDescription = "报告人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ReportedByEmployeeId { get; set; }
+    /// <summary>
+    /// 报告人名称（冗余：按 ReportedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "reported_by_employee_name", ColumnDescription = "报告人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ReportedByEmployeeName { get; set; }
 
     /// <summary>
     /// 责任成本中心ID（序列化为string以避免Javascript精度问题）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutput 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/output/assy-output）
 // 
@@ -91,13 +91,13 @@ public class TaktAssyOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutput._self", "zh-HK", "组立日报信息_hk", "实体名称"),
 
             // entity.assyoutput.prodcategory
-            new TranslationSeedItem("entity.assyoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyoutput.prodcategory
-            new TranslationSeedItem("entity.assyoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyoutput.prodcategory
-            new TranslationSeedItem("entity.assyoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyoutput.prodcategory
-            new TranslationSeedItem("entity.assyoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.assyoutput.proddate
             new TranslationSeedItem("entity.assyoutput.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -136,13 +136,13 @@ public class TaktAssyOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutput.indirectlabor", "zh-HK", "间接人员_hk", "间接人员"),
 
             // entity.assyoutput.shiftno
-            new TranslationSeedItem("entity.assyoutput.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.assyoutput.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assyoutput.shiftno
-            new TranslationSeedItem("entity.assyoutput.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.assyoutput.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assyoutput.shiftno
-            new TranslationSeedItem("entity.assyoutput.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.assyoutput.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.assyoutput.shiftno
-            new TranslationSeedItem("entity.assyoutput.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.assyoutput.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.assyoutput.prodordertype
             new TranslationSeedItem("entity.assyoutput.prodordertype", "en-US", "工单类别_us", "工单类别（回填：随工单）"),

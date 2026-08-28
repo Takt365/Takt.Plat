@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserCompanyI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUserCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktUserCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.usercompany.userid", "zh-HK", "用户ID_hk", "用户ID"),
 
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "en-US", "默认公司_us", "是否默认登录公司（字典 sys_default_type；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "en-US", "默认公司_us", "是否默认登录公司（字典 sys_yes_no；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "ja-JP", "默认公司_jp", "是否默认登录公司（字典 sys_default_type；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "ja-JP", "默认公司_jp", "是否默认登录公司（字典 sys_yes_no；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "zh-CN", "默认公司", "是否默认登录公司（字典 sys_default_type；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "zh-CN", "默认公司", "是否默认登录公司（字典 sys_yes_no；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
             // entity.usercompany.isdefault
-            new TranslationSeedItem("entity.usercompany.isdefault", "zh-HK", "默认公司_hk", "是否默认登录公司（字典 sys_default_type；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
+            new TranslationSeedItem("entity.usercompany.isdefault", "zh-HK", "默认公司_hk", "是否默认登录公司（字典 sys_yes_no；1=是 0=否） 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>"),
 
             // entity.usercompany.user
             new TranslationSeedItem("entity.usercompany.user", "en-US", "用户_us", "用户（多对一）"),

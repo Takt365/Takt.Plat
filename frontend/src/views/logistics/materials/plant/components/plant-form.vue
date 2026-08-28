@@ -102,7 +102,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseNature"
-                  dict-type="sys_enterprise_nature_type"
+                  dict-type="sys_enterprise_nature"
                   :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
@@ -114,7 +114,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.industryAttribute"
-                  dict-type="sys_industry_attribute_type"
+                  dict-type="sys_industry_attribute"
                   :placeholder="pi.ph('industryAttribute')"
                 />
               </a-form-item>
@@ -126,7 +126,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseScale"
-                  dict-type="sys_enterprise_scale_type"
+                  dict-type="sys_enterprise_scale"
                   :placeholder="pi.ph('enterpriseScale')"
                 />
               </a-form-item>

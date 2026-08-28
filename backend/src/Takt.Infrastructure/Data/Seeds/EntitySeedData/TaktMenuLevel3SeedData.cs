@@ -25,7 +25,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// <summary>
 /// Takt 三级菜单种子数据。
 /// <para>
-/// 父级为 TaktMenuLevel2SeedData 中定义的二级目录或分组（如 ROUTINE_NEWS_CENTER、LOGISTICS_SALES、HUMAN_RESOURCE_TALENT 等）。
+/// 父级为 TaktMenuLevel2SeedData 中定义的二级目录或分组（如 ROUTINE_MEETING_CENTER、ROUTINE_HELP_DESK、LOGISTICS_SALES、HUMAN_RESOURCE_TALENT 等）。
 /// 页面类型菜单需配置以 <c>:list</c> 结尾的权限串，供 TaktMenuButtonSeedData 生成按钮。
 /// 由 TaktMenuSeedData 统一协调调用，不直接注册为 ITaktSeedDataCoordinator。
 /// </para>
@@ -116,8 +116,8 @@ public class TaktMenuLevel3SeedData
         var hrTalentMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "HUMAN_RESOURCE_TALENT" && m.IsDeleted == 0)
             .FirstAsync();
-        var statisticsReportMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "STATISTICS_REPORT" && m.IsDeleted == 0)
+        var statisticsQuickQueryMenu = await seedContext.Db.Queryable<TaktMenu>()
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "STATISTICS_QUICK_QUERY" && m.IsDeleted == 0)
             .FirstAsync();
         var statisticsLoggingMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "STATISTICS_LOGGING" && m.IsDeleted == 0)
@@ -125,11 +125,8 @@ public class TaktMenuLevel3SeedData
         var routineHelpDeskMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_HELP_DESK" && m.IsDeleted == 0)
             .FirstAsync();
-        var routineDocumentCenterMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_DOCUMENT_CENTER" && m.IsDeleted == 0)
-            .FirstAsync();
-        var routineNewsCenterMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_NEWS_CENTER" && m.IsDeleted == 0)
+        var routineMeetingCenterMenu = await seedContext.Db.Queryable<TaktMenu>()
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "ROUTINE_MEETING_CENTER" && m.IsDeleted == 0)
             .FirstAsync();
 
         // ========== 管理会计下的三级菜单 (ACCOUNTING_FINANCIAL) ==========
@@ -1118,7 +1115,7 @@ public class TaktMenuLevel3SeedData
 
             var (insertMFG5, updateMFG5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT", menu =>
             {
-                menu.MenuName = "产出管理";
+                menu.MenuName = "OPH管理";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT";
                 menu.I18nKey = "menu.logistics.manufacturing.output._self";
                 menu.Icon = "RiBarChart2Line";
@@ -1789,7 +1786,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiUserAddLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:onboarding:list";
                 menu.RoutePath = "/human-resource/personnel/employee-onboarding";
                 menu.ComponentPath = "human-resource/personnel/employee-onboarding/index";
                 menu.SortOrder = 2;
@@ -1809,7 +1806,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiUserStarLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:joined:list";
                 menu.RoutePath = "/human-resource/personnel/employee-joined";
                 menu.ComponentPath = "human-resource/personnel/employee-joined/index";
                 menu.SortOrder = 3;
@@ -1829,7 +1826,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiMapPinLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:address:list";
                 menu.RoutePath = "/human-resource/personnel/employee-address";
                 menu.ComponentPath = "human-resource/personnel/employee-address/index";
                 menu.SortOrder = 4;
@@ -1849,7 +1846,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiBookOpenLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:education:list";
                 menu.RoutePath = "/human-resource/personnel/employee-education";
                 menu.ComponentPath = "human-resource/personnel/employee-education/index";
                 menu.SortOrder = 5;
@@ -1869,7 +1866,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiParentLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:family:list";
                 menu.RoutePath = "/human-resource/personnel/employee-family";
                 menu.ComponentPath = "human-resource/personnel/employee-family/index";
                 menu.SortOrder = 6;
@@ -1889,7 +1886,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiBriefcaseLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:experience:list";
                 menu.RoutePath = "/human-resource/personnel/employee-experience";
                 menu.ComponentPath = "human-resource/personnel/employee-experience/index";
                 menu.SortOrder = 7;
@@ -1909,7 +1906,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiAwardLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:skill:list";
                 menu.RoutePath = "/human-resource/personnel/employee-skill";
                 menu.ComponentPath = "human-resource/personnel/employee-skill/index";
                 menu.SortOrder = 8;
@@ -1929,7 +1926,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiFilePaperLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:contract:list";
                 menu.RoutePath = "/human-resource/personnel/employee-contract";
                 menu.ComponentPath = "human-resource/personnel/employee-contract/index";
                 menu.SortOrder = 9;
@@ -1949,7 +1946,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:reassignment:list";
                 menu.RoutePath = "/human-resource/personnel/employee-reassignment";
                 menu.ComponentPath = "human-resource/personnel/employee-reassignment/index";
                 menu.SortOrder = 10;
@@ -1969,7 +1966,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiUserUnfollowLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:resignation:list";
                 menu.RoutePath = "/human-resource/personnel/employee-resignation";
                 menu.ComponentPath = "human-resource/personnel/employee-resignation/index";
                 menu.SortOrder = 11;
@@ -1989,7 +1986,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiUserSharedLine";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:delegation:list";
                 menu.RoutePath = "/human-resource/personnel/employee-delegation";
                 menu.ComponentPath = "human-resource/personnel/employee-delegation/index";
                 menu.SortOrder = 12;
@@ -2009,7 +2006,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiAttachment2";
                 menu.ParentId = hrPersonnelMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "human:resource:personnel:employee:list";
+                menu.Permission = "human:resource:personnel:employee:attachment:list";
                 menu.RoutePath = "/human-resource/personnel/employee-attachment";
                 menu.ComponentPath = "human-resource/personnel/employee-attachment/index";
                 menu.SortOrder = 13;
@@ -2585,20 +2582,20 @@ public class TaktMenuLevel3SeedData
             updateCount += updateHRT5;
         }
 
-        // ========== 报表管理下的三级菜单 (STATISTICS_REPORT) ==========
-        if (statisticsReportMenu != null)
+        // ========== 快速查询下的三级菜单 (STATISTICS_QUICK_QUERY) ==========
+        if (statisticsQuickQueryMenu != null)
         {
-            var (insertSR1, updateSR1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "STATISTICS_REPORT_CONFIGURABLE", menu =>
+            var (insertSR1, updateSR1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "STATISTICS_QUICK_QUERY_CONFIGURABLE", menu =>
             {
-                menu.MenuName = "SQVI报表";
-                menu.MenuCode = "STATISTICS_REPORT_CONFIGURABLE";
-                menu.I18nKey = "menu.statistics.report.configurable";
+                menu.MenuName = "定制报表";
+                menu.MenuCode = "STATISTICS_QUICK_QUERY_CONFIGURABLE";
+                menu.I18nKey = "menu.statistics.quickquery.configurable";
                 menu.Icon = "RiFileChartLine";
-                menu.ParentId = statisticsReportMenu.Id;
+                menu.ParentId = statisticsQuickQueryMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "statistics:report:configurable:list";
-                menu.RoutePath = "/statistics/report/configurable";
-                menu.ComponentPath = "statistics/report/configurable/index";
+                menu.Permission = "statistics:quickquery:configurable:list";
+                menu.RoutePath = "/statistics/quick-query/configurable";
+                menu.ComponentPath = "statistics/quick-query/configurable/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -2773,6 +2770,52 @@ public class TaktMenuLevel3SeedData
             updateCount += updateSL8;
         }
 
+        // ========== 会议中心下的三级菜单 (ROUTINE_MEETING_CENTER) ==========
+        if (routineMeetingCenterMenu != null)
+        {
+            var (insertMc1, updateMc1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_MEETING_CENTER_MEETING", menu =>
+            {
+                menu.MenuName = "会议";
+                menu.MenuCode = "ROUTINE_MEETING_CENTER_MEETING";
+                menu.I18nKey = "menu.routine.meeting.center.meeting";
+                menu.Icon = "RiVideoLine";
+                menu.ParentId = routineMeetingCenterMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "routine:meeting:center:list";
+                menu.RoutePath = "/routine/meeting-center/meeting";
+                menu.ComponentPath = "routine/meeting-center/meeting/index";
+                menu.SortOrder = 1;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsLeaf = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertMc1;
+            updateCount += updateMc1;
+
+            var (insertMc2, updateMc2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_MEETING_CENTER_ROOM", menu =>
+            {
+                menu.MenuName = "会议室";
+                menu.MenuCode = "ROUTINE_MEETING_CENTER_ROOM";
+                menu.I18nKey = "menu.routine.meeting.center.room";
+                menu.Icon = "RiBuilding2Line";
+                menu.ParentId = routineMeetingCenterMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "routine:meeting:room:list";
+                menu.RoutePath = "/routine/meeting-center/meeting-room";
+                menu.ComponentPath = "routine/meeting-center/meeting-room/index";
+                menu.SortOrder = 2;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsLeaf = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertMc2;
+            updateCount += updateMc2;
+        }
+
         // ========== 服务台下的三级菜单 (ROUTINE_HELP_DESK) ==========
         if (routineHelpDeskMenu != null)
         {
@@ -2875,74 +2918,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHd5;
             updateCount += updateHd5;
-        }
-
-        // ========== 文管中心下的三级菜单 (ROUTINE_DOCUMENT_CENTER) ==========
-        if (routineDocumentCenterMenu != null)
-        {
-            var (insertDc1, updateDc1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_DOCUMENT_CENTER_DOCUMENT", menu =>
-            {
-                menu.MenuName = "文档管理";
-                menu.MenuCode = "ROUTINE_DOCUMENT_CENTER_DOCUMENT";
-                menu.I18nKey = "menu.routine.document.center.document";
-                menu.Icon = "RiFileTextLine";
-                menu.ParentId = routineDocumentCenterMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:document:center:list";
-                menu.RoutePath = "/routine/document-center/document";
-                menu.ComponentPath = "routine/document-center/document/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertDc1;
-            updateCount += updateDc1;
-        }
-
-        // ========== 新闻中心下的三级菜单 (ROUTINE_NEWS_CENTER) ==========
-        if (routineNewsCenterMenu != null)
-        {
-            var (insertNc1, updateNc1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_NEWS_CENTER_NEWS", menu =>
-            {
-                menu.MenuName = "新闻";
-                menu.MenuCode = "ROUTINE_NEWS_CENTER_NEWS";
-                menu.I18nKey = "menu.routine.news.center.news";
-                menu.Icon = "RiArticleLine";
-                menu.ParentId = routineNewsCenterMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:news:center:list";
-                menu.RoutePath = "/routine/news-center/news";
-                menu.ComponentPath = "routine/news-center/news/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertNc1;
-            updateCount += updateNc1;
-
-            var (insertNc2, updateNc2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_NEWS_CENTER_COMMENT", menu =>
-            {
-                menu.MenuName = "评论";
-                menu.MenuCode = "ROUTINE_NEWS_CENTER_COMMENT";
-                menu.I18nKey = "menu.routine.news.center.comment";
-                menu.Icon = "RiMessage3Line";
-                menu.ParentId = routineNewsCenterMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:news:center:comment:list";
-                menu.RoutePath = "/routine/news-center/news-comment";
-                menu.ComponentPath = "routine/news-center/news-comment/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertNc2;
-            updateCount += updateNc2;
         }
 
         return (insertCount, updateCount);

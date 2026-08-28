@@ -64,7 +64,7 @@ public class TaktShiftScheduleQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
@@ -148,7 +148,7 @@ public class TaktShiftScheduleCreateDto
 
 
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     public int ScheduleType { get; set; } = 0;
 
@@ -238,7 +238,7 @@ public class TaktShiftScheduleTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
@@ -304,7 +304,7 @@ public class TaktShiftScheduleImportDto
 
 
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
 
@@ -370,7 +370,7 @@ public class TaktShiftScheduleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     public int ScheduleType { get; set; } = 0;
 

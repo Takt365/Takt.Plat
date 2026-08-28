@@ -81,19 +81,19 @@
         <template v-else-if="column.key === 'fromCurrencyCode'">
           <TaktDictTag
             :value="getExchangeRateDictValue(record, 'fromCurrencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'toCurrencyCode'">
           <TaktDictTag
             :value="getExchangeRateDictValue(record, 'toCurrencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'exchangeRateType'">
           <TaktDictTag
             :value="getExchangeRateDictValue(record, 'exchangeRateType')"
-            dict-type="accounting_exchange_rate_type"
+            dict-type="accounting_financial_exchange_rate_type"
           />
         </template>
       </template>
@@ -141,7 +141,7 @@
       <a-form-item :label="pi.queryLabel('fromCurrencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.fromCurrencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('fromCurrencyCode', 'select')"
           allow-clear
         />
@@ -151,7 +151,7 @@
       <a-form-item :label="pi.queryLabel('toCurrencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.toCurrencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('toCurrencyCode', 'select')"
           allow-clear
         />
@@ -161,7 +161,7 @@
       <a-form-item :label="pi.queryLabel('exchangeRateType')">
         <TaktSelect
           v-model:value="advancedQueryForm.exchangeRateType"
-          dict-type="accounting_exchange_rate_type"
+          dict-type="accounting_financial_exchange_rate_type"
           :placeholder="pi.queryPh('exchangeRateType', 'select')"
           allow-clear
         />

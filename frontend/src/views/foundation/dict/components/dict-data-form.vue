@@ -60,6 +60,7 @@
         <a-input
           v-model:value="formState.dictLabel"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictlabel') })"
+          :maxlength="40"
         />
       </a-form-item>
 
@@ -70,6 +71,7 @@
         <a-input
           v-model:value="formState.i18nKey"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.i18nkey') })"
+          :maxlength="140"
         />
       </a-form-item>
 
@@ -80,6 +82,7 @@
         <a-input
           v-model:value="formState.dictValue"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dictdata.dictvalue') })"
+          :maxlength="40"
         />
       </a-form-item>
 
@@ -114,6 +117,7 @@
         <a-input
           v-model:value="formState.extLabel"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.extlabel') })"
+          :maxlength="140"
         />
       </a-form-item>
 
@@ -124,6 +128,7 @@
         <a-input
           v-model:value="formState.extValue"
           :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.dictdata.extvalue') })"
+          :maxlength="140"
         />
       </a-form-item>
 

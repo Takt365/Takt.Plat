@@ -88,7 +88,7 @@ public class TaktIpqcOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -201,7 +201,7 @@ public class TaktIpqcOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期（范围查询-开始）
@@ -330,7 +330,7 @@ public class TaktIpqcOrderCreateDto
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -495,7 +495,7 @@ public class TaktIpqcOrderTemplateDto
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -607,7 +607,7 @@ public class TaktIpqcOrderImportDto
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -725,7 +725,7 @@ public class TaktIpqcOrderExportDto
     /// <summary>
     /// 判定人（人员代码）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期

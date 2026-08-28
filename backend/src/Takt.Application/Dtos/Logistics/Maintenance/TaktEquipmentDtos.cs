@@ -98,7 +98,7 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -108,12 +108,12 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期
@@ -288,7 +288,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -298,12 +298,12 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期（范围查询-开始）
@@ -505,7 +505,7 @@ public class TaktEquipmentCreateDto
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -515,12 +515,12 @@ public class TaktEquipmentCreateDto
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期
@@ -760,7 +760,7 @@ public class TaktEquipmentTemplateDto
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -770,12 +770,12 @@ public class TaktEquipmentTemplateDto
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期
@@ -952,7 +952,7 @@ public class TaktEquipmentImportDto
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -962,12 +962,12 @@ public class TaktEquipmentImportDto
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期
@@ -1150,7 +1150,7 @@ public class TaktEquipmentExportDto
     /// <summary>
     /// 所属部门
     /// </summary>
-    public string? DeptBy { get; set; } = string.Empty;
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -1160,12 +1160,12 @@ public class TaktEquipmentExportDto
     /// <summary>
     /// 负责人
     /// </summary>
-    public string? ResponsibleUserBy { get; set; } = string.Empty;
+    public string? ResponsibleUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作人
     /// </summary>
-    public string? OperatorBy { get; set; } = string.Empty;
+    public string? OperatorEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期

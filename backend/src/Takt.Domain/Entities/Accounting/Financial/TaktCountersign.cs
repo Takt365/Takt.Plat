@@ -31,18 +31,17 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "countersign_code", ColumnDescription = "会签编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string CountersignCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源采购询价 ID（采购链路自动生成时写入）
+    /// 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_inquiry_id", ColumnDescription = "来源采购询价ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
     /// <summary>
-    /// 来源采购询价编码（冗余）
+    /// 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_inquiry_code", ColumnDescription = "来源采购询价编码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? PurchaseInquiryCode { get; set; }
     /// <summary>
-    /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+    /// 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
     /// </summary>
     [SugarColumn(ColumnName = "business_type", ColumnDescription = "会签业务类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "standalone")]
     public string BusinessType { get; set; } = "standalone";
@@ -57,7 +56,7 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "step_no", ColumnDescription = "会签步骤序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int StepNo { get; set; } = 1;
     /// <summary>
-    /// 会签部门 JSON
+    /// 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
     /// </summary>
     [SugarColumn(ColumnName = "countersign_depts", ColumnDescription = "会签部门", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? CountersignDepts { get; set; }
@@ -79,31 +78,50 @@ public class TaktCountersign : TaktApprovalEntityBase
     /// <summary>
     /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
+    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ApplicantBy { get; set; }
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "application_dept", ColumnDescription = "申请部门", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
-    public string? ApplicationDept { get; set; }
+    [SugarColumn(ColumnName = "applicant_name", ColumnDescription = "申请人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ApplicantName { get; set; }
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_bearer_dept", ColumnDescription = "经费负担部门", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
-    public string? CostBearerDept { get; set; }
+    [SugarColumn(ColumnName = "application_dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? ApplicationDeptId { get; set; }
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "application_dept_name", ColumnDescription = "申请部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? ApplicationDeptName { get; set; }
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "cost_bearer_dept_id", ColumnDescription = "经费负担部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? CostBearerDeptId { get; set; }
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "cost_bearer_dept_name", ColumnDescription = "经费负担部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? CostBearerDeptName { get; set; }
     /// <summary>
     /// 预算否（字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "is_budget", ColumnDescription = "预算否", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBudget { get; set; } = 0;
     /// <summary>
-    /// 预算项目
+    /// 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "budget_item", ColumnDescription = "预算项目", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "budget_item_id", ColumnDescription = "预算项目ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? BudgetItemId { get; set; }
+    /// <summary>
+    /// 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "budget_item", ColumnDescription = "预算项目名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? BudgetItem { get; set; }
     /// <summary>
-    /// 预算金额
+    /// 预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）
     /// </summary>
     [SugarColumn(ColumnName = "budget_amount", ColumnDescription = "预算金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal BudgetAmount { get; set; }
@@ -133,10 +151,15 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "target_and_expected_benefit", ColumnDescription = "目标与预期效益", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? TargetAndExpectedBenefit { get; set; }
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? Attachments { get; set; }
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    public string? FileName { get; set; }
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? AccessUrl { get; set; }
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>

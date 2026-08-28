@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableColumnI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTableColumn 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktGenTableColumnI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentablecolumn.databasedatatype", "zh-HK", "数据类型_hk", "数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）"),
 
             // entity.gentablecolumn.csharpdatatype
-            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "en-US", "C#类型_us", "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "en-US", "C#类型_us", "C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
             // entity.gentablecolumn.csharpdatatype
-            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "ja-JP", "C#类型_jp", "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "ja-JP", "C#类型_jp", "C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
             // entity.gentablecolumn.csharpdatatype
-            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "zh-CN", "C#类型", "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "zh-CN", "C#类型", "C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
             // entity.gentablecolumn.csharpdatatype
-            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "zh-HK", "C#类型_hk", "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.csharpdatatype", "zh-HK", "C#类型_hk", "C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）"),
 
             // entity.gentablecolumn.csharpcolumnname
             new TranslationSeedItem("entity.gentablecolumn.csharpcolumnname", "en-US", "C#列名_us", "C#列名（C#属性名，首字母大写，帕斯卡命名法）"),
@@ -262,22 +262,22 @@ public class TaktGenTableColumnI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentablecolumn.isquery", "zh-HK", "查询_hk", "查询（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.gentablecolumn.querytype
-            new TranslationSeedItem("entity.gentablecolumn.querytype", "en-US", "查询方式_us", "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
+            new TranslationSeedItem("entity.gentablecolumn.querytype", "en-US", "查询方式_us", "查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
             // entity.gentablecolumn.querytype
-            new TranslationSeedItem("entity.gentablecolumn.querytype", "ja-JP", "查询方式_jp", "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
+            new TranslationSeedItem("entity.gentablecolumn.querytype", "ja-JP", "查询方式_jp", "查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
             // entity.gentablecolumn.querytype
-            new TranslationSeedItem("entity.gentablecolumn.querytype", "zh-CN", "查询方式", "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
+            new TranslationSeedItem("entity.gentablecolumn.querytype", "zh-CN", "查询方式", "查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
             // entity.gentablecolumn.querytype
-            new TranslationSeedItem("entity.gentablecolumn.querytype", "zh-HK", "查询方式_hk", "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
+            new TranslationSeedItem("entity.gentablecolumn.querytype", "zh-HK", "查询方式_hk", "查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq"),
 
             // entity.gentablecolumn.htmltype
-            new TranslationSeedItem("entity.gentablecolumn.htmltype", "en-US", "显示类型_us", "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.htmltype", "en-US", "显示类型_us", "显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.gentablecolumn.htmltype
-            new TranslationSeedItem("entity.gentablecolumn.htmltype", "ja-JP", "显示类型_jp", "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.htmltype", "ja-JP", "显示类型_jp", "显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.gentablecolumn.htmltype
-            new TranslationSeedItem("entity.gentablecolumn.htmltype", "zh-CN", "显示类型", "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.htmltype", "zh-CN", "显示类型", "显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.gentablecolumn.htmltype
-            new TranslationSeedItem("entity.gentablecolumn.htmltype", "zh-HK", "显示类型_hk", "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.gentablecolumn.htmltype", "zh-HK", "显示类型_hk", "显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
 
             // entity.gentablecolumn.dicttype
             new TranslationSeedItem("entity.gentablecolumn.dicttype", "en-US", "字典类型_us", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),

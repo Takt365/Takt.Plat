@@ -44,7 +44,7 @@ export interface EmployeeResignation extends ApprovalDtoBase {
   employeeName: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 
@@ -124,7 +124,7 @@ export interface EmployeeResignationQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -273,7 +273,7 @@ export interface EmployeeResignationCreate {
   employeeName: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 
@@ -372,7 +372,7 @@ export interface EmployeeResignationTemplate {
   employeeName?: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -456,7 +456,7 @@ export interface EmployeeResignationImport {
   employeeName?: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -540,7 +540,7 @@ export interface EmployeeResignationExport {
   employeeName: string;
 
   /**
-   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+   * 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 

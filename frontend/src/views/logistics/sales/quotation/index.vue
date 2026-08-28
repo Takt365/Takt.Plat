@@ -77,25 +77,25 @@
         <template v-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'taxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'quotationStatus'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'quotationStatus')"
-            dict-type="logistics_quotation_status"
+            dict-type="logistics_sales_quotation_status"
           />
         </template>
       </template>
@@ -268,7 +268,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
@@ -278,7 +278,7 @@
       <a-form-item :label="pi.queryLabel('taxCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxCode"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('taxCode', 'select')"
           allow-clear
         />
@@ -288,7 +288,7 @@
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -326,7 +326,7 @@
       <a-form-item :label="pi.queryLabel('quotationStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.quotationStatus"
-          dict-type="logistics_quotation_status"
+          dict-type="logistics_sales_quotation_status"
           :placeholder="pi.queryPh('quotationStatus', 'select')"
           allow-clear
         />

@@ -29,8 +29,9 @@ export const PURCHASEPLAN_LIST_FIELDS = [
   'planPeriodStart',
   'planPeriodEnd',
   'purchaseGroupCode',
-  'plannerId',
-  'planBy',
+  'plannerEmployeeId',
+  'plannerEmployeeName',
+  'plannerName',
   'totalQuantity',
   'totalAmount',
   'convertedQuantity',
@@ -38,12 +39,34 @@ export const PURCHASEPLAN_LIST_FIELDS = [
   'planStatus',
   'convertedStatus',
   'planDescription',
-  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEPLAN_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  purchasePlanCode: 'required',
+  materialRequirementsPlanningId: 'optional',
+  materialRequirementsPlanningCode: 'optional',
+  productionPlanId: 'optional',
+  productionPlanCode: 'optional',
+  planDate: 'select',
+  planPeriodStart: 'select',
+  planPeriodEnd: 'select',
+  purchaseGroupCode: 'optional',
+  plannerEmployeeId: 'optional',
+  plannerName: 'optional',
+  totalQuantity: 'select',
+  totalAmount: 'select',
+  convertedQuantity: 'select',
+  convertedAmount: 'select',
+  planStatus: 'select',
+  convertedStatus: 'select',
+  planDescription: 'optional',
+  extField: 'optional',
+  remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -51,13 +74,51 @@ export type PurchasePlanField = keyof typeof PURCHASEPLAN_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEPLAN_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'purchasePlanCode',
+  'materialRequirementsPlanningId',
+  'materialRequirementsPlanningCode',
+  'productionPlanId',
+  'productionPlanCode',
+  'planDateStart',
+  'planDateEnd',
+  'planPeriodStartStart',
+  'planPeriodStartEnd',
+  'planPeriodEndStart',
+  'planPeriodEndEnd',
+  'purchaseGroupCode',
+  'plannerEmployeeId',
+  'plannerName',
+  'planDescription',
+  'initiatorId',
+  'initiatedAtStart',
+  'initiatedAtEnd',
+  'approvedBy',
+  'approvedAtStart',
+  'approvedAtEnd',
+  'flowInstanceId',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof PurchasePlanQuery)[]
 
-export type PurchasePlanQueryField = (typeof PURCHASEPLAN_QUERY_STRING_FIELDS)[number]
+export type PurchasePlanQueryField =
+  | (typeof PURCHASEPLAN_QUERY_STRING_FIELDS)[number]
+  | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEPLAN_QUERY_FIELDS: readonly PurchasePlanQueryField[] = [...PURCHASEPLAN_QUERY_STRING_FIELDS]
+export const PURCHASEPLAN_QUERY_FIELDS: readonly PurchasePlanQueryField[] = [
+  ...PURCHASEPLAN_QUERY_STRING_FIELDS,
+  'totalQuantity',
+  'totalAmount',
+  'convertedQuantity',
+  'convertedAmount',
+  'planStatus',
+  'convertedStatus',
+  'approvalStatus',
+]
 
 /**
  * Takt采购计划实体字段 i18n：index / purchase-plan-form 统一入口

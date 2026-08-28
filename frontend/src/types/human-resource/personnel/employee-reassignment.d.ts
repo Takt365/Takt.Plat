@@ -44,7 +44,7 @@ export interface EmployeeReassignment extends ApprovalDtoBase {
   employeeName: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType: number;
 
@@ -149,7 +149,7 @@ export interface EmployeeReassignmentQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType?: number;
 
@@ -313,7 +313,7 @@ export interface EmployeeReassignmentCreate {
   employeeName: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType: number;
 
@@ -437,7 +437,7 @@ export interface EmployeeReassignmentTemplate {
   employeeName?: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType?: number;
 
@@ -546,7 +546,7 @@ export interface EmployeeReassignmentImport {
   employeeName?: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType?: number;
 
@@ -655,7 +655,7 @@ export interface EmployeeReassignmentExport {
   employeeName: string;
 
   /**
-   * 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+   * 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
    */
   reassignmentType: number;
 

@@ -116,13 +116,13 @@
           <template v-else-if="column.key === 'costElementType'">
             <TaktDictTag
               :value="getCostElementDictValue(record, 'costElementType')"
-              dict-type="accounting_cost_element_type"
+              dict-type="accounting_controlling_cost_element_type"
             />
           </template>
           <template v-else-if="column.key === 'costElementCategory'">
             <TaktDictTag
               :value="getCostElementDictValue(record, 'costElementCategory')"
-              dict-type="accounting_cost_element_category"
+              dict-type="accounting_controlling_cost_element_category"
             />
           </template>
         </template>
@@ -203,7 +203,7 @@
       <a-form-item :label="pi.queryLabel('costElementType')">
         <TaktSelect
           v-model:value="advancedQueryForm.costElementType"
-          dict-type="accounting_cost_element_type"
+          dict-type="accounting_controlling_cost_element_type"
           :placeholder="pi.queryPh('costElementType', 'select')"
           allow-clear
         />
@@ -213,7 +213,7 @@
       <a-form-item :label="pi.queryLabel('costElementCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.costElementCategory"
-          dict-type="accounting_cost_element_category"
+          dict-type="accounting_controlling_cost_element_category"
           :placeholder="pi.queryPh('costElementCategory', 'select')"
           allow-clear
         />

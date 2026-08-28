@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktBalanceSheetI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBalanceSheet 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktBalanceSheetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.balancesheet.accounttitlename", "zh-HK", "会计科目名称_hk", "会计科目名称（冗余）"),
 
             // entity.balancesheet.linecategory
-            new TranslationSeedItem("entity.balancesheet.linecategory", "en-US", "行类别_us", "行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
+            new TranslationSeedItem("entity.balancesheet.linecategory", "en-US", "行类别_us", "行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
             // entity.balancesheet.linecategory
-            new TranslationSeedItem("entity.balancesheet.linecategory", "ja-JP", "行类别_jp", "行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
+            new TranslationSeedItem("entity.balancesheet.linecategory", "ja-JP", "行类别_jp", "行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
             // entity.balancesheet.linecategory
-            new TranslationSeedItem("entity.balancesheet.linecategory", "zh-CN", "行类别", "行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
+            new TranslationSeedItem("entity.balancesheet.linecategory", "zh-CN", "行类别", "行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
             // entity.balancesheet.linecategory
-            new TranslationSeedItem("entity.balancesheet.linecategory", "zh-HK", "行类别_hk", "行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
+            new TranslationSeedItem("entity.balancesheet.linecategory", "zh-HK", "行类别_hk", "行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）"),
 
             // entity.balancesheet.balancedirection
             new TranslationSeedItem("entity.balancesheet.balancedirection", "en-US", "余额方向_us", "余额方向（0=借方余额为正列报，1=贷方余额为正列报；资产多为借方，负债权益多为贷方）"),
@@ -217,13 +217,13 @@ public class TaktBalanceSheetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.balancesheet.priorperiodamount", "zh-HK", "上期列报金额_hk", "上期列报金额（比较信息；IAS 1 / CAS 要求列示比较期）"),
 
             // entity.balancesheet.currencycode
-            new TranslationSeedItem("entity.balancesheet.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；报告货币）"),
+            new TranslationSeedItem("entity.balancesheet.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code；报告货币）"),
             // entity.balancesheet.currencycode
-            new TranslationSeedItem("entity.balancesheet.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；报告货币）"),
+            new TranslationSeedItem("entity.balancesheet.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code；报告货币）"),
             // entity.balancesheet.currencycode
-            new TranslationSeedItem("entity.balancesheet.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；报告货币）"),
+            new TranslationSeedItem("entity.balancesheet.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code；报告货币）"),
             // entity.balancesheet.currencycode
-            new TranslationSeedItem("entity.balancesheet.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；报告货币）"),
+            new TranslationSeedItem("entity.balancesheet.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code；报告货币）"),
 
             // entity.balancesheet.sortorder
             new TranslationSeedItem("entity.balancesheet.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前；应与报表印刷顺序一致）"),

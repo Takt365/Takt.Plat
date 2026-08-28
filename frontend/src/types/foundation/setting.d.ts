@@ -54,7 +54,7 @@ export interface Setting extends CompanyDtoBase {
   settingGroup: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType: string;
 
@@ -139,7 +139,7 @@ export interface SettingQuery extends TaktPagedQuery {
   settingGroup?: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType?: string;
 
@@ -243,7 +243,7 @@ export interface SettingCreate {
   settingGroup: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType: string;
 
@@ -404,7 +404,7 @@ export interface SettingTemplate {
   settingGroup?: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType?: string;
 
@@ -493,7 +493,7 @@ export interface SettingImport {
   settingGroup?: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType?: string;
 
@@ -582,7 +582,7 @@ export interface SettingExport {
   settingGroup: string;
 
   /**
-   * 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   * 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
    */
   valueType: string;
 

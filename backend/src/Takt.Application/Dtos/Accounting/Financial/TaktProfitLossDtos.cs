@@ -62,7 +62,7 @@ public class TaktProfitLossDto : TaktCompanyDtoBase
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -92,7 +92,7 @@ public class TaktProfitLossDto : TaktCompanyDtoBase
     public int IsExpense { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -164,7 +164,7 @@ public class TaktProfitLossQueryDto : TaktPagedQuery
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -194,7 +194,7 @@ public class TaktProfitLossQueryDto : TaktPagedQuery
     public int? IsExpense { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -289,7 +289,7 @@ public class TaktProfitLossCreateDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -319,9 +319,9 @@ public class TaktProfitLossCreateDto
     public int IsExpense { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -464,7 +464,7 @@ public class TaktProfitLossTemplateDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -494,7 +494,7 @@ public class TaktProfitLossTemplateDto
     public int? IsExpense { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -567,7 +567,7 @@ public class TaktProfitLossImportDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -597,7 +597,7 @@ public class TaktProfitLossImportDto
     public int? IsExpense { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -670,7 +670,7 @@ public class TaktProfitLossExportDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -700,7 +700,7 @@ public class TaktProfitLossExportDto
     public int IsExpense { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

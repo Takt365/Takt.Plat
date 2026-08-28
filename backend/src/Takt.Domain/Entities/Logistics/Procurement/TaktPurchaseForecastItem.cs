@@ -34,7 +34,7 @@ public class TaktPurchaseForecastItem : TaktCompanyEntityBase
     public long PurchaseForecastId { get; set; }
 
     /// <summary>
-    /// 采购预测编码（冗余字段，便于查询）
+    /// 采购预测编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_forecast_code", ColumnDescription = "采购预测编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PurchaseForecastCode { get; set; } = string.Empty;

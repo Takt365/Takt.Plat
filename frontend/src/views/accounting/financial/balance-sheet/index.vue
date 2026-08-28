@@ -74,7 +74,7 @@
         <template v-if="column.key === 'lineCategory'">
           <TaktDictTag
             :value="getBalanceSheetDictValue(record, 'lineCategory')"
-            dict-type="accounting_balance_sheet_line_category"
+            dict-type="accounting_financial_balance_sheet_line_category"
           />
         </template>
         <template v-else-if="column.key === 'isTotalLine'">
@@ -86,7 +86,7 @@
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getBalanceSheetDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'balanceSheetStatus'">
@@ -204,7 +204,7 @@
       <a-form-item :label="pi.queryLabel('lineCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.lineCategory"
-          dict-type="accounting_balance_sheet_line_category"
+          dict-type="accounting_financial_balance_sheet_line_category"
           :placeholder="pi.queryPh('lineCategory', 'select')"
           allow-clear
         />
@@ -287,7 +287,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />

@@ -500,13 +500,15 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
                 || (x.ExpenseTitle != null && x.ExpenseTitle.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
-                || (x.ApplicationDept != null && x.ApplicationDept.Contains(keywords))
-                || (x.CostBearerDept != null && x.CostBearerDept.Contains(keywords))
+                || (x.ApplicantName != null && x.ApplicantName.Contains(keywords))
+                || (x.ApplicationDeptName != null && x.ApplicationDeptName.Contains(keywords))
+                || (x.CostBearerDeptName != null && x.CostBearerDeptName.Contains(keywords))
                 || (x.CostCenter != null && x.CostCenter.Contains(keywords))
                 || (x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(keywords))
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
                 || (x.ApplicationReason != null && x.ApplicationReason.Contains(keywords))
-                || (x.Attachments != null && x.Attachments.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -560,16 +562,34 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
             exp = exp.And(x => x.ApplicantBy == applicantBy);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicantName))
         {
-            var applicationDept = queryDto.ApplicationDept;
-            exp = exp.And(x => x.ApplicationDept != null && x.ApplicationDept.Contains(applicationDept));
+            var applicantName = queryDto.ApplicantName;
+            exp = exp.And(x => x.ApplicantName != null && x.ApplicantName.Contains(applicantName));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.CostBearerDept))
+        if (queryDto?.ApplicationDeptId.HasValue == true)
         {
-            var costBearerDept = queryDto.CostBearerDept;
-            exp = exp.And(x => x.CostBearerDept != null && x.CostBearerDept.Contains(costBearerDept));
+            var applicationDeptId = queryDto.ApplicationDeptId.Value;
+            exp = exp.And(x => x.ApplicationDeptId == applicationDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationDeptName))
+        {
+            var applicationDeptName = queryDto.ApplicationDeptName;
+            exp = exp.And(x => x.ApplicationDeptName != null && x.ApplicationDeptName.Contains(applicationDeptName));
+        }
+
+        if (queryDto?.CostBearerDeptId.HasValue == true)
+        {
+            var costBearerDeptId = queryDto.CostBearerDeptId.Value;
+            exp = exp.And(x => x.CostBearerDeptId == costBearerDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostBearerDeptName))
+        {
+            var costBearerDeptName = queryDto.CostBearerDeptName;
+            exp = exp.And(x => x.CostBearerDeptName != null && x.CostBearerDeptName.Contains(costBearerDeptName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.CostCenter))
@@ -620,10 +640,16 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
             exp = exp.And(x => x.ApplicationReason != null && x.ApplicationReason.Contains(applicationReason));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
         {
-            var attachments = queryDto.Attachments;
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
+        {
+            var accessUrl = queryDto.AccessUrl;
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(accessUrl));
         }
 
         if (queryDto?.ExpenseStatus.HasValue == true)
@@ -718,11 +744,23 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicantName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.CostBearerDept))
+        if (queryDto.ApplicationDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationDeptName))
+        {
+            return true;
+        }
+        if (queryDto.CostBearerDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostBearerDeptName))
         {
             return true;
         }
@@ -758,7 +796,11 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto.FileName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccessUrl))
         {
             return true;
         }

@@ -36,7 +36,7 @@ public class TaktRole : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "role_name", ColumnDescription = "角色名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string RoleName { get; set; } = string.Empty;
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     [SugarColumn(ColumnName = "data_scope", ColumnDescription = "数据权限范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int DataScope { get; set; } = 4;

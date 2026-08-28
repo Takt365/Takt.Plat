@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceRequestDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerServiceRequest 生成，请按需审阅）
 // 
@@ -52,12 +52,12 @@ public class TaktCustomerServiceRequestDto : TaktCompanyDtoBase
     public string? ClientName { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientName1 { get; set; } = string.Empty;
 
@@ -73,7 +73,7 @@ public class TaktCustomerServiceRequestDto : TaktCompanyDtoBase
     public string? ServiceContractName { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -213,12 +213,12 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -229,7 +229,7 @@ public class TaktCustomerServiceRequestQueryDto : TaktPagedQuery
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -402,14 +402,14 @@ public class TaktCustomerServiceRequestCreateDto
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
-    [Required(ErrorMessage = "客户端名称（冗余字段，便于查询）不能为空")]
+    [Required(ErrorMessage = "客户端名称（冗余：按对应 Id 取主数据名称联动）不能为空")]
     public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
@@ -419,7 +419,7 @@ public class TaktCustomerServiceRequestCreateDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -627,12 +627,12 @@ public class TaktCustomerServiceRequestTemplateDto
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -643,7 +643,7 @@ public class TaktCustomerServiceRequestTemplateDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -777,12 +777,12 @@ public class TaktCustomerServiceRequestImportDto
     public long? ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ClientName1 { get; set; } = string.Empty;
 
@@ -793,7 +793,7 @@ public class TaktCustomerServiceRequestImportDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 
@@ -933,12 +933,12 @@ public class TaktCustomerServiceRequestExportDto
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string ClientName1 { get; set; } = string.Empty;
 
@@ -949,7 +949,7 @@ public class TaktCustomerServiceRequestExportDto
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? ServiceContractCode { get; set; } = string.Empty;
 

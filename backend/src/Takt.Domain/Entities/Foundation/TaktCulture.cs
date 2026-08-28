@@ -34,9 +34,9 @@ public class TaktCulture : TaktTenantCoreEntityBase
     public string CultureCode { get; set; } = "mul";
 
     /// <summary>
-    /// 本地化名称（用该语言显示的自身名称，如：中文、English）
+    /// 本地化名称（用该语言显示的自身名称，如：中文、English；nvarchar Length=40）
     /// </summary>
-    [SugarColumn(ColumnName = "native_name", ColumnDescription = "本地化名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "native_name", ColumnDescription = "本地化名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string NativeName { get; set; } = string.Empty;
 
     /// <summary>

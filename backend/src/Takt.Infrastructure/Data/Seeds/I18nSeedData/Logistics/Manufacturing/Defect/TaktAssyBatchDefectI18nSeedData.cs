@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyBatchDefectI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyBatchDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktAssyBatchDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assybatchdefect._self", "zh-HK", "组立批量不良统计信息_hk", "实体名称"),
 
             // entity.assybatchdefect.prodcategory
-            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assybatchdefect.prodcategory
-            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assybatchdefect.prodcategory
-            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "zh-CN", "生产类别", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "zh-CN", "生产类别", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assybatchdefect.prodcategory
-            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assybatchdefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.assybatchdefect.batchcode
             new TranslationSeedItem("entity.assybatchdefect.batchcode", "en-US", "批次_us", "批次（统计维度）"),
@@ -226,13 +226,13 @@ public class TaktAssyBatchDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assybatchdefect.reportcount", "zh-HK", "日报笔数_hk", "关联组立不良日报笔数"),
 
             // entity.assybatchdefect.batchstatus
-            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "en-US", "批次状态_us", "批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "en-US", "批次状态_us", "批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
             // entity.assybatchdefect.batchstatus
-            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "ja-JP", "批次状态_jp", "批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "ja-JP", "批次状态_jp", "批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
             // entity.assybatchdefect.batchstatus
-            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "zh-CN", "批次状态", "批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "zh-CN", "批次状态", "批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
             // entity.assybatchdefect.batchstatus
-            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "zh-HK", "批次状态_hk", "批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assybatchdefect.batchstatus", "zh-HK", "批次状态_hk", "批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）"),
         };
     }
 

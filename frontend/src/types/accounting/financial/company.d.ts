@@ -44,17 +44,17 @@ export interface Company extends TenantDtoBase {
   companyShortName: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale: string;
 
@@ -194,22 +194,22 @@ export interface Company extends TenantDtoBase {
   accountHolder: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode: string;
 
@@ -219,12 +219,12 @@ export interface Company extends TenantDtoBase {
   businessPlace: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant: string;
 
@@ -289,17 +289,17 @@ export interface CompanyQuery extends TaktPagedQuery {
   companyShortName?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale?: string;
 
@@ -449,22 +449,22 @@ export interface CompanyQuery extends TaktPagedQuery {
   accountHolder?: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts?: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode?: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode?: string;
 
@@ -474,12 +474,12 @@ export interface CompanyQuery extends TaktPagedQuery {
   businessPlace?: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant?: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant?: string;
 
@@ -563,17 +563,17 @@ export interface CompanyCreate {
   companyShortName: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale: string;
 
@@ -713,22 +713,22 @@ export interface CompanyCreate {
   accountHolder: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode: string;
 
@@ -738,12 +738,12 @@ export interface CompanyCreate {
   businessPlace: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant: string;
 
@@ -875,17 +875,17 @@ export interface CompanyTemplate {
   companyShortName?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale?: string;
 
@@ -1025,22 +1025,22 @@ export interface CompanyTemplate {
   accountHolder?: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts?: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode?: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode?: string;
 
@@ -1050,12 +1050,12 @@ export interface CompanyTemplate {
   businessPlace?: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant?: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant?: string;
 
@@ -1134,17 +1134,17 @@ export interface CompanyImport {
   companyShortName?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale?: string;
 
@@ -1284,22 +1284,22 @@ export interface CompanyImport {
   accountHolder?: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts?: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode?: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode?: string;
 
@@ -1309,12 +1309,12 @@ export interface CompanyImport {
   businessPlace?: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant?: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant?: string;
 
@@ -1393,17 +1393,17 @@ export interface CompanyExport {
   companyShortName: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type）
+   * 企业规模（字典 sys_enterprise_scale）
    */
   enterpriseScale: string;
 
@@ -1543,22 +1543,22 @@ export interface CompanyExport {
   accountHolder: string;
 
   /**
-   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   * 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode: string;
 
   /**
-   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   * 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
    */
   chartOfAccounts: string;
 
   /**
-   * 进项税码（字典 accounting_tax_code）
+   * 进项税码（字典 accounting_financial_tax_code）
    */
   inputTaxCode: string;
 
   /**
-   * 销项税码（字典 accounting_tax_code）
+   * 销项税码（字典 accounting_financial_tax_code）
    */
   outputTaxCode: string;
 
@@ -1568,12 +1568,12 @@ export interface CompanyExport {
   businessPlace: string;
 
   /**
-   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   * 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
    */
   postingPeriodVariant: string;
 
   /**
-   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   * 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
    */
   fiscalYearVariant: string;
 

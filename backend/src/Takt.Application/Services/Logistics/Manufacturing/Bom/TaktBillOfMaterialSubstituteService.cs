@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM替代料应用服务实现
 // 
@@ -395,7 +395,7 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
         }
         if (string.IsNullOrEmpty(entity.SubstituteGroup))
         {
-            entity.SubstituteGroup = master.SubstituteGroup;
+            entity.SubstituteGroup = master.SubstituteGroup ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.MaterialUnit))
         {

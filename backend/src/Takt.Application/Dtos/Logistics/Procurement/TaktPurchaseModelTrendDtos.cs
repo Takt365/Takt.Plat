@@ -48,7 +48,7 @@ public class TaktPurchaseModelTrendQueryDto : TaktPagedQuery
     public string? SupplierCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；可选；如 PB00）
+    /// 价格类型（字典 logistics_procurement_price_type；可选；如 PB00）
     /// </summary>
     public string? PriceType { get; set; }
 
@@ -63,7 +63,7 @@ public class TaktPurchaseModelTrendQueryDto : TaktPagedQuery
     public string? TrendFilter { get; set; }
 
     /// <summary>
-    /// 物料类型（存 ROH/HALB/FERT 等码；机种推移必填；字典 logistics_material_type）
+    /// 物料类型（存 ROH/HALB/FERT 等码；机种推移必填；字典 logistics_materials_material_type）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 }

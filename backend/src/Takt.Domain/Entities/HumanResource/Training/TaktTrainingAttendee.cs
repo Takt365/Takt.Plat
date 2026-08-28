@@ -46,7 +46,7 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "course_name", ColumnDescription = "培训课程名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CourseName { get; set; } = string.Empty;
     /// <summary>
-    /// 培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）
+    /// 培训类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）
     /// </summary>
     [SugarColumn(ColumnName = "training_type", ColumnDescription = "培训类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string TrainingType { get; set; } = string.Empty;

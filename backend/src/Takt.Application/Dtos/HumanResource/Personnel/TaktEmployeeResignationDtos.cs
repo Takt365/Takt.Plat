@@ -52,7 +52,7 @@ public class TaktEmployeeResignationDto : TaktApprovalDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int ResignationType { get; set; } = 0;
 
@@ -136,7 +136,7 @@ public class TaktEmployeeResignationQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int? ResignationType { get; set; }
 
@@ -290,7 +290,7 @@ public class TaktEmployeeResignationCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int ResignationType { get; set; } = 0;
 
@@ -397,7 +397,7 @@ public class TaktEmployeeResignationTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int? ResignationType { get; set; }
 
@@ -480,7 +480,7 @@ public class TaktEmployeeResignationImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int? ResignationType { get; set; }
 
@@ -569,7 +569,7 @@ public class TaktEmployeeResignationExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     public int ResignationType { get; set; } = 0;
 

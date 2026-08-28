@@ -14,10 +14,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Takt.Application.Services.Code.Generator.GenEngine;
 
-/// <summary>按钮组配置解析</summary>
+/// <summary>
+/// 按钮组配置解析
+/// </summary>
 internal static class TaktGenButtonGroupParser
 {
-    /// <summary>解析按钮组为权限后缀列表</summary>
+    /// <summary>
+    /// 解析按钮组为权限后缀列表
+    /// </summary>
     /// <param name="buttonGroup">按钮组原始配置</param>
     /// <returns>权限后缀列表（小写）</returns>
     public static IReadOnlyList<string> ParseSelectionSuffixes(string? buttonGroup)

@@ -45,7 +45,7 @@ export interface MaterialDocumentItem extends CompanyDtoBase {
   restrictedStockFlag?: string;
 
   /**
-   * 特殊库存（字典 logistics_special_stock_type）
+   * 特殊库存（字典 logistics_materials_special_stock_type）
    */
   specialStock?: string;
 
@@ -65,7 +65,7 @@ export interface MaterialDocumentItem extends CompanyDtoBase {
   debitCreditIndicator?: string;
 
   /**
-   * 货币（字典 accounting_currency_code）
+   * 货币（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -85,7 +85,7 @@ export interface MaterialDocumentItem extends CompanyDtoBase {
   quantity?: number;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code）
    */
   baseUnit?: string;
 
@@ -383,7 +383,7 @@ export interface MaterialDocumentItemExport {
   lineDepth?: string;
 
   /**
-   * 移动类型（字典 logistics_movement_type）
+   * 移动类型（字典 logistics_materials_movement_type）
    */
   movementType: string;
 
@@ -423,7 +423,7 @@ export interface MaterialDocumentItemExport {
   restrictedStockFlag?: string;
 
   /**
-   * 特殊库存（字典 logistics_special_stock_type）
+   * 特殊库存（字典 logistics_materials_special_stock_type）
    */
   specialStock?: string;
 
@@ -443,7 +443,7 @@ export interface MaterialDocumentItemExport {
   debitCreditIndicator?: string;
 
   /**
-   * 货币（字典 accounting_currency_code）
+   * 货币（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -463,7 +463,7 @@ export interface MaterialDocumentItemExport {
   quantity: number;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code）
    */
   baseUnit?: string;
 

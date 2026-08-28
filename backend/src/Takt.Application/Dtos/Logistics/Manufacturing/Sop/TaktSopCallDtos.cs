@@ -59,7 +59,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public string? ExecName { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
@@ -96,7 +96,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 
@@ -151,7 +151,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
@@ -193,7 +193,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -261,7 +261,7 @@ public class TaktSopCallCreateDto
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
@@ -293,7 +293,7 @@ public class TaktSopCallCreateDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 
@@ -347,9 +347,9 @@ public class TaktSopCallStatusDto
     public long SopCallId { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
-    [Required(ErrorMessage = "呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）不能为空")]
+    [Required(ErrorMessage = "呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）不能为空")]
     public int CallStatus { get; set; } = 0;
 }
 
@@ -395,7 +395,7 @@ public class TaktSopCallTemplateDto
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
@@ -427,7 +427,7 @@ public class TaktSopCallTemplateDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -481,7 +481,7 @@ public class TaktSopCallImportDto
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int? CallType { get; set; }
 
@@ -513,7 +513,7 @@ public class TaktSopCallImportDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int? CallStatus { get; set; }
 
@@ -568,7 +568,7 @@ public class TaktSopCallExportDto
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     public int CallType { get; set; } = 0;
 
@@ -600,7 +600,7 @@ public class TaktSopCallExportDto
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     public int CallStatus { get; set; } = 0;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentStaffingRequirement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,22 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.reqcode", "zh-HK", "需求单号_hk", "需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）"),
 
             // entity.talentstaffingrequirement.deptid
-            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "en-US", "申请部门ID_us", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "en-US", "申请部门ID_us", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.talentstaffingrequirement.deptid
-            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "ja-JP", "申请部门ID_jp", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "ja-JP", "申请部门ID_jp", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.talentstaffingrequirement.deptid
-            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-CN", "申请部门ID", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-CN", "申请部门ID", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.talentstaffingrequirement.deptid
-            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-HK", "申请部门ID_hk", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-HK", "申请部门ID_hk", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.talentstaffingrequirement.deptname
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptname", "en-US", "申请部门名称_us", "申请部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.talentstaffingrequirement.deptname
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptname", "ja-JP", "申请部门名称_jp", "申请部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.talentstaffingrequirement.deptname
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptname", "zh-CN", "申请部门名称", "申请部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.talentstaffingrequirement.deptname
+            new TranslationSeedItem("entity.talentstaffingrequirement.deptname", "zh-HK", "申请部门名称_hk", "申请部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.talentstaffingrequirement.postid
             new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID_us", "申请岗位（选项 TaktPosts/options；DictValue=Id）"),
@@ -136,22 +145,22 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.requestqty", "zh-HK", "需求人数_hk", "需求人数（默认 1）"),
 
             // entity.talentstaffingrequirement.headcounttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "en-US", "编制类型_us", "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "en-US", "编制类型_us", "编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
             // entity.talentstaffingrequirement.headcounttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "ja-JP", "编制类型_jp", "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "ja-JP", "编制类型_jp", "编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
             // entity.talentstaffingrequirement.headcounttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-CN", "编制类型", "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-CN", "编制类型", "编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
             // entity.talentstaffingrequirement.headcounttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-HK", "编制类型_hk", "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.headcounttype", "zh-HK", "编制类型_hk", "编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）"),
 
             // entity.talentstaffingrequirement.reasoncode
-            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "en-US", "需求原因_us", "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "en-US", "需求原因_us", "需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
             // entity.talentstaffingrequirement.reasoncode
-            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "ja-JP", "需求原因_jp", "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "ja-JP", "需求原因_jp", "需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
             // entity.talentstaffingrequirement.reasoncode
-            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-CN", "需求原因", "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-CN", "需求原因", "需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
             // entity.talentstaffingrequirement.reasoncode
-            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-HK", "需求原因_hk", "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-HK", "需求原因_hk", "需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
 
             // entity.talentstaffingrequirement.replaceemployeeid
             new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "en-US", "替补员工ID_us", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
@@ -161,6 +170,15 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-CN", "替补员工ID", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
             // entity.talentstaffingrequirement.replaceemployeeid
             new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-HK", "替补员工ID_hk", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
+
+            // entity.talentstaffingrequirement.replaceemployeename
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeename", "en-US", "替补员工名称_us", "替补员工名称（冗余：按 ReplaceEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentstaffingrequirement.replaceemployeename
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeename", "ja-JP", "替补员工名称_jp", "替补员工名称（冗余：按 ReplaceEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentstaffingrequirement.replaceemployeename
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeename", "zh-CN", "替补员工名称", "替补员工名称（冗余：按 ReplaceEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentstaffingrequirement.replaceemployeename
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeename", "zh-HK", "替补员工名称_hk", "替补员工名称（冗余：按 ReplaceEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.talentstaffingrequirement.expectedonboarddate
             new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "en-US", "期望入职日_us", "期望入职日"),
@@ -172,13 +190,13 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "zh-HK", "期望入职日_hk", "期望入职日"),
 
             // entity.talentstaffingrequirement.contracttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "en-US", "合同类型_us", "合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "en-US", "合同类型_us", "合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
             // entity.talentstaffingrequirement.contracttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "ja-JP", "合同类型_jp", "合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "ja-JP", "合同类型_jp", "合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
             // entity.talentstaffingrequirement.contracttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-CN", "合同类型", "合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-CN", "合同类型", "合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
             // entity.talentstaffingrequirement.contracttype
-            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-HK", "合同类型_hk", "合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.contracttype", "zh-HK", "合同类型_hk", "合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）"),
 
             // entity.talentstaffingrequirement.worklocation
             new TranslationSeedItem("entity.talentstaffingrequirement.worklocation", "en-US", "工作地点_us", "工作地点（如工厂/分公司）"),

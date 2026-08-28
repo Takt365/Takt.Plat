@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-seikan.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-26
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -21,6 +21,7 @@ import type {
   EcSeikanObsolete,
   EcSeikanUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-seikan';
+import type { EcDetail } from '@/types/logistics/manufacturing/engineering-change/ec-detail';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -42,6 +43,20 @@ export function getEcSeikanList(queryDto: any): Promise<TaktPagedResult<EcSeikan
     url: `${EC_SEIKAN_API_BASE}/list`,
     method: 'get',
     params: queryDto,
+  });
+}
+
+/**
+ * 获取设变明细主表列表（左栏 TaktEcDetail，权限与本部门 list 一致）
+ * @param {any} queryDto 查询DTO
+ * @returns {Promise<TaktPagedResult<EcDetail>>} 分页结果
+ */
+export function getEcSeikanMasterList(queryDto: any): Promise<TaktPagedResult<EcDetail>> {
+  return request<TaktPagedResult<EcDetail>>({
+    url: `${EC_SEIKAN_API_BASE}/masters`,
+    method: 'get',
+    params: queryDto,
+    skipErrorNotification: true,
   });
 }
 

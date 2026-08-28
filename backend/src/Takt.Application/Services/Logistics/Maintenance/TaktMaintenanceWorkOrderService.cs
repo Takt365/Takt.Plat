@@ -654,7 +654,7 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                 || (x.Solution != null && x.Solution.Contains(keywords))
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
                 || (x.CostElementCode != null && x.CostElementCode.Contains(keywords))
-                || (x.AcceptedBy != null && x.AcceptedBy.Contains(keywords))
+                || (x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(keywords))
                 || (x.MaintenanceImages != null && x.MaintenanceImages.Contains(keywords))
                 || (x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(keywords))
                 || (x.AcceptedSummary != null && x.AcceptedSummary.Contains(keywords))
@@ -825,10 +825,10 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             exp = exp.And(x => x.SettlementStatus == settlementStatus);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedByEmployeeName))
         {
-            var acceptedBy = queryDto.AcceptedBy;
-            exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(acceptedBy));
+            var acceptedBy = queryDto.AcceptedByEmployeeName;
+            exp = exp.And(x => x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(acceptedBy));
         }
 
         if (queryDto?.MaintenanceResult.HasValue == true)
@@ -1113,7 +1113,7 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedByEmployeeName))
         {
             return true;
         }

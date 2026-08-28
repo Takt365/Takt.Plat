@@ -33,7 +33,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ComplaintId { get; set; }
     /// <summary>
-    /// 客诉单号（冗余字段，便于查询）
+    /// 客诉单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerComplaintCode { get; set; } = string.Empty;
@@ -93,10 +93,16 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "improvement_action", ColumnDescription = "改善对策", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? ImprovementAction { get; set; }
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "improvement_responsible", ColumnDescription = "改善责任人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ImprovementResponsible { get; set; }
+    [SugarColumn(ColumnName = "improvement_responsible_id", ColumnDescription = "改善责任人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ImprovementResponsibleId { get; set; }
+    /// <summary>
+    /// 改善责任人名称（冗余：按 ImprovementResponsibleId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "improvement_responsible_name", ColumnDescription = "改善责任人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ImprovementResponsibleName { get; set; }
     /// <summary>
     /// 计划完成日期
     /// </summary>
@@ -108,10 +114,15 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "actual_completion_date", ColumnDescription = "实际完成日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ActualCompletionDate { get; set; }
     /// <summary>
-    /// 附件路径（多个附件用逗号分隔）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [SugarColumn(ColumnName = "attachment_paths", ColumnDescription = "附件路径", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
-    public string? AttachmentPaths { get; set; }
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    public string? FileName { get; set; }
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? AccessUrl { get; set; }
     /// <summary>
     /// 改善状态（字典 logistics_quality_improvement_status）
     /// </summary>

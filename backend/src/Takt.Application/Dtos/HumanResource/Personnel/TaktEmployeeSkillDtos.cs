@@ -57,7 +57,7 @@ public class TaktEmployeeSkillDto : TaktCompanyDtoBase
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 
@@ -141,7 +141,7 @@ public class TaktEmployeeSkillQueryDto : TaktPagedQuery
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -248,7 +248,7 @@ public class TaktEmployeeSkillCreateDto
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 
@@ -355,7 +355,7 @@ public class TaktEmployeeSkillTemplateDto
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -438,7 +438,7 @@ public class TaktEmployeeSkillImportDto
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -527,7 +527,7 @@ public class TaktEmployeeSkillExportDto
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 

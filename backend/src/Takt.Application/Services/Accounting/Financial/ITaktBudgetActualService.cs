@@ -36,7 +36,7 @@ public interface ITaktBudgetActualService
     Task<TaktBudgetActualDto?> GetBudgetActualByIdAsync(long id);
 
     /// <summary>
-    /// 获取预算实绩选项列表
+    /// 获取预算实绩选项列表（DictValue=Id，DictLabel=预算项名称，ExtValue=本期预算金额）
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetBudgetActualOptionsAsync();

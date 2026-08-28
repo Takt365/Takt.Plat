@@ -16,11 +16,479 @@
     layout="horizontal"
     label-align="right"
   >
-    <div :class="formContentClass">
-      <a-row :gutter="24">
-
-      </a-row>
-    </div>
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="purchase-request-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseRequestCode')"
+                name="purchaseRequestCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseRequestCode"
+                  :placeholder="pi.ph('purchaseRequestCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseRequestId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseInquiryId')"
+                name="purchaseInquiryId"
+              >
+                <TaktSelect
+                  v-model:value="formState.purchaseInquiryId"
+                  api-url="TaktPurchaseInquirys/options"
+                  :placeholder="pi.ph('purchaseInquiryId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseInquiryCode')"
+                name="purchaseInquiryCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseInquiryCode"
+                  :placeholder="pi.ph('purchaseInquiryCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchasePlanId')"
+                name="purchasePlanId"
+              >
+                <a-input
+                  v-model:value="formState.purchasePlanId"
+                  :placeholder="pi.ph('purchasePlanId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchasePlanCode')"
+                name="purchasePlanCode"
+              >
+                <a-input
+                  v-model:value="formState.purchasePlanCode"
+                  :placeholder="pi.ph('purchasePlanCode')"
+                  show-count
+                  :maxlength="40"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('chainScheme')"
+                name="chainScheme"
+              >
+                <TaktSelect
+                  v-model:value="formState.chainScheme"
+                  dict-type="logistics_procurement_chain_scheme"
+                  :placeholder="pi.ph('chainScheme')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('poDecision')"
+                name="poDecision"
+              >
+                <a-input-number
+                  v-model:value="formState.poDecision"
+                  :placeholder="pi.ph('poDecision')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('countersignId')"
+                name="countersignId"
+              >
+                <TaktSelect
+                  v-model:value="formState.countersignId"
+                  api-url="TaktCountersigns/options"
+                  :placeholder="pi.ph('countersignId')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('countersignCode')"
+                name="countersignCode"
+              >
+                <a-input
+                  v-model:value="formState.countersignCode"
+                  :placeholder="pi.ph('countersignCode')"
+                  show-count
+                  :maxlength="50"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('requestDate')"
+                name="requestDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.requestDate"
+                  :placeholder="pi.ph('requestDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('requiredArrivalDate')"
+                name="requiredArrivalDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.requiredArrivalDate"
+                  :placeholder="pi.ph('requiredArrivalDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('requestEmployeeId')"
+                name="requestEmployeeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.requestEmployeeId"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('requestEmployeeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('requestEmployeeName')"
+                name="requestEmployeeName"
+              >
+                <a-input
+                  v-model:value="formState.requestEmployeeName"
+                  :placeholder="pi.ph('requestEmployeeName')"
+                  show-count
+                  :maxlength="80"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('supplierCode')"
+                name="supplierCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.supplierCode"
+                  api-url="TaktSuppliers/options"
+                  :placeholder="pi.ph('supplierCode')"
+                  :disabled="!!formData?.purchaseRequestId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('supplierName1')"
+                name="supplierName1"
+              >
+                <a-input
+                  v-model:value="formState.supplierName1"
+                  :placeholder="pi.ph('supplierName1')"
+                  show-count
+                  :maxlength="140"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_financial_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.purchaseRequestId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxCode')"
+                name="taxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxCode"
+                  dict-type="accounting_financial_tax_code"
+                  :placeholder="pi.ph('taxCode')"
+                  :disabled="!!formData?.purchaseRequestId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_financial_tax_code"
+                  :placeholder="pi.ph('taxRate')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('totalQuantity')"
+                name="totalQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.totalQuantity"
+                  :placeholder="pi.ph('totalQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('totalAmount')"
+                name="totalAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.totalAmount"
+                  :placeholder="pi.ph('totalAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('convertedQuantity')"
+                name="convertedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.convertedQuantity"
+                  :placeholder="pi.ph('convertedQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('convertedAmount')"
+                name="convertedAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.convertedAmount"
+                  :placeholder="pi.ph('convertedAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('requestReason')"
+                name="requestReason"
+              >
+                <a-input
+                  v-model:value="formState.requestReason"
+                  :placeholder="pi.ph('requestReason')"
+                  show-count
+                  :maxlength="1000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('requestStatus')"
+                name="requestStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.requestStatus"
+                  dict-type="sys_approval_status"
+                  :placeholder="pi.ph('requestStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('convertedStatus')"
+                name="convertedStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.convertedStatus"
+                  dict-type="sys_convert_status"
+                  :placeholder="pi.ph('convertedStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                name="extField"
+                class="takt-form-item-ext-field"
+              >
+                <template #label>
+                  <span class="takt-form-ext-field-label">
+                    <a-tooltip
+                      :title="t('common.page.entity.extfieldhint')"
+                      placement="top"
+                    >
+                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+                    </a-tooltip>
+                    <span>{{ pi.label('extField') }}</span>
+                  </span>
+                </template>
+                <a-textarea
+                  v-model:value="formState.extField"
+                  :placeholder="t('common.page.form.placeholder.extfield')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('remark')"
+                name="remark"
+              >
+                <a-textarea
+                  v-model:value="formState.remark"
+                  :placeholder="pi.ph('remark')"
+                  :rows="4"
+                  show-count
+                  :maxlength="400"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="purchaseRequestItemTableRef"
@@ -34,7 +502,63 @@
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
-    >    </TaktEditableTable>
+    >
+      <template #cell-allocationCategory="{ record }">
+        <TaktSelect
+          v-model:value="record.allocationCategory"
+          dict-type="logistics_sales_allocation_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseRequestItemPi.ph('allocationCategory')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseRequestItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-requestUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.requestUnit"
+          dict-type="logistics_materials_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseRequestItemPi.ph('requestUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-purchasePerUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.purchasePerUnit"
+          dict-type="logistics_materials_price_unit_param"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseRequestItemPi.ph('purchasePerUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseRequestItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -43,7 +567,7 @@
  * Takt采购申请实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/procurement/purchase-request/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePurchaseRequestI18n } from '../composables/use-purchase-request-i18n'
@@ -52,17 +576,60 @@ import { usePurchaseRequestI18n } from '../composables/use-purchase-request-i18n
 const pi = usePurchaseRequestI18n()
 
 import type { PurchaseRequestCreate } from '@/types/logistics/procurement/purchase-request'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = []
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchaseRequestCode","purchaseInquiryId","purchaseInquiryCode","purchasePlanId","purchasePlanCode","chainScheme","poDecision","countersignId","countersignCode","requestDate","requiredArrivalDate","requestEmployeeId","requestEmployeeName","supplierCode","supplierName1","currencyCode","taxCode","taxRate","taxAmount","totalQuantity","totalAmount","convertedQuantity","convertedAmount","requestReason","requestStatus","convertedStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { usePurchaseRequestItemI18n } from '../composables/use-purchase-request-item-i18n'
 
 const purchaseRequestItemPi = usePurchaseRequestItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childPurchaseRequestItemRows = ref<Record<string, unknown>[]>([])
 const purchaseRequestItemTableRef = ref<{
@@ -71,9 +638,94 @@ const purchaseRequestItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedPurchaseRequestItemRow(row: Record<string, unknown>): boolean {
+  const id = row.purchaseRequestItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextPurchaseRequestItemLineNumber(): number {
+  const rows = purchaseRequestItemTableRef.value?.getRows?.() ?? childPurchaseRequestItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 purchaseRequestItem 可编辑列 */
 const purchaseRequestItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
-,
+  {
+    key: 'purchasePlanItemId',
+    title: purchaseRequestItemPi.label('purchasePlanItemId'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseRequestItemPi.ph('purchasePlanItemId'),
+  },
+  {
+    key: 'lineNumber',
+    title: purchaseRequestItemPi.label('lineNumber'),
+    width: 140,
+  },
+  {
+    key: 'allocationCategory',
+    title: purchaseRequestItemPi.label('allocationCategory'),
+    width: 140,
+  },
+  {
+    key: 'materialCode',
+    title: purchaseRequestItemPi.label('materialCode'),
+    width: 140,
+  },
+  {
+    key: 'requestUnit',
+    title: purchaseRequestItemPi.label('requestUnit'),
+    width: 140,
+  },
+  {
+    key: 'requestQuantity',
+    title: purchaseRequestItemPi.label('requestQuantity'),
+    width: 140,
+  },
+  {
+    key: 'convertedQuantity',
+    title: purchaseRequestItemPi.label('convertedQuantity'),
+    width: 140,
+  },
+  {
+    key: 'purchasePerUnit',
+    title: purchaseRequestItemPi.label('purchasePerUnit'),
+    width: 140,
+  },
+  {
+    key: 'purchaseRequestUnitPrice',
+    title: purchaseRequestItemPi.label('purchaseRequestUnitPrice'),
+    width: 140,
+  },
+  {
+    key: 'taxIncludedAmount',
+    title: purchaseRequestItemPi.label('taxIncludedAmount'),
+    width: 140,
+  },
+  {
+    key: 'untaxedAmount',
+    title: purchaseRequestItemPi.label('untaxedAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: purchaseRequestItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'requestAmount',
+    title: purchaseRequestItemPi.label('requestAmount'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: purchaseRequestItemPi.label('isObsolete'),
+    width: 140,
+  },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
@@ -84,7 +736,20 @@ function syncChildRowsFromFormData(val: Partial<PurchaseRequestCreate & { purcha
 
 function createDefaultPurchaseRequestItemRow(): Record<string, unknown> {
   return {
-
+    purchasePlanItemId: '',
+    lineNumber: allocateNextPurchaseRequestItemLineNumber(),
+    allocationCategory: '',
+    materialCode: '',
+    requestUnit: '',
+    requestQuantity: 0,
+    convertedQuantity: 0,
+    purchasePerUnit: 0,
+    purchaseRequestUnitPrice: 0,
+    taxIncludedAmount: 0,
+    untaxedAmount: 0,
+    taxAmount: 0,
+    requestAmount: 0,
+    isObsolete: 0,
   }
 }
 
@@ -94,13 +759,21 @@ function buildSubmitPayload() {
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: purchaseRequestItemTableRef.value?.getRows?.() ?? childPurchaseRequestItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      purchaseRequestId: masterId,
-    })),
+    items: purchaseRequestItemTableRef.value?.getRows?.() ?? childPurchaseRequestItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        purchaseRequestId: masterId,
+      }
+      if (isUpdate && isPersistedPurchaseRequestItemRow(row)) {
+        normalized.purchaseRequestItemId = row.purchaseRequestItemId
+      } else {
+        delete normalized.purchaseRequestItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -120,10 +793,28 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  chainScheme: 1,
+  currencyCode: "CNY",
+  taxCode: "J2",
+  requestStatus: 0,
+  convertedStatus: 0
 }
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
 
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchaseRequestId 才视为编辑） */
@@ -151,9 +842,163 @@ watch(
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.purchaseRequestId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-
+  purchaseRequestCode: [
+    {
+      required: true,
+      message: pi.ph('purchaseRequestCode'),
+      trigger: 'blur'
+    }
+  ],
+  chainScheme: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('chainScheme'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('chainScheme'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  requestDate: [
+    {
+      required: true,
+      message: pi.ph('requestDate'),
+      trigger: 'change'
+    }
+  ],
+  supplierCode: [
+    {
+      required: true,
+      message: pi.ph('supplierCode'),
+      trigger: 'change'
+    }
+  ],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  convertedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('convertedQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('convertedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  convertedAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('convertedAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('convertedAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  requestStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('requestStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('requestStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  convertedStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('convertedStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('convertedStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -166,10 +1011,116 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('chainScheme' in payload) {
+    const rawchainScheme = payload.chainScheme
+    if (rawchainScheme === undefined || rawchainScheme === null || rawchainScheme === '') {
+      delete payload.chainScheme
+    } else {
+      const numchainScheme = typeof rawchainScheme === 'number' ? rawchainScheme : Number(rawchainScheme)
+      if (Number.isFinite(numchainScheme)) payload.chainScheme = numchainScheme
+      else delete payload.chainScheme
+    }
+  }
+  if ('poDecision' in payload) {
+    const rawpoDecision = payload.poDecision
+    if (rawpoDecision === undefined || rawpoDecision === null || rawpoDecision === '') {
+      delete payload.poDecision
+    } else {
+      const numpoDecision = typeof rawpoDecision === 'number' ? rawpoDecision : Number(rawpoDecision)
+      if (Number.isFinite(numpoDecision)) payload.poDecision = numpoDecision
+      else delete payload.poDecision
+    }
+  }
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    if (rawtaxRate === undefined || rawtaxRate === null || rawtaxRate === '') {
+      delete payload.taxRate
+    } else {
+      const numtaxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+      if (Number.isFinite(numtaxRate)) payload.taxRate = numtaxRate
+      else delete payload.taxRate
+    }
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    if (rawtaxAmount === undefined || rawtaxAmount === null || rawtaxAmount === '') {
+      delete payload.taxAmount
+    } else {
+      const numtaxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+      if (Number.isFinite(numtaxAmount)) payload.taxAmount = numtaxAmount
+      else delete payload.taxAmount
+    }
+  }
+  if ('totalQuantity' in payload) {
+    const rawtotalQuantity = payload.totalQuantity
+    if (rawtotalQuantity === undefined || rawtotalQuantity === null || rawtotalQuantity === '') {
+      delete payload.totalQuantity
+    } else {
+      const numtotalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+      if (Number.isFinite(numtotalQuantity)) payload.totalQuantity = numtotalQuantity
+      else delete payload.totalQuantity
+    }
+  }
+  if ('totalAmount' in payload) {
+    const rawtotalAmount = payload.totalAmount
+    if (rawtotalAmount === undefined || rawtotalAmount === null || rawtotalAmount === '') {
+      delete payload.totalAmount
+    } else {
+      const numtotalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+      if (Number.isFinite(numtotalAmount)) payload.totalAmount = numtotalAmount
+      else delete payload.totalAmount
+    }
+  }
+  if ('convertedQuantity' in payload) {
+    const rawconvertedQuantity = payload.convertedQuantity
+    if (rawconvertedQuantity === undefined || rawconvertedQuantity === null || rawconvertedQuantity === '') {
+      delete payload.convertedQuantity
+    } else {
+      const numconvertedQuantity = typeof rawconvertedQuantity === 'number' ? rawconvertedQuantity : Number(rawconvertedQuantity)
+      if (Number.isFinite(numconvertedQuantity)) payload.convertedQuantity = numconvertedQuantity
+      else delete payload.convertedQuantity
+    }
+  }
+  if ('convertedAmount' in payload) {
+    const rawconvertedAmount = payload.convertedAmount
+    if (rawconvertedAmount === undefined || rawconvertedAmount === null || rawconvertedAmount === '') {
+      delete payload.convertedAmount
+    } else {
+      const numconvertedAmount = typeof rawconvertedAmount === 'number' ? rawconvertedAmount : Number(rawconvertedAmount)
+      if (Number.isFinite(numconvertedAmount)) payload.convertedAmount = numconvertedAmount
+      else delete payload.convertedAmount
+    }
+  }
+  if ('requestStatus' in payload) {
+    const rawrequestStatus = payload.requestStatus
+    if (rawrequestStatus === undefined || rawrequestStatus === null || rawrequestStatus === '') {
+      delete payload.requestStatus
+    } else {
+      const numrequestStatus = typeof rawrequestStatus === 'number' ? rawrequestStatus : Number(rawrequestStatus)
+      if (Number.isFinite(numrequestStatus)) payload.requestStatus = numrequestStatus
+      else delete payload.requestStatus
+    }
+  }
+  if ('convertedStatus' in payload) {
+    const rawconvertedStatus = payload.convertedStatus
+    if (rawconvertedStatus === undefined || rawconvertedStatus === null || rawconvertedStatus === '') {
+      delete payload.convertedStatus
+    } else {
+      const numconvertedStatus = typeof rawconvertedStatus === 'number' ? rawconvertedStatus : Number(rawconvertedStatus)
+      if (Number.isFinite(numconvertedStatus)) payload.convertedStatus = numconvertedStatus
+      else delete payload.convertedStatus
+    }
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
 
   if (props.formData?.purchaseRequestId) {
     payload.purchaseRequestId = props.formData.purchaseRequestId
+    delete payload.numberingRuleCode
   }
   return payload
 }
@@ -184,9 +1135,19 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.purchaseRequestId)
   childPurchaseRequestItemRows.value = []
   purchaseRequestItemTableRef.value?.resetRows?.()
+  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

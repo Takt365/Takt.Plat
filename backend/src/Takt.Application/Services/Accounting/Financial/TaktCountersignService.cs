@@ -504,14 +504,16 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
                 || (x.FinanceDept != null && x.FinanceDept.Contains(keywords))
                 || (x.BudgetReviewComment != null && x.BudgetReviewComment.Contains(keywords))
                 || (x.ExecutiveOffice != null && x.ExecutiveOffice.Contains(keywords))
-                || (x.ApplicationDept != null && x.ApplicationDept.Contains(keywords))
-                || (x.CostBearerDept != null && x.CostBearerDept.Contains(keywords))
+                || (x.ApplicantName != null && x.ApplicantName.Contains(keywords))
+                || (x.ApplicationDeptName != null && x.ApplicationDeptName.Contains(keywords))
+                || (x.CostBearerDeptName != null && x.CostBearerDeptName.Contains(keywords))
                 || (x.BudgetItem != null && x.BudgetItem.Contains(keywords))
                 || (x.CountersignTitle != null && x.CountersignTitle.Contains(keywords))
                 || (x.ApplicationReason != null && x.ApplicationReason.Contains(keywords))
                 || (x.BudgetUsageDescription != null && x.BudgetUsageDescription.Contains(keywords))
                 || (x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(keywords))
-                || (x.Attachments != null && x.Attachments.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -595,16 +597,34 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
             exp = exp.And(x => x.ApplicantBy == applicantBy);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicantName))
         {
-            var applicationDept = queryDto.ApplicationDept;
-            exp = exp.And(x => x.ApplicationDept != null && x.ApplicationDept.Contains(applicationDept));
+            var applicantName = queryDto.ApplicantName;
+            exp = exp.And(x => x.ApplicantName != null && x.ApplicantName.Contains(applicantName));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.CostBearerDept))
+        if (queryDto?.ApplicationDeptId.HasValue == true)
         {
-            var costBearerDept = queryDto.CostBearerDept;
-            exp = exp.And(x => x.CostBearerDept != null && x.CostBearerDept.Contains(costBearerDept));
+            var applicationDeptId = queryDto.ApplicationDeptId.Value;
+            exp = exp.And(x => x.ApplicationDeptId == applicationDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApplicationDeptName))
+        {
+            var applicationDeptName = queryDto.ApplicationDeptName;
+            exp = exp.And(x => x.ApplicationDeptName != null && x.ApplicationDeptName.Contains(applicationDeptName));
+        }
+
+        if (queryDto?.CostBearerDeptId.HasValue == true)
+        {
+            var costBearerDeptId = queryDto.CostBearerDeptId.Value;
+            exp = exp.And(x => x.CostBearerDeptId == costBearerDeptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostBearerDeptName))
+        {
+            var costBearerDeptName = queryDto.CostBearerDeptName;
+            exp = exp.And(x => x.CostBearerDeptName != null && x.CostBearerDeptName.Contains(costBearerDeptName));
         }
 
         if (queryDto?.IsBudget.HasValue == true)
@@ -617,6 +637,12 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         {
             var budgetItem = queryDto.BudgetItem;
             exp = exp.And(x => x.BudgetItem != null && x.BudgetItem.Contains(budgetItem));
+        }
+
+        if (queryDto?.BudgetItemId.HasValue == true)
+        {
+            var budgetItemId = queryDto.BudgetItemId.Value;
+            exp = exp.And(x => x.BudgetItemId == budgetItemId);
         }
 
         if (queryDto?.BudgetAmount.HasValue == true)
@@ -655,10 +681,16 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
             exp = exp.And(x => x.TargetAndExpectedBenefit != null && x.TargetAndExpectedBenefit.Contains(targetAndExpectedBenefit));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
         {
-            var attachments = queryDto.Attachments;
-            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(attachments));
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
+        {
+            var accessUrl = queryDto.AccessUrl;
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(accessUrl));
         }
 
         if (queryDto?.CountersignStatus.HasValue == true)
@@ -761,15 +793,31 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicantName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.CostBearerDept))
+        if (queryDto.ApplicationDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ApplicationDeptName))
+        {
+            return true;
+        }
+        if (queryDto.CostBearerDeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostBearerDeptName))
         {
             return true;
         }
         if (queryDto.IsBudget.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BudgetItemId.HasValue)
         {
             return true;
         }
@@ -801,7 +849,11 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.Attachments))
+        if (!string.IsNullOrWhiteSpace(queryDto.FileName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccessUrl))
         {
             return true;
         }

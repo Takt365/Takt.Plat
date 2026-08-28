@@ -74,7 +74,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.callType"
-                  dict-type="logistics_sop_andon_type"
+                  dict-type="logistics_manufacturing_sop_andon_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopcall.calltype') })"
                 />
               </a-form-item>
@@ -162,7 +162,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.callStatus"
-                  dict-type="logistics_sop_andon_status"
+                  dict-type="logistics_manufacturing_sop_andon_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopcall.callstatus') })"
                 />
               </a-form-item>

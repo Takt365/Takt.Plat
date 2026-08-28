@@ -37,9 +37,9 @@ public class TaktMenu : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "menu_name", ColumnDescription = "菜单名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string MenuName { get; set; } = string.Empty;
     /// <summary>
-    /// 本地化键（用于多语言支持）
+    /// 国际化键（用于多语言支持；varchar Length=140）
     /// </summary>
-    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "本地化键", ColumnDataType = "varchar", Length = 120, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化键", ColumnDataType = "varchar", Length = 140, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;
     /// <summary>
     /// 菜单图标

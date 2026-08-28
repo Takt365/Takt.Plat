@@ -212,8 +212,7 @@
           bordered
         >
           <template #bodyCell="{ column, record, index }">
-
-            <template v-else-if="column.key === '__action'">
+            <template v-if="column.key === '__action'">
               <a-button type="link" danger size="small" @click="handleRemoveSopRevisionRow(index)">
                 {{ t('common.page.button.delete') }}
               </a-button>

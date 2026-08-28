@@ -130,7 +130,7 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名
@@ -307,7 +307,7 @@ public class TaktApsScheduleQueryDto : TaktPagedQuery
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名
@@ -482,7 +482,7 @@ public class TaktApsScheduleCreateDto
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名
@@ -705,7 +705,7 @@ public class TaktApsScheduleTemplateDto
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名
@@ -870,7 +870,7 @@ public class TaktApsScheduleImportDto
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名
@@ -1041,7 +1041,7 @@ public class TaktApsScheduleExportDto
     /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
     /// 计划员姓名

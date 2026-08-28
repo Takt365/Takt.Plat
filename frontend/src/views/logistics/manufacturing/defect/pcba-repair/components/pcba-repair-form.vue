@@ -38,7 +38,7 @@
       <template #cell-pcbaBoardType="{ record }">
         <TaktSelect
           v-model:value="record.pcbaBoardType"
-          dict-type="logistics_pcba_function_category"
+          dict-type="logistics_manufacturing_pcba_function"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaRepairDetailPi.ph('pcbaBoardType')"
@@ -60,7 +60,7 @@
       <template #cell-defectEngineering="{ record }">
         <TaktSelect
           v-model:value="record.defectEngineering"
-          dict-type="logistics_defect_category"
+          dict-type="logistics_manufacturing_defect_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaRepairDetailPi.ph('defectEngineering')"
@@ -71,7 +71,7 @@
       <template #cell-defectResponsibility="{ record }">
         <TaktSelect
           v-model:value="record.defectResponsibility"
-          dict-type="logistics_defect_responsibility_category"
+          dict-type="logistics_manufacturing_defect_responsibility_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaRepairDetailPi.ph('defectResponsibility')"
@@ -82,7 +82,7 @@
       <template #cell-defectNature="{ record }">
         <TaktSelect
           v-model:value="record.defectNature"
-          dict-type="logistics_defect_nature_category"
+          dict-type="logistics_manufacturing_defect_nature"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaRepairDetailPi.ph('defectNature')"

@@ -186,7 +186,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.workNature"
-                  dict-type="hr_employee_work_nature_type"
+                  dict-type="humanresource_personnel_employee_work_nature"
                   :placeholder="pi.ph('workNature')"
                 />
               </a-form-item>
@@ -198,7 +198,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.employmentType"
-                  dict-type="hr_employee_employment_type"
+                  dict-type="humanresource_personnel_employee_employment_type"
                   :placeholder="pi.ph('employmentType')"
                 />
               </a-form-item>

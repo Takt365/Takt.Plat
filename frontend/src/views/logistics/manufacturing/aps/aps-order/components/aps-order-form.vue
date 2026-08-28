@@ -120,7 +120,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.unitOfMeasure"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.apsorder.unitofmeasure') })"
                 />
               </a-form-item>

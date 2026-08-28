@@ -49,7 +49,7 @@
                   v-model:value="formState.nativeName"
                   :placeholder="pi.ph('nativeName')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>

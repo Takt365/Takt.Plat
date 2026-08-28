@@ -19,13 +19,19 @@ namespace Takt.Shared.Enums;
 /// </summary>
 public enum TaktQuartzTaskType
 {
-    /// <summary>程序集</summary>
+    /// <summary>
+    /// 程序集
+    /// </summary>
     [Display(Name = "程序集")]
     Assembly = 1,
-    /// <summary>网络请求</summary>
+    /// <summary>
+    /// 网络请求
+    /// </summary>
     [Display(Name = "网络请求")]
     Http = 2,
-    /// <summary>SQL 语句</summary>
+    /// <summary>
+    /// SQL 语句
+    /// </summary>
     [Display(Name = "SQL语句")]
     Sql = 3,
 }
@@ -35,10 +41,14 @@ public enum TaktQuartzTaskType
 /// </summary>
 public enum TaktQuartzLogJobGroup
 {
-    /// <summary>未知</summary>
+    /// <summary>
+    /// 未知
+    /// </summary>
     [Display(Name = "未知")]
     Unknown = 0,
-    /// <summary>默认（DEFAULT）</summary>
+    /// <summary>
+    /// 默认（DEFAULT）
+    /// </summary>
     [Display(Name = "默认")]
     Default = 1,
 }

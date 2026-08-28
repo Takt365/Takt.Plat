@@ -129,7 +129,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
-                  dict-type="logistics_process_segment_type"
+                  dict-type="logistics_manufacturing_process_segment_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopworkstation.processsegmenttype') })"
                 />
               </a-form-item>

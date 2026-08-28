@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
+using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -31,6 +32,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
 {
     private readonly ITaktCompanyRepository<TaktEcAttachment> _ecAttachmentRepository;
     private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecGijutsuRepository;
+    private readonly ITaktFileService _fileService;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,6 +41,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// </summary>
     /// <param name="ecAttachmentRepository">设变附件仓储</param>
     /// <param name="ecGijutsuRepository">设变技术课主仓储</param>
+    /// <param name="fileService">文件服务（按 AccessUrl 打开物理流）</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -46,6 +49,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     public TaktEcAttachmentService(
         ITaktCompanyRepository<TaktEcAttachment> ecAttachmentRepository,
         ITaktCompanyRepository<TaktEcGijutsu> ecGijutsuRepository,
+        ITaktFileService fileService,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -54,6 +58,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     {
         _ecAttachmentRepository = ecAttachmentRepository;
         _ecGijutsuRepository = ecGijutsuRepository;
+        _fileService = fileService;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -101,6 +106,29 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     }
 
     /// <summary>
+    /// 预览设变附件（按 AccessUrl 打开 TaktFile 物理流）
+    /// </summary>
+    /// <param name="id">设变附件ID</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>可读流与文件名</returns>
+    public async Task<TaktFileDownloadStreamResult> PreviewEcAttachmentAsync(
+        long id,
+        CancellationToken cancellationToken = default)
+    {
+        EnsureThreeLayerContext();
+        var entity = await _ecAttachmentRepository.GetByIdAsync(id);
+        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变附件不存在");
+        }
+        if (string.IsNullOrWhiteSpace(entity.AccessUrl) || entity.AccessUrl.Trim() == "-")
+        {
+            throw new TaktBusinessException("文件不存在");
+        }
+        return await _fileService.DownloadFileByAccessUrlAsync(entity.AccessUrl, cancellationToken);
+    }
+
+    /// <summary>
     /// 获取设变附件选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
@@ -125,9 +153,12 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// <returns>DTO</returns>
     public async Task<TaktEcAttachmentDto> CreateEcAttachmentAsync(TaktEcAttachmentCreateDto dto)
     {
+        EnsureEcAttachmentDocCodeFormat(dto.AttachmentType, dto.DocCode, dto.EcCode);
         var entity = dto.Adapt<TaktEcAttachment>();
         entity.IsObsolete = 0;
+        ApplyEcAttachmentFileNameFromDocCode(entity);
         await StampEcAttachmentEcGijutsuAsync(entity, dto);
+        await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: null);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId
@@ -161,8 +192,11 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         {
             throw new TaktBusinessException("设变附件不存在");
         }
+        EnsureEcAttachmentDocCodeFormat(dto.AttachmentType, dto.DocCode, dto.EcCode);
         dto.Adapt(entity);
+        ApplyEcAttachmentFileNameFromDocCode(entity);
         await StampEcAttachmentEcGijutsuAsync(entity, dto);
+        await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: id);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
             x => x.EcId == entity.EcId
@@ -276,7 +310,10 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             {
                 var entity = rows[i].Adapt<TaktEcAttachment>();
                 var importDto = rows[i].Adapt<TaktEcAttachmentCreateDto>();
+                EnsureEcAttachmentDocCodeFormat(entity.AttachmentType, entity.DocCode, entity.EcCode);
+                ApplyEcAttachmentFileNameFromDocCode(entity);
                 await StampEcAttachmentEcGijutsuAsync(entity, importDto);
+                await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: null);
                 var importKey = $"{entity.EcId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -346,6 +383,62 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     // ========================================
     // 主表外键同步（ManyToOne）
     // ========================================
+
+    /// <summary>
+    /// 文件名称强制等于文件编码 + 原扩展名（与源文件基名无关）
+    /// </summary>
+    /// <param name="entity">附件实体</param>
+    private static void ApplyEcAttachmentFileNameFromDocCode(TaktEcAttachment entity)
+    {
+        var source = string.IsNullOrWhiteSpace(entity.FileName) ? entity.AccessUrl : entity.FileName;
+        entity.FileName = TaktEcAttachmentDocCodeHelper.BuildFileNameFromDocCode(
+            entity.DocCode,
+            source,
+            entity.AccessUrl);
+    }
+
+    /// <summary>
+    /// 校验文件编码格式（按 AttachmentType）
+    /// </summary>
+    /// <param name="attachmentType">文件类别</param>
+    /// <param name="docCode">文件编码</param>
+    /// <param name="ecCode">设变单号</param>
+    private static void EnsureEcAttachmentDocCodeFormat(string? attachmentType, string? docCode, string? ecCode)
+    {
+        if (TaktEcAttachmentDocCodeHelper.IsValidDocCode(attachmentType, docCode, ecCode))
+        {
+            return;
+        }
+        var hint = TaktEcAttachmentDocCodeHelper.GetFormatHint(attachmentType);
+        throw new TaktBusinessException(string.IsNullOrEmpty(hint)
+            ? "文件编码格式不正确"
+            : $"文件编码格式不正确（{hint}）");
+    }
+
+    /// <summary>
+    /// 租户+公司范围内文件编码唯一（排除已作废）
+    /// </summary>
+    /// <param name="docCode">文件编码</param>
+    /// <param name="excludeId">更新时排除的主键</param>
+    private async Task EnsureEcAttachmentDocCodeUniqueAsync(string docCode, long? excludeId)
+    {
+        var trimmed = (docCode ?? string.Empty).Trim();
+        if (string.IsNullOrEmpty(trimmed))
+        {
+            return;
+        }
+        var isUnique = await _uniqueValidator.IsUniqueAsync(
+            _ecAttachmentRepository,
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.IsObsolete == 0
+                && x.DocCode == trimmed,
+            excludeId);
+        if (!isUnique)
+        {
+            throw new TaktBusinessException($"文件编码「{trimmed}」已存在，不可重复");
+        }
+    }
 
     /// <summary>
     /// 同步设变附件主表外键（ManyToOne → 设变技术课主）

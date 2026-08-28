@@ -48,7 +48,7 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
 
     /// <summary>
     /// 物料类型（存 ROH/HALB/FERT 等码）
-    /// <para>CRUD 表单：字典 logistics_material_type。</para>
+    /// <para>CRUD 表单：字典 logistics_materials_material_type。</para>
     /// <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomCostOptions/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
     /// </summary>
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "FERT")]
@@ -56,7 +56,7 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
 
     /// <summary>
     /// 产品编码（父件物料编码；本表业务主键之一）
-    /// <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para>
+    /// <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomCostOptions/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_materials_material_type。</para>
     /// <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
@@ -87,7 +87,7 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
     public decimal LatestPurchaseCost { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string CurrencyCode { get; set; } = string.Empty;

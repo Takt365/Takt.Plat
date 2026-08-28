@@ -43,11 +43,17 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
         .OrderBy(t => t.FullName, StringComparer.Ordinal)
         .ToArray();
 
-    /// <summary>应用配置（读取租户连接字符串）</summary>
+    /// <summary>
+    /// 应用配置（读取租户连接字符串）
+    /// </summary>
     private readonly IConfiguration _configuration;
-    /// <summary>已解析的 SqlSugar 数据库类型（构造时映射一次）</summary>
+    /// <summary>
+    /// 已解析的 SqlSugar 数据库类型（构造时映射一次）
+    /// </summary>
     private readonly DbType _sugarDbType;
-    /// <summary>物理表名 → 实体类型缓存（大小写不敏感）</summary>
+    /// <summary>
+    /// 物理表名 → 实体类型缓存（大小写不敏感）
+    /// </summary>
     private readonly Dictionary<string, Type?> _entityTypeByTableName = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>

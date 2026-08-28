@@ -75,25 +75,25 @@
         <template v-if="column.key === 'weightUnit'">
           <TaktDictTag
             :value="getPackagingMaterialDictValue(record, 'weightUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'volumeUnit'">
           <TaktDictTag
             :value="getPackagingMaterialDictValue(record, 'volumeUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'packagingType'">
           <TaktDictTag
             :value="getPackagingMaterialDictValue(record, 'packagingType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'packingUnit'">
           <TaktDictTag
             :value="getPackagingMaterialDictValue(record, 'packingUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
       </template>
@@ -307,7 +307,7 @@
       <a-form-item :label="pi.queryLabel('weightUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.weightUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('weightUnit', 'select')"
           allow-clear
         />
@@ -326,7 +326,7 @@
       <a-form-item :label="pi.queryLabel('volumeUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.volumeUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('volumeUnit', 'select')"
           allow-clear
         />
@@ -347,7 +347,7 @@
       <a-form-item :label="pi.queryLabel('packagingType')">
         <TaktSelect
           v-model:value="advancedQueryForm.packagingType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('packagingType', 'select')"
           allow-clear
         />
@@ -357,7 +357,7 @@
       <a-form-item :label="pi.queryLabel('packingUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.packingUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('packingUnit', 'select')"
           allow-clear
         />

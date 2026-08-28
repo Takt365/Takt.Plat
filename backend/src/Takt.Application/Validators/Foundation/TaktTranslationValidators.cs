@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktTranslationValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Translation 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTranslation 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktTranslationCreateValidator : AbstractValidator<TaktTranslationC
             .GreaterThanOrEqualTo(0).WithMessage("区域文化不能为负数");
         RuleFor(x => x.I18nKey)
             .NotEmpty().WithMessage("翻译键不能为空")
-            .MaximumLength(200).WithMessage("翻译键长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("翻译键长度不能超过140个字符");
         RuleFor(x => x.TranslationText)
             .NotEmpty().WithMessage("翻译文本不能为空")
             .MaximumLength(2000).WithMessage("翻译文本长度不能超过2000个字符");
@@ -76,7 +76,7 @@ public class TaktTranslationUpdateValidator : AbstractValidator<TaktTranslationU
             .GreaterThanOrEqualTo(0).WithMessage("区域文化不能为负数");
         RuleFor(x => x.I18nKey)
             .NotEmpty().WithMessage("翻译键不能为空")
-            .MaximumLength(200).WithMessage("翻译键长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("翻译键长度不能超过140个字符");
         RuleFor(x => x.TranslationText)
             .NotEmpty().WithMessage("翻译文本不能为空")
             .MaximumLength(2000).WithMessage("翻译文本长度不能超过2000个字符");
@@ -113,7 +113,7 @@ public class TaktTranslationImportValidator : AbstractValidator<TaktTranslationI
             .GreaterThanOrEqualTo(0).WithMessage("区域文化不能为负数");
         RuleFor(x => x.I18nKey)
             .NotEmpty().WithMessage("翻译键不能为空")
-            .MaximumLength(200).WithMessage("翻译键长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("翻译键长度不能超过140个字符");
         RuleFor(x => x.TranslationText)
             .NotEmpty().WithMessage("翻译文本不能为空")
             .MaximumLength(2000).WithMessage("翻译文本长度不能超过2000个字符");

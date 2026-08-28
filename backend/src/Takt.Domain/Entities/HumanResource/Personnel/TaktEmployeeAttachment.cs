@@ -4,7 +4,7 @@
 // 文件名称：TaktEmployeeAttachment.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：员工档案附件实体；文件上传统一由 TaktFile 管理，本表仅保存业务附件名称与 AccessUrl 引用。
+// 功能描述：员工档案附件实体；文件上传统一由 TaktFile 管理，本表仅保存文件名称与访问地址引用。
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Personnel;
 
 /// <summary>
-/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存业务名称与访问地址引用。
+/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存文件名称与访问地址引用。
 /// </summary>
 [SugarTable("takt_human_resource_personnel_employee_attachment", "员工附件表")]
 [SugarIndex("ix_employee_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -40,10 +40,10 @@ public class TaktEmployeeAttachment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [SugarColumn(ColumnName = "attachment_name", ColumnDescription = "附件名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string AttachmentName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    public string FileName { get; set; } = string.Empty;
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>

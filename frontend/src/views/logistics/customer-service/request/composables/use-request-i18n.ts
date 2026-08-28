@@ -20,7 +20,6 @@ export const CUSTOMERSERVICEREQUEST_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTO
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERSERVICEREQUEST_LIST_FIELDS = [
-  'plantCode',
   'serviceRequestCode',
   'clientId',
   'clientCode',

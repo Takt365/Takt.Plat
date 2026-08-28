@@ -11,7 +11,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
+/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_manufacturing_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_attachment", "设变附件表")]
 [SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -43,19 +43,19 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
+    /// 文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
     /// </summary>
     [SugarColumn(ColumnName = "attachment_type", ColumnDescription = "文件类别", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编码（如联络编码等）
+    /// 文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）
     /// </summary>
     [SugarColumn(ColumnName = "doc_code", ColumnDescription = "文件编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string DocCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件名称
+    /// 文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）
     /// </summary>
     [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string FileName { get; set; } = string.Empty;

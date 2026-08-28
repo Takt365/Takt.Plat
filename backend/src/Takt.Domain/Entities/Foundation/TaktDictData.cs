@@ -36,39 +36,35 @@ public class TaktDictData : TaktTenantCultureEntityBase
     public long DictTypeId { get; set; }
 
     /// <summary>
-    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）
+    /// 字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 140, IsNullable = false, DefaultValue = "")]
     public string DictTypeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
+    /// 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；nvarchar Length=40；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_label", ColumnDescription = "字典项标签", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "dict_label", ColumnDescription = "字典项标签", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DictLabel { get; set; } = string.Empty;
-
     /// <summary>
-    /// 字典项值（实际存储值，如：0, 1, 2）
+    /// 字典项值（实际存储值，如：0, 1, 2；varchar Length=40）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_value", ColumnDescription = "字典项值", ColumnDataType = "varchar", Length = 100, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "dict_value", ColumnDescription = "字典项值", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DictValue { get; set; } = string.Empty;
-
     /// <summary>
-    /// 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
+    /// 国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）
     /// </summary>
-    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化翻译键", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "国际化键", ColumnDataType = "varchar", Length = 140, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;
-
     /// <summary>
-    /// 扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）
+    /// 扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）
     /// </summary>
-    [SugarColumn(ColumnName = "ext_label", ColumnDescription = "扩展标签", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "ext_label", ColumnDescription = "扩展标签", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? ExtLabel { get; set; }
-
     /// <summary>
-    /// 扩展值（用于存储额外的业务数据，如：编码、标识符等）
+    /// 扩展值（用于存储额外的业务数据，如：编码、标识符等；varchar Length=140）
     /// </summary>
-    [SugarColumn(ColumnName = "ext_value", ColumnDescription = "扩展值", ColumnDataType = "varchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "ext_value", ColumnDescription = "扩展值", ColumnDataType = "varchar", Length = 140, IsNullable = true)]
     public string? ExtValue { get; set; }
 
     /// <summary>
@@ -84,8 +80,6 @@ public class TaktDictData : TaktTenantCultureEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "css_class", ColumnDescription = "CSS类名", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CssClass { get; set; } = 0;
-
-
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>

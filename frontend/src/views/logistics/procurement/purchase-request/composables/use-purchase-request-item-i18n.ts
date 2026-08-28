@@ -20,6 +20,7 @@ export const PURCHASEREQUESTITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASE
 
 /** 列表业务列（不含主键） */
 export const PURCHASEREQUESTITEM_LIST_FIELDS = [
+  'purchaseRequestId',
   'purchaseRequestCode',
   'purchasePlanItemId',
   'lineNumber',
@@ -35,12 +36,13 @@ export const PURCHASEREQUESTITEM_LIST_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'requestAmount',
   'isObsolete',
-  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEREQUESTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'purchaseRequestId',
   'purchaseRequestCode',
   'purchasePlanItemId',
   'lineNumber',
@@ -56,6 +58,7 @@ export const PURCHASEREQUESTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'requestAmount',
   'isObsolete',
   'action',
 ] as const
@@ -69,12 +72,32 @@ export const PURCHASEREQUESTITEM_SUMMARY_SUM_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'requestAmount',
   'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEREQUESTITEM_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  purchasePlanItemId: 'optional',
+  lineNumber: 'select',
+  allocationCategory: 'select',
+  materialCode: 'optional',
+  materialDescription: 'optional',
+  materialSpecification: 'optional',
+  requestUnit: 'select',
+  requestQuantity: 'select',
+  convertedQuantity: 'select',
+  purchasePerUnit: 'select',
+  purchaseRequestUnitPrice: 'select',
+  taxIncludedAmount: 'select',
+  untaxedAmount: 'select',
+  taxAmount: 'select',
+  requestAmount: 'select',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -82,13 +105,39 @@ export type PurchaseRequestItemField = keyof typeof PURCHASEREQUESTITEM_PLACEHOL
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEREQUESTITEM_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'purchaseRequestCode',
+  'purchasePlanItemId',
+  'allocationCategory',
+  'materialCode',
+  'materialDescription',
+  'materialSpecification',
+  'requestUnit',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof PurchaseRequestItemQuery)[]
 
-export type PurchaseRequestItemQueryField = (typeof PURCHASEREQUESTITEM_QUERY_STRING_FIELDS)[number]
+export type PurchaseRequestItemQueryField =
+  | (typeof PURCHASEREQUESTITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'requestQuantity' | 'convertedQuantity' | 'purchasePerUnit' | 'purchaseRequestUnitPrice' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'requestAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEREQUESTITEM_QUERY_FIELDS: readonly PurchaseRequestItemQueryField[] = [...PURCHASEREQUESTITEM_QUERY_STRING_FIELDS]
+export const PURCHASEREQUESTITEM_QUERY_FIELDS: readonly PurchaseRequestItemQueryField[] = [
+  ...PURCHASEREQUESTITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'requestQuantity',
+  'convertedQuantity',
+  'purchasePerUnit',
+  'purchaseRequestUnitPrice',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'requestAmount',
+  'isObsolete',
+]
 
 /**
  * PurchaseRequestItem字段 i18n：index / purchase-request-item-form 统一入口

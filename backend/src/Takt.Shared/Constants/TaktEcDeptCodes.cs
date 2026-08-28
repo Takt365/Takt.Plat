@@ -18,32 +18,56 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktEcDeptCodes
 {
-    /// <summary>技术课（D0710）</summary>
+    /// <summary>
+    /// 技术课（D0710）
+    /// </summary>
     public const string Eng = "D0710";
-    /// <summary>生管课（D0420）</summary>
+    /// <summary>
+    /// 生管课（D0420）
+    /// </summary>
     public const string Pmc = "D0420";
-    /// <summary>采购课（D0510）</summary>
+    /// <summary>
+    /// 采购课（D0510）
+    /// </summary>
     public const string Mp = "D0510";
-    /// <summary>受检课（D0810）</summary>
+    /// <summary>
+    /// 受检课（D0810）
+    /// </summary>
     public const string Iqc = "D0810";
-    /// <summary>部管课（D0430）</summary>
+    /// <summary>
+    /// 部管课（D0430）
+    /// </summary>
     public const string Mc = "D0430";
-    /// <summary>制造2课-间接（D0626）</summary>
+    /// <summary>
+    /// 制造2课-间接（D0626）
+    /// </summary>
     public const string Pcba = "D0626";
-    /// <summary>制造1课（D0610）</summary>
+    /// <summary>
+    /// 制造1课（D0610）
+    /// </summary>
     public const string Assy = "D0610";
-    /// <summary>品管课（D0820）</summary>
+    /// <summary>
+    /// 品管课（D0820）
+    /// </summary>
     public const string Qa = "D0820";
-    /// <summary>制造技术课（D0630）</summary>
+    /// <summary>
+    /// 制造技术课（D0630）
+    /// </summary>
     public const string Te = "D0630";
-    /// <summary>正式完成判定部门（品管课 D0820；全部明细已实施后设变视为正式完成）</summary>
+    /// <summary>
+    /// 正式完成判定部门（品管课 D0820；全部明细已实施后设变视为正式完成）
+    /// </summary>
     public const string OfficialCompletionDeptCode = Qa;
-    /// <summary>阶段二执行部门看板列顺序（不含技术课；技术工作在阶段一 TaktEcGijutsu 完成）</summary>
+    /// <summary>
+    /// 阶段二执行部门看板列顺序（不含技术课；技术工作在阶段一 TaktEcGijutsu 完成）
+    /// </summary>
     public static readonly string[] KanbanOrder =
     [
         Pmc, Mp, Iqc, Mc, Pcba, Assy, Qa, Te
     ];
-    /// <summary>转置表格列顺序（采购→生管→受检→部管→制二→制一→品管；不含技术课与制技）</summary>
+    /// <summary>
+    /// 转置表格列顺序（采购→生管→受检→部管→制二→制一→品管；不含技术课与制技）
+    /// </summary>
     public static readonly string[] TransposedOrder =
     [
         Mp, Pmc, Iqc, Mc, Pcba, Assy, Qa

@@ -89,10 +89,10 @@
                 :label="pi.label('costCenterType')"
                 name="costCenterType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.costCenterType"
+                  dict-type="accounting_controlling_cost_center_type"
                   :placeholder="pi.ph('costCenterType')"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>

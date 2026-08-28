@@ -31,6 +31,18 @@
             {{ t('common.page.button.create') }}
           </a-button>
           <a-button
+            v-if="canSource"
+            class="takt-button-source"
+            :disabled="sourceDisabled"
+            :loading="sourceLoading"
+            @click="handleSource"
+          >
+            <template #icon>
+              <RiDownloadLine class="takt-remix-icon" />
+            </template>
+            {{ t('common.page.button.source') }}
+          </a-button>
+          <a-button
             v-if="canStartFlow"
             class="takt-button-start"
             :disabled="startFlowDisabled"
@@ -363,6 +375,7 @@ import {
   RiDeleteBinLine,
   RiImportLine,
   RiExportLine,
+  RiDownloadLine,
   RiSendPlane2Line,
   RiMailSendLine,
   RiFilterLine,
@@ -412,6 +425,8 @@ interface Props {
   deletePermission?: string | undefined
   /** 导入权限标识(如:identity:user:import) */
   importPermission?: string | undefined
+  /** 来源导入权限标识(如:logistics:manufacturing:engineering:change:gijutsu:create) */
+  sourcePermission?: string | undefined
   /** 导出权限标识(如:identity:user:export) */
   exportPermission?: string | undefined
   /** 发起权限标识(如:workflow:instance:initiate；会议等模块同后缀 initiate) */
@@ -432,6 +447,8 @@ interface Props {
   showDelete?: boolean
   /** 显示导入按钮（必须同时满足此属性和权限检查） */
   showImport?: boolean
+  /** 显示来源导入按钮（必须同时满足此属性和权限检查） */
+  showSource?: boolean
   /** 显示导出按钮（必须同时满足此属性和权限检查） */
   showExport?: boolean
   /** 显示发起按钮（流程/会议等；必须同时满足此属性和权限检查） */
@@ -464,6 +481,8 @@ interface Props {
   deleteDisabled?: boolean
   /** 导入按钮禁用 */
   importDisabled?: boolean
+  /** 来源导入按钮禁用 */
+  sourceDisabled?: boolean
   /** 导出按钮禁用 */
   exportDisabled?: boolean
   /** 发起按钮禁用 */
@@ -498,6 +517,8 @@ interface Props {
   deleteLoading?: boolean
   /** 导入按钮加载状态 */
   importLoading?: boolean
+  /** 来源导入按钮加载状态 */
+  sourceLoading?: boolean
   /** 导出按钮加载状态 */
   exportLoading?: boolean
   /** 发起按钮加载状态 */
@@ -524,6 +545,7 @@ const props = withDefaults(defineProps<Props>(), {
   updatePermission: undefined,
   deletePermission: undefined,
   importPermission: undefined,
+  sourcePermission: undefined,
   exportPermission: undefined,
   startFlowPermission: undefined,
   sendMessagePermission: undefined,
@@ -534,6 +556,7 @@ const props = withDefaults(defineProps<Props>(), {
   showUpdate: false,
   showDelete: false,
   showImport: false,
+  showSource: false,
   showExport: false,
   showStartFlow: false,
   showSendMessage: false,
@@ -549,6 +572,7 @@ const props = withDefaults(defineProps<Props>(), {
   updateDisabled: false,
   deleteDisabled: false,
   importDisabled: false,
+  sourceDisabled: false,
   exportDisabled: false,
   startFlowDisabled: false,
   sendMessageDisabled: false,
@@ -565,6 +589,7 @@ const props = withDefaults(defineProps<Props>(), {
   updateLoading: false,
   deleteLoading: false,
   importLoading: false,
+  sourceLoading: false,
   exportLoading: false,
   startFlowLoading: false,
   sendMessageLoading: false,
@@ -582,6 +607,7 @@ const emit = defineEmits<{
   'update': []
   'delete': []
   'import': []
+  'source': []
   'export': []
   'start-flow': []
   'send-message': []
@@ -669,6 +695,12 @@ const canImport = computed(() => {
   return permissionStore.hasPermission(props.importPermission)
 })
 
+const canSource = computed(() => {
+  if (!props.showSource) return false
+  if (!props.sourcePermission) return false
+  return permissionStore.hasPermission(props.sourcePermission)
+})
+
 const canExport = computed(() => {
   if (!props.showExport) return false
   if (!props.exportPermission) return false
@@ -741,6 +773,10 @@ const handleDelete = () => {
 
 const handleImport = () => {
   emit('import')
+}
+
+const handleSource = () => {
+  emit('source')
 }
 
 const handleExport = () => {

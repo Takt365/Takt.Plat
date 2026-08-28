@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialMovingPriceI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialMovingPrice 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/materials/material-moving-price）
 // 
@@ -109,13 +109,13 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.materialmovingprice.valuation
-            new TranslationSeedItem("entity.materialmovingprice.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.materialmovingprice.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.materialmovingprice.valuation
-            new TranslationSeedItem("entity.materialmovingprice.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.materialmovingprice.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.materialmovingprice.valuation
-            new TranslationSeedItem("entity.materialmovingprice.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.materialmovingprice.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.materialmovingprice.valuation
-            new TranslationSeedItem("entity.materialmovingprice.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.materialmovingprice.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
 
             // entity.materialmovingprice.stockquantity
             new TranslationSeedItem("entity.materialmovingprice.stockquantity", "en-US", "库存数量_us", "库存数量（基本单位，4 位小数）"),
@@ -136,13 +136,13 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice.stockamount", "zh-HK", "库存金额_hk", "库存金额（与币种一致，2 位小数）"),
 
             // entity.materialmovingprice.pricecontrol
-            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "en-US", "价格控制_us", "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
+            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "en-US", "价格控制_us", "价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
             // entity.materialmovingprice.pricecontrol
-            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "ja-JP", "价格控制_jp", "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
+            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "ja-JP", "价格控制_jp", "价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
             // entity.materialmovingprice.pricecontrol
-            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "zh-CN", "价格控制", "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
+            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "zh-CN", "价格控制", "价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
             // entity.materialmovingprice.pricecontrol
-            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "zh-HK", "价格控制_hk", "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
+            new TranslationSeedItem("entity.materialmovingprice.pricecontrol", "zh-HK", "价格控制_hk", "价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）"),
 
             // entity.materialmovingprice.movingprice
             new TranslationSeedItem("entity.materialmovingprice.movingprice", "en-US", "移动价格_us", "移动价格（decimal，5 位小数；相对价格单位）"),
@@ -154,22 +154,22 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice.movingprice", "zh-HK", "移动价格_hk", "移动价格（decimal，5 位小数；相对价格单位）"),
 
             // entity.materialmovingprice.priceunit
-            new TranslationSeedItem("entity.materialmovingprice.priceunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.materialmovingprice.priceunit", "en-US", "价格单位_us", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.materialmovingprice.priceunit
-            new TranslationSeedItem("entity.materialmovingprice.priceunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.materialmovingprice.priceunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.materialmovingprice.priceunit
-            new TranslationSeedItem("entity.materialmovingprice.priceunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.materialmovingprice.priceunit", "zh-CN", "价格单位", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.materialmovingprice.priceunit
-            new TranslationSeedItem("entity.materialmovingprice.priceunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.materialmovingprice.priceunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
 
             // entity.materialmovingprice.currencycode
-            new TranslationSeedItem("entity.materialmovingprice.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currencycode
-            new TranslationSeedItem("entity.materialmovingprice.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currencycode
-            new TranslationSeedItem("entity.materialmovingprice.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currencycode
-            new TranslationSeedItem("entity.materialmovingprice.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
         };
     }
 

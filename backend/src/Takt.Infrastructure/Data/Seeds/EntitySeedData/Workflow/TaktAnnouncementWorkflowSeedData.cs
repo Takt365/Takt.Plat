@@ -42,7 +42,9 @@ public class TaktAnnouncementWorkflowSeedData : ITaktSeedDataCoordinator
         NullValueHandling = NullValueHandling.Ignore
     };
 
-    /// <summary>执行顺序</summary>
+    /// <summary>
+    /// 执行顺序
+    /// </summary>
     public int Order => 68;
 
     /// <summary>

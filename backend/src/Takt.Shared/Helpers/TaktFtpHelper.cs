@@ -25,7 +25,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktFtpHelper
 {
     /// <summary>
-    /// 从配置中读取 FTP 设置（键与字典 <c>sys_ftp_provider_type</c> 一致，如 <c>teac_cn</c>、<c>teac_jp</c>）。
+    /// 从配置中读取 FTP 设置（键与字典 <c>sys_ftp_provider</c> 一致，如 <c>teac_cn</c>、<c>teac_jp</c>）。
     /// </summary>
     /// <param name="configuration">配置</param>
     /// <param name="provider">FTP 提供商标识，对应 <c>Ftp:{provider}</c> 节点</param>
@@ -807,7 +807,7 @@ public static class TaktFtpHelper
         }
     }
 
-    // ========== 直接使用 IConfiguration 的重载方法（provider 与 sys_ftp_provider_type 字典值一致） ==========
+    // ========== 直接使用 IConfiguration 的重载方法（provider 与 sys_ftp_provider 字典值一致） ==========
 
     /// <summary>
     /// 上传文件到 FTP 服务器（使用配置）

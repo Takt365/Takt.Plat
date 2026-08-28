@@ -65,7 +65,7 @@ public class TaktPlannedOrder : TaktCompanyEntityBase
     public decimal PlannedQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string UnitOfMeasure { get; set; } = "PC";

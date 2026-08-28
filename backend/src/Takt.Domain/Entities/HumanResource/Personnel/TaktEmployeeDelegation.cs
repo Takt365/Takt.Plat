@@ -55,12 +55,12 @@ public class TaktEmployeeDelegation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "original_employee_name", ColumnDescription = "被代理人姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string OriginalEmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     [SugarColumn(ColumnName = "delegation_type", ColumnDescription = "代理类型", ColumnDataType = "int", IsNullable = false)]
     public int DelegationType { get; set; }
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     [SugarColumn(ColumnName = "scope_type", ColumnDescription = "代理范围类型", ColumnDataType = "int", IsNullable = false)]
     public int ScopeType { get; set; }

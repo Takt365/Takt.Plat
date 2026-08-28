@@ -29,11 +29,11 @@ export interface EcMonthlyTrendQuery extends TaktPagedQuery {
   ecCode?: string;
   /** 责任部门编码 */
   deptCode?: string;
-  /** 区分（字典 logistics_ec_distinction_category） */
+  /** 区分（字典 logistics_manufacturing_ec_distinction_category） */
   ecDistinction?: number;
-  /** 变更状态（字典 logistics_ec_status） */
+  /** 变更状态（字典 logistics_manufacturing_ec_status） */
   changeStatus?: number;
-  /** 设变状态（字典 logistics_ec_gijutsu_status） */
+  /** 设变状态（字典 logistics_manufacturing_ec_gijutsu_status） */
   ecStatus?: number;
   /** 涨跌筛选 */
   trendFilter?: string;

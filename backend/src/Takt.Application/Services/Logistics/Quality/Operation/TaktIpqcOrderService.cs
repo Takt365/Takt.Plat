@@ -541,7 +541,7 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
                 || (x.IpqcOrderCode != null && x.IpqcOrderCode.Contains(keywords))
                 || (x.ProcessCode != null && x.ProcessCode.Contains(keywords))
                 || (x.ProcessName != null && x.ProcessName.Contains(keywords))
-                || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
+                || (x.JudgeByEmployeeName != null && x.JudgeByEmployeeName.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -614,10 +614,10 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
             exp = exp.And(x => x.TotalInspectionReturnQuantity == totalInspectionReturnQuantity);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JudgeByEmployeeName))
         {
-            var judgeBy = queryDto.JudgeBy;
-            exp = exp.And(x => x.JudgeBy != null && x.JudgeBy.Contains(judgeBy));
+            var judgeBy = queryDto.JudgeByEmployeeName;
+            exp = exp.And(x => x.JudgeByEmployeeName != null && x.JudgeByEmployeeName.Contains(judgeBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.JudgeDescription))
@@ -742,7 +742,7 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.JudgeBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.JudgeByEmployeeName))
         {
             return true;
         }

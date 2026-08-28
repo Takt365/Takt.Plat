@@ -85,7 +85,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.csharpDataType"
-                  dict-type="gen_csharp_data_type"
+                  dict-type="code_generator_csharp_data_type"
                   :placeholder="pi.ph('csharpDataType')"
                 />
               </a-form-item>
@@ -265,7 +265,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.queryType"
-                  dict-type="gen_query_type"
+                  dict-type="code_generator_query_type"
                   :placeholder="pi.ph('queryType')"
                 />
               </a-form-item>
@@ -277,7 +277,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.htmlType"
-                  dict-type="gen_display_type"
+                  dict-type="code_generator_display_type"
                   :placeholder="pi.ph('htmlType')"
                 />
               </a-form-item>

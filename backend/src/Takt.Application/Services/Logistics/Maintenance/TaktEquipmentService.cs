@@ -619,10 +619,10 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
                 || (x.WorkshopBy != null && x.WorkshopBy.Contains(keywords))
                 || (x.ProductionLineBy != null && x.ProductionLineBy.Contains(keywords))
                 || (x.WorkstationBy != null && x.WorkstationBy.Contains(keywords))
-                || (x.DeptBy != null && x.DeptBy.Contains(keywords))
+                || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.EquipmentLocation != null && x.EquipmentLocation.Contains(keywords))
-                || (x.ResponsibleUserBy != null && x.ResponsibleUserBy.Contains(keywords))
-                || (x.OperatorBy != null && x.OperatorBy.Contains(keywords))
+                || (x.ResponsibleUserName != null && x.ResponsibleUserName.Contains(keywords))
+                || (x.OperatorEmployeeName != null && x.OperatorEmployeeName.Contains(keywords))
                 || (x.TechnicalParameters != null && x.TechnicalParameters.Contains(keywords))
                 || (x.EquipmentImages != null && x.EquipmentImages.Contains(keywords))
                 || (x.EquipmentDocuments != null && x.EquipmentDocuments.Contains(keywords))
@@ -715,10 +715,10 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exp = exp.And(x => x.WorkstationBy != null && x.WorkstationBy.Contains(workstationBy));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.DeptBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
         {
-            var deptBy = queryDto.DeptBy;
-            exp = exp.And(x => x.DeptBy != null && x.DeptBy.Contains(deptBy));
+            var deptBy = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EquipmentLocation))
@@ -727,16 +727,16 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exp = exp.And(x => x.EquipmentLocation != null && x.EquipmentLocation.Contains(equipmentLocation));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleUserBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleUserName))
         {
-            var responsibleUserBy = queryDto.ResponsibleUserBy;
-            exp = exp.And(x => x.ResponsibleUserBy != null && x.ResponsibleUserBy.Contains(responsibleUserBy));
+            var responsibleUserBy = queryDto.ResponsibleUserName;
+            exp = exp.And(x => x.ResponsibleUserName != null && x.ResponsibleUserName.Contains(responsibleUserBy));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.OperatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OperatorEmployeeName))
         {
-            var operatorBy = queryDto.OperatorBy;
-            exp = exp.And(x => x.OperatorBy != null && x.OperatorBy.Contains(operatorBy));
+            var operatorBy = queryDto.OperatorEmployeeName;
+            exp = exp.And(x => x.OperatorEmployeeName != null && x.OperatorEmployeeName.Contains(operatorBy));
         }
 
         if (queryDto?.EquipmentOriginalValue.HasValue == true)
@@ -939,7 +939,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.DeptBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
         {
             return true;
         }
@@ -947,11 +947,11 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleUserBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleUserName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.OperatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.OperatorEmployeeName))
         {
             return true;
         }

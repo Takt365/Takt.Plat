@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowTaskI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowTask 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtask.taskdefinitionkey", "zh-HK", "任务定义键_hk", "任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）"),
 
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "en-US", "任务名称_us", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.taskname", "en-US", "任务名称_us", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "ja-JP", "任务名称_jp", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.taskname", "ja-JP", "任务名称_jp", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "zh-CN", "任务名称", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.taskname", "zh-CN", "任务名称", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtask.taskname
-            new TranslationSeedItem("entity.flowtask.taskname", "zh-HK", "任务名称_hk", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.taskname", "zh-HK", "任务名称_hk", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.flowtask.assigneeuserid
             new TranslationSeedItem("entity.flowtask.assigneeuserid", "en-US", "办理人ID_us", "办理人 ID（选项 TaktUsers/options；DictValue=Id）"),
@@ -127,13 +127,13 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtask.assigneeuserid", "zh-HK", "办理人ID_hk", "办理人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "en-US", "办理人姓名_us", "办理人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "en-US", "办理人姓名_us", "办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "ja-JP", "办理人姓名_jp", "办理人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "ja-JP", "办理人姓名_jp", "办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-CN", "办理人姓名", "办理人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-CN", "办理人姓名", "办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtask.assigneeusername
-            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-HK", "办理人姓名_hk", "办理人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtask.assigneeusername", "zh-HK", "办理人姓名_hk", "办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）"),
 
             // entity.flowtask.owneruserid
             new TranslationSeedItem("entity.flowtask.owneruserid", "en-US", "任务所有者ID_us", "任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）"),
@@ -143,6 +143,15 @@ public class TaktFlowTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtask.owneruserid", "zh-CN", "任务所有者ID", "任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）"),
             // entity.flowtask.owneruserid
             new TranslationSeedItem("entity.flowtask.owneruserid", "zh-HK", "任务所有者ID_hk", "任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）"),
+
+            // entity.flowtask.ownerusername
+            new TranslationSeedItem("entity.flowtask.ownerusername", "en-US", "任务所有者姓名_us", "任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）"),
+            // entity.flowtask.ownerusername
+            new TranslationSeedItem("entity.flowtask.ownerusername", "ja-JP", "任务所有者姓名_jp", "任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）"),
+            // entity.flowtask.ownerusername
+            new TranslationSeedItem("entity.flowtask.ownerusername", "zh-CN", "任务所有者姓名", "任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）"),
+            // entity.flowtask.ownerusername
+            new TranslationSeedItem("entity.flowtask.ownerusername", "zh-HK", "任务所有者姓名_hk", "任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）"),
 
             // entity.flowtask.signtype
             new TranslationSeedItem("entity.flowtask.signtype", "en-US", "会签类型_us", "会签类型（字典 sys_flow_sign_type；1=或签 2=会签）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Benefits
 // 文件名称：TaktEmpBenefitPlanService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工福利方案应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
     }
 
     /// <summary>
-    /// 获取员工福利方案列表（分页）
+    /// 获取员工福利方案列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktEmpBenefitPlanDto>> GetEmpBenefitPlanListAsync(TaktEmpBenefitPlanQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktEmpBenefitPlanDto>.Create(
+                new List<TaktEmpBenefitPlanDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _empBenefitPlanRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,8 +105,8 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EmployeeName ?? e.Id.ToString(),
+            DictValue = e.PlanCode,
+            DictLabel = e.EmployeeName ?? e.PlanCode,
         }).ToList();
     }
 
@@ -237,7 +245,15 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEmpBenefitPlanAsync(TaktEmpBenefitPlanQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktEmpBenefitPlanQueryDto());
+        var queryDto = query ?? new TaktEmpBenefitPlanQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEmpBenefitPlanExportDto>(),
+                sheetName ?? "员工福利方案数据",
+                fileName ?? "员工福利方案导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _empBenefitPlanRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -266,100 +282,175 @@ public class TaktEmpBenefitPlanService : TaktServiceBase, ITaktEmpBenefitPlanSer
     {
         var exp = Expressionable.Create<TaktEmpBenefitPlan>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || SqlFunc.ToString(x.BenefitItemId).Contains(keywords)
-                || (x.PlanCode != null && x.PlanCode.Contains(keywords))
-                || SqlFunc.ToString(x.EmpBenefitStatus).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
+                || (x.PlanCode != null && x.PlanCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EnrollmentDate).Contains(keywords)
-                || SqlFunc.ToString(x.ExpiryDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.EmployeeId.HasValue == true)
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var employeeId = queryDto.EmployeeId.Value;
+            exp = exp.And(x => x.EmployeeId == employeeId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmployeeName))
         {
-            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
+            var employeeName = queryDto.EmployeeName;
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
         }
 
         if (queryDto?.BenefitItemId.HasValue == true)
         {
-            exp = exp.And(x => x.BenefitItemId == queryDto.BenefitItemId);
+            var benefitItemId = queryDto.BenefitItemId.Value;
+            exp = exp.And(x => x.BenefitItemId == benefitItemId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlanCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlanCode))
         {
-            exp = exp.And(x => x.PlanCode != null && x.PlanCode.Contains(queryDto.PlanCode));
+            var planCode = queryDto.PlanCode;
+            exp = exp.And(x => x.PlanCode != null && x.PlanCode.Contains(planCode));
         }
 
         if (queryDto?.EmpBenefitStatus.HasValue == true)
         {
-            exp = exp.And(x => x.EmpBenefitStatus == queryDto.EmpBenefitStatus);
+            var empBenefitStatus = queryDto.EmpBenefitStatus.Value;
+            exp = exp.And(x => x.EmpBenefitStatus == empBenefitStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EnrollmentDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EnrollmentDate >= queryDto.EnrollmentDateStart);
+            var enrollmentDateStart = queryDto.EnrollmentDateStart.Value;
+            exp = exp.And(x => x.EnrollmentDate >= enrollmentDateStart);
         }
 
         if (queryDto?.EnrollmentDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EnrollmentDate <= queryDto.EnrollmentDateEnd);
+            var enrollmentDateEnd = queryDto.EnrollmentDateEnd.Value;
+            exp = exp.And(x => x.EnrollmentDate <= enrollmentDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate >= queryDto.ExpiryDateStart);
+            var expiryDateStart = queryDto.ExpiryDateStart.Value;
+            exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate <= queryDto.ExpiryDateEnd);
+            var expiryDateEnd = queryDto.ExpiryDateEnd.Value;
+            exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktEmpBenefitPlanQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EmployeeName))
+        {
+            return true;
+        }
+        if (queryDto.BenefitItemId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlanCode))
+        {
+            return true;
+        }
+        if (queryDto.EmpBenefitStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EnrollmentDateStart.HasValue || queryDto.EnrollmentDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExpiryDateStart.HasValue || queryDto.ExpiryDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

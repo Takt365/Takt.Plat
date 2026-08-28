@@ -18,18 +18,22 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 /// </summary>
 internal static class TaktOutputDetailDictImportBindings
 {
-    /// <summary>组立日报明细导入</summary>
+    /// <summary>
+    /// 组立日报明细导入
+    /// </summary>
     public static readonly IReadOnlyList<TaktDictFieldStorageBinding> AssyDetail =
     [
-        new(nameof(TaktAssyOutputDetailCreateDto.DowntimeReason), "logistics_stop_reason_category", true),
-        new(nameof(TaktAssyOutputDetailCreateDto.UnachievedReason), "logistics_nonachievement_reason_category", true),
+        new(nameof(TaktAssyOutputDetailCreateDto.DowntimeReason), "logistics_manufacturing_stop_reason", true),
+        new(nameof(TaktAssyOutputDetailCreateDto.UnachievedReason), "logistics_manufacturing_nonachievement_reason", true),
     ];
 
-    /// <summary>PCBA 日报明细导入</summary>
+    /// <summary>
+    /// PCBA 日报明细导入
+    /// </summary>
     public static readonly IReadOnlyList<TaktDictFieldStorageBinding> PcbaDetail =
     [
-        new(nameof(TaktPcbaOutputDetailCreateDto.DowntimeReason), "logistics_stop_reason_category", true),
-        new(nameof(TaktPcbaOutputDetailCreateDto.UnachievedReason), "logistics_nonachievement_reason_category", true),
-        new(nameof(TaktPcbaOutputDetailCreateDto.PcbBoardType), "logistics_pcba_function_category", false),
+        new(nameof(TaktPcbaOutputDetailCreateDto.DowntimeReason), "logistics_manufacturing_stop_reason", true),
+        new(nameof(TaktPcbaOutputDetailCreateDto.UnachievedReason), "logistics_manufacturing_nonachievement_reason", true),
+        new(nameof(TaktPcbaOutputDetailCreateDto.PcbBoardType), "logistics_manufacturing_pcba_function", false),
     ];
 }

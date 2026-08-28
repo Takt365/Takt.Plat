@@ -17,25 +17,39 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktMaintenanceConstants
 {
-    /// <summary>维护工单：已创建</summary>
+    /// <summary>
+    /// 维护工单：已创建
+    /// </summary>
     public const int WorkOrderCreated = 0;
 
-    /// <summary>维护工单：已下达</summary>
+    /// <summary>
+    /// 维护工单：已下达
+    /// </summary>
     public const int WorkOrderReleased = 1;
 
-    /// <summary>维护工单：执行中</summary>
+    /// <summary>
+    /// 维护工单：执行中
+    /// </summary>
     public const int WorkOrderInProgress = 2;
 
-    /// <summary>维护工单：已完工</summary>
+    /// <summary>
+    /// 维护工单：已完工
+    /// </summary>
     public const int WorkOrderCompleted = 3;
 
-    /// <summary>维护工单：已结算</summary>
+    /// <summary>
+    /// 维护工单：已结算
+    /// </summary>
     public const int WorkOrderSettled = 4;
 
-    /// <summary>维护工单：已关闭</summary>
+    /// <summary>
+    /// 维护工单：已关闭
+    /// </summary>
     public const int WorkOrderClosed = 5;
 
-    /// <summary>维护工单：已取消</summary>
+    /// <summary>
+    /// 维护工单：已取消
+    /// </summary>
     public const int WorkOrderCancelled = 6;
 
     /// <summary>

@@ -20,7 +20,6 @@ export const CUSTOMERSERVICEORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOME
 
 /** 列表业务列（不含主键） */
 export const CUSTOMERSERVICEORDER_LIST_FIELDS = [
-  'plantCode',
   'serviceOrderCode',
   'clientId',
   'clientCode',
@@ -41,7 +40,8 @@ export const CUSTOMERSERVICEORDER_LIST_FIELDS = [
   'plannedEndDate',
   'actualStartDate',
   'actualEndDate',
-  'serviceBy',
+  'serviceEmployeeId',
+  'serviceEmployeeName',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -70,7 +70,8 @@ export const CUSTOMERSERVICEORDER_PLACEHOLDER = {
   plannedEndDate: 'optional',
   actualStartDate: 'optional',
   actualEndDate: 'optional',
-  serviceBy: 'optional',
+  serviceEmployeeId: 'optional',
+  serviceEmployeeName: 'optional',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -101,7 +102,8 @@ export const CUSTOMERSERVICEORDER_QUERY_STRING_FIELDS = [
   'actualStartDateEnd',
   'actualEndDateStart',
   'actualEndDateEnd',
-  'serviceBy',
+  'serviceEmployeeId',
+  'serviceEmployeeName',
   'createdAtStart',
   'createdAtEnd',
   'extField',

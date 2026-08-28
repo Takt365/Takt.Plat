@@ -46,9 +46,9 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）
     /// </summary>
-    public int ChangeStatus { get; set; } = 0;
+    public int ChangeStatus { get; set; } = 5;
 
     /// <summary>
     /// 设变标题
@@ -56,12 +56,12 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public string EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 
@@ -71,7 +71,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int EcDistinction { get; set; } = 0;
 
@@ -81,7 +81,12 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = "Z0";
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
     /// </summary>
     public int EcStatus { get; set; } = 0;
 
@@ -151,7 +156,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public DateTime? EcIssueDateEnd { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -161,12 +166,12 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -176,7 +181,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int? EcDistinction { get; set; }
 
@@ -191,7 +196,12 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public DateTime? EcEntryDateEnd { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string? DiscontinuedStatus { get; set; }
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
     public int? EcStatus { get; set; }
 
@@ -257,9 +267,9 @@ public class TaktEcGijutsuCreateDto
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）
     /// </summary>
-    public int ChangeStatus { get; set; } = 0;
+    public int ChangeStatus { get; set; } = 5;
 
     /// <summary>
     /// 设变标题
@@ -268,15 +278,15 @@ public class TaktEcGijutsuCreateDto
     public string EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     [Required(ErrorMessage = "设变内容不能为空")]
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
-    [Required(ErrorMessage = "负责人（选项 TaktEmployees/options；DictValue=Id）不能为空")]
+    [Required(ErrorMessage = "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）不能为空")]
     public string EcLeader { get; set; } = string.Empty;
 
     /// <summary>
@@ -285,7 +295,7 @@ public class TaktEcGijutsuCreateDto
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int EcDistinction { get; set; } = 0;
 
@@ -295,7 +305,12 @@ public class TaktEcGijutsuCreateDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = "Z0";
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
     /// </summary>
     public int EcStatus { get; set; } = 0;
 
@@ -379,9 +394,9 @@ public class TaktEcGijutsuStatusDto
     public long EcGijutsuId { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
-    [Required(ErrorMessage = "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）不能为空")]
+    [Required(ErrorMessage = "变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）不能为空")]
     public int ChangeStatus { get; set; } = 0;
 }
 
@@ -425,7 +440,7 @@ public class TaktEcGijutsuTemplateDto
     public DateTime? EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -435,12 +450,12 @@ public class TaktEcGijutsuTemplateDto
     public string? EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -450,7 +465,7 @@ public class TaktEcGijutsuTemplateDto
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int? EcDistinction { get; set; }
 
@@ -460,7 +475,12 @@ public class TaktEcGijutsuTemplateDto
     public DateTime? EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string? DiscontinuedStatus { get; set; }
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
     public int? EcStatus { get; set; }
 
@@ -527,7 +547,7 @@ public class TaktEcGijutsuImportDto
     public DateTime? EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -537,12 +557,12 @@ public class TaktEcGijutsuImportDto
     public string? EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -552,7 +572,7 @@ public class TaktEcGijutsuImportDto
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int? EcDistinction { get; set; }
 
@@ -562,7 +582,12 @@ public class TaktEcGijutsuImportDto
     public DateTime? EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string? DiscontinuedStatus { get; set; }
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
     public int? EcStatus { get; set; }
 
@@ -635,9 +660,9 @@ public class TaktEcGijutsuExportDto
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）
     /// </summary>
-    public int ChangeStatus { get; set; } = 0;
+    public int ChangeStatus { get; set; } = 5;
 
     /// <summary>
     /// 设变标题
@@ -645,12 +670,12 @@ public class TaktEcGijutsuExportDto
     public string EcTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
+    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 
@@ -660,7 +685,7 @@ public class TaktEcGijutsuExportDto
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
     public int EcDistinction { get; set; } = 0;
 
@@ -670,7 +695,12 @@ public class TaktEcGijutsuExportDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = "Z0";
+
+    /// <summary>
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
     /// </summary>
     public int EcStatus { get; set; } = 0;
 

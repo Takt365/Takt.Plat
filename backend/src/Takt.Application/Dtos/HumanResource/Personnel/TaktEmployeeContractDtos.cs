@@ -57,7 +57,7 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     public string ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -87,7 +87,7 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 
@@ -151,7 +151,7 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     public string? ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -201,7 +201,7 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -278,7 +278,7 @@ public class TaktEmployeeContractCreateDto
     public string ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -308,7 +308,7 @@ public class TaktEmployeeContractCreateDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 
@@ -362,9 +362,9 @@ public class TaktEmployeeContractStatusDto
     public long EmployeeContractId { get; set; }
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
-    [Required(ErrorMessage = "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）不能为空")]
+    [Required(ErrorMessage = "合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）不能为空")]
     public int ContractStatus { get; set; } = 0;
 }
 
@@ -419,7 +419,7 @@ public class TaktEmployeeContractTemplateDto
     public string? ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -449,7 +449,7 @@ public class TaktEmployeeContractTemplateDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -512,7 +512,7 @@ public class TaktEmployeeContractImportDto
     public string? ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -542,7 +542,7 @@ public class TaktEmployeeContractImportDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -611,7 +611,7 @@ public class TaktEmployeeContractExportDto
     public string ContractCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+    /// 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -641,7 +641,7 @@ public class TaktEmployeeContractExportDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+    /// 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 

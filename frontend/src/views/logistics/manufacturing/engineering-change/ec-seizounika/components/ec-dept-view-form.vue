@@ -2,71 +2,107 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-seizounika/components -->
 <!-- 文件名称：ec-dept-view-form.vue -->
-<!-- 功能描述：设变制造二课表单；defineExpose validate/getValues/resetFields -->
+<!-- 功能描述：设变制造二课表单；停产状态只读，执行内容可清空以消除 EOL -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+  <a-form
+    ref="formRef"
+    class="takt-generated-form"
+    :model="formState"
+    layout="horizontal"
+    label-align="right"
+  >
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.isimplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.productiondate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.productionbatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.productionteam')"><a-input v-model:value="formState.productionTeam" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.outboundorderCode')"><a-input v-model:value="formState.outboundOrderCode" /></a-form-item></a-col>
-      <a-col :span="24"><a-form-item :label="t('entity.ecdept.content')" :label-col="{ span: 3 }" :wrapper-col="{ span: 20 }"><a-textarea v-model:value="formState.content" :rows="3" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('tenantCode')"><a-input v-model:value="formState.tenantCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('companyCode')"><a-input v-model:value="formState.companyCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('cultureCode')"><a-input v-model:value="formState.cultureCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('plantCode')"><a-input v-model:value="formState.plantCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecParentMaterialCode')"><a-input v-model:value="formState.ecParentMaterialCode" disabled /></a-form-item></a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('discontinuedStatus')">
+          <TaktSelect v-model:value="formState.discontinuedStatus" dict-type="logistics_materials_material_discontinued_status" disabled />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('productionDate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('productionBatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('productionTeam')"><a-input v-model:value="formState.productionTeam" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('outboundOrderCode')"><a-input v-model:value="formState.outboundOrderCode" /></a-form-item></a-col>
+      <a-col :span="24">
+        <a-form-item :label="pi.label('execContent')">
+          <a-textarea v-model:value="formState.execContent" :rows="3" />
+        </a-form-item>
+      </a-col>
     </a-row>
   </a-form>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import type { EcDeptView, EcDeptViewUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-dept-view';
+import type { EcSeizounika, EcSeizounikaUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-seizounika'
+import { useEcDeptViewI18n } from '../../composables/use-ec-dept-view-i18n'
 
-const props = defineProps<{ formData?: EcDeptView | null; loading?: boolean }>();
-const { t } = useI18n();
+const props = defineProps<{ formData?: EcSeizounika | null; loading?: boolean }>();
+const pi = useEcDeptViewI18n('ecseizounika')
 const formRef = ref();
-const formState = reactive<EcDeptViewUpdate & { ecCode?: string; ecModel?: string }>({
-  ecDetailId: '',
-  isImplemented: 0,
-  isSopUpdated: 0,
-  content: '',
-});
+const formState = reactive<{
+  tenantCode?: string;
+  companyCode?: string;
+  cultureCode?: string;
+  plantCode?: string;
+  ecCode?: string;
+  ecModelCode?: string;
+  ecParentMaterialCode?: string;
+  discontinuedStatus?: string;
+  isImplemented: number;
+  execContent?: string;
+  productionDate?: string;
+  productionBatch?: string;
+  productionTeam?: string;
+  outboundOrderCode?: string;
+}>({ isImplemented: 0, execContent: '', discontinuedStatus: 'Z0' });
 
 watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
   Object.assign(formState, {
-    ecDetailId: val.ecDetailId,
+    tenantCode: val.tenantCode,
+    companyCode: val.companyCode,
+    cultureCode: val.cultureCode,
+    plantCode: val.plantCode,
     ecCode: val.ecCode,
-    ecModel: val.ecModel,
+    ecModelCode: val.ecModelCode,
+    ecParentMaterialCode: val.ecParentMaterialCode,
+    discontinuedStatus: val.discontinuedStatus ?? 'Z0',
     isImplemented: val.isImplemented ?? 0,
-    content: val.content ?? '',
-    isSopUpdated: val.isSopUpdated ?? 0,
-    scheduledProductionDate: val.scheduledProductionDate,
-    scheduledBatch: val.scheduledBatch,
-    supplier: val.supplier,
-    purchaseOrderCode: val.purchaseOrderCode,
-    iqcOrderCode: val.iqcOrderCode,
-    outboundBatch: val.outboundBatch,
+    execContent: val.execContent ?? '',
     productionDate: val.productionDate,
     productionBatch: val.productionBatch,
     productionTeam: val.productionTeam,
     outboundOrderCode: val.outboundOrderCode,
-    inspectionBatch: val.inspectionBatch,
-    samplingCode: val.samplingCode,
   });
 }, { immediate: true });
 
 async function validate() { await formRef.value?.validate(); }
-function getValues(): EcDeptViewUpdate {
-  const { ecCode, ecModel, ...rest } = formState;
-  return rest;
+function getValues(): EcSeizounikaUpdate {
+  return {
+    isImplemented: formState.isImplemented,
+    execContent: formState.execContent ?? '',
+    productionDate: formState.productionDate,
+    productionBatch: formState.productionBatch,
+    productionTeam: formState.productionTeam,
+    outboundOrderCode: formState.outboundOrderCode,
+  } as EcSeizounikaUpdate;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', isImplemented: 0, isSopUpdated: 0, content: '', ecCode: '', ecModel: '' });
+  Object.assign(formState, {
+    tenantCode: '', companyCode: '', cultureCode: '', plantCode: '',
+    ecCode: '', ecModelCode: '', ecParentMaterialCode: '', discontinuedStatus: 'Z0', isImplemented: 0, execContent: '',
+    productionDate: undefined, productionBatch: undefined, productionTeam: undefined, outboundOrderCode: undefined,
+  });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

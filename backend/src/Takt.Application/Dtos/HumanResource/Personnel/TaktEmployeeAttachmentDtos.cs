@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeAttachment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeAttachment 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存业务名称与访问地址引用。
+/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存文件名称与访问地址引用。
 /// 对应前端 TaktEmployeeAttachmentDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -52,9 +52,9 @@ public class TaktEmployeeAttachmentDto : TaktCompanyDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string AttachmentName { get; set; } = string.Empty;
+    public string FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
@@ -116,9 +116,9 @@ public class TaktEmployeeAttachmentQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentName { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
@@ -192,10 +192,10 @@ public class TaktEmployeeAttachmentCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [Required(ErrorMessage = "附件名称（业务称谓，如毕业证、就业证）不能为空")]
-    public string AttachmentName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "文件名称（原始文件名，长度对齐 TaktFile.FileName）不能为空")]
+    public string FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
@@ -281,9 +281,9 @@ public class TaktEmployeeAttachmentTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentName { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
@@ -344,9 +344,9 @@ public class TaktEmployeeAttachmentImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? AttachmentName { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）
@@ -413,9 +413,9 @@ public class TaktEmployeeAttachmentExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件名称（业务称谓，如毕业证、就业证）
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string AttachmentName { get; set; } = string.Empty;
+    public string FileName { get; set; } = string.Empty;
 
     /// <summary>
     /// 访问地址（关联 TaktFile.AccessUrl）

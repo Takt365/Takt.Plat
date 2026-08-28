@@ -43,7 +43,7 @@ public class TaktEmployeeSkill : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "skill_name", ColumnDescription = "技能名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string SkillName { get; set; } = string.Empty;
     /// <summary>
-    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+    /// 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     [SugarColumn(ColumnName = "skill_level", ColumnDescription = "技能等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SkillLevel { get; set; }

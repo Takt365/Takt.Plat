@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopWorkstation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation.workstationtype", "zh-HK", "工位类型_hk", "工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）"),
 
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopworkstation.processsegmenttype
-            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopworkstation.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
 
             // entity.sopworkstation.workstationstatus
             new TranslationSeedItem("entity.sopworkstation.workstationstatus", "en-US", "启用状态_us", "启用状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）"),

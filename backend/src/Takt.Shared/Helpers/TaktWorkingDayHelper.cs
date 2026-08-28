@@ -13,7 +13,7 @@
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 工作日辅助（纯静态；与假日字典 hr_holiday_working_day_type 语义对齐：0=非工作日）
+/// 工作日辅助（纯静态；与假日字典 humanresource_attendance_holiday_working_day_type 语义对齐：0=非工作日）
 /// </summary>
 public static class TaktWorkingDayHelper
 {

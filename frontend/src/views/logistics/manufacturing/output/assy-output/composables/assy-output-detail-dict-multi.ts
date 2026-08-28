@@ -17,9 +17,9 @@ import {
 } from '@/utils/takt-dict-convert'
 
 /** 停线原因字典 */
-export const ASSY_DETAIL_DOWNTIME_REASON_DICT = 'logistics_stop_reason_category'
+export const ASSY_DETAIL_DOWNTIME_REASON_DICT = 'logistics_manufacturing_stop_reason'
 /** 未达成原因字典 */
-export const ASSY_DETAIL_UNACHIEVED_REASON_DICT = 'logistics_nonachievement_reason_category'
+export const ASSY_DETAIL_UNACHIEVED_REASON_DICT = 'logistics_manufacturing_nonachievement_reason'
 
 export { buildDictSortOrderLookup }
 

@@ -82,7 +82,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     public string MovementType { get; set; } = string.Empty;
 
@@ -117,7 +117,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -137,7 +137,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -157,7 +157,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -389,7 +389,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -466,7 +466,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     public string? MovementType { get; set; } = string.Empty;
 
@@ -501,7 +501,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -521,7 +521,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -541,7 +541,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -773,7 +773,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -862,9 +862,9 @@ public class TaktMaterialDocumentItemCreateDto
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
-    [Required(ErrorMessage = "移动类型（字典 logistics_movement_type）不能为空")]
+    [Required(ErrorMessage = "移动类型（字典 logistics_materials_movement_type）不能为空")]
     public string MovementType { get; set; } = string.Empty;
 
     /// <summary>
@@ -899,7 +899,7 @@ public class TaktMaterialDocumentItemCreateDto
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -919,7 +919,7 @@ public class TaktMaterialDocumentItemCreateDto
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -939,7 +939,7 @@ public class TaktMaterialDocumentItemCreateDto
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -1171,7 +1171,7 @@ public class TaktMaterialDocumentItemCreateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1294,7 +1294,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     public string? MovementType { get; set; } = string.Empty;
 
@@ -1329,7 +1329,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -1349,7 +1349,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -1369,7 +1369,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -1601,7 +1601,7 @@ public class TaktMaterialDocumentItemTemplateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1677,7 +1677,7 @@ public class TaktMaterialDocumentItemImportDto
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     public string? MovementType { get; set; } = string.Empty;
 
@@ -1712,7 +1712,7 @@ public class TaktMaterialDocumentItemImportDto
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -1732,7 +1732,7 @@ public class TaktMaterialDocumentItemImportDto
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -1752,7 +1752,7 @@ public class TaktMaterialDocumentItemImportDto
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -1984,7 +1984,7 @@ public class TaktMaterialDocumentItemImportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -2066,7 +2066,7 @@ public class TaktMaterialDocumentItemExportDto
     public string? LineDepth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type）
+    /// 移动类型（字典 logistics_materials_movement_type）
     /// </summary>
     public string MovementType { get; set; } = string.Empty;
 
@@ -2101,7 +2101,7 @@ public class TaktMaterialDocumentItemExportDto
     public string? RestrictedStockFlag { get; set; } = string.Empty;
 
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type）
+    /// 特殊库存（字典 logistics_materials_special_stock_type）
     /// </summary>
     public string? SpecialStock { get; set; } = string.Empty;
 
@@ -2121,7 +2121,7 @@ public class TaktMaterialDocumentItemExportDto
     public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code）
+    /// 货币（字典 accounting_financial_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -2141,7 +2141,7 @@ public class TaktMaterialDocumentItemExportDto
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -2373,7 +2373,7 @@ public class TaktMaterialDocumentItemExportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

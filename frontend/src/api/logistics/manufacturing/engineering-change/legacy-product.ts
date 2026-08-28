@@ -4,7 +4,7 @@
 // 文件名称：legacy-product.ts
 // 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变旧品管制 API
+// 功能描述：设变旧品管制 API（列表 / 详情 / 更新 / 导出）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -12,34 +12,76 @@
 
 import request from '@/api/request';
 import type { TaktPagedResult } from '@/types/common';
-import type { EcLegacyProduct, EcLegacyProductQuery, EcLegacyProductUpdate } from '@/types/logistics/manufacturing/engineering-change/legacy-product';
+import type {
+  EcLegacyProduct,
+  EcLegacyProductQuery,
+  EcLegacyProductUpdate,
+} from '@/types/logistics/manufacturing/engineering-change/legacy-product';
 
-const TAKTECLEGACYPRODUCTS_API_BASE = 'TaktEcLegacyProducts';
+/**
+ * API 路径前缀（对应后端 TaktEcLegacyProductsController）
+ */
+const EC_LEGACY_PRODUCT_API_BASE = 'TaktEcLegacyProducts';
 
 /**
  * 获取旧品管制列表（分页）
+ * @param queryDto 查询参数
+ * @returns {Promise<TaktPagedResult<EcLegacyProduct>>} 分页结果
  */
-export function getEcLegacyProductList(queryDto: EcLegacyProductQuery) {
-  return request.get<TaktPagedResult<EcLegacyProduct>>(`/${TAKTECLEGACYPRODUCTS_API_BASE}/list`, { params: queryDto });
+export function getEcLegacyProductList(queryDto: EcLegacyProductQuery): Promise<TaktPagedResult<EcLegacyProduct>> {
+  return request<TaktPagedResult<EcLegacyProduct>>({
+    url: `${EC_LEGACY_PRODUCT_API_BASE}/list`,
+    method: 'get',
+    params: queryDto,
+  });
 }
 
 /**
- * 获取旧品管制详情
+ * 根据设变明细 ID 获取旧品管制详情
+ * @param ecDetailId 设变明细 ID
+ * @returns {Promise<EcLegacyProduct>} 详情
  */
-export function getEcLegacyProductByEcDetailId(ecDetailId: string) {
-  return request.get<EcLegacyProduct>(`/${TAKTECLEGACYPRODUCTS_API_BASE}/detail/${ecDetailId}`);
+export function getEcLegacyProductByEcDetailId(ecDetailId: string): Promise<EcLegacyProduct> {
+  return request<EcLegacyProduct>({
+    url: `${EC_LEGACY_PRODUCT_API_BASE}/detail/${ecDetailId}`,
+    method: 'get',
+  });
 }
 
 /**
  * 更新旧品管制
+ * @param ecDetailId 设变明细 ID
+ * @param dto 更新 DTO
+ * @returns {Promise<EcLegacyProduct>} 更新后的行
  */
-export function updateEcLegacyProduct(ecDetailId: string, dto: EcLegacyProductUpdate) {
-  return request.put<EcLegacyProduct>(`/${TAKTECLEGACYPRODUCTS_API_BASE}/detail/${ecDetailId}`, dto);
+export function updateEcLegacyProduct(ecDetailId: string, dto: EcLegacyProductUpdate): Promise<EcLegacyProduct> {
+  return request<EcLegacyProduct>({
+    url: `${EC_LEGACY_PRODUCT_API_BASE}/detail/${ecDetailId}`,
+    method: 'put',
+    data: dto,
+  });
 }
 
 /**
  * 导出旧品管制
+ * @param query 查询条件
+ * @param sheetName 工作表名
+ * @param exportName 导出文件基名
+ * @returns {Promise<Blob>} Excel blob
  */
-export function exportEcLegacyProductData(queryDto?: EcLegacyProductQuery) {
-  return request.get(`/${TAKTECLEGACYPRODUCTS_API_BASE}/export`, { params: queryDto, responseType: 'blob' });
+export function exportEcLegacyProduct(
+  query?: EcLegacyProductQuery,
+  sheetName?: string,
+  exportName?: string,
+): Promise<Blob> {
+  return request<Blob>({
+    url: `${EC_LEGACY_PRODUCT_API_BASE}/export`,
+    method: 'get',
+    params: {
+      ...query,
+      sheetName,
+      exportName,
+    },
+    responseType: 'blob',
+  });
 }

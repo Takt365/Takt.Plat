@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktRoleI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRole 实体字段国际化种子（已对齐前端 locales：src/locales/identity/role）
 // 
@@ -109,13 +109,13 @@ public class TaktRoleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.role.name", "zh-HK", "角色名称_hk", "角色名称"),
 
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围_us", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "en-US", "数据权限范围_us", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围_jp", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "ja-JP", "数据权限范围_jp", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-CN", "数据权限范围", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
             // entity.role.datascope
-            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围_hk", "数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
+            new TranslationSeedItem("entity.role.datascope", "zh-HK", "数据权限范围_hk", "数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）"),
 
             // entity.role.isbuiltin
             new TranslationSeedItem("entity.role.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；种子角色为内置，不允许删除）"),

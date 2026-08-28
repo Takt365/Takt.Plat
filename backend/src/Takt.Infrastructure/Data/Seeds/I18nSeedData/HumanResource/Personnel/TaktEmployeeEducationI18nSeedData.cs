@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,22 +127,22 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeeducation.schoolname", "zh-HK", "学校名称_hk", "学校名称"),
 
             // entity.employeeeducation.educationlevel
-            new TranslationSeedItem("entity.employeeeducation.educationlevel", "en-US", "学历层次_us", "学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "en-US", "学历层次_us", "学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.employeeeducation.educationlevel
-            new TranslationSeedItem("entity.employeeeducation.educationlevel", "ja-JP", "学历层次_jp", "学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "ja-JP", "学历层次_jp", "学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.employeeeducation.educationlevel
-            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-CN", "学历层次", "学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-CN", "学历层次", "学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.employeeeducation.educationlevel
-            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-HK", "学历层次_hk", "学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.educationlevel", "zh-HK", "学历层次_hk", "学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
 
             // entity.employeeeducation.degreelevel
-            new TranslationSeedItem("entity.employeeeducation.degreelevel", "en-US", "学位层次_us", "学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "en-US", "学位层次_us", "学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）"),
             // entity.employeeeducation.degreelevel
-            new TranslationSeedItem("entity.employeeeducation.degreelevel", "ja-JP", "学位层次_jp", "学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "ja-JP", "学位层次_jp", "学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）"),
             // entity.employeeeducation.degreelevel
-            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-CN", "学位层次", "学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-CN", "学位层次", "学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）"),
             // entity.employeeeducation.degreelevel
-            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-HK", "学位层次_hk", "学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）"),
+            new TranslationSeedItem("entity.employeeeducation.degreelevel", "zh-HK", "学位层次_hk", "学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）"),
 
             // entity.employeeeducation.majorname
             new TranslationSeedItem("entity.employeeeducation.majorname", "en-US", "专业名称_us", "专业名称"),

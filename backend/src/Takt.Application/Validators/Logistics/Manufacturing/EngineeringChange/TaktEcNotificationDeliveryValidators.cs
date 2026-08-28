@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationDeliveryValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotificationDelivery 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcNotificationDelivery 生成，请按需审阅）
 // 
@@ -53,7 +53,7 @@ public class TaktEcNotificationDeliveryCreateValidator : AbstractValidator<TaktE
             .MaximumLength(40).WithMessage("设变单号长度不能超过40个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("目标部门编码不能为空")
-            .MaximumLength(40).WithMessage("目标部门编码长度不能超过40个字符");
+            .MaximumLength(6).WithMessage("目标部门编码长度不能超过6个字符");
         RuleFor(x => x.ConfirmedByUserId)
             .GreaterThanOrEqualTo(0).WithMessage("确认人用户 ID不能为负数");
         RuleFor(x => x.ExtField)
@@ -103,7 +103,7 @@ public class TaktEcNotificationDeliveryUpdateValidator : AbstractValidator<TaktE
             .MaximumLength(40).WithMessage("设变单号长度不能超过40个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("目标部门编码不能为空")
-            .MaximumLength(40).WithMessage("目标部门编码长度不能超过40个字符");
+            .MaximumLength(6).WithMessage("目标部门编码长度不能超过6个字符");
         RuleFor(x => x.ConfirmedByUserId)
             .GreaterThanOrEqualTo(0).WithMessage("确认人用户 ID不能为负数");
         RuleFor(x => x.ExtField)
@@ -147,7 +147,7 @@ public class TaktEcNotificationDeliveryImportValidator : AbstractValidator<TaktE
             .MaximumLength(40).WithMessage("设变单号长度不能超过40个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("目标部门编码不能为空")
-            .MaximumLength(40).WithMessage("目标部门编码长度不能超过40个字符");
+            .MaximumLength(6).WithMessage("目标部门编码长度不能超过6个字符");
         RuleFor(x => x.ConfirmedByUserId)
             .GreaterThanOrEqualTo(0).WithMessage("确认人用户 ID不能为负数");
         RuleFor(x => x.ExtField)

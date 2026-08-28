@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktExpenseValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Expense 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktExpense 生成，请按需审阅）
 // 
@@ -36,10 +36,10 @@ public class TaktExpenseCreateValidator : AbstractValidator<TaktExpenseCreateDto
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.CostBearerDeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.CostBearerDeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ExpenseCode)
             .NotEmpty().WithMessage("费用单编码不能为空")
@@ -47,6 +47,10 @@ public class TaktExpenseCreateValidator : AbstractValidator<TaktExpenseCreateDto
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");
+        RuleFor(x => x.ApplicationDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("申请部门不能为负数");
+        RuleFor(x => x.CostBearerDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("经费负担部门不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("关联会签单不能为负数");
         RuleFor(x => x.ExtField)
@@ -79,10 +83,10 @@ public class TaktExpenseUpdateValidator : AbstractValidator<TaktExpenseUpdateDto
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.CostBearerDeptId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.CostBearerDeptId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ExpenseCode)
             .NotEmpty().WithMessage("费用单编码不能为空")
@@ -90,6 +94,10 @@ public class TaktExpenseUpdateValidator : AbstractValidator<TaktExpenseUpdateDto
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");
+        RuleFor(x => x.ApplicationDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("申请部门不能为负数");
+        RuleFor(x => x.CostBearerDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("经费负担部门不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("关联会签单不能为负数");
         RuleFor(x => x.ExtField)
@@ -127,6 +135,10 @@ public class TaktExpenseImportValidator : AbstractValidator<TaktExpenseImportDto
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");
+        RuleFor(x => x.ApplicationDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("申请部门不能为负数");
+        RuleFor(x => x.CostBearerDeptId)
+            .GreaterThanOrEqualTo(0).WithMessage("经费负担部门不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("关联会签单不能为负数");
         RuleFor(x => x.ExtField)

@@ -64,7 +64,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -74,7 +74,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   quotationQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit: number;
 
@@ -84,7 +84,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   quotationUnitPrice: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -184,7 +184,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -194,7 +194,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   quotationQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit?: number;
 
@@ -204,7 +204,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   quotationUnitPrice?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate?: number;
 
@@ -318,7 +318,7 @@ export interface SalesQuotationItemCreate {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -328,7 +328,7 @@ export interface SalesQuotationItemCreate {
   quotationQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit: number;
 
@@ -338,7 +338,7 @@ export interface SalesQuotationItemCreate {
   quotationUnitPrice: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -476,7 +476,7 @@ export interface SalesQuotationItemTemplate {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -486,7 +486,7 @@ export interface SalesQuotationItemTemplate {
   quotationQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit?: number;
 
@@ -496,7 +496,7 @@ export interface SalesQuotationItemTemplate {
   quotationUnitPrice?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate?: number;
 
@@ -600,7 +600,7 @@ export interface SalesQuotationItemImport {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -610,7 +610,7 @@ export interface SalesQuotationItemImport {
   quotationQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit?: number;
 
@@ -620,7 +620,7 @@ export interface SalesQuotationItemImport {
   quotationUnitPrice?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate?: number;
 
@@ -724,7 +724,7 @@ export interface SalesQuotationItemExport {
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -734,7 +734,7 @@ export interface SalesQuotationItemExport {
   quotationQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   salesPerUnit: number;
 
@@ -744,7 +744,7 @@ export interface SalesQuotationItemExport {
   quotationUnitPrice: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 

@@ -67,7 +67,7 @@ public class TaktGenTableColumnDto : TaktTenantCoreDtoBase
     public string DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     public string CsharpDataType { get; set; } = string.Empty;
 
@@ -137,12 +137,12 @@ public class TaktGenTableColumnDto : TaktTenantCoreDtoBase
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string HtmlType { get; set; } = string.Empty;
 
@@ -201,7 +201,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public string? DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     public string? CsharpDataType { get; set; } = string.Empty;
 
@@ -271,12 +271,12 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public int? IsQuery { get; set; }
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string? QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? HtmlType { get; set; } = string.Empty;
 
@@ -349,9 +349,9 @@ public class TaktGenTableColumnCreateDto
     public string DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
-    [Required(ErrorMessage = "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）不能为空")]
+    [Required(ErrorMessage = "C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）不能为空")]
     public string CsharpDataType { get; set; } = string.Empty;
 
     /// <summary>
@@ -421,15 +421,15 @@ public class TaktGenTableColumnCreateDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
-    [Required(ErrorMessage = "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq不能为空")]
+    [Required(ErrorMessage = "查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq不能为空")]
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    [Required(ErrorMessage = "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
+    [Required(ErrorMessage = "显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
     public string HtmlType { get; set; } = string.Empty;
 
     /// <summary>
@@ -510,7 +510,7 @@ public class TaktGenTableColumnTemplateDto
     public string? DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     public string? CsharpDataType { get; set; } = string.Empty;
 
@@ -580,12 +580,12 @@ public class TaktGenTableColumnTemplateDto
     public int? IsQuery { get; set; }
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string? QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? HtmlType { get; set; } = string.Empty;
 
@@ -643,7 +643,7 @@ public class TaktGenTableColumnImportDto
     public string? DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     public string? CsharpDataType { get; set; } = string.Empty;
 
@@ -713,12 +713,12 @@ public class TaktGenTableColumnImportDto
     public int? IsQuery { get; set; }
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string? QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? HtmlType { get; set; } = string.Empty;
 
@@ -782,7 +782,7 @@ public class TaktGenTableColumnExportDto
     public string DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     public string CsharpDataType { get; set; } = string.Empty;
 
@@ -852,12 +852,12 @@ public class TaktGenTableColumnExportDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string HtmlType { get; set; } = string.Empty;
 

@@ -41,7 +41,9 @@ public static class TaktEntityAuditExtensions
         return TaktConstants.SystemAuditUser.Id;
     }
 
-    /// <summary>写入创建审计字段（租户级实体）</summary>
+    /// <summary>
+    /// 写入创建审计字段（租户级实体）
+    /// </summary>
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -52,7 +54,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyCreateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入创建审计字段（公司级实体）</summary>
+    /// <summary>
+    /// 写入创建审计字段（公司级实体）
+    /// </summary>
     /// <param name="entity">待写入的公司级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -63,7 +67,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyCreateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入创建审计字段（审批级实体）</summary>
+    /// <summary>
+    /// 写入创建审计字段（审批级实体）
+    /// </summary>
     /// <param name="entity">待写入的审批级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -74,7 +80,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyCreateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入更新审计字段（租户级实体）</summary>
+    /// <summary>
+    /// 写入更新审计字段（租户级实体）
+    /// </summary>
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -85,7 +93,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyUpdateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入更新审计字段（公司级实体）</summary>
+    /// <summary>
+    /// 写入更新审计字段（公司级实体）
+    /// </summary>
     /// <param name="entity">待写入的公司级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -96,7 +106,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyUpdateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入更新审计字段（审批级实体）</summary>
+    /// <summary>
+    /// 写入更新审计字段（审批级实体）
+    /// </summary>
     /// <param name="entity">待写入的审批级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
@@ -107,7 +119,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplyUpdateCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入软删除审计字段（租户级实体）</summary>
+    /// <summary>
+    /// 写入软删除审计字段（租户级实体）
+    /// </summary>
     /// <param name="entity">待软删除的租户级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">删除时间；为空时使用 DateTime.Now</param>
@@ -118,7 +132,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplySoftDeleteCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入软删除审计字段（公司级实体）</summary>
+    /// <summary>
+    /// 写入软删除审计字段（公司级实体）
+    /// </summary>
     /// <param name="entity">待软删除的公司级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">删除时间；为空时使用 DateTime.Now</param>
@@ -129,7 +145,9 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplySoftDeleteCore(entity, operatorUserId, timestamp);
 
-    /// <summary>写入软删除审计字段（审批级实体）</summary>
+    /// <summary>
+    /// 写入软删除审计字段（审批级实体）
+    /// </summary>
     /// <param name="entity">待软删除的审批级实体</param>
     /// <param name="operatorUserId">操作人 ID；为空或不大于 0 时使用系统审计用户</param>
     /// <param name="timestamp">删除时间；为空时使用 DateTime.Now</param>
@@ -140,42 +158,54 @@ public static class TaktEntityAuditExtensions
         DateTime? timestamp = null)
         => ApplySoftDeleteCore(entity, operatorUserId, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySeedCreate(this TaktTenantCoreEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyCreate(TaktConstants.SystemAuditUser.Id, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的公司级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySeedCreate(this TaktCompanyEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyCreate(TaktConstants.SystemAuditUser.Id, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的审批级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySeedCreate(this TaktApprovalEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyCreate(TaktConstants.SystemAuditUser.Id, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySeedUpdate(this TaktTenantCoreEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyUpdate(TaktConstants.SystemAuditUser.Id, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的公司级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySeedUpdate(this TaktCompanyEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyUpdate(TaktConstants.SystemAuditUser.Id, timestamp);
 
-    /// <summary>种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）</summary>
+    /// <summary>
+    /// 种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）
+    /// </summary>
     /// <param name="entity">待写入的审批级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>

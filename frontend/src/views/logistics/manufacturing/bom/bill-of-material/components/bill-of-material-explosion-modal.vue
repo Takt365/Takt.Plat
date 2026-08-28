@@ -77,7 +77,7 @@ import { ref, computed, watch, h } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { getBillOfMaterialExplosion } from '@/api/logistics/manufacturing/bom/bill-of-material'
+import { getBillOfMaterialExplosion } from '@/api/logistics/manufacturing/bom/bill-of-material-explosion'
 import type { BillOfMaterial } from '@/types/logistics/manufacturing/bom/bill-of-material'
 import type { BillOfMaterialExplosionLine } from '@/types/logistics/manufacturing/bom/bill-of-material-explosion'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -184,7 +184,7 @@ const columns = computed<TableColumnsType>(() => [
     key: 'materialUnit',
     width: 80,
     customRender: ({ record }: { record: BillOfMaterialExplosionLine }) =>
-      h(TaktDictTag, { dictType: 'logistics_unit_of_measure_code', value: record.materialUnit }),
+      h(TaktDictTag, { dictType: 'logistics_materials_unit_of_measure_code', value: record.materialUnit }),
   },
   {
     title: t('entity.billofmaterialitem.scraprate'),

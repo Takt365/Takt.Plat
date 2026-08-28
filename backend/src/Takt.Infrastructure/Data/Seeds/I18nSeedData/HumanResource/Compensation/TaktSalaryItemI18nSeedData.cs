@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktSalaryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryitem.shortname", "zh-HK", "简称_hk", "简称"),
 
             // entity.salaryitem.itemtype
-            new TranslationSeedItem("entity.salaryitem.itemtype", "en-US", "项目类型_us", "项目类型（字典 hr_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
+            new TranslationSeedItem("entity.salaryitem.itemtype", "en-US", "项目类型_us", "项目类型（字典 humanresource_compensation_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
             // entity.salaryitem.itemtype
-            new TranslationSeedItem("entity.salaryitem.itemtype", "ja-JP", "项目类型_jp", "项目类型（字典 hr_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
+            new TranslationSeedItem("entity.salaryitem.itemtype", "ja-JP", "项目类型_jp", "项目类型（字典 humanresource_compensation_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
             // entity.salaryitem.itemtype
-            new TranslationSeedItem("entity.salaryitem.itemtype", "zh-CN", "项目类型", "项目类型（字典 hr_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
+            new TranslationSeedItem("entity.salaryitem.itemtype", "zh-CN", "项目类型", "项目类型（字典 humanresource_compensation_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
             // entity.salaryitem.itemtype
-            new TranslationSeedItem("entity.salaryitem.itemtype", "zh-HK", "项目类型_hk", "项目类型（字典 hr_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
+            new TranslationSeedItem("entity.salaryitem.itemtype", "zh-HK", "项目类型_hk", "项目类型（字典 humanresource_compensation_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）"),
 
             // entity.salaryitem.calcmethod
-            new TranslationSeedItem("entity.salaryitem.calcmethod", "en-US", "计算方式_us", "计算方式（字典 hr_salary_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.salaryitem.calcmethod", "en-US", "计算方式_us", "计算方式（字典 humanresource_compensation_salary_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.salaryitem.calcmethod
-            new TranslationSeedItem("entity.salaryitem.calcmethod", "ja-JP", "计算方式_jp", "计算方式（字典 hr_salary_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.salaryitem.calcmethod", "ja-JP", "计算方式_jp", "计算方式（字典 humanresource_compensation_salary_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.salaryitem.calcmethod
-            new TranslationSeedItem("entity.salaryitem.calcmethod", "zh-CN", "计算方式", "计算方式（字典 hr_salary_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.salaryitem.calcmethod", "zh-CN", "计算方式", "计算方式（字典 humanresource_compensation_salary_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.salaryitem.calcmethod
-            new TranslationSeedItem("entity.salaryitem.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 hr_salary_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.salaryitem.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 humanresource_compensation_salary_calc_method；1=固定金额 2=按比例 3=按公式）"),
 
             // entity.salaryitem.salaryformulaid
             new TranslationSeedItem("entity.salaryitem.salaryformulaid", "en-US", "计算公式ID_us", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),

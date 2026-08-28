@@ -53,7 +53,7 @@ export interface SocialInsuranceExport {
   companyCode: string;
 
   /**
-   * 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
+   * 关联福利项目 ID（通常对应 humanresource_benefits_benefit_type 为社保/公积金的 TaktBenefitItem）
    */
   benefitItemId?: string;
 
@@ -118,7 +118,7 @@ export interface SocialInsuranceExport {
   totalAmount: number;
 
   /**
-   * 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
+   * 缴纳状态（字典 humanresource_benefits_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
    */
   payStatus: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOrderI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktApsOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsorder.orderquantity", "zh-HK", "订单数量_hk", "订单数量"),
 
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.apsorder.routingcode
             new TranslationSeedItem("entity.apsorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）"),

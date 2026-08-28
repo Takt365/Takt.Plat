@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-26
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -24,14 +24,209 @@ import type {
  */
 export interface EcDetail extends CompanyDtoBase {
   /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   * EcDetailID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
-  cultureCode: string
+  ecDetailId: string;
+
+  /**
+   * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
+   */
+  ecId: string;
+
+  /**
+   * 设变主表名称（填充字段）
+   */
+  ecName?: string;
+
+  /**
+   * 设变单号（冗余字段,便于查询）
+   */
+  ecCode: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
+   * BOM行号
+   */
+  ecBomLineCode?: string;
+
+  /**
+   * 机种
+   */
+  ecModelCode: string;
+
+  /**
+   * 完成品物料编码
+   */
+  ecFinishedGoods?: string;
+
+  /**
+   * 完成品物料描述
+   */
+  ecFinishedGoodsDescription?: string;
+
+  /**
+   * 上阶物料编码
+   */
+  ecParentMaterialCode?: string;
+
+  /**
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
+   */
+  ecParentMaterialDescription?: string;
+
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 旧物料编码
+   */
+  ecOldMaterialCode?: string;
+
+  /**
+   * 旧物料描述
+   */
+  ecOldMaterialDescription?: string;
+
+  /**
+   * 旧用量
+   */
+  ecOldUsageQuantity?: number;
+
+  /**
+   * 旧位置
+   */
+  ecOldItemPosition?: string;
+
+  /**
+   * 旧在库数量
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecOldPurchaseType?: string;
+
+  /**
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecOldRequiresInspection: number;
+
+  /**
+   * 新物料编码
+   */
+  ecNewMaterialCode?: string;
+
+  /**
+   * 新物料描述
+   */
+  ecNewMaterialDescription?: string;
+
+  /**
+   * 新用量
+   */
+  ecNewUsageQuantity?: number;
+
+  /**
+   * 新位置
+   */
+  ecNewItemPosition?: string;
+
+  /**
+   * 新在库数量
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecNewPurchaseType?: string;
+
+  /**
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecNewRequiresInspection: number;
+
+  /**
+   * BOM生效日期
+   */
+  ecBomDate: string;
+
+  /**
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
+   * 设变技术课主表（多对一） （主表：TaktEcGijutsu）
+   */
+  ecGijutsu?: EcGijutsu;
+
+}
+
+
+/**
+ * EcDetail 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 EcDetailQuery
+ * @description 对应后端 TaktEcDetailQueryDto
+ */
+export interface EcDetailQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
 
   /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
 
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -49,147 +244,599 @@ export interface EcDetail extends CompanyDtoBase {
   lineNumber?: number;
 
   /**
-   * BOM行号（Ec_bom_line_no）
+   * BOM行号
    */
   ecBomLineCode?: string;
 
   /**
-   * 机种（Ec_model）
+   * 机种
    */
-  ecModel?: string;
+  ecModelCode?: string;
 
   /**
-   * 完成品（Ec_bomitem）
+   * 完成品物料编码
    */
-  ecBomItem?: string;
+  ecFinishedGoods?: string;
 
   /**
-   * 完成品描述（Ec_bomitemtext）
+   * 完成品物料描述
    */
-  ecBomItemText?: string;
+  ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料（Ec_bomsubitem）
+   * 上阶物料编码
    */
-  ecBomSubItem?: string;
+  ecParentMaterialCode?: string;
 
   /**
-   * 上阶物料描述（Ec_bomsubitemtext）
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
    */
-  ecBomSubItemText?: string;
+  ecParentMaterialDescription?: string;
 
   /**
-   * 完成品EOL（End of Line，0=否 1=是）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLine?: number;
+  discontinuedStatus?: string;
 
   /**
-   * 旧料号（Ec_olditem）
+   * 旧物料编码
    */
-  ecOldItem?: string;
+  ecOldMaterialCode?: string;
 
   /**
-   * 旧料号描述（Ec_oldtext）
+   * 旧物料描述
    */
-  ecOldText?: string;
+  ecOldMaterialDescription?: string;
 
   /**
-   * 旧用量（Ec_oldusage）
+   * 旧用量
    */
-  ecOldUsage?: number;
+  ecOldUsageQuantity?: number;
 
   /**
-   * 旧位置（Ec_oldposition）
+   * 旧位置
    */
-  ecOldPosition?: string;
+  ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量（Ec_oldstock）
+   * 旧在库数量
    */
   ecOldStock?: number;
 
   /**
-   * 旧品仓库（Ec_oldwarehouse）
+   * 旧品仓库
    */
   ecOldWarehouse?: string;
 
   /**
-   * 旧品是否采购（0=否 1=是）
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
    */
-  isOldProcurement?: number;
+  ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否检查（0=否 1=是）
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
    */
-  isOldCheck?: number;
+  ecOldRequiresInspection?: number;
 
   /**
-   * 新料号（Ec_newitem）
+   * 新物料编码
    */
-  ecNewItem?: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 新料号描述（Ec_newtext）
+   * 新物料描述
    */
-  ecNewText?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 新用量（Ec_newusage）
+   * 新用量
    */
-  ecNewUsage?: number;
+  ecNewUsageQuantity?: number;
 
   /**
-   * 新位置（Ec_newposition）
+   * 新位置
    */
-  ecNewPosition?: string;
+  ecNewItemPosition?: string;
 
   /**
-   * 新在库数量（Ec_newstock）
+   * 新在库数量
    */
   ecNewStock?: number;
 
   /**
-   * 新品仓库（Ec_newwarehouse）
+   * 新品仓库
    */
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否采购（0=否 1=是）
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
    */
-  isNewProcurement?: number;
+  ecNewPurchaseType?: string;
 
   /**
-   * 新品是否检查（0=否 1=是）
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
    */
-  isNewCheck?: number;
+  ecNewRequiresInspection?: number;
 
   /**
-   * BOM生效日期（Ec_bomdate）
+   * BOM生效日期（范围查询-开始）
    */
-  ecBomDate?: string;
+  ecBomDateStart?: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * BOM生效日期（范围查询-结束）
+   */
+  ecBomDateEnd?: string;
+
+  /**
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   ecSecondDistinction?: string;
 
   /**
-   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   ecInstruction?: string;
 
   /**
-   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  ecLegacyPartDisposition?: string;
+  ecOldPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+  /**
+   * 制二课主表页签（1=采购 F 且仓库 C003 2=其它；仅 TaktEcSeizounikas/masters 使用）
+   */
+  pcbaTab?: number;
+
+}
+
+
+/**
+ * 创建EcDetail DTO
+ * 对应前端 EcDetailCreate
+ * @description 对应后端 TaktEcDetailCreateDto
+ */
+export interface EcDetailCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
+   */
+  ecId: string;
+
+  /**
+   * 设变单号（冗余字段,便于查询）
+   */
+  ecCode: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
+   * BOM行号
+   */
+  ecBomLineCode?: string;
+
+  /**
+   * 机种
+   */
+  ecModelCode: string;
+
+  /**
+   * 完成品物料编码
+   */
+  ecFinishedGoods?: string;
+
+  /**
+   * 完成品物料描述
+   */
+  ecFinishedGoodsDescription?: string;
+
+  /**
+   * 上阶物料编码
+   */
+  ecParentMaterialCode?: string;
+
+  /**
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
+   */
+  ecParentMaterialDescription?: string;
+
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 旧物料编码
+   */
+  ecOldMaterialCode?: string;
+
+  /**
+   * 旧物料描述
+   */
+  ecOldMaterialDescription?: string;
+
+  /**
+   * 旧用量
+   */
+  ecOldUsageQuantity?: number;
+
+  /**
+   * 旧位置
+   */
+  ecOldItemPosition?: string;
+
+  /**
+   * 旧在库数量
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecOldPurchaseType?: string;
+
+  /**
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecOldRequiresInspection: number;
+
+  /**
+   * 新物料编码
+   */
+  ecNewMaterialCode?: string;
+
+  /**
+   * 新物料描述
+   */
+  ecNewMaterialDescription?: string;
+
+  /**
+   * 新用量
+   */
+  ecNewUsageQuantity?: number;
+
+  /**
+   * 新位置
+   */
+  ecNewItemPosition?: string;
+
+  /**
+   * 新在库数量
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecNewPurchaseType?: string;
+
+  /**
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecNewRequiresInspection: number;
+
+  /**
+   * BOM生效日期
+   */
+  ecBomDate: string;
+
+  /**
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新EcDetail DTO
+ * 继承 TaktEcDetailCreateDto，添加 EcDetailId 字段
+ * 对应前端 EcDetailUpdate
+ * @description 对应后端 TaktEcDetailUpdateDto
+ */
+export interface EcDetailUpdate extends EcDetailCreate {
+  /**
+   * EcDetailID（标识要更新的实体）
+   */
+  ecDetailId: string;
+
+}
+
+
+/**
+ * EcDetail 作废/撤销作废 DTO
+ * 对应前端 EcDetailObsolete
+ * @description 对应后端 TaktEcDetailObsoleteDto
+ */
+export interface EcDetailObsolete {
+  /**
+   * EcDetailID
+   */
+  ecDetailId: string;
 
   /**
    * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
+ * EcDetail 导入模板行 DTO
+ * 对应前端 EcDetailTemplate
+ * @description 对应后端 TaktEcDetailTemplateDto
+ */
+export interface EcDetailTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
+   */
+  ecId?: string;
+
+  /**
+   * 设变单号（冗余字段,便于查询）
+   */
+  ecCode?: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
+   * BOM行号
+   */
+  ecBomLineCode?: string;
+
+  /**
+   * 机种
+   */
+  ecModelCode?: string;
+
+  /**
+   * 完成品物料编码
+   */
+  ecFinishedGoods?: string;
+
+  /**
+   * 完成品物料描述
+   */
+  ecFinishedGoodsDescription?: string;
+
+  /**
+   * 上阶物料编码
+   */
+  ecParentMaterialCode?: string;
+
+  /**
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
+   */
+  ecParentMaterialDescription?: string;
+
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus?: string;
+
+  /**
+   * 旧物料编码
+   */
+  ecOldMaterialCode?: string;
+
+  /**
+   * 旧物料描述
+   */
+  ecOldMaterialDescription?: string;
+
+  /**
+   * 旧用量
+   */
+  ecOldUsageQuantity?: number;
+
+  /**
+   * 旧位置
+   */
+  ecOldItemPosition?: string;
+
+  /**
+   * 旧在库数量
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecOldPurchaseType?: string;
+
+  /**
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecOldRequiresInspection?: number;
+
+  /**
+   * 新物料编码
+   */
+  ecNewMaterialCode?: string;
+
+  /**
+   * 新物料描述
+   */
+  ecNewMaterialDescription?: string;
+
+  /**
+   * 新用量
+   */
+  ecNewUsageQuantity?: number;
+
+  /**
+   * 新位置
+   */
+  ecNewItemPosition?: string;
+
+  /**
+   * 新在库数量
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecNewPurchaseType?: string;
+
+  /**
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecNewRequiresInspection?: number;
+
+  /**
+   * BOM生效日期
+   */
+  ecBomDate?: string;
+
+  /**
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -204,6 +851,206 @@ export interface EcDetail extends CompanyDtoBase {
   remark?: string;
 
 }
+
+
+/**
+ * EcDetail 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 EcDetailImport
+ * @description 对应后端 TaktEcDetailImportDto
+ */
+export interface EcDetailImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
+   */
+  ecId?: string;
+
+  /**
+   * 设变单号（冗余字段,便于查询）
+   */
+  ecCode?: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
+   * BOM行号
+   */
+  ecBomLineCode?: string;
+
+  /**
+   * 机种
+   */
+  ecModelCode?: string;
+
+  /**
+   * 完成品物料编码
+   */
+  ecFinishedGoods?: string;
+
+  /**
+   * 完成品物料描述
+   */
+  ecFinishedGoodsDescription?: string;
+
+  /**
+   * 上阶物料编码
+   */
+  ecParentMaterialCode?: string;
+
+  /**
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
+   */
+  ecParentMaterialDescription?: string;
+
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   */
+  discontinuedStatus?: string;
+
+  /**
+   * 旧物料编码
+   */
+  ecOldMaterialCode?: string;
+
+  /**
+   * 旧物料描述
+   */
+  ecOldMaterialDescription?: string;
+
+  /**
+   * 旧用量
+   */
+  ecOldUsageQuantity?: number;
+
+  /**
+   * 旧位置
+   */
+  ecOldItemPosition?: string;
+
+  /**
+   * 旧在库数量
+   */
+  ecOldStock?: number;
+
+  /**
+   * 旧品仓库
+   */
+  ecOldWarehouse?: string;
+
+  /**
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecOldPurchaseType?: string;
+
+  /**
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecOldRequiresInspection?: number;
+
+  /**
+   * 新物料编码
+   */
+  ecNewMaterialCode?: string;
+
+  /**
+   * 新物料描述
+   */
+  ecNewMaterialDescription?: string;
+
+  /**
+   * 新用量
+   */
+  ecNewUsageQuantity?: number;
+
+  /**
+   * 新位置
+   */
+  ecNewItemPosition?: string;
+
+  /**
+   * 新在库数量
+   */
+  ecNewStock?: number;
+
+  /**
+   * 新品仓库
+   */
+  ecNewWarehouse?: string;
+
+  /**
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
+   */
+  ecNewPurchaseType?: string;
+
+  /**
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   */
+  ecNewRequiresInspection?: number;
+
+  /**
+   * BOM生效日期
+   */
+  ecBomDate?: string;
+
+  /**
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
 
 /**
  * EcDetail 导出 DTO（独立实现，不继承响应 Dto）
@@ -222,6 +1069,16 @@ export interface EcDetailExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   ecId: string;
@@ -237,147 +1094,147 @@ export interface EcDetailExport {
   lineNumber: number;
 
   /**
-   * BOM行号（Ec_bom_line_no）
+   * BOM行号
    */
   ecBomLineCode?: string;
 
   /**
-   * 机种（Ec_model）
+   * 机种
    */
-  ecModel: string;
+  ecModelCode: string;
 
   /**
-   * 完成品（Ec_bomitem）
+   * 完成品物料编码
    */
-  ecBomItem?: string;
+  ecFinishedGoods?: string;
 
   /**
-   * 完成品描述（Ec_bomitemtext）
+   * 完成品物料描述
    */
-  ecBomItemText?: string;
+  ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料（Ec_bomsubitem）
+   * 上阶物料编码
    */
-  ecBomSubItem?: string;
+  ecParentMaterialCode?: string;
 
   /**
-   * 上阶物料描述（Ec_bomsubitemtext）
+   * 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
    */
-  ecBomSubItemText?: string;
+  ecParentMaterialDescription?: string;
 
   /**
-   * 完成品EOL（End of Line，0=否 1=是）
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLine: number;
+  discontinuedStatus: string;
 
   /**
-   * 旧料号（Ec_olditem）
+   * 旧物料编码
    */
-  ecOldItem?: string;
+  ecOldMaterialCode?: string;
 
   /**
-   * 旧料号描述（Ec_oldtext）
+   * 旧物料描述
    */
-  ecOldText?: string;
+  ecOldMaterialDescription?: string;
 
   /**
-   * 旧用量（Ec_oldusage）
+   * 旧用量
    */
-  ecOldUsage?: number;
+  ecOldUsageQuantity?: number;
 
   /**
-   * 旧位置（Ec_oldposition）
+   * 旧位置
    */
-  ecOldPosition?: string;
+  ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量（Ec_oldstock）
+   * 旧在库数量
    */
   ecOldStock?: number;
 
   /**
-   * 旧品仓库（Ec_oldwarehouse）
+   * 旧品仓库
    */
   ecOldWarehouse?: string;
 
   /**
-   * 旧品是否采购（0=否 1=是）
+   * 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
    */
-  isOldProcurement: number;
+  ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否检查（0=否 1=是）
+   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
    */
-  isOldCheck: number;
+  ecOldRequiresInspection: number;
 
   /**
-   * 新料号（Ec_newitem）
+   * 新物料编码
    */
-  ecNewItem?: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 新料号描述（Ec_newtext）
+   * 新物料描述
    */
-  ecNewText?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 新用量（Ec_newusage）
+   * 新用量
    */
-  ecNewUsage?: number;
+  ecNewUsageQuantity?: number;
 
   /**
-   * 新位置（Ec_newposition）
+   * 新位置
    */
-  ecNewPosition?: string;
+  ecNewItemPosition?: string;
 
   /**
-   * 新在库数量（Ec_newstock）
+   * 新在库数量
    */
   ecNewStock?: number;
 
   /**
-   * 新品仓库（Ec_newwarehouse）
+   * 新品仓库
    */
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否采购（0=否 1=是）
+   * 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
    */
-  isNewProcurement: number;
+  ecNewPurchaseType?: string;
 
   /**
-   * 新品是否检查（0=否 1=是）
+   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
    */
-  isNewCheck: number;
+  ecNewRequiresInspection: number;
 
   /**
-   * BOM生效日期（Ec_bomdate）
+   * BOM生效日期
    */
   ecBomDate: string;
 
   /**
-   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   * 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
    */
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
    */
   ecSecondDistinction?: string;
 
   /**
-   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
    */
   ecInstruction?: string;
 
   /**
-   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  ecLegacyPartDisposition?: string;
+  ecOldPartDisposition?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

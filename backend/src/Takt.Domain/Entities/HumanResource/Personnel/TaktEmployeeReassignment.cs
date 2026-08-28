@@ -40,7 +40,7 @@ public class TaktEmployeeReassignment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     [SugarColumn(ColumnName = "reassignment_type", ColumnDescription = "调动类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReassignmentType { get; set; }

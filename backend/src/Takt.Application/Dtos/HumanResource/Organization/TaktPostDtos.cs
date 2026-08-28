@@ -87,7 +87,7 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 
@@ -210,7 +210,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -358,7 +358,7 @@ public class TaktPostCreateDto
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 
@@ -558,7 +558,7 @@ public class TaktPostTemplateDto
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -686,7 +686,7 @@ public class TaktPostImportDto
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -820,7 +820,7 @@ public class TaktPostExportDto
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 

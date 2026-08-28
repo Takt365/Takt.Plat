@@ -101,7 +101,7 @@
         <template v-else-if="column.key === 'dataSource'">
           <TaktDictTag
             :value="getDictTypeField(record, 'dataSource')"
-            dict-type="sys_data_source_type"
+            dict-type="sys_data_source"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">

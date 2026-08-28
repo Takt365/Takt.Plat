@@ -71,7 +71,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pcbaBoardType"
-                  dict-type="logistics_pcba_function_category"
+                  dict-type="logistics_manufacturing_pcba_function"
                   :placeholder="pi.ph('pcbaBoardType')"
                 />
               </a-form-item>
@@ -83,7 +83,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.visualInspectionLine"
-                  dict-type="logistics_visual_inspection_line_category"
+                  dict-type="logistics_manufacturing_visual_inspection_line_category"
                   :placeholder="pi.ph('visualInspectionLine')"
                 />
               </a-form-item>
@@ -95,7 +95,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.aoiLine"
-                  dict-type="logistics_aoi_inspection_line_category"
+                  dict-type="logistics_manufacturing_aoi_inspection_line_category"
                   :placeholder="pi.ph('aoiLine')"
                 />
               </a-form-item>
@@ -133,7 +133,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
+                  dict-type="logistics_manufacturing_shift_category"
                   :placeholder="pi.ph('shiftNo')"
                 />
               </a-form-item>
@@ -191,7 +191,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.inspectionStatus"
-                  dict-type="logistics_pcba_inspection_status"
+                  dict-type="logistics_manufacturing_pcba_inspection_status"
                   :placeholder="pi.ph('inspectionStatus')"
                 />
               </a-form-item>
@@ -302,7 +302,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectLocation"
-                  dict-type="logistics_pcb_location_category"
+                  dict-type="logistics_manufacturing_pcb_location_category"
                   :placeholder="pi.ph('defectLocation')"
                 />
               </a-form-item>

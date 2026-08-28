@@ -114,7 +114,7 @@ public class TaktProductionPlanItemDto : TaktCompanyDtoBase
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -249,7 +249,7 @@ public class TaktProductionPlanItemQueryDto : TaktPagedQuery
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -414,9 +414,9 @@ public class TaktProductionPlanItemCreateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -602,7 +602,7 @@ public class TaktProductionPlanItemTemplateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -742,7 +742,7 @@ public class TaktProductionPlanItemImportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -888,7 +888,7 @@ public class TaktProductionPlanItemExportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 

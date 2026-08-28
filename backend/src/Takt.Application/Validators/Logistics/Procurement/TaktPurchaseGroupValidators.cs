@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseGroup 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseGroup 生成，请按需审阅）
 // 
@@ -47,8 +47,6 @@ public class TaktPurchaseGroupCreateValidator : AbstractValidator<TaktPurchaseGr
         RuleFor(x => x.PurchaseGroupName)
             .NotEmpty().WithMessage("采购组名称不能为空")
             .MaximumLength(100).WithMessage("采购组名称长度不能超过100个字符");
-        RuleFor(x => x.ResponsibleUserId)
-            .GreaterThanOrEqualTo(0).WithMessage("采购组负责人用户 ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -90,8 +88,6 @@ public class TaktPurchaseGroupUpdateValidator : AbstractValidator<TaktPurchaseGr
         RuleFor(x => x.PurchaseGroupName)
             .NotEmpty().WithMessage("采购组名称不能为空")
             .MaximumLength(100).WithMessage("采购组名称长度不能超过100个字符");
-        RuleFor(x => x.ResponsibleUserId)
-            .GreaterThanOrEqualTo(0).WithMessage("采购组负责人用户 ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -127,8 +123,6 @@ public class TaktPurchaseGroupImportValidator : AbstractValidator<TaktPurchaseGr
         RuleFor(x => x.PurchaseGroupName)
             .NotEmpty().WithMessage("采购组名称不能为空")
             .MaximumLength(100).WithMessage("采购组名称长度不能超过100个字符");
-        RuleFor(x => x.ResponsibleUserId)
-            .GreaterThanOrEqualTo(0).WithMessage("采购组负责人用户 ID不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

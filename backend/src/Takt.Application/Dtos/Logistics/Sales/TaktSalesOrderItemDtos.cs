@@ -72,7 +72,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public decimal ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -127,7 +127,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public decimal SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -206,7 +206,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -221,7 +221,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public decimal? ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -261,7 +261,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public decimal? SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -354,9 +354,9 @@ public class TaktSalesOrderItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -370,7 +370,7 @@ public class TaktSalesOrderItemCreateDto
     public decimal ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -410,7 +410,7 @@ public class TaktSalesOrderItemCreateDto
     public decimal SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -469,9 +469,9 @@ public class TaktSalesOrderItemStatusDto
     public long SalesOrderItemId { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
-    [Required(ErrorMessage = "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）不能为空")]
+    [Required(ErrorMessage = "行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）不能为空")]
     public int DeliveryStatus { get; set; } = 0;
 }
 
@@ -559,7 +559,7 @@ public class TaktSalesOrderItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -574,7 +574,7 @@ public class TaktSalesOrderItemTemplateDto
     public decimal? ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -614,7 +614,7 @@ public class TaktSalesOrderItemTemplateDto
     public decimal? SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -692,7 +692,7 @@ public class TaktSalesOrderItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -707,7 +707,7 @@ public class TaktSalesOrderItemImportDto
     public decimal? ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -747,7 +747,7 @@ public class TaktSalesOrderItemImportDto
     public decimal? SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -831,7 +831,7 @@ public class TaktSalesOrderItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -846,7 +846,7 @@ public class TaktSalesOrderItemExportDto
     public decimal ShippedQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -886,7 +886,7 @@ public class TaktSalesOrderItemExportDto
     public decimal SalesAmount { get; set; }
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 

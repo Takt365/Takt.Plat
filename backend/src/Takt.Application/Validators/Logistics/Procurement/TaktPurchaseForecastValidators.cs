@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseForecastValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseForecast 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseForecast 生成，请按需审阅）
 // 
@@ -56,11 +56,8 @@ public class TaktPurchaseForecastCreateValidator : AbstractValidator<TaktPurchas
         RuleFor(x => x.MaterialDescription)
             .NotEmpty().WithMessage("物料描述不能为空")
             .MaximumLength(40).WithMessage("物料描述长度不能超过40个字符");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -111,11 +108,8 @@ public class TaktPurchaseForecastUpdateValidator : AbstractValidator<TaktPurchas
         RuleFor(x => x.MaterialDescription)
             .NotEmpty().WithMessage("物料描述不能为空")
             .MaximumLength(40).WithMessage("物料描述长度不能超过40个字符");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -160,11 +154,8 @@ public class TaktPurchaseForecastImportValidator : AbstractValidator<TaktPurchas
         RuleFor(x => x.MaterialDescription)
             .NotEmpty().WithMessage("物料描述不能为空")
             .MaximumLength(40).WithMessage("物料描述长度不能超过40个字符");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(50).WithMessage("计划人长度不能超过50个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

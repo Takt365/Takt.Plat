@@ -78,7 +78,7 @@ export interface SalaryFormulaExport {
   formulaName: string;
 
   /**
-   * 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+   * 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
    */
   formulaStep: number;
 

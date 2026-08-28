@@ -28,6 +28,22 @@ export default {
       importSuccess: '已成功导入 {count} 条设变',
       importPartial: '导入完成：成功 {success} 条，失败 {fail} 条',
     },
+    attachment: {
+      docCode: {
+        formatInvalid: '文件编码格式不正确（{hint}）',
+        duplicate: '文件编码「{code}」已存在，不可重复',
+        hint: {
+          empty: '请输入文件编码',
+          ec: '与设变单号一致',
+          eppFpp: 'P-xxxx（P- + 4 位数字，如 P-0001）',
+          tl: 'DTS-xxxx（DTS- + 4 位数字，如 DTS-0001）',
+          quadDash: 'xxxx-xxxx（各 4 位数字，如 1234-5678）',
+        },
+      },
+      fileName: {
+        duplicate: '文件名称「{name}」已存在，不可重复',
+      },
+    },
     tabs: {
       oldNewMaterial: '旧新物料',
     },

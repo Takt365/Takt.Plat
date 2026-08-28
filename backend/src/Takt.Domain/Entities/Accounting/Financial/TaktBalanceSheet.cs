@@ -53,7 +53,7 @@ public class TaktBalanceSheet : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "account_title_name", ColumnDescription = "会计科目名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? AccountTitleName { get; set; }
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     [SugarColumn(ColumnName = "line_category", ColumnDescription = "行类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int LineCategory { get; set; } = 1;
@@ -98,7 +98,7 @@ public class TaktBalanceSheet : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "prior_period_amount", ColumnDescription = "上期列报金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal PriorPeriodAmount { get; set; } = 0;
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";

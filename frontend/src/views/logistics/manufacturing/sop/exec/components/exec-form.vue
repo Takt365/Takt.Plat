@@ -125,7 +125,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
-                  dict-type="logistics_process_segment_type"
+                  dict-type="logistics_manufacturing_process_segment_type"
                   :placeholder="pi.ph('processSegmentType')"
                 />
               </a-form-item>
@@ -235,7 +235,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.selfCheckResult"
-                  dict-type="logistics_sop_check_result_type"
+                  dict-type="logistics_manufacturing_sop_check_result"
                   :placeholder="pi.ph('selfCheckResult')"
                 />
               </a-form-item>
@@ -247,7 +247,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.execStatus"
-                  dict-type="logistics_sop_exec_status"
+                  dict-type="logistics_manufacturing_sop_exec_status"
                   :placeholder="pi.ph('execStatus')"
                 />
               </a-form-item>
@@ -374,7 +374,7 @@
       <template #cell-stepResult="{ record }">
         <TaktSelect
           v-model:value="record.stepResult"
-          dict-type="logistics_sop_check_result_type"
+          dict-type="logistics_manufacturing_sop_check_result"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="sopExecStepPi.ph('stepResult')"

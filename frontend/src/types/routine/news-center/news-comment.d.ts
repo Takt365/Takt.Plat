@@ -99,7 +99,7 @@ export interface NewsComment extends ApprovalDtoBase {
   commentLevel: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus: number;
 
@@ -229,7 +229,7 @@ export interface NewsCommentQuery extends TaktPagedQuery {
   commentLevel?: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus?: number;
 
@@ -393,7 +393,7 @@ export interface NewsCommentCreate {
   commentLevel: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus: number;
 
@@ -442,7 +442,7 @@ export interface NewsCommentStatus {
   newsCommentId: string;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus: number;
 
@@ -560,7 +560,7 @@ export interface NewsCommentTemplate {
   commentLevel?: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus?: number;
 
@@ -674,7 +674,7 @@ export interface NewsCommentImport {
   commentLevel?: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus?: number;
 
@@ -788,7 +788,7 @@ export interface NewsCommentExport {
   commentLevel: number;
 
   /**
-   * 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+   * 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
    */
   commentStatus: number;
 

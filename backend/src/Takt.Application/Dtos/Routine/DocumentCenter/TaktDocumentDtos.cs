@@ -46,12 +46,12 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 
@@ -206,12 +206,12 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -443,12 +443,12 @@ public class TaktDocumentCreateDto
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 
@@ -679,12 +679,12 @@ public class TaktDocumentTemplateDto
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -838,12 +838,12 @@ public class TaktDocumentImportDto
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -1003,12 +1003,12 @@ public class TaktDocumentExportDto
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+    /// 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+    /// 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 

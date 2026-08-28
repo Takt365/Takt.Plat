@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowSchemeI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktFlowSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowscheme.formid", "zh-HK", "关联表单ID_hk", "关联表单 ID（选项 TaktFlowForms/options；DictValue=Id）"),
 
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "en-US", "关联表单编码_us", "关联表单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "en-US", "关联表单编码_us", "关联表单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "ja-JP", "关联表单编码_jp", "关联表单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "ja-JP", "关联表单编码_jp", "关联表单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "zh-CN", "关联表单编码", "关联表单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "zh-CN", "关联表单编码", "关联表单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowscheme.formcode
-            new TranslationSeedItem("entity.flowscheme.formcode", "zh-HK", "关联表单编码_hk", "关联表单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowscheme.formcode", "zh-HK", "关联表单编码_hk", "关联表单编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.flowscheme.sortorder
             new TranslationSeedItem("entity.flowscheme.sortorder", "en-US", "排序号_us", "排序号（回填）"),

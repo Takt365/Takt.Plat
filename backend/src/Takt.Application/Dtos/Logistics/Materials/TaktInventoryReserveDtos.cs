@@ -52,12 +52,12 @@ public class TaktInventoryReserveDto : TaktCompanyDtoBase
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int ProvisionScope { get; set; } = 0;
 
@@ -132,7 +132,7 @@ public class TaktInventoryReserveDto : TaktCompanyDtoBase
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -204,12 +204,12 @@ public class TaktInventoryReserveQueryDto : TaktPagedQuery
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int? ProvisionScope { get; set; }
 
@@ -284,7 +284,7 @@ public class TaktInventoryReserveQueryDto : TaktPagedQuery
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -371,13 +371,13 @@ public class TaktInventoryReserveCreateDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
-    [Required(ErrorMessage = "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
+    [Required(ErrorMessage = "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）不能为空")]
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int ProvisionScope { get; set; } = 0;
 
@@ -452,9 +452,9 @@ public class TaktInventoryReserveCreateDto
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -592,12 +592,12 @@ public class TaktInventoryReserveTemplateDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int? ProvisionScope { get; set; }
 
@@ -672,7 +672,7 @@ public class TaktInventoryReserveTemplateDto
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -739,12 +739,12 @@ public class TaktInventoryReserveImportDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int? ProvisionScope { get; set; }
 
@@ -819,7 +819,7 @@ public class TaktInventoryReserveImportDto
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -887,12 +887,12 @@ public class TaktInventoryReserveExportDto
     public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
+    /// 计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）
     /// </summary>
     public int ProvisionScope { get; set; } = 0;
 
@@ -967,7 +967,7 @@ public class TaktInventoryReserveExportDto
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

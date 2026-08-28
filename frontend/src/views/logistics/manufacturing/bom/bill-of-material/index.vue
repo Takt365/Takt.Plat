@@ -77,19 +77,19 @@
         <template v-if="column.key === 'bomType'">
           <TaktDictTag
             :value="getBillOfMaterialDictValue(record, 'bomType')"
-            dict-type="logistics_bom_type"
+            dict-type="logistics_manufacturing_bom_type"
           />
         </template>
         <template v-else-if="column.key === 'parentMaterialUnit'">
           <TaktDictTag
             :value="getBillOfMaterialDictValue(record, 'parentMaterialUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'bomStatus'">
           <TaktDictTag
             :value="getBillOfMaterialDictValue(record, 'bomStatus')"
-            dict-type="logistics_bom_status"
+            dict-type="logistics_manufacturing_bom_status"
           />
         </template>
       </template>
@@ -206,7 +206,7 @@
       <a-form-item :label="pi.queryLabel('bomType')">
         <TaktSelect
           v-model:value="advancedQueryForm.bomType"
-          dict-type="logistics_bom_type"
+          dict-type="logistics_manufacturing_bom_type"
           :placeholder="pi.queryPh('bomType', 'select')"
           allow-clear
         />
@@ -267,7 +267,7 @@
       <a-form-item :label="pi.queryLabel('parentMaterialUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.parentMaterialUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('parentMaterialUnit', 'select')"
           allow-clear
         />
@@ -296,7 +296,7 @@
       <a-form-item :label="pi.queryLabel('bomStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.bomStatus"
-          dict-type="logistics_bom_status"
+          dict-type="logistics_manufacturing_bom_status"
           :placeholder="pi.queryPh('bomStatus', 'select')"
           allow-clear
         />

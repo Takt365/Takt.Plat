@@ -54,6 +54,11 @@ public class TaktSopAck : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "acknowledged_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AcknowledgedBy { get; set; }
+    /// <summary>
+    /// 确认人名称（冗余：按 AcknowledgedBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "acknowledged_by_name", ColumnDescription = "确认人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? AcknowledgedByName { get; set; }
 
     /// <summary>
     /// 确认时间

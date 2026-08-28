@@ -133,9 +133,9 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _qualityGroupRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
         entity = await _qualityGroupRepository.CreateAsync(entity);
         return await GetQualityGroupByIdAsync(entity.Id) ?? entity.Adapt<TaktQualityGroupDto>();
@@ -308,9 +308,9 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _qualityGroupRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                         x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
                 }
                 await _qualityGroupRepository.CreateAsync(entity);
                 success += 1;
@@ -371,7 +371,6 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
                 || (x.QualityGroupCode != null && x.QualityGroupCode.Contains(keywords))
                 || (x.QualityGroupName != null && x.QualityGroupName.Contains(keywords))
                 || (x.QualityGroupDescription != null && x.QualityGroupDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
@@ -407,11 +406,6 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
         if (!string.IsNullOrEmpty(queryDto?.QualityGroupDescription))
         {
             exp = exp.And(x => x.QualityGroupDescription != null && x.QualityGroupDescription.Contains(queryDto.QualityGroupDescription));
-        }
-
-        if (queryDto?.ResponsibleUserId.HasValue == true)
-        {
-            exp = exp.And(x => x.ResponsibleUserId == queryDto.ResponsibleUserId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ContactPhone))

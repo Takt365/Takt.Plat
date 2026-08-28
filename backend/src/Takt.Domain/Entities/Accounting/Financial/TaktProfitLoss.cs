@@ -53,7 +53,7 @@ public class TaktProfitLoss : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "account_title_name", ColumnDescription = "会计科目名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? AccountTitleName { get; set; }
     /// <summary>
-    /// 行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
+    /// 行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）
     /// </summary>
     [SugarColumn(ColumnName = "line_category", ColumnDescription = "行类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int LineCategory { get; set; } = 1;
@@ -83,7 +83,7 @@ public class TaktProfitLoss : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_expense", ColumnDescription = "是否费用性质", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsExpense { get; set; } = 0;
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";

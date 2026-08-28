@@ -71,7 +71,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectCategory"
-                  dict-type="logistics_defect_category"
+                  dict-type="logistics_manufacturing_defect_category"
                   :placeholder="pi.ph('defectCategory')"
                 />
               </a-form-item>
@@ -174,7 +174,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectLocation"
-                  dict-type="logistics_assy_location_category"
+                  dict-type="logistics_manufacturing_assy_location_category"
                   :placeholder="pi.ph('defectLocation')"
                 />
               </a-form-item>

@@ -91,7 +91,7 @@
         <template v-else-if="column.key === 'dataSource'">
           <TaktDictTag
             :value="getDictTypeDictValue(record, 'dataSource')"
-            dict-type="sys_data_source_type"
+            dict-type="sys_data_source"
           />
         </template>
       </template>
@@ -137,7 +137,7 @@
           v-model:value="advancedQueryForm.dictTypeCode"
           :placeholder="pi.queryPh('dictTypeCode', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
@@ -157,7 +157,7 @@
       <a-form-item :label="pi.queryLabel('dataSource')">
         <TaktSelect
           v-model:value="advancedQueryForm.dataSource"
-          dict-type="sys_data_source_type"
+          dict-type="sys_data_source"
           :placeholder="pi.queryPh('dataSource', 'select')"
           allow-clear
         />

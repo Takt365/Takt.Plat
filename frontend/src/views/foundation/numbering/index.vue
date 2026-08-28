@@ -84,7 +84,7 @@
         <template v-else-if="column.key === 'dateFormat'">
           <TaktDictTag
             :value="getNumberingField(record, 'dateFormat')"
-            dict-type="sys_numbering_date_format_config"
+            dict-type="sys_numbering_date_format"
           />
         </template>
         <template v-else-if="column.key === 'resetPeriod'">
@@ -201,7 +201,7 @@
       <a-form-item :label="t('entity.numbering.dateformat')">
         <TaktSelect
           v-model:value="advancedQueryForm.dateFormat"
-          dict-type="sys_numbering_date_format_config"
+          dict-type="sys_numbering_date_format"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.dateformat') })"
           allow-clear
         />

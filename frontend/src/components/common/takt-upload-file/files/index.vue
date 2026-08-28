@@ -137,8 +137,8 @@ watch(fileList, (newValue) => {
   emit('update:modelValue', newValue)
 }, { deep: true })
 
-// 上传前的钩子
-const handleBeforeUpload = (file: UploadFile | File) => {
+// 上传前的钩子（须 await 父级 beforeUpload，否则异步查重无法拦住上传）
+const handleBeforeUpload = async (file: UploadFile | File) => {
   const originFile = (file as UploadFile).originFileObj || (file as File)
 
   if (props.maxSize && originFile.size) {
@@ -151,10 +151,10 @@ const handleBeforeUpload = (file: UploadFile | File) => {
 
   if (props.beforeUpload) {
     const beforeUpload = props.beforeUpload
-    const result = beforeUpload(
+    const result = await Promise.resolve(beforeUpload(
       originFile as Parameters<BeforeUploadFn>[0],
-      fileList.value as Parameters<BeforeUploadFn>[1]
-    )
+      fileList.value as Parameters<BeforeUploadFn>[1],
+    ))
     if (result === Upload.LIST_IGNORE || result === false) {
       return result
     }

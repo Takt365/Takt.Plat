@@ -67,7 +67,7 @@ public class TaktApsOrderDto : TaktCompanyDtoBase
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -167,7 +167,7 @@ public class TaktApsOrderQueryDto : TaktPagedQuery
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -286,9 +286,9 @@ public class TaktApsOrderCreateDto
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -439,7 +439,7 @@ public class TaktApsOrderTemplateDto
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -538,7 +538,7 @@ public class TaktApsOrderImportDto
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -643,7 +643,7 @@ public class TaktApsOrderExportDto
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 

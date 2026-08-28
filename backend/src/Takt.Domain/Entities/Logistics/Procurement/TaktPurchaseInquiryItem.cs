@@ -42,7 +42,7 @@ public class TaktPurchaseInquiryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; }
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ public class TaktPurchaseInquiryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "inquiry_unit", ColumnDescription = "询价单位", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string InquiryUnit { get; set; } = "PC";
@@ -72,7 +72,7 @@ public class TaktPurchaseInquiryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inquiry_quantity", ColumnDescription = "询价数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal InquiryQuantity { get; set; } = 0;
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PurchasePerUnit { get; set; } = 1000;

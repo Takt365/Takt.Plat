@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsLikeI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsLike 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktNewsLikeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newslike.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.newslike.username
-            new TranslationSeedItem("entity.newslike.username", "en-US", "用户姓名_us", "用户姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newslike.username", "en-US", "用户姓名_us", "用户姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newslike.username
-            new TranslationSeedItem("entity.newslike.username", "ja-JP", "用户姓名_jp", "用户姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newslike.username", "ja-JP", "用户姓名_jp", "用户姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newslike.username
-            new TranslationSeedItem("entity.newslike.username", "zh-CN", "用户姓名", "用户姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newslike.username", "zh-CN", "用户姓名", "用户姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newslike.username
-            new TranslationSeedItem("entity.newslike.username", "zh-HK", "用户姓名_hk", "用户姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newslike.username", "zh-HK", "用户姓名_hk", "用户姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.newslike.liketime
             new TranslationSeedItem("entity.newslike.liketime", "en-US", "点赞时间_us", "点赞时间"),

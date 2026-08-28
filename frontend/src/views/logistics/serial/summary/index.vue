@@ -74,7 +74,7 @@
         <template v-if="column.key === 'destinationPort'">
           <TaktDictTag
             :value="getSerialSummaryDictValue(record, 'destinationPort')"
-            dict-type="logistics_destination_port_code"
+            dict-type="logistics_serial_destination_port_code"
           />
         </template>
       </template>
@@ -256,7 +256,7 @@
       <a-form-item :label="pi.queryLabel('destinationPort')">
         <TaktSelect
           v-model:value="advancedQueryForm.destinationPort"
-          dict-type="logistics_destination_port_code"
+          dict-type="logistics_serial_destination_port_code"
           :placeholder="pi.queryPh('destinationPort', 'select')"
           allow-clear
         />

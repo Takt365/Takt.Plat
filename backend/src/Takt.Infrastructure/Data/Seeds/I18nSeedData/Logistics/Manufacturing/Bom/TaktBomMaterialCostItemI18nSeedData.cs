@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCostItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -235,13 +235,13 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcostitem.movingpriceunit", "zh-HK", "移动价格单位_hk", "移动价格单位"),
 
             // entity.bommaterialcostitem.movingpricecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "en-US", "移动价格货币_us", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "en-US", "移动价格货币_us", "移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.movingpricecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "ja-JP", "移动价格货币_jp", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "ja-JP", "移动价格货币_jp", "移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.movingpricecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-CN", "移动价格货币", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-CN", "移动价格货币", "移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.movingpricecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-HK", "移动价格货币_hk", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-HK", "移动价格货币_hk", "移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
 
             // entity.bommaterialcostitem.purchaseorganization
             new TranslationSeedItem("entity.bommaterialcostitem.purchaseorganization", "en-US", "采购组织_us", "采购组织"),
@@ -289,13 +289,13 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcostitem.purchasepriceunit", "zh-HK", "采购价格单位_hk", "采购价格单位"),
 
             // entity.bommaterialcostitem.purchasecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "en-US", "采购货币_us", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "en-US", "采购货币_us", "采购货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.purchasecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "ja-JP", "采购货币_jp", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "ja-JP", "采购货币_jp", "采购货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.purchasecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-CN", "采购货币", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-CN", "采购货币", "采购货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
             // entity.bommaterialcostitem.purchasecurrencycode
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-HK", "采购货币_hk", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-HK", "采购货币_hk", "采购货币（字典 accounting_financial_currency_code；如 CNY/USD）"),
 
             // entity.bommaterialcostitem.costingdate
             new TranslationSeedItem("entity.bommaterialcostitem.costingdate", "en-US", "核算日期_us", "核算日期"),

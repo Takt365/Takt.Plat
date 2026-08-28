@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingPlanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingplan.planyear", "zh-HK", "计划年度_hk", "计划年度"),
 
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型_us", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "en-US", "计划类型_us", "计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型_jp", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "ja-JP", "计划类型_jp", "计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "zh-CN", "计划类型", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "zh-CN", "计划类型", "计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
             // entity.trainingplan.plantype
-            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型_hk", "计划类型（字典 hr_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
+            new TranslationSeedItem("entity.trainingplan.plantype", "zh-HK", "计划类型_hk", "计划类型（字典 humanresource_training_plan_type；列存 DictValue：YEAR/QUARTER/MONTH/SPECIAL）"),
 
             // entity.trainingplan.applicabledepartment
             new TranslationSeedItem("entity.trainingplan.applicabledepartment", "en-US", "适用部门_us", "适用部门"),

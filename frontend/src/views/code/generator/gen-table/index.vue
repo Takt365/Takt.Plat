@@ -83,13 +83,13 @@
         <template v-else-if="column.key === 'genTemplateCategory'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'genTemplateCategory')"
-            dict-type="gen_template_type"
+            dict-type="code_generator_template_type"
           />
         </template>
         <template v-else-if="column.key === 'menuButtonGroup'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'menuButtonGroup')"
-            dict-type="gen_button_category"
+            dict-type="code_generator_button_category"
           />
         </template>
         <template v-else-if="column.key === 'isRepository'">
@@ -101,19 +101,19 @@
         <template v-else-if="column.key === 'genFunction'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'genFunction')"
-            dict-type="gen_function_type"
+            dict-type="code_generator_function"
           />
         </template>
         <template v-else-if="column.key === 'genMethod'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'genMethod')"
-            dict-type="gen_method_type"
+            dict-type="code_generator_method"
           />
         </template>
         <template v-else-if="column.key === 'genPath'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'genPath')"
-            dict-type="gen_path_type"
+            dict-type="code_generator_path_type"
           />
         </template>
         <template v-else-if="column.key === 'isGenMenu'">
@@ -137,19 +137,19 @@
         <template v-else-if="column.key === 'frontUi'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'frontUi')"
-            dict-type="gen_frontend_ui_type"
+            dict-type="code_generator_frontend_ui_type"
           />
         </template>
         <template v-else-if="column.key === 'frontFormLayout'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'frontFormLayout')"
-            dict-type="gen_frontend_form_layout_config"
+            dict-type="code_generator_frontend_form_layout"
           />
         </template>
         <template v-else-if="column.key === 'frontBtnStyle'">
           <TaktDictTag
             :value="getGenTableDictValue(record, 'frontBtnStyle')"
-            dict-type="gen_button_style_config"
+            dict-type="code_generator_button_style"
           />
         </template>
         <template v-else-if="column.key === 'isGenCode'">
@@ -303,7 +303,7 @@
       <a-form-item :label="pi.queryLabel('genTemplateCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.genTemplateCategory"
-          dict-type="gen_template_type"
+          dict-type="code_generator_template_type"
           :placeholder="pi.queryPh('genTemplateCategory', 'select')"
           allow-clear
         />
@@ -357,7 +357,7 @@
       <a-form-item :label="pi.queryLabel('menuButtonGroup')">
         <TaktSelect
           v-model:value="advancedQueryForm.menuButtonGroup"
-          dict-type="gen_button_category"
+          dict-type="code_generator_button_category"
           :placeholder="pi.queryPh('menuButtonGroup', 'select')"
           allow-clear
         />
@@ -531,7 +531,7 @@
       <a-form-item :label="pi.queryLabel('genFunction')">
         <TaktSelect
           v-model:value="advancedQueryForm.genFunction"
-          dict-type="gen_function_type"
+          dict-type="code_generator_function"
           :placeholder="pi.queryPh('genFunction', 'select')"
           allow-clear
         />
@@ -541,7 +541,7 @@
       <a-form-item :label="pi.queryLabel('genMethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.genMethod"
-          dict-type="gen_method_type"
+          dict-type="code_generator_method"
           :placeholder="pi.queryPh('genMethod', 'select')"
           allow-clear
         />
@@ -551,7 +551,7 @@
       <a-form-item :label="pi.queryLabel('genPath')">
         <TaktSelect
           v-model:value="advancedQueryForm.genPath"
-          dict-type="gen_path_type"
+          dict-type="code_generator_path_type"
           :placeholder="pi.queryPh('genPath', 'select')"
           allow-clear
         />
@@ -612,7 +612,7 @@
       <a-form-item :label="pi.queryLabel('frontUi')">
         <TaktSelect
           v-model:value="advancedQueryForm.frontUi"
-          dict-type="gen_frontend_ui_type"
+          dict-type="code_generator_frontend_ui_type"
           :placeholder="pi.queryPh('frontUi', 'select')"
           allow-clear
         />
@@ -622,7 +622,7 @@
       <a-form-item :label="pi.queryLabel('frontFormLayout')">
         <TaktSelect
           v-model:value="advancedQueryForm.frontFormLayout"
-          dict-type="gen_frontend_form_layout_config"
+          dict-type="code_generator_frontend_form_layout"
           :placeholder="pi.queryPh('frontFormLayout', 'select')"
           allow-clear
         />
@@ -632,7 +632,7 @@
       <a-form-item :label="pi.queryLabel('frontBtnStyle')">
         <TaktSelect
           v-model:value="advancedQueryForm.frontBtnStyle"
-          dict-type="gen_button_style_config"
+          dict-type="code_generator_button_style"
           :placeholder="pi.queryPh('frontBtnStyle', 'select')"
           allow-clear
         />

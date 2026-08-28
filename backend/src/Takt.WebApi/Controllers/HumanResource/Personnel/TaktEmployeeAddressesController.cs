@@ -41,7 +41,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("human:resource:personnel:employee:list", "员工地址列表")]
+    [TaktPermission("human:resource:personnel:employee:address:list", "员工地址列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeAddressListAsync([FromQuery] TaktEmployeeAddressQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工地址ID</param>
     /// <returns>员工地址DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:query", "员工地址详情")]
+    [TaktPermission("human:resource:personnel:employee:address:query", "员工地址详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeAddressByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// 获取员工地址选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("human:resource:personnel:employee:query", "员工地址选项")]
+    [TaktPermission("human:resource:personnel:employee:address:query", "员工地址选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeAddressOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>员工地址DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:create", "创建员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:create", "创建员工地址")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeAddressAsync([FromBody] TaktEmployeeAddressCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// <param name="id">员工地址ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>员工地址DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:update", "更新员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:update", "更新员工地址")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeAddressAsync(long id, [FromBody] TaktEmployeeAddressUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="id">员工地址ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delete", "删除员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:delete", "删除员工地址")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeAddressByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delete", "批量删除员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:delete", "批量删除员工地址")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeAddressBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:import", "获取员工地址导入模板")]
+    [TaktPermission("human:resource:personnel:employee:address:import", "获取员工地址导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeAddressTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("human:resource:personnel:employee:import", "导入员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:import", "导入员工地址")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeAddressAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktEmployeeAddressesController : TaktControllerBase
     /// 导出员工地址
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:export", "导出员工地址")]
+    [TaktPermission("human:resource:personnel:employee:address:export", "导出员工地址")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeAddressAsync([FromQuery] TaktEmployeeAddressQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

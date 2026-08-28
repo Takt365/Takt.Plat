@@ -13,6 +13,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Accounting.Financial;
+using Takt.Domain.Entities.HumanResource.Personnel;
 using Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -26,6 +27,8 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 /// </summary>
 public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
 {
+    private const string DefaultEquipAdministratorEmployeeCode = "900001";
+
     private static readonly HashSet<string> TargetPlantCodes = new(StringComparer.Ordinal) { "C100" };
 
     /// <summary>
@@ -52,6 +55,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var database = configuration.RequireDatabase();
         var repository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktProductionEquipment>>();
+        var employeeRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktEmployee>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var companies = await companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
@@ -88,10 +92,24 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
             {
                 continue;
             }
+            var equipAdministrator = await employeeRepository.FirstAsync(e =>
+                e.TenantCode == tenantCode
+                && e.CompanyCode == company.CompanyCode
+                && e.EmployeeCode == DefaultEquipAdministratorEmployeeCode
+                && e.EmployeeStatus == 1);
+            long? equipAdministratorId = equipAdministrator?.Id;
+            string? equipAdministratorName = equipAdministrator?.EmployeeName;
             foreach (var seed in templates)
             {
                 var (_, inserted, updated) = await CreateOrUpdateProductionEquipmentAsync(
-                    repository, tenantCode, company.CompanyCode, company.CultureCode, plantCode, seed);
+                    repository,
+                    tenantCode,
+                    company.CompanyCode,
+                    company.CultureCode,
+                    plantCode,
+                    seed,
+                    equipAdministratorId,
+                    equipAdministratorName);
                 insertCount += inserted;
                 updateCount += updated;
             }
@@ -977,7 +995,9 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         string companyCode,
         string cultureCode,
         string plantCode,
-        TaktProductionEquipment seed)
+        TaktProductionEquipment seed,
+        long? equipAdministratorId,
+        string? equipAdministratorName)
     {
         var equipment = await repository.FirstAsync(e =>
             e.TenantCode == tenantCode
@@ -993,11 +1013,11 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 PlantCode = plantCode,
                 CultureCode = cultureCode
             };
-            CopySeedFields(equipment, seed);
+            CopySeedFields(equipment, seed, equipAdministratorId, equipAdministratorName);
             equipment = await repository.CreateAsync(equipment);
             return (equipment, 1, 0);
         }
-        CopySeedFields(equipment, seed);
+        CopySeedFields(equipment, seed, equipAdministratorId, equipAdministratorName);
         await repository.UpdateAsync(equipment);
         return (equipment, 0, 1);
     }
@@ -1005,7 +1025,11 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 将种子模板业务字段写入实体（不含租户/公司/工厂/主键）
     /// </summary>
-    private static void CopySeedFields(TaktProductionEquipment target, TaktProductionEquipment seed)
+    private static void CopySeedFields(
+        TaktProductionEquipment target,
+        TaktProductionEquipment seed,
+        long? equipAdministratorId,
+        string? equipAdministratorName)
     {
         target.ProdEquipCode = seed.ProdEquipCode;
         target.ProdEquipName = seed.ProdEquipName;
@@ -1071,8 +1095,26 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         target.CumulativeRunHours = seed.CumulativeRunHours;
         target.InterfaceType = seed.InterfaceType;
         target.StorageLocation = seed.StorageLocation;
-        target.EquipAdministrator = seed.EquipAdministrator;
+        ApplyEquipAdministrator(target, equipAdministratorId, equipAdministratorName);
         target.SortOrder = seed.SortOrder;
         target.ProdEquipStatus = seed.ProdEquipStatus;
+    }
+
+    /// <summary>
+    /// 设备管理员成对写入：有 Id 则必须带名称，否则两者皆空
+    /// </summary>
+    private static void ApplyEquipAdministrator(
+        TaktProductionEquipment target,
+        long? equipAdministratorId,
+        string? equipAdministratorName)
+    {
+        if (equipAdministratorId.HasValue && !string.IsNullOrWhiteSpace(equipAdministratorName))
+        {
+            target.EquipAdministratorId = equipAdministratorId;
+            target.EquipAdministratorName = equipAdministratorName;
+            return;
+        }
+        target.EquipAdministratorId = null;
+        target.EquipAdministratorName = null;
     }
 }

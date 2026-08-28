@@ -57,17 +57,17 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -102,7 +102,7 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public decimal InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int InspectionStatus { get; set; } = 0;
 
@@ -142,7 +142,7 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -206,17 +206,17 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -241,7 +241,7 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public DateTime? TSideAssemblyDateEnd { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -261,7 +261,7 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public decimal? InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int? InspectionStatus { get; set; }
 
@@ -301,7 +301,7 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -378,17 +378,17 @@ public class TaktPcbaInspectionDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -403,7 +403,7 @@ public class TaktPcbaInspectionDetailCreateDto
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -423,7 +423,7 @@ public class TaktPcbaInspectionDetailCreateDto
     public decimal InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int InspectionStatus { get; set; } = 0;
 
@@ -463,7 +463,7 @@ public class TaktPcbaInspectionDetailCreateDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -522,9 +522,9 @@ public class TaktPcbaInspectionDetailStatusDto
     public long PcbaInspectionDetailId { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
-    [Required(ErrorMessage = "检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）不能为空")]
+    [Required(ErrorMessage = "检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）不能为空")]
     public int InspectionStatus { get; set; } = 0;
 }
 
@@ -597,17 +597,17 @@ public class TaktPcbaInspectionDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -622,7 +622,7 @@ public class TaktPcbaInspectionDetailTemplateDto
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -642,7 +642,7 @@ public class TaktPcbaInspectionDetailTemplateDto
     public decimal? InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int? InspectionStatus { get; set; }
 
@@ -682,7 +682,7 @@ public class TaktPcbaInspectionDetailTemplateDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -745,17 +745,17 @@ public class TaktPcbaInspectionDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -770,7 +770,7 @@ public class TaktPcbaInspectionDetailImportDto
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -790,7 +790,7 @@ public class TaktPcbaInspectionDetailImportDto
     public decimal? InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int? InspectionStatus { get; set; }
 
@@ -830,7 +830,7 @@ public class TaktPcbaInspectionDetailImportDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -899,17 +899,17 @@ public class TaktPcbaInspectionDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -924,7 +924,7 @@ public class TaktPcbaInspectionDetailExportDto
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -944,7 +944,7 @@ public class TaktPcbaInspectionDetailExportDto
     public decimal InspectionQty { get; set; }
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     public int InspectionStatus { get; set; } = 0;
 
@@ -984,7 +984,7 @@ public class TaktPcbaInspectionDetailExportDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 

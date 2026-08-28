@@ -117,7 +117,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.clientType"
-                  dict-type="logistics_client_category"
+                  dict-type="logistics_sales_client_category"
                   :placeholder="pi.ph('clientType')"
                 />
               </a-form-item>
@@ -129,7 +129,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseNature"
-                  dict-type="sys_enterprise_nature_type"
+                  dict-type="sys_enterprise_nature"
                   :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
@@ -141,7 +141,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.industryAttribute"
-                  dict-type="sys_industry_attribute_type"
+                  dict-type="sys_industry_attribute"
                   :placeholder="pi.ph('industryAttribute')"
                 />
               </a-form-item>
@@ -177,7 +177,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxCode"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxCode')"
                   :disabled="!!formData?.clientId"
                 />
@@ -190,7 +190,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
@@ -370,7 +370,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.clientId"
                 />
@@ -423,7 +423,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.customerGroup"
-                  dict-type="logistics_customer_group"
+                  dict-type="logistics_sales_customer_group"
                   :placeholder="pi.ph('customerGroup')"
                 />
               </a-form-item>
@@ -457,7 +457,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.accountAssignmentGroup"
-                  dict-type="logistics_account_assignment_group"
+                  dict-type="logistics_sales_account_assignment_group"
                   :placeholder="pi.ph('accountAssignmentGroup')"
                 />
               </a-form-item>
@@ -544,7 +544,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentTerms"
-                  dict-type="accounting_payment_terms_param"
+                  dict-type="accounting_financial_payment_terms_param"
                   :placeholder="pi.ph('paymentTerms')"
                 />
               </a-form-item>
@@ -556,7 +556,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentMethod"
-                  dict-type="accounting_payment_method_type"
+                  dict-type="accounting_financial_payment_method"
                   :placeholder="pi.ph('paymentMethod')"
                 />
               </a-form-item>
@@ -590,7 +590,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.incoterms1"
-                  dict-type="logistics_incoterms1"
+                  dict-type="logistics_sales_incoterms1"
                   :placeholder="pi.ph('incoterms1')"
                 />
               </a-form-item>
@@ -616,7 +616,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.shippingConditions"
-                  dict-type="logistics_shipping_conditions"
+                  dict-type="logistics_sales_shipping_conditions"
                   :placeholder="pi.ph('shippingConditions')"
                 />
               </a-form-item>
@@ -628,7 +628,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.customerPricingProcedure"
-                  dict-type="logistics_customer_pricing_procedure"
+                  dict-type="logistics_sales_customer_pricing_procedure"
                   :placeholder="pi.ph('customerPricingProcedure')"
                 />
               </a-form-item>
@@ -640,7 +640,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.salesChannel"
-                  dict-type="logistics_sales_channel_type"
+                  dict-type="logistics_sales_channel"
                   :placeholder="pi.ph('salesChannel')"
                 />
               </a-form-item>
@@ -680,7 +680,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.clientLevel"
-                  dict-type="logistics_customer_level_category"
+                  dict-type="logistics_sales_customer_level"
                   :placeholder="pi.ph('clientLevel')"
                 />
               </a-form-item>

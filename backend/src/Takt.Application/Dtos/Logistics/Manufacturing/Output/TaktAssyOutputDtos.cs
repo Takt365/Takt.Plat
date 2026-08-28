@@ -36,7 +36,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     public long AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -149,7 +149,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -179,7 +179,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -279,9 +279,9 @@ public class TaktAssyOutputCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -306,7 +306,7 @@ public class TaktAssyOutputCreateDto
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -430,7 +430,7 @@ public class TaktAssyOutputTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -455,7 +455,7 @@ public class TaktAssyOutputTemplateDto
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -547,7 +547,7 @@ public class TaktAssyOutputImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -572,7 +572,7 @@ public class TaktAssyOutputImportDto
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -670,7 +670,7 @@ public class TaktAssyOutputExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -695,7 +695,7 @@ public class TaktAssyOutputExportDto
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 

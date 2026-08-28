@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesQuotationItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesQuotationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationitem.salesquotationid", "zh-HK", "销售报价ID_hk", "销售报价（选项 TaktSalesQuotations/options；DictValue=Id）"),
 
             // entity.salesquotationitem.salesquotationcode
-            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "en-US", "销售报价编码_us", "销售报价编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "en-US", "销售报价编码_us", "销售报价编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesquotationitem.salesquotationcode
-            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "ja-JP", "销售报价编码_jp", "销售报价编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "ja-JP", "销售报价编码_jp", "销售报价编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesquotationitem.salesquotationcode
-            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "zh-CN", "销售报价编码", "销售报价编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "zh-CN", "销售报价编码", "销售报价编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.salesquotationitem.salesquotationcode
-            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "zh-HK", "销售报价编码_hk", "销售报价编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesquotationcode", "zh-HK", "销售报价编码_hk", "销售报价编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.salesquotationitem.linenumber
             new TranslationSeedItem("entity.salesquotationitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -145,13 +145,13 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
             // entity.salesquotationitem.salesunit
-            new TranslationSeedItem("entity.salesquotationitem.salesunit", "en-US", "销售单位_us", "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesunit", "en-US", "销售单位_us", "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.salesquotationitem.salesunit
-            new TranslationSeedItem("entity.salesquotationitem.salesunit", "ja-JP", "销售单位_jp", "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesunit", "ja-JP", "销售单位_jp", "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.salesquotationitem.salesunit
-            new TranslationSeedItem("entity.salesquotationitem.salesunit", "zh-CN", "销售单位", "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesunit", "zh-CN", "销售单位", "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.salesquotationitem.salesunit
-            new TranslationSeedItem("entity.salesquotationitem.salesunit", "zh-HK", "销售单位_hk", "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesunit", "zh-HK", "销售单位_hk", "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.salesquotationitem.quotationquantity
             new TranslationSeedItem("entity.salesquotationitem.quotationquantity", "en-US", "报价数量_us", "报价数量（基本单位数量）"),
@@ -163,13 +163,13 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationitem.quotationquantity", "zh-HK", "报价数量_hk", "报价数量（基本单位数量）"),
 
             // entity.salesquotationitem.salesperunit
-            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.salesquotationitem.salesperunit
-            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.salesquotationitem.salesperunit
-            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
             // entity.salesquotationitem.salesperunit
-            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
+            new TranslationSeedItem("entity.salesquotationitem.salesperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）"),
 
             // entity.salesquotationitem.quotationunitprice
             new TranslationSeedItem("entity.salesquotationitem.quotationunitprice", "en-US", "报价单价_us", "报价单价"),
@@ -181,13 +181,13 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationitem.quotationunitprice", "zh-HK", "报价单价_hk", "报价单价"),
 
             // entity.salesquotationitem.discountrate
-            new TranslationSeedItem("entity.salesquotationitem.discountrate", "en-US", "折扣率_us", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesquotationitem.discountrate", "en-US", "折扣率_us", "折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.salesquotationitem.discountrate
-            new TranslationSeedItem("entity.salesquotationitem.discountrate", "ja-JP", "折扣率_jp", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesquotationitem.discountrate", "ja-JP", "折扣率_jp", "折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.salesquotationitem.discountrate
-            new TranslationSeedItem("entity.salesquotationitem.discountrate", "zh-CN", "折扣率", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesquotationitem.discountrate", "zh-CN", "折扣率", "折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
             // entity.salesquotationitem.discountrate
-            new TranslationSeedItem("entity.salesquotationitem.discountrate", "zh-HK", "折扣率_hk", "折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
+            new TranslationSeedItem("entity.salesquotationitem.discountrate", "zh-HK", "折扣率_hk", "折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）"),
 
             // entity.salesquotationitem.discountamount
             new TranslationSeedItem("entity.salesquotationitem.discountamount", "en-US", "折扣金额_us", "折扣金额"),

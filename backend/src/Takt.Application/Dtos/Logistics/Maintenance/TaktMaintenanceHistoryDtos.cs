@@ -165,7 +165,7 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -361,7 +361,7 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间（范围查询-开始）
@@ -555,7 +555,7 @@ public class TaktMaintenanceHistoryCreateDto
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -772,7 +772,7 @@ public class TaktMaintenanceHistoryTemplateDto
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -941,7 +941,7 @@ public class TaktMaintenanceHistoryImportDto
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间
@@ -1116,7 +1116,7 @@ public class TaktMaintenanceHistoryExportDto
     /// <summary>
     /// 验收人（人员编码）
     /// </summary>
-    public string? AcceptedBy { get; set; } = string.Empty;
+    public string? AcceptedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 验收时间

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExec 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexec.routingitemid", "zh-HK", "工序ID_hk", "工序 ID（选项 TaktRoutingItems/options；DictValue=Id）"),
 
             // entity.sopexec.processsegmenttype
-            new TranslationSeedItem("entity.sopexec.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopexec.processsegmenttype", "en-US", "工艺段类型_us", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopexec.processsegmenttype
-            new TranslationSeedItem("entity.sopexec.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopexec.processsegmenttype", "ja-JP", "工艺段类型_jp", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopexec.processsegmenttype
-            new TranslationSeedItem("entity.sopexec.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopexec.processsegmenttype", "zh-CN", "工艺段类型", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
             // entity.sopexec.processsegmenttype
-            new TranslationSeedItem("entity.sopexec.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
+            new TranslationSeedItem("entity.sopexec.processsegmenttype", "zh-HK", "工艺段类型_hk", "工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）"),
 
             // entity.sopexec.workstationid
             new TranslationSeedItem("entity.sopexec.workstationid", "en-US", "工位ID_us", "工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）"),
@@ -161,6 +161,15 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexec.employeeid", "zh-CN", "员工ID", "员工 ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.sopexec.employeeid
             new TranslationSeedItem("entity.sopexec.employeeid", "zh-HK", "员工ID_hk", "员工 ID（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.sopexec.employeename
+            new TranslationSeedItem("entity.sopexec.employeename", "en-US", "员工名称_us", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexec.employeename
+            new TranslationSeedItem("entity.sopexec.employeename", "ja-JP", "员工名称_jp", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexec.employeename
+            new TranslationSeedItem("entity.sopexec.employeename", "zh-CN", "员工名称", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexec.employeename
+            new TranslationSeedItem("entity.sopexec.employeename", "zh-HK", "员工名称_hk", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.sopexec.sopid
             new TranslationSeedItem("entity.sopexec.sopid", "en-US", "SOP主档ID_us", "SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）"),
@@ -208,22 +217,22 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexec.endedat", "zh-HK", "结束时间_hk", "结束时间"),
 
             // entity.sopexec.selfcheckresult
-            new TranslationSeedItem("entity.sopexec.selfcheckresult", "en-US", "自检结果_us", "自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexec.selfcheckresult", "en-US", "自检结果_us", "自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexec.selfcheckresult
-            new TranslationSeedItem("entity.sopexec.selfcheckresult", "ja-JP", "自检结果_jp", "自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexec.selfcheckresult", "ja-JP", "自检结果_jp", "自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexec.selfcheckresult
-            new TranslationSeedItem("entity.sopexec.selfcheckresult", "zh-CN", "自检结果", "自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexec.selfcheckresult", "zh-CN", "自检结果", "自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexec.selfcheckresult
-            new TranslationSeedItem("entity.sopexec.selfcheckresult", "zh-HK", "自检结果_hk", "自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexec.selfcheckresult", "zh-HK", "自检结果_hk", "自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
 
             // entity.sopexec.execstatus
-            new TranslationSeedItem("entity.sopexec.execstatus", "en-US", "执行状态_us", "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）"),
+            new TranslationSeedItem("entity.sopexec.execstatus", "en-US", "执行状态_us", "执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）"),
             // entity.sopexec.execstatus
-            new TranslationSeedItem("entity.sopexec.execstatus", "ja-JP", "执行状态_jp", "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）"),
+            new TranslationSeedItem("entity.sopexec.execstatus", "ja-JP", "执行状态_jp", "执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）"),
             // entity.sopexec.execstatus
-            new TranslationSeedItem("entity.sopexec.execstatus", "zh-CN", "执行状态", "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）"),
+            new TranslationSeedItem("entity.sopexec.execstatus", "zh-CN", "执行状态", "执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）"),
             // entity.sopexec.execstatus
-            new TranslationSeedItem("entity.sopexec.execstatus", "zh-HK", "执行状态_hk", "执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）"),
+            new TranslationSeedItem("entity.sopexec.execstatus", "zh-HK", "执行状态_hk", "执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）"),
 
             // entity.sopexec.currentstepid
             new TranslationSeedItem("entity.sopexec.currentstepid", "en-US", "当前工步ID_us", "当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),

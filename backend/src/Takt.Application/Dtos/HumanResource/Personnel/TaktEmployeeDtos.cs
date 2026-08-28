@@ -47,7 +47,7 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -72,27 +72,27 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 
@@ -233,7 +233,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -263,27 +263,27 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
@@ -365,7 +365,7 @@ public class TaktEmployeeCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -392,28 +392,28 @@ public class TaktEmployeeCreateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
-    [Required(ErrorMessage = "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）不能为空")]
+    [Required(ErrorMessage = "籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）不能为空")]
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 
@@ -607,9 +607,9 @@ public class TaktEmployeeStatusDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    [Required(ErrorMessage = "婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）不能为空")]
+    [Required(ErrorMessage = "婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）不能为空")]
     public int MaritalStatus { get; set; } = 0;
 }
 
@@ -653,7 +653,7 @@ public class TaktEmployeeTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -678,27 +678,27 @@ public class TaktEmployeeTemplateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
@@ -830,7 +830,7 @@ public class TaktEmployeeImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -855,27 +855,27 @@ public class TaktEmployeeImportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
@@ -1013,7 +1013,7 @@ public class TaktEmployeeExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -1038,27 +1038,27 @@ public class TaktEmployeeExportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 

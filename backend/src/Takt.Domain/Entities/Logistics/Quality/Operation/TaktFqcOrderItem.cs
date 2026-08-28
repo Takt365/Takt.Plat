@@ -30,7 +30,7 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
     /// <summary>
-    /// FQC检验单编码（冗余字段，便于查询）
+    /// FQC检验单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "fqc_order_code", ColumnDescription = "FQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string FqcOrderCode { get; set; } = string.Empty;
@@ -105,10 +105,16 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inspection_description", ColumnDescription = "检验说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? InspectionDescription { get; set; }
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "inspector_by", ColumnDescription = "检验员", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string InspectorBy { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "inspector_id", ColumnDescription = "检验员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? InspectorId { get; set; }
+    /// <summary>
+    /// 检验员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "inspector_name", ColumnDescription = "检验员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? InspectorName { get; set; }
     /// <summary>
     /// 检验日期
     /// </summary>

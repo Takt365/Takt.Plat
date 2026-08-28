@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationDeliveryI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotificationDelivery 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktEcNotificationDeliveryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecnotificationdelivery.deptcode", "zh-HK", "目标部门编码_hk", "目标部门编码（TaktDept.DeptCode，如 D0710、D0810）"),
 
             // entity.ecnotificationdelivery.deptname
-            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "en-US", "目标部门名称_us", "目标部门名称（冗余）"),
+            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "en-US", "目标部门名称_us", "目标部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
             // entity.ecnotificationdelivery.deptname
-            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "ja-JP", "目标部门名称_jp", "目标部门名称（冗余）"),
+            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "ja-JP", "目标部门名称_jp", "目标部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
             // entity.ecnotificationdelivery.deptname
-            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "zh-CN", "目标部门名称", "目标部门名称（冗余）"),
+            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "zh-CN", "目标部门名称", "目标部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
             // entity.ecnotificationdelivery.deptname
-            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "zh-HK", "目标部门名称_hk", "目标部门名称（冗余）"),
+            new TranslationSeedItem("entity.ecnotificationdelivery.deptname", "zh-HK", "目标部门名称_hk", "目标部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
 
             // entity.ecnotificationdelivery.priority
             new TranslationSeedItem("entity.ecnotificationdelivery.priority", "en-US", "优先级_us", "优先级（1=普通，2=高，3=紧急）"),

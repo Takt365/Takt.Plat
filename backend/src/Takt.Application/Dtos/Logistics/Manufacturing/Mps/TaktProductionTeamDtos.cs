@@ -46,7 +46,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string TeamCategory { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -114,7 +114,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -124,7 +124,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -196,9 +196,9 @@ public class TaktProductionTeamCreateDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
-    [Required(ErrorMessage = "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）不能为空")]
+    [Required(ErrorMessage = "班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）不能为空")]
     public string TeamCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -207,7 +207,7 @@ public class TaktProductionTeamCreateDto
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -322,7 +322,7 @@ public class TaktProductionTeamTemplateDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -332,7 +332,7 @@ public class TaktProductionTeamTemplateDto
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -394,7 +394,7 @@ public class TaktProductionTeamImportDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -404,7 +404,7 @@ public class TaktProductionTeamImportDto
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -472,7 +472,7 @@ public class TaktProductionTeamExportDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string TeamCategory { get; set; } = string.Empty;
 
@@ -482,7 +482,7 @@ public class TaktProductionTeamExportDto
     public string? TeamLeaderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 

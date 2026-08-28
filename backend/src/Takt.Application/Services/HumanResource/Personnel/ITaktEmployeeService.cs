@@ -36,7 +36,7 @@ public interface ITaktEmployeeService
     Task<TaktEmployeeDto?> GetEmployeeByIdAsync(long id);
 
     /// <summary>
-    /// 获取员工选项列表
+    /// 获取员工选项列表（DictValue=Id，ExtValue=EmployeeName）
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetEmployeeOptionsAsync();

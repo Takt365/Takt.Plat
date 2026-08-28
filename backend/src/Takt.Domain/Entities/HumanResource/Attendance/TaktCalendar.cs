@@ -31,7 +31,7 @@ public class TaktCalendar : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "calendar_date", ColumnDescription = "日历日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime CalendarDate { get; set; }
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsWorkingDay { get; set; }

@@ -537,7 +537,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
                 || (x.SamplingSchemeCode != null && x.SamplingSchemeCode.Contains(keywords))
                 || (x.SampleSerialCode != null && x.SampleSerialCode.Contains(keywords))
                 || (x.InspectionDescription != null && x.InspectionDescription.Contains(keywords))
-                || (x.InspectorBy != null && x.InspectorBy.Contains(keywords))
+                || (x.InspectorName != null && x.InspectorName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -651,10 +651,10 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
             exp = exp.And(x => x.InspectionDescription != null && x.InspectionDescription.Contains(inspectionDescription));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.InspectorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InspectorName))
         {
-            var inspectorBy = queryDto.InspectorBy;
-            exp = exp.And(x => x.InspectorBy != null && x.InspectorBy.Contains(inspectorBy));
+            var inspectorBy = queryDto.InspectorName;
+            exp = exp.And(x => x.InspectorName != null && x.InspectorName.Contains(inspectorBy));
         }
 
         if (queryDto?.JudgeStatus.HasValue == true)
@@ -789,7 +789,7 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.InspectorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.InspectorName))
         {
             return true;
         }

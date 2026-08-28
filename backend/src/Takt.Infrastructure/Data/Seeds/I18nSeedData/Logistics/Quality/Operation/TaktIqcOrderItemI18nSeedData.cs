@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcorderitem.iqcorderid", "zh-HK", "IQC检验单ID_hk", "IQC检验单 ID（选项 TaktIqcOrders/options，DictValue=Id）"),
 
             // entity.iqcorderitem.iqcordercode
-            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "en-US", "IQC检验单编码_us", "IQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "en-US", "IQC检验单编码_us", "IQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.iqcorderitem.iqcordercode
-            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "ja-JP", "IQC检验单编码_jp", "IQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "ja-JP", "IQC检验单编码_jp", "IQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.iqcorderitem.iqcordercode
-            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "zh-CN", "IQC检验单编码", "IQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "zh-CN", "IQC检验单编码", "IQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.iqcorderitem.iqcordercode
-            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "zh-HK", "IQC检验单编码_hk", "IQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.iqcorderitem.iqcordercode", "zh-HK", "IQC检验单编码_hk", "IQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.iqcorderitem.linenumber
             new TranslationSeedItem("entity.iqcorderitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -234,14 +234,23 @@ public class TaktIqcOrderItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.iqcorderitem.inspectiondescription
             new TranslationSeedItem("entity.iqcorderitem.inspectiondescription", "zh-HK", "检验说明_hk", "检验说明"),
 
-            // entity.iqcorderitem.inspectorby
-            new TranslationSeedItem("entity.iqcorderitem.inspectorby", "en-US", "检验员_us", "检验员（人员代码）"),
-            // entity.iqcorderitem.inspectorby
-            new TranslationSeedItem("entity.iqcorderitem.inspectorby", "ja-JP", "检验员_jp", "检验员（人员代码）"),
-            // entity.iqcorderitem.inspectorby
-            new TranslationSeedItem("entity.iqcorderitem.inspectorby", "zh-CN", "检验员", "检验员（人员代码）"),
-            // entity.iqcorderitem.inspectorby
-            new TranslationSeedItem("entity.iqcorderitem.inspectorby", "zh-HK", "检验员_hk", "检验员（人员代码）"),
+            // entity.iqcorderitem.inspectorid
+            new TranslationSeedItem("entity.iqcorderitem.inspectorid", "en-US", "检验员ID_us", "检验员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.iqcorderitem.inspectorid
+            new TranslationSeedItem("entity.iqcorderitem.inspectorid", "ja-JP", "检验员ID_jp", "检验员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.iqcorderitem.inspectorid
+            new TranslationSeedItem("entity.iqcorderitem.inspectorid", "zh-CN", "检验员ID", "检验员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.iqcorderitem.inspectorid
+            new TranslationSeedItem("entity.iqcorderitem.inspectorid", "zh-HK", "检验员ID_hk", "检验员（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.iqcorderitem.inspectorname
+            new TranslationSeedItem("entity.iqcorderitem.inspectorname", "en-US", "检验员名称_us", "检验员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.iqcorderitem.inspectorname
+            new TranslationSeedItem("entity.iqcorderitem.inspectorname", "ja-JP", "检验员名称_jp", "检验员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.iqcorderitem.inspectorname
+            new TranslationSeedItem("entity.iqcorderitem.inspectorname", "zh-CN", "检验员名称", "检验员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.iqcorderitem.inspectorname
+            new TranslationSeedItem("entity.iqcorderitem.inspectorname", "zh-HK", "检验员名称_hk", "检验员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.iqcorderitem.inspectiondate
             new TranslationSeedItem("entity.iqcorderitem.inspectiondate", "en-US", "检验日期_us", "检验日期"),

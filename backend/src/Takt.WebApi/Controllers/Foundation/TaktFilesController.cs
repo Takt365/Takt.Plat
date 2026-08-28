@@ -271,7 +271,7 @@ public class TaktFilesController : TaktControllerBase
     /// </summary>
     /// <param name="id">文件ID</param>
     /// <returns>文件流</returns>
-    [TaktPermission("foundation:file:query", "下载文件")]
+    [TaktPermission("foundation:file:download", "下载文件")]
     [HttpGet("{id}/download")]
     public async Task<IActionResult> DownloadFileByIdAsync(long id)
     {

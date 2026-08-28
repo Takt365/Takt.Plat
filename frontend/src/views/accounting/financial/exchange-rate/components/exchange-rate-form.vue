@@ -48,7 +48,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.fromCurrencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('fromCurrencyCode')"
                   :disabled="!!formData?.exchangeRateId"
                 />
@@ -61,7 +61,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.toCurrencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('toCurrencyCode')"
                   :disabled="!!formData?.exchangeRateId"
                 />
@@ -74,7 +74,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.exchangeRateType"
-                  dict-type="accounting_exchange_rate_type"
+                  dict-type="accounting_financial_exchange_rate_type"
                   :placeholder="pi.ph('exchangeRateType')"
                 />
               </a-form-item>

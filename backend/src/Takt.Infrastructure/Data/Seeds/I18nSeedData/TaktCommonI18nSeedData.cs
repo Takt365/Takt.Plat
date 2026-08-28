@@ -93,6 +93,11 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.query", "ja-JP", "照会", "共通ボタン"),
             ("common.page.button.query", "zh-HK", "查詢", "通用按钮"),
 
+            ("common.page.button.list", "zh-CN", "列表", "通用按钮"),
+            ("common.page.button.list", "en-US", "List", "Common Button"),
+            ("common.page.button.list", "ja-JP", "一覧", "共通ボタン"),
+            ("common.page.button.list", "zh-HK", "列表", "通用按钮"),
+            
             ("common.page.button.quit", "zh-CN", "退出", "通用按钮"),
             ("common.page.button.quit", "en-US", "Quit", "Common Button"),
             ("common.page.button.quit", "ja-JP", "終了", "共通ボタン"),
@@ -135,6 +140,11 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.import", "en-US", "Import", "Common Button"),
             ("common.page.button.import", "ja-JP", "インポート", "共通ボタン"),
             ("common.page.button.import", "zh-HK", "導入", "通用按钮"),
+
+            ("common.page.button.source", "zh-CN", "来源导入", "通用按钮"),
+            ("common.page.button.source", "en-US", "Source Import", "Common Button"),
+            ("common.page.button.source", "ja-JP", "ソース取込", "共通ボタン"),
+            ("common.page.button.source", "zh-HK", "來源導入", "通用按钮"),
             
             ("common.page.button.export", "zh-CN", "导出", "通用按钮"),
             ("common.page.button.export", "en-US", "Export", "Common Button"),
@@ -378,6 +388,31 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.button.version", "en-US", "Version", "Common Button"),
             ("common.page.button.version", "ja-JP", "バージョン", "共通ボタン"),
             ("common.page.button.version", "zh-HK", "版本", "通用按钮"),
+
+            ("common.page.button.room", "zh-CN", "会议室", "通用按钮"),
+            ("common.page.button.room", "en-US", "Room", "Common Button"),
+            ("common.page.button.room", "ja-JP", "会議室", "共通ボタン"),
+            ("common.page.button.room", "zh-HK", "會議室", "通用按钮"),
+
+            ("common.page.button.minutes", "zh-CN", "会后纪要", "通用按钮"),
+            ("common.page.button.minutes", "en-US", "Minutes", "Common Button"),
+            ("common.page.button.minutes", "ja-JP", "議事録", "共通ボタン"),
+            ("common.page.button.minutes", "zh-HK", "會後紀要", "通用按钮"),
+
+            ("common.page.button.attendee", "zh-CN", "出席人", "通用按钮"),
+            ("common.page.button.attendee", "en-US", "Attendees", "Common Button"),
+            ("common.page.button.attendee", "ja-JP", "出席者", "共通ボタン"),
+            ("common.page.button.attendee", "zh-HK", "出席人", "通用按钮"),
+
+            ("common.page.button.notification", "zh-CN", "会议通知", "通用按钮"),
+            ("common.page.button.notification", "en-US", "Notifications", "Common Button"),
+            ("common.page.button.notification", "ja-JP", "会議通知", "共通ボタン"),
+            ("common.page.button.notification", "zh-HK", "會議通知", "通用按钮"),
+
+            ("common.page.button.confirmReceipt", "zh-CN", "确认收到", "通用按钮"),
+            ("common.page.button.confirmReceipt", "en-US", "Confirm receipt", "Common Button"),
+            ("common.page.button.confirmReceipt", "ja-JP", "受領確認", "共通ボタン"),
+            ("common.page.button.confirmReceipt", "zh-HK", "確認收到", "通用按钮"),
             
             ("common.page.button.run", "zh-CN", "运行", "通用按钮"),
             ("common.page.button.run", "en-US", "Run", "Common Button"),
@@ -1249,6 +1284,10 @@ public class TaktCommonI18nSeedData : ITaktSeedDataCoordinator
             ("common.page.entity.approvedat", "en-US", "Approved At", "Common Entity"),
             ("common.page.entity.approvedat", "ja-JP", "最終承認日時", "共通エンティティ"),
             ("common.page.entity.approvedat", "zh-HK", "最終審批時間", "通用实体"),
+            ("common.page.entity.flowinstanceid", "zh-CN", "流程实例ID", "通用实体"),
+            ("common.page.entity.flowinstanceid", "en-US", "Flow Instance ID", "Common Entity"),
+            ("common.page.entity.flowinstanceid", "ja-JP", "フローインスタンスID", "共通エンティティ"),
+            ("common.page.entity.flowinstanceid", "zh-HK", "流程實例ID", "通用实体"),
             ("common.page.entity.createdbyid", "zh-CN", "创建人ID", "通用实体"),
             ("common.page.entity.createdbyid", "en-US", "Created By ID", "Common Entity"),
             ("common.page.entity.createdbyid", "ja-JP", "作成者ID", "共通エンティティ"),

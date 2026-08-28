@@ -62,7 +62,7 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -134,7 +134,7 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -227,7 +227,7 @@ public class TaktSopWorkstationCreateDto
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
@@ -371,7 +371,7 @@ public class TaktSopWorkstationTemplateDto
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -443,7 +443,7 @@ public class TaktSopWorkstationImportDto
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
@@ -516,7 +516,7 @@ public class TaktSopWorkstationExportDto
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 

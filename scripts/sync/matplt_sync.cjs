@@ -39,9 +39,8 @@ CREATE TABLE #st_source (
   [id] BIGINT,
   [plant_code] NVARCHAR(100),
   [material_code] NVARCHAR(100),
-  [material_name] NVARCHAR(500),
-  [material_specification] NVARCHAR(500),
-  [material_description] NVARCHAR(500),
+  [material_description] NVARCHAR(40),
+  [material_specification] NVARCHAR(70),
   [industry_sector] NVARCHAR(100),
   [material_hierarchy] NVARCHAR(100),
   [material_group] NVARCHAR(100),
@@ -70,7 +69,7 @@ CREATE TABLE #st_source (
   [storage_location] NVARCHAR(100),
   [is_inspection] INT,
   [is_batch] INT,
-  [is_end_of_life] NVARCHAR(20),
+  [discontinued_status] NVARCHAR(20),
   [material_status] NVARCHAR(100),
   [tenant_code] NVARCHAR(50),
   [company_code] NVARCHAR(50),
@@ -91,9 +90,8 @@ SELECT
   CAST((DATEDIFF_BIG(MICROSECOND, '1970-01-01', GETDATE()) * 1000 + S.rn) AS BIGINT),
   LTRIM(RTRIM(S.[plant_code])),
   LTRIM(RTRIM(S.[material_code])),
-  ISNULL(NULLIF(LTRIM(RTRIM(S.[material_name])), ''), ''),
-  '',
-  '',
+  LEFT(ISNULL(NULLIF(LTRIM(RTRIM(S.[material_description])), ''), ''), 40),
+  CAST(N'' AS NVARCHAR(70)),
   ISNULL(NULLIF(LTRIM(RTRIM(S.[industry_sector])), ''), ''),
   ISNULL(NULLIF(LTRIM(RTRIM(S.[material_hierarchy])), ''), ''),
   ISNULL(NULLIF(LTRIM(RTRIM(S.[material_group])), ''), ''),
@@ -122,7 +120,7 @@ SELECT
   ISNULL(NULLIF(LTRIM(RTRIM(S.[storage_location])), ''), ''),
   CASE WHEN LTRIM(RTRIM(S.[is_inspection])) = 'X' THEN 1 ELSE 0 END,
   CASE WHEN LTRIM(RTRIM(S.[is_batch])) = 'X' THEN 1 ELSE 0 END,
-  COALESCE(NULLIF(LTRIM(RTRIM(S.[is_end_of_life])), ''), 'Z0'),
+  COALESCE(NULLIF(LTRIM(RTRIM(S.[discontinued_status])), ''), 'Z0'),
   '1',
   '000',
   '2300',
@@ -141,7 +139,7 @@ FROM (
     [D_SAP_ZCA1D_Z002] AS material_code,
     [D_SAP_ZCA1D_Z003] AS industry_sector,
     [D_SAP_ZCA1D_Z004] AS material_type,
-    [D_SAP_ZCA1D_Z005] AS material_name,
+    [D_SAP_ZCA1D_Z005] AS material_description,
     [D_SAP_ZCA1D_Z006] AS base_unit,
     [D_SAP_ZCA1D_Z007] AS material_hierarchy,
     [D_SAP_ZCA1D_Z008] AS material_group,
@@ -168,7 +166,7 @@ FROM (
     [D_SAP_ZCA1D_Z031] AS purchasing_location,
     [D_SAP_ZCA1D_Z032] AS storage_location,
     [D_SAP_ZCA1D_Z033] AS current_stock,
-    [D_SAP_ZCA1D_Z034] AS is_end_of_life,
+    [D_SAP_ZCA1D_Z034] AS discontinued_status,
     ROW_NUMBER() OVER (ORDER BY [D_SAP_ZCA1D_Z001], [D_SAP_ZCA1D_Z002]) AS rn
   FROM [Sap_Data].[dbo].[PP_SapMaterial]
 ) S
@@ -184,8 +182,8 @@ CREATE TABLE #delta (
   material_code NVARCHAR(100),
   tenant_code NVARCHAR(50),
   company_code NVARCHAR(50),
-  material_name_old NVARCHAR(500),
-  material_name_new NVARCHAR(500),
+  material_description_old NVARCHAR(40),
+  material_description_new NVARCHAR(40),
   material_type_old NVARCHAR(100),
   material_type_new NVARCHAR(100),
   base_unit_old NVARCHAR(50),
@@ -200,16 +198,15 @@ CREATE TABLE #delta (
   remark_new NVARCHAR(MAX)
 );
 
-/* ========== 3. MERGE ========== */
+/* ========== 3. MERGE（目标列对齐 TaktMaterialPlant） ========== */
 MERGE INTO [takt_logistics_materials_material_plant] AS T
 USING #st_source AS S
 ON T.[plant_code] = S.[plant_code]
 AND T.[material_code] = S.[material_code]
 WHEN MATCHED THEN
   UPDATE SET
-    T.[material_name] = S.[material_name],
-    T.[material_specification] = S.[material_specification],
     T.[material_description] = S.[material_description],
+    T.[material_specification] = S.[material_specification],
     T.[industry_sector] = S.[industry_sector],
     T.[material_hierarchy] = S.[material_hierarchy],
     T.[material_group] = S.[material_group],
@@ -225,7 +222,7 @@ WHEN MATCHED THEN
     T.[in_house_production_days] = S.[in_house_production_days],
     T.[manufacturer] = S.[manufacturer],
     T.[manufacturer_material_code] = S.[manufacturer_material_code],
-    T.[currency] = S.[currency],
+    T.[currency_code] = S.[currency],
     T.[price_control] = S.[price_control],
     T.[price_unit] = S.[price_unit],
     T.[valuation] = S.[valuation],
@@ -236,9 +233,9 @@ WHEN MATCHED THEN
     T.[production_location] = S.[production_location],
     T.[purchasing_location] = S.[purchasing_location],
     T.[storage_location] = S.[storage_location],
-    T.[is_inspection] = S.[is_inspection],
+    T.[requires_inspection] = S.[is_inspection],
     T.[is_batch] = S.[is_batch],
-    T.[is_end_of_life] = S.[is_end_of_life],
+    T.[discontinued_status] = S.[discontinued_status],
     T.[material_status] = S.[material_status],
     T.[tenant_code] = S.[tenant_code],
     T.[company_code] = S.[company_code],
@@ -251,24 +248,24 @@ WHEN MATCHED THEN
     T.[deleted_at] = S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT (
-    [id],[plant_code],[material_code],[material_name],[material_specification],[material_description],
+    [id],[plant_code],[material_code],[material_description],[material_specification],
     [industry_sector],[material_hierarchy],[material_group],[material_type],[base_unit],
     [purchase_group],[purchase_type],[special_procurement],[is_bulk],[min_order_quantity],
     [rounding_value],[planned_delivery_time_days],[in_house_production_days],[manufacturer],
-    [manufacturer_material_code],[currency],[price_control],[price_unit],[valuation],
+    [manufacturer_material_code],[currency_code],[price_control],[price_unit],[valuation],
     [moving_price],[difference_code],[profit_center],[current_stock],[production_location],
-    [purchasing_location],[storage_location],[is_inspection],[is_batch],[is_end_of_life],
+    [purchasing_location],[storage_location],[requires_inspection],[is_batch],[discontinued_status],
     [material_status],[tenant_code],[company_code],[ext_field],[remark],[created_by],
     [created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at]
   )
   VALUES (
-    S.[id],S.[plant_code],S.[material_code],S.[material_name],S.[material_specification],S.[material_description],
+    S.[id],S.[plant_code],S.[material_code],S.[material_description],S.[material_specification],
     S.[industry_sector],S.[material_hierarchy],S.[material_group],S.[material_type],S.[base_unit],
     S.[purchase_group],S.[purchase_type],S.[special_procurement],S.[is_bulk],S.[min_order_quantity],
     S.[rounding_value],S.[planned_delivery_time_days],S.[in_house_production_days],S.[manufacturer],
     S.[manufacturer_material_code],S.[currency],S.[price_control],S.[price_unit],S.[valuation],
     S.[moving_price],S.[difference_code],S.[profit_center],S.[current_stock],S.[production_location],
-    S.[purchasing_location],S.[storage_location],S.[is_inspection],S.[is_batch],S.[is_end_of_life],
+    S.[purchasing_location],S.[storage_location],S.[is_inspection],S.[is_batch],S.[discontinued_status],
     S.[material_status],S.[tenant_code],S.[company_code],S.[ext_field],S.[remark],S.[created_by],
     S.[created_at],S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at]
   )
@@ -280,7 +277,7 @@ OUTPUT
   INSERTED.[material_code],
   INSERTED.[tenant_code],
   INSERTED.[company_code],
-  DELETED.[material_name], INSERTED.[material_name],
+  DELETED.[material_description], INSERTED.[material_description],
   DELETED.[material_type], INSERTED.[material_type],
   DELETED.[base_unit], INSERTED.[base_unit],
   DELETED.[material_group], INSERTED.[material_group],
@@ -290,7 +287,7 @@ OUTPUT
 INTO #delta(
   rn, oper_type, id, plant_code, material_code,
   tenant_code, company_code,
-  material_name_old, material_name_new,
+  material_description_old, material_description_new,
   material_type_old, material_type_new,
   base_unit_old, base_unit_new,
   material_group_old, material_group_new,
@@ -332,7 +329,7 @@ SELECT
   CASE WHEN d.oper_type = 'UPDATE' THEN
     (
       SELECT
-        d.material_name_old AS material_name,
+        d.material_description_old AS material_description,
         d.material_type_old AS material_type,
         d.base_unit_old AS base_unit,
         d.material_group_old AS material_group,
@@ -342,7 +339,7 @@ SELECT
   ELSE '{}' END,
   (
     SELECT
-      d.material_name_new AS material_name,
+      d.material_description_new AS material_description,
       d.material_type_new AS material_type,
       d.base_unit_new AS base_unit,
       d.material_group_new AS material_group,
@@ -352,8 +349,8 @@ SELECT
   CASE WHEN d.oper_type = 'UPDATE' THEN
     (
       SELECT
-        ISNULL(d.material_name_old, 'null') AS [material_name.old],
-        ISNULL(d.material_name_new, 'null') AS [material_name.new],
+        ISNULL(d.material_description_old, 'null') AS [material_description.old],
+        ISNULL(d.material_description_new, 'null') AS [material_description.new],
         ISNULL(CAST(d.current_stock_old AS NVARCHAR), 'null') AS [current_stock.old],
         ISNULL(CAST(d.current_stock_new AS NVARCHAR), 'null') AS [current_stock.new]
       FOR JSON PATH, WITHOUT_ARRAY_WRAPPER

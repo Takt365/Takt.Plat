@@ -191,7 +191,9 @@ public class TaktGenEngine : ITaktGenEngine
         return RenderAsync(templateContent, (object)context);
     }
 
-    /// <summary>PascalCase 转 snake_case，如 EntityNamespace → entity_namespace。</summary>
+    /// <summary>
+    /// PascalCase 转 snake_case，如 EntityNamespace → entity_namespace。
+    /// </summary>
     private static string ToSnakeCase(string? pascal)
     {
         if (string.IsNullOrEmpty(pascal)) return string.Empty;

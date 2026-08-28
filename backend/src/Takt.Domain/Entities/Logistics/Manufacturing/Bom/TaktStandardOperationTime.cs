@@ -53,7 +53,7 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     public decimal StandardMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit；默认 MIN）
+    /// 工时单位（字典 logistics_manufacturing_time_unit；默认 MIN）
     /// </summary>
     [SugarColumn(ColumnName = "time_unit", ColumnDescription = "工时单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "MIN")]
     public string TimeUnit { get; set; } = "MIN";
@@ -65,13 +65,13 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
+    /// 点数单位（字典 logistics_manufacturing_points_unit；默认 SHORT）
     /// </summary>
     [SugarColumn(ColumnName = "points_unit", ColumnDescription = "点数单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "SHORT")]
     public string PointsUnit { get; set; } = "SHORT";
 
     /// <summary>
-    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_manufacturing_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
     [SugarColumn(ColumnName = "points_to_minutes_rate", ColumnDescription = "转换汇率", ColumnDataType = "decimal", Length = 10, DecimalDigits = 3, IsNullable = false, DefaultValue = "1")]
     public decimal PointsToMinutesRate { get; set; } = 1;

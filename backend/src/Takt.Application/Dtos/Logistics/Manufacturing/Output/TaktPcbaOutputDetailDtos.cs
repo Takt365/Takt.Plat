@@ -82,7 +82,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -112,7 +112,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -132,7 +132,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
@@ -306,7 +306,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -336,7 +336,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -356,7 +356,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -546,7 +546,7 @@ public class TaktPcbaOutputDetailCreateDto
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -577,9 +577,9 @@ public class TaktPcbaOutputDetailCreateDto
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
-    [Required(ErrorMessage = "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）不能为空")]
+    [Required(ErrorMessage = "面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）不能为空")]
     public string PanelSide { get; set; } = string.Empty;
 
     /// <summary>
@@ -598,7 +598,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
@@ -743,9 +743,9 @@ public class TaktPcbaOutputDetailStatusDto
     public long PcbaOutputDetailId { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
-    [Required(ErrorMessage = "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）不能为空")]
+    [Required(ErrorMessage = "完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）不能为空")]
     public int CompletedStatus { get; set; } = 0;
 }
 
@@ -843,7 +843,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -873,7 +873,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -893,7 +893,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -1066,7 +1066,7 @@ public class TaktPcbaOutputDetailImportDto
     public int? IndirectLabor { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -1096,7 +1096,7 @@ public class TaktPcbaOutputDetailImportDto
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -1116,7 +1116,7 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
@@ -1295,7 +1295,7 @@ public class TaktPcbaOutputDetailExportDto
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -1325,7 +1325,7 @@ public class TaktPcbaOutputDetailExportDto
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -1345,7 +1345,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 

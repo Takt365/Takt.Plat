@@ -201,7 +201,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.educationRequired"
-                  dict-type="hr_education_level_category"
+                  dict-type="humanresource_personnel_education_level"
                   :placeholder="pi.ph('educationRequired')"
                 />
               </a-form-item>

@@ -1,7 +1,7 @@
 ﻿// ========================================
 // 项目名称：节拍工厂·Takt Plat
-// 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.Ecn
-// 文件名称：TaktEcnDetail.cs
+// 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange
+// 文件名称：TaktEcDetail.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变明细实体（技术阶段一 ③）；BOM/料号变更行，与主表/附件保存后自动生成通知并初始化各部门执行行
@@ -32,7 +32,6 @@ public class TaktEcDetail : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcId { get; set; }
 
-
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
     /// </summary>
@@ -46,172 +45,172 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// BOM行号（Ec_bom_line_no）
+    /// BOM行号
     /// </summary>
     [SugarColumn(ColumnName = "ec_bom_line_code", ColumnDescription = "BOM行号", Length = 8, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcBomLineCode { get; set; }
 
     /// <summary>
-    /// 机种（Ec_model）
+    /// 机种编码
     /// </summary>
-    [SugarColumn(ColumnName = "ec_model", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcModel { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_model_code", ColumnDescription = "机种编码", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（Ec_bomitem）
+    /// 完成品
     /// </summary>
-    [SugarColumn(ColumnName = "ec_bomitem", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcBomItem { get; set; }
+    [SugarColumn(ColumnName = "ec_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcFinishedGoods { get; set; }
 
     /// <summary>
-    /// 完成品描述（Ec_bomitemtext）
+    /// 完成品描述
     /// </summary>
-    [SugarColumn(ColumnName = "ec_bomitemtext", ColumnDescription = "完成品描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcBomItemText { get; set; }
+    [SugarColumn(ColumnName = "ec_finished_goods_description", ColumnDescription = "完成品描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcFinishedGoodsDescription { get; set; }
 
     /// <summary>
-    /// 上阶物料（Ec_bomsubitem）
+    /// 上阶物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "ec_bomsubitem", ColumnDescription = "上阶物料", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcBomSubItem { get; set; }
+    [SugarColumn(ColumnName = "ec_parent_material_code", ColumnDescription = "上阶物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcParentMaterialCode { get; set; }
 
     /// <summary>
-    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
+    /// 上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_bomsubitemtext", ColumnDescription = "上阶物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcBomSubItemText { get; set; }
+    [SugarColumn(ColumnName = "ec_parent_material_description", ColumnDescription = "上阶物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcParentMaterialDescription { get; set; }
 
     /// <summary>
-    /// 完成品EOL（End of Line，0=否 1=是）
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_end_of_line", ColumnDescription = "完成品EOL", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsEndOfLine { get; set; } = 0;
+    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "完成品物料状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
+    public string DiscontinuedStatus { get; set; } = "Z0";
 
     /// <summary>
-    /// 旧料号（Ec_olditem）
+    /// 旧物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "ec_olditem", ColumnDescription = "旧料号", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcOldItem { get; set; }
+    [SugarColumn(ColumnName = "ec_old_material_code", ColumnDescription = "旧物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcOldMaterialCode { get; set; }
 
     /// <summary>
-    /// 旧料号描述（Ec_oldtext）
+    /// 旧物料描述
     /// </summary>
-    [SugarColumn(ColumnName = "ec_oldtext", ColumnDescription = "旧料号描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcOldText { get; set; }
+    [SugarColumn(ColumnName = "ec_old_material_description", ColumnDescription = "旧物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcOldMaterialDescription { get; set; }
 
     /// <summary>
-    /// 旧用量（Ec_oldusage）
+    /// 旧用量
     /// </summary>
-    [SugarColumn(ColumnName = "ec_oldusage", ColumnDescription = "旧用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
-    public decimal? EcOldUsage { get; set; }
+    [SugarColumn(ColumnName = "ec_old_usage_quantity", ColumnDescription = "旧用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    public decimal? EcOldUsageQuantity { get; set; }
 
     /// <summary>
-    /// 旧位置（Ec_oldposition）
+    /// 旧位置
     /// </summary>
-    [SugarColumn(ColumnName = "ec_oldposition", ColumnDescription = "旧位置", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcOldPosition { get; set; }
+    [SugarColumn(ColumnName = "ec_old_item_position", ColumnDescription = "旧位置", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcOldItemPosition { get; set; }
 
     /// <summary>
-    /// 旧在库数量（Ec_oldstock）
+    /// 旧在库数量
     /// </summary>
-    [SugarColumn(ColumnName = "ec_oldstock", ColumnDescription = "旧在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_old_stock", ColumnDescription = "旧在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
-    /// 旧品仓库（Ec_oldwarehouse）
+    /// 旧品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_oldwarehouse", ColumnDescription = "旧品仓库", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_old_warehouse", ColumnDescription = "旧品仓库", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcOldWarehouse { get; set; }
 
     /// <summary>
-    /// 旧品是否采购（0=否 1=是）
+    /// 旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_old_procurement", ColumnDescription = "旧品是否采购", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsOldProcurement { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_old_purchase_type", ColumnDescription = "旧采购类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
+    public string? EcOldPurchaseType { get; set; }
 
     /// <summary>
-    /// 旧品是否检查（0=否 1=是）
+    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_old_check", ColumnDescription = "旧品是否检查", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsOldCheck { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_old_requires_inspection", ColumnDescription = "旧品是否需检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int EcOldRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// 新料号（Ec_newitem）
+    /// 新物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newitem", ColumnDescription = "新料号", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcNewItem { get; set; }
+    [SugarColumn(ColumnName = "ec_new_material_code", ColumnDescription = "新物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcNewMaterialCode { get; set; }
 
     /// <summary>
-    /// 新料号描述（Ec_newtext）
+    /// 新物料描述
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newtext", ColumnDescription = "新料号描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcNewText { get; set; }
+    [SugarColumn(ColumnName = "ec_new_material_description", ColumnDescription = "新物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcNewMaterialDescription { get; set; }
 
     /// <summary>
-    /// 新用量（Ec_newusage）
+    /// 新用量
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newusage", ColumnDescription = "新用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
-    public decimal? EcNewUsage { get; set; }
+    [SugarColumn(ColumnName = "ec_new_usage_quantity", ColumnDescription = "新用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    public decimal? EcNewUsageQuantity { get; set; }
 
     /// <summary>
-    /// 新位置（Ec_newposition）
+    /// 新位置
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newposition", ColumnDescription = "新位置", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcNewPosition { get; set; }
+    [SugarColumn(ColumnName = "ec_new_item_position", ColumnDescription = "新位置", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcNewItemPosition { get; set; }
 
     /// <summary>
-    /// 新在库数量（Ec_newstock）
+    /// 新在库数量
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newstock", ColumnDescription = "新在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_new_stock", ColumnDescription = "新在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
-    /// 新品仓库（Ec_newwarehouse）
+    /// 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_newwarehouse", ColumnDescription = "新品仓库", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_new_warehouse", ColumnDescription = "新品仓库", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcNewWarehouse { get; set; }
 
     /// <summary>
-    /// 新品是否采购（0=否 1=是）
+    /// 新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_new_procurement", ColumnDescription = "新品是否采购", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsNewProcurement { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_new_purchase_type", ColumnDescription = "新采购类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
+    public string? EcNewPurchaseType { get; set; }
 
     /// <summary>
-    /// 新品是否检查（0=否 1=是）
+    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_new_check", ColumnDescription = "新品是否检查", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsNewCheck { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_new_requires_inspection", ColumnDescription = "新品是否需检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int EcNewRequiresInspection { get; set; } = 0;
 
     /// <summary>
-    /// BOM生效日期（Ec_bomdate）
+    /// BOM生效日期
     /// </summary>
     [SugarColumn(ColumnName = "ec_bomdate", ColumnDescription = "BOM生效日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     [SugarColumn(ColumnName = "ec_is_compatible", ColumnDescription = "兼容性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcIsCompatible { get; set; }
 
     /// <summary>
-    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     [SugarColumn(ColumnName = "ec_second_distinction", ColumnDescription = "二级区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcSecondDistinction { get; set; }
 
     /// <summary>
-    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "ec_instruction", ColumnDescription = "生产指令", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcInstruction { get; set; }
 
     /// <summary>
-    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_legacy_part_disposition", ColumnDescription = "旧品处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcLegacyPartDisposition { get; set; }
+    [SugarColumn(ColumnName = "ec_old_part_disposition", ColumnDescription = "旧品处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcOldPartDisposition { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

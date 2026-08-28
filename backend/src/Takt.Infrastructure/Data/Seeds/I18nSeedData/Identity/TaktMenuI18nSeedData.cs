@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMenu 实体字段国际化种子（已对齐前端 locales：src/locales/identity/menu）
 // 
@@ -109,13 +109,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.menu.name", "zh-HK", "菜单名称_hk", "菜单名称"),
 
             // entity.menu.l10nkey
-            new TranslationSeedItem("entity.menu.l10nkey", "en-US", "本地化键_us", "本地化键（用于多语言支持）"),
+            new TranslationSeedItem("entity.menu.l10nkey", "en-US", "国际化键_us", "国际化键（用于多语言支持；varchar Length=140）"),
             // entity.menu.l10nkey
-            new TranslationSeedItem("entity.menu.l10nkey", "ja-JP", "本地化键_jp", "本地化键（用于多语言支持）"),
+            new TranslationSeedItem("entity.menu.l10nkey", "ja-JP", "国际化键_jp", "国际化键（用于多语言支持；varchar Length=140）"),
             // entity.menu.l10nkey
-            new TranslationSeedItem("entity.menu.l10nkey", "zh-CN", "本地化键", "本地化键（用于多语言支持）"),
+            new TranslationSeedItem("entity.menu.l10nkey", "zh-CN", "国际化键", "国际化键（用于多语言支持；varchar Length=140）"),
             // entity.menu.l10nkey
-            new TranslationSeedItem("entity.menu.l10nkey", "zh-HK", "本地化键_hk", "本地化键（用于多语言支持）"),
+            new TranslationSeedItem("entity.menu.l10nkey", "zh-HK", "国际化键_hk", "国际化键（用于多语言支持；varchar Length=140）"),
 
             // entity.menu.icon
             new TranslationSeedItem("entity.menu.icon", "en-US", "菜单图标_us", "菜单图标"),

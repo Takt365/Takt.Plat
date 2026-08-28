@@ -388,7 +388,7 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.MaterialDocumentCode = entity.MaterialDocumentCode;
-                childDto.PostedBy = entity.PostedBy;
+                childDto.PostedByEmployeeName = entity.PostedByEmployeeName;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -493,7 +493,7 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
                 || (x.BillOfLadingCode != null && x.BillOfLadingCode.Contains(keywords))
                 || (x.DeliveryCode != null && x.DeliveryCode.Contains(keywords))
                 || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
-                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -571,10 +571,10 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
             exp = exp.And(x => x.TransactionCode != null && x.TransactionCode.Contains(transactionCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
         {
-            var postedBy = queryDto.PostedBy;
-            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+            var postedBy = queryDto.PostedByEmployeeName;
+            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -691,7 +691,7 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
         {
             return true;
         }

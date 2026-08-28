@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceOfSupply 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-HK", "冻结_hk", "冻结（字典 sys_yes_no；1=是，0=否；冻结后禁止新建采购订单引用）"),
 
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "ja-JP", "采购单位_jp", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "ja-JP", "采购单位_jp", "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-CN", "采购单位", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-CN", "采购单位", "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-HK", "采购单位_hk", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-HK", "采购单位_hk", "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.sourceofsupply.minorderquantity
             new TranslationSeedItem("entity.sourceofsupply.minorderquantity", "en-US", "最小起订量_us", "最小起订量（采购单位数量，整数）"),

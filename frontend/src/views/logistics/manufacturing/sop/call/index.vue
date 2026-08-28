@@ -74,13 +74,13 @@
         <template v-if="column.key === 'callType'">
           <TaktDictTag
             :value="getSopCallField(record, 'callType')"
-            dict-type="logistics_sop_andon_type"
+            dict-type="logistics_manufacturing_sop_andon_type"
           />
         </template>
         <template v-else-if="column.key === 'callStatus'">
           <TaktDictTag
             :value="getSopCallField(record, 'callStatus')"
-            dict-type="logistics_sop_andon_status"
+            dict-type="logistics_manufacturing_sop_andon_status"
           />
         </template>
       </template>
@@ -150,7 +150,7 @@
       <a-form-item :label="t('entity.sopcall.calltype')">
         <TaktSelect
           v-model:value="advancedQueryForm.callType"
-          dict-type="logistics_sop_andon_type"
+          dict-type="logistics_manufacturing_sop_andon_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopcall.calltype') })"
           allow-clear
         />
@@ -233,7 +233,7 @@
       <a-form-item :label="t('entity.sopcall.callstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.callStatus"
-          dict-type="logistics_sop_andon_status"
+          dict-type="logistics_manufacturing_sop_andon_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopcall.callstatus') })"
           allow-clear
         />

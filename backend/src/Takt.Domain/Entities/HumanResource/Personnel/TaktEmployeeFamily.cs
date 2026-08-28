@@ -43,7 +43,7 @@ public class TaktEmployeeFamily : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "member_name", ColumnDescription = "成员姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MemberName { get; set; } = string.Empty;
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     [SugarColumn(ColumnName = "relation_type", ColumnDescription = "关系类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "9")]
     public int RelationType { get; set; }

@@ -20,6 +20,7 @@ export const PURCHASEPLANITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEPLA
 
 /** 列表业务列（不含主键） */
 export const PURCHASEPLANITEM_LIST_FIELDS = [
+  'purchasePlanId',
   'purchasePlanCode',
   'lineNumber',
   'productionPlanId',
@@ -41,11 +42,11 @@ export const PURCHASEPLANITEM_LIST_FIELDS = [
   'referenceSupplierCode',
   'referenceSupplierName1',
   'isObsolete',
-  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEPLANITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'purchasePlanId',
   'purchasePlanCode',
   'lineNumber',
   'productionPlanId',
@@ -85,7 +86,30 @@ export const PURCHASEPLANITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEPLANITEM_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  lineNumber: 'select',
+  productionPlanId: 'optional',
+  productionPlanCode: 'optional',
+  productionPlanLineNumber: 'optional',
+  materialRequirementsPlanningItemId: 'optional',
+  materialCode: 'select',
+  materialDescription: 'optional',
+  materialSpecification: 'optional',
+  planUnit: 'select',
+  planQuantity: 'select',
+  plannedArrivalDate: 'optional',
+  convertedQuantity: 'select',
+  estimatedUnitPrice: 'select',
+  estimatedAmount: 'select',
+  taxIncludedPrice: 'select',
+  untaxedPrice: 'select',
+  taxAmount: 'select',
+  referenceSupplierCode: 'optional',
+  referenceSupplierName1: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -93,13 +117,44 @@ export type PurchasePlanItemField = keyof typeof PURCHASEPLANITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEPLANITEM_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'purchasePlanCode',
+  'productionPlanId',
+  'productionPlanCode',
+  'materialRequirementsPlanningItemId',
+  'materialCode',
+  'materialDescription',
+  'materialSpecification',
+  'planUnit',
+  'plannedArrivalDateStart',
+  'plannedArrivalDateEnd',
+  'referenceSupplierCode',
+  'referenceSupplierName1',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof PurchasePlanItemQuery)[]
 
-export type PurchasePlanItemQueryField = (typeof PURCHASEPLANITEM_QUERY_STRING_FIELDS)[number]
+export type PurchasePlanItemQueryField =
+  | (typeof PURCHASEPLANITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'productionPlanLineNumber' | 'planQuantity' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'taxIncludedPrice' | 'untaxedPrice' | 'taxAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEPLANITEM_QUERY_FIELDS: readonly PurchasePlanItemQueryField[] = [...PURCHASEPLANITEM_QUERY_STRING_FIELDS]
+export const PURCHASEPLANITEM_QUERY_FIELDS: readonly PurchasePlanItemQueryField[] = [
+  ...PURCHASEPLANITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'productionPlanLineNumber',
+  'planQuantity',
+  'convertedQuantity',
+  'estimatedUnitPrice',
+  'estimatedAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
+  'isObsolete',
+]
 
 /**
  * PurchasePlanItem字段 i18n：index / purchase-plan-item-form 统一入口

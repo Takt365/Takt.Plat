@@ -91,7 +91,7 @@ public class TaktBankDto : TaktCompanyDtoBase
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -151,7 +151,7 @@ public class TaktBankDto : TaktCompanyDtoBase
     public int SddCore { get; set; } = 0;
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int SddRtrans { get; set; } = 0;
 
@@ -253,7 +253,7 @@ public class TaktBankQueryDto : TaktPagedQuery
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -313,7 +313,7 @@ public class TaktBankQueryDto : TaktPagedQuery
     public int? SddCore { get; set; }
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int? SddRtrans { get; set; }
 
@@ -436,7 +436,7 @@ public class TaktBankCreateDto
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -496,7 +496,7 @@ public class TaktBankCreateDto
     public int SddCore { get; set; } = 0;
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int SddRtrans { get; set; } = 0;
 
@@ -627,7 +627,7 @@ public class TaktBankTemplateDto
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -687,7 +687,7 @@ public class TaktBankTemplateDto
     public int? SddCore { get; set; }
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int? SddRtrans { get; set; }
 
@@ -794,7 +794,7 @@ public class TaktBankImportDto
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -854,7 +854,7 @@ public class TaktBankImportDto
     public int? SddCore { get; set; }
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int? SddRtrans { get; set; }
 
@@ -967,7 +967,7 @@ public class TaktBankExportDto
     public string? Address2 { get; set; } = string.Empty;
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
     public string? SwiftBic { get; set; } = string.Empty;
 
@@ -1027,7 +1027,7 @@ public class TaktBankExportDto
     public int SddCore { get; set; } = 0;
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     public int SddRtrans { get; set; } = 0;
 

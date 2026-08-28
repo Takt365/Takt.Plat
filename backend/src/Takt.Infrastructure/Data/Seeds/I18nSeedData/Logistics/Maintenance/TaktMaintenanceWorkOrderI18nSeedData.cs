@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceWorkOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -369,14 +369,23 @@ public class TaktMaintenanceWorkOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.maintenanceworkorder.completedat
             new TranslationSeedItem("entity.maintenanceworkorder.completedat", "zh-HK", "完工时间_hk", "完工时间"),
 
-            // entity.maintenanceworkorder.acceptedby
-            new TranslationSeedItem("entity.maintenanceworkorder.acceptedby", "en-US", "验收人_us", "验收人（人员编码）"),
-            // entity.maintenanceworkorder.acceptedby
-            new TranslationSeedItem("entity.maintenanceworkorder.acceptedby", "ja-JP", "验收人_jp", "验收人（人员编码）"),
-            // entity.maintenanceworkorder.acceptedby
-            new TranslationSeedItem("entity.maintenanceworkorder.acceptedby", "zh-CN", "验收人", "验收人（人员编码）"),
-            // entity.maintenanceworkorder.acceptedby
-            new TranslationSeedItem("entity.maintenanceworkorder.acceptedby", "zh-HK", "验收人_hk", "验收人（人员编码）"),
+            // entity.maintenanceworkorder.acceptedbyemployeeid
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeeid", "en-US", "验收人员工ID_us", "验收人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenanceworkorder.acceptedbyemployeeid
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeeid", "ja-JP", "验收人员工ID_jp", "验收人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenanceworkorder.acceptedbyemployeeid
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeeid", "zh-CN", "验收人员工ID", "验收人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.maintenanceworkorder.acceptedbyemployeeid
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeeid", "zh-HK", "验收人员工ID_hk", "验收人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.maintenanceworkorder.acceptedbyemployeename
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeename", "en-US", "验收人名称_us", "验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenanceworkorder.acceptedbyemployeename
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeename", "ja-JP", "验收人名称_jp", "验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenanceworkorder.acceptedbyemployeename
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeename", "zh-CN", "验收人名称", "验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.maintenanceworkorder.acceptedbyemployeename
+            new TranslationSeedItem("entity.maintenanceworkorder.acceptedbyemployeename", "zh-HK", "验收人名称_hk", "验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.maintenanceworkorder.acceptedat
             new TranslationSeedItem("entity.maintenanceworkorder.acceptedat", "en-US", "验收时间_us", "验收时间"),

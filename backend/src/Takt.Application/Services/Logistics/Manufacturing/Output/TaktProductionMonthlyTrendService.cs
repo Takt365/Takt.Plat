@@ -801,19 +801,29 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// </summary>
   private sealed class ProductionMonthlyTrendSourceRow
   {
-    /// <summary>工厂代码</summary>
+    /// <summary>
+    /// 工厂代码
+    /// </summary>
     public string PlantCode { get; init; } = string.Empty;
 
-    /// <summary>机种</summary>
+    /// <summary>
+    /// 机种
+    /// </summary>
     public string ModelCode { get; init; } = string.Empty;
 
-    /// <summary>产出类别</summary>
+    /// <summary>
+    /// 产出类别
+    /// </summary>
     public string OutputCategory { get; init; } = string.Empty;
 
-    /// <summary>期间 yyyy-MM</summary>
+    /// <summary>
+    /// 期间 yyyy-MM
+    /// </summary>
     public string Period { get; init; } = string.Empty;
 
-    /// <summary>产量</summary>
+    /// <summary>
+    /// 产量
+    /// </summary>
     public decimal Qty { get; init; }
   }
 
@@ -830,7 +840,9 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// </summary>
   private sealed class ProductionMonthlyTrendRowKeyComparer : IEqualityComparer<ProductionMonthlyTrendRowKey>
   {
-    /// <summary>单例</summary>
+    /// <summary>
+    /// 单例
+    /// </summary>
     public static ProductionMonthlyTrendRowKeyComparer Instance { get; } = new();
 
     /// <summary>
@@ -867,28 +879,44 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// </summary>
   private sealed class ProductionMonthlyTrendAnalysisBuilt
   {
-    /// <summary>排序后全量行</summary>
+    /// <summary>
+    /// 排序后全量行
+    /// </summary>
     public List<TaktProductionMonthlyTrendDto> OrderedRows { get; init; } = new();
 
-    /// <summary>期间列顺序</summary>
+    /// <summary>
+    /// 期间列顺序
+    /// </summary>
     public List<string> PeriodOrder { get; init; } = new();
 
-    /// <summary>环比基准期间</summary>
+    /// <summary>
+    /// 环比基准期间
+    /// </summary>
     public string? BasePeriod { get; init; }
 
-    /// <summary>环比对比期间</summary>
+    /// <summary>
+    /// 环比对比期间
+    /// </summary>
     public string? ComparePeriod { get; init; }
 
-    /// <summary>上涨行数</summary>
+    /// <summary>
+    /// 上涨行数
+    /// </summary>
     public int UpCount { get; init; }
 
-    /// <summary>下跌行数</summary>
+    /// <summary>
+    /// 下跌行数
+    /// </summary>
     public int DownCount { get; init; }
 
-    /// <summary>持平行数</summary>
+    /// <summary>
+    /// 持平行数
+    /// </summary>
     public int FlatCount { get; init; }
 
-    /// <summary>无法比较行数</summary>
+    /// <summary>
+    /// 无法比较行数
+    /// </summary>
     public int NoneCount { get; init; }
 
     /// <summary>

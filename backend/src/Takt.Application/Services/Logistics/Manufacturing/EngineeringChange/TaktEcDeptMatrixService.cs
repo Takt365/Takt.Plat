@@ -210,8 +210,8 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             EcIssueDate = ec?.EcIssueDate ?? default,
             EcLeader = ec?.EcLeader ?? string.Empty,
             EcCode = detail.EcCode,
-            EcModel = detail.EcModel,
-            EcNewItem = detail.EcNewItem,
+            EcModelCode = detail.EcModelCode,
+            EcNewMaterialCode = detail.EcNewMaterialCode,
             DeptCells = cells,
         };
     }
@@ -262,21 +262,21 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
-                || (x.EcOldItem != null && x.EcOldItem.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(keywords))
+                || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords)));
         }
         if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcModel))
+        if (!string.IsNullOrEmpty(queryDto.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNewItem))
+        if (!string.IsNullOrEmpty(queryDto.EcNewMaterialCode))
         {
-            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
+            exp = exp.And(x => x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(queryDto.EcNewMaterialCode));
         }
         if (queryDto.EcIssueDateStart.HasValue)
         {
@@ -436,8 +436,8 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             PNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Fpp),
             TcjLiaisonNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Tcj),
             EcIssueDate = ec?.EcIssueDate ?? ec?.EcEntryDate ?? default,
-            EcModel = detail.EcModel,
-            EcNewItem = detail.EcNewItem,
+            EcModelCode = detail.EcModelCode,
+            EcNewMaterialCode = detail.EcNewMaterialCode,
             EcEntryDate = ec?.EcEntryDate ?? default,
             StageCells = stageCells,
         };
@@ -492,21 +492,21 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
-                || (x.EcOldItem != null && x.EcOldItem.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(keywords))
+                || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords)));
         }
         if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcModel))
+        if (!string.IsNullOrEmpty(queryDto.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNewItem))
+        if (!string.IsNullOrEmpty(queryDto.EcNewMaterialCode))
         {
-            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
+            exp = exp.And(x => x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(queryDto.EcNewMaterialCode));
         }
         if (queryDto.EcIssueDateStart.HasValue)
         {

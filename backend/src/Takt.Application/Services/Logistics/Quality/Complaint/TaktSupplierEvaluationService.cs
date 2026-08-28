@@ -537,8 +537,8 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
                 || (x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.EvaluatorBy != null && x.EvaluatorBy.Contains(keywords))
-                || (x.EvaluationDept != null && x.EvaluationDept.Contains(keywords))
+                || (x.EvaluatorByEmployeeName != null && x.EvaluatorByEmployeeName.Contains(keywords))
+                || (x.EvaluationDeptName != null && x.EvaluationDeptName.Contains(keywords))
                 || (x.MainStrengths != null && x.MainStrengths.Contains(keywords))
                 || (x.MainIssues != null && x.MainIssues.Contains(keywords))
                 || (x.ImprovementRequirements != null && x.ImprovementRequirements.Contains(keywords))
@@ -596,16 +596,16 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             exp = exp.And(x => x.EvaluationType == evaluationType);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluatorByEmployeeName))
         {
-            var evaluatorBy = queryDto.EvaluatorBy;
-            exp = exp.And(x => x.EvaluatorBy != null && x.EvaluatorBy.Contains(evaluatorBy));
+            var evaluatorBy = queryDto.EvaluatorByEmployeeName;
+            exp = exp.And(x => x.EvaluatorByEmployeeName != null && x.EvaluatorByEmployeeName.Contains(evaluatorBy));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluationDeptName))
         {
-            var evaluationDept = queryDto.EvaluationDept;
-            exp = exp.And(x => x.EvaluationDept != null && x.EvaluationDept.Contains(evaluationDept));
+            var evaluationDept = queryDto.EvaluationDeptName;
+            exp = exp.And(x => x.EvaluationDeptName != null && x.EvaluationDeptName.Contains(evaluationDept));
         }
 
         if (queryDto?.OverallRating.HasValue == true)
@@ -796,11 +796,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EvaluatorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.EvaluatorByEmployeeName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EvaluationDept))
+        if (!string.IsNullOrWhiteSpace(queryDto.EvaluationDeptName))
         {
             return true;
         }

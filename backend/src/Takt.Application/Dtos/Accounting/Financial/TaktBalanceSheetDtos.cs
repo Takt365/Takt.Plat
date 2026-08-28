@@ -62,7 +62,7 @@ public class TaktBalanceSheetDto : TaktCompanyDtoBase
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -107,7 +107,7 @@ public class TaktBalanceSheetDto : TaktCompanyDtoBase
     public decimal PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -179,7 +179,7 @@ public class TaktBalanceSheetQueryDto : TaktPagedQuery
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -224,7 +224,7 @@ public class TaktBalanceSheetQueryDto : TaktPagedQuery
     public decimal? PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -319,7 +319,7 @@ public class TaktBalanceSheetCreateDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -364,9 +364,9 @@ public class TaktBalanceSheetCreateDto
     public decimal PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code；报告货币）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code；报告货币）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -509,7 +509,7 @@ public class TaktBalanceSheetTemplateDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -554,7 +554,7 @@ public class TaktBalanceSheetTemplateDto
     public decimal? PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -627,7 +627,7 @@ public class TaktBalanceSheetImportDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int? LineCategory { get; set; }
 
@@ -672,7 +672,7 @@ public class TaktBalanceSheetImportDto
     public decimal? PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -745,7 +745,7 @@ public class TaktBalanceSheetExportDto
     public string? AccountTitleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行类别（字典 accounting_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
+    /// 行类别（字典 accounting_financial_balance_sheet_line_category；1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益；对齐 CAS/IAS 1 流动非流动列报）
     /// </summary>
     public int LineCategory { get; set; } = 0;
 
@@ -790,7 +790,7 @@ public class TaktBalanceSheetExportDto
     public decimal PriorPeriodAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；报告货币）
+    /// 币种（字典 accounting_financial_currency_code；报告货币）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

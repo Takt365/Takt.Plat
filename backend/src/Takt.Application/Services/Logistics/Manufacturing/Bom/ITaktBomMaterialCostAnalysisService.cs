@@ -11,11 +11,12 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// BOM 成本分析服务（转置 / 差异 / 月度涨跌）
+/// BOM 成本分析服务（转置 / 差异；月度涨跌见 ITaktBomMaterialCostAnalysisTrendService）
 /// </summary>
 public interface ITaktBomMaterialCostAnalysisService
 {
@@ -60,22 +61,10 @@ public interface ITaktBomMaterialCostAnalysisService
         string? fileName = null);
 
     /// <summary>
-    /// 获取成本分析月度涨跌（机种下单产品或产品平均月成本序列）
+    /// 加载成本分析汇总头（全量，非分页；供月度涨跌独立服务复用）
     /// </summary>
-    /// <param name="queryDto">月度涨跌查询 DTO</param>
-    /// <returns>月度涨跌结果</returns>
-    Task<TaktBomMaterialCostAnalysisMonthlyTrendResultDto> GetBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
-        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto queryDto);
-
-    /// <summary>
-    /// 导出成本分析月度涨跌 Excel
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns>实际文件名与文件字节</returns>
-    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
-        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto query,
-        string? sheetName = null,
-        string? fileName = null);
+    /// <param name="queryDto">与转置相同筛选语义</param>
+    /// <returns>成本汇总行</returns>
+    Task<List<TaktBomMaterialCost>> LoadBomMaterialCostAnalysisHeadersAsync(
+        TaktBomMaterialCostAnalysisTransposedQueryDto queryDto);
 }

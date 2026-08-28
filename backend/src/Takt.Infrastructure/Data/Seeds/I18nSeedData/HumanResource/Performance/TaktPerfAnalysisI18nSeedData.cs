@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfAnalysisI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfAnalysis 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -207,14 +207,23 @@ public class TaktPerfAnalysisI18nSeedData : ITaktSeedDataCoordinator
             // entity.perfanalysis.mentorid
             new TranslationSeedItem("entity.perfanalysis.mentorid", "zh-HK", "指导老师ID_hk", "指导老师（选项 TaktEmployees/options；DictValue=Id）"),
 
+            // entity.perfanalysis.mentorname
+            new TranslationSeedItem("entity.perfanalysis.mentorname", "en-US", "指导老师名称_us", "指导老师名称（冗余：按 MentorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.perfanalysis.mentorname
+            new TranslationSeedItem("entity.perfanalysis.mentorname", "ja-JP", "指导老师名称_jp", "指导老师名称（冗余：按 MentorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.perfanalysis.mentorname
+            new TranslationSeedItem("entity.perfanalysis.mentorname", "zh-CN", "指导老师名称", "指导老师名称（冗余：按 MentorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.perfanalysis.mentorname
+            new TranslationSeedItem("entity.perfanalysis.mentorname", "zh-HK", "指导老师名称_hk", "指导老师名称（冗余：按 MentorId 取 TaktEmployee.EmployeeName 联动）"),
+
             // entity.perfanalysis.improvementstatus
-            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "en-US", "业务状态_us", "业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
+            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "en-US", "业务状态_us", "业务状态（字典 humanresource_performance_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
             // entity.perfanalysis.improvementstatus
-            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "ja-JP", "业务状态_jp", "业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
+            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "ja-JP", "业务状态_jp", "业务状态（字典 humanresource_performance_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
             // entity.perfanalysis.improvementstatus
-            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "zh-CN", "业务状态", "业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
+            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "zh-CN", "业务状态", "业务状态（字典 humanresource_performance_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
             // entity.perfanalysis.improvementstatus
-            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "zh-HK", "业务状态_hk", "业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
+            new TranslationSeedItem("entity.perfanalysis.improvementstatus", "zh-HK", "业务状态_hk", "业务状态（字典 humanresource_performance_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),
         };
     }
 

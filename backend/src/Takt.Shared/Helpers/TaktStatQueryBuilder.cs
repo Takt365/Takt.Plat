@@ -4,7 +4,7 @@
 // 文件名称：TaktStatQueryBuilder.cs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SQVI 式自定义报表 SqlSugar Queryable 编译器（JOIN/筛选/分组/排序）
+// 功能描述：定制报表 SqlSugar Queryable 编译器（JOIN/筛选/分组/排序）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,7 +17,7 @@ using Takt.Shared.Models.Statistics;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 自定义报表 SqlSugar Queryable 编译器（纯函数，无副作用）
+/// 定制报表 SqlSugar Queryable 编译器（纯函数，无副作用）
 /// </summary>
 public static class TaktStatQueryBuilder
 {
@@ -149,7 +149,7 @@ public static class TaktStatQueryBuilder
             {
                 ValidateAlias(x.SourceAlias);
                 ValidateColumn(x.ColumnName);
-                var dir = x.SortDirection == 2 ? "DESC" : "ASC";
+                var dir = string.Equals(x.SortDirection, "DESC", StringComparison.OrdinalIgnoreCase) ? "DESC" : "ASC";
                 return $"{ColumnExpr(x.SourceAlias, x.ColumnName)} {dir}";
             });
             query = query.OrderBy(string.Join(", ", orderParts));

@@ -56,7 +56,7 @@ public class TaktSellerMaterialDto : TaktTenantCoreDtoBase
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
@@ -133,7 +133,7 @@ public class TaktSellerMaterialQueryDto : TaktPagedQuery
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
@@ -228,9 +228,9 @@ public class TaktSellerMaterialCreateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
-    [Required(ErrorMessage = "物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）不能为空")]
+    [Required(ErrorMessage = "物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）不能为空")]
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
@@ -341,7 +341,7 @@ public class TaktSellerMaterialTemplateDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
@@ -423,7 +423,7 @@ public class TaktSellerMaterialImportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
@@ -511,7 +511,7 @@ public class TaktSellerMaterialExportDto
     public string? ClientShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 

@@ -245,7 +245,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.issueStatus"
-                  dict-type="hr_payslip_issue_status"
+                  dict-type="humanresource_compensation_payslip_issue_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.payslip.issuestatus') })"
                 />
               </a-form-item>

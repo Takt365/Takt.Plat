@@ -78,7 +78,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
@@ -114,7 +114,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     [SugarColumn(ColumnName = "panel_side", ColumnDescription = "面板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PanelSide { get; set; } = string.Empty;
@@ -138,7 +138,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal TotalCompletedQty { get; set; } = 0;
 
     /// <summary>
-    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
+    /// 完成状态（计算结果：字典 logistics_manufacturing_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     [SugarColumn(ColumnName = "completed_status", ColumnDescription = "完成状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CompletedStatus { get; set; } = 0;

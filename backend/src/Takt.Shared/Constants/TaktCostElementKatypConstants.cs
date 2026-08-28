@@ -13,18 +13,22 @@
 namespace Takt.Shared.Constants;
 
 /// <summary>
-/// 成本要素类别与类型（字典 accounting_cost_element_category / accounting_cost_element_type）
+/// 成本要素类别与类型（字典 accounting_controlling_cost_element_category / accounting_controlling_cost_element_type）
 /// </summary>
 public static class TaktCostElementKatypConstants
 {
     /// <summary>
-    /// 成本要素类型（字典 accounting_cost_element_type）
+    /// 成本要素类型（字典 accounting_controlling_cost_element_type）
     /// </summary>
     public static class Type
     {
-        /// <summary>初级成本要素（对应 FI 总账科目）</summary>
+        /// <summary>
+        /// 初级成本要素（对应 FI 总账科目）
+        /// </summary>
         public const int Primary = 0;
-        /// <summary>次级成本要素（仅 CO 内部）</summary>
+        /// <summary>
+        /// 次级成本要素（仅 CO 内部）
+        /// </summary>
         public const int Secondary = 1;
     }
 

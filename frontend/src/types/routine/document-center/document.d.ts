@@ -39,12 +39,12 @@ export interface Document extends ApprovalDtoBase {
   documentTitle: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel: number;
 
@@ -194,12 +194,12 @@ export interface DocumentQuery extends TaktPagedQuery {
   documentTitle?: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory?: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel?: number;
 
@@ -423,12 +423,12 @@ export interface DocumentCreate {
   documentTitle: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel: number;
 
@@ -640,12 +640,12 @@ export interface DocumentTemplate {
   documentTitle?: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory?: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel?: number;
 
@@ -799,12 +799,12 @@ export interface DocumentImport {
   documentTitle?: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory?: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel?: number;
 
@@ -958,12 +958,12 @@ export interface DocumentExport {
   documentTitle: string;
 
   /**
-   * 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
+   * 文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）
    */
   documentCategory: number;
 
   /**
-   * 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
+   * 密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）
    */
   confidentialLevel: number;
 

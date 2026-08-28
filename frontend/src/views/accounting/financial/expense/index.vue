@@ -74,7 +74,19 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'expenseStatus'">
+        <template v-if="column.key === 'expenseType'">
+          <TaktDictTag
+            :value="getExpenseDictValue(record, 'expenseType')"
+            dict-type="accounting_financial_expense_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getExpenseDictValue(record, 'taxRate')"
+            dict-type="accounting_financial_tax_rate_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'expenseStatus'">
           <TaktDictTag
             :value="getExpenseDictValue(record, 'expenseStatus')"
             dict-type="sys_approval_status"
@@ -117,7 +129,137 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-
+      <div v-show="isFieldVisible('expenseCode')">
+      <a-form-item :label="pi.queryLabel('expenseCode')">
+        <a-input
+          v-model:value="advancedQueryForm.expenseCode"
+          :placeholder="pi.queryPh('expenseCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('expenseTitle')">
+      <a-form-item :label="pi.queryLabel('expenseTitle')">
+        <a-input
+          v-model:value="advancedQueryForm.expenseTitle"
+          :placeholder="pi.queryPh('expenseTitle', 'required')"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('expenseType')">
+      <a-form-item :label="pi.queryLabel('expenseType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.expenseType"
+          dict-type="accounting_financial_expense_type"
+          :placeholder="pi.queryPh('expenseType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicantBy')">
+      <a-form-item :label="pi.queryLabel('applicantBy')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.applicantBy"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('applicantBy', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicantName')">
+      <a-form-item :label="pi.queryLabel('applicantName')">
+        <a-input
+          v-model:value="advancedQueryForm.applicantName"
+          :placeholder="pi.queryPh('applicantName', 'required')"
+          show-count
+          :maxlength="80"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicationDeptId')">
+      <a-form-item :label="pi.queryLabel('applicationDeptId')">
+        <TaktTreeSelect
+          v-model:value="advancedQueryForm.applicationDeptId"
+          api-url="TaktDepts/tree-options"
+          :lazy="true"
+          allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="pi.queryPh('applicationDeptId', 'select')"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicationDeptName')">
+      <a-form-item :label="pi.queryLabel('applicationDeptName')">
+        <a-input
+          v-model:value="advancedQueryForm.applicationDeptName"
+          :placeholder="pi.queryPh('applicationDeptName', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costBearerDeptId')">
+      <a-form-item :label="pi.queryLabel('costBearerDeptId')">
+        <TaktTreeSelect
+          v-model:value="advancedQueryForm.costBearerDeptId"
+          api-url="TaktDepts/tree-options"
+          :lazy="true"
+          allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="pi.queryPh('costBearerDeptId', 'select')"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costBearerDeptName')">
+      <a-form-item :label="pi.queryLabel('costBearerDeptName')">
+        <a-input
+          v-model:value="advancedQueryForm.costBearerDeptName"
+          :placeholder="pi.queryPh('costBearerDeptName', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('fileName')">
+      <a-form-item :label="pi.queryLabel('fileName')">
+        <a-input
+          v-model:value="advancedQueryForm.fileName"
+          :placeholder="pi.queryPh('fileName', 'required')"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('accessUrl')">
+      <a-form-item :label="pi.queryLabel('accessUrl')">
+        <a-input
+          v-model:value="advancedQueryForm.accessUrl"
+          :placeholder="pi.queryPh('accessUrl', 'required')"
+          show-count
+          :maxlength="1000"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('expenseStatus')">
+      <a-form-item :label="pi.queryLabel('expenseStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.expenseStatus"
+          dict-type="sys_approval_status"
+          :placeholder="pi.queryPh('expenseStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       </template>
     </TaktQueryDrawer>
 
@@ -247,7 +389,30 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
-
+  if (form.expenseType !== undefined && form.expenseType !== null) {
+    return true
+  }
+  if (form.expenseAmount !== undefined && form.expenseAmount !== null) {
+    return true
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.expenseDateStart !== undefined && form.expenseDateStart !== null && String(form.expenseDateStart).trim().length > 0) {
+    return true
+  }
+  if (form.expenseDateEnd !== undefined && form.expenseDateEnd !== null && String(form.expenseDateEnd).trim().length > 0) {
+    return true
+  }
+  if (form.expenseStatus !== undefined && form.expenseStatus !== null) {
+    return true
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    return true
+  }
   return false
 }
 
@@ -262,6 +427,14 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
+    expenseType: undefined as number | undefined,
+    expenseAmount: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    expenseDateStart: undefined as string | undefined,
+    expenseDateEnd: undefined as string | undefined,
+    expenseStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -315,6 +488,30 @@ function buildListQuery(overrides?: Partial<ExpenseQuery>): ExpenseQuery {
   }
   for (const key of EXPENSE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  if (form.expenseType !== undefined && form.expenseType !== null) {
+    query.expenseType = form.expenseType
+  }
+  if (form.expenseAmount !== undefined && form.expenseAmount !== null) {
+    query.expenseAmount = form.expenseAmount
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
+  }
+  if (form.expenseDateStart !== undefined && form.expenseDateStart !== null && String(form.expenseDateStart).trim().length > 0) {
+    query.expenseDateStart = form.expenseDateStart
+  }
+  if (form.expenseDateEnd !== undefined && form.expenseDateEnd !== null && String(form.expenseDateEnd).trim().length > 0) {
+    query.expenseDateEnd = form.expenseDateEnd
+  }
+  if (form.expenseStatus !== undefined && form.expenseStatus !== null) {
+    query.expenseStatus = form.expenseStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
   }
   return query
 }
@@ -376,6 +573,9 @@ async function loadExpenseDetail(record: ExpenseRowRecord): Promise<Expense | nu
   }
 }
 
+/** 字典列（由 #bodyCell TaktDictTag 渲染） */
+const EXPENSE_DICT_COLUMN_KEYS = new Set(['expenseType', 'taxRate', 'expenseStatus'])
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -388,23 +588,19 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseId') ?? ''
   },
-  {
-    title: pi.label('expenseStatus'),
-    dataIndex: 'expenseStatus',
-    key: 'expenseStatus',
+  ...EXPENSE_LIST_FIELDS.map((field) => ({
+    title: pi.label(field),
+    dataIndex: field,
+    key: field,
     width: 120,
     resizable: true,
     ellipsis: true,
-  },
-  {
-    title: pi.label('remark'),
-    dataIndex: 'remark',
-    key: 'remark',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getExpenseField(record, 'remark') ?? ''
-  },
+    ...(EXPENSE_DICT_COLUMN_KEYS.has(field)
+      ? {}
+      : {
+          customRender: ({ record }: { record: any }) => getExpenseField(record, field) ?? '',
+        }),
+  })),
   CreateActionColumn({
     actions: [
       {

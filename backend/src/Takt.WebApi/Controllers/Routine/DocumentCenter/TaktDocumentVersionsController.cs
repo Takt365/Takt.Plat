@@ -41,7 +41,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("routine:document:center:list", "文管文档版本列表")]
+    [TaktPermission("routine:document:center:version:list", "文管文档版本列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetDocumentVersionListAsync([FromQuery] TaktDocumentVersionQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管文档版本ID</param>
     /// <returns>文管文档版本DTO</returns>
-    [TaktPermission("routine:document:center:query", "文管文档版本详情")]
+    [TaktPermission("routine:document:center:version:query", "文管文档版本详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDocumentVersionByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// 获取文管文档版本选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("routine:document:center:query", "文管文档版本选项")]
+    [TaktPermission("routine:document:center:version:query", "文管文档版本选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetDocumentVersionOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>文管文档版本DTO</returns>
-    [TaktPermission("routine:document:center:create", "创建文管文档版本")]
+    [TaktPermission("routine:document:center:version:create", "创建文管文档版本")]
     [HttpPost]
     public async Task<IActionResult> CreateDocumentVersionAsync([FromBody] TaktDocumentVersionCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// <param name="id">文管文档版本ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>文管文档版本DTO</returns>
-    [TaktPermission("routine:document:center:update", "更新文管文档版本")]
+    [TaktPermission("routine:document:center:version:update", "更新文管文档版本")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDocumentVersionAsync(long id, [FromBody] TaktDocumentVersionUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">文管文档版本ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:delete", "删除文管文档版本")]
+    [TaktPermission("routine:document:center:version:delete", "删除文管文档版本")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumentVersionByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("routine:document:center:delete", "批量删除文管文档版本")]
+    [TaktPermission("routine:document:center:version:delete", "批量删除文管文档版本")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteDocumentVersionBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>文管文档版本DTO</returns>
-    [TaktPermission("routine:document:center:update", "更新文管文档版本作废状态")]
+    [TaktPermission("routine:document:center:version:update", "更新文管文档版本作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateDocumentVersionObsoleteAsync([FromBody] TaktDocumentVersionObsoleteDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:document:center:import", "获取文管文档版本导入模板")]
+    [TaktPermission("routine:document:center:version:import", "获取文管文档版本导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetDocumentVersionTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("routine:document:center:import", "导入文管文档版本")]
+    [TaktPermission("routine:document:center:version:import", "导入文管文档版本")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportDocumentVersionAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// 导出文管文档版本
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("routine:document:center:export", "导出文管文档版本")]
+    [TaktPermission("routine:document:center:version:export", "导出文管文档版本")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportDocumentVersionAsync([FromQuery] TaktDocumentVersionQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

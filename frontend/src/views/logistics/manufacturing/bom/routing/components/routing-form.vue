@@ -101,7 +101,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.purpose"
-                  dict-type="logistics_routing_purpose"
+                  dict-type="logistics_manufacturing_routing_purpose"
                   :placeholder="pi.ph('purpose')"
                 />
               </a-form-item>
@@ -140,7 +140,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.routingStatus"
-                  dict-type="logistics_routing_status"
+                  dict-type="logistics_manufacturing_routing_status"
                   :placeholder="pi.ph('routingStatus')"
                 />
               </a-form-item>
@@ -292,7 +292,7 @@
       <template #cell-baseUnit="{ record }">
         <TaktSelect
           v-model:value="record.baseUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('baseUnit')"
@@ -303,7 +303,7 @@
       <template #cell-timeUnit="{ record }">
         <TaktSelect
           v-model:value="record.timeUnit"
-          dict-type="logistics_time_unit"
+          dict-type="logistics_manufacturing_time_unit"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('timeUnit')"
@@ -314,7 +314,7 @@
       <template #cell-pointsUnit="{ record }">
         <TaktSelect
           v-model:value="record.pointsUnit"
-          dict-type="logistics_points_unit"
+          dict-type="logistics_manufacturing_points_unit"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('pointsUnit')"
@@ -325,7 +325,7 @@
       <template #cell-pointsToMinutesRate="{ record }">
         <TaktSelect
           v-model:value="record.pointsToMinutesRate"
-          dict-type="logistics_points_to_minutes_rate"
+          dict-type="logistics_manufacturing_points_to_minutes_rate"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('pointsToMinutesRate')"
@@ -347,7 +347,7 @@
       <template #cell-processSegmentType="{ record }">
         <TaktSelect
           v-model:value="record.processSegmentType"
-          dict-type="logistics_process_segment_type"
+          dict-type="logistics_manufacturing_process_segment_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="routingItemPi.ph('processSegmentType')"

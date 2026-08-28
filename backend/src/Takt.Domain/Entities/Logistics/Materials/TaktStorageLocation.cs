@@ -46,7 +46,7 @@ public class TaktStorageLocation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "location_name", ColumnDescription = "库位名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string LocationName { get; set; } = string.Empty;
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     [SugarColumn(ColumnName = "location_type", ColumnDescription = "库位类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LocationType { get; set; } = 0;

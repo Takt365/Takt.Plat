@@ -29,6 +29,32 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('ticketCode')"
                 name="ticketCode"
               >
@@ -61,10 +87,9 @@
                 :label="pi.label('ticketContent')"
                 name="ticketContent"
               >
-                <a-textarea
+                <takt-rich-editor
                   v-model:value="formState.ticketContent"
                   :placeholder="pi.ph('ticketContent')"
-                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -133,6 +158,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('ticketSource')"
@@ -140,7 +175,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.ticketSource"
-                  dict-type="routine_ticket_source_type"
+                  dict-type="routine_help_desk_ticket_source"
                   :placeholder="pi.ph('ticketSource')"
                 />
               </a-form-item>
@@ -157,16 +192,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('submitterName')"
@@ -177,7 +202,7 @@
                   :placeholder="pi.ph('submitterName')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -203,7 +228,7 @@
                   :placeholder="pi.ph('assigneeName')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -270,6 +295,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('resolutionDueBy')"
@@ -296,17 +331,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('itAssetId')"
                 name="itAssetId"
@@ -318,7 +343,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('assetCode')"
                 name="assetCode"
@@ -328,12 +353,11 @@
                   :placeholder="pi.ph('assetCode')"
                   show-count
                   :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.ticketId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('applicantDeptId')"
                 name="applicantDeptId"
@@ -345,7 +369,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('applicantDeptName')"
                 name="applicantDeptName"
@@ -355,11 +379,11 @@
                   :placeholder="pi.ph('applicantDeptName')"
                   show-count
                   :maxlength="100"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('applicantBy')"
                 name="applicantBy"
@@ -371,7 +395,21 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('applicantName')"
+                name="applicantName"
+              >
+                <a-input
+                  v-model:value="formState.applicantName"
+                  :placeholder="pi.ph('applicantName')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('ticketStatus')"
                 name="ticketStatus"
@@ -383,7 +421,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('childTickets')"
                 name="childTickets"
@@ -426,25 +464,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <a-input
-                  v-model:value="formState.cultureCode"
-                  :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -525,7 +548,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -540,9 +563,11 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
@@ -588,6 +613,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 ticketId 才视为编辑） */
 watch(
   () => props.formData,
@@ -614,7 +641,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.ticketId) {
       applyScopeDefaults(formState, true)
@@ -730,25 +757,65 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('priority' in payload) {
     const rawpriority = payload.priority
-    payload.priority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
+    if (rawpriority === undefined || rawpriority === null || rawpriority === '') {
+      delete payload.priority
+    } else {
+      const numpriority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
+      if (Number.isFinite(numpriority)) payload.priority = numpriority
+      else delete payload.priority
+    }
   }
   if ('urgency' in payload) {
     const rawurgency = payload.urgency
-    payload.urgency = typeof rawurgency === 'number' ? rawurgency : Number(rawurgency)
+    if (rawurgency === undefined || rawurgency === null || rawurgency === '') {
+      delete payload.urgency
+    } else {
+      const numurgency = typeof rawurgency === 'number' ? rawurgency : Number(rawurgency)
+      if (Number.isFinite(numurgency)) payload.urgency = numurgency
+      else delete payload.urgency
+    }
   }
   if ('impact' in payload) {
     const rawimpact = payload.impact
-    payload.impact = typeof rawimpact === 'number' ? rawimpact : Number(rawimpact)
+    if (rawimpact === undefined || rawimpact === null || rawimpact === '') {
+      delete payload.impact
+    } else {
+      const numimpact = typeof rawimpact === 'number' ? rawimpact : Number(rawimpact)
+      if (Number.isFinite(numimpact)) payload.impact = numimpact
+      else delete payload.impact
+    }
   }
   if ('ticketSource' in payload) {
     const rawticketSource = payload.ticketSource
-    payload.ticketSource = typeof rawticketSource === 'number' ? rawticketSource : Number(rawticketSource)
+    if (rawticketSource === undefined || rawticketSource === null || rawticketSource === '') {
+      delete payload.ticketSource
+    } else {
+      const numticketSource = typeof rawticketSource === 'number' ? rawticketSource : Number(rawticketSource)
+      if (Number.isFinite(numticketSource)) payload.ticketSource = numticketSource
+      else delete payload.ticketSource
+    }
   }
   if ('ticketStatus' in payload) {
     const rawticketStatus = payload.ticketStatus
-    payload.ticketStatus = typeof rawticketStatus === 'number' ? rawticketStatus : Number(rawticketStatus)
+    if (rawticketStatus === undefined || rawticketStatus === null || rawticketStatus === '') {
+      delete payload.ticketStatus
+    } else {
+      const numticketStatus = typeof rawticketStatus === 'number' ? rawticketStatus : Number(rawticketStatus)
+      if (Number.isFinite(numticketStatus)) payload.ticketStatus = numticketStatus
+      else delete payload.ticketStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.ticketId) {
+    payload.ticketId = props.formData.ticketId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

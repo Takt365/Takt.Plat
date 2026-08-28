@@ -178,16 +178,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('responsibleUserId')">
-      <a-form-item :label="pi.queryLabel('responsibleUserId')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.responsibleUserId"
-          api-url="TaktUsers/options"
-          :placeholder="pi.queryPh('responsibleUserId', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('contactPhone')">
       <a-form-item :label="pi.queryLabel('contactPhone')">
         <a-input

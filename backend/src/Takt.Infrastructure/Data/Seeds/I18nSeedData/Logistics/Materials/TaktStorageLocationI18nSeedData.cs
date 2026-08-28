@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktStorageLocationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStorageLocation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktStorageLocationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.storagelocation.locationname", "zh-HK", "库位名称_hk", "库位名称"),
 
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "en-US", "库位类型_us", "库位类型（字典 logistics_storage_location_type）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "en-US", "库位类型_us", "库位类型（字典 logistics_materials_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "ja-JP", "库位类型_jp", "库位类型（字典 logistics_storage_location_type）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "ja-JP", "库位类型_jp", "库位类型（字典 logistics_materials_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-CN", "库位类型", "库位类型（字典 logistics_storage_location_type）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-CN", "库位类型", "库位类型（字典 logistics_materials_storage_location_type）"),
             // entity.storagelocation.locationtype
-            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-HK", "库位类型_hk", "库位类型（字典 logistics_storage_location_type）"),
+            new TranslationSeedItem("entity.storagelocation.locationtype", "zh-HK", "库位类型_hk", "库位类型（字典 logistics_materials_storage_location_type）"),
 
             // entity.storagelocation.isbuiltin
             new TranslationSeedItem("entity.storagelocation.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),

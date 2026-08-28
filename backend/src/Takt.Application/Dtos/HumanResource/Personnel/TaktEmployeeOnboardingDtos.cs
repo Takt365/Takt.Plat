@@ -99,7 +99,7 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 
@@ -212,7 +212,7 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -322,7 +322,7 @@ public class TaktEmployeeOnboardingCreateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 
@@ -376,9 +376,9 @@ public class TaktEmployeeOnboardingStatusDto
     public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
-    [Required(ErrorMessage = "待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）不能为空")]
+    [Required(ErrorMessage = "待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）不能为空")]
     public int TodoStatus { get; set; } = 0;
 }
 
@@ -465,7 +465,7 @@ public class TaktEmployeeOnboardingTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -560,7 +560,7 @@ public class TaktEmployeeOnboardingImportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -661,7 +661,7 @@ public class TaktEmployeeOnboardingExportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+    /// 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 

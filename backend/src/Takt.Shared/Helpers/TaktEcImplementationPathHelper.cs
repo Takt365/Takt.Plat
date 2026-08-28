@@ -19,13 +19,21 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public sealed class TaktEcImplementationPathResult
 {
-    /// <summary>当前待实施部门编码（路径上首个未全部完成的部门；全部完成时为 null）</summary>
+    /// <summary>
+    /// 当前待实施部门编码（路径上首个未全部完成的部门；全部完成时为 null）
+    /// </summary>
     public string? CurrentDeptCode { get; init; }
-    /// <summary>当前部门待实施明细数</summary>
+    /// <summary>
+    /// 当前部门待实施明细数
+    /// </summary>
     public int PendingAtCurrentDeptCount { get; init; }
-    /// <summary>实施路径状态</summary>
+    /// <summary>
+    /// 实施路径状态
+    /// </summary>
     public int ImplementationStatus { get; init; }
-    /// <summary>品管课是否已全部实施（正式完成）</summary>
+    /// <summary>
+    /// 品管课是否已全部实施（正式完成）
+    /// </summary>
     public bool IsOfficiallyCompleted { get; init; }
 }
 

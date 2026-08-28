@@ -13,15 +13,5 @@
 export default {
   page: {
     notProcessed: '未处理',
-    dept: {
-      eng: '技术',
-      mp: '采购',
-      pmc: '生管',
-      iqc: '受检',
-      mc: '部管',
-      pcba: '制二',
-      assy: '制一',
-      qa: '品管',
-    },
   },
 };

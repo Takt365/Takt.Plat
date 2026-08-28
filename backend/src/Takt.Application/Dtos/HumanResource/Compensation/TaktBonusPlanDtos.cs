@@ -79,12 +79,12 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     public string? PlanName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type）
     /// </summary>
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -183,12 +183,12 @@ public class TaktBonusPlanCreateDto
     public string PlanName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type）
     /// </summary>
     public int BonusType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 
@@ -315,12 +315,12 @@ public class TaktBonusPlanTemplateDto
     public string? PlanName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type）
     /// </summary>
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -399,12 +399,12 @@ public class TaktBonusPlanImportDto
     public string? PlanName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type）
     /// </summary>
     public int? BonusType { get; set; }
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method）
     /// </summary>
     public int? CalcMethod { get; set; }
 
@@ -483,12 +483,12 @@ public class TaktBonusPlanExportDto
     public string PlanName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type）
     /// </summary>
     public int BonusType { get; set; } = 0;
 
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method）
     /// </summary>
     public int CalcMethod { get; set; } = 0;
 

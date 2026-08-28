@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktBudgetActualI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBudgetActual 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,22 +145,22 @@ public class TaktBudgetActualI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.budgetactual.accounttitlecode", "zh-HK", "会计科目编码_hk", "会计科目编码（可选；选项 TaktAccountTitles/options）"),
 
             // entity.budgetactual.budgettype
-            new TranslationSeedItem("entity.budgetactual.budgettype", "en-US", "预算类型_us", "预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
+            new TranslationSeedItem("entity.budgetactual.budgettype", "en-US", "预算类型_us", "预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
             // entity.budgetactual.budgettype
-            new TranslationSeedItem("entity.budgetactual.budgettype", "ja-JP", "预算类型_jp", "预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
+            new TranslationSeedItem("entity.budgetactual.budgettype", "ja-JP", "预算类型_jp", "预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
             // entity.budgetactual.budgettype
-            new TranslationSeedItem("entity.budgetactual.budgettype", "zh-CN", "预算类型", "预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
+            new TranslationSeedItem("entity.budgetactual.budgettype", "zh-CN", "预算类型", "预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
             // entity.budgetactual.budgettype
-            new TranslationSeedItem("entity.budgetactual.budgettype", "zh-HK", "预算类型_hk", "预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
+            new TranslationSeedItem("entity.budgetactual.budgettype", "zh-HK", "预算类型_hk", "预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）"),
 
             // entity.budgetactual.measuretype
-            new TranslationSeedItem("entity.budgetactual.measuretype", "en-US", "计量类型_us", "计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）"),
+            new TranslationSeedItem("entity.budgetactual.measuretype", "en-US", "计量类型_us", "计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）"),
             // entity.budgetactual.measuretype
-            new TranslationSeedItem("entity.budgetactual.measuretype", "ja-JP", "计量类型_jp", "计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）"),
+            new TranslationSeedItem("entity.budgetactual.measuretype", "ja-JP", "计量类型_jp", "计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）"),
             // entity.budgetactual.measuretype
-            new TranslationSeedItem("entity.budgetactual.measuretype", "zh-CN", "计量类型", "计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）"),
+            new TranslationSeedItem("entity.budgetactual.measuretype", "zh-CN", "计量类型", "计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）"),
             // entity.budgetactual.measuretype
-            new TranslationSeedItem("entity.budgetactual.measuretype", "zh-HK", "计量类型_hk", "计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）"),
+            new TranslationSeedItem("entity.budgetactual.measuretype", "zh-HK", "计量类型_hk", "计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）"),
 
             // entity.budgetactual.budgetamount
             new TranslationSeedItem("entity.budgetactual.budgetamount", "en-US", "本期预算_us", "本期预算金额（或数量，视 MeasureType）"),
@@ -235,13 +235,13 @@ public class TaktBudgetActualI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.budgetactual.ytdvarianceamount", "zh-HK", "本年累计差异_hk", "本年累计差异（= 本年累计实绩 − 本年累计预算）"),
 
             // entity.budgetactual.currencycode
-            new TranslationSeedItem("entity.budgetactual.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；数量计量时可仍存报告币）"),
+            new TranslationSeedItem("entity.budgetactual.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）"),
             // entity.budgetactual.currencycode
-            new TranslationSeedItem("entity.budgetactual.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；数量计量时可仍存报告币）"),
+            new TranslationSeedItem("entity.budgetactual.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）"),
             // entity.budgetactual.currencycode
-            new TranslationSeedItem("entity.budgetactual.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；数量计量时可仍存报告币）"),
+            new TranslationSeedItem("entity.budgetactual.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）"),
             // entity.budgetactual.currencycode
-            new TranslationSeedItem("entity.budgetactual.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；数量计量时可仍存报告币）"),
+            new TranslationSeedItem("entity.budgetactual.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）"),
 
             // entity.budgetactual.sortorder
             new TranslationSeedItem("entity.budgetactual.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),

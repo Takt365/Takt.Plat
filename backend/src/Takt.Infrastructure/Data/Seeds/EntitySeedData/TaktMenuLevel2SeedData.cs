@@ -135,7 +135,7 @@ public class TaktMenuLevel2SeedData
         }
 
         // ========== 日常事务下的二级菜单 (SortOrder: 3) ==========
-        // 顺序：公告通知 → 会议中心 → 文管中心（目录） → 新闻中心 → 服务台（目录） → 访客中心
+        // 顺序：公告通知 → 会议中心（目录） → 文管中心（页面） → 新闻中心（页面） → 服务台（目录） → 访客中心
         if (routineMenu != null)
         {
             var (insert1, update1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_ANNOUNCEMENT", menu =>
@@ -158,17 +158,17 @@ public class TaktMenuLevel2SeedData
             insertCount += insert1;
             updateCount += update1;
 
-            var (insert2, update2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_CONFERENCE_CENTER", menu =>
+            // 会议中心：二级目录（下级：会议、会议室）
+            var (insert2, update2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_MEETING_CENTER", menu =>
             {
                 menu.MenuName = "会议中心";
-                menu.MenuCode = "ROUTINE_CONFERENCE_CENTER";
-                menu.I18nKey = "menu.routine.conference.center";
+                menu.MenuCode = "ROUTINE_MEETING_CENTER";
+                menu.I18nKey = "menu.routine.meeting.center._self";
                 menu.Icon = "RiVideoLine";
                 menu.ParentId = routineMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:conference:center:list";
-                menu.RoutePath = "/routine/conference-center/conference";
-                menu.ComponentPath = "routine/conference-center/conference/index";
+                menu.MenuType = 0;
+                menu.RoutePath = "/routine/meeting-center";
+                menu.ComponentPath = "routine/meeting-center";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -178,41 +178,46 @@ public class TaktMenuLevel2SeedData
             insertCount += insert2;
             updateCount += update2;
 
+            // 文管中心：二级页面菜单（版本控制在文管视图工具栏按钮中，无三级子菜单）
             var (insert3, update3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_DOCUMENT_CENTER", menu =>
             {
                 menu.MenuName = "文管中心";
                 menu.MenuCode = "ROUTINE_DOCUMENT_CENTER";
-                menu.I18nKey = "menu.routine.document.center._self";
+                menu.I18nKey = "menu.routine.document.center";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = routineMenu.Id;
-                menu.MenuType = 0;
-                menu.RoutePath = "/routine/document-center";
-                menu.ComponentPath = "routine/document-center";
+                menu.MenuType = 1;
+                menu.Permission = "routine:document:center:list";
+                menu.RoutePath = "/routine/document-center/document";
+                menu.ComponentPath = "routine/document-center/document/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
+                menu.IsLeaf = 1;
             });
             insertCount += insert3;
             updateCount += update3;
 
+            // 新闻中心：二级页面菜单（与公告通知/访客中心同型；无三级子菜单）
             var (insert4, update4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "ROUTINE_NEWS_CENTER", menu =>
             {
                 menu.MenuName = "新闻中心";
                 menu.MenuCode = "ROUTINE_NEWS_CENTER";
-                menu.I18nKey = "menu.routine.news.center._self";
+                menu.I18nKey = "menu.routine.news.center";
                 menu.Icon = "RiArticleLine";
                 menu.ParentId = routineMenu.Id;
-                menu.MenuType = 0;
-                menu.Permission = string.Empty;
-                menu.RoutePath = "/routine/news-center";
-                menu.ComponentPath = "routine/news-center";
+                menu.MenuType = 1;
+                menu.Permission = "routine:news:center:list";
+                menu.RoutePath = "/routine/news-center/news";
+                menu.ComponentPath = "routine/news-center/news/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
+                menu.IsLeaf = 1;
             });
             insertCount += insert4;
             updateCount += update4;
@@ -1191,16 +1196,16 @@ public class TaktMenuLevel2SeedData
         // ========== 统计看板下的二级菜单 (SortOrder: 11) ==========
         if (statisticsMenu != null)
         {
-            var (insertStatistics1, updateStatistics1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_REPORT", menu =>
+            var (insertStatistics1, updateStatistics1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "STATISTICS_QUICK_QUERY", menu =>
             {
-                menu.MenuName = "报表管理";
-                menu.MenuCode = "STATISTICS_REPORT";
-                menu.I18nKey = "menu.statistics.report._self";
-                menu.Icon = "RiBarChartBoxLine";
+                menu.MenuName = "快速查询";
+                menu.MenuCode = "STATISTICS_QUICK_QUERY";
+                menu.I18nKey = "menu.statistics.quickquery._self";
+                menu.Icon = "RiSearchLine";
                 menu.ParentId = statisticsMenu.Id;
                 menu.MenuType = 0;
-                menu.RoutePath = "/statistics/report";
-                menu.ComponentPath = "statistics/report";
+                menu.RoutePath = "/statistics/quick-query";
+                menu.ComponentPath = "statistics/quick-query";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;

@@ -12,8 +12,6 @@
 
 import request from '@/api/request';
 import type {
-  BomMaterialCostItemMonthlyTrendQuery,
-  BomMaterialCostItemMonthlyTrendResult,
   BomMaterialCostItemTransposedQuery,
   BomMaterialCostItemTransposedResult,
   BomMaterialCostItemVarianceQuery,
@@ -91,20 +89,5 @@ export function exportBomMaterialCostItemVarianceAnalysis(
     method: 'get',
     params: { ...query, sheetName, exportName },
     responseType: 'blob',
-  });
-}
-
-/**
- * 获取 BOM 成本分析月度涨跌
- * @param {BomMaterialCostItemMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<BomMaterialCostItemMonthlyTrendResult>} 月度涨跌结果
- */
-export function getBomMaterialCostItemMonthlyTrendAnalysis(
-  queryDto: BomMaterialCostItemMonthlyTrendQuery
-): Promise<BomMaterialCostItemMonthlyTrendResult> {
-  return request<BomMaterialCostItemMonthlyTrendResult>({
-    url: `${BOM_MATERIAL_COST_ANALYSIS_API_BASE}/monthly-trend-analysis`,
-    method: 'get',
-    params: queryDto,
   });
 }

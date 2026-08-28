@@ -125,7 +125,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   totalActualHours?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+   * 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -292,7 +292,7 @@ export interface OvertimeCreate {
   totalActualHours: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+   * 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType: number;
 
@@ -435,7 +435,7 @@ export interface OvertimeTemplate {
   totalActualHours?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+   * 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -552,7 +552,7 @@ export interface OvertimeImport {
   totalActualHours?: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+   * 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType?: number;
 
@@ -656,7 +656,7 @@ export interface OvertimeExport {
   totalActualHours: number;
 
   /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+   * 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
    */
   overtimeType: number;
 

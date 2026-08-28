@@ -34,12 +34,12 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "course_name", ColumnDescription = "课程名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CourseName { get; set; } = string.Empty;
     /// <summary>
-    /// 课程类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）
+    /// 课程类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）
     /// </summary>
     [SugarColumn(ColumnName = "course_type", ColumnDescription = "课程类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CourseType { get; set; } = string.Empty;
     /// <summary>
-    /// 课程级别（字典 hr_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）
+    /// 课程级别（字典 humanresource_training_course_level；列存 DictValue：BEGINNER/INTERMEDIATE/ADVANCED/EXPERT）
     /// </summary>
     [SugarColumn(ColumnName = "course_level", ColumnDescription = "课程级别", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CourseLevel { get; set; } = string.Empty;
@@ -64,12 +64,12 @@ public class TaktTrainingCourse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "main_instructor", ColumnDescription = "主讲讲师", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MainInstructor { get; set; } = string.Empty;
     /// <summary>
-    /// 培训方式（字典 hr_training_method_type；列存 DictValue：OFFLINE/ONLINE/HYBRID）
+    /// 培训方式（字典 humanresource_training_method；列存 DictValue：OFFLINE/ONLINE/HYBRID）
     /// </summary>
     [SugarColumn(ColumnName = "training_method", ColumnDescription = "培训方式", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string TrainingMethod { get; set; } = string.Empty;
     /// <summary>
-    /// 考核方式（字典 hr_training_assessment_method_type；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）
+    /// 考核方式（字典 humanresource_training_assessment_method；列存 DictValue：EXAM/PRACTICAL/ASSIGNMENT/NONE）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_method", ColumnDescription = "考核方式", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string AssessmentMethod { get; set; } = string.Empty;

@@ -61,7 +61,7 @@
                 <TaktSelect
                   v-model:value="formState.numberingRuleCode"
                   api-url="TaktNumberings/options"
-                  :api-params="{ documentType: '文档管理' }"
+                  :api-params="{ documentType: '文管中心' }"
                   :placeholder="t('common.page.form.placeholder.selectonly')"
                   :disabled="!!formData?.documentId || loading"
                 />
@@ -115,7 +115,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.documentCategory"
-                  dict-type="routine_document_category"
+                  dict-type="routine_document_center_category"
                   :placeholder="pi.ph('documentCategory')"
                 />
               </a-form-item>
@@ -127,7 +127,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.confidentialLevel"
-                  dict-type="routine_document_confidential_level"
+                  dict-type="routine_document_center_confidential_level"
                   :placeholder="pi.ph('confidentialLevel')"
                 />
               </a-form-item>

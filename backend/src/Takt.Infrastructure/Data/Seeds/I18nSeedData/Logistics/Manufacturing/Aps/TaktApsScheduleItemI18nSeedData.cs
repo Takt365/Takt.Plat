@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsScheduleItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktApsScheduleItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsscheduleitem.apsscheduleid", "zh-HK", "APS排程ID_hk", "APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）"),
 
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "en-US", "APS排程编码_us", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "en-US", "APS排程编码_us", "APS排程编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "ja-JP", "APS排程编码_jp", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "ja-JP", "APS排程编码_jp", "APS排程编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-CN", "APS排程编码", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-CN", "APS排程编码", "APS排程编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.apsscheduleitem.apsschedulecode
-            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-HK", "APS排程编码_hk", "APS排程编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.apsscheduleitem.apsschedulecode", "zh-HK", "APS排程编码_hk", "APS排程编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.apsscheduleitem.apsorderid
             new TranslationSeedItem("entity.apsscheduleitem.apsorderid", "en-US", "APS订单ID_us", "APS 订单 ID（选项 TaktApsOrders/options；DictValue=Id）"),

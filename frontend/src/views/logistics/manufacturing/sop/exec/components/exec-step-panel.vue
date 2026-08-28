@@ -209,7 +209,7 @@
       <a-form-item :label="pi.queryLabel('stepResult')">
         <TaktSelect
           v-model:value="advancedQueryForm.stepResult"
-          dict-type="logistics_sop_check_result_type"
+          dict-type="logistics_manufacturing_sop_check_result"
           :placeholder="pi.queryPh('stepResult', 'select')"
           allow-clear
         />

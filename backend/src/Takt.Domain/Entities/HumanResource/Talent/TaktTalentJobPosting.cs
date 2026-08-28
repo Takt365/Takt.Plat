@@ -55,7 +55,7 @@ public class TaktTalentJobPosting : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "close_date", ColumnDescription = "招聘关闭日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? CloseDate { get; set; }
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     [SugarColumn(ColumnName = "publish_channel", ColumnDescription = "发布渠道", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PublishChannel { get; set; }
@@ -65,7 +65,7 @@ public class TaktTalentJobPosting : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "reason", ColumnDescription = "发布说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? Reason { get; set; }
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     [SugarColumn(ColumnName = "posting_status", ColumnDescription = "发布状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PostingStatus { get; set; }

@@ -81,7 +81,7 @@
         <template v-else-if="column.key === 'formulaStep'">
           <TaktDictTag
             :value="getSalaryFormulaField(record, 'formulaStep')"
-            dict-type="hr_salary_formula_step_type"
+            dict-type="humanresource_compensation_salary_formula_step_type"
           />
         </template>
       </template>
@@ -184,7 +184,7 @@
       <a-form-item :label="t('entity.salaryformula.formulastep')">
         <TaktSelect
           v-model:value="advancedQueryForm.formulaStep"
-          dict-type="hr_salary_formula_step_type"
+          dict-type="humanresource_compensation_salary_formula_step_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryformula.formulastep') })"
           allow-clear
         />

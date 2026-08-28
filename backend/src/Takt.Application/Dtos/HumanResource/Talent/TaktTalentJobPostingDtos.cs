@@ -72,7 +72,7 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 
@@ -177,7 +177,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public DateTime? CloseDateEnd { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -187,7 +187,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -275,7 +275,7 @@ public class TaktTalentJobPostingCreateDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -285,7 +285,7 @@ public class TaktTalentJobPostingCreateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 
@@ -349,9 +349,9 @@ public class TaktTalentJobPostingStatusDto
     public long TalentJobPostingId { get; set; }
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
-    [Required(ErrorMessage = "发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）不能为空")]
+    [Required(ErrorMessage = "发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）不能为空")]
     public int PostingStatus { get; set; } = 0;
 }
 
@@ -416,7 +416,7 @@ public class TaktTalentJobPostingTemplateDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -426,7 +426,7 @@ public class TaktTalentJobPostingTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -504,7 +504,7 @@ public class TaktTalentJobPostingImportDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int? PublishChannel { get; set; }
 
@@ -514,7 +514,7 @@ public class TaktTalentJobPostingImportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int? PostingStatus { get; set; }
 
@@ -598,7 +598,7 @@ public class TaktTalentJobPostingExportDto
     public DateTime? CloseDate { get; set; }
 
     /// <summary>
-    /// 发布渠道（字典 hr_talent_publish_channel_type；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
+    /// 发布渠道（字典 humanresource_talent_publish_channel；0=官网 1=招聘网站 2=内推 3=校园 9=其他）
     /// </summary>
     public int PublishChannel { get; set; } = 0;
 
@@ -608,7 +608,7 @@ public class TaktTalentJobPostingExportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发布状态（字典 hr_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
+    /// 发布状态（字典 humanresource_talent_job_posting_status；0=草稿 1=招聘中 2=已暂停 3=已关闭）
     /// </summary>
     public int PostingStatus { get; set; } = 0;
 

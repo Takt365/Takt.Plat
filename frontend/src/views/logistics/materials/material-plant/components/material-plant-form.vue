@@ -147,6 +147,7 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   currencyCode: "CNY",
   priceControl: "V",
   priceUnit: 1000,
+  discontinuedStatus: "Z0",
   materialStatus: 1
 }
 
@@ -421,14 +422,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  isInspection: [{
+  requiresInspection: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('isInspection'))
+        return Promise.reject(pi.ph('requiresInspection'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('isInspection'))
+        return Promise.reject(pi.ph('requiresInspection'))
       }
       return Promise.resolve()
     },
@@ -447,10 +448,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  isEndOfLife: [
+  discontinuedStatus: [
     {
       required: true,
-      message: pi.ph('isEndOfLife'),
+      message: pi.ph('discontinuedStatus'),
       trigger: 'change'
     }
   ],
@@ -514,9 +515,9 @@ function getValues(): Record<string, any> {
     const rawcurrentStock = payload.currentStock
     payload.currentStock = typeof rawcurrentStock === 'number' ? rawcurrentStock : Number(rawcurrentStock)
   }
-  if ('isInspection' in payload) {
-    const rawisInspection = payload.isInspection
-    payload.isInspection = typeof rawisInspection === 'number' ? rawisInspection : Number(rawisInspection)
+  if ('requiresInspection' in payload) {
+    const rawrequiresInspection = payload.requiresInspection
+    payload.requiresInspection = typeof rawrequiresInspection === 'number' ? rawrequiresInspection : Number(rawrequiresInspection)
   }
   if ('isBatch' in payload) {
     const rawisBatch = payload.isBatch

@@ -76,7 +76,7 @@ public class TaktDept : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "cost_center_code", ColumnDescription = "成本中心编码", ColumnDataType = "varchar", Length = 6, IsNullable = false, DefaultValue = "")]
     public string CostCenterCode { get; set; } = string.Empty;
     /// <summary>
-    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+    /// 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
     /// </summary>
     [SugarColumn(ColumnName = "cost_category", ColumnDescription = "费用类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
     public int CostCategory { get; set; } = 2;

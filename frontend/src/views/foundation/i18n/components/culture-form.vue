@@ -49,6 +49,7 @@
         <a-input
           v-model:value="formState.nativeName"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.culture.nativename') })"
+          :maxlength="40"
           :disabled="props.loading || !!formState.cultureId"
         />
       </a-form-item>

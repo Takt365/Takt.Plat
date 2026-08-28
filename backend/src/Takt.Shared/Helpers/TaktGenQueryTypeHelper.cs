@@ -4,7 +4,7 @@
 // 文件名称：TaktGenQueryTypeHelper.cs
 // 创建时间：2026-06-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：代码生成列 IsQuery 与 QueryType 关联解析（对齐字典 gen_query_type dict_value）
+// 功能描述：代码生成列 IsQuery 与 QueryType 关联解析（对齐字典 code_generator_query_type dict_value）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

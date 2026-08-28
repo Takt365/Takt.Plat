@@ -109,6 +109,7 @@
         ref="formRef"
         :form-data="formData"
         :master-id="masterBillOfMaterialItemId"
+        :master-row="selectedMasterRow"
         :loading="formLoading"
       />
     </TaktModal>
@@ -129,6 +130,16 @@
           v-model:value="advancedQueryForm.cultureCode"
           dict-type="sys_culture_code"
           :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -229,7 +240,7 @@
       <a-form-item :label="pi.queryLabel('materialUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('materialUnit', 'select')"
           allow-clear
         />

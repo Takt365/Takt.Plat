@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint-handling.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -23,6 +23,10 @@ import type {
  * @description 对应后端 TaktCustomerComplaintHandlingDto
  */
 export interface CustomerComplaintHandling extends CompanyDtoBase {
+  /**
+   * CustomerComplaintHandlingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  customerComplaintHandlingId: string;
 
   /**
    * 客诉处理记录编码（唯一索引）
@@ -30,7 +34,7 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   complaintHandlingCode: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
@@ -40,12 +44,12 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   complaintName?: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
@@ -55,12 +59,12 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   complaintItemName?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod: number;
 
@@ -85,19 +89,34 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间
@@ -125,17 +144,22 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus: number;
 
@@ -160,12 +184,17 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -175,27 +204,27 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   complaintHandlingCode?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode?: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod?: number;
 
@@ -220,19 +249,34 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间（范围查询-开始）
@@ -275,17 +319,22 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus?: number;
 
@@ -329,15 +378,12 @@ export interface CustomerComplaintHandlingCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode: string
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -347,27 +393,27 @@ export interface CustomerComplaintHandlingCreate {
   complaintHandlingCode: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod: number;
 
@@ -392,19 +438,34 @@ export interface CustomerComplaintHandlingCreate {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间
@@ -432,17 +493,22 @@ export interface CustomerComplaintHandlingCreate {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus: number;
 
@@ -486,7 +552,7 @@ export interface CustomerComplaintHandlingStatus {
   customerComplaintHandlingId: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus: number;
 
@@ -510,7 +576,12 @@ export interface CustomerComplaintHandlingTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -520,27 +591,27 @@ export interface CustomerComplaintHandlingTemplate {
   complaintHandlingCode?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode?: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod?: number;
 
@@ -565,19 +636,34 @@ export interface CustomerComplaintHandlingTemplate {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间
@@ -605,17 +691,22 @@ export interface CustomerComplaintHandlingTemplate {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus?: number;
 
@@ -649,15 +740,12 @@ export interface CustomerComplaintHandlingImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -667,27 +755,27 @@ export interface CustomerComplaintHandlingImport {
   complaintHandlingCode?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode?: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage?: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod?: number;
 
@@ -712,19 +800,34 @@ export interface CustomerComplaintHandlingImport {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间
@@ -752,17 +855,22 @@ export interface CustomerComplaintHandlingImport {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus?: number;
 
@@ -796,9 +904,14 @@ export interface CustomerComplaintHandlingExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 客诉处理记录编码（唯一索引）
@@ -806,27 +919,27 @@ export interface CustomerComplaintHandlingExport {
   complaintHandlingCode: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
   /**
-   * 客诉单号（冗余字段，便于查询）
+   * 客诉单号（冗余：按对应 Id 取主数据名称联动）
    */
   complaintCode: string;
 
   /**
-   * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+   * 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
    */
   complaintItemId?: string;
 
   /**
-   * 处理阶段（0=初步响应，1=原因分析，2=改善对策，3=效果验证，4=结案）
+   * 处理阶段（字典 logistics_quality_complaint_handling_stage）
    */
   handlingStage: number;
 
   /**
-   * 处理方式（0=返工，1=返修，2=补货，3=退货，4=退款，5=折扣，6=其他）
+   * 处理方式（字典 logistics_quality_complaint_handling_method）
    */
   handlingMethod: number;
 
@@ -851,19 +964,34 @@ export interface CustomerComplaintHandlingExport {
   preventiveAction?: string;
 
   /**
-   * 责任部门
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  responsibleDept?: string;
+  responsibleDeptId?: string;
 
   /**
-   * 责任人（人员代码）
+   * 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
    */
-  responsibleBy?: string;
+  responsibleDeptName?: string;
 
   /**
-   * 处理人（人员代码）
+   * 责任人（选项 TaktEmployees/options；DictValue=Id）
    */
-  handlerBy?: string;
+  responsiblePersonId?: string;
+
+  /**
+   * 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+   */
+  responsiblePersonName?: string;
+
+  /**
+   * 处理人（选项 TaktEmployees/options；DictValue=Id）
+   */
+  handlerId?: string;
+
+  /**
+   * 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+   */
+  handlerName?: string;
 
   /**
    * 处理时间
@@ -891,17 +1019,22 @@ export interface CustomerComplaintHandlingExport {
   customerFeedback?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 附件路径（JSON格式，存储相关文件URL列表）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentPaths?: string;
+  fileName?: string;
 
   /**
-   * 处理状态（0=待处理，1=处理中，2=已完成，3=已关闭，4=已驳回）
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
+
+  /**
+   * 处理状态（字典 logistics_quality_complaint_handling_status）
    */
   handlingStatus: number;
 

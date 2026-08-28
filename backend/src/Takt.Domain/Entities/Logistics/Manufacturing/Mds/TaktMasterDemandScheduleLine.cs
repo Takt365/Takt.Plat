@@ -47,7 +47,7 @@ public class TaktMasterDemandScheduleLine : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     [SugarColumn(ColumnName = "demand_source_type", ColumnDescription = "需求来源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DemandSourceType { get; set; } = 0;
@@ -103,7 +103,7 @@ public class TaktMasterDemandScheduleLine : TaktCompanyEntityBase
     public decimal DemandQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string UnitOfMeasure { get; set; } = "PC";

@@ -59,15 +59,18 @@ v-permission → display:none | canActivateRoute → 路由守卫
 ## 自检
 
 ```
-- [ ] 四处 Permission 字符串完全一致
+- [ ] 四处 Permission 字符串完全一致（含 MenuOther 附属嵌套码）
 - [ ] 菜单 I18nKey（menu.*）≠ Permission（identity:…:list）
 - [ ] 列/表单用 entity.*；按钮文案 common.button.*
 - [ ] 生成代码后核对 15-codegen §五 权限项
+- [ ] 无 SoftDeleteObsolete / 双入口兼容旧菜单（00-project §1.9）
+- [ ] 无独立页面的附属 CRUD 已写入 TaktMenuOtherSeedData
 ```
 
 ## 交叉规则
 
-- 格式权威：`00-project` §1.6 / §1.7
+- 格式权威：`00-project` §1.6 / §1.7 / **§1.9 全新写法**
 - CRUD 映射：`12-crud` §三
 - 代码生成：`15-codegen`
 - 前端 i18n 落地：`02-frontend` §6
+- 附属权限种子：`TaktMenuOtherSeedData`（挂父级 L2，形如 `…:room:create`）

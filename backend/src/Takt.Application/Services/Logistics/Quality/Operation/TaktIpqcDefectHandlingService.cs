@@ -439,9 +439,9 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
                 || (x.DefectCode != null && x.DefectCode.Contains(keywords))
                 || (x.DefectDescription != null && x.DefectDescription.Contains(keywords))
                 || (x.HandlingDescription != null && x.HandlingDescription.Contains(keywords))
-                || (x.ResponsibleDept != null && x.ResponsibleDept.Contains(keywords))
-                || (x.ResponsibleBy != null && x.ResponsibleBy.Contains(keywords))
-                || (x.HandlerBy != null && x.HandlerBy.Contains(keywords))
+                || (x.ResponsibleDeptName != null && x.ResponsibleDeptName.Contains(keywords))
+                || (x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(keywords))
+                || (x.HandlerName != null && x.HandlerName.Contains(keywords))
                 || (x.CorrectiveAction != null && x.CorrectiveAction.Contains(keywords))
                 || (x.DefectImages != null && x.DefectImages.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
@@ -522,22 +522,22 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
             exp = exp.And(x => x.HandlingDescription != null && x.HandlingDescription.Contains(handlingDescription));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleDept))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleDeptName))
         {
-            var responsibleDept = queryDto.ResponsibleDept;
-            exp = exp.And(x => x.ResponsibleDept != null && x.ResponsibleDept.Contains(responsibleDept));
+            var responsibleDept = queryDto.ResponsibleDeptName;
+            exp = exp.And(x => x.ResponsibleDeptName != null && x.ResponsibleDeptName.Contains(responsibleDept));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsibleBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ResponsiblePersonName))
         {
-            var responsibleBy = queryDto.ResponsibleBy;
-            exp = exp.And(x => x.ResponsibleBy != null && x.ResponsibleBy.Contains(responsibleBy));
+            var responsibleBy = queryDto.ResponsiblePersonName;
+            exp = exp.And(x => x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(responsibleBy));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.HandlerBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlerName))
         {
-            var handlerBy = queryDto.HandlerBy;
-            exp = exp.And(x => x.HandlerBy != null && x.HandlerBy.Contains(handlerBy));
+            var handlerBy = queryDto.HandlerName;
+            exp = exp.And(x => x.HandlerName != null && x.HandlerName.Contains(handlerBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.CorrectiveAction))
@@ -666,15 +666,15 @@ public class TaktIpqcDefectHandlingService : TaktServiceBase, ITaktIpqcDefectHan
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleDept))
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleDeptName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ResponsibleBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.ResponsiblePersonName))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.HandlerBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.HandlerName))
         {
             return true;
         }

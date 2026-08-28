@@ -33,7 +33,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 开票凭证（冗余字段，便于查询）
+    /// 开票凭证（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "billing_document_code", ColumnDescription = "开票凭证", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string BillingDocumentCode { get; set; } = string.Empty;
@@ -357,10 +357,16 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     public DateTime? ExchangeRateDate { get; set; }
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "已创建的", ColumnDataType = "nvarchar", Length = 12, IsNullable = true)]
-    public string? PostedBy { get; set; }
+    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PostedByEmployeeId { get; set; }
+    /// <summary>
+    /// 过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "posted_by_employee_name", ColumnDescription = "过账人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PostedByEmployeeName { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

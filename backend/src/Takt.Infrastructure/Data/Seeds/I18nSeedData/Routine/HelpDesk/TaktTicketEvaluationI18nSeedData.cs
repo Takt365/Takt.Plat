@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketEvaluationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktTicketEvaluationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketevaluation.evaluatorid", "zh-HK", "评价人ID_hk", "评价人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "en-US", "评价人姓名_us", "评价人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "en-US", "评价人姓名_us", "评价人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "ja-JP", "评价人姓名_jp", "评价人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "ja-JP", "评价人姓名_jp", "评价人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-CN", "评价人姓名", "评价人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-CN", "评价人姓名", "评价人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ticketevaluation.evaluatorname
-            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-HK", "评价人姓名_hk", "评价人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ticketevaluation.evaluatorname", "zh-HK", "评价人姓名_hk", "评价人姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.ticketevaluation.evaluatedat
             new TranslationSeedItem("entity.ticketevaluation.evaluatedat", "en-US", "评价时间_us", "评价时间"),

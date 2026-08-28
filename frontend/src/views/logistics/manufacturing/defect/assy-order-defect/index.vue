@@ -74,13 +74,13 @@
         <template v-if="column.key === 'prodCategory'">
           <TaktDictTag
             :value="getAssyOrderDefectDictValue(record, 'prodCategory')"
-            dict-type="logistics_prod_category"
+            dict-type="logistics_manufacturing_prod_category"
           />
         </template>
         <template v-else-if="column.key === 'orderStatus'">
           <TaktDictTag
             :value="getAssyOrderDefectDictValue(record, 'orderStatus')"
-            dict-type="logistics_prod_status"
+            dict-type="logistics_manufacturing_prod_status"
           />
         </template>
       </template>
@@ -139,7 +139,7 @@
       <a-form-item :label="pi.queryLabel('prodCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          dict-type="logistics_prod_category"
+          dict-type="logistics_manufacturing_prod_category"
           :placeholder="pi.queryPh('prodCategory', 'select')"
           allow-clear
         />
@@ -285,7 +285,7 @@
       <a-form-item :label="pi.queryLabel('orderStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.orderStatus"
-          dict-type="logistics_prod_status"
+          dict-type="logistics_manufacturing_prod_status"
           :placeholder="pi.queryPh('orderStatus', 'select')"
           allow-clear
         />

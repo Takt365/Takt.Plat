@@ -39,7 +39,7 @@ export interface MaterialMovingPrice extends CompanyDtoBase {
   materialCode: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
@@ -54,7 +54,7 @@ export interface MaterialMovingPrice extends CompanyDtoBase {
   stockAmount: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl: string;
 
@@ -64,12 +64,12 @@ export interface MaterialMovingPrice extends CompanyDtoBase {
   movingPrice: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -114,7 +114,7 @@ export interface MaterialMovingPriceQuery extends TaktPagedQuery {
   materialCode?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
@@ -129,7 +129,7 @@ export interface MaterialMovingPriceQuery extends TaktPagedQuery {
   stockAmount?: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl?: string;
 
@@ -139,12 +139,12 @@ export interface MaterialMovingPriceQuery extends TaktPagedQuery {
   movingPrice?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -208,7 +208,7 @@ export interface MaterialMovingPriceCreate {
   materialCode: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
@@ -223,7 +223,7 @@ export interface MaterialMovingPriceCreate {
   stockAmount: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl: string;
 
@@ -233,12 +233,12 @@ export interface MaterialMovingPriceCreate {
   movingPrice: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -307,7 +307,7 @@ export interface MaterialMovingPriceTemplate {
   materialCode?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
@@ -322,7 +322,7 @@ export interface MaterialMovingPriceTemplate {
   stockAmount?: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl?: string;
 
@@ -332,12 +332,12 @@ export interface MaterialMovingPriceTemplate {
   movingPrice?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -391,7 +391,7 @@ export interface MaterialMovingPriceImport {
   materialCode?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
@@ -406,7 +406,7 @@ export interface MaterialMovingPriceImport {
   stockAmount?: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl?: string;
 
@@ -416,12 +416,12 @@ export interface MaterialMovingPriceImport {
   movingPrice?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -475,7 +475,7 @@ export interface MaterialMovingPriceExport {
   materialCode: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
@@ -490,7 +490,7 @@ export interface MaterialMovingPriceExport {
   stockAmount: number;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl: string;
 
@@ -500,12 +500,12 @@ export interface MaterialMovingPriceExport {
   movingPrice: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 

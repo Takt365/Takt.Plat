@@ -337,6 +337,13 @@ const COMMON_ENTITY_FIELD_T_KEYS = {
   relatedPlant: 'common.page.entity.relatedplant',
   createdAtStart: 'common.page.entity.createdatstart',
   createdAtEnd: 'common.page.entity.createdatend',
+  approvalStatus: 'common.page.entity.approvalstatus',
+  initiatorId: 'common.page.entity.initiatorid',
+  initiatedAt: 'common.page.entity.initiatedat',
+  approvalOpinion: 'common.page.entity.approvalopinion',
+  approvedBy: 'common.page.entity.approvedby',
+  approvedAt: 'common.page.entity.approvedat',
+  flowInstanceId: 'common.page.entity.flowinstanceid',
 };
 
 /**
@@ -1926,12 +1933,12 @@ function isTaktNumberingAutoFormField(field) {
  */
 const NUMBERING_DOCUMENT_TYPE_BY_ENTITY = {
   Announcement: '公告通知',
-  Conference: '会议中心',
+  Meeting: '会议中心',
   Document: '文档管理',
   News: '新闻',
   Employee: '员工档案',
   FlowForm: '表单管理',
-  Configurable: 'SQVI报表',
+  Configurable: '定制报表',
 };
 
 /**

@@ -68,12 +68,12 @@ public class TaktEmployeeDelegationDto : TaktCompanyDtoBase
     public string OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 
@@ -180,12 +180,12 @@ public class TaktEmployeeDelegationQueryDto : TaktPagedQuery
     public string? OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
@@ -303,12 +303,12 @@ public class TaktEmployeeDelegationCreateDto
     public string OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 
@@ -428,12 +428,12 @@ public class TaktEmployeeDelegationTemplateDto
     public string? OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
@@ -528,12 +528,12 @@ public class TaktEmployeeDelegationImportDto
     public string? OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int? DelegationType { get; set; }
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int? ScopeType { get; set; }
 
@@ -634,12 +634,12 @@ public class TaktEmployeeDelegationExportDto
     public string OriginalEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
+    /// 代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>
     public int DelegationType { get; set; } = 0;
 
     /// <summary>
-    /// 代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
+    /// 代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）
     /// </summary>
     public int ScopeType { get; set; } = 0;
 

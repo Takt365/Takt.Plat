@@ -27,7 +27,9 @@ namespace Takt.Application.Services.Logistics.Sales;
 /// </summary>
 public class TaktSalesPriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITaktSalesPriceTrendMonthlyAnalysisBuilder
 {
-    /// <summary>物料/客户名称按编码分批查询，避免超长 IN 列表</summary>
+    /// <summary>
+    /// 物料/客户名称按编码分批查询，避免超长 IN 列表
+    /// </summary>
     private const int MaterialNameLookupBatchSize = 500;
 
     private readonly ITaktCompanyRepository<TaktSalesPrice> _salesPriceRepository;
@@ -580,7 +582,9 @@ public class TaktSalesPriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITaktS
     /// </summary>
     private sealed class SalesPriceTrendRowKeyComparer : IEqualityComparer<SalesPriceTrendRowKey>
     {
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static SalesPriceTrendRowKeyComparer Instance { get; } = new();
 
         /// <summary>
@@ -617,10 +621,14 @@ public class TaktSalesPriceTrendMonthlyAnalysisBuilder : TaktServiceBase, ITaktS
     /// </summary>
     private sealed class SalesPriceTrendSourceRow
     {
-        /// <summary>销售价格主表</summary>
+        /// <summary>
+        /// 销售价格主表
+        /// </summary>
         public TaktSalesPrice Master { get; init; } = null!;
 
-        /// <summary>销售价格明细</summary>
+        /// <summary>
+        /// 销售价格明细
+        /// </summary>
         public TaktSalesPriceItem Item { get; init; } = null!;
     }
 }

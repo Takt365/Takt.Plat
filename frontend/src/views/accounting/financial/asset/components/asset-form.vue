@@ -75,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.assetCategory"
-                  dict-type="accounting_asset_category"
+                  dict-type="accounting_financial_asset_category"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
                   allow-clear
                 />
@@ -88,7 +88,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.assetType"
-                  dict-type="accounting_asset_type"
+                  dict-type="accounting_financial_asset_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
                   allow-clear
                 />
@@ -145,12 +145,14 @@
                 :label="t('entity.asset.costcenterid')"
                 name="costCenterId"
               >
-                <a-input
+                <TaktTreeSelect
                   v-model:value="formState.costCenterId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcenterid') })"
-                  show-count
-                  :maxlength="20"
+                  api-url="TaktCostCenters/tree-options"
+                  :lazy="true"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.costcenterid') })"
                   allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  @change="handleCostCenterChange"
                 />
               </a-form-item>
             </a-col>
@@ -161,10 +163,10 @@
               >
                 <a-input
                   v-model:value="formState.costCenterName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcentername') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.costcentername') })"
                   show-count
                   :maxlength="100"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -173,12 +175,14 @@
                 :label="t('entity.asset.deptid')"
                 name="deptId"
               >
-                <a-input
+                <TaktTreeSelect
                   v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptid') })"
-                  show-count
-                  :maxlength="20"
+                  api-url="TaktDepts/tree-options"
+                  :lazy="true"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.deptid') })"
                   allow-clear
+                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+                  @change="handleDeptChange"
                 />
               </a-form-item>
             </a-col>
@@ -189,10 +193,10 @@
               >
                 <a-input
                   v-model:value="formState.deptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptname') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.deptname') })"
                   show-count
                   :maxlength="100"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -201,12 +205,12 @@
                 :label="t('entity.asset.userid')"
                 name="userId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.userId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.userid') })"
-                  show-count
-                  :maxlength="20"
+                  api-url="TaktUsers/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.userid') })"
                   allow-clear
+                  @change="handleUserChange"
                 />
               </a-form-item>
             </a-col>
@@ -217,10 +221,10 @@
               >
                 <a-input
                   v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.username') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.username') })"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -319,7 +323,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.depreciationMethod"
-                  dict-type="accounting_depreciation_method"
+                  dict-type="accounting_financial_depreciation_method"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') })"
                   allow-clear
                 />
@@ -358,7 +362,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.assetStatus"
-                  dict-type="accounting_asset_status"
+                  dict-type="accounting_financial_asset_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.status') })"
                   allow-clear
                 />
@@ -425,6 +429,7 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
@@ -524,6 +529,68 @@ watch(
     }
   },
 )
+
+/** 选项变更时回填冗余名称 */
+type SelectOptionLike = { label?: string; dictLabel?: string; extValue?: string } | null
+
+/**
+ * 从选项解析展示文案
+ * @param value 选中值
+ * @param option 选项或选项数组
+ * @param preferExtValue 为 true 时优先 ExtValue（使用者登录名）
+ * @returns {string} 冗余名称
+ */
+function resolveOptionName(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+  preferExtValue = false,
+): string {
+  if (value === undefined || value === null || value === '') {
+    return ''
+  }
+  const opt = Array.isArray(option) ? option[0] : option
+  const rec = opt && typeof opt === 'object' ? (opt as { label?: string; dictLabel?: string; extValue?: string }) : undefined
+  if (preferExtValue && rec?.extValue) {
+    return String(rec.extValue).trim()
+  }
+  return String(rec?.label ?? rec?.dictLabel ?? '').trim()
+}
+
+/**
+ * 成本中心变更：回填成本中心名称
+ * @param value 成本中心 Id
+ * @param option 选项（含 dictLabel）
+ */
+function handleCostCenterChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.costCenterName = resolveOptionName(value, option)
+}
+
+/**
+ * 部门变更：回填部门名称
+ * @param value 部门 Id
+ * @param option 选项（含 dictLabel）
+ */
+function handleDeptChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.deptName = resolveOptionName(value, option)
+}
+
+/**
+ * 使用者变更：回填用户名（TaktUsers/options ExtValue=UserName）
+ * @param value 用户 Id
+ * @param option 选项
+ */
+function handleUserChange(
+  value: string | number | (string | number)[] | undefined,
+  option: SelectOptionLike | SelectOptionLike[] | unknown,
+) {
+  formState.userName = resolveOptionName(value, option, true)
+}
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsShareI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsShare 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsshare.userid", "zh-HK", "分享人ID_hk", "分享人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名_us", "分享人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名_us", "分享人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "ja-JP", "分享人姓名_jp", "分享人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newsshare.username", "ja-JP", "分享人姓名_jp", "分享人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "zh-CN", "分享人姓名", "分享人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newsshare.username", "zh-CN", "分享人姓名", "分享人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.newsshare.username
-            new TranslationSeedItem("entity.newsshare.username", "zh-HK", "分享人姓名_hk", "分享人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.newsshare.username", "zh-HK", "分享人姓名_hk", "分享人姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.newsshare.sharechannel
             new TranslationSeedItem("entity.newsshare.sharechannel", "en-US", "分享渠道_us", "分享渠道（如 wechat、link 等）"),

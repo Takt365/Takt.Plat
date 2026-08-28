@@ -68,7 +68,7 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -86,7 +86,7 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -96,12 +96,12 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public decimal ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -131,12 +131,12 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public decimal ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -151,7 +151,7 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -241,7 +241,7 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -259,7 +259,7 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -269,12 +269,12 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     public decimal? ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -304,12 +304,12 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     public decimal? ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -324,7 +324,7 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -414,7 +414,7 @@ public class TaktSalesOrderCreateDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -432,9 +432,9 @@ public class TaktSalesOrderCreateDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
-    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    [Required(ErrorMessage = "结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -443,12 +443,12 @@ public class TaktSalesOrderCreateDto
     public decimal ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -478,12 +478,12 @@ public class TaktSalesOrderCreateDto
     public decimal ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -498,7 +498,7 @@ public class TaktSalesOrderCreateDto
     public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 
@@ -630,7 +630,7 @@ public class TaktSalesOrderTemplateDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -648,7 +648,7 @@ public class TaktSalesOrderTemplateDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -658,12 +658,12 @@ public class TaktSalesOrderTemplateDto
     public decimal? ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -693,12 +693,12 @@ public class TaktSalesOrderTemplateDto
     public decimal? ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -713,7 +713,7 @@ public class TaktSalesOrderTemplateDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -792,7 +792,7 @@ public class TaktSalesOrderImportDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -810,7 +810,7 @@ public class TaktSalesOrderImportDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -820,12 +820,12 @@ public class TaktSalesOrderImportDto
     public decimal? ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -855,12 +855,12 @@ public class TaktSalesOrderImportDto
     public decimal? ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int? DeliveryMethod { get; set; }
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
@@ -875,7 +875,7 @@ public class TaktSalesOrderImportDto
     public int? OrderStatus { get; set; }
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
 
@@ -960,7 +960,7 @@ public class TaktSalesOrderExportDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -978,7 +978,7 @@ public class TaktSalesOrderExportDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -988,12 +988,12 @@ public class TaktSalesOrderExportDto
     public decimal ExchangeRate { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -1023,12 +1023,12 @@ public class TaktSalesOrderExportDto
     public decimal ReceivedAmount { get; set; }
 
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     public int DeliveryMethod { get; set; } = 0;
 
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
@@ -1043,7 +1043,7 @@ public class TaktSalesOrderExportDto
     public int OrderStatus { get; set; } = 0;
 
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
 

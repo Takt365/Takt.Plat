@@ -73,12 +73,12 @@ public class TaktTalentStaffingRequirementDto : TaktApprovalDtoBase
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string ReasonCode { get; set; } = string.Empty;
 
@@ -99,7 +99,7 @@ public class TaktTalentStaffingRequirementDto : TaktApprovalDtoBase
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
@@ -207,12 +207,12 @@ public class TaktTalentStaffingRequirementQueryDto : TaktPagedQuery
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
@@ -233,7 +233,7 @@ public class TaktTalentStaffingRequirementQueryDto : TaktPagedQuery
     public DateTime? ExpectedOnboardDateEnd { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
@@ -379,15 +379,15 @@ public class TaktTalentStaffingRequirementCreateDto
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
-    [Required(ErrorMessage = "编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）不能为空")]
+    [Required(ErrorMessage = "编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）不能为空")]
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
-    [Required(ErrorMessage = "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）不能为空")]
+    [Required(ErrorMessage = "需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）不能为空")]
     public string ReasonCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -402,7 +402,7 @@ public class TaktTalentStaffingRequirementCreateDto
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
@@ -525,12 +525,12 @@ public class TaktTalentStaffingRequirementTemplateDto
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
@@ -546,7 +546,7 @@ public class TaktTalentStaffingRequirementTemplateDto
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
@@ -640,12 +640,12 @@ public class TaktTalentStaffingRequirementImportDto
     public int? RequestQty { get; set; }
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string? HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string? ReasonCode { get; set; } = string.Empty;
 
@@ -661,7 +661,7 @@ public class TaktTalentStaffingRequirementImportDto
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 
@@ -761,12 +761,12 @@ public class TaktTalentStaffingRequirementExportDto
     public int RequestQty { get; set; } = 0;
 
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     public string HeadcountType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     public string ReasonCode { get; set; } = string.Empty;
 
@@ -782,7 +782,7 @@ public class TaktTalentStaffingRequirementExportDto
     public DateTime? ExpectedOnboardDate { get; set; }
 
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     public string? ContractType { get; set; } = string.Empty;
 

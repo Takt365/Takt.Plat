@@ -59,7 +59,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.resignationType"
-                  dict-type="hr_resignation_category"
+                  dict-type="humanresource_personnel_resignation_category"
                   :placeholder="pi.ph('resignationType')"
                 />
               </a-form-item>

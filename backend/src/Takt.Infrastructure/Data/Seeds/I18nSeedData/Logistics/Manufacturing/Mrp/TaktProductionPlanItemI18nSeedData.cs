@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionPlanItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktProductionPlanItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionplanitem.productionplanid", "zh-HK", "生产计划ID_hk", "生产计划ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.productionplanitem.productionplancode
-            new TranslationSeedItem("entity.productionplanitem.productionplancode", "en-US", "生产计划编码_us", "生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplanitem.productionplancode", "en-US", "生产计划编码_us", "生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplanitem.productionplancode
-            new TranslationSeedItem("entity.productionplanitem.productionplancode", "ja-JP", "生产计划编码_jp", "生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplanitem.productionplancode", "ja-JP", "生产计划编码_jp", "生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplanitem.productionplancode
-            new TranslationSeedItem("entity.productionplanitem.productionplancode", "zh-CN", "生产计划编码", "生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplanitem.productionplancode", "zh-CN", "生产计划编码", "生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.productionplanitem.productionplancode
-            new TranslationSeedItem("entity.productionplanitem.productionplancode", "zh-HK", "生产计划编码_hk", "生产计划编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.productionplanitem.productionplancode", "zh-HK", "生产计划编码_hk", "生产计划编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.productionplanitem.linenumber
             new TranslationSeedItem("entity.productionplanitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -199,13 +199,13 @@ public class TaktProductionPlanItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionplanitem.modelname", "zh-HK", "机种名称_hk", "机种名称（冗余字段，便于查询展示）"),
 
             // entity.productionplanitem.planunit
-            new TranslationSeedItem("entity.productionplanitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.productionplanitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.productionplanitem.planunit
-            new TranslationSeedItem("entity.productionplanitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.productionplanitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.productionplanitem.planunit
-            new TranslationSeedItem("entity.productionplanitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.productionplanitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.productionplanitem.planunit
-            new TranslationSeedItem("entity.productionplanitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.productionplanitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.productionplanitem.planquantity
             new TranslationSeedItem("entity.productionplanitem.planquantity", "en-US", "计划数量_us", "计划数量（基本单位数量）"),

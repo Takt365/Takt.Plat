@@ -45,6 +45,7 @@
       delete-permission="routine:document:center:delete"
       import-permission="routine:document:center:import"
       export-permission="routine:document:center:export"
+      :left-actions="toolbarLeftActions"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -77,13 +78,13 @@
         <template v-if="column.key === 'documentCategory'">
           <TaktDictTag
             :value="getDocumentDictValue(record, 'documentCategory')"
-            dict-type="routine_document_category"
+            dict-type="routine_document_center_category"
           />
         </template>
         <template v-else-if="column.key === 'confidentialLevel'">
           <TaktDictTag
             :value="getDocumentDictValue(record, 'confidentialLevel')"
-            dict-type="routine_document_confidential_level"
+            dict-type="routine_document_center_confidential_level"
           />
         </template>
         <template v-else-if="column.key === 'documentIsTop'">
@@ -129,6 +130,25 @@
         :form-data="formData"
         :loading="formLoading"
       />
+    </TaktModal>
+    <!-- 版本控制窗口（选中文档后工具栏/行操作打开；含版本 CRUD） -->
+    <TaktModal
+      v-model:open="versionWindowVisible"
+      :title="versionWindowTitle"
+      width="1200px"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleVersionWindowClose"
+    >
+      <div
+        v-if="versionWindowVisible"
+        class="h-[70vh] min-h-[420px] flex flex-col overflow-hidden"
+      >
+        <DocumentVersionPanel
+          ref="documentVersionWindowPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </div>
     </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
@@ -187,7 +207,7 @@
       <a-form-item :label="pi.queryLabel('documentCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.documentCategory"
-          dict-type="routine_document_category"
+          dict-type="routine_document_center_category"
           :placeholder="pi.queryPh('documentCategory', 'select')"
           allow-clear
         />
@@ -197,7 +217,7 @@
       <a-form-item :label="pi.queryLabel('confidentialLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.confidentialLevel"
-          dict-type="routine_document_confidential_level"
+          dict-type="routine_document_center_confidential_level"
           :placeholder="pi.queryPh('confidentialLevel', 'select')"
           allow-clear
         />
@@ -621,7 +641,7 @@
  * 文管中心主实体 支持制度、流程、模板等文档的分类、版本与权限控制管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/routine/document-center/document
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
@@ -636,7 +656,8 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiGitBranchLine } from '@remixicon/vue'
+import type { ToolBarAction } from '@/components/business/takt-tools-bar/index.vue'
 
 import {
   useDocumentI18n,
@@ -778,6 +799,67 @@ const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideDocumentMasterContext()
 const documentVersionPanelRef = ref<InstanceType<typeof DocumentVersionPanel> | null>(null)
+/** 版本窗口内面板 ref */
+const documentVersionWindowPanelRef = ref<InstanceType<typeof DocumentVersionPanel> | null>(null)
+/** 版本控制窗口是否打开 */
+const versionWindowVisible = ref(false)
+
+/** 版本窗口标题 */
+const versionWindowTitle = computed(() => {
+  const row = selectedMasterRow.value as Record<string, unknown> | null
+  const title = row?.documentTitle != null ? String(row.documentTitle) : ''
+  const code = row?.documentCode != null ? String(row.documentCode) : ''
+  const base = t('common.page.button.version')
+  if (title || code) {
+    return `${base} — ${title || code}`
+  }
+  return base
+})
+
+/** 工具栏扩展：版本控制（须选中一行） */
+const toolbarLeftActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'version',
+    label: t('common.page.button.version'),
+    icon: RiGitBranchLine,
+    buttonClass: 'takt-button-version',
+    permission: 'routine:document:center:version',
+    disabled: selectedRows.value.length !== 1 && !selectedMasterKey.value,
+    onClick: () => handleOpenVersionWindow(),
+  },
+])
+
+/**
+ * 打开版本控制窗口（选中当前文档）
+ * @param {DocumentRowRecord} [record] 行；省略时用工具栏当前选中
+ * @returns {void}
+ */
+function handleOpenVersionWindow(record?: DocumentRowRecord): void {
+  const target = record
+    ?? (selectedRows.value.length === 1 ? selectedRows.value[0] : null)
+    ?? (selectedMasterRow.value as DocumentRowRecord | null)
+  if (!target) {
+    message.warning(t('common.tip.select.to.action', {
+      action: t('common.page.button.version'),
+      entity: pi.self(),
+    }))
+    return
+  }
+  selectedMasterRow.value = target
+  selectedMasterKey.value = getDocumentId(target)
+  versionWindowVisible.value = true
+  nextTick(() => {
+    documentVersionWindowPanelRef.value?.reload?.()
+  })
+}
+
+/**
+ * 关闭版本控制窗口
+ * @returns {void}
+ */
+function handleVersionWindowClose(): void {
+  versionWindowVisible.value = false
+}
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
@@ -1104,6 +1186,14 @@ const columns = computed<TableColumnsType>(() => [
   },
   CreateActionColumn({
     actions: [
+      {
+        key: 'version',
+        label: t('common.page.button.version'),
+        shape: 'plain',
+        icon: RiGitBranchLine,
+        permission: 'routine:document:center:version',
+        onClick: (record: DocumentRowRecord) => handleOpenVersionWindow(record)
+      },
       {
         key: 'update',
         label: t('common.page.button.edit'),

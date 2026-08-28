@@ -28,9 +28,9 @@ namespace Takt.Domain.Entities.Foundation;
 public class TaktDictType : TaktTenantCoreEntityBase
 {
     /// <summary>
-    /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
+    /// 字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）
     /// </summary>
-    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false)]
+    [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 140, IsNullable = false)]
     public string DictTypeCode { get; set; } = string.Empty;
     /// <summary>
     /// 字典类型名称（如：订单状态、用户类型）
@@ -38,7 +38,7 @@ public class TaktDictType : TaktTenantCoreEntityBase
     [SugarColumn(ColumnName = "dict_type_name", ColumnDescription = "字典类型名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DictTypeName { get; set; } = string.Empty;
     /// <summary>
-    /// 数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）
+    /// 数据源（字典 sys_data_source；0=系统表 1=SQL查询）
     /// </summary>
     [SugarColumn(ColumnName = "data_source", ColumnDescription = "数据源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DataSource { get; set; } = 0;

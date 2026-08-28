@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/numbering）
 // 
@@ -136,13 +136,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.prefixcode", "zh-HK", "前缀编码_hk", "前缀编码（如：PUR、SORD、ANN）"),
 
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "en-US", "日期格式_us", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.dateformat", "en-US", "日期格式_us", "日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "ja-JP", "日期格式_jp", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.dateformat", "ja-JP", "日期格式_jp", "日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "zh-CN", "日期格式", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.dateformat", "zh-CN", "日期格式", "日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
             // entity.numbering.dateformat
-            new TranslationSeedItem("entity.numbering.dateformat", "zh-HK", "日期格式_hk", "日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
+            new TranslationSeedItem("entity.numbering.dateformat", "zh-HK", "日期格式_hk", "日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）"),
 
             // entity.numbering.sequencelength
             new TranslationSeedItem("entity.numbering.sequencelength", "en-US", "流水位数_us", "流水位数（3=001, 4=0001, 5=00001, 6=000001）"),

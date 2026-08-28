@@ -44,7 +44,7 @@ export interface EmployeeAddress extends CompanyDtoBase {
   employeeName: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType: number;
 
@@ -129,7 +129,7 @@ export interface EmployeeAddressQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType?: number;
 
@@ -228,7 +228,7 @@ export interface EmployeeAddressCreate {
   employeeName: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType: number;
 
@@ -332,7 +332,7 @@ export interface EmployeeAddressTemplate {
   employeeName?: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType?: number;
 
@@ -421,7 +421,7 @@ export interface EmployeeAddressImport {
   employeeName?: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType?: number;
 
@@ -510,7 +510,7 @@ export interface EmployeeAddressExport {
   employeeName: string;
 
   /**
-   * 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+   * 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
    */
   addressType: number;
 

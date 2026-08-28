@@ -54,10 +54,16 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_until_date", ColumnDescription = "报价有效期至", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ValidUntilDate { get; set; }
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_by", ColumnDescription = "销售员", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? SalesBy { get; set; }
+    [SugarColumn(ColumnName = "sales_employee_id", ColumnDescription = "销售员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? SalesEmployeeId { get; set; }
+    /// <summary>
+    /// 销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_employee_name", ColumnDescription = "销售员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SalesEmployeeName { get; set; }
     /// <summary>
     /// 报价总数量（基本单位数量）
     /// </summary>
@@ -74,17 +80,17 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountAmount { get; set; } = 0;
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? TaxCode { get; set; }
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
     public int TaxRate { get; set; } = 13;
@@ -104,7 +110,7 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sales_order_code", ColumnDescription = "销售订单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? SalesOrderCode { get; set; }
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     [SugarColumn(ColumnName = "quotation_status", ColumnDescription = "报价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int QuotationStatus { get; set; } = 0;

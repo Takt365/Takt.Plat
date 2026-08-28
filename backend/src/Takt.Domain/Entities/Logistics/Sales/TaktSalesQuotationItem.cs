@@ -32,7 +32,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public long SalesQuotationId { get; set; }
 
     /// <summary>
-    /// 销售报价编码（冗余字段，便于查询）
+    /// 销售报价编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "销售报价编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesQuotationCode { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "sales_unit", ColumnDescription = "销售单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
     public string SalesUnit { get; set; } = "PC";
@@ -74,7 +74,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public decimal QuotationQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "sales_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int SalesPerUnit { get; set; } = 1000;
@@ -86,7 +86,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public decimal QuotationUnitPrice { get; set; } = 0;
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;

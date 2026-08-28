@@ -63,7 +63,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -81,17 +81,17 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -111,7 +111,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int QuotationStatus { get; set; } = 0;
 
@@ -191,7 +191,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -209,17 +209,17 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -239,7 +239,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int? QuotationStatus { get; set; }
 
@@ -324,7 +324,7 @@ public class TaktSalesQuotationCreateDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -342,18 +342,18 @@ public class TaktSalesQuotationCreateDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
-    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    [Required(ErrorMessage = "结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -373,7 +373,7 @@ public class TaktSalesQuotationCreateDto
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int QuotationStatus { get; set; } = 0;
 
@@ -437,9 +437,9 @@ public class TaktSalesQuotationStatusDto
     public long SalesQuotationId { get; set; }
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
-    [Required(ErrorMessage = "报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）不能为空")]
+    [Required(ErrorMessage = "报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）不能为空")]
     public int QuotationStatus { get; set; } = 0;
 }
 
@@ -500,7 +500,7 @@ public class TaktSalesQuotationTemplateDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -518,17 +518,17 @@ public class TaktSalesQuotationTemplateDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -548,7 +548,7 @@ public class TaktSalesQuotationTemplateDto
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int? QuotationStatus { get; set; }
 
@@ -622,7 +622,7 @@ public class TaktSalesQuotationImportDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -640,17 +640,17 @@ public class TaktSalesQuotationImportDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -670,7 +670,7 @@ public class TaktSalesQuotationImportDto
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int? QuotationStatus { get; set; }
 
@@ -750,7 +750,7 @@ public class TaktSalesQuotationExportDto
     /// <summary>
     /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SalesBy { get; set; } = string.Empty;
+    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价总数量（基本单位数量）
@@ -768,17 +768,17 @@ public class TaktSalesQuotationExportDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -798,7 +798,7 @@ public class TaktSalesQuotationExportDto
     public string? SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+    /// 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
     /// </summary>
     public int QuotationStatus { get; set; } = 0;
 

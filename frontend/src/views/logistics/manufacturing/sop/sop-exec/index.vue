@@ -77,19 +77,19 @@
         <template v-if="column.key === 'processSegmentType'">
           <TaktDictTag
             :value="getSopExecField(record, 'processSegmentType')"
-            dict-type="logistics_process_segment_type"
+            dict-type="logistics_manufacturing_process_segment_type"
           />
         </template>
         <template v-else-if="column.key === 'selfCheckResult'">
           <TaktDictTag
             :value="getSopExecField(record, 'selfCheckResult')"
-            dict-type="logistics_sop_check_result_type"
+            dict-type="logistics_manufacturing_sop_check_result"
           />
         </template>
         <template v-else-if="column.key === 'execStatus'">
           <TaktDictTag
             :value="getSopExecField(record, 'execStatus')"
-            dict-type="logistics_sop_exec_status"
+            dict-type="logistics_manufacturing_sop_exec_status"
           />
         </template>
       </template>
@@ -233,7 +233,7 @@
       <a-form-item :label="t('entity.sopexec.processsegmenttype')">
         <TaktSelect
           v-model:value="advancedQueryForm.processSegmentType"
-          dict-type="logistics_process_segment_type"
+          dict-type="logistics_manufacturing_process_segment_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') })"
           allow-clear
         />
@@ -350,7 +350,7 @@
       <a-form-item :label="t('entity.sopexec.selfcheckresult')">
         <TaktSelect
           v-model:value="advancedQueryForm.selfCheckResult"
-          dict-type="logistics_sop_check_result_type"
+          dict-type="logistics_manufacturing_sop_check_result"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.selfcheckresult') })"
           allow-clear
         />
@@ -360,7 +360,7 @@
       <a-form-item :label="t('entity.sopexec.execstatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.execStatus"
-          dict-type="logistics_sop_exec_status"
+          dict-type="logistics_manufacturing_sop_exec_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') })"
           allow-clear
         />

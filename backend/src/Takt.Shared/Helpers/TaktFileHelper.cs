@@ -63,13 +63,19 @@ public static class TaktFileHelper
 
     #region 文件状态
 
-    /// <summary>禁用（字典 sys_normal_disable=0）</summary>
+    /// <summary>
+    /// 禁用（字典 sys_normal_disable=0）
+    /// </summary>
     public const int FileStatusDisabled = 0;
 
-    /// <summary>启用（字典 sys_normal_disable=1）</summary>
+    /// <summary>
+    /// 启用（字典 sys_normal_disable=1）
+    /// </summary>
     public const int FileStatusEnabled = 1;
 
-    /// <summary>锁定（字典 sys_normal_disable=2）</summary>
+    /// <summary>
+    /// 锁定（字典 sys_normal_disable=2）
+    /// </summary>
     public const int FileStatusLocked = 2;
 
     /// <summary>
@@ -127,19 +133,29 @@ public static class TaktFileHelper
 
     #region 存储配置
 
-    /// <summary>本地存储（字典 sys_storage_type=0）</summary>
+    /// <summary>
+    /// 本地存储（字典 sys_storage_type=0）
+    /// </summary>
     public const int StorageTypeLocal = 0;
 
-    /// <summary>OSS 对象存储（字典 sys_storage_type=1）</summary>
+    /// <summary>
+    /// OSS 对象存储（字典 sys_storage_type=1）
+    /// </summary>
     public const int StorageTypeOss = 1;
 
-    /// <summary>FTP 存储（字典 sys_storage_type=2）</summary>
+    /// <summary>
+    /// FTP 存储（字典 sys_storage_type=2）
+    /// </summary>
     public const int StorageTypeFtp = 2;
 
-    /// <summary>默认 OSS 提供商标识（字典 sys_oss_provider=aliyun）</summary>
+    /// <summary>
+    /// 默认 OSS 提供商标识（字典 sys_oss_provider=aliyun）
+    /// </summary>
     public const string DefaultOssProvider = "aliyun";
 
-    /// <summary>默认 FTP 提供商标识（字典 sys_ftp_provider_type=teac_cn）</summary>
+    /// <summary>
+    /// 默认 FTP 提供商标识（字典 sys_ftp_provider=teac_cn）
+    /// </summary>
     public const string DefaultFtpProvider = "teac_cn";
 
     /// <summary>

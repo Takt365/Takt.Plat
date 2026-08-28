@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingAttendee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.coursename", "zh-HK", "培训课程名称_hk", "培训课程名称"),
 
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "en-US", "培训类型_us", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "en-US", "培训类型_us", "培训类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "ja-JP", "培训类型_jp", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "ja-JP", "培训类型_jp", "培训类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-CN", "培训类型", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-CN", "培训类型", "培训类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
             // entity.trainingattendee.trainingtype
-            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-HK", "培训类型_hk", "培训类型（字典 hr_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingtype", "zh-HK", "培训类型_hk", "培训类型（字典 humanresource_training_course_type；列存 DictValue：ONBOARD/SKILL/MANAGEMENT/SAFETY/PROFESSIONAL）"),
 
             // entity.trainingattendee.instructor
             new TranslationSeedItem("entity.trainingattendee.instructor", "en-US", "培训讲师_us", "培训讲师"),

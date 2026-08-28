@@ -62,7 +62,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paramUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('paramUnit')"
                 />
               </a-form-item>

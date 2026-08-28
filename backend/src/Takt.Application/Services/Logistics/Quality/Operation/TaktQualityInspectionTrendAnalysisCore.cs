@@ -273,13 +273,17 @@ public static class TaktQualityInspectionTrendAnalysisCore
     /// </summary>
     private sealed class InspectionTrendRowKeyComparer : IEqualityComparer<InspectionTrendRowKey>
     {
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static InspectionTrendRowKeyComparer Instance { get; } = new();
 
         /// <summary>
         /// 月生产推移行键比较器
         /// </summary>
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         /// <summary>
         /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
         /// </summary>

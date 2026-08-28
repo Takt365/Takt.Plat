@@ -28,7 +28,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_manufacturing_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ZDTA")]
     public string ProdOrderType { get; set; } = "ZDTA";
@@ -64,7 +64,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public decimal ProducedQty { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string UnitOfMeasure { get; set; } = string.Empty;
@@ -138,7 +138,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public DateTime? PlannedEndTime { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_prod_status；1=进行中 2=已完成）
+    /// 状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成）
     /// </summary>
     [SugarColumn(ColumnName = "order_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int OrderStatus { get; set; } = 1;

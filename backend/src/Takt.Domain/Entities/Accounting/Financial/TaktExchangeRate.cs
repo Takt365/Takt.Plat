@@ -29,19 +29,19 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktExchangeRate : TaktTenantCoreEntityBase
 {
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     [SugarColumn(ColumnName = "from_currency_code", ColumnDescription = "源币种", ColumnDataType = "varchar", Length = 3, IsNullable = false)]
     public string FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     [SugarColumn(ColumnName = "to_currency_code", ColumnDescription = "目标币种", ColumnDataType = "varchar", Length = 3, IsNullable = false)]
     public string ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     [SugarColumn(ColumnName = "exchange_rate_type", ColumnDescription = "汇率类型", ColumnDataType = "varchar", Length = 1, IsNullable = false, DefaultValue = "M")]
     public string ExchangeRateType { get; set; } = "M";

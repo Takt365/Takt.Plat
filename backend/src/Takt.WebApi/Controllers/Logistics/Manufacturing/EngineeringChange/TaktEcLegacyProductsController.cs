@@ -26,10 +26,14 @@ public class TaktEcLegacyProductsController : TaktControllerBase
 {
     private readonly ITaktEcLegacyProductService _service;
 
-    /// <summary>构造函数</summary>
+    /// <summary>
+    /// 构造函数
+    /// </summary>
     public TaktEcLegacyProductsController(ITaktEcLegacyProductService service) => _service = service;
 
-    /// <summary>获取旧品管制列表（分页）</summary>
+    /// <summary>
+    /// 获取旧品管制列表（分页）
+    /// </summary>
     [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:list", "旧品管制列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcLegacyProductListAsync([FromQuery] TaktEcLegacyProductQueryDto queryDto)
@@ -38,7 +42,9 @@ public class TaktEcLegacyProductsController : TaktControllerBase
         catch (Exception ex) { return HandleException(ex); }
     }
 
-    /// <summary>获取旧品管制详情</summary>
+    /// <summary>
+    /// 获取旧品管制详情
+    /// </summary>
     [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:query", "旧品管制详情")]
     [HttpGet("detail/{ecDetailId}")]
     public async Task<IActionResult> GetEcLegacyProductByEcDetailIdAsync(long ecDetailId)
@@ -47,7 +53,9 @@ public class TaktEcLegacyProductsController : TaktControllerBase
         catch (Exception ex) { return HandleException(ex); }
     }
 
-    /// <summary>更新旧品管制</summary>
+    /// <summary>
+    /// 更新旧品管制
+    /// </summary>
     [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:update", "更新旧品管制")]
     [HttpPut("detail/{ecDetailId}")]
     public async Task<IActionResult> UpdateEcLegacyProductAsync(long ecDetailId, [FromBody] TaktEcLegacyProductUpdateDto dto)
@@ -56,12 +64,24 @@ public class TaktEcLegacyProductsController : TaktControllerBase
         catch (Exception ex) { return HandleException(ex); }
     }
 
-    /// <summary>导出旧品管制</summary>
+    /// <summary>
+    /// 导出旧品管制
+    /// </summary>
     [TaktPermission("logistics:manufacturing:engineering:change:legacy:product:export", "导出旧品管制")]
     [HttpGet("export")]
-    public async Task<IActionResult> ExportEcLegacyProductAsync([FromQuery] TaktEcLegacyProductQueryDto? query)
+    public async Task<IActionResult> ExportEcLegacyProductAsync(
+        [FromQuery] TaktEcLegacyProductQueryDto? query,
+        [FromQuery] string? sheetName = null,
+        [FromQuery] string? exportName = null)
     {
-        try { var (fileName, fileContent) = await _service.ExportEcLegacyProductAsync(query); return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName); }
-        catch (Exception ex) { return HandleException(ex); }
+        try
+        {
+            var (fileName, fileContent) = await _service.ExportEcLegacyProductAsync(query, sheetName, exportName);
+            return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 }

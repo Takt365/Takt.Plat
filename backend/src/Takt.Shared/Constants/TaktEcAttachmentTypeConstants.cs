@@ -17,18 +17,32 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktEcAttachmentTypeConstants
 {
-    /// <summary>联络（技联 No.，DictValue=TL）</summary>
+    /// <summary>
+    /// 联络（技联 No.，DictValue=TL）
+    /// </summary>
     public const string Liaison = "TL";
-    /// <summary>EPP</summary>
+    /// <summary>
+    /// EPP
+    /// </summary>
     public const string Epp = "EPP";
-    /// <summary>FPP（P番 No.）</summary>
+    /// <summary>
+    /// FPP（P番 No.）
+    /// </summary>
     public const string Fpp = "FPP";
-    /// <summary>外部联络（DictValue=EL）</summary>
+    /// <summary>
+    /// 外部联络（DictValue=EL）
+    /// </summary>
     public const string ExternalLiaison = "EL";
-    /// <summary>TCJ 技联</summary>
+    /// <summary>
+    /// TCJ 技联
+    /// </summary>
     public const string Tcj = "TCJ";
-    /// <summary>源 PDF（DictValue=源PDF）</summary>
+    /// <summary>
+    /// 源 PDF（DictValue=源PDF）
+    /// </summary>
     public const string SourcePdf = "源PDF";
-    /// <summary>EC（DictValue=EC）</summary>
+    /// <summary>
+    /// EC（DictValue=EC）
+    /// </summary>
     public const string Ec = "EC";
 }

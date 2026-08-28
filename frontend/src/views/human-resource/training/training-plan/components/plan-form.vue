@@ -22,31 +22,45 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.plancode')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('planCode')"
                 name="planCode"
               >
                 <a-input
                   v-model:value="formState.planCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.plancode') })"
+                  :placeholder="pi.ph('planCode')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -56,12 +70,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.planname')"
+                :label="pi.label('planName')"
                 name="planName"
               >
                 <a-input
                   v-model:value="formState.planName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.planname') })"
+                  :placeholder="pi.ph('planName')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -70,38 +84,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.planyear')"
+                :label="pi.label('planYear')"
                 name="planYear"
               >
                 <a-input-number
                   v-model:value="formState.planYear"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.planyear') })"
+                  :placeholder="pi.ph('planYear')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.plantype')"
+                :label="pi.label('planType')"
                 name="planType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.planType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.plantype') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  dict-type="humanresource_training_plan_type"
+                  :placeholder="pi.ph('planType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.applicabledepartment')"
+                :label="pi.label('applicableDepartment')"
                 name="applicableDepartment"
               >
                 <a-input
                   v-model:value="formState.applicableDepartment"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.applicabledepartment') })"
+                  :placeholder="pi.ph('applicableDepartment')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -110,12 +122,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.startdate')"
+                :label="pi.label('startDate')"
                 name="startDate"
               >
                 <a-date-picker
                   v-model:value="formState.startDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.trainingplan.startdate') })"
+                  :placeholder="pi.ph('startDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -123,14 +135,28 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingplan.enddate')"
+                :label="pi.label('endDate')"
                 name="endDate"
               >
                 <a-date-picker
                   v-model:value="formState.endDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.trainingplan.enddate') })"
+                  :placeholder="pi.ph('endDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('trainingObjectives')"
+                name="trainingObjectives"
+              >
+                <a-input
+                  v-model:value="formState.trainingObjectives"
+                  :placeholder="pi.ph('trainingObjectives')"
+                  show-count
+                  :maxlength="1000"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -139,83 +165,92 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.trainingplan.trainingobjectives')"
-                name="trainingObjectives"
-              >
-                <a-input
-                  v-model:value="formState.trainingObjectives"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.trainingobjectives') })"
-                  show-count
-                  :maxlength="1000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.trainingplan.plannedheadcount')"
+                :label="pi.label('plannedHeadcount')"
                 name="plannedHeadcount"
               >
                 <a-input-number
                   v-model:value="formState.plannedHeadcount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.plannedheadcount') })"
+                  :placeholder="pi.ph('plannedHeadcount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.trainingplan.trainingbudget')"
+                :label="pi.label('trainingBudget')"
                 name="trainingBudget"
               >
                 <a-input-number
                   v-model:value="formState.trainingBudget"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.trainingbudget') })"
+                  :placeholder="pi.ph('trainingBudget')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.trainingplan.description')"
-                name="description"
+                :label="pi.label('trainingPlanDescription')"
+                name="trainingPlanDescription"
               >
                 <a-textarea
-                  v-model:value="formState.description"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.trainingplan.description') })"
+                  v-model:value="formState.trainingPlanDescription"
+                  :placeholder="pi.ph('trainingPlanDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.trainingplan.status')"
+                :label="pi.label('trainingPlanStatus')"
                 name="trainingPlanStatus"
               >
                 <TaktSelect
                   v-model:value="formState.trainingPlanStatus"
                   dict-type="sys_normal_disable"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.trainingplan.status') })"
+                  :placeholder="pi.ph('trainingPlanStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.trainingplan.relatedplant')"
-                name="plantCode"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingplan.relatedplant') })"
-                  show-count
-                  :maxlength="4"
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
                   disabled
                 />
               </a-form-item>
@@ -233,7 +268,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -248,12 +283,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -276,6 +311,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useTrainingPlanI18n } from '../composables/use-plan-i18n'
+
+/** 实体字段 i18n */
+const pi = useTrainingPlanI18n()
 import type { TrainingPlanCreate } from '@/types/human-resource/training/plan'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -286,37 +325,38 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","planCode","planName","planYear","planType","applicableDepartment","startDate","endDate","trainingObjectives","plannedHeadcount","trainingBudget","description","trainingPlanStatus","plantCode","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -352,6 +392,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 trainingPlanId 才视为编辑） */
 watch(
   () => props.formData,
@@ -380,8 +422,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.trainingPlanId
-    if (isCreate) {
+    if (!props.formData?.trainingPlanId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -392,25 +433,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   planCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.plancode') }),
+      message: pi.ph('planCode'),
       trigger: 'blur'
     }
   ],
   planName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.planname') }),
+      message: pi.ph('planName'),
       trigger: 'blur'
     }
   ],
   planYear: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.planyear') }))
+        return Promise.reject(pi.ph('planYear'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.planyear') }))
+        return Promise.reject(pi.ph('planYear'))
       }
       return Promise.resolve()
     },
@@ -419,46 +460,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   planType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.plantype') }),
-      trigger: 'blur'
+      message: pi.ph('planType'),
+      trigger: 'change'
     }
   ],
   applicableDepartment: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.applicabledepartment') }),
+      message: pi.ph('applicableDepartment'),
       trigger: 'blur'
     }
   ],
   startDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.trainingplan.startdate') }),
+      message: pi.ph('startDate'),
       trigger: 'change'
     }
   ],
   endDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.trainingplan.enddate') }),
+      message: pi.ph('endDate'),
       trigger: 'change'
     }
   ],
   trainingObjectives: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.trainingobjectives') }),
+      message: pi.ph('trainingObjectives'),
       trigger: 'blur'
     }
   ],
   plannedHeadcount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.plannedheadcount') }))
+        return Promise.reject(pi.ph('plannedHeadcount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.plannedheadcount') }))
+        return Promise.reject(pi.ph('plannedHeadcount'))
       }
       return Promise.resolve()
     },
@@ -467,31 +508,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   trainingBudget: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.trainingbudget') }))
+        return Promise.reject(pi.ph('trainingBudget'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.trainingbudget') }))
+        return Promise.reject(pi.ph('trainingBudget'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  description: [
+  trainingPlanDescription: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingplan.description') }),
+      message: pi.ph('trainingPlanDescription'),
       trigger: 'blur'
     }
   ],
   trainingPlanStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.status') }))
+        return Promise.reject(pi.ph('trainingPlanStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.trainingplan.status') }))
+        return Promise.reject(pi.ph('trainingPlanStatus'))
       }
       return Promise.resolve()
     },
@@ -510,21 +551,55 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('planYear' in payload) {
     const rawplanYear = payload.planYear
-    payload.planYear = typeof rawplanYear === 'number' ? rawplanYear : Number(rawplanYear)
+    if (rawplanYear === undefined || rawplanYear === null || rawplanYear === '') {
+      delete payload.planYear
+    } else {
+      const numplanYear = typeof rawplanYear === 'number' ? rawplanYear : Number(rawplanYear)
+      if (Number.isFinite(numplanYear)) payload.planYear = numplanYear
+      else delete payload.planYear
+    }
   }
   if ('plannedHeadcount' in payload) {
     const rawplannedHeadcount = payload.plannedHeadcount
-    payload.plannedHeadcount = typeof rawplannedHeadcount === 'number' ? rawplannedHeadcount : Number(rawplannedHeadcount)
+    if (rawplannedHeadcount === undefined || rawplannedHeadcount === null || rawplannedHeadcount === '') {
+      delete payload.plannedHeadcount
+    } else {
+      const numplannedHeadcount = typeof rawplannedHeadcount === 'number' ? rawplannedHeadcount : Number(rawplannedHeadcount)
+      if (Number.isFinite(numplannedHeadcount)) payload.plannedHeadcount = numplannedHeadcount
+      else delete payload.plannedHeadcount
+    }
   }
   if ('trainingBudget' in payload) {
     const rawtrainingBudget = payload.trainingBudget
-    payload.trainingBudget = typeof rawtrainingBudget === 'number' ? rawtrainingBudget : Number(rawtrainingBudget)
+    if (rawtrainingBudget === undefined || rawtrainingBudget === null || rawtrainingBudget === '') {
+      delete payload.trainingBudget
+    } else {
+      const numtrainingBudget = typeof rawtrainingBudget === 'number' ? rawtrainingBudget : Number(rawtrainingBudget)
+      if (Number.isFinite(numtrainingBudget)) payload.trainingBudget = numtrainingBudget
+      else delete payload.trainingBudget
+    }
   }
   if ('trainingPlanStatus' in payload) {
     const rawtrainingPlanStatus = payload.trainingPlanStatus
-    payload.trainingPlanStatus = typeof rawtrainingPlanStatus === 'number' ? rawtrainingPlanStatus : Number(rawtrainingPlanStatus)
+    if (rawtrainingPlanStatus === undefined || rawtrainingPlanStatus === null || rawtrainingPlanStatus === '') {
+      delete payload.trainingPlanStatus
+    } else {
+      const numtrainingPlanStatus = typeof rawtrainingPlanStatus === 'number' ? rawtrainingPlanStatus : Number(rawtrainingPlanStatus)
+      if (Number.isFinite(numtrainingPlanStatus)) payload.trainingPlanStatus = numtrainingPlanStatus
+      else delete payload.trainingPlanStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.trainingPlanId) {
+    payload.trainingPlanId = props.formData.trainingPlanId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

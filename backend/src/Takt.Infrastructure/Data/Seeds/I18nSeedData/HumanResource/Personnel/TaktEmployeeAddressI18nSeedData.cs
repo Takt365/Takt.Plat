@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeAddressI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeAddress 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktEmployeeAddressI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeaddress.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeeaddress.addresstype
-            new TranslationSeedItem("entity.employeeaddress.addresstype", "en-US", "地址类型_us", "地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）"),
+            new TranslationSeedItem("entity.employeeaddress.addresstype", "en-US", "地址类型_us", "地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）"),
             // entity.employeeaddress.addresstype
-            new TranslationSeedItem("entity.employeeaddress.addresstype", "ja-JP", "地址类型_jp", "地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）"),
+            new TranslationSeedItem("entity.employeeaddress.addresstype", "ja-JP", "地址类型_jp", "地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）"),
             // entity.employeeaddress.addresstype
-            new TranslationSeedItem("entity.employeeaddress.addresstype", "zh-CN", "地址类型", "地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）"),
+            new TranslationSeedItem("entity.employeeaddress.addresstype", "zh-CN", "地址类型", "地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）"),
             // entity.employeeaddress.addresstype
-            new TranslationSeedItem("entity.employeeaddress.addresstype", "zh-HK", "地址类型_hk", "地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）"),
+            new TranslationSeedItem("entity.employeeaddress.addresstype", "zh-HK", "地址类型_hk", "地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）"),
 
             // entity.employeeaddress.country
             new TranslationSeedItem("entity.employeeaddress.country", "en-US", "国家_us", "国家（字典 sys_country_code；DictValue=ISO alpha-2）"),

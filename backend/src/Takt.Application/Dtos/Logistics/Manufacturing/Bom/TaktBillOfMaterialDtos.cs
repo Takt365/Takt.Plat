@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterial 生成，请按需审阅）
 // 
@@ -61,7 +61,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public string BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int BomType { get; set; } = 0;
 
@@ -81,7 +81,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
@@ -101,7 +101,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int BomStatus { get; set; } = 0;
 
@@ -169,7 +169,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int? BomType { get; set; }
 
@@ -199,7 +199,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public DateTime? ExpiryDateEnd { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
@@ -219,7 +219,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int? BomStatus { get; set; }
 
@@ -303,7 +303,7 @@ public class TaktBillOfMaterialCreateDto
     public string BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int BomType { get; set; } = 0;
 
@@ -324,9 +324,9 @@ public class TaktBillOfMaterialCreateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
-    [Required(ErrorMessage = "父物料单位（字典 logistics_unit_of_measure_code）不能为空")]
+    [Required(ErrorMessage = "父物料单位（字典 logistics_materials_unit_of_measure_code）不能为空")]
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -340,7 +340,7 @@ public class TaktBillOfMaterialCreateDto
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int BomStatus { get; set; } = 0;
 
@@ -404,9 +404,9 @@ public class TaktBillOfMaterialStatusDto
     public long BillOfMaterialId { get; set; }
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
-    [Required(ErrorMessage = "BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）不能为空")]
+    [Required(ErrorMessage = "BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）不能为空")]
     public int BomStatus { get; set; } = 0;
 }
 
@@ -489,7 +489,7 @@ public class TaktBillOfMaterialTemplateDto
     public string? BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int? BomType { get; set; }
 
@@ -509,7 +509,7 @@ public class TaktBillOfMaterialTemplateDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
@@ -524,7 +524,7 @@ public class TaktBillOfMaterialTemplateDto
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int? BomStatus { get; set; }
 
@@ -596,7 +596,7 @@ public class TaktBillOfMaterialImportDto
     public string? BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int? BomType { get; set; }
 
@@ -616,7 +616,7 @@ public class TaktBillOfMaterialImportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
@@ -631,7 +631,7 @@ public class TaktBillOfMaterialImportDto
     public string? BomDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int? BomStatus { get; set; }
 
@@ -709,7 +709,7 @@ public class TaktBillOfMaterialExportDto
     public string BomVersion { get; set; } = string.Empty;
 
     /// <summary>
-    /// BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
+    /// BOM类型/用途（字典 logistics_manufacturing_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
     /// </summary>
     public int BomType { get; set; } = 0;
 
@@ -729,7 +729,7 @@ public class TaktBillOfMaterialExportDto
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 父物料单位（字典 logistics_unit_of_measure_code）
+    /// 父物料单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
@@ -749,7 +749,7 @@ public class TaktBillOfMaterialExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+    /// BOM状态（字典 logistics_manufacturing_bom_status；0=草稿，1=已发布，2=已停用）
     /// </summary>
     public int BomStatus { get; set; } = 0;
 

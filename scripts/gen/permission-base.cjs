@@ -99,8 +99,19 @@ function buildPermissionBaseFull(pathParts, entityShort) {
   /** @type {string[]} */
   const result = [...segments];
   const pathWordSet = new Set(segments);
-  for (const word of entityWords) {
+  // EngineeringChange 实体短名以 Ec 开头（EcKoubai、EcGijutsu）时跳过词 ec，
+  // 与菜单 logistics:manufacturing:engineering:change:{dept} 对齐；EcGroup 仍保留 :ec:group。
+  const skipLeadingEc =
+    segments.includes('engineering')
+    && segments.includes('change')
+    && entityShort.startsWith('Ec')
+    && entityShort !== 'EcGroup';
+  for (let i = 0; i < entityWords.length; i += 1) {
+    const word = entityWords[i];
     if (pathWordSet.has(word)) {
+      continue;
+    }
+    if (skipLeadingEc && i === 0 && word === 'ec') {
       continue;
     }
     result.push(word);

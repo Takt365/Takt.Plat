@@ -35,7 +35,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     [SugarColumn(ColumnName = "price_type", ColumnDescription = "条件类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "PB00")]
     public string PriceType { get; set; } = "PB00";
@@ -65,7 +65,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public string? PurchaseGroup { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? TaxCode { get; set; }
@@ -77,7 +77,7 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     [SugarColumn(ColumnName = "pricing_date_control", ColumnDescription = "定价日期控制", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PricingDateControl { get; set; } = 1;

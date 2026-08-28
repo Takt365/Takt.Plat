@@ -70,10 +70,16 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "total_inspection_return_quantity", ColumnDescription = "总验退数量", ColumnDataType = "decimal", Length = 16, DecimalDigits = 6, IsNullable = false, DefaultValue = "0")]
     public decimal TotalInspectionReturnQuantity { get; set; } = 0;
     /// <summary>
-    /// 判定人（人员代码）
+    /// 判定人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "judge_by", ColumnDescription = "判定人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? JudgeBy { get; set; }
+    [SugarColumn(ColumnName = "judge_by_employee_id", ColumnDescription = "判定人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? JudgeByEmployeeId { get; set; }
+    /// <summary>
+    /// 判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "judge_by_employee_name", ColumnDescription = "判定人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? JudgeByEmployeeName { get; set; }
     /// <summary>
     /// 判定日期
     /// </summary>

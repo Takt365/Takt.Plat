@@ -27,13 +27,21 @@ public static class TaktTenantDatabaseHelper
     /// </summary>
     public enum TenantDatabaseFailureKind
     {
-        /// <summary>业务库不存在</summary>
+        /// <summary>
+        /// 业务库不存在
+        /// </summary>
         DatabaseMissing,
-        /// <summary>业务表缺失</summary>
+        /// <summary>
+        /// 业务表缺失
+        /// </summary>
         TableMissing,
-        /// <summary>SQL Server 登录失败</summary>
+        /// <summary>
+        /// SQL Server 登录失败
+        /// </summary>
         LoginFailed,
-        /// <summary>其他连接失败</summary>
+        /// <summary>
+        /// 其他连接失败
+        /// </summary>
         ConnectionFailed,
     }
 

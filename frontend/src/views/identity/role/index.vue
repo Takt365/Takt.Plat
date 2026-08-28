@@ -74,15 +74,15 @@
         <template v-if="column.key === 'dataScope'">
           <TaktDictTag
             :value="getRoleField(record, 'dataScope')"
-            dict-type="sys_data_scope_type"
+            dict-type="sys_data_scope"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <a-switch
             :checked="getRoleField(record, 'isBuiltIn') === 1"
             :disabled="getRoleField(record, 'isBuiltIn') === 1"
-            :checked-children="t('dict.sys.yes.no.type.1')"
-            :un-checked-children="t('dict.sys.yes.no.type.0')"
+            :checked-children="t('dict.sys.yes.no.1')"
+            :un-checked-children="t('dict.sys.yes.no.0')"
             @change="(checked: unknown) => handleRoleBuiltInChange(record, Boolean(checked))"
           />
         </template>
@@ -173,7 +173,7 @@
       <a-form-item :label="t('entity.role.datascope')">
         <TaktSelect
           v-model:value="advancedQueryForm.dataScope"
-          dict-type="sys_data_scope_type"
+          dict-type="sys_data_scope"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.role.datascope') })"
           allow-clear
         />

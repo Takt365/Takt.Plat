@@ -49,12 +49,12 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector: string;
 
@@ -69,12 +69,12 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -159,7 +159,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -169,7 +169,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -279,7 +279,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -309,7 +309,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -319,7 +319,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -349,12 +349,12 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -479,7 +479,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -739,7 +739,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -759,7 +759,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -779,7 +779,7 @@ export interface GeneralMaterial extends TenantCoreDtoBase {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 
@@ -1089,12 +1089,12 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
@@ -1109,12 +1109,12 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -1199,7 +1199,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -1209,7 +1209,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -1319,7 +1319,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -1349,7 +1349,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -1359,7 +1359,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -1389,12 +1389,12 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -1539,7 +1539,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -1799,7 +1799,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -1819,7 +1819,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -1839,7 +1839,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 
@@ -2153,12 +2153,12 @@ export interface GeneralMaterialCreate {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector: string;
 
@@ -2173,12 +2173,12 @@ export interface GeneralMaterialCreate {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -2263,7 +2263,7 @@ export interface GeneralMaterialCreate {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -2273,7 +2273,7 @@ export interface GeneralMaterialCreate {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -2383,7 +2383,7 @@ export interface GeneralMaterialCreate {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -2413,7 +2413,7 @@ export interface GeneralMaterialCreate {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -2423,7 +2423,7 @@ export interface GeneralMaterialCreate {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -2453,12 +2453,12 @@ export interface GeneralMaterialCreate {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -2583,7 +2583,7 @@ export interface GeneralMaterialCreate {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -2843,7 +2843,7 @@ export interface GeneralMaterialCreate {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -2863,7 +2863,7 @@ export interface GeneralMaterialCreate {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -2883,7 +2883,7 @@ export interface GeneralMaterialCreate {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 
@@ -3221,12 +3221,12 @@ export interface GeneralMaterialTemplate {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
@@ -3241,12 +3241,12 @@ export interface GeneralMaterialTemplate {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -3331,7 +3331,7 @@ export interface GeneralMaterialTemplate {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -3341,7 +3341,7 @@ export interface GeneralMaterialTemplate {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -3451,7 +3451,7 @@ export interface GeneralMaterialTemplate {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -3481,7 +3481,7 @@ export interface GeneralMaterialTemplate {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -3491,7 +3491,7 @@ export interface GeneralMaterialTemplate {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -3521,12 +3521,12 @@ export interface GeneralMaterialTemplate {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -3651,7 +3651,7 @@ export interface GeneralMaterialTemplate {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -3911,7 +3911,7 @@ export interface GeneralMaterialTemplate {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -3931,7 +3931,7 @@ export interface GeneralMaterialTemplate {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -3951,7 +3951,7 @@ export interface GeneralMaterialTemplate {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 
@@ -4255,12 +4255,12 @@ export interface GeneralMaterialImport {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
@@ -4275,12 +4275,12 @@ export interface GeneralMaterialImport {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -4365,7 +4365,7 @@ export interface GeneralMaterialImport {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -4375,7 +4375,7 @@ export interface GeneralMaterialImport {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -4485,7 +4485,7 @@ export interface GeneralMaterialImport {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -4515,7 +4515,7 @@ export interface GeneralMaterialImport {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -4525,7 +4525,7 @@ export interface GeneralMaterialImport {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -4555,12 +4555,12 @@ export interface GeneralMaterialImport {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -4685,7 +4685,7 @@ export interface GeneralMaterialImport {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -4945,7 +4945,7 @@ export interface GeneralMaterialImport {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -4965,7 +4965,7 @@ export interface GeneralMaterialImport {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -4985,7 +4985,7 @@ export interface GeneralMaterialImport {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 
@@ -5289,12 +5289,12 @@ export interface GeneralMaterialExport {
   clientDeletionFlag?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector: string;
 
@@ -5309,12 +5309,12 @@ export interface GeneralMaterialExport {
   oldMaterialNumber?: string;
 
   /**
-   * 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
   /**
-   * 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   orderUnit?: string;
 
@@ -5399,7 +5399,7 @@ export interface GeneralMaterialExport {
   netWeight?: number;
 
   /**
-   * 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   weightUnit?: string;
 
@@ -5409,7 +5409,7 @@ export interface GeneralMaterialExport {
   volume?: number;
 
   /**
-   * 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   volumeUnit?: string;
 
@@ -5519,7 +5519,7 @@ export interface GeneralMaterialExport {
   height?: number;
 
   /**
-   * 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   dimensionUnit?: string;
 
@@ -5549,7 +5549,7 @@ export interface GeneralMaterialExport {
   allowedPackagingWeight?: number;
 
   /**
-   * 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+   * 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
    */
   allowedPackagingWeightUnit?: string;
 
@@ -5559,7 +5559,7 @@ export interface GeneralMaterialExport {
   allowedPackagingVolume?: number;
 
   /**
-   * 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+   * 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
    */
   allowedPackagingVolumeUnit?: string;
 
@@ -5589,12 +5589,12 @@ export interface GeneralMaterialExport {
   configurableMaterial?: string;
 
   /**
-   * 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+   * 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
    */
   batchManagementRequired?: string;
 
   /**
-   * 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+   * 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
    */
   packagingMaterialType?: string;
 
@@ -5719,7 +5719,7 @@ export interface GeneralMaterialExport {
   storagePercentage?: number;
 
   /**
-   * 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+   * 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
    */
   contentUnit?: string;
 
@@ -5979,7 +5979,7 @@ export interface GeneralMaterialExport {
   maximumPackingHeight?: number;
 
   /**
-   * 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+   * 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
    */
   maximumPackingDimensionUnit?: string;
 
@@ -5999,7 +5999,7 @@ export interface GeneralMaterialExport {
   quarantinePeriod?: number;
 
   /**
-   * 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+   * 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
    */
   quarantinePeriodUnit?: string;
 
@@ -6019,7 +6019,7 @@ export interface GeneralMaterialExport {
   formName?: string;
 
   /**
-   * 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   logisticsUnitOfMeasure?: string;
 

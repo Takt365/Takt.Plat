@@ -73,7 +73,7 @@ public class TaktExchangeRateSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 计划/预算/预测汇率（类型 P；RMB 按字典 accounting_currency_code 存为 CNY）
+    /// 计划/预算/预测汇率（类型 P；RMB 按字典 accounting_financial_currency_code 存为 CNY）
     /// 来源：TAC/DTA/TSZ FY2027-1 BUDGET，生效日 2026-04-01
     /// </summary>
     private static List<TaktExchangeRateSeedItem> GetPlanBudgetExchangeRates()
@@ -146,9 +146,9 @@ public class TaktExchangeRateSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 汇率种子项
     /// </summary>
-    /// <param name="FromCurrencyCode">源币种（字典 accounting_currency_code）</param>
+    /// <param name="FromCurrencyCode">源币种（字典 accounting_financial_currency_code）</param>
     /// <param name="ToCurrencyCode">目标币种</param>
-    /// <param name="ExchangeRateType">汇率类型（字典 accounting_exchange_rate_type）</param>
+    /// <param name="ExchangeRateType">汇率类型（字典 accounting_financial_exchange_rate_type）</param>
     /// <param name="ExchangeRate">直接标价：1 源币种 = ExchangeRate 目标币种</param>
     /// <param name="ValidFrom">生效日期</param>
     /// <param name="ValidTo">失效日期</param>

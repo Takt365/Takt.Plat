@@ -49,7 +49,7 @@ export interface EmployeeSkill extends CompanyDtoBase {
   skillName: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 
@@ -129,7 +129,7 @@ export interface EmployeeSkillQuery extends TaktPagedQuery {
   skillName?: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -233,7 +233,7 @@ export interface EmployeeSkillCreate {
   skillName: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 
@@ -332,7 +332,7 @@ export interface EmployeeSkillTemplate {
   skillName?: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -416,7 +416,7 @@ export interface EmployeeSkillImport {
   skillName?: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -500,7 +500,7 @@ export interface EmployeeSkillExport {
   skillName: string;
 
   /**
-   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
+   * 技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 

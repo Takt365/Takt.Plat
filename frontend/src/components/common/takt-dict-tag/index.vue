@@ -17,9 +17,9 @@
 /**
  * 字典标签
  */
-import { useI18n } from 'vue-i18n';
 import { useDictDataStore } from '@/stores/foundation/dict-data';
 import { createLogger } from '@/utils/logger';
+import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import type { TaktSelectOption } from '@/types/common';
 
 const dictLogger = createLogger('takt-dict-tag');
@@ -48,7 +48,6 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'middle',
 });
 
-const { t } = useI18n();
 const dictDataStore = useDictDataStore();
 
 /**
@@ -67,7 +66,7 @@ const currentOption = computed<TaktSelectOption | undefined>(() => {
 });
 
 /**
- * 展示文案（sys_culture_code 用 DictLabel；其余走 i18nKey）
+ * 展示文案（sys_culture_code 用 DictLabel；其余走 i18nKey，数值段键用树解析避免 vue-i18n 把 .1/.3 当成列表下标）
  */
 const displayLabel = computed(() => {
   if (props.label) {
@@ -79,14 +78,17 @@ const displayLabel = computed(() => {
   }
 
   if (currentOption.value?.i18nKey) {
-    return t(currentOption.value.i18nKey);
+    const translated = translateLocaleMessage(currentOption.value.i18nKey);
+    if (translated && translated !== currentOption.value.i18nKey) {
+      return translated;
+    }
   }
 
   if (currentOption.value?.dictLabel) {
     return currentOption.value.dictLabel;
   }
 
-  if (props.value !== undefined && props.value !== null) {
+  if (props.value !== undefined && props.value !== null && props.value !== '') {
     return String(props.value);
   }
 

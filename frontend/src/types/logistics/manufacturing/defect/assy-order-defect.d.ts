@@ -25,7 +25,7 @@ import type {
 export interface AssyOrderDefect extends CompanyDtoBase {
 
   /**
-   * 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -95,7 +95,7 @@ export interface AssyOrderDefect extends CompanyDtoBase {
   reportCount?: number;
 
   /**
-   * 工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）
+   * 工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）
    */
   orderStatus?: number;
 
@@ -133,7 +133,7 @@ export interface AssyOrderDefectExport {
   plantCode: string;
 
   /**
-   * 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -203,7 +203,7 @@ export interface AssyOrderDefectExport {
   reportCount: number;
 
   /**
-   * 工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）
+   * 工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）
    */
   orderStatus: number;
 

@@ -22,10 +22,14 @@ namespace Takt.Application.Dtos.Code.Generator;
 /// </summary>
 public partial class TaktCodeGenResultDto
 {
-    /// <summary>生成的文件名或相对路径（如 Entity.cs、Dto.cs）</summary>
+    /// <summary>
+    /// 生成的文件名或相对路径（如 Entity.cs、Dto.cs）
+    /// </summary>
     public string FileName { get; set; } = string.Empty;
 
-    /// <summary>生成后的代码/文本内容</summary>
+    /// <summary>
+    /// 生成后的代码/文本内容
+    /// </summary>
     public string Content { get; set; } = string.Empty;
 }
 
@@ -34,13 +38,19 @@ public partial class TaktCodeGenResultDto
 /// </summary>
 public partial class TaktCodeGenPreviewFileDto
 {
-    /// <summary>目标相对路径（如 backend/src/Takt.Domain/Entities/Identity/TaktUser.cs）</summary>
+    /// <summary>
+    /// 目标相对路径（如 backend/src/Takt.Domain/Entities/Identity/TaktUser.cs）
+    /// </summary>
     public string Path { get; set; } = string.Empty;
 
-    /// <summary>渲染后的代码/文本内容</summary>
+    /// <summary>
+    /// 渲染后的代码/文本内容
+    /// </summary>
     public string Content { get; set; } = string.Empty;
 
-    /// <summary>目标路径下文件是否已存在（仅 GenMethod=1/2 且路径可解析时有效）</summary>
+    /// <summary>
+    /// 目标路径下文件是否已存在（仅 GenMethod=1/2 且路径可解析时有效）
+    /// </summary>
     public bool IsExisting { get; set; }
 }
 
@@ -49,13 +59,19 @@ public partial class TaktCodeGenPreviewFileDto
 /// </summary>
 public partial class TaktCodeGenPreviewValidationIssueDto
 {
-    /// <summary>模板键（如 Backend/Crud/Csharp/Dto.cs）</summary>
+    /// <summary>
+    /// 模板键（如 Backend/Crud/Csharp/Dto.cs）
+    /// </summary>
     public string TemplateKey { get; set; } = string.Empty;
 
-    /// <summary>解析后的目标相对路径（可能为空）</summary>
+    /// <summary>
+    /// 解析后的目标相对路径（可能为空）
+    /// </summary>
     public string? TargetPath { get; set; }
 
-    /// <summary>校验错误信息（模板解析失败、模板渲染失败等）</summary>
+    /// <summary>
+    /// 校验错误信息（模板解析失败、模板渲染失败等）
+    /// </summary>
     public string Message { get; set; } = string.Empty;
 }
 
@@ -64,13 +80,19 @@ public partial class TaktCodeGenPreviewValidationIssueDto
 /// </summary>
 public partial class TaktCodeGenPreviewResultDto
 {
-    /// <summary>预览渲染是否通过（无校验问题则为 true）</summary>
+    /// <summary>
+    /// 预览渲染是否通过（无校验问题则为 true）
+    /// </summary>
     public bool IsValid { get; set; }
 
-    /// <summary>渲染成功的预览文件列表</summary>
+    /// <summary>
+    /// 渲染成功的预览文件列表
+    /// </summary>
     public List<TaktCodeGenPreviewFileDto> PreviewFiles { get; set; } = [];
 
-    /// <summary>模板校验问题列表（按模板逐项记录）</summary>
+    /// <summary>
+    /// 模板校验问题列表（按模板逐项记录）
+    /// </summary>
     public List<TaktCodeGenPreviewValidationIssueDto> ValidationIssues { get; set; } = [];
 }
 
@@ -80,13 +102,19 @@ public partial class TaktCodeGenPreviewResultDto
 /// </summary>
 public partial class TaktImportTableFromDatabaseRequestDto
 {
-    /// <summary>租户编码（3 位，对应 appsettings Database:TenantCodes）</summary>
+    /// <summary>
+    /// 租户编码（3 位，对应 appsettings Database:TenantCodes）
+    /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-    /// <summary>要导入的数据表名</summary>
+    /// <summary>
+    /// 要导入的数据表名
+    /// </summary>
     public string TableName { get; set; } = string.Empty;
 
-    /// <summary>表配置覆盖（可选，用于补充实体类名、业务名等）</summary>
+    /// <summary>
+    /// 表配置覆盖（可选，用于补充实体类名、业务名等）
+    /// </summary>
     public TaktGenTableCreateDto? TableOverrides { get; set; }
 }
 
@@ -136,22 +164,34 @@ public partial class TaktInitializeTableFromEntityRequestDto
 /// </summary>
 public partial class TaktCodeGenGenerateResultDto
 {
-    /// <summary>生成方式（0=zip，1=自定义路径，2=当前项目）</summary>
+    /// <summary>
+    /// 生成方式（0=zip，1=自定义路径，2=当前项目）
+    /// </summary>
     public int GenMethod { get; set; }
 
-    /// <summary>zip 内容（GenMethod=0，由控制器直接 File 响应）</summary>
+    /// <summary>
+    /// zip 内容（GenMethod=0，由控制器直接 File 响应）
+    /// </summary>
     public byte[]? ZipBytes { get; set; }
 
-    /// <summary>zip 文件名（GenMethod=0）</summary>
+    /// <summary>
+    /// zip 文件名（GenMethod=0）
+    /// </summary>
     public string? ZipFileName { get; set; }
 
-    /// <summary>落盘根路径（GenMethod=1/2）</summary>
+    /// <summary>
+    /// 落盘根路径（GenMethod=1/2）
+    /// </summary>
     public string? BasePath { get; set; }
 
-    /// <summary>已写入相对路径（GenMethod=1/2）</summary>
+    /// <summary>
+    /// 已写入相对路径（GenMethod=1/2）
+    /// </summary>
     public List<string> WrittenFilePaths { get; set; } = [];
 
-    /// <summary>文件数</summary>
+    /// <summary>
+    /// 文件数
+    /// </summary>
     public int FileCount { get; set; }
 }
 
@@ -166,10 +206,14 @@ public partial class TaktGenerateCodeRequestDto
     /// </summary>
     public Dictionary<string, string> Templates { get; set; } = new();
 
-    /// <summary>生成方式覆盖（可空，默认取表配置 GenMethod）</summary>
+    /// <summary>
+    /// 生成方式覆盖（可空，默认取表配置 GenMethod）
+    /// </summary>
     public int? GenMethod { get; set; }
 
-    /// <summary>目标根路径覆盖（GenMethod=1 时使用；GenMethod=2 由服务端解析仓库根）</summary>
+    /// <summary>
+    /// 目标根路径覆盖（GenMethod=1 时使用；GenMethod=2 由服务端解析仓库根）
+    /// </summary>
     public string? GenPath { get; set; }
 }
 

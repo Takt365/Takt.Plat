@@ -74,7 +74,7 @@
         <template v-if="column.key === 'payStatus'">
           <TaktDictTag
             :value="getSocialInsuranceField(record, 'payStatus')"
-            dict-type="hr_social_insurance_pay_status"
+            dict-type="humanresource_benefits_social_insurance_pay_status"
           />
         </template>
       </template>
@@ -247,7 +247,7 @@
       <a-form-item :label="t('entity.socialinsurance.paystatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.payStatus"
-          dict-type="hr_social_insurance_pay_status"
+          dict-type="humanresource_benefits_social_insurance_pay_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.socialinsurance.paystatus') })"
           allow-clear
         />

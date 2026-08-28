@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaInspectionDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,31 +118,31 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.pcbainspectiondetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "en-US", "PCBA板别_us", "PCBA板别（字典 logistics_pcba_function_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "en-US", "PCBA板别_us", "PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）"),
             // entity.pcbainspectiondetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "ja-JP", "PCBA板别_jp", "PCBA板别（字典 logistics_pcba_function_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "ja-JP", "PCBA板别_jp", "PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）"),
             // entity.pcbainspectiondetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别（字典 logistics_pcba_function_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）"),
             // entity.pcbainspectiondetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "zh-HK", "PCBA板别_hk", "PCBA板别（字典 logistics_pcba_function_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.pcbaboardtype", "zh-HK", "PCBA板别_hk", "PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）"),
 
             // entity.pcbainspectiondetail.visualinspectionline
-            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "en-US", "目视线别_us", "目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "en-US", "目视线别_us", "目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.visualinspectionline
-            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "ja-JP", "目视线别_jp", "目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "ja-JP", "目视线别_jp", "目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.visualinspectionline
-            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "zh-CN", "目视线别", "目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "zh-CN", "目视线别", "目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.visualinspectionline
-            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "zh-HK", "目视线别_hk", "目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.visualinspectionline", "zh-HK", "目视线别_hk", "目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）"),
 
             // entity.pcbainspectiondetail.aoiline
-            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "en-US", "AOI线别_us", "AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "en-US", "AOI线别_us", "AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.aoiline
-            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "ja-JP", "AOI线别_jp", "AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "ja-JP", "AOI线别_jp", "AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.aoiline
-            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "zh-CN", "AOI线别", "AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "zh-CN", "AOI线别", "AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）"),
             // entity.pcbainspectiondetail.aoiline
-            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "zh-HK", "AOI线别_hk", "AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.aoiline", "zh-HK", "AOI线别_hk", "AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）"),
 
             // entity.pcbainspectiondetail.bsideassemblydate
             new TranslationSeedItem("entity.pcbainspectiondetail.bsideassemblydate", "en-US", "B面实装日期_us", "B面实装日期"),
@@ -163,22 +163,31 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.tsideassemblydate", "zh-HK", "T面实装日期_hk", "T面实装日期"),
 
             // entity.pcbainspectiondetail.shiftno
-            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbainspectiondetail.shiftno
-            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbainspectiondetail.shiftno
-            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbainspectiondetail.shiftno
-            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+
+            // entity.pcbainspectiondetail.inspectorid
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorid", "en-US", "检查员ID_us", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.pcbainspectiondetail.inspectorid
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorid", "ja-JP", "检查员ID_jp", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.pcbainspectiondetail.inspectorid
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorid", "zh-CN", "检查员ID", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.pcbainspectiondetail.inspectorid
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorid", "zh-HK", "检查员ID_hk", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.pcbainspectiondetail.inspectorname
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "en-US", "检查员_us", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "en-US", "检查员名称_us", "检查员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.pcbainspectiondetail.inspectorname
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "ja-JP", "检查员_jp", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "ja-JP", "检查员名称_jp", "检查员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.pcbainspectiondetail.inspectorname
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "zh-CN", "检查员", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "zh-CN", "检查员名称", "检查员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
             // entity.pcbainspectiondetail.inspectorname
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "zh-HK", "检查员_hk", "检查员（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectorname", "zh-HK", "检查员名称_hk", "检查员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.pcbainspectiondetail.dailycompletedqty
             new TranslationSeedItem("entity.pcbainspectiondetail.dailycompletedqty", "en-US", "当日完成数量_us", "当日完成数量"),
@@ -199,13 +208,13 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.inspectionqty", "zh-HK", "检查数量_hk", "检查数量"),
 
             // entity.pcbainspectiondetail.inspectionstatus
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "en-US", "检查状态_us", "检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "en-US", "检查状态_us", "检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
             // entity.pcbainspectiondetail.inspectionstatus
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "ja-JP", "检查状态_jp", "检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "ja-JP", "检查状态_jp", "检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
             // entity.pcbainspectiondetail.inspectionstatus
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "zh-CN", "检查状态", "检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "zh-CN", "检查状态", "检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
             // entity.pcbainspectiondetail.inspectionstatus
-            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "zh-HK", "检查状态_hk", "检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.inspectionstatus", "zh-HK", "检查状态_hk", "检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）"),
 
             // entity.pcbainspectiondetail.teamcode
             new TranslationSeedItem("entity.pcbainspectiondetail.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
@@ -271,13 +280,13 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.content", "zh-HK", "内容_hk", "内容"),
 
             // entity.pcbainspectiondetail.defectlocation
-            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "en-US", "不良个所_us", "不良个所（字典 logistics_pcb_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "en-US", "不良个所_us", "不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）"),
             // entity.pcbainspectiondetail.defectlocation
-            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "ja-JP", "不良个所_jp", "不良个所（字典 logistics_pcb_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "ja-JP", "不良个所_jp", "不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）"),
             // entity.pcbainspectiondetail.defectlocation
-            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-CN", "不良个所", "不良个所（字典 logistics_pcb_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-CN", "不良个所", "不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）"),
             // entity.pcbainspectiondetail.defectlocation
-            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-HK", "不良个所_hk", "不良个所（字典 logistics_pcb_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-HK", "不良个所_hk", "不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）"),
 
             // entity.pcbainspectiondetail.isobsolete
             new TranslationSeedItem("entity.pcbainspectiondetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

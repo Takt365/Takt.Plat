@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotification 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-notification）
 // 
@@ -109,13 +109,13 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecnotification.ecid", "zh-HK", "设变ID_hk", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
 
             // entity.ecnotification.eccode
-            new TranslationSeedItem("entity.ecnotification.eccode", "en-US", "设变单号_us", "设变单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ecnotification.eccode", "en-US", "设变单号_us", "设变单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ecnotification.eccode
-            new TranslationSeedItem("entity.ecnotification.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ecnotification.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ecnotification.eccode
-            new TranslationSeedItem("entity.ecnotification.eccode", "zh-CN", "设变单号", "设变单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ecnotification.eccode", "zh-CN", "设变单号", "设变单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.ecnotification.eccode
-            new TranslationSeedItem("entity.ecnotification.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.ecnotification.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.ecnotification.ectitle
             new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "设变标题_us", "设变标题（冗余字段）"),

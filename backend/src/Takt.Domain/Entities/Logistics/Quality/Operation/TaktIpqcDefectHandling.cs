@@ -34,7 +34,7 @@ public class TaktIpqcDefectHandling : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderItemId { get; set; }
     /// <summary>
-    /// IPQC检验单编码（冗余字段，便于查询）
+    /// IPQC检验单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "ipqc_order_code", ColumnDescription = "IPQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string IpqcOrderCode { get; set; } = string.Empty;
@@ -74,20 +74,38 @@ public class TaktIpqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? HandlingDescription { get; set; }
     /// <summary>
-    /// 责任部门
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "responsible_dept", ColumnDescription = "责任部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ResponsibleDept { get; set; }
+    [SugarColumn(ColumnName = "responsible_dept_id", ColumnDescription = "责任部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleDeptId { get; set; }
     /// <summary>
-    /// 责任人（人员代码）
+    /// 责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "responsible_by", ColumnDescription = "责任人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ResponsibleBy { get; set; }
+    [SugarColumn(ColumnName = "responsible_dept_name", ColumnDescription = "责任部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? ResponsibleDeptName { get; set; }
     /// <summary>
-    /// 处理人（人员代码）
+    /// 责任人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "handler_by", ColumnDescription = "处理人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? HandlerBy { get; set; }
+    [SugarColumn(ColumnName = "responsible_person_id", ColumnDescription = "责任人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsiblePersonId { get; set; }
+    /// <summary>
+    /// 责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "responsible_person_name", ColumnDescription = "责任人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ResponsiblePersonName { get; set; }
+    /// <summary>
+    /// 处理人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "handler_id", ColumnDescription = "处理人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HandlerId { get; set; }
+    /// <summary>
+    /// 处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "handler_name", ColumnDescription = "处理人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? HandlerName { get; set; }
     /// <summary>
     /// 处理时间
     /// </summary>

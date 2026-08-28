@@ -19,6 +19,11 @@ description: >-
 | 语义 | Length |
 |------|--------|
 | 租户 / 公司 / 工厂 | 3 / 4 / 4 |
+| **字典类型编码** `dict_type_code` | **140** |
+| **国际化键** `i18n_key` | **140** |
+| **字典项标签/值** `dict_label` / `dict_value` | **40** |
+| **字典扩展标签/值** `ext_label` / `ext_value` | **140** |
+| **本地化名称** `native_name` | **40** |
 | 币种 `CurrencyCode`（含 from/to/scale/condition 等） | 3 |
 | 物料编码 / 短描述 / 规格·型号 / 长描述 | 20 / 40 / 70 / 200 |
 | **特例** 制造商/销售商物料编码 `manufacturer_material_code` / `seller_material_code` | **40**（❌ 勿套物料编码 20） |
@@ -32,6 +37,7 @@ description: >-
 | 销售/采购订单·报价·询价·价格 | 20 |
 | 客户 / 供应商 | 10 / 10 |
 | 设备编码 | 18 |
+| 仓库 / 存货地点编码（含 ec_old/new_warehouse） | 4 |
 | 入/出库单编码（`inbound_code` / `outbound_code`） | 10 |
 | Quality 域编码 / 描述 | 20 / 70 |
 
@@ -42,5 +48,7 @@ description: >-
 ```
 - [ ] 新字段已对照 17-field-length 专项表
 - [ ] 冗余码/来源码与主表同 Length
+- [ ] 字典类型编码 `dict_type_code` 为 140，且 `{领域}_{业务}_{项}`
+- [ ] 国际化键 `i18n_key` 为 140；字典项标签/值为 40；扩展标签/值为 140；NativeName 为 40
 - [ ] 无无说明的 Length=50/100
 ```

@@ -118,7 +118,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.formulaStep"
-                  dict-type="hr_salary_formula_step_type"
+                  dict-type="humanresource_compensation_salary_formula_step_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryformula.formulastep') })"
                 />
               </a-form-item>

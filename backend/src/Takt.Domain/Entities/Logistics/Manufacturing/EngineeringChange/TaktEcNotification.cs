@@ -45,7 +45,7 @@ public class TaktEcNotification : TaktApprovalEntityBase
     public long EcId { get; set; }
 
     /// <summary>
-    /// 设变单号（冗余字段，便于查询）
+    /// 设变单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcCode { get; set; } = string.Empty;

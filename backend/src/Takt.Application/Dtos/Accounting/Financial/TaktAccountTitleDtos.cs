@@ -52,7 +52,7 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
@@ -77,7 +77,7 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 
@@ -186,7 +186,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string? AccountTitleType { get; set; } = string.Empty;
 
@@ -211,7 +211,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string? AuxiliaryType { get; set; } = string.Empty;
 
@@ -334,9 +334,9 @@ public class TaktAccountTitleCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
-    [Required(ErrorMessage = "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）不能为空")]
+    [Required(ErrorMessage = "科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）不能为空")]
     public string AccountTitleType { get; set; } = string.Empty;
 
     /// <summary>
@@ -355,9 +355,9 @@ public class TaktAccountTitleCreateDto
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
-    [Required(ErrorMessage = "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）不能为空")]
+    [Required(ErrorMessage = "辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）不能为空")]
     public string AuxiliaryType { get; set; } = string.Empty;
 
     /// <summary>
@@ -521,7 +521,7 @@ public class TaktAccountTitleTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string? AccountTitleType { get; set; } = string.Empty;
 
@@ -541,7 +541,7 @@ public class TaktAccountTitleTemplateDto
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string? AuxiliaryType { get; set; } = string.Empty;
 
@@ -634,7 +634,7 @@ public class TaktAccountTitleImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string? AccountTitleType { get; set; } = string.Empty;
 
@@ -654,7 +654,7 @@ public class TaktAccountTitleImportDto
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string? AuxiliaryType { get; set; } = string.Empty;
 
@@ -753,7 +753,7 @@ public class TaktAccountTitleExportDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
@@ -778,7 +778,7 @@ public class TaktAccountTitleExportDto
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 

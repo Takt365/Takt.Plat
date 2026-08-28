@@ -45,7 +45,7 @@ public class TaktMpsRunFromMdsDto
 public class TaktMrpRunOptionsDto
 {
     /// <summary>
-    /// BOM 类型（字典 logistics_bom_type；默认 2=制造）
+    /// BOM 类型（字典 logistics_manufacturing_bom_type；默认 2=制造）
     /// </summary>
     public int BomType { get; set; } = 2;
 

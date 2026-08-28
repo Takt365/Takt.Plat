@@ -32,9 +32,11 @@ namespace Takt.Application.Services.Code.Generator.GenEngine;
 /// </summary>
 public class TaktGenWorkflowService : ITaktGenWorkflowService
 {
-    private const string GenButtonCategoryDictTypeCode = "gen_button_category";
+    private const string GenButtonCategoryDictTypeCode = "code_generator_button_category";
 
-    /// <summary>生成菜单/字段翻译 SQL 时使用的区域文化，与 <c>TaktCultureSeedData</c> 种子一致（4 种）。</summary>
+    /// <summary>
+    /// 生成菜单/字段翻译 SQL 时使用的区域文化，与 <c>TaktCultureSeedData</c> 种子一致（4 种）。
+    /// </summary>
     private static readonly string[] GenTranslationCultureCodes = { "en-US", "ja-JP", "zh-HK", "zh-CN" };
 
     private readonly ITaktDatabaseSchemaProvider _schemaProvider;
@@ -570,7 +572,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 解析代码落盘根路径：GenMethod=2 仓库根；GenMethod=1 取请求或表 GenPath（字典 gen_path_type 的 DictValue）。
+    /// 解析代码落盘根路径：GenMethod=2 仓库根；GenMethod=1 取请求或表 GenPath（字典 code_generator_path_type 的 DictValue）。
     /// </summary>
     private string ResolveGenerationBasePath(TaktGenTable table, string? genPathOverride, int genMethod)
     {
@@ -589,7 +591,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     /// <summary>
     /// 将 GenPath 字典值或目录路径解析为绝对路径；solution 令牌解析为 Solution 根目录。
     /// </summary>
-    /// <param name="genPath">字典 gen_path_type 的 DictValue 或相对/绝对目录</param>
+    /// <param name="genPath">字典 code_generator_path_type 的 DictValue 或相对/绝对目录</param>
     /// <returns>绝对路径</returns>
     private string ResolveGenPathDirectory(string genPath)
     {
@@ -851,7 +853,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 加载 gen_button_category 字典：后缀 → 显示名、排序号。
+    /// 加载 code_generator_button_category 字典：后缀 → 显示名、排序号。
     /// </summary>
     /// <returns>标签与排序映射</returns>
     private async Task<(Dictionary<string, string> Labels, Dictionary<string, int> SortOrders)> LoadGenButtonCategoryMapsAsync()
@@ -876,7 +878,9 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         return (labels, sortOrders);
     }
 
-    /// <summary>与菜单 SQL 模板中 <c>menu_code</c> 一致：去掉表名前缀 <c>takt_</c> 后转大写、横线改下划线。</summary>
+    /// <summary>
+    /// 与菜单 SQL 模板中 <c>menu_code</c> 一致：去掉表名前缀 <c>takt_</c> 后转大写、横线改下划线。
+    /// </summary>
     private static string ToMenuCodeUpperFromTableName(string? tableName)
     {
         if (string.IsNullOrWhiteSpace(tableName))
@@ -918,7 +922,9 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         return string.IsNullOrEmpty(suffix) ? $"{prefix}.{middleSegment}" : $"{prefix}.{middleSegment}.{suffix}";
     }
 
-    /// <summary>将下划线/空格/横线命名字符串转为帕斯卡命名（如 user_name → UserName）。</summary>
+    /// <summary>
+    /// 将下划线/空格/横线命名字符串转为帕斯卡命名（如 user_name → UserName）。
+    /// </summary>
     /// <param name="snakeCase">下划线、空格或横线分隔的字符串</param>
     /// <returns>帕斯卡命名字符串</returns>
     private static string ToPascalCase(string snakeCase)
@@ -1113,7 +1119,9 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         return !string.IsNullOrWhiteSpace(dbColumnName) && EntityBaseColumnNames.Contains(dbColumnName.Trim());
     }
 
-    /// <summary>将数据库数据类型映射为 C# 类型（如 nvarchar→string、bigint→long、bit→bool）。</summary>
+    /// <summary>
+    /// 将数据库数据类型映射为 C# 类型（如 nvarchar→string、bigint→long、bit→bool）。
+    /// </summary>
     /// <param name="dbType">数据库类型名（如 nvarchar、bigint、datetime）</param>
     /// <returns>C# 类型名（如 string、long、DateTime）</returns>
     private static string MapDbTypeToCsharp(string dbType)

@@ -494,7 +494,7 @@ public class TaktPurchaseForecastService : TaktServiceBase, ITaktPurchaseForecas
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
-                || (x.PlanBy != null && x.PlanBy.Contains(keywords))
+                || (x.PlannerName != null && x.PlannerName.Contains(keywords))
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -573,16 +573,16 @@ public class TaktPurchaseForecastService : TaktServiceBase, ITaktPurchaseForecas
             exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(supplierName1));
         }
 
-        if (queryDto?.PlannerId.HasValue == true)
+        if (queryDto?.PlannerEmployeeId.HasValue == true)
         {
-            var plannerId = queryDto.PlannerId.Value;
-            exp = exp.And(x => x.PlannerId == plannerId);
+            var plannerId = queryDto.PlannerEmployeeId.Value;
+            exp = exp.And(x => x.PlannerEmployeeId == plannerId);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlannerName))
         {
-            var planBy = queryDto.PlanBy;
-            exp = exp.And(x => x.PlanBy != null && x.PlanBy.Contains(planBy));
+            var planBy = queryDto.PlannerName;
+            exp = exp.And(x => x.PlannerName != null && x.PlannerName.Contains(planBy));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -741,11 +741,11 @@ public class TaktPurchaseForecastService : TaktServiceBase, ITaktPurchaseForecas
         {
             return true;
         }
-        if (queryDto.PlannerId.HasValue)
+        if (queryDto.PlannerEmployeeId.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PlannerName))
         {
             return true;
         }

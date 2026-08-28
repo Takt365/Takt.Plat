@@ -39,7 +39,7 @@ export interface Menu extends TenantCoreDtoBase {
   menuName: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey: string;
 
@@ -177,7 +177,7 @@ export interface MenuQuery extends TaktPagedQuery {
   menuName?: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey?: string;
 
@@ -315,7 +315,7 @@ export interface MenuCreate {
   menuName: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey: string;
 
@@ -483,7 +483,7 @@ export interface MenuTemplate {
   menuName?: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey?: string;
 
@@ -601,7 +601,7 @@ export interface MenuImport {
   menuName?: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey?: string;
 
@@ -714,7 +714,7 @@ export interface MenuExport {
   menuName: string;
 
   /**
-   * 本地化键（用于多语言支持）
+   * 国际化键（用于多语言支持）
    */
   i18nKey: string;
 

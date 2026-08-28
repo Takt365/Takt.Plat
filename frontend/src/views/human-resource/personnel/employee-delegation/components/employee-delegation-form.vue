@@ -71,7 +71,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.delegationType"
-                  dict-type="hr_employee_delegation_type"
+                  dict-type="humanresource_personnel_employee_delegation_type"
                   :placeholder="pi.ph('delegationType')"
                 />
               </a-form-item>
@@ -83,7 +83,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.scopeType"
-                  dict-type="hr_employee_delegation_scope_type"
+                  dict-type="humanresource_personnel_employee_delegation_scope"
                   :placeholder="pi.ph('scopeType')"
                 />
               </a-form-item>

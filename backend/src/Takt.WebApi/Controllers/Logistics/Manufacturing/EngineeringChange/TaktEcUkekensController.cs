@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcUkekensController : TaktControllerBase
 {
     private readonly ITaktEcUkekenService _ecUkekenService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecUkekenService">设变受检执行服务</param>
-    public TaktEcUkekensController(ITaktEcUkekenService ecUkekenService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcUkekensController(
+        ITaktEcUkekenService ecUkekenService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecUkekenService = ecUkekenService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:list", "设变受检执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:list", "设变受检执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcUkekenListAsync([FromQuery] TaktEcUkekenQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcUkekensController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:list", "设变受检执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcUkekenMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Iqc);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变受检执行
     /// </summary>
     /// <param name="id">设变受检执行ID</param>
     /// <returns>设变受检执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:query", "设变受检执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:query", "设变受检执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcUkekenByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// 获取设变受检执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:query", "设变受检执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:query", "设变受检执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcUkekenOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变受检执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:create", "创建设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:create", "创建设变受检执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcUkekenAsync([FromBody] TaktEcUkekenCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// <param name="id">设变受检执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变受检执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:update", "更新设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:update", "更新设变受检执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcUkekenAsync(long id, [FromBody] TaktEcUkekenUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变受检执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:delete", "删除设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:delete", "删除设变受检执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcUkekenByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:delete", "批量删除设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:delete", "批量删除设变受检执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcUkekenBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变受检执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:update", "更新设变受检执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:update", "更新设变受检执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcUkekenObsoleteAsync([FromBody] TaktEcUkekenObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:import", "获取设变受检执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:import", "获取设变受检执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcUkekenTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:import", "导入设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:import", "导入设变受检执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcUkekenAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcUkekensController : TaktControllerBase
     /// 导出设变受检执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:ukeken:export", "导出设变受检执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:export", "导出设变受检执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcUkekenAsync([FromQuery] TaktEcUkekenQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

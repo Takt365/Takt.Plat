@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Code.Generator
 // 文件名称：TaktGenTableValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTable 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktGenTable 生成，请按需审阅）
 // 
@@ -59,8 +59,8 @@ public class TaktGenTableCreateValidator : AbstractValidator<TaktGenTableCreateD
             .NotEmpty().WithMessage("排序字段不能为空")
             .MaximumLength(100).WithMessage("排序字段长度不能超过100个字符");
         RuleFor(x => x.SortType)
-            .NotEmpty().WithMessage("排序类型不能为空")
-            .MaximumLength(10).WithMessage("排序类型长度不能超过10个字符");
+            .NotEmpty().WithMessage("排序方向不能为空")
+            .MaximumLength(10).WithMessage("排序方向长度不能超过10个字符");
         RuleFor(x => x.GenAuthor)
             .NotEmpty().WithMessage("作者不能为空")
             .MaximumLength(50).WithMessage("作者长度不能超过50个字符");
@@ -117,8 +117,8 @@ public class TaktGenTableUpdateValidator : AbstractValidator<TaktGenTableUpdateD
             .NotEmpty().WithMessage("排序字段不能为空")
             .MaximumLength(100).WithMessage("排序字段长度不能超过100个字符");
         RuleFor(x => x.SortType)
-            .NotEmpty().WithMessage("排序类型不能为空")
-            .MaximumLength(10).WithMessage("排序类型长度不能超过10个字符");
+            .NotEmpty().WithMessage("排序方向不能为空")
+            .MaximumLength(10).WithMessage("排序方向长度不能超过10个字符");
         RuleFor(x => x.GenAuthor)
             .NotEmpty().WithMessage("作者不能为空")
             .MaximumLength(50).WithMessage("作者长度不能超过50个字符");
@@ -172,8 +172,8 @@ public class TaktGenTableImportValidator : AbstractValidator<TaktGenTableImportD
             .NotEmpty().WithMessage("排序字段不能为空")
             .MaximumLength(100).WithMessage("排序字段长度不能超过100个字符");
         RuleFor(x => x.SortType)
-            .NotEmpty().WithMessage("排序类型不能为空")
-            .MaximumLength(10).WithMessage("排序类型长度不能超过10个字符");
+            .NotEmpty().WithMessage("排序方向不能为空")
+            .MaximumLength(10).WithMessage("排序方向长度不能超过10个字符");
         RuleFor(x => x.GenAuthor)
             .NotEmpty().WithMessage("作者不能为空")
             .MaximumLength(50).WithMessage("作者长度不能超过50个字符");

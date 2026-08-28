@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialInboundI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialInbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktSerialInboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialinbound.inbounddate", "zh-HK", "入库日期_hk", "入库日期"),
 
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "en-US", "入库类型_us", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "en-US", "入库类型_us", "入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "ja-JP", "入库类型_jp", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "ja-JP", "入库类型_jp", "入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-CN", "入库类型", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-CN", "入库类型", "入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
             // entity.serialinbound.inboundtype
-            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-HK", "入库类型_hk", "入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
+            new TranslationSeedItem("entity.serialinbound.inboundtype", "zh-HK", "入库类型_hk", "入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）"),
 
             // entity.serialinbound.warehousecode
             new TranslationSeedItem("entity.serialinbound.warehousecode", "en-US", "仓库编码_us", "仓库编码（选项 TaktWarehouses/options；DictValue=Id）"),

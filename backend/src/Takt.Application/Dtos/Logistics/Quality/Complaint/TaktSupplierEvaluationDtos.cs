@@ -79,12 +79,12 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
@@ -248,12 +248,12 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
@@ -431,12 +431,12 @@ public class TaktSupplierEvaluationCreateDto
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
@@ -671,12 +671,12 @@ public class TaktSupplierEvaluationTemplateDto
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
@@ -834,12 +834,12 @@ public class TaktSupplierEvaluationImportDto
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）
@@ -1003,12 +1003,12 @@ public class TaktSupplierEvaluationExportDto
     /// <summary>
     /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? EvaluatorBy { get; set; } = string.Empty;
+    public string? EvaluatorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? EvaluationDept { get; set; } = string.Empty;
+    public string? EvaluationDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 总体评级（字典 logistics_quality_supplier_rating）

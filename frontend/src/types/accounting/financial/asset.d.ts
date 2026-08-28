@@ -25,7 +25,7 @@ import type {
 export interface Asset extends CompanyDtoBase {
 
   /**
-   * 资产状态（字典 accounting_asset_status）
+   * 资产状态（字典 accounting_financial_asset_status）
    */
   assetStatus?: number;
 
@@ -68,12 +68,12 @@ export interface AssetExport {
   assetName: string;
 
   /**
-   * 资产分类（字典 accounting_asset_category）
+   * 资产分类（字典 accounting_financial_asset_category）
    */
   assetCategory: string;
 
   /**
-   * 资产类型（字典 accounting_asset_type）
+   * 资产类型（字典 accounting_financial_asset_type）
    */
   assetType: string;
 
@@ -93,32 +93,32 @@ export interface AssetExport {
   accumulatedDepreciation: number;
 
   /**
-   * 成本中心ID
+   * 成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）
    */
   costCenterId?: string;
 
   /**
-   * 成本中心名称
+   * 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
    */
   costCenterName?: string;
 
   /**
-   * 部门ID
+   * 部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 部门名称
+   * 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
    */
   deptName?: string;
 
   /**
-   * 使用者ID
+   * 使用者（选项 TaktUsers/options；DictValue=Id）
    */
   userId?: string;
 
   /**
-   * 使用者名称
+   * 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
    */
   userName?: string;
 
@@ -153,7 +153,7 @@ export interface AssetExport {
   expectedLifeMonths: number;
 
   /**
-   * 折旧方法（字典 accounting_depreciation_method）
+   * 折旧方法（字典 accounting_financial_depreciation_method）
    */
   depreciationMethod: number;
 
@@ -168,7 +168,7 @@ export interface AssetExport {
   plantCode: string;
 
   /**
-   * 资产状态（字典 accounting_asset_status）
+   * 资产状态（字典 accounting_financial_asset_status）
    */
   assetStatus: number;
 

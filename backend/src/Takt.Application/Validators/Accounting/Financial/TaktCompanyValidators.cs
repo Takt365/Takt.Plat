@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktCompanyValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Company 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCompany 生成，请按需审阅）
 // 
@@ -101,9 +101,6 @@ public class TaktCompanyCreateValidator : AbstractValidator<TaktCompanyCreateDto
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.CompanyManager)
-            .NotEmpty().WithMessage("公司负责人不能为空")
-            .MaximumLength(50).WithMessage("公司负责人长度不能超过50个字符");
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
@@ -238,9 +235,6 @@ public class TaktCompanyUpdateValidator : AbstractValidator<TaktCompanyUpdateDto
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.CompanyManager)
-            .NotEmpty().WithMessage("公司负责人不能为空")
-            .MaximumLength(50).WithMessage("公司负责人长度不能超过50个字符");
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
@@ -370,9 +364,6 @@ public class TaktCompanyImportValidator : AbstractValidator<TaktCompanyImportDto
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.CompanyManager)
-            .NotEmpty().WithMessage("公司负责人不能为空")
-            .MaximumLength(50).WithMessage("公司负责人长度不能超过50个字符");
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");

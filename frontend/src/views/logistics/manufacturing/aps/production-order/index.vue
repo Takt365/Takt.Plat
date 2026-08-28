@@ -74,13 +74,13 @@
         <template v-if="column.key === 'prodOrderType'">
           <TaktDictTag
             :value="getProductionOrderDictValue(record, 'prodOrderType')"
-            dict-type="logistics_prod_order_type"
+            dict-type="logistics_manufacturing_prod_order_type"
           />
         </template>
         <template v-else-if="column.key === 'unitOfMeasure'">
           <TaktDictTag
             :value="getProductionOrderDictValue(record, 'unitOfMeasure')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'priority'">
@@ -92,7 +92,7 @@
         <template v-else-if="column.key === 'orderStatus'">
           <TaktDictTag
             :value="getProductionOrderDictValue(record, 'orderStatus')"
-            dict-type="logistics_prod_status"
+            dict-type="logistics_manufacturing_prod_status"
           />
         </template>
       </template>
@@ -150,7 +150,7 @@
       <a-form-item :label="pi.queryLabel('prodOrderType')">
         <TaktSelect
           v-model:value="advancedQueryForm.prodOrderType"
-          dict-type="logistics_prod_order_type"
+          dict-type="logistics_manufacturing_prod_order_type"
           :placeholder="pi.queryPh('prodOrderType', 'select')"
           allow-clear
         />
@@ -199,7 +199,7 @@
       <a-form-item :label="pi.queryLabel('unitOfMeasure')">
         <TaktSelect
           v-model:value="advancedQueryForm.unitOfMeasure"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('unitOfMeasure', 'select')"
           allow-clear
         />
@@ -362,7 +362,7 @@
       <a-form-item :label="pi.queryLabel('orderStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.orderStatus"
-          dict-type="logistics_prod_status"
+          dict-type="logistics_manufacturing_prod_status"
           :placeholder="pi.queryPh('orderStatus', 'select')"
           allow-clear
         />

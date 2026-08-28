@@ -63,12 +63,12 @@ export interface BonusPlanExport {
   planName: string;
 
   /**
-   * 奖金类型（字典 hr_comp_bonus_type）
+   * 奖金类型（字典 humanresource_compensation_bonus_type）
    */
   bonusType: number;
 
   /**
-   * 计算方式（字典 hr_comp_bonus_calc_method_type）
+   * 计算方式（字典 humanresource_compensation_bonus_calc_method）
    */
   calcMethod: number;
 

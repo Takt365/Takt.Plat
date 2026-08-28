@@ -33,7 +33,9 @@ namespace Takt.Application.Services.Code.Database;
 /// </summary>
 public class TaktTableArchiveService : TaktServiceBase, ITaktTableArchiveService
 {
-    /// <summary>Quartz Handler 类名（与 TaktTableArchiveJobHandler.HandlerKey 一致）</summary>
+    /// <summary>
+    /// Quartz Handler 类名（与 TaktTableArchiveJobHandler.HandlerKey 一致）
+    /// </summary>
     public const string QuartzHandlerClassName = "TaktTableArchiveJobHandler";
 
     private const int ExecuteModeImmediate = 1;

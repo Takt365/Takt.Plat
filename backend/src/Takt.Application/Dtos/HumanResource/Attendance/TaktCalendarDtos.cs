@@ -74,7 +74,7 @@ public class TaktCalendarQueryDto : TaktPagedQuery
     public DateTime? CalendarDateEnd { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -147,7 +147,7 @@ public class TaktCalendarCreateDto
     public DateTime CalendarDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int IsWorkingDay { get; set; } = 0;
 
@@ -231,7 +231,7 @@ public class TaktCalendarTemplateDto
     public DateTime? CalendarDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -291,7 +291,7 @@ public class TaktCalendarImportDto
     public DateTime? CalendarDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
 
@@ -351,7 +351,7 @@ public class TaktCalendarExportDto
     public DateTime CalendarDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int IsWorkingDay { get; set; } = 0;
 

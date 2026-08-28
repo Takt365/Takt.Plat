@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktBonusPlanI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBonusPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bonusplan.planname", "zh-HK", "方案名称_hk", "方案名称"),
 
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "en-US", "奖金类型_us", "奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "en-US", "奖金类型_us", "奖金类型（字典 humanresource_compensation_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "ja-JP", "奖金类型_jp", "奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "ja-JP", "奖金类型_jp", "奖金类型（字典 humanresource_compensation_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-CN", "奖金类型", "奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-CN", "奖金类型", "奖金类型（字典 humanresource_compensation_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
             // entity.bonusplan.bonustype
-            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-HK", "奖金类型_hk", "奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
+            new TranslationSeedItem("entity.bonusplan.bonustype", "zh-HK", "奖金类型_hk", "奖金类型（字典 humanresource_compensation_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）"),
 
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "en-US", "计算方式_us", "计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "en-US", "计算方式_us", "计算方式（字典 humanresource_compensation_bonus_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "ja-JP", "计算方式_jp", "计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "ja-JP", "计算方式_jp", "计算方式（字典 humanresource_compensation_bonus_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-CN", "计算方式", "计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-CN", "计算方式", "计算方式（字典 humanresource_compensation_bonus_calc_method；1=固定金额 2=按比例 3=按公式）"),
             // entity.bonusplan.calcmethod
-            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
+            new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 humanresource_compensation_bonus_calc_method；1=固定金额 2=按比例 3=按公式）"),
 
             // entity.bonusplan.salaryformulaid
             new TranslationSeedItem("entity.bonusplan.salaryformulaid", "en-US", "计算公式ID_us", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),

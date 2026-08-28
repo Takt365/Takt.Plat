@@ -99,7 +99,7 @@
         <template v-else-if="column.key === 'sddRtrans'">
           <TaktDictTag
             :value="getBankDictValue(record, 'sddRtrans')"
-            dict-type="accounting_sepa_rtrans_type"
+            dict-type="accounting_financial_sepa_rtrans_type"
           />
         </template>
       </template>
@@ -408,7 +408,7 @@
       <a-form-item :label="pi.queryLabel('sddRtrans')">
         <TaktSelect
           v-model:value="advancedQueryForm.sddRtrans"
-          dict-type="accounting_sepa_rtrans_type"
+          dict-type="accounting_financial_sepa_rtrans_type"
           :placeholder="pi.queryPh('sddRtrans', 'select')"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeSkill 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktEmployeeSkillI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeskill.skillname", "zh-HK", "技能名称_hk", "技能名称"),
 
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "en-US", "技能等级_us", "技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "en-US", "技能等级_us", "技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "ja-JP", "技能等级_jp", "技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "ja-JP", "技能等级_jp", "技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-CN", "技能等级", "技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-CN", "技能等级", "技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
             // entity.employeeskill.skilllevel
-            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-HK", "技能等级_hk", "技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
+            new TranslationSeedItem("entity.employeeskill.skilllevel", "zh-HK", "技能等级_hk", "技能等级（字典 humanresource_personnel_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）"),
 
             // entity.employeeskill.certificatename
             new TranslationSeedItem("entity.employeeskill.certificatename", "en-US", "证书名称_us", "证书名称"),

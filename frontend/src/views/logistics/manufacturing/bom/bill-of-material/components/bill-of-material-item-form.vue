@@ -96,7 +96,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('materialUnit')"
                 />
               </a-form-item>
@@ -386,6 +386,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialItemId 才视为编辑） */
 watch(
   () => props.formData,
@@ -660,8 +662,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.billOfMaterialItemId) {
     payload.billOfMaterialItemId = props.formData.billOfMaterialItemId
+    delete payload.numberingRuleCode
   }
   payload.billOfMaterialId = props.masterId
   // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）

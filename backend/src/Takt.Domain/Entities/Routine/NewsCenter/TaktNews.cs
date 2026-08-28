@@ -31,7 +31,7 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNews : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻）
+    /// 新闻编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 新闻编码规则生成并展示，非手输；单据类型菜单：新闻中心）
     /// </summary>
     [SugarColumn(ColumnName = "news_code", ColumnDescription = "新闻编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string NewsCode { get; set; } = string.Empty;
@@ -117,7 +117,7 @@ public class TaktNews : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 发布部门名称（冗余字段，便于查询）
+    /// 发布部门名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "发布部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -128,7 +128,7 @@ public class TaktNews : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
     /// <summary>
-    /// 发布人姓名（冗余字段，便于查询）
+    /// 发布人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_name", ColumnDescription = "发布人姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PublisherName { get; set; } = string.Empty;

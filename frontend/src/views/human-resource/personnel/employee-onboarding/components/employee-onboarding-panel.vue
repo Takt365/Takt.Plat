@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:onboarding:create"
+      update-permission="human:resource:personnel:employee:onboarding:update"
+      delete-permission="human:resource:personnel:employee:onboarding:delete"
+      import-permission="human:resource:personnel:employee:onboarding:import"
+      export-permission="human:resource:personnel:employee:onboarding:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -254,7 +254,7 @@
       <a-form-item :label="pi.queryLabel('todoStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.todoStatus"
-          dict-type="hr_personnel_onboarding_status"
+          dict-type="humanresource_personnel_onboarding_status"
           :placeholder="pi.queryPh('todoStatus', 'select')"
           allow-clear
         />
@@ -710,7 +710,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:onboarding:update',
         onClick: (record: EmployeeOnboarding) => void handleEdit(record),
       },
       {
@@ -718,7 +718,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:onboarding:delete',
         onClick: (record: EmployeeOnboarding) => void handleDeleteOne(record),
       },
     ],

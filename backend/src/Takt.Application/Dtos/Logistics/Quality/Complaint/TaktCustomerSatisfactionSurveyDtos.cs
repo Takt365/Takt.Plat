@@ -84,7 +84,7 @@ public class TaktCustomerSatisfactionSurveyDto : TaktCompanyDtoBase
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人
@@ -264,7 +264,7 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人
@@ -448,7 +448,7 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人
@@ -694,7 +694,7 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人
@@ -863,7 +863,7 @@ public class TaktCustomerSatisfactionSurveyImportDto
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人
@@ -1038,7 +1038,7 @@ public class TaktCustomerSatisfactionSurveyExportDto
     /// <summary>
     /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? SurveyorBy { get; set; } = string.Empty;
+    public string? SurveyorByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户联系人

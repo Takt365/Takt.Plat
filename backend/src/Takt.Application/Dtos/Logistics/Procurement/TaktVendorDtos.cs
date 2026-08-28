@@ -56,17 +56,17 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
@@ -76,12 +76,12 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -146,7 +146,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -166,12 +166,12 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public int ClearingWithCustomer { get; set; } = 0;
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     public string PaymentTerms { get; set; } = string.Empty;
 
@@ -196,7 +196,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     public string Incoterms1 { get; set; } = string.Empty;
 
@@ -211,7 +211,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 
@@ -236,7 +236,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -256,7 +256,7 @@ public class TaktVendorDto : TaktCompanyDtoBase
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 
@@ -328,17 +328,17 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
@@ -348,12 +348,12 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -418,7 +418,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -438,12 +438,12 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public int? ClearingWithCustomer { get; set; }
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     public string? PaymentTerms { get; set; } = string.Empty;
 
@@ -468,7 +468,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     public string? Incoterms1 { get; set; } = string.Empty;
 
@@ -483,7 +483,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public int? AutomaticPurchaseOrder { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -508,7 +508,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int? CreditLevel { get; set; }
 
@@ -528,7 +528,7 @@ public class TaktVendorQueryDto : TaktPagedQuery
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int? VendorLevel { get; set; }
 
@@ -620,20 +620,20 @@ public class TaktVendorCreateDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
-    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature_type）不能为空")]
+    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature）不能为空")]
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
-    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute_type）不能为空")]
+    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute）不能为空")]
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
@@ -642,12 +642,12 @@ public class TaktVendorCreateDto
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -712,9 +712,9 @@ public class TaktVendorCreateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [Required(ErrorMessage = "结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）不能为空")]
+    [Required(ErrorMessage = "结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -735,14 +735,14 @@ public class TaktVendorCreateDto
     public int ClearingWithCustomer { get; set; } = 0;
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
-    [Required(ErrorMessage = "付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）不能为空")]
+    [Required(ErrorMessage = "付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）不能为空")]
     public string PaymentTerms { get; set; } = string.Empty;
 
     /// <summary>
@@ -769,9 +769,9 @@ public class TaktVendorCreateDto
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
-    [Required(ErrorMessage = "国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）不能为空")]
+    [Required(ErrorMessage = "国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）不能为空")]
     public string Incoterms1 { get; set; } = string.Empty;
 
     /// <summary>
@@ -786,7 +786,7 @@ public class TaktVendorCreateDto
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 
@@ -813,7 +813,7 @@ public class TaktVendorCreateDto
     public string PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -833,7 +833,7 @@ public class TaktVendorCreateDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 
@@ -977,17 +977,17 @@ public class TaktVendorTemplateDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
@@ -997,12 +997,12 @@ public class TaktVendorTemplateDto
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -1067,7 +1067,7 @@ public class TaktVendorTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -1087,12 +1087,12 @@ public class TaktVendorTemplateDto
     public int? ClearingWithCustomer { get; set; }
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     public string? PaymentTerms { get; set; } = string.Empty;
 
@@ -1117,7 +1117,7 @@ public class TaktVendorTemplateDto
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     public string? Incoterms1 { get; set; } = string.Empty;
 
@@ -1132,7 +1132,7 @@ public class TaktVendorTemplateDto
     public int? AutomaticPurchaseOrder { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -1157,7 +1157,7 @@ public class TaktVendorTemplateDto
     public string? PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int? CreditLevel { get; set; }
 
@@ -1177,7 +1177,7 @@ public class TaktVendorTemplateDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int? VendorLevel { get; set; }
 
@@ -1249,17 +1249,17 @@ public class TaktVendorImportDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int? VendorType { get; set; }
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
@@ -1269,12 +1269,12 @@ public class TaktVendorImportDto
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -1339,7 +1339,7 @@ public class TaktVendorImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -1359,12 +1359,12 @@ public class TaktVendorImportDto
     public int? ClearingWithCustomer { get; set; }
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int? PaymentMethod { get; set; }
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     public string? PaymentTerms { get; set; } = string.Empty;
 
@@ -1389,7 +1389,7 @@ public class TaktVendorImportDto
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     public string? Incoterms1 { get; set; } = string.Empty;
 
@@ -1404,7 +1404,7 @@ public class TaktVendorImportDto
     public int? AutomaticPurchaseOrder { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -1429,7 +1429,7 @@ public class TaktVendorImportDto
     public string? PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int? CreditLevel { get; set; }
 
@@ -1449,7 +1449,7 @@ public class TaktVendorImportDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int? VendorLevel { get; set; }
 
@@ -1527,17 +1527,17 @@ public class TaktVendorExportDto
     public string? VendorShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+    /// 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
     /// </summary>
     public int VendorType { get; set; } = 0;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
@@ -1547,12 +1547,12 @@ public class TaktVendorExportDto
     public string? VendorTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -1617,7 +1617,7 @@ public class TaktVendorExportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -1637,12 +1637,12 @@ public class TaktVendorExportDto
     public int ClearingWithCustomer { get; set; } = 0;
 
     /// <summary>
-    /// 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+    /// 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
     /// </summary>
     public int PaymentMethod { get; set; } = 0;
 
     /// <summary>
-    /// 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
     /// </summary>
     public string PaymentTerms { get; set; } = string.Empty;
 
@@ -1667,7 +1667,7 @@ public class TaktVendorExportDto
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+    /// 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
     /// </summary>
     public string Incoterms1 { get; set; } = string.Empty;
 
@@ -1682,7 +1682,7 @@ public class TaktVendorExportDto
     public int AutomaticPurchaseOrder { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 
@@ -1707,7 +1707,7 @@ public class TaktVendorExportDto
     public string PurchasingOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+    /// 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
     /// </summary>
     public int CreditLevel { get; set; } = 0;
 
@@ -1727,7 +1727,7 @@ public class TaktVendorExportDto
     public string? AgentRegion { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+    /// 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
     /// </summary>
     public int VendorLevel { get; set; } = 0;
 

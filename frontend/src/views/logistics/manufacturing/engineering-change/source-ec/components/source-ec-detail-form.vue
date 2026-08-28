@@ -66,12 +66,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceFinishedProduct')"
-                name="sourceFinishedProduct"
+                :label="pi.label('sourceFinishedGoods')"
+                name="sourceFinishedGoods"
               >
                 <a-input
-                  v-model:value="formState.sourceFinishedProduct"
-                  :placeholder="pi.ph('sourceFinishedProduct')"
+                  v-model:value="formState.sourceFinishedGoods"
+                  :placeholder="pi.ph('sourceFinishedGoods')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -80,12 +80,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceParentPart')"
-                name="sourceParentPart"
+                :label="pi.label('sourceParentMaterialCode')"
+                name="sourceParentMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.sourceParentPart"
-                  :placeholder="pi.ph('sourceParentPart')"
+                  v-model:value="formState.sourceParentMaterialCode"
+                  :placeholder="pi.ph('sourceParentMaterialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -94,12 +94,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceLegacyPartCode')"
-                name="sourceLegacyPartCode"
+                :label="pi.label('sourceOldMaterialCode')"
+                name="sourceOldMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.sourceLegacyPartCode"
-                  :placeholder="pi.ph('sourceLegacyPartCode')"
+                  v-model:value="formState.sourceOldMaterialCode"
+                  :placeholder="pi.ph('sourceOldMaterialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -109,12 +109,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceLegacyPartName')"
-                name="sourceLegacyPartName"
+                :label="pi.label('sourceOldMaterialDescription')"
+                name="sourceOldMaterialDescription"
               >
                 <a-input
-                  v-model:value="formState.sourceLegacyPartName"
-                  :placeholder="pi.ph('sourceLegacyPartName')"
+                  v-model:value="formState.sourceOldMaterialDescription"
+                  :placeholder="pi.ph('sourceOldMaterialDescription')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -123,24 +123,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceLegacyUsage')"
-                name="sourceLegacyUsage"
+                :label="pi.label('sourceOldUsageQuantity')"
+                name="sourceOldUsageQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.sourceLegacyUsage"
-                  :placeholder="pi.ph('sourceLegacyUsage')"
+                  v-model:value="formState.sourceOldUsageQuantity"
+                  :placeholder="pi.ph('sourceOldUsageQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceLegacyMountingPosition')"
-                name="sourceLegacyMountingPosition"
+                :label="pi.label('sourceOldItemPosition')"
+                name="sourceOldItemPosition"
               >
                 <a-input
-                  v-model:value="formState.sourceLegacyMountingPosition"
-                  :placeholder="pi.ph('sourceLegacyMountingPosition')"
+                  v-model:value="formState.sourceOldItemPosition"
+                  :placeholder="pi.ph('sourceOldItemPosition')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -149,12 +149,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceReplacementPartCode')"
-                name="sourceReplacementPartCode"
+                :label="pi.label('sourceNewMaterialCode')"
+                name="sourceNewMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.sourceReplacementPartCode"
-                  :placeholder="pi.ph('sourceReplacementPartCode')"
+                  v-model:value="formState.sourceNewMaterialCode"
+                  :placeholder="pi.ph('sourceNewMaterialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -174,12 +174,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceReplacementPartName')"
-                name="sourceReplacementPartName"
+                :label="pi.label('sourceNewMaterialDescription')"
+                name="sourceNewMaterialDescription"
               >
                 <a-input
-                  v-model:value="formState.sourceReplacementPartName"
-                  :placeholder="pi.ph('sourceReplacementPartName')"
+                  v-model:value="formState.sourceNewMaterialDescription"
+                  :placeholder="pi.ph('sourceNewMaterialDescription')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -188,24 +188,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceReplacementUsage')"
-                name="sourceReplacementUsage"
+                :label="pi.label('sourceNewUsageQuantity')"
+                name="sourceNewUsageQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.sourceReplacementUsage"
-                  :placeholder="pi.ph('sourceReplacementUsage')"
+                  v-model:value="formState.sourceNewUsageQuantity"
+                  :placeholder="pi.ph('sourceNewUsageQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceReplacementMountingPosition')"
-                name="sourceReplacementMountingPosition"
+                :label="pi.label('sourceNewItemPosition')"
+                name="sourceNewItemPosition"
               >
                 <a-input
-                  v-model:value="formState.sourceReplacementMountingPosition"
-                  :placeholder="pi.ph('sourceReplacementMountingPosition')"
+                  v-model:value="formState.sourceNewItemPosition"
+                  :placeholder="pi.ph('sourceNewItemPosition')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -232,10 +232,12 @@
                 :label="pi.label('sourceCompatibility')"
                 name="sourceCompatibility"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.sourceCompatibility"
-                  dict-type="logistics_ec_source_compatibility"
                   :placeholder="pi.ph('sourceCompatibility')"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -246,7 +248,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.sourceDistinction"
-                  dict-type="logistics_ec_source_distinction"
+                  dict-type="logistics_manufacturing_ec_source_distinction"
                   :placeholder="pi.ph('sourceDistinction')"
                 />
               </a-form-item>
@@ -258,20 +260,20 @@
               >
                 <TaktSelect
                   v-model:value="formState.sourceInstruction"
-                  dict-type="logistics_ec_source_instruction"
+                  dict-type="logistics_manufacturing_ec_source_instruction"
                   :placeholder="pi.ph('sourceInstruction')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceLegacyPartDisposition')"
-                name="sourceLegacyPartDisposition"
+                :label="pi.label('sourceOldPartDisposition')"
+                name="sourceOldPartDisposition"
               >
                 <TaktSelect
-                  v-model:value="formState.sourceLegacyPartDisposition"
-                  dict-type="logistics_ec_legacy_part_disposition"
-                  :placeholder="pi.ph('sourceLegacyPartDisposition')"
+                  v-model:value="formState.sourceOldPartDisposition"
+                  dict-type="logistics_manufacturing_ec_old_part_disposition"
+                  :placeholder="pi.ph('sourceOldPartDisposition')"
                 />
               </a-form-item>
             </a-col>
@@ -398,7 +400,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","sourceFinishedProduct","sourceParentPart","sourceLegacyPartCode","sourceLegacyPartName","sourceLegacyUsage","sourceLegacyMountingPosition","sourceReplacementPartCode","sourceReplacementPartName","sourceReplacementUsage","sourceReplacementMountingPosition","sourceBomCode","sourceCompatibility","sourceDistinction","sourceInstruction","sourceLegacyPartDisposition","sourceBomEffectiveDate","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","sourceFinishedGoods","sourceParentMaterialCode","sourceOldMaterialCode","sourceOldMaterialDescription","sourceOldUsageQuantity","sourceOldItemPosition","sourceNewMaterialCode","sourceNewMaterialDescription","sourceNewUsageQuantity","sourceNewItemPosition","sourceBomCode","sourceCompatibility","sourceDistinction","sourceInstruction","sourceOldPartDisposition","sourceBomEffectiveDate","isObsolete"]
 
 
 
@@ -486,17 +488,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  sourceFinishedProduct: [
+  sourceFinishedGoods: [
     {
       required: true,
-      message: pi.ph('sourceFinishedProduct'),
+      message: pi.ph('sourceFinishedGoods'),
       trigger: 'blur'
     }
   ],
-  sourceParentPart: [
+  sourceParentMaterialCode: [
     {
       required: true,
-      message: pi.ph('sourceParentPart'),
+      message: pi.ph('sourceParentMaterialCode'),
       trigger: 'blur'
     }
   ],
@@ -534,24 +536,24 @@ function getValues(): Record<string, any> {
       else delete payload.lineNumber
     }
   }
-  if ('sourceLegacyUsage' in payload) {
-    const rawsourceLegacyUsage = payload.sourceLegacyUsage
-    if (rawsourceLegacyUsage === undefined || rawsourceLegacyUsage === null || rawsourceLegacyUsage === '') {
-      delete payload.sourceLegacyUsage
+  if ('sourceOldUsageQuantity' in payload) {
+    const rawsourceOldUsageQuantity = payload.sourceOldUsageQuantity
+    if (rawsourceOldUsageQuantity === undefined || rawsourceOldUsageQuantity === null || rawsourceOldUsageQuantity === '') {
+      delete payload.sourceOldUsageQuantity
     } else {
-      const numsourceLegacyUsage = typeof rawsourceLegacyUsage === 'number' ? rawsourceLegacyUsage : Number(rawsourceLegacyUsage)
-      if (Number.isFinite(numsourceLegacyUsage)) payload.sourceLegacyUsage = numsourceLegacyUsage
-      else delete payload.sourceLegacyUsage
+      const numsourceOldUsageQuantity = typeof rawsourceOldUsageQuantity === 'number' ? rawsourceOldUsageQuantity : Number(rawsourceOldUsageQuantity)
+      if (Number.isFinite(numsourceOldUsageQuantity)) payload.sourceOldUsageQuantity = numsourceOldUsageQuantity
+      else delete payload.sourceOldUsageQuantity
     }
   }
-  if ('sourceReplacementUsage' in payload) {
-    const rawsourceReplacementUsage = payload.sourceReplacementUsage
-    if (rawsourceReplacementUsage === undefined || rawsourceReplacementUsage === null || rawsourceReplacementUsage === '') {
-      delete payload.sourceReplacementUsage
+  if ('sourceNewUsageQuantity' in payload) {
+    const rawsourceNewUsageQuantity = payload.sourceNewUsageQuantity
+    if (rawsourceNewUsageQuantity === undefined || rawsourceNewUsageQuantity === null || rawsourceNewUsageQuantity === '') {
+      delete payload.sourceNewUsageQuantity
     } else {
-      const numsourceReplacementUsage = typeof rawsourceReplacementUsage === 'number' ? rawsourceReplacementUsage : Number(rawsourceReplacementUsage)
-      if (Number.isFinite(numsourceReplacementUsage)) payload.sourceReplacementUsage = numsourceReplacementUsage
-      else delete payload.sourceReplacementUsage
+      const numsourceNewUsageQuantity = typeof rawsourceNewUsageQuantity === 'number' ? rawsourceNewUsageQuantity : Number(rawsourceNewUsageQuantity)
+      if (Number.isFinite(numsourceNewUsageQuantity)) payload.sourceNewUsageQuantity = numsourceNewUsageQuantity
+      else delete payload.sourceNewUsageQuantity
     }
   }
   if ('isObsolete' in payload) {

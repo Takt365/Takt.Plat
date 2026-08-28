@@ -456,9 +456,9 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
         {
             entity.AcceptedSummary = master.AcceptedSummary ?? string.Empty;
         }
-        if (string.IsNullOrEmpty(entity.AcceptedBy))
+        if (string.IsNullOrEmpty(entity.AcceptedByEmployeeName))
         {
-            entity.AcceptedBy = master.AcceptedBy ?? string.Empty;
+            entity.AcceptedByEmployeeName = master.AcceptedByEmployeeName ?? string.Empty;
         }
     }
     // ========================================
@@ -491,7 +491,7 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
                 || (x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(keywords))
                 || (x.MaintenanceImages != null && x.MaintenanceImages.Contains(keywords))
                 || (x.AcceptedSummary != null && x.AcceptedSummary.Contains(keywords))
-                || (x.AcceptedBy != null && x.AcceptedBy.Contains(keywords))
+                || (x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -623,10 +623,10 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
             exp = exp.And(x => x.AcceptedSummary != null && x.AcceptedSummary.Contains(acceptedSummary));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptedByEmployeeName))
         {
-            var acceptedBy = queryDto.AcceptedBy;
-            exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(acceptedBy));
+            var acceptedBy = queryDto.AcceptedByEmployeeName;
+            exp = exp.And(x => x.AcceptedByEmployeeName != null && x.AcceptedByEmployeeName.Contains(acceptedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -827,7 +827,7 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.AcceptedByEmployeeName))
         {
             return true;
         }

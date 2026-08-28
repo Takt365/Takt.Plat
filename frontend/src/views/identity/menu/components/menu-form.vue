@@ -138,7 +138,7 @@
                   v-model:value="formState.i18nKey"
                   :placeholder="t('identity.menu.page.placeholder.l10nhint')"
                   show-count
-                  :maxlength="100"
+                  :maxlength="140"
                 />
               </a-form-item>
             </a-col>

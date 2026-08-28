@@ -17,7 +17,9 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktAuditContextRemarks
 {
-    /// <summary>非登出场景下操作人用户名无法解析时的默认 Remark</summary>
+    /// <summary>
+    /// 非登出场景下操作人用户名无法解析时的默认 Remark
+    /// </summary>
     public const string DefaultUnknownOperator = "操作人用户名未解析";
 
     /// <summary>

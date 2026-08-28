@@ -28,22 +28,32 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktShiftSchedule : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+    /// 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
     /// </summary>
     [SugarColumn(ColumnName = "schedule_type", ColumnDescription = "排班类别", ColumnDataType = "tinyint", IsNullable = false)]
     public int ScheduleType { get; set; }
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id；ScheduleType=0 时必填）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 员工（选项 TaktEmployees/options；ScheduleType=1 时必填，DictValue=Id）
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? DeptName { get; set; }
+    /// <summary>
+    /// 员工（选项 TaktEmployees/options；DictValue=Id；ScheduleType=1 时必填）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+    /// <summary>
+    /// 员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EmployeeName { get; set; }
     /// <summary>
     /// 排班日期
     /// </summary>

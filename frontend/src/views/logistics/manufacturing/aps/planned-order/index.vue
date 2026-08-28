@@ -74,7 +74,7 @@
         <template v-if="column.key === 'unitOfMeasure'">
           <TaktDictTag
             :value="getPlannedOrderDictValue(record, 'unitOfMeasure')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'orderStatus'">
@@ -201,7 +201,7 @@
       <a-form-item :label="pi.queryLabel('unitOfMeasure')">
         <TaktSelect
           v-model:value="advancedQueryForm.unitOfMeasure"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('unitOfMeasure', 'select')"
           allow-clear
         />

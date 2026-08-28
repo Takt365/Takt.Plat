@@ -60,19 +60,19 @@
         <template v-if="column.key === 'materialType'">
           <TaktDictTag
             :value="getBomMaterialCostDictValue(record, 'materialType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'productCode'">
           <TaktDictTag
             :value="getBomMaterialCostDictValue(record, 'productCode')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getBomMaterialCostDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
       </template>
@@ -143,7 +143,7 @@
       <a-form-item :label="pi.queryLabel('materialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('materialType', 'select')"
           allow-clear
         />
@@ -153,7 +153,7 @@
       <a-form-item :label="pi.queryLabel('productCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.productCode"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('productCode', 'select')"
           allow-clear
         />
@@ -200,7 +200,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />

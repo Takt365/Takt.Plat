@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktPurchaseSalesInventoryI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseSalesInventory 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktPurchaseSalesInventoryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.purchasesalesinventory.valuation
-            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.purchasesalesinventory.valuation
-            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.purchasesalesinventory.valuation
-            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.purchasesalesinventory.valuation
-            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
 
             // entity.purchasesalesinventory.unitcode
             new TranslationSeedItem("entity.purchasesalesinventory.unitcode", "en-US", "计量单位_us", "计量单位"),
@@ -262,13 +262,13 @@ public class TaktPurchaseSalesInventoryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasesalesinventory.closingunitcost", "zh-HK", "期末单位成本_hk", "期末单位成本（期末数量&gt;0 时 = 期末成本/期末数量）"),
 
             // entity.purchasesalesinventory.currencycode
-            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code）"),
             // entity.purchasesalesinventory.currencycode
-            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code）"),
             // entity.purchasesalesinventory.currencycode
-            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code）"),
             // entity.purchasesalesinventory.currencycode
-            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code）"),
 
             // entity.purchasesalesinventory.sortorder
             new TranslationSeedItem("entity.purchasesalesinventory.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),

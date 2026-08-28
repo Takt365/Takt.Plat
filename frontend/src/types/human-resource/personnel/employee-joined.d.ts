@@ -94,12 +94,12 @@ export interface EmployeeJoined extends ApprovalDtoBase {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 
@@ -229,12 +229,12 @@ export interface EmployeeJoinedQuery extends TaktPagedQuery {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
@@ -398,12 +398,12 @@ export interface EmployeeJoinedCreate {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 
@@ -532,12 +532,12 @@ export interface EmployeeJoinedTemplate {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
@@ -651,12 +651,12 @@ export interface EmployeeJoinedImport {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
@@ -770,12 +770,12 @@ export interface EmployeeJoinedExport {
   jobTitle?: string;
 
   /**
-   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+   * 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+   * 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 

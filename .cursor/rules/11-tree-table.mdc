@@ -12,7 +12,7 @@ alwaysApply: true
 
 通用命名、权限、i18n 见 `@.cursor/rules/00-project.mdc`；后端见 `01-backend`；前端见 `02-frontend`；树深/虚拟列表见 `07-overflow-vue` §3。
 
-**代码生成模板类型**：`TaktGenTable.GenTemplateCategory = tree`（对应 `dict.gen.template.type.tree`）。
+**代码生成模板类型**：`TaktGenTable.GenTemplateCategory = tree`（对应 `dict.code.generator.template.type.tree`）。
 
 ---
 

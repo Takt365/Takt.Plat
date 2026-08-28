@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceRequestI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerServiceRequest 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktCustomerServiceRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicerequest.clientid", "zh-HK", "客户端ID_hk", "客户端ID（关联 TaktClient，序列化为string以避免Javascript精度问题）"),
 
             // entity.customerservicerequest.clientcode
-            new TranslationSeedItem("entity.customerservicerequest.clientcode", "en-US", "客户端编码_us", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientcode", "en-US", "客户端编码_us", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientcode
-            new TranslationSeedItem("entity.customerservicerequest.clientcode", "ja-JP", "客户端编码_jp", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientcode", "ja-JP", "客户端编码_jp", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientcode
-            new TranslationSeedItem("entity.customerservicerequest.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientcode", "zh-CN", "客户端编码", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientcode
-            new TranslationSeedItem("entity.customerservicerequest.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customerservicerequest.clientname1
-            new TranslationSeedItem("entity.customerservicerequest.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientname1
-            new TranslationSeedItem("entity.customerservicerequest.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientname1
-            new TranslationSeedItem("entity.customerservicerequest.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.clientname1
-            new TranslationSeedItem("entity.customerservicerequest.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customerservicerequest.servicecontractid
             new TranslationSeedItem("entity.customerservicerequest.servicecontractid", "en-US", "关联服务合同ID_us", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
@@ -136,13 +136,13 @@ public class TaktCustomerServiceRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicerequest.servicecontractid", "zh-HK", "关联服务合同ID_hk", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),
 
             // entity.customerservicerequest.servicecontractcode
-            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "en-US", "关联服务合同编码_us", "关联服务合同编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "en-US", "关联服务合同编码_us", "关联服务合同编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.servicecontractcode
-            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "ja-JP", "关联服务合同编码_jp", "关联服务合同编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "ja-JP", "关联服务合同编码_jp", "关联服务合同编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.servicecontractcode
-            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "zh-CN", "关联服务合同编码", "关联服务合同编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "zh-CN", "关联服务合同编码", "关联服务合同编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.customerservicerequest.servicecontractcode
-            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "zh-HK", "关联服务合同编码_hk", "关联服务合同编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.customerservicerequest.servicecontractcode", "zh-HK", "关联服务合同编码_hk", "关联服务合同编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.customerservicerequest.requestdate
             new TranslationSeedItem("entity.customerservicerequest.requestdate", "en-US", "请求日期_us", "请求日期"),

@@ -101,7 +101,10 @@ export const useDictDataStore = defineStore('dict-data', () => {
       return options.find((item) => String(item.extLabel) === valueText);
     }
 
-    return options.find((item) => String(item.dictValue) === valueText);
+    return (
+      options.find((item) => String(item.dictValue) === valueText)
+      ?? options.find((item) => String(item.dictLabel) === valueText)
+    );
   }
 
   /**

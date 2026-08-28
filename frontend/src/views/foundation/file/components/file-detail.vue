@@ -143,7 +143,7 @@
                 <a-form-item :label="t('foundation.file.page.ftp.provider')">
                   <TaktSelect
                     :model-value="detailState.ftpProvider"
-                    dict-type="sys_ftp_provider_type"
+                    dict-type="sys_ftp_provider"
                     size="small"
                     disabled
                     :allow-clear="false"
@@ -276,6 +276,7 @@ import { useI18n } from 'vue-i18n'
 import { downloadFileById } from '@/api/foundation/file'
 import type { File } from '@/types/foundation/file'
 import { taktFileCategoryI18nKey } from '@/utils/takt-file-category'
+import { usePermissionStore } from '@/stores/identity/permission'
 import {
   normalizeOssProvider,
   parseFileStorageConfig,
@@ -285,6 +286,8 @@ import { useMenuUploadPath } from '@/views/foundation/file/composables/use-menu-
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+/** 文件下载权限 */
+const permissionStore = usePermissionStore()
 /** 一级目录菜单 → 上传路径展示名 */
 const { resolveUploadPathLabel } = useMenuUploadPath()
 
@@ -315,6 +318,9 @@ const downloadLoading = ref(false)
 const canDownloadDetailFile = computed(() => {
   const state = detailState.value
   if (!state?.fileId) {
+    return false
+  }
+  if (!permissionStore.hasPermission('foundation:file:download')) {
     return false
   }
   return isFileStatusEnabled(state.fileStatus)

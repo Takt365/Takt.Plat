@@ -234,7 +234,7 @@ export const ASSY_CLEANING_TIME_PERIODS = [
 /** 清洁时段停线原因字典标签 */
 export const ASSY_CLEANING_STOP_REASON_LABEL = '清洁'
 
-/** 清洁时段停线原因字典项 DictValue（logistics_stop_reason_category · 清洁） */
+/** 清洁时段停线原因字典项 DictValue（logistics_manufacturing_stop_reason · 清洁） */
 export const ASSY_CLEANING_STOP_REASON_DICT_VALUE = '12'
 
 /** 清洁时段每位直接人员停线分钟数 */

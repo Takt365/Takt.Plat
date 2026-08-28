@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInquiryItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktPurchaseInquiryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiryitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.purchaseinquiryitem.allocationcategory
-            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "en-US", "分配类别_us", "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "en-US", "分配类别_us", "分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）"),
             // entity.purchaseinquiryitem.allocationcategory
-            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "ja-JP", "分配类别_jp", "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "ja-JP", "分配类别_jp", "分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）"),
             // entity.purchaseinquiryitem.allocationcategory
-            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "zh-CN", "分配类别", "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "zh-CN", "分配类别", "分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）"),
             // entity.purchaseinquiryitem.allocationcategory
-            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "zh-HK", "分配类别_hk", "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "zh-HK", "分配类别_hk", "分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）"),
 
             // entity.purchaseinquiryitem.materialcode
             new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
@@ -154,13 +154,13 @@ public class TaktPurchaseInquiryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "en-US", "询价单位_us", "询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "en-US", "询价单位_us", "询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "ja-JP", "询价单位_jp", "询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "ja-JP", "询价单位_jp", "询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-CN", "询价单位", "询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-CN", "询价单位", "询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-HK", "询价单位_hk", "询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-HK", "询价单位_hk", "询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.purchaseinquiryitem.inquiryquantity
             new TranslationSeedItem("entity.purchaseinquiryitem.inquiryquantity", "en-US", "询价数量_us", "询价数量（基本单位数量，decimal(18,5)）"),
@@ -172,13 +172,13 @@ public class TaktPurchaseInquiryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiryitem.inquiryquantity", "zh-HK", "询价数量_hk", "询价数量（基本单位数量，decimal(18,5)）"),
 
             // entity.purchaseinquiryitem.purchaseperunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "en-US", "价格单位_us", "价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）"),
             // entity.purchaseinquiryitem.purchaseperunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "ja-JP", "价格单位_jp", "价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）"),
             // entity.purchaseinquiryitem.purchaseperunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "zh-CN", "价格单位", "价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）"),
             // entity.purchaseinquiryitem.purchaseperunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseperunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）"),
 
             // entity.purchaseinquiryitem.quotedunitprice
             new TranslationSeedItem("entity.purchaseinquiryitem.quotedunitprice", "en-US", "报价单价_us", "报价单价"),

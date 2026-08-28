@@ -32,11 +32,23 @@
                 :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
                   disabled
                 />
               </a-form-item>
@@ -80,8 +92,7 @@
                   :placeholder="pi.ph('clientCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -95,7 +106,7 @@
                   :placeholder="pi.ph('clientName1')"
                   show-count
                   :maxlength="140"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -123,8 +134,7 @@
                   :placeholder="pi.ph('serviceRequestCode')"
                   show-count
                   :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -152,22 +162,7 @@
                   :placeholder="pi.ph('serviceOrderCode')"
                   show-count
                   :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceContractId')"
-                name="serviceContractId"
-              >
-                <a-input
-                  v-model:value="formState.serviceContractId"
-                  :placeholder="pi.ph('serviceContractId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -183,6 +178,20 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('serviceContractId')"
+                name="serviceContractId"
+              >
+                <a-input
+                  v-model:value="formState.serviceContractId"
+                  :placeholder="pi.ph('serviceContractId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('serviceContractCode')"
                 name="serviceContractCode"
               >
@@ -191,8 +200,7 @@
                   :placeholder="pi.ph('serviceContractCode')"
                   show-count
                   :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -298,7 +306,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('assignedEmployeeName')"
                 name="assignedEmployeeName"
@@ -312,16 +330,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('scheduledStartTime')"
@@ -388,15 +396,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('acceptedBy')"
-                name="acceptedBy"
+                :label="pi.label('acceptedByEmployeeId')"
+                name="acceptedByEmployeeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.acceptedByEmployeeId"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('acceptedByEmployeeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('acceptedByEmployeeName')"
+                name="acceptedByEmployeeName"
               >
                 <a-input
-                  v-model:value="formState.acceptedBy"
-                  :placeholder="pi.ph('acceptedBy')"
+                  v-model:value="formState.acceptedByEmployeeName"
+                  :placeholder="pi.ph('acceptedByEmployeeName')"
                   show-count
-                  :maxlength="50"
-                  allow-clear
+                  :maxlength="80"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -442,25 +462,10 @@
                 :label="pi.label('companyCode')"
                 name="companyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
                   :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <a-input
-                  v-model:value="formState.cultureCode"
-                  :placeholder="pi.ph('cultureCode')"
-                  show-count
-                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
@@ -541,7 +546,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -556,9 +561,11 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
@@ -601,6 +608,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceTicketId 才视为编辑） */
 watch(
   () => props.formData,
@@ -627,7 +636,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.customerServiceTicketId) {
       applyScopeDefaults(formState, true)
@@ -637,13 +646,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'blur'
-    }
-  ],
   serviceTicketCode: [
     {
       required: true,
@@ -655,20 +657,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('clientId'),
-      trigger: 'blur'
-    }
-  ],
-  clientCode: [
-    {
-      required: true,
-      message: pi.ph('clientCode'),
-      trigger: 'blur'
-    }
-  ],
-  clientName1: [
-    {
-      required: true,
-      message: pi.ph('clientName1'),
       trigger: 'blur'
     }
   ],
@@ -731,21 +719,55 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('ticketType' in payload) {
     const rawticketType = payload.ticketType
-    payload.ticketType = typeof rawticketType === 'number' ? rawticketType : Number(rawticketType)
+    if (rawticketType === undefined || rawticketType === null || rawticketType === '') {
+      delete payload.ticketType
+    } else {
+      const numticketType = typeof rawticketType === 'number' ? rawticketType : Number(rawticketType)
+      if (Number.isFinite(numticketType)) payload.ticketType = numticketType
+      else delete payload.ticketType
+    }
   }
   if ('priority' in payload) {
     const rawpriority = payload.priority
-    payload.priority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
+    if (rawpriority === undefined || rawpriority === null || rawpriority === '') {
+      delete payload.priority
+    } else {
+      const numpriority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
+      if (Number.isFinite(numpriority)) payload.priority = numpriority
+      else delete payload.priority
+    }
   }
   if ('ticketStatus' in payload) {
     const rawticketStatus = payload.ticketStatus
-    payload.ticketStatus = typeof rawticketStatus === 'number' ? rawticketStatus : Number(rawticketStatus)
+    if (rawticketStatus === undefined || rawticketStatus === null || rawticketStatus === '') {
+      delete payload.ticketStatus
+    } else {
+      const numticketStatus = typeof rawticketStatus === 'number' ? rawticketStatus : Number(rawticketStatus)
+      if (Number.isFinite(numticketStatus)) payload.ticketStatus = numticketStatus
+      else delete payload.ticketStatus
+    }
   }
   if ('acceptanceResult' in payload) {
     const rawacceptanceResult = payload.acceptanceResult
-    payload.acceptanceResult = typeof rawacceptanceResult === 'number' ? rawacceptanceResult : Number(rawacceptanceResult)
+    if (rawacceptanceResult === undefined || rawacceptanceResult === null || rawacceptanceResult === '') {
+      delete payload.acceptanceResult
+    } else {
+      const numacceptanceResult = typeof rawacceptanceResult === 'number' ? rawacceptanceResult : Number(rawacceptanceResult)
+      if (Number.isFinite(numacceptanceResult)) payload.acceptanceResult = numacceptanceResult
+      else delete payload.acceptanceResult
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.customerServiceTicketId) {
+    payload.customerServiceTicketId = props.formData.customerServiceTicketId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

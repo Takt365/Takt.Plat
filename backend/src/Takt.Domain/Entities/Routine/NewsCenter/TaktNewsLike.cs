@@ -44,7 +44,7 @@ public class TaktNewsLike : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
     /// <summary>
-    /// 用户姓名（冗余字段，便于查询）
+    /// 用户姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "user_name", ColumnDescription = "用户姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string UserName { get; set; } = string.Empty;

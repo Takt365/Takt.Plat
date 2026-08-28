@@ -48,7 +48,7 @@ public class TaktSalesModelTrendQueryDto : TaktPagedQuery
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type，如 PR00；可选）
+    /// 价格类型（字典 logistics_procurement_price_type，如 PR00；可选）
     /// </summary>
     public string? PriceType { get; set; }
 

@@ -73,7 +73,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.educationLevel"
-                  dict-type="hr_education_level_category"
+                  dict-type="humanresource_personnel_education_level"
                   :placeholder="pi.ph('educationLevel')"
                 />
               </a-form-item>
@@ -85,7 +85,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.degreeLevel"
-                  dict-type="hr_degree_level_category"
+                  dict-type="humanresource_personnel_degree_level"
                   :placeholder="pi.ph('degreeLevel')"
                 />
               </a-form-item>

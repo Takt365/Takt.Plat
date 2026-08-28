@@ -507,7 +507,7 @@ public class TaktMaterialRequirementsPlanningService : TaktServiceBase, ITaktMat
                 || (x.MaterialRequirementsPlanningCode != null && x.MaterialRequirementsPlanningCode.Contains(keywords))
                 || (x.MpsCode != null && x.MpsCode.Contains(keywords))
                 || (x.MdsCode != null && x.MdsCode.Contains(keywords))
-                || (x.PlanBy != null && x.PlanBy.Contains(keywords))
+                || (x.PlannerName != null && x.PlannerName.Contains(keywords))
                 || (x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(keywords))
                 || (x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(keywords))
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
@@ -558,16 +558,16 @@ public class TaktMaterialRequirementsPlanningService : TaktServiceBase, ITaktMat
             exp = exp.And(x => x.MdsCode != null && x.MdsCode.Contains(mdsCode));
         }
 
-        if (queryDto?.PlannerId.HasValue == true)
+        if (queryDto?.PlannerEmployeeId.HasValue == true)
         {
-            var plannerId = queryDto.PlannerId.Value;
-            exp = exp.And(x => x.PlannerId == plannerId);
+            var plannerId = queryDto.PlannerEmployeeId.Value;
+            exp = exp.And(x => x.PlannerEmployeeId == plannerId);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlannerName))
         {
-            var planBy = queryDto.PlanBy;
-            exp = exp.And(x => x.PlanBy != null && x.PlanBy.Contains(planBy));
+            var planBy = queryDto.PlannerName;
+            exp = exp.And(x => x.PlannerName != null && x.PlannerName.Contains(planBy));
         }
 
         if (queryDto?.RunStatus.HasValue == true)
@@ -712,11 +712,11 @@ public class TaktMaterialRequirementsPlanningService : TaktServiceBase, ITaktMat
         {
             return true;
         }
-        if (queryDto.PlannerId.HasValue)
+        if (queryDto.PlannerEmployeeId.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PlannerName))
         {
             return true;
         }

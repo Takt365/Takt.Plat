@@ -60,7 +60,7 @@ public class TaktSopExec : TaktCompanyEntityBase
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+    /// 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     [SugarColumn(ColumnName = "process_segment_type", ColumnDescription = "工艺段类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProcessSegmentType { get; set; } = 1;
@@ -78,6 +78,11 @@ public class TaktSopExec : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+    /// <summary>
+    /// 员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EmployeeName { get; set; }
 
     /// <summary>
     /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
@@ -112,13 +117,13 @@ public class TaktSopExec : TaktCompanyEntityBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     [SugarColumn(ColumnName = "self_check_result", ColumnDescription = "自检结果", ColumnDataType = "int", IsNullable = true)]
     public int? SelfCheckResult { get; set; }
 
     /// <summary>
-    /// 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+    /// 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
     /// </summary>
     [SugarColumn(ColumnName = "exec_status", ColumnDescription = "执行状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ExecStatus { get; set; } = 1;

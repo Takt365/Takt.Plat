@@ -33,7 +33,7 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 采购申请编码（冗余字段，便于查询）
+    /// 采购申请编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "采购申请编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PurchaseRequestCode { get; set; } = string.Empty;
@@ -51,7 +51,7 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;
@@ -74,7 +74,7 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 申请单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "request_unit", ColumnDescription = "申请单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string RequestUnit { get; set; } = "PC";
@@ -92,7 +92,7 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     public decimal ConvertedQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PurchasePerUnit { get; set; } = 1000;

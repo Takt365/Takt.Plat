@@ -42,13 +42,13 @@ public class TaktCustomerServiceTicket : TaktCompanyEntityBase
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_code", ColumnDescription = "客户端编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_name1", ColumnDescription = "客户端名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
     public string ClientName1 { get; set; } = string.Empty;
@@ -61,7 +61,7 @@ public class TaktCustomerServiceTicket : TaktCompanyEntityBase
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_request_code", ColumnDescription = "关联服务请求单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceRequestCode { get; set; }
@@ -74,7 +74,7 @@ public class TaktCustomerServiceTicket : TaktCompanyEntityBase
     public long? ServiceOrderId { get; set; }
 
     /// <summary>
-    /// 关联服务订单编码（冗余字段，便于查询）
+    /// 关联服务订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_order_code", ColumnDescription = "关联服务订单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceOrderCode { get; set; }
@@ -87,7 +87,7 @@ public class TaktCustomerServiceTicket : TaktCompanyEntityBase
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_contract_code", ColumnDescription = "关联服务合同编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceContractCode { get; set; }
@@ -178,10 +178,16 @@ public class TaktCustomerServiceTicket : TaktCompanyEntityBase
     public int? AcceptanceResult { get; set; }
 
     /// <summary>
-    /// 验收人
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "accepted_by", ColumnDescription = "验收人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? AcceptedBy { get; set; }
+    [SugarColumn(ColumnName = "accepted_by_employee_id", ColumnDescription = "验收人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "accepted_by_employee_name", ColumnDescription = "验收人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? AcceptedByEmployeeName { get; set; }
 
     /// <summary>
     /// 验收时间

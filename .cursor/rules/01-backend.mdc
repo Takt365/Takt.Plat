@@ -214,11 +214,11 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 | ❌ 禁止 | 在 summary 写外部系统字段码（完全多余） |
 
 ```text
-✅ 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+✅ 客户端等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
 ✅ 具有供应商的清算（字典 sys_yes_no；0=否 1=是）
 ✅ 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
 ❌ 具有供应商的清算（字典 sys_yes_no，0=否 1=是；外系统字段码）
-❌ 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3；外系统字段码）
+❌ 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3；外系统字段码）
 ```
 
 规范化脚本（可选）：`node scripts/gen/normalize-entity-dict-xml-comments.cjs`
@@ -233,8 +233,9 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 实现 `SeedAsync` 返回 `(InsertCount, UpdateCount)`，**幂等**（存在则更新，不存在则插入）
 - 通过 `Order` 控制执行顺序；子种子可由协调类（如 `TaktMenuSeedData`）统一调用
 - 默认密码从配置 `PasswordPolicy:DefaultPassword` 读取，禁止硬编码明文
+- **全新写法（强制，见 `00-project` §1.9）**：种子只表达**当前目标结构**；❌ 禁止 `SoftDeleteObsolete*`、按历史 `MenuCode` 软删清理、双入口/隐藏桩「兼容旧菜单」；结构调整时从种子删除废弃项，不写迁移兼容逻辑
 
-**国际化翻译键（i18n 种子，强制，详见 `00-project` §1.6）**：
+**国际化键（i18n 种子，强制，详见 `00-project` §1.6）**：
 - **格式**：小写 + 点号 `.` 分段；结构为 `用途.目录[.子目录…].末段`，**中间目录随菜单/模块加深可为多级**（与权限码层级对应，分隔符为 `.`）
 - **段内**：仅 `a-z`、`0-9`；❌ 禁止 `quote_a`、`head_office`、`technology_dept` 等下划线拼段
 - **菜单标题**：`menu.{领域}.{目录…}.{项}`，与 `TaktMenu*SeedData` 的 `I18nKey`、路由层级一致；子菜单加深则键加长

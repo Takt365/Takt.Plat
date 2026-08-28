@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/source-ec -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：设变来源明细列表管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：设变来源只读列表页，含查询、导出（无新增/编辑/删除/导入） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -40,32 +40,18 @@
           @reset="handleReset"
         />
         <TaktToolsBar
-      create-permission="logistics:manufacturing:engineering:change:source:ec:create"
-      update-permission="logistics:manufacturing:engineering:change:source:ec:update"
-      delete-permission="logistics:manufacturing:engineering:change:source:ec:delete"
-      import-permission="logistics:manufacturing:engineering:change:source:ec:import"
       export-permission="logistics:manufacturing:engineering:change:source:ec:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
-      :show-import="true"
+      :show-create="false"
+      :show-update="false"
+      :show-delete="false"
+      :show-import="false"
       :show-export="true"
       :show-expand="false"
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
-      :delete-disabled="deleteDisabled"
-      :delete-loading="loading"
       :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
-      @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
@@ -73,30 +59,10 @@
         />
       </template>
       <template #detail>
-        <SourceEcDetailPanel
-          ref="sourceEcDetailPanelRef"
-          class="h-full min-h-0 flex-1"
-        />
+        <SourceEcDetailPanel class="h-full min-h-0 flex-1" />
       </template>
     </TaktMasterDetailTableLr>
 
-    <!-- 新增/编辑对话框 -->
-    <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
-      width="1100px"
-      wrap-class-name="takt-form-modal-resizable"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
-    >
-      <SourceEcForm
-        :key="formData?.sourceEcId ?? 'create'"
-        ref="formRef"
-        :form-data="formData"
-        :loading="formLoading"
-      />
-    </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -494,35 +460,12 @@
       </template>
     </TaktQueryDrawer>
 
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: pi.self() })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        v-if="importVisible"
-        :entity-i18n-key="SOURCEEC_SELF_I18N_KEY"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
       :id-column-key="'sourceEcId'"
-      :action-column-key="'action'"
       entity-scope="company"
       table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
@@ -533,32 +476,27 @@
 
 <script setup lang="ts">
 /**
- * 设变来源明细列表管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 设变来源只读列表页（查询/导出）
  * @module views/logistics/manufacturing/engineering-change/source-ec
  */
 import { ref, computed, onMounted } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
-import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import SourceEcForm from './components/source-ec-form.vue'
 import SourceEcDetailPanel from './components/source-ec-detail-panel.vue'
 import { provideSourceEcMasterContext, type SourceEcRowRecord } from './composables/use-source-ec-master-context'
-import { getSourceEcList, getSourceEcById, createSourceEc, updateSourceEc, deleteSourceEcById, deleteSourceEcBatch, getSourceEcTemplate, importSourceEc, exportSourceEc, updateSourceEcStatus } from '@/api/logistics/manufacturing/engineering-change/source-ec'
+import { getSourceEcList, exportSourceEc } from '@/api/logistics/manufacturing/engineering-change/source-ec'
 import type { SourceEc, SourceEcQuery } from '@/types/logistics/manufacturing/engineering-change/source-ec'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiQuestionLine } from '@remixicon/vue'
 
 import {
   useSourceEcI18n,
-  SOURCEEC_LIST_FIELDS,
   SOURCEEC_QUERY_STRING_FIELDS,
   SOURCEEC_QUERY_FIELDS,
-  SOURCEEC_SELF_I18N_KEY,
 } from './composables/use-source-ec-i18n'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
@@ -591,17 +529,6 @@ const selectedRow = ref<SourceEcRowRecord | null>(null)
 const selectedRows = ref<SourceEcRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
-
-/** 新增/编辑弹窗是否打开 */
-const formVisible = ref(false)
-/** 弹窗标题（新增/编辑） */
-const formTitle = ref('')
-/** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<SourceEc> | null>(null)
-/** 表单提交 loading */
-const formLoading = ref(false)
-/** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -653,22 +580,15 @@ const queryFieldsMeta = computed(() =>
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-/** 导入对话框是否打开 */
-const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'sourceEcId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSourceEcMasterContext()
-const sourceEcDetailPanelRef = ref<InstanceType<typeof SourceEcDetailPanel> | null>(null)
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
@@ -710,7 +630,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -740,25 +659,6 @@ function handleMasterSelect(record: Record<string, unknown>) {
  */
 function handleMasterPaginationChange(_page: number, _pageSize: number) {
   loadData()
-}
-
-/** 加载主表详情并回填当前页 dataSource */
-async function loadSourceEcDetail(record: SourceEcRowRecord): Promise<SourceEc | null> {
-  const id = getSourceEcId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getSourceEcById(id)
-    const index = dataSource.value.findIndex((row) => getSourceEcId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as SourceEc
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
@@ -1016,26 +916,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcContent') ?? ''
   },
-  CreateActionColumn({
-    actions: [
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'logistics:manufacturing:engineering:change:source:ec:update',
-        onClick: (record: SourceEcRowRecord) => handleEdit(record)
-      },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineering:change:source:ec:delete',
-        onClick: (record: SourceEcRowRecord) => handleDeleteOne(record)
-      }
-    ]
-  })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
@@ -1049,8 +929,6 @@ const getSourceEcId = (record: SourceEcRowRecord): string => {
  * @param field 字段名
  */
 const getSourceEcField = (record: any, field: string): any => record?.[field]
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1154,105 +1032,6 @@ function handleReset() {
   loadData()
 }
 
-/** 打开新增弹窗 */
-function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
-  formData.value = null
-  formVisible.value = true
-  nextTick(() => formRef.value?.resetFields())
-}
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SourceEcRowRecord) {
-  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
-  formLoading.value = true
-  try {
-    const detail = await loadSourceEcDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 工具栏编辑：打开当前单选行 */
-function handleUpdate() {
-  if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
-  }
-}
-/** 提交新增/编辑表单 */
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
-    const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateSourceEc(id, payload as any)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createSourceEc(payload as any)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
-    formVisible.value = false
-    formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-    if (selectedMasterKey.value) {
-  sourceEcDetailPanelRef.value?.reload?.()
-    }
-    loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 关闭新增/编辑弹窗（不提交） */
-function handleFormCancel() {
-  formVisible.value = false
-  formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-}
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getSourceEcTemplate(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
-async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
-  const raw = await importSourceEc(file, sheetName)
-  return normalizeImportResult(raw)
-}
-
-/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
-function handleImportSuccess(result: TaktImportResult) {
-  loadData()
-
-      if (selectedMasterKey.value) {
-    sourceEcDetailPanelRef.value?.reload?.()
-      }
-  if (result.fail === 0 && result.success > 0) {
-    setTimeout(() => { importVisible.value = false }, 2000)
-  }
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
-}
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
@@ -1290,47 +1069,6 @@ async function handleExport() {
   } finally {
     loading.value = false
   }
-}
-/** 删除单行 */
-async function handleDeleteOne(record: SourceEcRowRecord) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteSourceEcById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
-}
-/** 批量删除选中行 */
-async function handleDelete() {
-  if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteSourceEcBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyDefectDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktAssyDefectDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assydefectdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.assydefectdetail.defectcategory
-            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "en-US", "不良区分_us", "不良区分（字典 logistics_defect_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "en-US", "不良区分_us", "不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）"),
             // entity.assydefectdetail.defectcategory
-            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "ja-JP", "不良区分_jp", "不良区分（字典 logistics_defect_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "ja-JP", "不良区分_jp", "不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）"),
             // entity.assydefectdetail.defectcategory
-            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "zh-CN", "不良区分", "不良区分（字典 logistics_defect_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "zh-CN", "不良区分", "不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）"),
             // entity.assydefectdetail.defectcategory
-            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "zh-HK", "不良区分_hk", "不良区分（字典 logistics_defect_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectcategory", "zh-HK", "不良区分_hk", "不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）"),
 
             // entity.assydefectdetail.defectqty
             new TranslationSeedItem("entity.assydefectdetail.defectqty", "en-US", "不良数量_us", "不良数量"),
@@ -199,13 +199,13 @@ public class TaktAssyDefectDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assydefectdetail.defectsymptom", "zh-HK", "不良症状_hk", "不良症状"),
 
             // entity.assydefectdetail.defectlocation
-            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "en-US", "不良个所_us", "不良个所（字典 logistics_assy_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "en-US", "不良个所_us", "不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）"),
             // entity.assydefectdetail.defectlocation
-            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "ja-JP", "不良个所_jp", "不良个所（字典 logistics_assy_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "ja-JP", "不良个所_jp", "不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）"),
             // entity.assydefectdetail.defectlocation
-            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "zh-CN", "不良个所", "不良个所（字典 logistics_assy_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "zh-CN", "不良个所", "不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）"),
             // entity.assydefectdetail.defectlocation
-            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "zh-HK", "不良个所_hk", "不良个所（字典 logistics_assy_location_category；存 DictValue）"),
+            new TranslationSeedItem("entity.assydefectdetail.defectlocation", "zh-HK", "不良个所_hk", "不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）"),
 
             // entity.assydefectdetail.defectreason
             new TranslationSeedItem("entity.assydefectdetail.defectreason", "en-US", "不良原因_us", "不良原因"),
@@ -216,14 +216,23 @@ public class TaktAssyDefectDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.assydefectdetail.defectreason
             new TranslationSeedItem("entity.assydefectdetail.defectreason", "zh-HK", "不良原因_hk", "不良原因"),
 
-            // entity.assydefectdetail.repairoperator
-            new TranslationSeedItem("entity.assydefectdetail.repairoperator", "en-US", "修理员_us", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.assydefectdetail.repairoperator
-            new TranslationSeedItem("entity.assydefectdetail.repairoperator", "ja-JP", "修理员_jp", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.assydefectdetail.repairoperator
-            new TranslationSeedItem("entity.assydefectdetail.repairoperator", "zh-CN", "修理员", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.assydefectdetail.repairoperator
-            new TranslationSeedItem("entity.assydefectdetail.repairoperator", "zh-HK", "修理员_hk", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.assydefectdetail.repairoperatorid
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorid", "en-US", "修理员ID_us", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.assydefectdetail.repairoperatorid
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorid", "ja-JP", "修理员ID_jp", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.assydefectdetail.repairoperatorid
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorid", "zh-CN", "修理员ID", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.assydefectdetail.repairoperatorid
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorid", "zh-HK", "修理员ID_hk", "修理员（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.assydefectdetail.repairoperatorname
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorname", "en-US", "修理员名称_us", "修理员名称（冗余：按 RepairOperatorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.assydefectdetail.repairoperatorname
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorname", "ja-JP", "修理员名称_jp", "修理员名称（冗余：按 RepairOperatorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.assydefectdetail.repairoperatorname
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorname", "zh-CN", "修理员名称", "修理员名称（冗余：按 RepairOperatorId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.assydefectdetail.repairoperatorname
+            new TranslationSeedItem("entity.assydefectdetail.repairoperatorname", "zh-HK", "修理员名称_hk", "修理员名称（冗余：按 RepairOperatorId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.assydefectdetail.isobsolete
             new TranslationSeedItem("entity.assydefectdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

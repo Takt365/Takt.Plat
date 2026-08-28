@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
@@ -89,7 +90,7 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
     }
 
     /// <summary>
-    /// 获取预算实绩选项列表
+    /// 获取预算实绩选项列表（DictValue=Id，DictLabel=预算项名称，ExtValue=本期预算金额）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetBudgetActualOptionsAsync()
@@ -102,7 +103,9 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.CostCenterName ?? e.Id.ToString(),
+            DictLabel = string.IsNullOrWhiteSpace(e.BudgetItemName) ? e.BudgetItemCode : e.BudgetItemName,
+            ExtLabel = e.BudgetItemCode,
+            ExtValue = e.BudgetAmount.ToString(CultureInfo.InvariantCulture),
         }).ToList();
     }
 

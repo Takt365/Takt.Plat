@@ -72,12 +72,12 @@
     >
       <a-spin :spinning="detailLoading">
         <a-descriptions v-if="detailData" bordered :column="2" size="small">
-          <a-descriptions-item :label="t('entity.ec.no')">{{ detailData.ecCode }}</a-descriptions-item>
-          <a-descriptions-item :label="t('entity.ecdetail.linenumber')">{{ detailData.lineNumber }}</a-descriptions-item>
-          <a-descriptions-item :label="t('entity.ecdetail.ecmodel')">{{ detailData.ecModel }}</a-descriptions-item>
-          <a-descriptions-item :label="t('entity.ecdetail.ecnewitem')">{{ detailData.ecNewItem ?? '—' }}</a-descriptions-item>
-          <a-descriptions-item :label="t('entity.ecdetail.ecolditem')">{{ detailData.ecOldItem ?? '—' }}</a-descriptions-item>
-          <a-descriptions-item :label="t('entity.ecdetail.ecentrydate')">{{ detailData.ecEntryDate ?? '—' }}</a-descriptions-item>
+          <a-descriptions-item :label="gi.label('ecCode')">{{ detailData.ecCode }}</a-descriptions-item>
+          <a-descriptions-item :label="pi.label('lineNumber')">{{ detailData.lineNumber }}</a-descriptions-item>
+          <a-descriptions-item :label="pi.label('ecModelCode')">{{ detailData.ecModelCode }}</a-descriptions-item>
+          <a-descriptions-item :label="pi.label('ecNewMaterialCode')">{{ detailData.ecNewMaterialCode ?? '—' }}</a-descriptions-item>
+          <a-descriptions-item :label="pi.label('ecOldMaterialCode')">{{ detailData.ecOldMaterialCode ?? '—' }}</a-descriptions-item>
+          <a-descriptions-item :label="gi.label('ecEntryDate')">{{ detailData.ecEntryDate ?? '—' }}</a-descriptions-item>
         </a-descriptions>
       </a-spin>
     </TaktModal>
@@ -91,19 +91,35 @@
 import { RiEyeLine } from '@remixicon/vue';
 import type { TableColumnsType } from 'ant-design-vue';
 import { useI18n } from 'vue-i18n';
+import { useEntityFieldI18n } from '@/composables/use-entity-field-i18n';
 import { getEcBatchTransposedList } from '@/api/logistics/manufacturing/engineering-change/ec-batch';
 import { getEcDetailById } from '@/api/logistics/manufacturing/engineering-change/ec-detail';
 import { exportEcBatchData } from '@/api/logistics/manufacturing/engineering-change/ec-batch';
 import { CreateActionColumn } from '@/components/business/takt-action-column/index';
 import { TaktEcBatchStageCodes } from '@/constants/logistics/ec-batch-stage-codes';
+import { TaktEcDeptCodes } from '@/constants/logistics/ec-dept-codes';
 import type { EcDetail } from '@/types/logistics/manufacturing/engineering-change/ec-detail';
 import type {
   EcExecBatchTransposed,
   EcExecBatchTransposedResult,
 } from '@/types/logistics/manufacturing/engineering-change/ec-exec-transposed';
+import { taktOrgDeptI18nKey } from '@/utils/naming';
+import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n';
+import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n';
 
 const { t } = useI18n();
-const localePrefix = 'logistics.manufacturing.engineering-change.ec-batch.page';
+const pi = useEcDetailI18n();
+const gi = useEcGijutsuI18n();
+/** 生管 entity.ecseikan.* */
+const seikan = useEntityFieldI18n('ecseikan');
+/** 部管 entity.ecbukan.* */
+const bukan = useEntityFieldI18n('ecbukan');
+/** 制二 entity.ecseizounika.* */
+const nika = useEntityFieldI18n('ecseizounika');
+/** 制一 entity.ecseizouikka.* */
+const ikka = useEntityFieldI18n('ecseizouikka');
+/** 品管 entity.echinkan.* */
+const hinkan = useEntityFieldI18n('echinkan');
 /** 列表 loading */
 const loading = ref(false);
 /** 转置结果 */
@@ -126,31 +142,60 @@ const detailData = ref<EcDetail | null>(null);
 const tableScroll = { x: 'max-content' } as const;
 
 /**
- * 阶段列标题映射
+ * 部门显示名（org.dept.{编码}）
+ * @param code 部门编码
+ * @returns {string} 文案
+ */
+function deptLabel(code: string): string {
+  const key = taktOrgDeptI18nKey(code);
+  return key ? t(key) : '';
+}
+
+/**
+ * 附件类别列标题（字典 dict.logistics.manufacturing.ec.attachment.type.*）
+ * @param typeKey 字典末段 tl / fpp / tcj
+ * @returns {string} 文案
+ */
+function attachmentTypeTitle(typeKey: 'tl' | 'fpp' | 'tcj'): string {
+  return t(`dict.logistics.manufacturing.ec.attachment.type.${typeKey}`);
+}
+
+/**
+ * 部门名 + 实体字段标签
+ * @param deptCode 部门编码
+ * @param fieldLabel entity.* 字段文案
+ * @returns {string} 列标题
+ */
+function deptFieldTitle(deptCode: string, fieldLabel: string): string {
+  return `${deptLabel(deptCode)} ${fieldLabel}`.trim();
+}
+
+/**
+ * 阶段列标题（org.dept.* + entity.{deptSlug}.*）
  * @param stageCode 阶段编码
  * @param kind 日期或批次
- * @returns 列标题
+ * @returns {string} 列标题
  */
 function stageColumnTitle(stageCode: string, kind: 'date' | 'batch'): string {
   const map: Record<string, { date: string; batch: string }> = {
     [TaktEcBatchStageCodes.Scheduled]: {
-      date: t(`${localePrefix}.stage.scheduledDate`),
-      batch: t(`${localePrefix}.stage.scheduledBatch`),
+      date: deptFieldTitle(TaktEcDeptCodes.Pmc, seikan.label('scheduledProductionDate')),
+      batch: deptFieldTitle(TaktEcDeptCodes.Pmc, seikan.label('scheduledBatch')),
     },
     [TaktEcBatchStageCodes.Outbound]: {
-      date: t(`${localePrefix}.stage.outboundDate`),
-      batch: t(`${localePrefix}.stage.outboundBatch`),
+      date: deptFieldTitle(TaktEcDeptCodes.Mc, bukan.label('outboundDate')),
+      batch: deptFieldTitle(TaktEcDeptCodes.Mc, bukan.label('outboundBatch')),
     },
     [TaktEcBatchStageCodes.PcbaProduction]: {
-      date: t(`${localePrefix}.stage.pcbaProductionDate`),
-      batch: t(`${localePrefix}.stage.pcbaProductionBatch`),
+      date: deptFieldTitle(TaktEcDeptCodes.Pcba, nika.label('productionDate')),
+      batch: deptFieldTitle(TaktEcDeptCodes.Pcba, nika.label('productionBatch')),
     },
     [TaktEcBatchStageCodes.AssyProduction]: {
-      date: t(`${localePrefix}.stage.assyProductionDate`),
-      batch: t(`${localePrefix}.stage.assyProductionBatch`),
+      date: deptFieldTitle(TaktEcDeptCodes.Assy, ikka.label('productionDate')),
+      batch: deptFieldTitle(TaktEcDeptCodes.Assy, ikka.label('implementationBatch')),
     },
     [TaktEcBatchStageCodes.SampleInspection]: {
-      date: t(`${localePrefix}.stage.sampleInspectionDate`),
+      date: deptFieldTitle(TaktEcDeptCodes.Qa, hinkan.label('inspectionDate')),
       batch: '',
     },
   };
@@ -163,14 +208,14 @@ function stageColumnTitle(stageCode: string, kind: 'date' | 'batch'): string {
 const columns = computed(() => {
   const order = transposedResult.value?.stageCodeOrder ?? [];
   const base: TableColumnsType = [
-    { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 110, fixed: 'left' as const },
-    { title: t(`${localePrefix}.column.technicalLiaisonNo`), dataIndex: 'technicalLiaisonNo', key: 'technicalLiaisonNo', width: 110 },
-    { title: t(`${localePrefix}.column.pNo`), dataIndex: 'pNo', key: 'pNo', width: 100 },
-    { title: t(`${localePrefix}.column.tcjLiaisonNo`), dataIndex: 'tcjLiaisonNo', key: 'tcjLiaisonNo', width: 120 },
-    { title: t('entity.ec.issuedate'), dataIndex: 'ecIssueDate', key: 'ecIssueDate', width: 100 },
-    { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 100 },
-    { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 120 },
-    { title: t(`${localePrefix}.column.ecEntryDate`), dataIndex: 'ecEntryDate', key: 'ecEntryDate', width: 100 }];
+    { title: gi.label('ecCode'), dataIndex: 'ecCode', key: 'ecCode', width: 110, fixed: 'left' as const },
+    { title: attachmentTypeTitle('tl'), dataIndex: 'technicalLiaisonNo', key: 'technicalLiaisonNo', width: 110 },
+    { title: attachmentTypeTitle('fpp'), dataIndex: 'pNo', key: 'pNo', width: 100 },
+    { title: attachmentTypeTitle('tcj'), dataIndex: 'tcjLiaisonNo', key: 'tcjLiaisonNo', width: 120 },
+    { title: gi.label('ecIssueDate'), dataIndex: 'ecIssueDate', key: 'ecIssueDate', width: 100 },
+    { title: pi.label('ecModelCode'), dataIndex: 'ecModelCode', key: 'ecModelCode', width: 100 },
+    { title: pi.label('ecNewMaterialCode'), dataIndex: 'ecNewMaterialCode', key: 'ecNewMaterialCode', width: 120 },
+    { title: gi.label('ecEntryDate'), dataIndex: 'ecEntryDate', key: 'ecEntryDate', width: 100 }];
   order.forEach((stageCode) => {
     base.push({
       title: stageColumnTitle(stageCode, 'date'),

@@ -34,7 +34,7 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
 
 
     /// <summary>
-    /// APS排程编码（冗余字段，便于查询）
+    /// APS排程编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "aps_schedule_code", ColumnDescription = "APS排程编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ApsScheduleCode { get; set; } = string.Empty;

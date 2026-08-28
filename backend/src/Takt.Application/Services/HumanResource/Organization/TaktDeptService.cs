@@ -123,6 +123,9 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
                 {
                     DictValue = item.Id.ToString(),
                     DictLabel = item.DeptName1,
+                    I18nKey = string.IsNullOrWhiteSpace(item.DeptCode)
+                        ? null
+                        : TaktNamingHelper.OrgDeptResourceKey(item.DeptCode),
                     SortOrder = item.SortOrder,
                     IsLeaf = isLeaf,
                     Children = null,

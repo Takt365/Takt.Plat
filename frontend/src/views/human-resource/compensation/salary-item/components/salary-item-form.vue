@@ -89,7 +89,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.itemType"
-                  dict-type="hr_salary_item_type"
+                  dict-type="humanresource_compensation_salary_item_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') })"
                 />
               </a-form-item>
@@ -101,7 +101,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.calcMethod"
-                  dict-type="hr_salary_calc_method_type"
+                  dict-type="humanresource_compensation_salary_calc_method"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') })"
                 />
               </a-form-item>

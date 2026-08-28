@@ -23,7 +23,7 @@ export const EMPLOYEEATTACHMENT_LIST_FIELDS = [
   'employeeId',
   'employeeCode',
   'employeeName',
-  'attachmentName',
+  'fileName',
   'accessUrl',
 ] as const
 
@@ -32,7 +32,7 @@ export const EMPLOYEEATTACHMENT_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'employeeId',
   'employeeCode',
   'employeeName',
-  'attachmentName',
+  'fileName',
   'accessUrl',
   'action',
 ] as const
@@ -47,7 +47,7 @@ export const EMPLOYEEATTACHMENT_PLACEHOLDER = {
   cultureCode: 'optional',
   plantCode: 'optional',
   employeeName: 'optional',
-  attachmentName: 'required',
+  fileName: 'required',
   accessUrl: 'required',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -60,7 +60,7 @@ export const EMPLOYEEATTACHMENT_QUERY_STRING_FIELDS = [
   'plantCode',
   'employeeCode',
   'employeeName',
-  'attachmentName',
+  'fileName',
   'accessUrl',
   'createdAtStart',
   'createdAtEnd',

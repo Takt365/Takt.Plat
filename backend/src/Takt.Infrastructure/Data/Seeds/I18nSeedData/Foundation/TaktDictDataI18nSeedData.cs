@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,58 +100,58 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-HK", "字典类型ID_hk", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
 
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "en-US", "字典类型编码_us", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "en-US", "字典类型编码_us", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "ja-JP", "字典类型编码_jp", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "ja-JP", "字典类型编码_jp", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-HK", "字典类型编码_hk", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-HK", "字典类型编码_hk", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐；varchar Length=140）"),
 
             // entity.dictdata.dictlabel
-            new TranslationSeedItem("entity.dictdata.dictlabel", "en-US", "字典项标签_us", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
+            new TranslationSeedItem("entity.dictdata.dictlabel", "en-US", "字典项标签_us", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；nvarchar Length=40；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
             // entity.dictdata.dictlabel
-            new TranslationSeedItem("entity.dictdata.dictlabel", "ja-JP", "字典项标签_jp", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
+            new TranslationSeedItem("entity.dictdata.dictlabel", "ja-JP", "字典项标签_jp", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；nvarchar Length=40；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
             // entity.dictdata.dictlabel
-            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-CN", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
+            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-CN", "字典项标签", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；nvarchar Length=40；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
             // entity.dictdata.dictlabel
-            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-HK", "字典项标签_hk", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
+            new TranslationSeedItem("entity.dictdata.dictlabel", "zh-HK", "字典项标签_hk", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；nvarchar Length=40；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),
 
             // entity.dictdata.dictvalue
-            new TranslationSeedItem("entity.dictdata.dictvalue", "en-US", "字典项值_us", "字典项值（实际存储值，如：0, 1, 2）"),
+            new TranslationSeedItem("entity.dictdata.dictvalue", "en-US", "字典项值_us", "字典项值（实际存储值，如：0, 1, 2；varchar Length=40）"),
             // entity.dictdata.dictvalue
-            new TranslationSeedItem("entity.dictdata.dictvalue", "ja-JP", "字典项值_jp", "字典项值（实际存储值，如：0, 1, 2）"),
+            new TranslationSeedItem("entity.dictdata.dictvalue", "ja-JP", "字典项值_jp", "字典项值（实际存储值，如：0, 1, 2；varchar Length=40）"),
             // entity.dictdata.dictvalue
-            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-CN", "字典项值", "字典项值（实际存储值，如：0, 1, 2）"),
+            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-CN", "字典项值", "字典项值（实际存储值，如：0, 1, 2；varchar Length=40）"),
             // entity.dictdata.dictvalue
-            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-HK", "字典项值_hk", "字典项值（实际存储值，如：0, 1, 2）"),
+            new TranslationSeedItem("entity.dictdata.dictvalue", "zh-HK", "字典项值_hk", "字典项值（实际存储值，如：0, 1, 2；varchar Length=40）"),
 
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "en-US", "国际化翻译键_us", "国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "en-US", "国际化键_us", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "ja-JP", "国际化翻译键_jp", "国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "ja-JP", "国际化键_jp", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-CN", "国际化翻译键", "国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-CN", "国际化键", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
             // entity.dictdata.i18nkey
-            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-HK", "国际化翻译键_hk", "国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）"),
+            new TranslationSeedItem("entity.dictdata.i18nkey", "zh-HK", "国际化键_hk", "国际化键（与 DictTypeCode 段对应，如 dict.accounting.controlling.cost.center.type.0；varchar Length=140）"),
 
             // entity.dictdata.extlabel
-            new TranslationSeedItem("entity.dictdata.extlabel", "en-US", "扩展标签_us", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            new TranslationSeedItem("entity.dictdata.extlabel", "en-US", "扩展标签_us", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）"),
             // entity.dictdata.extlabel
-            new TranslationSeedItem("entity.dictdata.extlabel", "ja-JP", "扩展标签_jp", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            new TranslationSeedItem("entity.dictdata.extlabel", "ja-JP", "扩展标签_jp", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）"),
             // entity.dictdata.extlabel
-            new TranslationSeedItem("entity.dictdata.extlabel", "zh-CN", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            new TranslationSeedItem("entity.dictdata.extlabel", "zh-CN", "扩展标签", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）"),
             // entity.dictdata.extlabel
-            new TranslationSeedItem("entity.dictdata.extlabel", "zh-HK", "扩展标签_hk", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等）"),
+            new TranslationSeedItem("entity.dictdata.extlabel", "zh-HK", "扩展标签_hk", "扩展标签（用于存储额外的显示文本，如：副标题、简短描述等；nvarchar Length=140）"),
 
             // entity.dictdata.extvalue
-            new TranslationSeedItem("entity.dictdata.extvalue", "en-US", "扩展值_us", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            new TranslationSeedItem("entity.dictdata.extvalue", "en-US", "扩展值_us", "扩展值（用于存储额外的业务数据，如：编码、标识符等；varchar Length=140）"),
             // entity.dictdata.extvalue
-            new TranslationSeedItem("entity.dictdata.extvalue", "ja-JP", "扩展值_jp", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            new TranslationSeedItem("entity.dictdata.extvalue", "ja-JP", "扩展值_jp", "扩展值（用于存储额外的业务数据，如：编码、标识符等；varchar Length=140）"),
             // entity.dictdata.extvalue
-            new TranslationSeedItem("entity.dictdata.extvalue", "zh-CN", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            new TranslationSeedItem("entity.dictdata.extvalue", "zh-CN", "扩展值", "扩展值（用于存储额外的业务数据，如：编码、标识符等；varchar Length=140）"),
             // entity.dictdata.extvalue
-            new TranslationSeedItem("entity.dictdata.extvalue", "zh-HK", "扩展值_hk", "扩展值（用于存储额外的业务数据，如：编码、标识符等）"),
+            new TranslationSeedItem("entity.dictdata.extvalue", "zh-HK", "扩展值_hk", "扩展值（用于存储额外的业务数据，如：编码、标识符等；varchar Length=140）"),
 
             // entity.dictdata.listclass
             new TranslationSeedItem("entity.dictdata.listclass", "en-US", "列表样式类_us", "列表样式类（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于下拉列表选项中显示的颜色标识"),

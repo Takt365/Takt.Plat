@@ -42,7 +42,7 @@ public class TaktSelectOption
     public object? ExtValue { get; set; }
 
     /// <summary>
-    /// 国际化翻译键（用于多语言翻译，与 TaktDictData.I18nKey 一致）
+    /// 国际化键（用于多语言翻译，与 TaktDictData.I18nKey 一致）
     /// </summary>
     public string? I18nKey { get; set; }
 

@@ -29,7 +29,9 @@ namespace Takt.Application.Services.Logistics.Procurement;
 /// </summary>
 public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModelTrendService
 {
-    /// <summary>物料 BOM 按编码分批查询，避免超长 IN 列表</summary>
+    /// <summary>
+    /// 物料 BOM 按编码分批查询，避免超长 IN 列表
+    /// </summary>
     private const int MaterialNameLookupBatchSize = 500;
 
     /// <summary>
@@ -808,13 +810,19 @@ public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModel
     /// </summary>
     private sealed class BomMaterialUsageInfo
     {
-        /// <summary>产品编码列表</summary>
+        /// <summary>
+        /// 产品编码列表
+        /// </summary>
         public List<string> ProductCodes { get; init; } = new();
 
-        /// <summary>机种编码列表</summary>
+        /// <summary>
+        /// 机种编码列表
+        /// </summary>
         public List<string> ModelCodes { get; init; } = new();
 
-        /// <summary>组件描述（物料文本回退）</summary>
+        /// <summary>
+        /// 组件描述（物料文本回退）
+        /// </summary>
         public string ComponentDescription { get; init; } = string.Empty;
     }
 }

@@ -80,7 +80,7 @@ export interface SalesOrder extends CompanyDtoBase {
   discountAmount?: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
@@ -90,7 +90,7 @@ export interface SalesOrder extends CompanyDtoBase {
   exchangeRate?: number;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
   taxCode?: string | null;
   taxRate?: number;
@@ -121,12 +121,12 @@ export interface SalesOrder extends CompanyDtoBase {
   receivedAmount?: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+   * 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod?: number;
 
   /**
-   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+   * 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod?: number;
 
@@ -146,7 +146,7 @@ export interface SalesOrder extends CompanyDtoBase {
   orderStatus?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   * 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus?: number;
 
@@ -239,7 +239,7 @@ export interface SalesOrderExport {
   discountAmount: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
@@ -249,7 +249,7 @@ export interface SalesOrderExport {
   exchangeRate: number;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
   taxCode?: string | null;
   taxRate: number;
@@ -280,12 +280,12 @@ export interface SalesOrderExport {
   receivedAmount: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+   * 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
    */
   deliveryMethod: number;
 
   /**
-   * 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+   * 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
    */
   paymentMethod: number;
 
@@ -305,7 +305,7 @@ export interface SalesOrderExport {
   orderStatus: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+   * 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus: number;
 

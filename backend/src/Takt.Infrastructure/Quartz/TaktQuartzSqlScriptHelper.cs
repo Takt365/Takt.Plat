@@ -22,13 +22,19 @@ namespace Takt.Infrastructure.Quartz;
 /// </summary>
 public static class TaktQuartzSqlScriptHelper
 {
-    /// <summary>源库占位符</summary>
+    /// <summary>
+    /// 源库占位符
+    /// </summary>
     public const string SourceDatabasePlaceholder = "{{SourceDatabase}}";
 
-    /// <summary>目标库占位符</summary>
+    /// <summary>
+    /// 目标库占位符
+    /// </summary>
     public const string TargetDatabasePlaceholder = "{{TargetDatabase}}";
 
-    /// <summary>核算月份占位符（yyyy-MM；可空，脚本内自行默认当月）</summary>
+    /// <summary>
+    /// 核算月份占位符（yyyy-MM；可空，脚本内自行默认当月）
+    /// </summary>
     public const string CostingPeriodPlaceholder = "{{CostingPeriod}}";
 
     /// <summary>

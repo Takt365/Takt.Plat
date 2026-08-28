@@ -137,6 +137,31 @@ public class TaktFileService : TaktServiceBase, ITaktFileService
     }
 
     /// <summary>
+    /// 按访问地址打开物理文件流
+    /// </summary>
+    /// <param name="accessUrl">TaktFile.AccessUrl</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>可读流与下载文件名</returns>
+    public async Task<TaktFileDownloadStreamResult> DownloadFileByAccessUrlAsync(
+        string accessUrl,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(accessUrl);
+        EnsureThreeLayerContext();
+        var normalized = accessUrl.Trim();
+        var files = await _fileRepository.GetListAsync(x =>
+            x.AccessUrl == normalized
+            && x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode);
+        var entity = files.OrderByDescending(x => x.Id).FirstOrDefault();
+        if (entity == null)
+        {
+            throw new TaktBusinessException("文件不存在");
+        }
+        return await DownloadFileByIdAsync(entity.Id, cancellationToken);
+    }
+
+    /// <summary>
     /// 校验当前用户是否允许下载该文件
     /// </summary>
     /// <param name="entity">文件实体</param>

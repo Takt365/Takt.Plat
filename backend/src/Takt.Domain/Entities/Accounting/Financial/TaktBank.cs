@@ -93,9 +93,9 @@ public class TaktBank : TaktCompanyEntityBase
     public string? Address2 { get; set; }
 
     /// <summary>
-    /// SWIFT/BIC（；CHAR 11）
+    /// 银行识别码（SWIFT/BIC；CHAR 11）
     /// </summary>
-    [SugarColumn(ColumnName = "swift_bic", ColumnDescription = "SWIFT/BIC", ColumnDataType = "nvarchar", Length = 11, IsNullable = true)]
+    [SugarColumn(ColumnName = "swift_bic", ColumnDescription = "银行识别码", ColumnDataType = "nvarchar", Length = 11, IsNullable = true)]
     public string? SwiftBic { get; set; }
 
     /// <summary>
@@ -165,7 +165,7 @@ public class TaktBank : TaktCompanyEntityBase
     public int SddCore { get; set; } = 0;
 
     /// <summary>
-    /// SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+    /// SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
     /// </summary>
     [SugarColumn(ColumnName = "sdd_rtrans", ColumnDescription = "SEPA拒付交易支持标识", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SddRtrans { get; set; } = 0;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktPlannedOrderI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlannedOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder.plannedquantity", "zh-HK", "计划数量_hk", "计划数量"),
 
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.plannedorder.unitofmeasure
-            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.plannedorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.plannedorder.plannedstarttime
             new TranslationSeedItem("entity.plannedorder.plannedstarttime", "en-US", "计划开始时间_us", "计划开始时间"),

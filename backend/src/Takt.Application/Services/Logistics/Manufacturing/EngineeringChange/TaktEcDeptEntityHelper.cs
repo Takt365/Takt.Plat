@@ -4,14 +4,14 @@
 // 文件名称：TaktEcDeptEntityHelper.cs
 // 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变 8 张部门执行表实体读取辅助（转置/视图/批次，无宽表快照）
+// 功能描述：设变部门执行表实体读取辅助（转置/视图/批次，公共字段走 ITaktEcDeptExecEntity）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-using Takt.Domain.Entities;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
+using Takt.Domain.Interfaces;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 
@@ -22,6 +22,19 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 /// </summary>
 public static class TaktEcDeptEntityHelper
 {
+    /// <summary>
+    /// 转为部门执行接口（公共字段单链路）
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <returns>部门执行接口</returns>
+    /// <exception cref="ArgumentException">非部门执行实体</exception>
+    private static ITaktEcDeptExecEntity AsExec(object exec)
+    {
+        ArgumentNullException.ThrowIfNull(exec);
+        return exec as ITaktEcDeptExecEntity
+            ?? throw new ArgumentException("不支持的部门执行实体类型", nameof(exec));
+    }
+
     /// <summary>
     /// 按部门编码在列表中查找执行实体
     /// </summary>
@@ -39,36 +52,72 @@ public static class TaktEcDeptEntityHelper
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>部门编码</returns>
-    public static string GetDeptCode(object exec) => exec switch
-    {
-        TaktEcSeikan e => e.DeptCode,
-        TaktEcKoubai e => e.DeptCode,
-        TaktEcUkeken e => e.DeptCode,
-        TaktEcBukan e => e.DeptCode,
-        TaktEcSeizounika e => e.DeptCode,
-        TaktEcSeizouikka e => e.DeptCode,
-        TaktEcHinkan e => e.DeptCode,
-        TaktEcSeizougijutsu e => e.DeptCode,
-        _ => throw new ArgumentException("不支持的部门执行实体类型", nameof(exec))
-    };
+    public static string GetDeptCode(object exec) => AsExec(exec).DeptCode;
 
     /// <summary>
     /// 读取是否实施
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>是否实施</returns>
-    public static int GetIsImplemented(object exec) => exec switch
+    public static int GetIsImplemented(object exec) => AsExec(exec).IsImplemented;
+
+    /// <summary>
+    /// 写入是否实施
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <param name="isImplemented">是否实施</param>
+    public static void SetIsImplemented(object exec, int isImplemented)
     {
-        TaktEcSeikan e => e.IsImplemented,
-        TaktEcKoubai e => e.IsImplemented,
-        TaktEcUkeken e => e.IsImplemented,
-        TaktEcBukan e => e.IsImplemented,
-        TaktEcSeizounika e => e.IsImplemented,
-        TaktEcSeizouikka e => e.IsImplemented,
-        TaktEcHinkan e => e.IsImplemented,
-        TaktEcSeizougijutsu e => e.IsImplemented,
-        _ => 0
-    };
+        AsExec(exec).IsImplemented = isImplemented;
+    }
+
+    /// <summary>
+    /// 写入执行内容（仅当目标为空或强制覆盖时；短文案规范为「管理区分-…」）
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <param name="content">执行内容</param>
+    /// <param name="overwrite">是否覆盖已有内容</param>
+    public static void SetExecContent(object exec, string? content, bool overwrite = false)
+    {
+        var entity = AsExec(exec);
+        var normalized = TaktEcDistinctionConstants.NormalizeLegacyAutoExecContent(content);
+        if (overwrite || string.IsNullOrWhiteSpace(entity.ExecContent))
+        {
+            entity.ExecContent = normalized;
+        }
+    }
+
+    /// <summary>
+    /// 读取执行内容
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <returns>执行内容</returns>
+    public static string? GetExecContent(object exec) => AsExec(exec).ExecContent;
+
+    /// <summary>
+    /// 读取是否作废
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <returns>是否作废</returns>
+    public static int GetIsObsolete(object exec) => AsExec(exec).IsObsolete;
+
+    /// <summary>
+    /// 部门执行行是否已有输入（实施=是，或执行内容非空）
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <returns>是否有输入</returns>
+    public static bool HasDeptInput(object exec)
+    {
+        if (GetIsObsolete(exec) == 1)
+        {
+            return false;
+        }
+        if (GetIsImplemented(exec) == 1)
+        {
+            return true;
+        }
+        return !string.IsNullOrWhiteSpace(GetExecContent(exec));
+    }
 
     /// <summary>
     /// 解析转置单元格完成日期
@@ -157,22 +206,18 @@ public static class TaktEcDeptEntityHelper
     }
 
     /// <summary>
+    /// 读取设变单号
+    /// </summary>
+    /// <param name="exec">部门执行实体</param>
+    /// <returns>设变单号</returns>
+    public static string GetEcCode(object exec) => AsExec(exec).EcCode;
+
+    /// <summary>
     /// 读取明细 ID
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>设变明细 ID</returns>
-    public static long GetEcnDetailId(object exec) => exec switch
-    {
-        TaktEcSeikan e => e.EcnDetailId,
-        TaktEcKoubai e => e.EcnDetailId,
-        TaktEcUkeken e => e.EcnDetailId,
-        TaktEcBukan e => e.EcnDetailId,
-        TaktEcSeizounika e => e.EcnDetailId,
-        TaktEcSeizouikka e => e.EcnDetailId,
-        TaktEcHinkan e => e.EcnDetailId,
-        TaktEcSeizougijutsu e => e.EcnDetailId,
-        _ => 0
-    };
+    public static long GetEcnDetailId(object exec) => AsExec(exec).EcnDetailId;
 
     /// <summary>
     /// 判断是否匹配是否实施筛选

@@ -35,7 +35,7 @@ export interface ProductionTeam extends CompanyDtoBase {
   teamName?: string;
 
   /**
-   * 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+   * 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
    */
   teamCategory?: string;
 
@@ -45,7 +45,7 @@ export interface ProductionTeam extends CompanyDtoBase {
   teamLeaderName?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -103,7 +103,7 @@ export interface ProductionTeamExport {
   teamName: string;
 
   /**
-   * 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+   * 班组分类（字典 logistics_manufacturing_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
    */
   teamCategory: string;
 
@@ -113,7 +113,7 @@ export interface ProductionTeamExport {
   teamLeaderName?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 

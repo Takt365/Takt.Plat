@@ -28,6 +28,7 @@
  */
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { taktOrgDeptI18nKey } from '@/utils/naming';
 import { TaktEcKanbanOrder } from '@/constants/logistics/ec-exec-codes';
 import type { EcKanbanDeptStage } from '@/types/logistics/manufacturing/engineering-change/ec-kanban';
 
@@ -39,7 +40,6 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-const localePrefix = 'logistics.manufacturing.engineering-change.ec-kanban.page';
 
 /** 看板顺序阶段 */
 const orderedStages = computed(() => {
@@ -53,7 +53,8 @@ const orderedStages = computed(() => {
  * @returns {string} 文案
  */
 function deptLabel(code: string): string {
-  return t(`${localePrefix}.dept.${code.toLowerCase()}`);
+  const key = taktOrgDeptI18nKey(code);
+  return key ? t(key) : '';
 }
 
 /**

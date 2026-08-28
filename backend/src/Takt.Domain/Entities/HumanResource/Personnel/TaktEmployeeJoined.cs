@@ -85,12 +85,12 @@ public class TaktEmployeeJoined : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "job_title", ColumnDescription = "职务", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? JobTitle { get; set; }
     /// <summary>
-    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
+    /// 工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "work_nature", ColumnDescription = "工作性质", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int WorkNature { get; set; }
     /// <summary>
-    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
+    /// 任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     [SugarColumn(ColumnName = "employment_type", ColumnDescription = "任职类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EmploymentType { get; set; }

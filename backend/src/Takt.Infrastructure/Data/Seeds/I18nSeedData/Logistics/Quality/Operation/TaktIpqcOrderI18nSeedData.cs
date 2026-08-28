@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -180,14 +180,23 @@ public class TaktIpqcOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.ipqcorder.totalinspectionreturnquantity
             new TranslationSeedItem("entity.ipqcorder.totalinspectionreturnquantity", "zh-HK", "总验退数量_hk", "总验退数量（自动计算 = 各明细验退数量合计）"),
 
-            // entity.ipqcorder.judgeby
-            new TranslationSeedItem("entity.ipqcorder.judgeby", "en-US", "判定人_us", "判定人（人员代码）"),
-            // entity.ipqcorder.judgeby
-            new TranslationSeedItem("entity.ipqcorder.judgeby", "ja-JP", "判定人_jp", "判定人（人员代码）"),
-            // entity.ipqcorder.judgeby
-            new TranslationSeedItem("entity.ipqcorder.judgeby", "zh-CN", "判定人", "判定人（人员代码）"),
-            // entity.ipqcorder.judgeby
-            new TranslationSeedItem("entity.ipqcorder.judgeby", "zh-HK", "判定人_hk", "判定人（人员代码）"),
+            // entity.ipqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeeid", "en-US", "判定人ID_us", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.ipqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeeid", "ja-JP", "判定人ID_jp", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.ipqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeeid", "zh-CN", "判定人ID", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.ipqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeeid", "zh-HK", "判定人ID_hk", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.ipqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeename", "en-US", "判定人名称_us", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.ipqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeename", "ja-JP", "判定人名称_jp", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.ipqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeename", "zh-CN", "判定人名称", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.ipqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.ipqcorder.judgebyemployeename", "zh-HK", "判定人名称_hk", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.ipqcorder.judgedate
             new TranslationSeedItem("entity.ipqcorder.judgedate", "en-US", "判定日期_us", "判定日期"),

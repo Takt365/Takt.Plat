@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialOutboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSerialOutboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbounditem.outboundid", "zh-HK", "出库ID_hk", "出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）"),
 
             // entity.serialoutbounditem.outboundcode
-            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "en-US", "出库单号_us", "出库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "en-US", "出库单号_us", "出库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialoutbounditem.outboundcode
-            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "ja-JP", "出库单号_jp", "出库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "ja-JP", "出库单号_jp", "出库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialoutbounditem.outboundcode
-            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "zh-CN", "出库单号", "出库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "zh-CN", "出库单号", "出库单号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.serialoutbounditem.outboundcode
-            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "zh-HK", "出库单号_hk", "出库单号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.serialoutbounditem.outboundcode", "zh-HK", "出库单号_hk", "出库单号（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.serialoutbounditem.linenumber
             new TranslationSeedItem("entity.serialoutbounditem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

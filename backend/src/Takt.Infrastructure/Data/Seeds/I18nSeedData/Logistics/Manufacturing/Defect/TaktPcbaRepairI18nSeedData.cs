@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepair 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepair._self", "zh-HK", "PCBA改修日报信息_hk", "实体名称"),
 
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.pcbarepair.proddate
             new TranslationSeedItem("entity.pcbarepair.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -118,13 +118,13 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepair.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.pcbarepair.shiftno
-            new TranslationSeedItem("entity.pcbarepair.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "en-US", "班次_us", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbarepair.shiftno
-            new TranslationSeedItem("entity.pcbarepair.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbarepair.shiftno
-            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-CN", "班次", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
             // entity.pcbarepair.shiftno
-            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
+            new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
             // entity.pcbarepair.prodordertype
             new TranslationSeedItem("entity.pcbarepair.prodordertype", "en-US", "工单类别_us", "工单类别（回填：随工单）"),

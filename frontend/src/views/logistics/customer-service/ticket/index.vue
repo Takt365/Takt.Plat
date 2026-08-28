@@ -137,11 +137,10 @@
       </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="pi.queryPh('plantCode', 'required')"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -438,13 +437,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('acceptedBy')">
-      <a-form-item :label="pi.queryLabel('acceptedBy')">
+      <div v-show="isFieldVisible('acceptedByEmployeeId')">
+      <a-form-item :label="pi.queryLabel('acceptedByEmployeeId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.acceptedByEmployeeId"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('acceptedByEmployeeId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedByEmployeeName')">
+      <a-form-item :label="pi.queryLabel('acceptedByEmployeeName')">
         <a-input
-          v-model:value="advancedQueryForm.acceptedBy"
-          :placeholder="pi.queryPh('acceptedBy', 'required')"
+          v-model:value="advancedQueryForm.acceptedByEmployeeName"
+          :placeholder="pi.queryPh('acceptedByEmployeeName', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>

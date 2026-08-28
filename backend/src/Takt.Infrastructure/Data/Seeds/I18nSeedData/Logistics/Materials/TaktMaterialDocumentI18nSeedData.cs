@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDocumentI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -198,14 +198,23 @@ public class TaktMaterialDocumentI18nSeedData : ITaktSeedDataCoordinator
             // entity.materialdocument.transactioncode
             new TranslationSeedItem("entity.materialdocument.transactioncode", "zh-HK", "事务代码_hk", "事务代码"),
 
-            // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "en-US", "用户名_us", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "ja-JP", "用户名_jp", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-CN", "用户名", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-HK", "用户名_hk", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.materialdocument.postedbyemployeeid
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeeid", "en-US", "过账人ID_us", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.materialdocument.postedbyemployeeid
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeeid", "ja-JP", "过账人ID_jp", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.materialdocument.postedbyemployeeid
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeeid", "zh-CN", "过账人ID", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.materialdocument.postedbyemployeeid
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeeid", "zh-HK", "过账人ID_hk", "过账人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.materialdocument.postedbyemployeename
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeename", "en-US", "过账人名称_us", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.materialdocument.postedbyemployeename
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeename", "ja-JP", "过账人名称_jp", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.materialdocument.postedbyemployeename
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeename", "zh-CN", "过账人名称", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.materialdocument.postedbyemployeename
+            new TranslationSeedItem("entity.materialdocument.postedbyemployeename", "zh-HK", "过账人名称_hk", "过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.materialdocument.items
             new TranslationSeedItem("entity.materialdocument.items", "en-US", "物料凭证行项目列表_us", "物料凭证行项目列表（主子表关系）"),

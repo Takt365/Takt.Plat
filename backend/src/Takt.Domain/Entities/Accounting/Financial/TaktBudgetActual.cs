@@ -58,12 +58,12 @@ public class TaktBudgetActual : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "account_title_code", ColumnDescription = "会计科目编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? AccountTitleCode { get; set; }
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     [SugarColumn(ColumnName = "budget_type", ColumnDescription = "预算类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int BudgetType { get; set; } = 1;
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     [SugarColumn(ColumnName = "measure_type", ColumnDescription = "计量类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int MeasureType { get; set; } = 1;
@@ -108,7 +108,7 @@ public class TaktBudgetActual : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ytd_variance_amount", ColumnDescription = "本年累计差异", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal YtdVarianceAmount { get; set; } = 0;
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";

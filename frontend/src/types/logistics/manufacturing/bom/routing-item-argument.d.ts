@@ -49,7 +49,7 @@ export interface RoutingItemArgument extends CompanyDtoBase {
   paramName: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 
@@ -124,7 +124,7 @@ export interface RoutingItemArgumentQuery extends TaktPagedQuery {
   paramName?: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 
@@ -213,7 +213,7 @@ export interface RoutingItemArgumentCreate {
   paramName: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 
@@ -321,7 +321,7 @@ export interface RoutingItemArgumentTemplate {
   paramName?: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 
@@ -395,7 +395,7 @@ export interface RoutingItemArgumentImport {
   paramName?: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 
@@ -459,7 +459,7 @@ export interface RoutingItemArgumentExport {
   paramName: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   paramUnit?: string;
 

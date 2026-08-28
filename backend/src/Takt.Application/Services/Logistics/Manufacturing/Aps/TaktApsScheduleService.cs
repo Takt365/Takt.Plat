@@ -681,10 +681,10 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
             exp = exp.And(x => x.ScheduleStatus == scheduleStatus);
         }
 
-        if (queryDto?.PlannerId.HasValue == true)
+        if (queryDto?.PlannerEmployeeId.HasValue == true)
         {
-            var plannerId = queryDto.PlannerId.Value;
-            exp = exp.And(x => x.PlannerId == plannerId);
+            var plannerId = queryDto.PlannerEmployeeId.Value;
+            exp = exp.And(x => x.PlannerEmployeeId == plannerId);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.PlannerName))
@@ -865,7 +865,7 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         {
             return true;
         }
-        if (queryDto.PlannerId.HasValue)
+        if (queryDto.PlannerEmployeeId.HasValue)
         {
             return true;
         }

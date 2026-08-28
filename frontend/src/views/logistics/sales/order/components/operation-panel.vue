@@ -397,7 +397,7 @@ import { formatSummaryValue } from '@/components/business/takt-editable-table/ed
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import ApsOperationForm from './operation-form.vue'
-import { useApsOrderMasterContext } from '../composables/use-order-master-context'
+import { useSalesOrderMasterContext } from '../composables/use-order-master-context'
 import {
   getApsOperationList,
   getApsOperationById,
@@ -424,7 +424,7 @@ import {
 const pi = useApsOperationI18n()
 
 const { t } = useI18n()
-const { selectedMasterRow } = useApsOrderMasterContext()
+const { selectedMasterRow } = useSalesOrderMasterContext()
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktApsOperation')

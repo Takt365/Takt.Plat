@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentOfferI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentOffer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -125,6 +125,15 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentoffer.employeeid", "zh-CN", "关联员工ID", "关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）"),
             // entity.talentoffer.employeeid
             new TranslationSeedItem("entity.talentoffer.employeeid", "zh-HK", "关联员工ID_hk", "关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）"),
+
+            // entity.talentoffer.employeename
+            new TranslationSeedItem("entity.talentoffer.employeename", "en-US", "员工名称_us", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentoffer.employeename
+            new TranslationSeedItem("entity.talentoffer.employeename", "ja-JP", "员工名称_jp", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentoffer.employeename
+            new TranslationSeedItem("entity.talentoffer.employeename", "zh-CN", "员工名称", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.talentoffer.employeename
+            new TranslationSeedItem("entity.talentoffer.employeename", "zh-HK", "员工名称_hk", "员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.talentoffer.deptid
             new TranslationSeedItem("entity.talentoffer.deptid", "en-US", "拟录用部门ID_us", "拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),

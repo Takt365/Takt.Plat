@@ -19,10 +19,14 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public static class TaktDatabaseBackupPathHelper
 {
-    /// <summary>完整备份类型</summary>
+    /// <summary>
+    /// 完整备份类型
+    /// </summary>
     public const int BackupTypeFull = 1;
 
-    /// <summary>增量备份类型</summary>
+    /// <summary>
+    /// 增量备份类型
+    /// </summary>
     public const int BackupTypeDelta = 2;
 
     private static readonly Regex SafeDbNamePart = new(@"^[A-Za-z0-9_\-\.]+$", RegexOptions.Compiled);

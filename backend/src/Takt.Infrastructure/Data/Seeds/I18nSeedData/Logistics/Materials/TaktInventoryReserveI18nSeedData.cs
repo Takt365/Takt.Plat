@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktInventoryReserveI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInventoryReserve 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktInventoryReserveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inventoryreserve.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.inventoryreserve.valuation
-            new TranslationSeedItem("entity.inventoryreserve.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.inventoryreserve.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.inventoryreserve.valuation
-            new TranslationSeedItem("entity.inventoryreserve.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.inventoryreserve.valuation", "ja-JP", "评估类别_jp", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.inventoryreserve.valuation
-            new TranslationSeedItem("entity.inventoryreserve.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.inventoryreserve.valuation", "zh-CN", "评估类别", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
             // entity.inventoryreserve.valuation
-            new TranslationSeedItem("entity.inventoryreserve.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
+            new TranslationSeedItem("entity.inventoryreserve.valuation", "zh-HK", "评估类别_hk", "评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）"),
 
             // entity.inventoryreserve.provisionscope
-            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "en-US", "计提范围_us", "计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
+            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "en-US", "计提范围_us", "计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
             // entity.inventoryreserve.provisionscope
-            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "ja-JP", "计提范围_jp", "计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
+            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "ja-JP", "计提范围_jp", "计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
             // entity.inventoryreserve.provisionscope
-            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "zh-CN", "计提范围", "计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
+            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "zh-CN", "计提范围", "计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
             // entity.inventoryreserve.provisionscope
-            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "zh-HK", "计提范围_hk", "计提范围（字典 logistics_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
+            new TranslationSeedItem("entity.inventoryreserve.provisionscope", "zh-HK", "计提范围_hk", "计提范围（字典 logistics_materials_inventory_reserve_scope；1=按单个存货项目，2=按存货类别；CAS 优先单个项目，数量繁多单价较低时可按类别）"),
 
             // entity.inventoryreserve.stockquantity
             new TranslationSeedItem("entity.inventoryreserve.stockquantity", "en-US", "库存数量_us", "库存数量（基本单位，4 位小数）"),
@@ -262,13 +262,13 @@ public class TaktInventoryReserveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inventoryreserve.carryingamount", "zh-HK", "账面价值_hk", "账面价值（Carrying amount = 存货成本 − 期末跌价准备；报表列示金额，应 ≤ 可变现净值当成本更高时取孰低）"),
 
             // entity.inventoryreserve.currencycode
-            new TranslationSeedItem("entity.inventoryreserve.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.inventoryreserve.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.inventoryreserve.currencycode
-            new TranslationSeedItem("entity.inventoryreserve.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.inventoryreserve.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.inventoryreserve.currencycode
-            new TranslationSeedItem("entity.inventoryreserve.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.inventoryreserve.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
             // entity.inventoryreserve.currencycode
-            new TranslationSeedItem("entity.inventoryreserve.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.inventoryreserve.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）"),
 
             // entity.inventoryreserve.impairmentreason
             new TranslationSeedItem("entity.inventoryreserve.impairmentreason", "en-US", "跌价原因_us", "跌价原因说明（业务备注：滞销、毁损、市价下跌等）"),

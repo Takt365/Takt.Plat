@@ -34,10 +34,14 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     /// </summary>
     private const int MaxRowLoad = 20000;
 
-    /// <summary>BOM 成本明细按年分表基表名</summary>
+    /// <summary>
+    /// BOM 成本明细按年分表基表名
+    /// </summary>
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
 
-    /// <summary>移动价格按年分表基表名</summary>
+    /// <summary>
+    /// 移动价格按年分表基表名
+    /// </summary>
     private const string MovingPriceYearShardBaseTable = "takt_logistics_materials_material_moving_price";
 
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;

@@ -34,7 +34,7 @@ public class TaktFlowTransition : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "activity_id", ColumnDescription = "节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? ActivityId { get; set; }
     /// <summary>
-    /// 节点名称（冗余字段，便于查询）
+    /// 节点名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "activity_name", ColumnDescription = "节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ActivityName { get; set; }
@@ -49,7 +49,7 @@ public class TaktFlowTransition : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "from_node_id", ColumnDescription = "源节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FromNodeId { get; set; }
     /// <summary>
-    /// 源节点名称（冗余字段，便于查询）
+    /// 源节点名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "from_node_name", ColumnDescription = "源节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? FromNodeName { get; set; }
@@ -59,7 +59,7 @@ public class TaktFlowTransition : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "to_node_id", ColumnDescription = "目标节点ID", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? ToNodeId { get; set; }
     /// <summary>
-    /// 目标节点名称（冗余字段，便于查询）
+    /// 目标节点名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "to_node_name", ColumnDescription = "目标节点名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ToNodeName { get; set; }
@@ -69,7 +69,7 @@ public class TaktFlowTransition : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "transition_user_id", ColumnDescription = "操作人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long TransitionUserId { get; set; }
     /// <summary>
-    /// 操作人姓名（冗余字段，便于查询）
+    /// 操作人姓名（冗余：按 TransitionUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "transition_user_name", ColumnDescription = "操作人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? TransitionUserName { get; set; }

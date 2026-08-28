@@ -135,7 +135,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
+                  dict-type="logistics_manufacturing_shift_category"
                   :placeholder="pi.ph('shiftNo')"
                 />
               </a-form-item>
@@ -183,7 +183,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.panelSide"
-                  dict-type="logistics_pcba_side_category"
+                  dict-type="logistics_manufacturing_pcba_side_category"
                   :placeholder="pi.ph('panelSide')"
                 />
               </a-form-item>

@@ -538,7 +538,7 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
                 || (x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || (x.SurveyorBy != null && x.SurveyorBy.Contains(keywords))
+                || (x.SurveyorByEmployeeName != null && x.SurveyorByEmployeeName.Contains(keywords))
                 || (x.CustomerContact != null && x.CustomerContact.Contains(keywords))
                 || (x.CustomerPhone != null && x.CustomerPhone.Contains(keywords))
                 || (x.CustomerPraise != null && x.CustomerPraise.Contains(keywords))
@@ -604,10 +604,10 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             exp = exp.And(x => x.SurveyPeriod == surveyPeriod);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SurveyorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SurveyorByEmployeeName))
         {
-            var surveyorBy = queryDto.SurveyorBy;
-            exp = exp.And(x => x.SurveyorBy != null && x.SurveyorBy.Contains(surveyorBy));
+            var surveyorBy = queryDto.SurveyorByEmployeeName;
+            exp = exp.And(x => x.SurveyorByEmployeeName != null && x.SurveyorByEmployeeName.Contains(surveyorBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.CustomerContact))
@@ -802,7 +802,7 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SurveyorBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.SurveyorByEmployeeName))
         {
             return true;
         }

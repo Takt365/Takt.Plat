@@ -15,7 +15,7 @@ import type { TaktPagedQuery, TaktPagedResult } from '@/types/common';
 /** 机种成本推移查询 */
 export interface BomMaterialCostItemModelCostTrendQuery extends TaktPagedQuery {
   plantCode: string;
-  /** 物料类型（字典 logistics_material_type；空=默认 FERT） */
+  /** 物料类型（字典 logistics_materials_material_type；空=默认 FERT） */
   materialType?: string;
   /** 兼容单机种 */
   modelCode?: string;

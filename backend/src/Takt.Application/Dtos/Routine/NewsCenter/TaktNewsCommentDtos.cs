@@ -110,7 +110,7 @@ public class TaktNewsCommentDto : TaktApprovalDtoBase
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int CommentStatus { get; set; } = 0;
 
@@ -248,7 +248,7 @@ public class TaktNewsCommentQueryDto : TaktPagedQuery
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int? CommentStatus { get; set; }
 
@@ -421,7 +421,7 @@ public class TaktNewsCommentCreateDto
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int CommentStatus { get; set; } = 0;
 
@@ -480,9 +480,9 @@ public class TaktNewsCommentStatusDto
     public long NewsCommentId { get; set; }
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
-    [Required(ErrorMessage = "评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）不能为空")]
+    [Required(ErrorMessage = "评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）不能为空")]
     public int CommentStatus { get; set; } = 0;
 }
 
@@ -608,7 +608,7 @@ public class TaktNewsCommentTemplateDto
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int? CommentStatus { get; set; }
 
@@ -724,7 +724,7 @@ public class TaktNewsCommentImportDto
     public int? CommentLevel { get; set; }
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int? CommentStatus { get; set; }
 
@@ -846,7 +846,7 @@ public class TaktNewsCommentExportDto
     public int CommentLevel { get; set; } = 0;
 
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     public int CommentStatus { get; set; } = 0;
 

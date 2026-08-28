@@ -122,7 +122,7 @@
           <template v-else-if="column.key === 'level'">
             <TaktDictTag
               :value="getAdminDivisionDictValue(record, 'level')"
-              dict-type="sys_admin_division_level_type"
+              dict-type="sys_admin_division_level"
             />
           </template>
           <template v-else-if="column.key === 'isLeaf'">
@@ -134,7 +134,7 @@
           <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
               :value="getAdminDivisionDictValue(record, 'currencyCode')"
-              dict-type="accounting_currency_code"
+              dict-type="accounting_financial_currency_code"
             />
           </template>
           <template v-else-if="column.key === 'isBuiltIn'">
@@ -222,7 +222,7 @@
       <a-form-item :label="pi.queryLabel('level')">
         <TaktSelect
           v-model:value="advancedQueryForm.level"
-          dict-type="sys_admin_division_level_type"
+          dict-type="sys_admin_division_level"
           :placeholder="pi.queryPh('level', 'select')"
           allow-clear
         />
@@ -264,7 +264,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />

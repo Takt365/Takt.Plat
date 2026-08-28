@@ -37,17 +37,17 @@ public class TaktExchangeRateDto : TaktTenantCoreDtoBase
     public long ExchangeRateId { get; set; }
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     public string FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     public string ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     public string ExchangeRateType { get; set; } = string.Empty;
 
@@ -99,17 +99,17 @@ public class TaktExchangeRateQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     public string? FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     public string? ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     public string? ExchangeRateType { get; set; } = string.Empty;
 
@@ -189,21 +189,21 @@ public class TaktExchangeRateCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
-    [Required(ErrorMessage = "源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）不能为空")]
+    [Required(ErrorMessage = "源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）不能为空")]
     public string FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
-    [Required(ErrorMessage = "目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）不能为空")]
+    [Required(ErrorMessage = "目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）不能为空")]
     public string ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
-    [Required(ErrorMessage = "汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）不能为空")]
+    [Required(ErrorMessage = "汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）不能为空")]
     public string ExchangeRateType { get; set; } = string.Empty;
 
     /// <summary>
@@ -307,17 +307,17 @@ public class TaktExchangeRateTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     public string? FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     public string? ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     public string? ExchangeRateType { get; set; } = string.Empty;
 
@@ -374,17 +374,17 @@ public class TaktExchangeRateImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     public string? FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     public string? ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     public string? ExchangeRateType { get; set; } = string.Empty;
 
@@ -447,17 +447,17 @@ public class TaktExchangeRateExportDto
     public long ExchangeRateId { get; set; }
 
     /// <summary>
-    /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+    /// 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
     public string FromCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+    /// 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
     /// </summary>
     public string ToCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+    /// 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
     /// </summary>
     public string ExchangeRateType { get; set; } = string.Empty;
 

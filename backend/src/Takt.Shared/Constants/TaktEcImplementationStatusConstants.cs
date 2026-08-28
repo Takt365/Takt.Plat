@@ -17,12 +17,20 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktEcImplementationStatusConstants
 {
-    /// <summary>未开始（各部门均未实施）</summary>
+    /// <summary>
+    /// 未开始（各部门均未实施）
+    /// </summary>
     public const int NotStarted = 0;
-    /// <summary>实施中（路径上存在未完成部门，且品管课尚未全部完成）</summary>
+    /// <summary>
+    /// 实施中（路径上存在未完成部门，且品管课尚未全部完成）
+    /// </summary>
     public const int InProgress = 1;
-    /// <summary>正式完成（品管课全部明细已实施；制技 Te 可未完成）</summary>
+    /// <summary>
+    /// 正式完成（品管课全部明细已实施；制技 Te 可未完成）
+    /// </summary>
     public const int OfficiallyCompleted = 2;
-    /// <summary>全部完成（含制技 Te 全部明细已实施）</summary>
+    /// <summary>
+    /// 全部完成（含制技 Te 全部明细已实施）
+    /// </summary>
     public const int FullyCompleted = 3;
 }

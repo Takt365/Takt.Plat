@@ -44,7 +44,7 @@ export interface AccountTitle extends CompanyDtoBase {
   parentId: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType: string;
 
@@ -69,7 +69,7 @@ export interface AccountTitle extends CompanyDtoBase {
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType: string;
 
@@ -174,7 +174,7 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   parentId?: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType?: string;
 
@@ -199,7 +199,7 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType?: string;
 
@@ -318,7 +318,7 @@ export interface AccountTitleCreate {
   parentId: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType: string;
 
@@ -338,7 +338,7 @@ export interface AccountTitleCreate {
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType: string;
 
@@ -485,7 +485,7 @@ export interface AccountTitleTemplate {
   parentId?: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType?: string;
 
@@ -505,7 +505,7 @@ export interface AccountTitleTemplate {
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType?: string;
 
@@ -599,7 +599,7 @@ export interface AccountTitleImport {
   parentId?: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType?: string;
 
@@ -619,7 +619,7 @@ export interface AccountTitleImport {
   isAuxiliary?: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType?: string;
 
@@ -713,7 +713,7 @@ export interface AccountTitleExport {
   parentId: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+   * 科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
    */
   accountTitleType: string;
 
@@ -738,7 +738,7 @@ export interface AccountTitleExport {
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
+   * 辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
    */
   auxiliaryType: string;
 

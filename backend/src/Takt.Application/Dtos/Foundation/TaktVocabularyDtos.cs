@@ -52,9 +52,9 @@ public class TaktVocabularyDto : TaktTenantCoreDtoBase
     public int FilterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
-    public string ReplaceText { get; set; } = "*";
+    public string ReplaceText { get; set; } = "*Takt*";
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
@@ -93,7 +93,7 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     public int? FilterLevel { get; set; }
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
     public string? ReplaceText { get; set; }
 
@@ -153,9 +153,9 @@ public class TaktVocabularyCreateDto
     public int FilterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
-    public string ReplaceText { get; set; } = "*";
+    public string ReplaceText { get; set; } = "*Takt*";
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用 0=禁用）
@@ -247,7 +247,7 @@ public class TaktVocabularyTemplateDto
     public int? FilterLevel { get; set; }
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
     public string? ReplaceText { get; set; }
 
@@ -293,7 +293,7 @@ public class TaktVocabularyImportDto
     public int? FilterLevel { get; set; }
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
     public string? ReplaceText { get; set; }
 
@@ -346,9 +346,9 @@ public class TaktVocabularyExportDto
     public int FilterLevel { get; set; } = 0;
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
-    public string ReplaceText { get; set; } = "*";
+    public string ReplaceText { get; set; } = "*Takt*";
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用 0=禁用）

@@ -34,7 +34,7 @@ public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
     public long QualityIssueId { get; set; }
 
     /// <summary>
-    /// 品质问题编码（冗余字段，便于查询）
+    /// 品质问题编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIssueCode { get; set; } = string.Empty;

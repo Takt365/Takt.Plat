@@ -86,7 +86,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   discountAmount?: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
@@ -96,12 +96,12 @@ export interface PurchaseOrder extends CompanyDtoBase {
   exchangeRate?: number;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -131,12 +131,12 @@ export interface PurchaseOrder extends CompanyDtoBase {
   paidAmount?: number;
 
   /**
-   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
+   * 交货方式（字典 logistics_sales_delivery_method；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
    */
   deliveryMethod?: number;
 
@@ -151,7 +151,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   orderStatus?: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
 
@@ -259,7 +259,7 @@ export interface PurchaseOrderExport {
   discountAmount: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
@@ -269,12 +269,12 @@ export interface PurchaseOrderExport {
   exchangeRate: number;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -304,12 +304,12 @@ export interface PurchaseOrderExport {
   paidAmount: number;
 
   /**
-   * 支付方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 支付方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 交货方式（字典 logistics_delivery_method_type；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
+   * 交货方式（字典 logistics_sales_delivery_method；0=自提，1=送货上门（采购为供应商送货），2=物流配送，3=快递）
    */
   deliveryMethod: number;
 
@@ -324,7 +324,7 @@ export interface PurchaseOrderExport {
   orderStatus: number;
 
   /**
-   * 交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
 

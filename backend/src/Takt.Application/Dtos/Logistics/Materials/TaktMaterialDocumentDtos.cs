@@ -98,7 +98,7 @@ public class TaktMaterialDocumentDto : TaktCompanyDtoBase
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）
@@ -211,7 +211,7 @@ public class TaktMaterialDocumentQueryDto : TaktPagedQuery
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -328,7 +328,7 @@ public class TaktMaterialDocumentCreateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -464,7 +464,7 @@ public class TaktMaterialDocumentTemplateDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -571,7 +571,7 @@ public class TaktMaterialDocumentImportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -684,7 +684,7 @@ public class TaktMaterialDocumentExportDto
     /// <summary>
     /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

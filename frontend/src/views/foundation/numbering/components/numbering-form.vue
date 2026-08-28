@@ -122,7 +122,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.dateFormat"
-                  dict-type="sys_numbering_date_format_config"
+                  dict-type="sys_numbering_date_format"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.dateformat') })"
                 />
               </a-form-item>

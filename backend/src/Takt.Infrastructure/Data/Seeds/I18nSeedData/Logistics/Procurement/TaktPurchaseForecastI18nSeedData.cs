@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseForecastI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseForecast 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktPurchaseForecastI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseforecast.salesproduct", "zh-HK", "产品_hk", "产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）"),
 
             // entity.purchaseforecast.productcategorycode
-            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "en-US", "产品类别_us", "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
+            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "en-US", "产品类别_us", "产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
             // entity.purchaseforecast.productcategorycode
-            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "ja-JP", "产品类别_jp", "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
+            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "ja-JP", "产品类别_jp", "产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
             // entity.purchaseforecast.productcategorycode
-            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "zh-CN", "产品类别", "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
+            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "zh-CN", "产品类别", "产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
             // entity.purchaseforecast.productcategorycode
-            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "zh-HK", "产品类别_hk", "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
+            new TranslationSeedItem("entity.purchaseforecast.productcategorycode", "zh-HK", "产品类别_hk", "产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）"),
 
             // entity.purchaseforecast.profitcentercode
             new TranslationSeedItem("entity.purchaseforecast.profitcentercode", "en-US", "利润中心_us", "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）"),
@@ -198,23 +198,23 @@ public class TaktPurchaseForecastI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseforecast.suppliername1
             new TranslationSeedItem("entity.purchaseforecast.suppliername1", "zh-HK", "供应商名称1_hk", "供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）"),
 
-            // entity.purchaseforecast.plannerid
-            new TranslationSeedItem("entity.purchaseforecast.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseforecast.plannerid
-            new TranslationSeedItem("entity.purchaseforecast.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseforecast.plannerid
-            new TranslationSeedItem("entity.purchaseforecast.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.purchaseforecast.plannerid
-            new TranslationSeedItem("entity.purchaseforecast.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseforecast.planneremployeeid
+            new TranslationSeedItem("entity.purchaseforecast.planneremployeeid", "en-US", "计划人员工ID_us", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseforecast.planneremployeeid
+            new TranslationSeedItem("entity.purchaseforecast.planneremployeeid", "ja-JP", "计划人员工ID_jp", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseforecast.planneremployeeid
+            new TranslationSeedItem("entity.purchaseforecast.planneremployeeid", "zh-CN", "计划人员工ID", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.purchaseforecast.planneremployeeid
+            new TranslationSeedItem("entity.purchaseforecast.planneremployeeid", "zh-HK", "计划人员工ID_hk", "计划人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.purchaseforecast.planby
-            new TranslationSeedItem("entity.purchaseforecast.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseforecast.planby
-            new TranslationSeedItem("entity.purchaseforecast.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseforecast.planby
-            new TranslationSeedItem("entity.purchaseforecast.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.purchaseforecast.planby
-            new TranslationSeedItem("entity.purchaseforecast.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.purchaseforecast.plannername
+            new TranslationSeedItem("entity.purchaseforecast.plannername", "en-US", "计划人名称_us", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseforecast.plannername
+            new TranslationSeedItem("entity.purchaseforecast.plannername", "ja-JP", "计划人名称_jp", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseforecast.plannername
+            new TranslationSeedItem("entity.purchaseforecast.plannername", "zh-CN", "计划人名称", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.purchaseforecast.plannername
+            new TranslationSeedItem("entity.purchaseforecast.plannername", "zh-HK", "计划人名称_hk", "计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.purchaseforecast.totalquantity
             new TranslationSeedItem("entity.purchaseforecast.totalquantity", "en-US", "计划总数量_us", "计划总数量（基本单位数量；通常汇总版本 002）"),

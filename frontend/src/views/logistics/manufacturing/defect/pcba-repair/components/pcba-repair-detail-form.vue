@@ -71,7 +71,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pcbaBoardType"
-                  dict-type="logistics_pcba_function_category"
+                  dict-type="logistics_manufacturing_pcba_function"
                   :placeholder="pi.ph('pcbaBoardType')"
                 />
               </a-form-item>
@@ -137,7 +137,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectEngineering"
-                  dict-type="logistics_defect_category"
+                  dict-type="logistics_manufacturing_defect_category"
                   :placeholder="pi.ph('defectEngineering')"
                 />
               </a-form-item>
@@ -185,7 +185,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectResponsibility"
-                  dict-type="logistics_defect_responsibility_category"
+                  dict-type="logistics_manufacturing_defect_responsibility_category"
                   :placeholder="pi.ph('defectResponsibility')"
                 />
               </a-form-item>
@@ -197,7 +197,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.defectNature"
-                  dict-type="logistics_defect_nature_category"
+                  dict-type="logistics_manufacturing_defect_nature"
                   :placeholder="pi.ph('defectNature')"
                 />
               </a-form-item>

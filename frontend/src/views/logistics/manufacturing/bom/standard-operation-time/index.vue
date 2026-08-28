@@ -197,7 +197,7 @@
       <a-form-item :label="t('entity.standardoperationtime.pointstominutesrate')">
         <TaktSelect
           v-model:value="advancedQueryForm.pointsToMinutesRate"
-          dict-type="logistics_points_to_minutes_rate"
+          dict-type="logistics_manufacturing_points_to_minutes_rate"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') })"
           allow-clear
         />
@@ -755,7 +755,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => h(TaktDictTag, {
       value: getStandardOperationTimeField(record, 'pointsToMinutesRate'),
-      dictType: 'logistics_points_to_minutes_rate',
+      dictType: 'logistics_manufacturing_points_to_minutes_rate',
     }),
   },
   {

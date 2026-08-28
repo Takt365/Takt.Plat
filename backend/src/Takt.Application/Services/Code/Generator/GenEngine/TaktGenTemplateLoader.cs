@@ -146,7 +146,7 @@ public static class TaktGenTemplateLoader
     }
 
     /// <summary>
-    /// 将 gen_template_type 字典值规范为 Backend 子目录名（Crud/Tree/Sub）。
+    /// 将 code_generator_template_type 字典值规范为 Backend 子目录名（Crud/Tree/Sub）。
     /// </summary>
     private static string NormalizeBackendCategory(string? genTemplateCategory)
     {

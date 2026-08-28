@@ -105,7 +105,7 @@ public class TaktPayslip : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "issue_date", ColumnDescription = "发放日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? IssueDate { get; set; }
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status；0=待发放 1=已发放 2=已确认）
     /// </summary>
     [SugarColumn(ColumnName = "issue_status", ColumnDescription = "发放状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IssueStatus { get; set; }

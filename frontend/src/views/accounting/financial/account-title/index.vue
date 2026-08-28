@@ -114,7 +114,7 @@
           <template v-else-if="column.key === 'accountTitleType'">
             <TaktDictTag
               :value="getAccountTitleDictValue(record, 'accountTitleType')"
-              dict-type="accounting_account_title_type"
+              dict-type="accounting_financial_account_title_type"
             />
           </template>
           <template v-else-if="column.key === 'isLeaf'">
@@ -132,7 +132,7 @@
           <template v-else-if="column.key === 'auxiliaryType'">
             <TaktDictTag
               :value="getAccountTitleDictValue(record, 'auxiliaryType')"
-              dict-type="accounting_auxiliary_type"
+              dict-type="accounting_financial_auxiliary_type"
             />
           </template>
           <template v-else-if="column.key === 'isQuantity'">
@@ -248,7 +248,7 @@
       <a-form-item :label="pi.queryLabel('accountTitleType')">
         <TaktSelect
           v-model:value="advancedQueryForm.accountTitleType"
-          dict-type="accounting_account_title_type"
+          dict-type="accounting_financial_account_title_type"
           :placeholder="pi.queryPh('accountTitleType', 'select')"
           allow-clear
         />
@@ -296,7 +296,7 @@
       <a-form-item :label="pi.queryLabel('auxiliaryType')">
         <TaktSelect
           v-model:value="advancedQueryForm.auxiliaryType"
-          dict-type="accounting_auxiliary_type"
+          dict-type="accounting_financial_auxiliary_type"
           :placeholder="pi.queryPh('auxiliaryType', 'select')"
           allow-clear
         />

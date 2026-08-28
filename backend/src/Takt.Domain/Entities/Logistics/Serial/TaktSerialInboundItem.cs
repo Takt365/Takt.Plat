@@ -32,7 +32,7 @@ public class TaktSerialInboundItem : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InboundId { get; set; }
     /// <summary>
-    /// 入库单号（冗余字段，便于查询）
+    /// 入库单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_code", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string InboundCode { get; set; } = string.Empty;

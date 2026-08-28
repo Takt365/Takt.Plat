@@ -61,7 +61,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -173,7 +173,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -308,7 +308,7 @@ public class TaktNumberingCreateDto
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -475,7 +475,7 @@ public class TaktNumberingTemplateDto
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -593,7 +593,7 @@ public class TaktNumberingImportDto
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 
@@ -742,7 +742,7 @@ public class TaktNumberingExportDto
     public string? PrefixCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+    /// 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
     /// </summary>
     public string? DateFormat { get; set; } = string.Empty;
 

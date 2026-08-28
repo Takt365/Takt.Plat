@@ -44,7 +44,7 @@ public class TaktBackupLog : TaktCompanyEntityBase
     public string SourceId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源编码快照（冗余字段，便于查询）
+    /// 来源编码快照（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;

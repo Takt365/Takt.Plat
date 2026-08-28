@@ -15,7 +15,7 @@ import type { TaktPagedQuery, TaktPagedResult } from '@/types/common';
 /** BOM 成本推移：单个产品 × 月材料成本查询 */
 export interface BomMaterialCostItemComponentMovingPriceQuery extends TaktPagedQuery {
   plantCode: string;
-  /** 物料类型（字典 logistics_material_type；空=默认 FERT） */
+  /** 物料类型（字典 logistics_materials_material_type；空=默认 FERT） */
   materialType?: string;
   /** 可选；仅缩小产品范围 */
   modelCode?: string;

@@ -57,7 +57,7 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -97,19 +97,19 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public decimal DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -171,7 +171,7 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -196,7 +196,7 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -211,19 +211,19 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     public decimal? DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -298,7 +298,7 @@ public class TaktPcbaRepairDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -323,7 +323,7 @@ public class TaktPcbaRepairDetailCreateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -338,19 +338,19 @@ public class TaktPcbaRepairDetailCreateDto
     public decimal DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -458,7 +458,7 @@ public class TaktPcbaRepairDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -483,7 +483,7 @@ public class TaktPcbaRepairDetailTemplateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -498,19 +498,19 @@ public class TaktPcbaRepairDetailTemplateDto
     public decimal? DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -571,7 +571,7 @@ public class TaktPcbaRepairDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -596,7 +596,7 @@ public class TaktPcbaRepairDetailImportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -611,19 +611,19 @@ public class TaktPcbaRepairDetailImportDto
     public decimal? DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -690,7 +690,7 @@ public class TaktPcbaRepairDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -715,7 +715,7 @@ public class TaktPcbaRepairDetailExportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检出工程（字典 logistics_defect_category；存 DictValue，与组立不良区分共用）
+    /// 检出工程（字典 logistics_manufacturing_defect_category；存 DictValue，与组立不良区分共用）
     /// </summary>
     public string? DefectEngineering { get; set; } = string.Empty;
 
@@ -730,19 +730,19 @@ public class TaktPcbaRepairDetailExportDto
     public decimal DefectQty { get; set; }
 
     /// <summary>
-    /// 责任归属（字典 logistics_defect_responsibility_category；存 DictValue）
+    /// 责任归属（字典 logistics_manufacturing_defect_responsibility_category；存 DictValue）
     /// </summary>
     public string? DefectResponsibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良性质（字典 logistics_defect_nature_category；存 DictValue）
+    /// 不良性质（字典 logistics_manufacturing_defect_nature；存 DictValue）
     /// </summary>
     public string? DefectNature { get; set; } = string.Empty;
 
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

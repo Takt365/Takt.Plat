@@ -141,7 +141,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public int MovingPriceUnit { get; set; } = 1;
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "moving_price_currency_code", ColumnDescription = "移动价格货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string MovingPriceCurrencyCode { get; set; } = string.Empty;
@@ -177,7 +177,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public int PurchasePriceUnit { get; set; } = 1;
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
+    /// 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_currency_code", ColumnDescription = "采购货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string PurchaseCurrencyCode { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutput 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutput._self", "zh-HK", "PCBA日报信息_hk", "实体名称"),
 
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.pcbaoutput.proddate
             new TranslationSeedItem("entity.pcbaoutput.proddate", "en-US", "生产日期_us", "生产日期"),

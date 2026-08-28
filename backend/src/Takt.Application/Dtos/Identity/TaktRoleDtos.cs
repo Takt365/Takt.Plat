@@ -46,7 +46,7 @@ public class TaktRoleDto : TaktTenantCoreDtoBase
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
 
@@ -121,7 +121,7 @@ public class TaktRoleQueryDto : TaktPagedQuery
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
 
@@ -192,7 +192,7 @@ public class TaktRoleCreateDto
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
 
@@ -354,7 +354,7 @@ public class TaktRoleTemplateDto
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
 
@@ -420,7 +420,7 @@ public class TaktRoleImportDto
     public string? RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int? DataScope { get; set; }
 
@@ -493,7 +493,7 @@ public class TaktRoleExportDto
     public string RoleName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数据权限范围（字典 sys_data_scope_type：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
+    /// 数据权限范围（字典 sys_data_scope：0=全部数据，1=本部门，2=本部门及以下，3=仅本人，4=自定义）
     /// </summary>
     public int DataScope { get; set; } = 0;
 

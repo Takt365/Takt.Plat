@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcSeikansController : TaktControllerBase
 {
     private readonly ITaktEcSeikanService _ecSeikanService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecSeikanService">设变生管执行服务</param>
-    public TaktEcSeikansController(ITaktEcSeikanService ecSeikanService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcSeikansController(
+        ITaktEcSeikanService ecSeikanService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecSeikanService = ecSeikanService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:list", "设变生管执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:list", "设变生管执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcSeikanListAsync([FromQuery] TaktEcSeikanQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcSeikansController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:list", "设变生管执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcSeikanMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Pmc);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变生管执行
     /// </summary>
     /// <param name="id">设变生管执行ID</param>
     /// <returns>设变生管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:query", "设变生管执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:query", "设变生管执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcSeikanByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// 获取设变生管执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:query", "设变生管执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:query", "设变生管执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcSeikanOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变生管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:create", "创建设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:create", "创建设变生管执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcSeikanAsync([FromBody] TaktEcSeikanCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// <param name="id">设变生管执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变生管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:update", "更新设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:update", "更新设变生管执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcSeikanAsync(long id, [FromBody] TaktEcSeikanUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变生管执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:delete", "删除设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:delete", "删除设变生管执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcSeikanByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:delete", "批量删除设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:delete", "批量删除设变生管执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcSeikanBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变生管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:update", "更新设变生管执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:update", "更新设变生管执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcSeikanObsoleteAsync([FromBody] TaktEcSeikanObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:import", "获取设变生管执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:import", "获取设变生管执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcSeikanTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:import", "导入设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:import", "导入设变生管执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcSeikanAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcSeikansController : TaktControllerBase
     /// 导出设变生管执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seikan:export", "导出设变生管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:export", "导出设变生管执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcSeikanAsync([FromQuery] TaktEcSeikanQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

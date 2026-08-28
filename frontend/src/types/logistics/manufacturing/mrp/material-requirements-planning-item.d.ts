@@ -89,7 +89,7 @@ export interface MaterialRequirementsPlanningItem extends CompanyDtoBase {
   requirementDate?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -212,7 +212,7 @@ export interface MaterialRequirementsPlanningItemExport {
   requirementDate: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 

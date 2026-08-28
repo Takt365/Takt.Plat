@@ -29,7 +29,7 @@ export interface PcbaOutput extends CompanyDtoBase {
   pcbaOutputId: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -109,7 +109,7 @@ export interface PcbaOutputQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -208,7 +208,7 @@ export interface PcbaOutputCreate {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -317,7 +317,7 @@ export interface PcbaOutputTemplate {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -406,7 +406,7 @@ export interface PcbaOutputImport {
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -495,7 +495,7 @@ export interface PcbaOutputExport {
   cultureCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 

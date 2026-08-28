@@ -183,7 +183,7 @@
       <a-form-item :label="t('entity.sopexecstep.stepresult')">
         <TaktSelect
           v-model:value="advancedQueryForm.stepResult"
-          dict-type="logistics_sop_check_result_type"
+          dict-type="logistics_manufacturing_sop_check_result"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.stepresult') })"
           allow-clear
         />

@@ -88,7 +88,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialType"
-                  dict-type="logistics_material_type"
+                  dict-type="logistics_materials_material_type"
                   :placeholder="pi.ph('materialType')"
                 />
               </a-form-item>

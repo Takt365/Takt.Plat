@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyOrderDefectI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOrderDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktAssyOrderDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyorderdefect._self", "zh-HK", "组立工单不良统计信息_hk", "实体名称"),
 
             // entity.assyorderdefect.prodcategory
-            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyorderdefect.prodcategory
-            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "ja-JP", "生产类别_jp", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyorderdefect.prodcategory
-            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "zh-CN", "生产类别", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "zh-CN", "生产类别", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyorderdefect.prodcategory
-            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.assyorderdefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.assyorderdefect.prodordercode
             new TranslationSeedItem("entity.assyorderdefect.prodordercode", "en-US", "工单号_us", "工单号（统计维度，选项 TaktProductionOrders/options）"),
@@ -217,13 +217,13 @@ public class TaktAssyOrderDefectI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyorderdefect.reportcount", "zh-HK", "日报笔数_hk", "关联组立不良日报笔数"),
 
             // entity.assyorderdefect.orderstatus
-            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "en-US", "工单状态_us", "工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "en-US", "工单状态_us", "工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
             // entity.assyorderdefect.orderstatus
-            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "ja-JP", "工单状态_jp", "工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "ja-JP", "工单状态_jp", "工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
             // entity.assyorderdefect.orderstatus
-            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "zh-CN", "工单状态", "工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "zh-CN", "工单状态", "工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
             // entity.assyorderdefect.orderstatus
-            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "zh-HK", "工单状态_hk", "工单状态（字典 logistics_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
+            new TranslationSeedItem("entity.assyorderdefect.orderstatus", "zh-HK", "工单状态_hk", "工单状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；工单数量与累计生实实绩相等时为已完成）"),
         };
     }
 

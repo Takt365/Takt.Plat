@@ -84,37 +84,37 @@
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'taxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'paymentMethod'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'paymentMethod')"
-            dict-type="accounting_payment_method_type"
+            dict-type="accounting_financial_payment_method"
           />
         </template>
         <template v-else-if="column.key === 'deliveryMethod'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'deliveryMethod')"
-            dict-type="logistics_delivery_method_type"
+            dict-type="logistics_sales_delivery_method"
           />
         </template>
         <template v-else-if="column.key === 'deliveryStatus'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'deliveryStatus')"
-            dict-type="logistics_delivery_status"
+            dict-type="logistics_sales_delivery_status"
           />
         </template>
       </template>

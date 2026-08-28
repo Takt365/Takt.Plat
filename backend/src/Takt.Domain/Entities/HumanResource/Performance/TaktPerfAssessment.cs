@@ -76,7 +76,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "final_score", ColumnDescription = "综合得分", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal FinalScore { get; set; }
     /// <summary>
-    /// 绩效等级（字典 hr_perf_grade；列存 DictValue：A/B/C/D/E）
+    /// 绩效等级（字典 humanresource_performance_grade；列存 DictValue：A/B/C/D/E）
     /// </summary>
     [SugarColumn(ColumnName = "performance_grade", ColumnDescription = "绩效等级", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PerformanceGrade { get; set; } = string.Empty;
@@ -86,6 +86,11 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "reviewer_id", ColumnDescription = "评审人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReviewerId { get; set; }
+    /// <summary>
+    /// 评审人名称（冗余：按 ReviewerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "reviewer_name", ColumnDescription = "评审人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ReviewerName { get; set; }
     /// <summary>
     /// 面谈日期
     /// </summary>
@@ -97,7 +102,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "interview_notes", ColumnDescription = "面谈记录", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string InterviewNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
+    /// 状态（字典 humanresource_performance_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int AssessmentStatus { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktBillOfMaterialItem 生成，请按需审阅）
 // 

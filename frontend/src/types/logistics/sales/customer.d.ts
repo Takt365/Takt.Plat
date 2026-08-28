@@ -49,17 +49,17 @@ export interface Customer extends CompanyDtoBase {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -69,12 +69,12 @@ export interface Customer extends CompanyDtoBase {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -139,7 +139,7 @@ export interface Customer extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -159,7 +159,7 @@ export interface Customer extends CompanyDtoBase {
   productGroup: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup: string;
 
@@ -169,7 +169,7 @@ export interface Customer extends CompanyDtoBase {
   tradingPartner: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup: string;
 
@@ -204,12 +204,12 @@ export interface Customer extends CompanyDtoBase {
   clearingWithVendor: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -219,7 +219,7 @@ export interface Customer extends CompanyDtoBase {
   deliveringPlant: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -229,17 +229,17 @@ export interface Customer extends CompanyDtoBase {
   incoterms2: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -249,7 +249,7 @@ export interface Customer extends CompanyDtoBase {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -259,7 +259,7 @@ export interface Customer extends CompanyDtoBase {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 
@@ -329,17 +329,17 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -349,12 +349,12 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -419,7 +419,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -439,7 +439,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   productGroup?: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup?: string;
 
@@ -449,7 +449,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   tradingPartner?: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup?: string;
 
@@ -484,12 +484,12 @@ export interface CustomerQuery extends TaktPagedQuery {
   clearingWithVendor?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -499,7 +499,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   deliveringPlant?: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -509,17 +509,17 @@ export interface CustomerQuery extends TaktPagedQuery {
   incoterms2?: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions?: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel?: number;
 
@@ -529,7 +529,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   creditAmount?: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate?: number;
 
@@ -539,7 +539,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
 
@@ -628,17 +628,17 @@ export interface CustomerCreate {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -648,12 +648,12 @@ export interface CustomerCreate {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -718,7 +718,7 @@ export interface CustomerCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -738,7 +738,7 @@ export interface CustomerCreate {
   productGroup: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup: string;
 
@@ -748,7 +748,7 @@ export interface CustomerCreate {
   tradingPartner: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup: string;
 
@@ -783,12 +783,12 @@ export interface CustomerCreate {
   clearingWithVendor: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -798,7 +798,7 @@ export interface CustomerCreate {
   deliveringPlant: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -808,17 +808,17 @@ export interface CustomerCreate {
   incoterms2: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -828,7 +828,7 @@ export interface CustomerCreate {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -838,7 +838,7 @@ export interface CustomerCreate {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 
@@ -965,17 +965,17 @@ export interface CustomerTemplate {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -985,12 +985,12 @@ export interface CustomerTemplate {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -1055,7 +1055,7 @@ export interface CustomerTemplate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -1075,7 +1075,7 @@ export interface CustomerTemplate {
   productGroup?: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup?: string;
 
@@ -1085,7 +1085,7 @@ export interface CustomerTemplate {
   tradingPartner?: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup?: string;
 
@@ -1120,12 +1120,12 @@ export interface CustomerTemplate {
   clearingWithVendor?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -1135,7 +1135,7 @@ export interface CustomerTemplate {
   deliveringPlant?: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1145,17 +1145,17 @@ export interface CustomerTemplate {
   incoterms2?: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions?: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel?: number;
 
@@ -1165,7 +1165,7 @@ export interface CustomerTemplate {
   creditAmount?: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate?: number;
 
@@ -1175,7 +1175,7 @@ export interface CustomerTemplate {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
 
@@ -1249,17 +1249,17 @@ export interface CustomerImport {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -1269,12 +1269,12 @@ export interface CustomerImport {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -1339,7 +1339,7 @@ export interface CustomerImport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -1359,7 +1359,7 @@ export interface CustomerImport {
   productGroup?: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup?: string;
 
@@ -1369,7 +1369,7 @@ export interface CustomerImport {
   tradingPartner?: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup?: string;
 
@@ -1404,12 +1404,12 @@ export interface CustomerImport {
   clearingWithVendor?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
@@ -1419,7 +1419,7 @@ export interface CustomerImport {
   deliveringPlant?: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1429,17 +1429,17 @@ export interface CustomerImport {
   incoterms2?: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions?: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel?: number;
 
@@ -1449,7 +1449,7 @@ export interface CustomerImport {
   creditAmount?: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate?: number;
 
@@ -1459,7 +1459,7 @@ export interface CustomerImport {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
 
@@ -1533,17 +1533,17 @@ export interface CustomerExport {
   customerShortName?: string;
 
   /**
-   * 客户类型（字典 logistics_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
+   * 客户类型（字典 logistics_sales_customer_category；0=企业客户 1=个人客户 2=政府机构 3=其他）
    */
   customerType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -1553,12 +1553,12 @@ export interface CustomerExport {
   customerTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -1623,7 +1623,7 @@ export interface CustomerExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -1643,7 +1643,7 @@ export interface CustomerExport {
   productGroup: string;
 
   /**
-   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   * 客户组（字典 logistics_sales_customer_group；DictValue=Z1～Z4）
    */
   customerGroup: string;
 
@@ -1653,7 +1653,7 @@ export interface CustomerExport {
   tradingPartner: string;
 
   /**
-   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   * 帐户分配组（字典 logistics_sales_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
    */
   accountAssignmentGroup: string;
 
@@ -1688,12 +1688,12 @@ export interface CustomerExport {
   clearingWithVendor: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
@@ -1703,7 +1703,7 @@ export interface CustomerExport {
   deliveringPlant: string;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -1713,17 +1713,17 @@ export interface CustomerExport {
   incoterms2: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   * 装运条件（字典 logistics_sales_shipping_conditions；DictValue=Z1～Z3）
    */
   shippingConditions: string;
 
   /**
-   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   * 客户定价过程（字典 logistics_sales_customer_pricing_procedure；DictValue=1/2/3；默认 1）
    */
   customerPricingProcedure: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
    */
   creditLevel: number;
 
@@ -1733,7 +1733,7 @@ export interface CustomerExport {
   creditAmount: number;
 
   /**
-   * 折扣率（百分比；可选字典 logistics_discount_rate_param 预设）
+   * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate: number;
 
@@ -1743,7 +1743,7 @@ export interface CustomerExport {
   salesBy?: string;
 
   /**
-   * 客户等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+   * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
 

@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:resignation:create"
+      update-permission="human:resource:personnel:employee:resignation:update"
+      delete-permission="human:resource:personnel:employee:resignation:delete"
+      import-permission="human:resource:personnel:employee:resignation:import"
+      export-permission="human:resource:personnel:employee:resignation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -170,7 +170,7 @@
       <a-form-item :label="pi.queryLabel('resignationType')">
         <TaktSelect
           v-model:value="advancedQueryForm.resignationType"
-          dict-type="hr_resignation_category"
+          dict-type="humanresource_personnel_resignation_category"
           :placeholder="pi.queryPh('resignationType', 'select')"
           allow-clear
         />
@@ -756,7 +756,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:resignation:update',
         onClick: (record: EmployeeResignation) => void handleEdit(record),
       },
       {
@@ -764,7 +764,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:resignation:delete',
         onClick: (record: EmployeeResignation) => void handleDeleteOne(record),
       },
     ],

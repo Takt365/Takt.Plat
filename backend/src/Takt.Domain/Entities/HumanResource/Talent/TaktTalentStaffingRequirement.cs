@@ -33,10 +33,15 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "req_code", ColumnDescription = "需求单号", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
     public string ReqCode { get; set; } = string.Empty;
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
+    /// <summary>
+    /// 申请部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "申请部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? DeptName { get; set; }
     /// <summary>
     /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
@@ -53,12 +58,12 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "request_qty", ColumnDescription = "需求人数", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int RequestQty { get; set; } = 1;
     /// <summary>
-    /// 编制类型（字典 hr_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
+    /// 编制类型（字典 humanresource_talent_headcount_type；列存 DictValue：formal/dispatch/intern/temp）
     /// </summary>
     [SugarColumn(ColumnName = "headcount_type", ColumnDescription = "编制类型", ColumnDataType = "varchar", Length = 20, IsNullable = false, DefaultValue = "formal")]
     public string HeadcountType { get; set; } = "formal";
     /// <summary>
-    /// 需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
+    /// 需求原因（字典 humanresource_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）
     /// </summary>
     [SugarColumn(ColumnName = "reason_code", ColumnDescription = "需求原因", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
     public string ReasonCode { get; set; } = string.Empty;
@@ -68,12 +73,17 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "replace_employee_id", ColumnDescription = "替补员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ReplaceEmployeeId { get; set; }
     /// <summary>
+    /// 替补员工名称（冗余：按 ReplaceEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "replace_employee_name", ColumnDescription = "替补员工名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ReplaceEmployeeName { get; set; }
+    /// <summary>
     /// 期望入职日
     /// </summary>
     [SugarColumn(ColumnName = "expected_onboard_date", ColumnDescription = "期望入职日", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ExpectedOnboardDate { get; set; }
     /// <summary>
-    /// 合同类型（字典 hr_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
+    /// 合同类型（字典 humanresource_talent_staffing_contract_type；列存 DictValue：fixed/indefinite/intern_agreement）
     /// </summary>
     [SugarColumn(ColumnName = "contract_type", ColumnDescription = "合同类型", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? ContractType { get; set; }

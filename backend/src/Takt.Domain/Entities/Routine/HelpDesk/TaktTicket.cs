@@ -69,7 +69,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "category_code", ColumnDescription = "分类编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CategoryCode { get; set; }
     /// <summary>
-    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+    /// 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     [SugarColumn(ColumnName = "ticket_source", ColumnDescription = "工单来源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int TicketSource { get; set; } = 0;
@@ -80,7 +80,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubmitterId { get; set; }
     /// <summary>
-    /// 提交人姓名（冗余字段，便于查询）
+    /// 提交人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "submitter_name", ColumnDescription = "提交人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SubmitterName { get; set; }
@@ -91,7 +91,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
     /// <summary>
-    /// 处理人姓名（冗余字段，便于查询）
+    /// 处理人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_name", ColumnDescription = "处理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeName { get; set; }
@@ -156,16 +156,21 @@ public class TaktTicket : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
     /// <summary>
-    /// 申请部门名称（冗余字段，便于查询）
+    /// 申请部门名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_dept_name", ColumnDescription = "申请部门名称", Length = 100, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ApplicantDeptName { get; set; }
     /// <summary>
     /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
+    /// <summary>
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "applicant_name", ColumnDescription = "申请人名称", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
+    public string? ApplicantName { get; set; }
     /// <summary>
     /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>

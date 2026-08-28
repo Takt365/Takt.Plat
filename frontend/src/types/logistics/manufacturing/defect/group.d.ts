@@ -49,16 +49,6 @@ export interface DefectGroup extends CompanyDtoBase {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
-   * 不良组负责人用户 名称（填充字段）
-   */
-  responsibleUserName?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -84,7 +74,6 @@ export interface DefectGroup extends CompanyDtoBase {
   groupStatus: number;
 
 }
-
 
 /**
  * DefectGroup 分页查询 DTO
@@ -134,11 +123,6 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -184,7 +168,6 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   remark?: string;
 
 }
-
 
 /**
  * 创建DefectGroup DTO
@@ -233,11 +216,6 @@ export interface DefectGroupCreate {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -269,7 +247,6 @@ export interface DefectGroupCreate {
 
 }
 
-
 /**
  * 更新DefectGroup DTO
  * 继承 TaktDefectGroupCreateDto，添加 DefectGroupId 字段
@@ -283,7 +260,6 @@ export interface DefectGroupUpdate extends DefectGroupCreate {
   defectGroupId: string;
 
 }
-
 
 /**
  * DefectGroup 状态更新 DTO
@@ -303,7 +279,6 @@ export interface DefectGroupStatus {
 
 }
 
-
 /**
  * DefectGroup 排序更新 DTO
  * 对应前端 DefectGroupSort
@@ -321,7 +296,6 @@ export interface DefectGroupSort {
   sortOrder: number;
 
 }
-
 
 /**
  * DefectGroup 导入模板行 DTO
@@ -370,11 +344,6 @@ export interface DefectGroupTemplate {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -405,7 +374,6 @@ export interface DefectGroupTemplate {
   remark?: string;
 
 }
-
 
 /**
  * DefectGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -454,11 +422,6 @@ export interface DefectGroupImport {
   defectGroupDescription?: string;
 
   /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -489,7 +452,6 @@ export interface DefectGroupImport {
   remark?: string;
 
 }
-
 
 /**
  * DefectGroup 导出 DTO（独立实现，不继承响应 Dto）
@@ -536,11 +498,6 @@ export interface DefectGroupExport {
    * 不良组描述
    */
   defectGroupDescription?: string;
-
-  /**
-   * 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话

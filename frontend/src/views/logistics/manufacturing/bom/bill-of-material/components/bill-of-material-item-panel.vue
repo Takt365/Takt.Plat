@@ -197,7 +197,7 @@
       <a-form-item :label="pi.queryLabel('materialUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('materialUnit', 'select')"
           allow-clear
         />

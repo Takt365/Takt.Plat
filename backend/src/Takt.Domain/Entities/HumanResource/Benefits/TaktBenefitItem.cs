@@ -4,7 +4,7 @@
 // 文件名称：TaktBenefitItem.cs
 // 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
-// 功能描述：福利项目主数据；类型由字典 hr_benefit_type 区分（社保/公积金/商保/年假额度/餐补/培训补贴/折扣等，不另建多种福利实体）
+// 功能描述：福利项目主数据；类型由字典 humanresource_benefits_benefit_type 区分（社保/公积金/商保/年假额度/餐补/培训补贴/折扣等，不另建多种福利实体）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -34,17 +34,17 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "item_name", ColumnDescription = "福利项目名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string ItemName { get; set; } = string.Empty;
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category；1=保险 2=补贴 3=休假 4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "benefit_category", ColumnDescription = "福利大类", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BenefitCategory { get; set; } = 0;
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）
+    /// 福利类型（字典 humanresource_benefits_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）
     /// </summary>
     [SugarColumn(ColumnName = "benefit_type", ColumnDescription = "福利类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BenefitType { get; set; } = 0;
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle；1=月度 2=季度 3=年度 4=一次性）
     /// </summary>
     [SugarColumn(ColumnName = "payment_cycle", ColumnDescription = "发放周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentCycle { get; set; } = 0;

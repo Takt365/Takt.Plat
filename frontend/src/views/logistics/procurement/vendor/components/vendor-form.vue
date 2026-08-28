@@ -117,7 +117,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.vendorType"
-                  dict-type="logistics_vendor_category"
+                  dict-type="logistics_sales_vendor_category"
                   :placeholder="pi.ph('vendorType')"
                 />
               </a-form-item>
@@ -129,7 +129,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseNature"
-                  dict-type="sys_enterprise_nature_type"
+                  dict-type="sys_enterprise_nature"
                   :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
@@ -141,7 +141,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.industryAttribute"
-                  dict-type="sys_industry_attribute_type"
+                  dict-type="sys_industry_attribute"
                   :placeholder="pi.ph('industryAttribute')"
                 />
               </a-form-item>
@@ -177,7 +177,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxCode"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxCode')"
                   :disabled="!!formData?.vendorId"
                 />
@@ -190,7 +190,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
@@ -370,7 +370,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.vendorId"
                 />
@@ -420,7 +420,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentMethod"
-                  dict-type="accounting_payment_method_type"
+                  dict-type="accounting_financial_payment_method"
                   :placeholder="pi.ph('paymentMethod')"
                 />
               </a-form-item>
@@ -432,7 +432,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentTerms"
-                  dict-type="accounting_payment_terms_param"
+                  dict-type="accounting_financial_payment_terms_param"
                   :placeholder="pi.ph('paymentTerms')"
                 />
               </a-form-item>
@@ -507,7 +507,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.incoterms1"
-                  dict-type="logistics_incoterms1"
+                  dict-type="logistics_sales_incoterms1"
                   :placeholder="pi.ph('incoterms1')"
                 />
               </a-form-item>
@@ -545,7 +545,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pricingDateControl"
-                  dict-type="logistics_pricing_date_control"
+                  dict-type="logistics_procurement_pricing_date_control"
                   :placeholder="pi.ph('pricingDateControl')"
                 />
               </a-form-item>
@@ -615,7 +615,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.creditLevel"
-                  dict-type="logistics_credit_rating_category"
+                  dict-type="logistics_sales_credit_rating"
                   :placeholder="pi.ph('creditLevel')"
                 />
               </a-form-item>
@@ -667,7 +667,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.vendorLevel"
-                  dict-type="logistics_grade_category"
+                  dict-type="logistics_sales_grade"
                   :placeholder="pi.ph('vendorLevel')"
                 />
               </a-form-item>

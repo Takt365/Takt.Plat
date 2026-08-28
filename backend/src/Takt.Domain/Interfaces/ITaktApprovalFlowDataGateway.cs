@@ -17,22 +17,34 @@ namespace Takt.Domain.Interfaces;
 /// </summary>
 public sealed class TaktApprovalFlowStatePatch
 {
-    /// <summary>流程实例 ID</summary>
+    /// <summary>
+    /// 流程实例 ID
+    /// </summary>
     public long? FlowInstanceId { get; set; }
 
-    /// <summary>审批状态</summary>
+    /// <summary>
+    /// 审批状态
+    /// </summary>
     public int? ApprovalStatus { get; set; }
 
-    /// <summary>发起人 ID</summary>
+    /// <summary>
+    /// 发起人 ID
+    /// </summary>
     public long? InitiatorId { get; set; }
 
-    /// <summary>发起时间</summary>
+    /// <summary>
+    /// 发起时间
+    /// </summary>
     public DateTime? InitiatedAt { get; set; }
 
-    /// <summary>业务状态列名（蛇形）</summary>
+    /// <summary>
+    /// 业务状态列名（蛇形）
+    /// </summary>
     public string? BusinessStatusColumn { get; set; }
 
-    /// <summary>业务状态值</summary>
+    /// <summary>
+    /// 业务状态值
+    /// </summary>
     public int? BusinessStatusValue { get; set; }
 }
 

@@ -100,7 +100,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseNature"
-                  dict-type="sys_enterprise_nature_type"
+                  dict-type="sys_enterprise_nature"
                   :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
@@ -112,7 +112,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.industryAttribute"
-                  dict-type="sys_industry_attribute_type"
+                  dict-type="sys_industry_attribute"
                   :placeholder="pi.ph('industryAttribute')"
                 />
               </a-form-item>
@@ -124,7 +124,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.enterpriseScale"
-                  dict-type="sys_enterprise_scale_type"
+                  dict-type="sys_enterprise_scale"
                   :placeholder="pi.ph('enterpriseScale')"
                 />
               </a-form-item>
@@ -516,7 +516,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.companyId"
                 />
@@ -529,7 +529,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.chartOfAccounts"
-                  dict-type="accounting_chart_of_accounts"
+                  dict-type="accounting_financial_chart_of_accounts"
                   :placeholder="pi.ph('chartOfAccounts')"
                 />
               </a-form-item>
@@ -541,7 +541,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.inputTaxCode"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('inputTaxCode')"
                   :disabled="!!formData?.companyId"
                 />
@@ -554,7 +554,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.outputTaxCode"
-                  dict-type="accounting_tax_code"
+                  dict-type="accounting_financial_tax_code"
                   :placeholder="pi.ph('outputTaxCode')"
                   :disabled="!!formData?.companyId"
                 />
@@ -591,7 +591,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.postingPeriodVariant"
-                  dict-type="accounting_posting_period_variant"
+                  dict-type="accounting_financial_posting_period_variant"
                   :placeholder="pi.ph('postingPeriodVariant')"
                 />
               </a-form-item>
@@ -603,7 +603,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.fiscalYearVariant"
-                  dict-type="accounting_fiscal_year_variant"
+                  dict-type="accounting_financial_fiscal_year_variant"
                   :placeholder="pi.ph('fiscalYearVariant')"
                 />
               </a-form-item>

@@ -98,7 +98,7 @@ if (marked.test(text)) {
   );
 } else {
   const re2 =
-    /(\s*)\("sys_culture_code",[\s\S]*?(?=\s*\("sys_data_scope_type")/;
+    /(\s*)\("sys_culture_code",[\s\S]*?(?=\s*\("sys_data_scope")/;
   if (!re2.test(text)) {
     throw new Error('Cannot locate sys_culture_code block in TaktDictDataSeedData.cs');
   }

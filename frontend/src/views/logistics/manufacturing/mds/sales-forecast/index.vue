@@ -84,7 +84,7 @@
         <template v-else-if="column.key === 'productCategoryCode'">
           <TaktDictTag
             :value="getSalesForecastDictValue(record, 'productCategoryCode')"
-            dict-type="logistics_mds_product_category"
+            dict-type="logistics_manufacturing_mds_product_category"
           />
         </template>
         <template v-else-if="column.key === 'convertedStatus'">

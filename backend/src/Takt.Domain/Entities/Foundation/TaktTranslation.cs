@@ -40,9 +40,9 @@ public class TaktTranslation : TaktTenantCoreEntityBase
     public string CultureCode { get; set; } = "mul";
 
     /// <summary>
-    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
+    /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；varchar Length=140；如 common.confirm）
     /// </summary>
-    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "翻译键", ColumnDataType = "varchar", Length = 200, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "i18n_key", ColumnDescription = "翻译键", ColumnDataType = "varchar", Length = 140, IsNullable = false, DefaultValue = "")]
     public string I18nKey { get; set; } = string.Empty;
 
     /// <summary>

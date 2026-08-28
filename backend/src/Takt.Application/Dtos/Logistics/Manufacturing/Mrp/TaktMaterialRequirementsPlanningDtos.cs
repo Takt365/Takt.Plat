@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialRequirementsPlanning 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialRequirementsPlanning 生成，请按需审阅）
 // 
@@ -88,20 +88,20 @@ public class TaktMaterialRequirementsPlanningDto : TaktApprovalDtoBase
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人员工名称（填充字段）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? PlannerName { get; set; }
+    public string? PlannerEmployeeName { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）
@@ -241,15 +241,15 @@ public class TaktMaterialRequirementsPlanningQueryDto : TaktPagedQuery
     public DateTime? PlanPeriodEndEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）
@@ -420,16 +420,15 @@ public class TaktMaterialRequirementsPlanningCreateDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [Required(ErrorMessage = "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）
@@ -601,15 +600,15 @@ public class TaktMaterialRequirementsPlanningTemplateDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）
@@ -728,15 +727,15 @@ public class TaktMaterialRequirementsPlanningImportDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）
@@ -861,15 +860,15 @@ public class TaktMaterialRequirementsPlanningExportDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）

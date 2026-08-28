@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktMessageDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Message 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMessage 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public long MessageId { get; set; }
 
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string FromUserName { get; set; } = string.Empty;
 
@@ -52,13 +52,13 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public string? FromUserNickName { get; set; }
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ToUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string ToUserName { get; set; } = string.Empty;
 
@@ -73,12 +73,12 @@ public class TaktMessageDto : TaktCompanyDtoBase
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue：text、system、multimedia）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
     public string MessageGroup { get; set; } = "message";
 
@@ -135,7 +135,7 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -144,30 +144,30 @@ public class TaktMessageQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? ToUserName { get; set; } = string.Empty;
 
@@ -182,14 +182,14 @@ public class TaktMessageQueryDto : TaktPagedQuery
     public string? MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
-    public string? MessageType { get; set; }
+    public string? MessageType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息分组（查询条件，字典 DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
-    public string? MessageGroup { get; set; }
+    public string? MessageGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取时间（范围查询-开始）
@@ -281,26 +281,24 @@ public class TaktMessageCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    [Required(ErrorMessage = "发送者用户名不能为空")]
     public string FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
@@ -323,13 +321,15 @@ public class TaktMessageCreateDto
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue：text、system、multimedia）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
+    [Required(ErrorMessage = "消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）不能为空")]
     public string MessageType { get; set; } = "system";
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
+    [Required(ErrorMessage = "消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）不能为空")]
     public string MessageGroup { get; set; } = "message";
 
     /// <summary>
@@ -505,7 +505,7 @@ public class TaktMessageReadDto
     public long MessageId { get; set; }
 
     /// <summary>
-    /// 读取状态（0=未读，1=已读）
+    /// 读取状态（0=未读 1=已读）
     /// </summary>
     public int ReadStatus { get; set; } = 1;
 
@@ -529,7 +529,7 @@ public class TaktMessageUnreadDto
     public long MessageId { get; set; }
 
     /// <summary>
-    /// 读取状态（0=未读，1=已读）
+    /// 读取状态（0=未读 1=已读）
     /// </summary>
     public int ReadStatus { get; set; } = 0;
 
@@ -595,30 +595,30 @@ public class TaktMessageTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? ToUserName { get; set; } = string.Empty;
 
@@ -633,14 +633,14 @@ public class TaktMessageTemplateDto
     public string? MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
-    public string? MessageType { get; set; }
+    public string? MessageType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息分组（查询条件，字典 DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
-    public string? MessageGroup { get; set; }
+    public string? MessageGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取时间
@@ -709,31 +709,30 @@ public class TaktMessageImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
-    /// 发送者用户 ID
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ToUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? ToUserName { get; set; } = string.Empty;
 
@@ -748,14 +747,14 @@ public class TaktMessageImportDto
     public string? MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
-    public string? MessageType { get; set; }
+    public string? MessageType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息分组（查询条件，字典 DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
-    public string? MessageGroup { get; set; }
+    public string? MessageGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取时间
@@ -826,24 +825,34 @@ public class TaktMessageExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发送者用户 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发送者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FromUserId { get; set; }
 
     /// <summary>
-    /// 发送者用户名
+    /// 发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string FromUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 接收者用户 ID
+    /// 接收者用户（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ToUserId { get; set; }
 
     /// <summary>
-    /// 接收者用户名
+    /// 接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string ToUserName { get; set; } = string.Empty;
 
@@ -858,14 +867,14 @@ public class TaktMessageExportDto
     public string MessageContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息类型（字典 sys_message_type DictValue：text、system、multimedia）
+    /// 消息类型（字典 sys_message_type 的 DictValue，如 text、system、multimedia）
     /// </summary>
-    public string MessageType { get; set; } = "system";
+    public string MessageType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 消息分组（字典 sys_message_group DictValue）
+    /// 消息分组（字典 sys_message_group 的 DictValue，如 collaboration、message、reminder）
     /// </summary>
-    public string MessageGroup { get; set; } = "message";
+    public string MessageGroup { get; set; } = string.Empty;
 
     /// <summary>
     /// 读取时间

@@ -4,7 +4,7 @@
 // 文件名称：TaktSalaryItem.cs
 // 创建时间：2026-06-12
 // 创建人：Takt365(Cursor AI)
-// 功能描述：薪资项目主数据（基本工资、岗位工资、津贴、奖金、股权激励等现金报酬项；类型由字典 hr_salary_item_type 区分）
+// 功能描述：薪资项目主数据（基本工资、岗位工资、津贴、奖金、股权激励等现金报酬项；类型由字典 humanresource_compensation_salary_item_type 区分）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -39,12 +39,12 @@ public class TaktSalaryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "short_name", ColumnDescription = "简称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? ShortName { get; set; }
     /// <summary>
-    /// 项目类型（字典 hr_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）
+    /// 项目类型（字典 humanresource_compensation_salary_item_type；1=基本工资 2=岗位工资 3=津贴 4=奖金 5=股权激励）
     /// </summary>
     [SugarColumn(ColumnName = "item_type", ColumnDescription = "项目类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ItemType { get; set; } = 0;
     /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type；1=固定金额 2=按比例 3=按公式）
+    /// 计算方式（字典 humanresource_compensation_salary_calc_method；1=固定金额 2=按比例 3=按公式）
     /// </summary>
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;

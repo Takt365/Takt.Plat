@@ -38,7 +38,7 @@ public class TaktQuartzLog : TaktCompanyEntityBase
     public long QuartzTaskId { get; set; }
 
     /// <summary>
-    /// 任务名称（冗余字段，便于查询）
+    /// 任务名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string TaskName { get; set; } = string.Empty;

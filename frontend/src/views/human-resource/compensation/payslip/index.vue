@@ -74,7 +74,7 @@
         <template v-if="column.key === 'issueStatus'">
           <TaktDictTag
             :value="getPayslipField(record, 'issueStatus')"
-            dict-type="hr_payslip_issue_status"
+            dict-type="humanresource_compensation_payslip_issue_status"
           />
         </template>
       </template>
@@ -265,7 +265,7 @@
       <a-form-item :label="t('entity.payslip.issuestatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.issueStatus"
-          dict-type="hr_payslip_issue_status"
+          dict-type="humanresource_compensation_payslip_issue_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.payslip.issuestatus') })"
           allow-clear
         />

@@ -165,7 +165,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pointsToMinutesRate"
-                  dict-type="logistics_points_to_minutes_rate"
+                  dict-type="logistics_manufacturing_points_to_minutes_rate"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.standardoperationtime.pointstominutesrate') })"
                 />
               </a-form-item>

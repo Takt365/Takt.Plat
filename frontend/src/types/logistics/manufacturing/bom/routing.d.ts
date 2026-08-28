@@ -40,7 +40,7 @@ export interface Routing extends ApprovalDtoBase {
   routingName: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
@@ -55,7 +55,7 @@ export interface Routing extends ApprovalDtoBase {
   version: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -125,7 +125,7 @@ export interface RoutingQuery extends TaktPagedQuery {
   routingName?: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
@@ -140,7 +140,7 @@ export interface RoutingQuery extends TaktPagedQuery {
   version?: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -274,7 +274,7 @@ export interface RoutingCreate {
   routingName: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
@@ -289,7 +289,7 @@ export interface RoutingCreate {
   version: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -358,7 +358,7 @@ export interface RoutingStatus {
   routingId: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -407,7 +407,7 @@ export interface RoutingTemplate {
   routingName?: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
@@ -422,7 +422,7 @@ export interface RoutingTemplate {
   version?: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -501,7 +501,7 @@ export interface RoutingImport {
   routingName?: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
@@ -516,7 +516,7 @@ export interface RoutingImport {
   version?: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -585,7 +585,7 @@ export interface RoutingExport {
   routingName: string;
 
   /**
-   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
@@ -600,7 +600,7 @@ export interface RoutingExport {
   version: string;
 
   /**
-   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+   * 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 

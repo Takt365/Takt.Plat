@@ -94,17 +94,17 @@ public class TaktIqcDefectHandlingDto : TaktCompanyDtoBase
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -228,17 +228,17 @@ public class TaktIqcDefectHandlingQueryDto : TaktPagedQuery
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间（范围查询-开始）
@@ -383,17 +383,17 @@ public class TaktIqcDefectHandlingCreateDto
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -587,17 +587,17 @@ public class TaktIqcDefectHandlingTemplateDto
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -720,17 +720,17 @@ public class TaktIqcDefectHandlingImportDto
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -859,17 +859,17 @@ public class TaktIqcDefectHandlingExportDto
     /// <summary>
     /// 责任部门
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（人员代码）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（人员代码）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间

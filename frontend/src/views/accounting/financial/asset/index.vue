@@ -73,25 +73,25 @@
         <template v-if="column.key === 'assetCategory'">
           <TaktDictTag
             :value="getAssetField(record, 'assetCategory')"
-            dict-type="accounting_asset_category"
+            dict-type="accounting_financial_asset_category"
           />
         </template>
         <template v-else-if="column.key === 'assetType'">
           <TaktDictTag
             :value="getAssetField(record, 'assetType')"
-            dict-type="accounting_asset_type"
+            dict-type="accounting_financial_asset_type"
           />
         </template>
         <template v-else-if="column.key === 'assetStatus'">
           <TaktDictTag
             :value="getAssetField(record, 'assetStatus')"
-            dict-type="accounting_asset_status"
+            dict-type="accounting_financial_asset_status"
           />
         </template>
         <template v-else-if="column.key === 'depreciationMethod'">
           <TaktDictTag
             :value="getAssetField(record, 'depreciationMethod')"
-            dict-type="accounting_depreciation_method"
+            dict-type="accounting_financial_depreciation_method"
           />
         </template>
       </template>
@@ -160,7 +160,7 @@
       <a-form-item :label="t('entity.asset.category')">
         <TaktSelect
           v-model:value="advancedQueryForm.assetCategory"
-          dict-type="accounting_asset_category"
+          dict-type="accounting_financial_asset_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
           allow-clear
         />
@@ -170,7 +170,7 @@
       <a-form-item :label="t('entity.asset.type')">
         <TaktSelect
           v-model:value="advancedQueryForm.assetType"
-          dict-type="accounting_asset_type"
+          dict-type="accounting_financial_asset_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
           allow-clear
         />
@@ -205,12 +205,13 @@
       </div>
       <div v-show="isFieldVisible('costCenterId')">
       <a-form-item :label="t('entity.asset.costcenterid')">
-        <a-input
+        <TaktTreeSelect
           v-model:value="advancedQueryForm.costCenterId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcenterid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktCostCenters/tree-options"
+          :lazy="true"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.costcenterid') })"
           allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
         />
       </a-form-item>
       </div>
@@ -218,7 +219,7 @@
       <a-form-item :label="t('entity.asset.costcentername')">
         <a-input
           v-model:value="advancedQueryForm.costCenterName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.costcentername') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.costcentername') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -227,12 +228,13 @@
       </div>
       <div v-show="isFieldVisible('deptId')">
       <a-form-item :label="t('entity.asset.deptid')">
-        <a-input
+        <TaktTreeSelect
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktDepts/tree-options"
+          :lazy="true"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.deptid') })"
           allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
         />
       </a-form-item>
       </div>
@@ -240,7 +242,7 @@
       <a-form-item :label="t('entity.asset.deptname')">
         <a-input
           v-model:value="advancedQueryForm.deptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.deptname') })"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.deptname') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -249,11 +251,10 @@
       </div>
       <div v-show="isFieldVisible('userId')">
       <a-form-item :label="t('entity.asset.userid')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.userId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.userid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktUsers/options"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.userid') })"
           allow-clear
         />
       </a-form-item>
@@ -373,7 +374,7 @@
       <a-form-item :label="t('entity.asset.depreciationmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.depreciationMethod"
-          dict-type="accounting_depreciation_method"
+          dict-type="accounting_financial_depreciation_method"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') })"
           allow-clear
         />
@@ -403,7 +404,7 @@
       <a-form-item :label="t('entity.asset.status')">
         <TaktSelect
           v-model:value="advancedQueryForm.assetStatus"
-          dict-type="accounting_asset_status"
+          dict-type="accounting_financial_asset_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.status') })"
           allow-clear
         />

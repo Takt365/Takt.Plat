@@ -40,11 +40,11 @@
           @reset="handleReset"
         />
         <TaktToolsBar
-      create-permission="routine:news:center:create"
-      update-permission="routine:news:center:update"
-      delete-permission="routine:news:center:delete"
-      import-permission="routine:news:center:import"
-      export-permission="routine:news:center:export"
+      create-permission="routine:news:center:comment:create"
+      update-permission="routine:news:center:comment:update"
+      delete-permission="routine:news:center:comment:delete"
+      import-permission="routine:news:center:comment:import"
+      export-permission="routine:news:center:comment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -643,7 +643,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import NewsForm from './components/news-form.vue'
+import NewsForm from '../news/components/news-form.vue'
 import NewsCommentPanel from './components/news-comment-panel.vue'
 import { provideNewsMasterContext, type NewsRowRecord } from './composables/use-news-master-context'
 import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews, updateNewsStatus } from '@/api/routine/news-center/news'
@@ -1164,7 +1164,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:news:center:update',
+        permission: 'routine:news:center:comment:update',
         onClick: (record: NewsRowRecord) => handleEdit(record)
       },
       {
@@ -1172,7 +1172,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:news:center:delete',
+        permission: 'routine:news:center:comment:delete',
         onClick: (record: NewsRowRecord) => handleDeleteOne(record)
       }
     ]

@@ -51,7 +51,7 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public string? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 凭证货币（字典 accounting_currency_code）
+    /// 凭证货币（字典 accounting_financial_currency_code）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "凭证货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
@@ -81,7 +81,7 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public string? ConditionCode { get; set; }
 
     /// <summary>
-    /// 装运条件（字典 logistics_shipping_conditions）
+    /// 装运条件（字典 logistics_sales_shipping_conditions）
     /// </summary>
     [SugarColumn(ColumnName = "shipping_conditions", ColumnDescription = "装运条件", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? ShippingConditions { get; set; }
@@ -159,7 +159,7 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 统计货币（字典 accounting_currency_code）
+    /// 统计货币（字典 accounting_financial_currency_code）
     /// </summary>
     [SugarColumn(ColumnName = "statistics_currency_code", ColumnDescription = "统计货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? StatisticsCurrencyCode { get; set; }
@@ -249,10 +249,16 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public string? ReversalReason { get; set; }
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "已创建的", ColumnDataType = "nvarchar", Length = 12, IsNullable = true)]
-    public string? PostedBy { get; set; }
+    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PostedByEmployeeId { get; set; }
+    /// <summary>
+    /// 过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "posted_by_employee_name", ColumnDescription = "过账人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PostedByEmployeeName { get; set; }
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）

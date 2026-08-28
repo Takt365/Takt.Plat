@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktWarehouseI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWarehouse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -144,14 +144,23 @@ public class TaktWarehouseI18nSeedData : ITaktSeedDataCoordinator
             // entity.warehouse.contactphone
             new TranslationSeedItem("entity.warehouse.contactphone", "zh-HK", "联系电话_hk", "联系电话（contact_phone）"),
 
-            // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "en-US", "仓库负责人用户编码_us", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
-            // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "ja-JP", "仓库负责人用户编码_jp", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
-            // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-CN", "仓库负责人用户编码", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
-            // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-HK", "仓库负责人用户编码_hk", "仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）"),
+            // entity.warehouse.manageruserid
+            new TranslationSeedItem("entity.warehouse.manageruserid", "en-US", "仓库负责人ID_us", "仓库负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.warehouse.manageruserid
+            new TranslationSeedItem("entity.warehouse.manageruserid", "ja-JP", "仓库负责人ID_jp", "仓库负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.warehouse.manageruserid
+            new TranslationSeedItem("entity.warehouse.manageruserid", "zh-CN", "仓库负责人ID", "仓库负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.warehouse.manageruserid
+            new TranslationSeedItem("entity.warehouse.manageruserid", "zh-HK", "仓库负责人ID_hk", "仓库负责人（选项 TaktUsers/options；DictValue=Id）"),
+
+            // entity.warehouse.managerusername
+            new TranslationSeedItem("entity.warehouse.managerusername", "en-US", "仓库负责人姓名_us", "仓库负责人姓名（冗余：按 ManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.warehouse.managerusername
+            new TranslationSeedItem("entity.warehouse.managerusername", "ja-JP", "仓库负责人姓名_jp", "仓库负责人姓名（冗余：按 ManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.warehouse.managerusername
+            new TranslationSeedItem("entity.warehouse.managerusername", "zh-CN", "仓库负责人姓名", "仓库负责人姓名（冗余：按 ManagerUserId 取 TaktUser.UserName 联动）"),
+            // entity.warehouse.managerusername
+            new TranslationSeedItem("entity.warehouse.managerusername", "zh-HK", "仓库负责人姓名_hk", "仓库负责人姓名（冗余：按 ManagerUserId 取 TaktUser.UserName 联动）"),
 
             // entity.warehouse.isvirtual
             new TranslationSeedItem("entity.warehouse.isvirtual", "en-US", "虚拟仓_us", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
@@ -163,13 +172,13 @@ public class TaktWarehouseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.warehouse.isvirtual", "zh-HK", "虚拟仓_hk", "虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）"),
 
             // entity.warehouse.type
-            new TranslationSeedItem("entity.warehouse.type", "en-US", "仓库类型_us", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
+            new TranslationSeedItem("entity.warehouse.type", "en-US", "仓库类型_us", "仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
             // entity.warehouse.type
-            new TranslationSeedItem("entity.warehouse.type", "ja-JP", "仓库类型_jp", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
+            new TranslationSeedItem("entity.warehouse.type", "ja-JP", "仓库类型_jp", "仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
             // entity.warehouse.type
-            new TranslationSeedItem("entity.warehouse.type", "zh-CN", "仓库类型", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
+            new TranslationSeedItem("entity.warehouse.type", "zh-CN", "仓库类型", "仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
             // entity.warehouse.type
-            new TranslationSeedItem("entity.warehouse.type", "zh-HK", "仓库类型_hk", "仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
+            new TranslationSeedItem("entity.warehouse.type", "zh-HK", "仓库类型_hk", "仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）"),
 
             // entity.warehouse.isbuiltin
             new TranslationSeedItem("entity.warehouse.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）"),

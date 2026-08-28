@@ -44,7 +44,7 @@ export interface SalesPrice extends CompanyDtoBase {
   salesPriceCode?: string;
 
   /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   * 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType?: string;
 
@@ -69,7 +69,7 @@ export interface SalesPrice extends CompanyDtoBase {
   salesGroup?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   * 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
    */
   taxCode?: string;
 
@@ -79,7 +79,7 @@ export interface SalesPrice extends CompanyDtoBase {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -152,7 +152,7 @@ export interface SalesPriceExport {
   salesPriceCode: string;
 
   /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   * 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType: string;
 
@@ -177,7 +177,7 @@ export interface SalesPriceExport {
   salesGroup?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   * 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
    */
   taxCode?: string;
 
@@ -187,7 +187,7 @@ export interface SalesPriceExport {
   grBasedInvoiceInspection: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 

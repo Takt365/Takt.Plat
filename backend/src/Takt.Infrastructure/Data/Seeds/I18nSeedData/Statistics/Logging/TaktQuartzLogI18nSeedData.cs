@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktQuartzLogI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktQuartzLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartzlog.quartztaskid", "zh-HK", "定时任务ID_hk", "关联定时任务 ID（选项 TaktQuartzTasks/options；DictValue=Id）"),
 
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称_us", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "en-US", "任务名称_us", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称_jp", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "ja-JP", "任务名称_jp", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "zh-CN", "任务名称", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "zh-CN", "任务名称", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.quartzlog.taskname
-            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.quartzlog.taskname", "zh-HK", "任务名称_hk", "任务名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.quartzlog.jobgroup
             new TranslationSeedItem("entity.quartzlog.jobgroup", "en-US", "任务组名_us", "任务组名（字典 sys_quartz_job_group；DictValue=编码）"),

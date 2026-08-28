@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktFqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "zh-HK", "FQC检验单明细ID_hk", "FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）"),
 
             // entity.fqcdefecthandling.fqcordercode
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "en-US", "FQC检验单编码_us", "FQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "en-US", "FQC检验单编码_us", "FQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.fqcdefecthandling.fqcordercode
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "ja-JP", "FQC检验单编码_jp", "FQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "ja-JP", "FQC检验单编码_jp", "FQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.fqcdefecthandling.fqcordercode
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "zh-CN", "FQC检验单编码", "FQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "zh-CN", "FQC检验单编码", "FQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.fqcdefecthandling.fqcordercode
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "zh-HK", "FQC检验单编码_hk", "FQC检验单编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "zh-HK", "FQC检验单编码_hk", "FQC检验单编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.fqcdefecthandling.linenumber
             new TranslationSeedItem("entity.fqcdefecthandling.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -180,32 +180,59 @@ public class TaktFqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             // entity.fqcdefecthandling.handlingdescription
             new TranslationSeedItem("entity.fqcdefecthandling.handlingdescription", "zh-HK", "处理说明_hk", "处理说明"),
 
-            // entity.fqcdefecthandling.responsibledept
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibledept", "en-US", "责任部门_us", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.fqcdefecthandling.responsibledept
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibledept", "ja-JP", "责任部门_jp", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.fqcdefecthandling.responsibledept
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibledept", "zh-CN", "责任部门", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
-            // entity.fqcdefecthandling.responsibledept
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibledept", "zh-HK", "责任部门_hk", "责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）"),
+            // entity.fqcdefecthandling.responsibledeptid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptid", "en-US", "责任部门ID_us", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsibledeptid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptid", "ja-JP", "责任部门ID_jp", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsibledeptid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptid", "zh-CN", "责任部门ID", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsibledeptid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptid", "zh-HK", "责任部门ID_hk", "责任部门（选项 TaktDepts/tree-options；DictValue=Id）"),
 
-            // entity.fqcdefecthandling.responsibleby
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibleby", "en-US", "责任人_us", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.responsibleby
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibleby", "ja-JP", "责任人_jp", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.responsibleby
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibleby", "zh-CN", "责任人", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.responsibleby
-            new TranslationSeedItem("entity.fqcdefecthandling.responsibleby", "zh-HK", "责任人_hk", "责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.fqcdefecthandling.responsibledeptname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptname", "en-US", "责任部门名称_us", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.fqcdefecthandling.responsibledeptname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptname", "ja-JP", "责任部门名称_jp", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.fqcdefecthandling.responsibledeptname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptname", "zh-CN", "责任部门名称", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.fqcdefecthandling.responsibledeptname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsibledeptname", "zh-HK", "责任部门名称_hk", "责任部门名称（冗余：按 ResponsibleDeptId 取 TaktDept.DeptName1 联动）"),
 
-            // entity.fqcdefecthandling.handlerby
-            new TranslationSeedItem("entity.fqcdefecthandling.handlerby", "en-US", "处理人_us", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.handlerby
-            new TranslationSeedItem("entity.fqcdefecthandling.handlerby", "ja-JP", "处理人_jp", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.handlerby
-            new TranslationSeedItem("entity.fqcdefecthandling.handlerby", "zh-CN", "处理人", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcdefecthandling.handlerby
-            new TranslationSeedItem("entity.fqcdefecthandling.handlerby", "zh-HK", "处理人_hk", "处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.fqcdefecthandling.responsiblepersonid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonid", "en-US", "责任人ID_us", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsiblepersonid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonid", "ja-JP", "责任人ID_jp", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsiblepersonid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonid", "zh-CN", "责任人ID", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.responsiblepersonid
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonid", "zh-HK", "责任人ID_hk", "责任人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.fqcdefecthandling.responsiblepersonname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonname", "en-US", "责任人名称_us", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.responsiblepersonname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonname", "ja-JP", "责任人名称_jp", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.responsiblepersonname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonname", "zh-CN", "责任人名称", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.responsiblepersonname
+            new TranslationSeedItem("entity.fqcdefecthandling.responsiblepersonname", "zh-HK", "责任人名称_hk", "责任人名称（冗余：按 ResponsiblePersonId 取 TaktEmployee.EmployeeName 联动）"),
+
+            // entity.fqcdefecthandling.handlerid
+            new TranslationSeedItem("entity.fqcdefecthandling.handlerid", "en-US", "处理人ID_us", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.handlerid
+            new TranslationSeedItem("entity.fqcdefecthandling.handlerid", "ja-JP", "处理人ID_jp", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.handlerid
+            new TranslationSeedItem("entity.fqcdefecthandling.handlerid", "zh-CN", "处理人ID", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcdefecthandling.handlerid
+            new TranslationSeedItem("entity.fqcdefecthandling.handlerid", "zh-HK", "处理人ID_hk", "处理人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.fqcdefecthandling.handlername
+            new TranslationSeedItem("entity.fqcdefecthandling.handlername", "en-US", "处理人名称_us", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.handlername
+            new TranslationSeedItem("entity.fqcdefecthandling.handlername", "ja-JP", "处理人名称_jp", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.handlername
+            new TranslationSeedItem("entity.fqcdefecthandling.handlername", "zh-CN", "处理人名称", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcdefecthandling.handlername
+            new TranslationSeedItem("entity.fqcdefecthandling.handlername", "zh-HK", "处理人名称_hk", "处理人名称（冗余：按 HandlerId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.fqcdefecthandling.handlingat
             new TranslationSeedItem("entity.fqcdefecthandling.handlingat", "en-US", "处理时间_us", "处理时间"),

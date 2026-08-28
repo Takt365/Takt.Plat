@@ -19,13 +19,21 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public sealed class TaktEcDeptTransposedCell
 {
-    /// <summary>部门编码</summary>
+    /// <summary>
+    /// 部门编码
+    /// </summary>
     public string DeptCode { get; init; } = string.Empty;
-    /// <summary>是否实施（0=否 1=是）</summary>
+    /// <summary>
+    /// 是否实施（0=否 1=是）
+    /// </summary>
     public int IsImplemented { get; init; }
-    /// <summary>完成日期（部门业务日期或更新时间）</summary>
+    /// <summary>
+    /// 完成日期（部门业务日期或更新时间）
+    /// </summary>
     public DateTime? CompletedDate { get; init; }
-    /// <summary>展示文本（已实施时为 yyyyMMdd；未实施为 null，前端渲染「未处理」）</summary>
+    /// <summary>
+    /// 展示文本（已实施时为 yyyyMMdd；未实施为 null，前端渲染「未处理」）
+    /// </summary>
     public string? DisplayText { get; init; }
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfSchemeI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfScheme 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,22 +118,22 @@ public class TaktPerfSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfscheme.applicabledepartment", "zh-HK", "适用部门_hk", "适用部门"),
 
             // entity.perfscheme.cycletype
-            new TranslationSeedItem("entity.perfscheme.cycletype", "en-US", "考核周期类型_us", "考核周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfscheme.cycletype", "en-US", "考核周期类型_us", "考核周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfscheme.cycletype
-            new TranslationSeedItem("entity.perfscheme.cycletype", "ja-JP", "考核周期类型_jp", "考核周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfscheme.cycletype", "ja-JP", "考核周期类型_jp", "考核周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfscheme.cycletype
-            new TranslationSeedItem("entity.perfscheme.cycletype", "zh-CN", "考核周期类型", "考核周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfscheme.cycletype", "zh-CN", "考核周期类型", "考核周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
             // entity.perfscheme.cycletype
-            new TranslationSeedItem("entity.perfscheme.cycletype", "zh-HK", "考核周期类型_hk", "考核周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
+            new TranslationSeedItem("entity.perfscheme.cycletype", "zh-HK", "考核周期类型_hk", "考核周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）"),
 
             // entity.perfscheme.scoringstandard
-            new TranslationSeedItem("entity.perfscheme.scoringstandard", "en-US", "评分标准_us", "评分标准（字典 hr_perf_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
+            new TranslationSeedItem("entity.perfscheme.scoringstandard", "en-US", "评分标准_us", "评分标准（字典 humanresource_performance_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
             // entity.perfscheme.scoringstandard
-            new TranslationSeedItem("entity.perfscheme.scoringstandard", "ja-JP", "评分标准_jp", "评分标准（字典 hr_perf_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
+            new TranslationSeedItem("entity.perfscheme.scoringstandard", "ja-JP", "评分标准_jp", "评分标准（字典 humanresource_performance_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
             // entity.perfscheme.scoringstandard
-            new TranslationSeedItem("entity.perfscheme.scoringstandard", "zh-CN", "评分标准", "评分标准（字典 hr_perf_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
+            new TranslationSeedItem("entity.perfscheme.scoringstandard", "zh-CN", "评分标准", "评分标准（字典 humanresource_performance_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
             // entity.perfscheme.scoringstandard
-            new TranslationSeedItem("entity.perfscheme.scoringstandard", "zh-HK", "评分标准_hk", "评分标准（字典 hr_perf_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
+            new TranslationSeedItem("entity.perfscheme.scoringstandard", "zh-HK", "评分标准_hk", "评分标准（字典 humanresource_performance_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）"),
 
             // entity.perfscheme.selfevaluationweight
             new TranslationSeedItem("entity.perfscheme.selfevaluationweight", "en-US", "自评权重_us", "自评权重（%）"),
@@ -172,22 +172,22 @@ public class TaktPerfSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfscheme.metricname", "zh-HK", "指标名称_hk", "指标名称"),
 
             // entity.perfscheme.category
-            new TranslationSeedItem("entity.perfscheme.category", "en-US", "指标类别_us", "指标类别（字典 hr_perf_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
+            new TranslationSeedItem("entity.perfscheme.category", "en-US", "指标类别_us", "指标类别（字典 humanresource_performance_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
             // entity.perfscheme.category
-            new TranslationSeedItem("entity.perfscheme.category", "ja-JP", "指标类别_jp", "指标类别（字典 hr_perf_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
+            new TranslationSeedItem("entity.perfscheme.category", "ja-JP", "指标类别_jp", "指标类别（字典 humanresource_performance_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
             // entity.perfscheme.category
-            new TranslationSeedItem("entity.perfscheme.category", "zh-CN", "指标类别", "指标类别（字典 hr_perf_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
+            new TranslationSeedItem("entity.perfscheme.category", "zh-CN", "指标类别", "指标类别（字典 humanresource_performance_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
             // entity.perfscheme.category
-            new TranslationSeedItem("entity.perfscheme.category", "zh-HK", "指标类别_hk", "指标类别（字典 hr_perf_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
+            new TranslationSeedItem("entity.perfscheme.category", "zh-HK", "指标类别_hk", "指标类别（字典 humanresource_performance_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）"),
 
             // entity.perfscheme.metrictype
-            new TranslationSeedItem("entity.perfscheme.metrictype", "en-US", "指标类型_us", "指标类型（字典 hr_perf_metric_type；列存 DictValue：QUANT/QUAL）"),
+            new TranslationSeedItem("entity.perfscheme.metrictype", "en-US", "指标类型_us", "指标类型（字典 humanresource_performance_metric_type；列存 DictValue：QUANT/QUAL）"),
             // entity.perfscheme.metrictype
-            new TranslationSeedItem("entity.perfscheme.metrictype", "ja-JP", "指标类型_jp", "指标类型（字典 hr_perf_metric_type；列存 DictValue：QUANT/QUAL）"),
+            new TranslationSeedItem("entity.perfscheme.metrictype", "ja-JP", "指标类型_jp", "指标类型（字典 humanresource_performance_metric_type；列存 DictValue：QUANT/QUAL）"),
             // entity.perfscheme.metrictype
-            new TranslationSeedItem("entity.perfscheme.metrictype", "zh-CN", "指标类型", "指标类型（字典 hr_perf_metric_type；列存 DictValue：QUANT/QUAL）"),
+            new TranslationSeedItem("entity.perfscheme.metrictype", "zh-CN", "指标类型", "指标类型（字典 humanresource_performance_metric_type；列存 DictValue：QUANT/QUAL）"),
             // entity.perfscheme.metrictype
-            new TranslationSeedItem("entity.perfscheme.metrictype", "zh-HK", "指标类型_hk", "指标类型（字典 hr_perf_metric_type；列存 DictValue：QUANT/QUAL）"),
+            new TranslationSeedItem("entity.perfscheme.metrictype", "zh-HK", "指标类型_hk", "指标类型（字典 humanresource_performance_metric_type；列存 DictValue：QUANT/QUAL）"),
 
             // entity.perfscheme.scoringcriteria
             new TranslationSeedItem("entity.perfscheme.scoringcriteria", "en-US", "评分标准说明_us", "评分标准说明"),
@@ -217,13 +217,13 @@ public class TaktPerfSchemeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfscheme.sortorder", "zh-HK", "排序号_hk", "排序号（回填）"),
 
             // entity.perfscheme.schememetricstatus
-            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "en-US", "状态_us", "状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）"),
+            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "en-US", "状态_us", "状态（字典 humanresource_performance_scheme_metric_status；0=启用 1=停用）"),
             // entity.perfscheme.schememetricstatus
-            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "ja-JP", "状态_jp", "状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）"),
+            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "ja-JP", "状态_jp", "状态（字典 humanresource_performance_scheme_metric_status；0=启用 1=停用）"),
             // entity.perfscheme.schememetricstatus
-            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "zh-CN", "状态", "状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）"),
+            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "zh-CN", "状态", "状态（字典 humanresource_performance_scheme_metric_status；0=启用 1=停用）"),
             // entity.perfscheme.schememetricstatus
-            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "zh-HK", "状态_hk", "状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）"),
+            new TranslationSeedItem("entity.perfscheme.schememetricstatus", "zh-HK", "状态_hk", "状态（字典 humanresource_performance_scheme_metric_status；0=启用 1=停用）"),
         };
     }
 

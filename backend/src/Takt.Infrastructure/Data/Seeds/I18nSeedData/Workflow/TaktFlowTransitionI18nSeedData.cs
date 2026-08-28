@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Workflow
 // 文件名称：TaktFlowTransitionI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFlowTransition 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktFlowTransitionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtransition.activityid", "zh-HK", "节点ID_hk", "节点 ID（设计器 nodeId）"),
 
             // entity.flowtransition.activityname
-            new TranslationSeedItem("entity.flowtransition.activityname", "en-US", "节点名称_us", "节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.activityname", "en-US", "节点名称_us", "节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.activityname
-            new TranslationSeedItem("entity.flowtransition.activityname", "ja-JP", "节点名称_jp", "节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.activityname", "ja-JP", "节点名称_jp", "节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.activityname
-            new TranslationSeedItem("entity.flowtransition.activityname", "zh-CN", "节点名称", "节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.activityname", "zh-CN", "节点名称", "节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.activityname
-            new TranslationSeedItem("entity.flowtransition.activityname", "zh-HK", "节点名称_hk", "节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.activityname", "zh-HK", "节点名称_hk", "节点名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.flowtransition.activitytype
             new TranslationSeedItem("entity.flowtransition.activitytype", "en-US", "节点类型_us", "节点类型（设计器 nodeType 语义；运行时文本）"),
@@ -136,13 +136,13 @@ public class TaktFlowTransitionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtransition.fromnodeid", "zh-HK", "源节点ID_hk", "源节点 ID（设计器 nodeId）"),
 
             // entity.flowtransition.fromnodename
-            new TranslationSeedItem("entity.flowtransition.fromnodename", "en-US", "源节点名称_us", "源节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.fromnodename", "en-US", "源节点名称_us", "源节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.fromnodename
-            new TranslationSeedItem("entity.flowtransition.fromnodename", "ja-JP", "源节点名称_jp", "源节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.fromnodename", "ja-JP", "源节点名称_jp", "源节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.fromnodename
-            new TranslationSeedItem("entity.flowtransition.fromnodename", "zh-CN", "源节点名称", "源节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.fromnodename", "zh-CN", "源节点名称", "源节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.fromnodename
-            new TranslationSeedItem("entity.flowtransition.fromnodename", "zh-HK", "源节点名称_hk", "源节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.fromnodename", "zh-HK", "源节点名称_hk", "源节点名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.flowtransition.tonodeid
             new TranslationSeedItem("entity.flowtransition.tonodeid", "en-US", "目标节点ID_us", "目标节点 ID（设计器 nodeId）"),
@@ -154,13 +154,13 @@ public class TaktFlowTransitionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtransition.tonodeid", "zh-HK", "目标节点ID_hk", "目标节点 ID（设计器 nodeId）"),
 
             // entity.flowtransition.tonodename
-            new TranslationSeedItem("entity.flowtransition.tonodename", "en-US", "目标节点名称_us", "目标节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.tonodename", "en-US", "目标节点名称_us", "目标节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.tonodename
-            new TranslationSeedItem("entity.flowtransition.tonodename", "ja-JP", "目标节点名称_jp", "目标节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.tonodename", "ja-JP", "目标节点名称_jp", "目标节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.tonodename
-            new TranslationSeedItem("entity.flowtransition.tonodename", "zh-CN", "目标节点名称", "目标节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.tonodename", "zh-CN", "目标节点名称", "目标节点名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.flowtransition.tonodename
-            new TranslationSeedItem("entity.flowtransition.tonodename", "zh-HK", "目标节点名称_hk", "目标节点名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.tonodename", "zh-HK", "目标节点名称_hk", "目标节点名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.flowtransition.transitionuserid
             new TranslationSeedItem("entity.flowtransition.transitionuserid", "en-US", "操作人ID_us", "操作人 ID（选项 TaktUsers/options；DictValue=Id）"),
@@ -172,13 +172,13 @@ public class TaktFlowTransitionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.flowtransition.transitionuserid", "zh-HK", "操作人ID_hk", "操作人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.flowtransition.transitionusername
-            new TranslationSeedItem("entity.flowtransition.transitionusername", "en-US", "操作人姓名_us", "操作人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.transitionusername", "en-US", "操作人姓名_us", "操作人姓名（冗余：按 TransitionUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtransition.transitionusername
-            new TranslationSeedItem("entity.flowtransition.transitionusername", "ja-JP", "操作人姓名_jp", "操作人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.transitionusername", "ja-JP", "操作人姓名_jp", "操作人姓名（冗余：按 TransitionUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtransition.transitionusername
-            new TranslationSeedItem("entity.flowtransition.transitionusername", "zh-CN", "操作人姓名", "操作人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.transitionusername", "zh-CN", "操作人姓名", "操作人姓名（冗余：按 TransitionUserId 取 TaktUser.UserName 联动）"),
             // entity.flowtransition.transitionusername
-            new TranslationSeedItem("entity.flowtransition.transitionusername", "zh-HK", "操作人姓名_hk", "操作人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.flowtransition.transitionusername", "zh-HK", "操作人姓名_hk", "操作人姓名（冗余：按 TransitionUserId 取 TaktUser.UserName 联动）"),
 
             // entity.flowtransition.starttime
             new TranslationSeedItem("entity.flowtransition.starttime", "en-US", "开始时间_us", "开始时间"),

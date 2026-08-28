@@ -128,7 +128,7 @@ export interface PayslipExport {
   formulaSetCode?: string;
 
   /**
-   * 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+   * 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
    */
   issueStatus: number;
 

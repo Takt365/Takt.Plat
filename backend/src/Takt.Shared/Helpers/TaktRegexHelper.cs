@@ -26,43 +26,69 @@ public static class TaktRegexHelper
     /// </summary>
     private const RegexOptions Opt = RegexOptions.Compiled;
 
-    /// <summary>邮箱最小长度（RFC 5322 最短合法地址如 a@b.co）。</summary>
+    /// <summary>
+    /// 邮箱最小长度（RFC 5322 最短合法地址如 a@b.co）。
+    /// </summary>
     public const int EmailMinLength = 6;
 
-    /// <summary>邮箱最大长度（与 TaktEmployee.email varchar(100) 一致）。</summary>
+    /// <summary>
+    /// 邮箱最大长度（与 TaktEmployee.email varchar(100) 一致）。
+    /// </summary>
     public const int EmailMaxLength = 100;
 
-    /// <summary>用户昵称最小长度。</summary>
+    /// <summary>
+    /// 用户昵称最小长度。
+    /// </summary>
     public const int NickNameMinLength = 2;
 
-    /// <summary>用户昵称最大长度（与 TaktUser.NickName nvarchar(40) 一致）。</summary>
+    /// <summary>
+    /// 用户昵称最大长度（与 TaktUser.NickName nvarchar(40) 一致）。
+    /// </summary>
     public const int NickNameMaxLength = 40;
 
-    /// <summary>中国大陆手机号位数。</summary>
+    /// <summary>
+    /// 中国大陆手机号位数。
+    /// </summary>
     public const int PhoneCnLength = 11;
 
-    /// <summary>中国香港手机号位数。</summary>
+    /// <summary>
+    /// 中国香港手机号位数。
+    /// </summary>
     public const int PhoneHkLength = 8;
 
-    /// <summary>美国手机号位数。</summary>
+    /// <summary>
+    /// 美国手机号位数。
+    /// </summary>
     public const int PhoneUsLength = 10;
 
-    /// <summary>日本手机号位数。</summary>
+    /// <summary>
+    /// 日本手机号位数。
+    /// </summary>
     public const int PhoneJpLength = 11;
 
-    /// <summary>格式不正确校验 I18n 键（common.validation.format.invalid）。</summary>
+    /// <summary>
+    /// 格式不正确校验 I18n 键（common.validation.format.invalid）。
+    /// </summary>
     public const string InvalidFormatI18nKey = "common.validation.format.invalid";
 
-    /// <summary>公司默认文化 zh-CN → 手机号格式说明 I18n 键（common.tip.phone.*，表单提示用）。</summary>
+    /// <summary>
+    /// 公司默认文化 zh-CN → 手机号格式说明 I18n 键（common.tip.phone.*，表单提示用）。
+    /// </summary>
     public const string PhoneTipI18nKeyCn = "common.tip.phone.cn";
 
-    /// <summary>公司默认文化 zh-HK → 手机号格式说明 I18n 键。</summary>
+    /// <summary>
+    /// 公司默认文化 zh-HK → 手机号格式说明 I18n 键。
+    /// </summary>
     public const string PhoneTipI18nKeyHk = "common.tip.phone.hk";
 
-    /// <summary>公司默认文化 en-US → 手机号格式说明 I18n 键。</summary>
+    /// <summary>
+    /// 公司默认文化 en-US → 手机号格式说明 I18n 键。
+    /// </summary>
     public const string PhoneTipI18nKeyUs = "common.tip.phone.us";
 
-    /// <summary>公司默认文化 ja-JP → 手机号格式说明 I18n 键。</summary>
+    /// <summary>
+    /// 公司默认文化 ja-JP → 手机号格式说明 I18n 键。
+    /// </summary>
     public const string PhoneTipI18nKeyJp = "common.tip.phone.jp";
     /// <summary>
     /// 邮箱地址（RFC 5322 常用子集；长度 6–100 由 IsValidEmail 校验）。
@@ -344,7 +370,7 @@ public static class TaktRegexHelper
     /// </summary>
     public static readonly Regex MenuCode = new(@"^[a-zA-Z][a-zA-Z0-9_-]{2,199}$", Opt);
     /// <summary>
-    /// 本地化键（小写字母开头，点分格式）。
+    /// 国际化键（小写字母开头，点分格式）。
     /// </summary>
     public static readonly Regex L10nKey = new(@"^[a-z][a-z0-9.]{1,198}[a-z0-9]$", Opt);
     /// <summary>

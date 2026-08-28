@@ -67,7 +67,7 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 
@@ -179,7 +179,7 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -323,9 +323,9 @@ public class TaktSourceOfSupplyCreateDto
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -508,7 +508,7 @@ public class TaktSourceOfSupplyTemplateDto
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -620,7 +620,7 @@ public class TaktSourceOfSupplyImportDto
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -733,7 +733,7 @@ public class TaktSourceOfSupplyExportDto
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 

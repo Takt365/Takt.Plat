@@ -24,10 +24,14 @@ namespace Takt.Infrastructure.Data.Schema;
 /// </summary>
 public class TaktTableArchiveProvider : ITaktTableArchiveProvider
 {
-    /// <summary>单次归档上限（与数据克隆同量级）</summary>
+    /// <summary>
+    /// 单次归档上限（与数据克隆同量级）
+    /// </summary>
     public const int MaxArchiveRowCount = 50000;
 
-    /// <summary>分批行数</summary>
+    /// <summary>
+    /// 分批行数
+    /// </summary>
     public const int BatchSize = 1000;
 
     private readonly IConfiguration _configuration;

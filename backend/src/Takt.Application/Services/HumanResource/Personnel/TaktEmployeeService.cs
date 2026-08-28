@@ -156,20 +156,21 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         return dto;    }
 
     /// <summary>
-    /// 获取员工选项列表
+    /// 获取员工选项列表（DictValue=Id，ExtValue=EmployeeName）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetEmployeeOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _employeeRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaritalStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EmployeeStatus == 1,
             x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.EmployeeCode,
+            DictValue = e.Id,
             DictLabel = e.EmployeeName ?? e.EmployeeCode,
+            ExtValue = e.EmployeeName,
         }).ToList();
     }
 

@@ -36,7 +36,7 @@
       />
       <TaktSelect
         v-model:value="currencyCode"
-        dict-type="accounting_currency_code"
+        dict-type="accounting_financial_currency_code"
         class="cost-trend-query-bar__control cost-trend-query-bar__control--currencyCode"
         allow-clear
         :placeholder="t(`${localePrefix}.currencyCode`)"

@@ -38,7 +38,7 @@ public class TaktTicketCategoryAssign : TaktCompanyEntityBase
     public long AssigneeId { get; set; }
 
     /// <summary>
-    /// 默认处理人姓名（冗余字段，便于查询）
+    /// 默认处理人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_name", ColumnDescription = "默认处理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeName { get; set; }

@@ -12,7 +12,7 @@ alwaysApply: true
 
 通用命名、权限、i18n 见 `@.cursor/rules/00-project.mdc`；后端分层见 `01-backend`；前端 UI 见 `02-frontend`；**主表列表必须分页、子表按需分页**见 `06`/`07`/`08-overflow`。
 
-**代码生成模板类型**：`TaktGenTable.GenTemplateCategory = sub`（对应 `dict.gen.template.type.sub`）。
+**代码生成模板类型**：`TaktGenTable.GenTemplateCategory = sub`（对应 `dict.code.generator.template.type.sub`）。
 
 ---
 

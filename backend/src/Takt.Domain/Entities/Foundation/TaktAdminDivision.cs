@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.Foundation;
 
 /// <summary>
 /// 行政区划实体（租户级共享；世界通用六级树）
-/// 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type）
+/// 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level）
 /// 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
 /// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
@@ -55,7 +55,7 @@ public class TaktAdminDivision : TaktTenantCoreEntityBase
     public long ParentId { get; set; } = 0;
 
     /// <summary>
-    /// 层级（字典 sys_admin_division_level_type；1～6）
+    /// 层级（字典 sys_admin_division_level；1～6）
     /// </summary>
     [SugarColumn(ColumnName = "level", ColumnDescription = "层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int Level { get; set; } = 1;
@@ -80,7 +80,7 @@ public class TaktAdminDivision : TaktTenantCoreEntityBase
 
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "")]
     public string CurrencyCode { get; set; } = string.Empty;

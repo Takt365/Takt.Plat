@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktSocialInsuranceI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSocialInsurance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -208,13 +208,13 @@ public class TaktSocialInsuranceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.socialinsurance.totalamount", "zh-HK", "缴纳合计_hk", "缴纳合计（元）"),
 
             // entity.socialinsurance.paystatus
-            new TranslationSeedItem("entity.socialinsurance.paystatus", "en-US", "缴纳状态_us", "缴纳状态（字典 hr_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
+            new TranslationSeedItem("entity.socialinsurance.paystatus", "en-US", "缴纳状态_us", "缴纳状态（字典 humanresource_benefits_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
             // entity.socialinsurance.paystatus
-            new TranslationSeedItem("entity.socialinsurance.paystatus", "ja-JP", "缴纳状态_jp", "缴纳状态（字典 hr_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
+            new TranslationSeedItem("entity.socialinsurance.paystatus", "ja-JP", "缴纳状态_jp", "缴纳状态（字典 humanresource_benefits_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
             // entity.socialinsurance.paystatus
-            new TranslationSeedItem("entity.socialinsurance.paystatus", "zh-CN", "缴纳状态", "缴纳状态（字典 hr_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
+            new TranslationSeedItem("entity.socialinsurance.paystatus", "zh-CN", "缴纳状态", "缴纳状态（字典 humanresource_benefits_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
             // entity.socialinsurance.paystatus
-            new TranslationSeedItem("entity.socialinsurance.paystatus", "zh-HK", "缴纳状态_hk", "缴纳状态（字典 hr_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
+            new TranslationSeedItem("entity.socialinsurance.paystatus", "zh-HK", "缴纳状态_hk", "缴纳状态（字典 humanresource_benefits_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),
         };
     }
 

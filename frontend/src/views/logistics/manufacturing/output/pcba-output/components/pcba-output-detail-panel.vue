@@ -217,7 +217,7 @@
       <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />
@@ -274,7 +274,7 @@
       <a-form-item :label="pi.queryLabel('panelSide')">
         <TaktSelect
           v-model:value="advancedQueryForm.panelSide"
-          dict-type="logistics_pcba_side_category"
+          dict-type="logistics_manufacturing_pcba_side_category"
           :placeholder="pi.queryPh('panelSide', 'select')"
           allow-clear
         />
@@ -311,7 +311,7 @@
       <a-form-item :label="pi.queryLabel('completedStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.completedStatus"
-          dict-type="logistics_pcba_completed_status"
+          dict-type="logistics_manufacturing_pcba_completed_status"
           :placeholder="pi.queryPh('completedStatus', 'select')"
           allow-clear
         />

@@ -74,13 +74,13 @@
         <template v-if="column.key === 'valuation'">
           <TaktDictTag
             :value="getPurchaseSalesInventoryDictValue(record, 'valuation')"
-            dict-type="logistics_valuation_class_category"
+            dict-type="logistics_materials_valuation_class"
           />
         </template>
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getPurchaseSalesInventoryDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'psiStatus'">
@@ -176,7 +176,7 @@
       <a-form-item :label="pi.queryLabel('valuation')">
         <TaktSelect
           v-model:value="advancedQueryForm.valuation"
-          dict-type="logistics_valuation_class_category"
+          dict-type="logistics_materials_valuation_class"
           :placeholder="pi.queryPh('valuation', 'select')"
           allow-clear
         />
@@ -323,7 +323,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />

@@ -79,7 +79,7 @@ export interface Dept extends CompanyDtoBase {
   costCenterCode: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory: number;
 
@@ -234,7 +234,7 @@ export interface DeptQuery extends TaktPagedQuery {
   costCenterCode?: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory?: number;
 
@@ -368,7 +368,7 @@ export interface DeptCreate {
   costCenterCode: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory: number;
 
@@ -569,7 +569,7 @@ export interface DeptTemplate {
   costCenterCode?: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory?: number;
 
@@ -698,7 +698,7 @@ export interface DeptImport {
   costCenterCode?: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory?: number;
 
@@ -842,7 +842,7 @@ export interface DeptExport {
   costCenterCode: string;
 
   /**
-   * 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
+   * 费用类别（字典 humanresource_organization_dept_cost_category；1=直接 2=间接）
    */
   costCategory: number;
 

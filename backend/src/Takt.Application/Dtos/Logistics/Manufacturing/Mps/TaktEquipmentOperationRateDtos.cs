@@ -72,7 +72,7 @@ public class TaktEquipmentOperationRateDto : TaktCompanyDtoBase
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 
@@ -82,7 +82,7 @@ public class TaktEquipmentOperationRateDto : TaktCompanyDtoBase
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -239,7 +239,7 @@ public class TaktEquipmentOperationRateQueryDto : TaktPagedQuery
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -249,7 +249,7 @@ public class TaktEquipmentOperationRateQueryDto : TaktPagedQuery
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -417,7 +417,7 @@ public class TaktEquipmentOperationRateCreateDto
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 
@@ -427,7 +427,7 @@ public class TaktEquipmentOperationRateCreateDto
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
@@ -627,7 +627,7 @@ public class TaktEquipmentOperationRateTemplateDto
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -637,7 +637,7 @@ public class TaktEquipmentOperationRateTemplateDto
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -789,7 +789,7 @@ public class TaktEquipmentOperationRateImportDto
     public string? EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int? EquipmentType { get; set; }
 
@@ -799,7 +799,7 @@ public class TaktEquipmentOperationRateImportDto
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
@@ -952,7 +952,7 @@ public class TaktEquipmentOperationRateExportDto
     public string EquipmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+    /// 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
     /// </summary>
     public int EquipmentType { get; set; } = 0;
 
@@ -962,7 +962,7 @@ public class TaktEquipmentOperationRateExportDto
     public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 

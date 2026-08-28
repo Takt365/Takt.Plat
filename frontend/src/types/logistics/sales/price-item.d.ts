@@ -49,17 +49,17 @@ export interface SalesPriceItem extends CompanyDtoBase {
   salesPriceSeq?: number;
 
   /**
-   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+   * 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
   priceType?: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -69,7 +69,7 @@ export interface SalesPriceItem extends CompanyDtoBase {
   scaleQuantity?: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -79,12 +79,12 @@ export interface SalesPriceItem extends CompanyDtoBase {
   scaleValue?: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrencyCode?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+   * 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
    */
   calculationType?: string;
 
@@ -109,17 +109,17 @@ export interface SalesPriceItem extends CompanyDtoBase {
   taxAmount?: number;
 
   /**
-   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   * 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
    */
   conditionCurrencyCode?: string;
 
   /**
-   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure?: string;
 
@@ -197,17 +197,17 @@ export interface SalesPriceItemExport {
   salesPriceSeq: number;
 
   /**
-   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+   * 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
   priceType: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -217,7 +217,7 @@ export interface SalesPriceItemExport {
   scaleQuantity: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -227,12 +227,12 @@ export interface SalesPriceItemExport {
   scaleValue: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrencyCode?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+   * 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
    */
   calculationType: string;
 
@@ -257,17 +257,17 @@ export interface SalesPriceItemExport {
   taxAmount: number;
 
   /**
-   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   * 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
    */
   conditionCurrencyCode: string;
 
   /**
-   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unitOfMeasure: string;
 

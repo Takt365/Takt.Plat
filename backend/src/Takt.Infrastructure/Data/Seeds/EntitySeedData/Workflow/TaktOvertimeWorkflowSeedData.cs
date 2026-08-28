@@ -43,7 +43,9 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
         NullValueHandling = NullValueHandling.Ignore
     };
 
-    /// <summary>执行顺序（在请假工作流之后）</summary>
+    /// <summary>
+    /// 执行顺序（在请假工作流之后）
+    /// </summary>
     public int Order => 67;
 
     /// <summary>
@@ -159,7 +161,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
             new { field = "overtimeDate", title = "加班日期", type = "datePicker", props = new { valueFormat = "YYYY-MM-DD" } },
             new { field = "plannedStartTime", title = "计划开始", type = "input" },
             new { field = "plannedEndTime", title = "计划结束", type = "input" },
-            new { field = "overtimeType", title = "加班类型", type = "select", props = new { dictType = "hr_overtime_type" } },
+            new { field = "overtimeType", title = "加班类型", type = "select", props = new { dictType = "humanresource_attendance_overtime_type" } },
             new { field = "totalEmployees", title = "总人数", type = "input" },
             new { field = "totalPlannedHours", title = "计划总小时", type = "input" },
             new { field = "reason", title = "加班原因", type = "textarea", props = new { rows = 3 } }
@@ -178,7 +180,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 new { dbColumnName = "overtime_date", csharpColumnName = "overtimeDate", columnDescription = "加班日期", dataType = "date", displayType = "date" },
                 new { dbColumnName = "planned_start_time", csharpColumnName = "plannedStartTime", columnDescription = "计划开始", dataType = "datetime", displayType = "input" },
                 new { dbColumnName = "planned_end_time", csharpColumnName = "plannedEndTime", columnDescription = "计划结束", dataType = "datetime", displayType = "input" },
-                new { dbColumnName = "overtime_type", csharpColumnName = "overtimeType", columnDescription = "加班类型", dataType = "int", displayType = "select", dictTypeCode = "hr_overtime_type" },
+                new { dbColumnName = "overtime_type", csharpColumnName = "overtimeType", columnDescription = "加班类型", dataType = "int", displayType = "select", dictTypeCode = "humanresource_attendance_overtime_type" },
                 new { dbColumnName = "total_employees", csharpColumnName = "totalEmployees", columnDescription = "总人数", dataType = "int", displayType = "input" },
                 new { dbColumnName = "total_planned_hours", csharpColumnName = "totalPlannedHours", columnDescription = "计划总小时", dataType = "decimal", displayType = "input" },
                 new { dbColumnName = "reason", csharpColumnName = "reason", columnDescription = "加班原因", dataType = "nvarchar", displayType = "textarea" }

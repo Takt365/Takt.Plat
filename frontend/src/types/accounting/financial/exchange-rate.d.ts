@@ -29,17 +29,17 @@ export interface ExchangeRate extends TenantCoreDtoBase {
   exchangeRateId: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType: string;
 
@@ -88,17 +88,17 @@ export interface ExchangeRateQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode?: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode?: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType?: string;
 
@@ -176,17 +176,17 @@ export interface ExchangeRateCreate {
   tenantCode: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType: string;
 
@@ -276,17 +276,17 @@ export interface ExchangeRateTemplate {
   tenantCode?: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode?: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode?: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType?: string;
 
@@ -344,17 +344,17 @@ export interface ExchangeRateImport {
   tenantCode?: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode?: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode?: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType?: string;
 
@@ -412,17 +412,17 @@ export interface ExchangeRateExport {
   exchangeRateId: string;
 
   /**
-   * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
+   * 源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode: string;
 
   /**
-   * 目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）
+   * 目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）
    */
   toCurrencyCode: string;
 
   /**
-   * 汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
+   * 汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）
    */
   exchangeRateType: string;
 

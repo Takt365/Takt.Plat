@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialRequirementsPlanningItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningid", "zh-HK", "MRP头表ID_hk", "MRP 头表 ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.materialrequirementsplanningitem.materialrequirementsplanningcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "en-US", "MRP编码_us", "MRP 编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "en-US", "MRP编码_us", "MRP 编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.materialrequirementsplanningitem.materialrequirementsplanningcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "ja-JP", "MRP编码_jp", "MRP 编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "ja-JP", "MRP编码_jp", "MRP 编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.materialrequirementsplanningitem.materialrequirementsplanningcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "zh-CN", "MRP编码", "MRP 编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "zh-CN", "MRP编码", "MRP 编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.materialrequirementsplanningitem.materialrequirementsplanningcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "zh-HK", "MRP编码_hk", "MRP 编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialrequirementsplanningcode", "zh-HK", "MRP编码_hk", "MRP 编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.materialrequirementsplanningitem.linenumber
             new TranslationSeedItem("entity.materialrequirementsplanningitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -190,13 +190,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.requirementdate", "zh-HK", "需求日期_hk", "需求日期"),
 
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.materialrequirementsplanningitem.grossrequirement
             new TranslationSeedItem("entity.materialrequirementsplanningitem.grossrequirement", "en-US", "毛需求数量_us", "毛需求数量（基本单位数量）"),

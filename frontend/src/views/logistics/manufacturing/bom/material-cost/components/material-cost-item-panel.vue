@@ -247,7 +247,7 @@
       <a-form-item :label="pi.queryLabel('movingPriceCurrencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.movingPriceCurrencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('movingPriceCurrencyCode', 'select')"
           allow-clear
         />
@@ -306,7 +306,7 @@
       <a-form-item :label="pi.queryLabel('purchaseCurrencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.purchaseCurrencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('purchaseCurrencyCode', 'select')"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeecontract.contractcode", "zh-HK", "合同编码_hk", "合同编码"),
 
             // entity.employeecontract.contracttype
-            new TranslationSeedItem("entity.employeecontract.contracttype", "en-US", "合同类型_us", "合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
+            new TranslationSeedItem("entity.employeecontract.contracttype", "en-US", "合同类型_us", "合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
             // entity.employeecontract.contracttype
-            new TranslationSeedItem("entity.employeecontract.contracttype", "ja-JP", "合同类型_jp", "合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
+            new TranslationSeedItem("entity.employeecontract.contracttype", "ja-JP", "合同类型_jp", "合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
             // entity.employeecontract.contracttype
-            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-CN", "合同类型", "合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
+            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-CN", "合同类型", "合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
             // entity.employeecontract.contracttype
-            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-HK", "合同类型_hk", "合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
+            new TranslationSeedItem("entity.employeecontract.contracttype", "zh-HK", "合同类型_hk", "合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),
 
             // entity.employeecontract.startdate
             new TranslationSeedItem("entity.employeecontract.startdate", "en-US", "合同开始日期_us", "合同开始日期"),
@@ -181,13 +181,13 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeecontract.signcompany", "zh-HK", "签约单位_hk", "签约单位"),
 
             // entity.employeecontract.contractstatus
-            new TranslationSeedItem("entity.employeecontract.contractstatus", "en-US", "合同状态_us", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "en-US", "合同状态_us", "合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
             // entity.employeecontract.contractstatus
-            new TranslationSeedItem("entity.employeecontract.contractstatus", "ja-JP", "合同状态_jp", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "ja-JP", "合同状态_jp", "合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
             // entity.employeecontract.contractstatus
-            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-CN", "合同状态", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-CN", "合同状态", "合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
             // entity.employeecontract.contractstatus
-            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-HK", "合同状态_hk", "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
+            new TranslationSeedItem("entity.employeecontract.contractstatus", "zh-HK", "合同状态_hk", "合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）"),
 
             // entity.employeecontract.employee
             new TranslationSeedItem("entity.employeecontract.employee", "en-US", "员工主档_us", "员工主档（多对一）"),

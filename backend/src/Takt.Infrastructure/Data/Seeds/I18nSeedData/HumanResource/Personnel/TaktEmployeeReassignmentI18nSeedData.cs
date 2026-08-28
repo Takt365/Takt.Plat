@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeReassignment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeereassignment.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeereassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "en-US", "调动类型_us", "调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）"),
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "en-US", "调动类型_us", "调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）"),
             // entity.employeereassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "ja-JP", "调动类型_jp", "调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）"),
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "ja-JP", "调动类型_jp", "调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）"),
             // entity.employeereassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-CN", "调动类型", "调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）"),
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-CN", "调动类型", "调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）"),
             // entity.employeereassignment.reassignmenttype
-            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-HK", "调动类型_hk", "调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）"),
+            new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "zh-HK", "调动类型_hk", "调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）"),
 
             // entity.employeereassignment.fromdeptid
             new TranslationSeedItem("entity.employeereassignment.fromdeptid", "en-US", "调出部门ID_us", "调出部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),

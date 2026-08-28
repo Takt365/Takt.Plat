@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -109,13 +109,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "zh-HK", "发行日期_hk", "发行日期"),
 
             // entity.ecgijutsu.changestatus
-            new TranslationSeedItem("entity.ecgijutsu.changestatus", "en-US", "变更状态_us", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "en-US", "变更状态_us", "变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）"),
             // entity.ecgijutsu.changestatus
-            new TranslationSeedItem("entity.ecgijutsu.changestatus", "ja-JP", "变更状态_jp", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "ja-JP", "变更状态_jp", "变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）"),
             // entity.ecgijutsu.changestatus
-            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-CN", "变更状态", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-CN", "变更状态", "变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）"),
             // entity.ecgijutsu.changestatus
-            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-HK", "变更状态_hk", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
+            new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-HK", "变更状态_hk", "变更状态（字典 logistics_manufacturing_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的；默认 5=固定的，表示设变将被实施）"),
 
             // entity.ecgijutsu.ectitle
             new TranslationSeedItem("entity.ecgijutsu.ectitle", "en-US", "设变标题_us", "设变标题"),
@@ -127,22 +127,22 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-HK", "设变标题_hk", "设变标题"),
 
             // entity.ecgijutsu.eccontent
-            new TranslationSeedItem("entity.ecgijutsu.eccontent", "en-US", "设变内容_us", "设变内容"),
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "en-US", "设变内容_us", "设变内容（富文本 HTML）"),
             // entity.ecgijutsu.eccontent
-            new TranslationSeedItem("entity.ecgijutsu.eccontent", "ja-JP", "设变内容_jp", "设变内容"),
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "ja-JP", "设变内容_jp", "设变内容（富文本 HTML）"),
             // entity.ecgijutsu.eccontent
-            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-CN", "设变内容", "设变内容"),
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-CN", "设变内容", "设变内容（富文本 HTML）"),
             // entity.ecgijutsu.eccontent
-            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-HK", "设变内容_hk", "设变内容"),
+            new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-HK", "设变内容_hk", "设变内容（富文本 HTML）"),
 
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
 
             // entity.ecgijutsu.eclossamount
             new TranslationSeedItem("entity.ecgijutsu.eclossamount", "en-US", "损失金额_us", "损失金额"),
@@ -154,13 +154,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.eclossamount", "zh-HK", "损失金额_hk", "损失金额"),
 
             // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "en-US", "区分_us", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "en-US", "区分_us", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
             // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
             // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-CN", "区分", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-CN", "区分", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
             // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
 
             // entity.ecgijutsu.ecentrydate
             new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "en-US", "录入日期_us", "录入日期"),
@@ -171,14 +171,23 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecgijutsu.ecentrydate
             new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "zh-HK", "录入日期_hk", "录入日期"),
 
+            // entity.ecgijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "en-US", "完成品物料状态_us", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            // entity.ecgijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "ja-JP", "完成品物料状态_jp", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            // entity.ecgijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "zh-CN", "完成品物料状态", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            // entity.ecgijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "zh-HK", "完成品物料状态_hk", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+
             // entity.ecgijutsu.ecstatus
-            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "en-US", "设变状态_us", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "en-US", "设变状态_us", "设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）"),
             // entity.ecgijutsu.ecstatus
-            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "ja-JP", "设变状态_jp", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "ja-JP", "设变状态_jp", "设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）"),
             // entity.ecgijutsu.ecstatus
-            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-CN", "设变状态", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-CN", "设变状态", "设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）"),
             // entity.ecgijutsu.ecstatus
-            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-HK", "设变状态_hk", "设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecstatus", "zh-HK", "设变状态_hk", "设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）"),
 
             // entity.ecgijutsu.ecdetails
             new TranslationSeedItem("entity.ecgijutsu.ecdetails", "en-US", "设变明细列表_us", "设变明细列表（技术阶段一：③，BOM/料号变更行）"),

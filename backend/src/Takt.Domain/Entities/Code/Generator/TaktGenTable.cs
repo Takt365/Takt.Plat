@@ -80,7 +80,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public int InDatabase { get; set; } = 1;
 
     /// <summary>
-    /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
+    /// 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
     /// </summary>
     [SugarColumn(ColumnName = "gen_template_category", ColumnDescription = "生成模板类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "crud")]
     public string GenTemplateCategory { get; set; } = "crud";
@@ -110,7 +110,7 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
     /// </summary>
     [SugarColumn(ColumnName = "menu_button_group", ColumnDescription = "菜单权限组", ColumnDataType = "ntext", IsNullable = true)]
     public string? MenuButtonGroup { get; set; }
@@ -206,22 +206,22 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string? RepositoryClassName { get; set; }
     
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。
+    /// 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。
     /// 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下：
     /// Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto；
     /// Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
-    [SugarColumn(ColumnName = "gen_function", ColumnDescription = "生成功能", ColumnDataType = "ntext", IsNullable = true)]
+    [SugarColumn(ColumnName = "code_generator_function", ColumnDescription = "生成功能", ColumnDataType = "ntext", IsNullable = true)]
     public string? GenFunction { get; set; }
 
     /// <summary>
-    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
     /// </summary>
-    [SugarColumn(ColumnName = "gen_method", ColumnDescription = "生成方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "code_generator_method", ColumnDescription = "生成方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int GenMethod { get; set; } = 0;
 
     /// <summary>
-    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
     [SugarColumn(ColumnName = "gen_path", ColumnDescription = "生成路径", ColumnDataType = "nvarchar", Length = 500, IsNullable = false, DefaultValue = "/")]
     public string GenPath { get; set; } = "/";
@@ -251,25 +251,25 @@ public class TaktGenTable : TaktTenantCoreEntityBase
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
     /// </summary>
-    [SugarColumn(ColumnName = "sort_type", ColumnDescription = "排序类型", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "asc")]
+    [SugarColumn(ColumnName = "sort_type", ColumnDescription = "排序方向", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "asc")]
     public string SortType { get; set; } = "asc";
 
     /// <summary>
-    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
     /// </summary>
     [SugarColumn(ColumnName = "front_ui", ColumnDescription = "前端UI框架", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FrontUi { get; set; } = 2;
 
     /// <summary>
-    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
     /// </summary>
     [SugarColumn(ColumnName = "front_form_layout", ColumnDescription = "前端表单布局", ColumnDataType = "int", IsNullable = false, DefaultValue = "24")]
     public int FrontFormLayout { get; set; } = 24;
 
     /// <summary>
-    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
     /// </summary>
     [SugarColumn(ColumnName = "front_btn_style", ColumnDescription = "前端按钮样式", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int FrontBtnStyle { get; set; } = 1;

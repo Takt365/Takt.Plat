@@ -2,13 +2,14 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-explosion.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
+
 
 /**
  * BOM 递归展开查询参数
@@ -38,6 +39,7 @@ export interface BillOfMaterialExplosionQuery {
 
 }
 
+
 /**
  * BOM 递归展开结果
  * 对应前端 BillOfMaterialExplosion
@@ -60,9 +62,9 @@ export interface BillOfMaterialExplosion {
   parentMaterialCode: string;
 
   /**
-   * 父件物料描述
+   * 父件物料名称
    */
-  parentMaterialDescription: string;
+  parentMaterialName: string;
 
   /**
    * 需求数量
@@ -74,7 +76,13 @@ export interface BillOfMaterialExplosion {
    */
   lines: BillOfMaterialExplosionLine[];
 
+  /**
+   * 父件物料描述
+   */
+  parentMaterialDescription?: string;
+
 }
+
 
 /**
  * BOM 展开行（运行时计算，不落库）
@@ -118,9 +126,9 @@ export interface BillOfMaterialExplosionLine {
   materialCode: string;
 
   /**
-   * 子项物料描述
+   * 子项物料名称
    */
-  materialDescription?: string;
+  materialName?: string;
 
   /**
    * 直接父件物料编码（展开路径上的上一级）
@@ -186,6 +194,11 @@ export interface BillOfMaterialExplosionLine {
    * 是否循环引用（检测到环时标记，不再下钻）
    */
   isCircular: number;
+
+  /**
+   * 子项物料描述
+   */
+  materialDescription: string;
 
 }
 

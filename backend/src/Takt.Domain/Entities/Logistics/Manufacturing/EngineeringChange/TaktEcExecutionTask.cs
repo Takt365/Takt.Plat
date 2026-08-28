@@ -57,10 +57,15 @@ public class TaktEcExecutionTask : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EcnDetailId { get; set; }
     /// <summary>
-    /// 责任部门编码
+    /// 责任部门编码（TaktDept.DeptCode，如 D0710）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "责任部门编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "责任部门编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 责任部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "责任部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? DeptName { get; set; }
     /// <summary>
     /// 任务标题
     /// </summary>

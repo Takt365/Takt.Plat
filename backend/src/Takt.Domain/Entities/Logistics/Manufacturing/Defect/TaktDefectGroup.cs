@@ -31,47 +31,49 @@ public class TaktDefectGroup : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "defect_category", ColumnDescription = "不良类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DefectCategory { get; set; } = 0;
+
     /// <summary>
     /// 不良组编码（3）
     /// </summary>
     [SugarColumn(ColumnName = "defect_group_code", ColumnDescription = "不良组编码", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string DefectGroupCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 不良组名称
     /// </summary>
     [SugarColumn(ColumnName = "defect_group_name", ColumnDescription = "不良组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DefectGroupName { get; set; } = string.Empty;
+
     /// <summary>
     /// 不良组描述
     /// </summary>
     [SugarColumn(ColumnName = "defect_group_description", ColumnDescription = "不良组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? DefectGroupDescription { get; set; }
-    /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
+
     /// <summary>
     /// 联系电话
     /// </summary>
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ContactPhone { get; set; }
+
     /// <summary>
     /// 联系邮箱
     /// </summary>
     [SugarColumn(ColumnName = "contact_email", ColumnDescription = "联系邮箱", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ContactEmail { get; set; }
+
     /// <summary>
     /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
+
     /// <summary>
     /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+
     /// <summary>
     /// 不良组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>

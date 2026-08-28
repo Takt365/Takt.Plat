@@ -242,16 +242,16 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(keywords)));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcModel))
+        if (!string.IsNullOrEmpty(queryDto?.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
         if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {

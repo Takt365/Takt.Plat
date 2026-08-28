@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDelegation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,22 +145,22 @@ public class TaktEmployeeDelegationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedelegation.originalemployeename", "zh-HK", "被代理人姓名_hk", "被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "en-US", "代理类型_us", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "en-US", "代理类型_us", "代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "ja-JP", "代理类型_jp", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "ja-JP", "代理类型_jp", "代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-CN", "代理类型", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-CN", "代理类型", "代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
             // entity.employeedelegation.delegationtype
-            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-HK", "代理类型_hk", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
+            new TranslationSeedItem("entity.employeedelegation.delegationtype", "zh-HK", "代理类型_hk", "代理类型（字典 humanresource_personnel_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),
 
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "en-US", "代理范围类型_us", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "en-US", "代理范围类型_us", "代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "ja-JP", "代理范围类型_jp", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "ja-JP", "代理范围类型_jp", "代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-CN", "代理范围类型", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-CN", "代理范围类型", "代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
             // entity.employeedelegation.scopetype
-            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-HK", "代理范围类型_hk", "代理范围类型（字典 hr_employee_delegation_scope_type；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
+            new TranslationSeedItem("entity.employeedelegation.scopetype", "zh-HK", "代理范围类型_hk", "代理范围类型（字典 humanresource_personnel_employee_delegation_scope；1=部门级别 2=岗位级别 3=全局代理 4=特定业务）"),
 
             // entity.employeedelegation.scopeid
             new TranslationSeedItem("entity.employeedelegation.scopeid", "en-US", "代理范围ID_us", "代理范围 ID（ScopeType=1 时关联 TaktDept.Id/TaktDepts/tree-options；=2 时关联 TaktPost.Id/TaktPosts/options；=4 时为业务主键）"),

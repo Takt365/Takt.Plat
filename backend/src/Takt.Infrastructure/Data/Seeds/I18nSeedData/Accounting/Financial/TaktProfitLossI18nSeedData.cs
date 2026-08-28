@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktProfitLossI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitLoss 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktProfitLossI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitloss.accounttitlename", "zh-HK", "会计科目名称_hk", "会计科目名称（冗余）"),
 
             // entity.profitloss.linecategory
-            new TranslationSeedItem("entity.profitloss.linecategory", "en-US", "行类别_us", "行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
+            new TranslationSeedItem("entity.profitloss.linecategory", "en-US", "行类别_us", "行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
             // entity.profitloss.linecategory
-            new TranslationSeedItem("entity.profitloss.linecategory", "ja-JP", "行类别_jp", "行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
+            new TranslationSeedItem("entity.profitloss.linecategory", "ja-JP", "行类别_jp", "行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
             // entity.profitloss.linecategory
-            new TranslationSeedItem("entity.profitloss.linecategory", "zh-CN", "行类别", "行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
+            new TranslationSeedItem("entity.profitloss.linecategory", "zh-CN", "行类别", "行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
             // entity.profitloss.linecategory
-            new TranslationSeedItem("entity.profitloss.linecategory", "zh-HK", "行类别_hk", "行类别（字典 accounting_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
+            new TranslationSeedItem("entity.profitloss.linecategory", "zh-HK", "行类别_hk", "行类别（字典 accounting_financial_profit_loss_line_category；1=营业收入，2=营业成本，3=税金及附加，4=期间费用，5=其他收益损失，6=营业利润，7=营业外收支，8=利润总额，9=所得税费用，10=净利润，11=其他综合收益OCI，12=综合收益总额）"),
 
             // entity.profitloss.istotalline
             new TranslationSeedItem("entity.profitloss.istotalline", "en-US", "是否合计行_us", "是否合计/小计行（字典 sys_yes_no；1=是，0=否）"),
@@ -190,13 +190,13 @@ public class TaktProfitLossI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitloss.isexpense", "zh-HK", "是否费用性质_hk", "是否费用/成本性质（字典 sys_yes_no；1=费用成本，计算营业利润时作减项；0=收入或其他加项）"),
 
             // entity.profitloss.currencycode
-            new TranslationSeedItem("entity.profitloss.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.profitloss.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code）"),
             // entity.profitloss.currencycode
-            new TranslationSeedItem("entity.profitloss.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.profitloss.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code）"),
             // entity.profitloss.currencycode
-            new TranslationSeedItem("entity.profitloss.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.profitloss.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code）"),
             // entity.profitloss.currencycode
-            new TranslationSeedItem("entity.profitloss.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code）"),
+            new TranslationSeedItem("entity.profitloss.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code）"),
 
             // entity.profitloss.sortorder
             new TranslationSeedItem("entity.profitloss.sortorder", "en-US", "排序号_us", "排序号（回填）（越小越靠前）"),

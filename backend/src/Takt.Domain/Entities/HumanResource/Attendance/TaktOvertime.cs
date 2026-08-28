@@ -29,13 +29,13 @@ namespace Takt.Domain.Entities.HumanResource.Attendance;
 public class TaktOvertime : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "部门ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
@@ -70,7 +70,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "total_actual_hours", ColumnDescription = "实际总小时数", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TotalActualHours { get; set; }
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_type", ColumnDescription = "加班类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int OvertimeType { get; set; }
@@ -82,9 +82,14 @@ public class TaktOvertime : TaktApprovalEntityBase
     /// <summary>
     /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "handling_by_name", ColumnDescription = "经办人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? HandlingByName { get; set; }
     /// <summary>
     /// 经办时间
     /// </summary>

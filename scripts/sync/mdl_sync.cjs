@@ -94,7 +94,7 @@ WHEN NOT MATCHED THEN
   INSERT (
     [id],
     [material_code],
-    [material_name],
+    [material_description],
     [model_code],
     [model_name],
     [destination_code],

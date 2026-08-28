@@ -44,7 +44,7 @@ export interface SerialInbound extends CompanyDtoBase {
   inboundDate: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 
@@ -109,7 +109,7 @@ export interface SerialInboundQuery extends TaktPagedQuery {
   inboundDateEnd?: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
@@ -191,7 +191,7 @@ export interface SerialInboundCreate {
   inboundDate: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 
@@ -275,7 +275,7 @@ export interface SerialInboundTemplate {
   inboundDate?: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
@@ -352,7 +352,7 @@ export interface SerialInboundImport {
   inboundDate?: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType?: number;
 
@@ -421,7 +421,7 @@ export interface SerialInboundExport {
   inboundDate: string;
 
   /**
-   * 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+   * 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
    */
   inboundType: number;
 

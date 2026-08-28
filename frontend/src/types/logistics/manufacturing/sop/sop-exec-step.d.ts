@@ -49,7 +49,7 @@ export interface SopExecStep extends CompanyDtoBase {
   stepNo?: number;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_manufacturing_sop_check_result）
    */
   stepResult?: number;
 
@@ -117,7 +117,7 @@ export interface SopExecStepExport {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_manufacturing_sop_check_result）
    */
   stepResult?: number;
 

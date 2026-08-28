@@ -79,7 +79,7 @@ export interface Post extends CompanyDtoBase {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired: number;
 
@@ -199,7 +199,7 @@ export interface PostQuery extends TaktPagedQuery {
   requirements?: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired?: number;
 
@@ -338,7 +338,7 @@ export interface PostCreate {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired: number;
 
@@ -520,7 +520,7 @@ export interface PostTemplate {
   requirements?: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired?: number;
 
@@ -649,7 +649,7 @@ export interface PostImport {
   requirements?: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired?: number;
 
@@ -778,7 +778,7 @@ export interface PostExport {
   requirements: string;
 
   /**
-   * 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+   * 学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationRequired: number;
 

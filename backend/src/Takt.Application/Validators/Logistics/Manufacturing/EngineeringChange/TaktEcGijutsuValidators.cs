@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcGijutsu 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcGijutsu 生成，请按需审阅）
 // 
@@ -52,6 +52,9 @@ public class TaktEcGijutsuCreateValidator : AbstractValidator<TaktEcGijutsuCreat
         RuleFor(x => x.EcLeader)
             .NotEmpty().WithMessage("负责人不能为空")
             .MaximumLength(50).WithMessage("负责人长度不能超过50个字符");
+        RuleFor(x => x.DiscontinuedStatus)
+            .NotEmpty().WithMessage("完成品物料状态不能为空")
+            .MaximumLength(4).WithMessage("完成品物料状态长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -98,6 +101,9 @@ public class TaktEcGijutsuUpdateValidator : AbstractValidator<TaktEcGijutsuUpdat
         RuleFor(x => x.EcLeader)
             .NotEmpty().WithMessage("负责人不能为空")
             .MaximumLength(50).WithMessage("负责人长度不能超过50个字符");
+        RuleFor(x => x.DiscontinuedStatus)
+            .NotEmpty().WithMessage("完成品物料状态不能为空")
+            .MaximumLength(4).WithMessage("完成品物料状态长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -138,6 +144,9 @@ public class TaktEcGijutsuImportValidator : AbstractValidator<TaktEcGijutsuImpor
         RuleFor(x => x.EcLeader)
             .NotEmpty().WithMessage("负责人不能为空")
             .MaximumLength(50).WithMessage("负责人长度不能超过50个字符");
+        RuleFor(x => x.DiscontinuedStatus)
+            .NotEmpty().WithMessage("完成品物料状态不能为空")
+            .MaximumLength(4).WithMessage("完成品物料状态长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

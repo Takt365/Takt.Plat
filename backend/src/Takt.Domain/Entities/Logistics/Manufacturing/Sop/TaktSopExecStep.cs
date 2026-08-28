@@ -58,7 +58,7 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     [SugarColumn(ColumnName = "step_result", ColumnDescription = "工步结果", ColumnDataType = "int", IsNullable = true)]
     public int? StepResult { get; set; }
@@ -69,6 +69,11 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "confirmed_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
+    /// <summary>
+    /// 确认人名称（冗余：按 ConfirmedBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "confirmed_by_name", ColumnDescription = "确认人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ConfirmedByName { get; set; }
 
     /// <summary>
     /// 确认时间

@@ -165,7 +165,7 @@
       <a-form-item :label="t('entity.sopexecscan.scanresult')">
         <TaktSelect
           v-model:value="advancedQueryForm.scanResult"
-          dict-type="logistics_sop_scan_result_type"
+          dict-type="logistics_manufacturing_sop_scan_result"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scanresult') })"
           allow-clear
         />

@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcHinkansController : TaktControllerBase
 {
     private readonly ITaktEcHinkanService _ecHinkanService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecHinkanService">设变品管执行服务</param>
-    public TaktEcHinkansController(ITaktEcHinkanService ecHinkanService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcHinkansController(
+        ITaktEcHinkanService ecHinkanService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecHinkanService = ecHinkanService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:list", "设变品管执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:list", "设变品管执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcHinkanListAsync([FromQuery] TaktEcHinkanQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcHinkansController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:list", "设变品管执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcHinkanMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Qa);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变品管执行
     /// </summary>
     /// <param name="id">设变品管执行ID</param>
     /// <returns>设变品管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:query", "设变品管执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:query", "设变品管执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcHinkanByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// 获取设变品管执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:query", "设变品管执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:query", "设变品管执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcHinkanOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变品管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:create", "创建设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:create", "创建设变品管执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcHinkanAsync([FromBody] TaktEcHinkanCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// <param name="id">设变品管执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变品管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:update", "更新设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:update", "更新设变品管执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcHinkanAsync(long id, [FromBody] TaktEcHinkanUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变品管执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:delete", "删除设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:delete", "删除设变品管执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcHinkanByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:delete", "批量删除设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:delete", "批量删除设变品管执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcHinkanBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变品管执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:update", "更新设变品管执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:update", "更新设变品管执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcHinkanObsoleteAsync([FromBody] TaktEcHinkanObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:import", "获取设变品管执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:import", "获取设变品管执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcHinkanTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:import", "导入设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:import", "导入设变品管执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcHinkanAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcHinkansController : TaktControllerBase
     /// 导出设变品管执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:hinkan:export", "导出设变品管执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:export", "导出设变品管执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcHinkanAsync([FromQuery] TaktEcHinkanQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

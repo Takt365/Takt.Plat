@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncidentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "zh-HK", "品质事故主表ID_hk", "品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）"),
 
             // entity.qualityincidentitem.qualityincidentcode
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "en-US", "品质事故编码_us", "品质事故编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "en-US", "品质事故编码_us", "品质事故编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityincidentitem.qualityincidentcode
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "ja-JP", "品质事故编码_jp", "品质事故编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "ja-JP", "品质事故编码_jp", "品质事故编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityincidentitem.qualityincidentcode
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "zh-CN", "品质事故编码", "品质事故编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "zh-CN", "品质事故编码", "品质事故编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityincidentitem.qualityincidentcode
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "zh-HK", "品质事故编码_hk", "品质事故编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "zh-HK", "品质事故编码_hk", "品质事故编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.qualityincidentitem.linenumber
             new TranslationSeedItem("entity.qualityincidentitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

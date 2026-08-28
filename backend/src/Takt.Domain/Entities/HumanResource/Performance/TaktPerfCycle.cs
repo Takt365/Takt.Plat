@@ -34,7 +34,7 @@ public class TaktPerfCycle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "cycle_name", ColumnDescription = "周期名称", ColumnDataType = "nvarchar", Length = 128, IsNullable = false)]
     public string CycleName { get; set; } = string.Empty;
     /// <summary>
-    /// 周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）
+    /// 周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_type", ColumnDescription = "周期类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CycleType { get; set; } = string.Empty;
@@ -94,7 +94,7 @@ public class TaktPerfCycle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "perf_cycle_description", ColumnDescription = "周期说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string PerfCycleDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
+    /// 状态（字典 humanresource_performance_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_schedule_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CycleScheduleStatus { get; set; }

@@ -47,17 +47,17 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "company_short_name", ColumnDescription = "公司简称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CompanyShortName { get; set; } = string.Empty;
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type）
+    /// 企业性质（字典 sys_enterprise_nature）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_nature", ColumnDescription = "企业性质", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "150")]
     public string EnterpriseNature { get; set; } = "150";
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type）
+    /// 行业属性（字典 sys_industry_attribute）
     /// </summary>
     [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "C")]
     public string IndustryAttribute { get; set; } = "C";
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type）
+    /// 企业规模（字典 sys_enterprise_scale）
     /// </summary>
     [SugarColumn(ColumnName = "enterprise_scale", ColumnDescription = "企业规模", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "M")]
     public string EnterpriseScale { get; set; } = "M";
@@ -152,10 +152,16 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "legal_representative", ColumnDescription = "法定代表人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string LegalRepresentative { get; set; } = string.Empty;
     /// <summary>
-    /// 公司负责人
+    /// 公司负责人（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "company_manager", ColumnDescription = "公司负责人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string CompanyManager { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "company_manager_user_id", ColumnDescription = "公司负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CompanyManagerUserId { get; set; }
+    /// <summary>
+    /// 公司负责人名称（冗余：按 CompanyManagerUserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "company_manager_user_name", ColumnDescription = "公司负责人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? CompanyManagerUserName { get; set; }
     /// <summary>
     /// 注册资本（万元）
     /// </summary>
@@ -197,22 +203,22 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "account_holder", ColumnDescription = "帐户持有人", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
     public string AccountHolder { get; set; } = string.Empty;
     /// <summary>
-    /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+    /// 币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "")]
     public string CurrencyCode { get; set; } = string.Empty;
     /// <summary>
-    /// 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+    /// 帐目表（字典 accounting_financial_chart_of_accounts；如 INT/TEAC）
     /// </summary>
     [SugarColumn(ColumnName = "chart_of_accounts", ColumnDescription = "帐目表", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string ChartOfAccounts { get; set; } = string.Empty;
     /// <summary>
-    /// 进项税码（字典 accounting_tax_code）
+    /// 进项税码（字典 accounting_financial_tax_code）
     /// </summary>
     [SugarColumn(ColumnName = "input_tax_code", ColumnDescription = "进项税码", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "")]
     public string InputTaxCode { get; set; } = string.Empty;
     /// <summary>
-    /// 销项税码（字典 accounting_tax_code）
+    /// 销项税码（字典 accounting_financial_tax_code）
     /// </summary>
     [SugarColumn(ColumnName = "output_tax_code", ColumnDescription = "销项税码", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "")]
     public string OutputTaxCode { get; set; } = string.Empty;
@@ -222,12 +228,12 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "business_place", ColumnDescription = "营业税主体", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string BusinessPlace { get; set; } = string.Empty;
     /// <summary>
-    /// 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+    /// 记帐期间变式（字典 accounting_financial_posting_period_variant；原则上一个公司对应一个变式）
     /// </summary>
     [SugarColumn(ColumnName = "posting_period_variant", ColumnDescription = "记帐期间变式", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string PostingPeriodVariant { get; set; } = string.Empty;
     /// <summary>
-    /// 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+    /// 会计年度变式（字典 accounting_financial_fiscal_year_variant；如 K4/Z1/Z2）
     /// </summary>
     [SugarColumn(ColumnName = "fiscal_year_variant", ColumnDescription = "会计年度变式", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "")]
     public string FiscalYearVariant { get; set; } = string.Empty;

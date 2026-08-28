@@ -56,7 +56,7 @@ public class TaktSetting : TaktCompanyEntityBase
     public string SettingGroup { get; set; } = "frontend";
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     [SugarColumn(ColumnName = "value_type", ColumnDescription = "值类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "input")]
     public string ValueType { get; set; } = "input";

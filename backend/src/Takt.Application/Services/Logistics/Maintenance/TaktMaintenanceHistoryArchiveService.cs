@@ -131,7 +131,7 @@ public class TaktMaintenanceHistoryArchiveService : TaktServiceBase, ITaktMainte
         history.MaintenanceDocuments = workOrder.MaintenanceDocuments;
         history.MaintenanceImages = workOrder.MaintenanceImages;
         history.AcceptedSummary = workOrder.AcceptedSummary;
-        history.AcceptedBy = workOrder.AcceptedBy;
+        history.AcceptedByEmployeeName = workOrder.AcceptedByEmployeeName;
         history.AcceptedAt = workOrder.AcceptedAt;
         history.ArchivedAt = DateTime.Now;
 

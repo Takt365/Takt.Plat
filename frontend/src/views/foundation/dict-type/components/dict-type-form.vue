@@ -36,7 +36,7 @@
                   v-model:value="formState.dictTypeCode"
                   :placeholder="pi.ph('dictTypeCode')"
                   show-count
-                  :maxlength="80"
+                  :maxlength="140"
                   allow-clear
                   :disabled="!!formData?.dictTypeId"
                 />
@@ -63,7 +63,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.dataSource"
-                  dict-type="sys_data_source_type"
+                  dict-type="sys_data_source"
                   :placeholder="pi.ph('dataSource')"
                 />
               </a-form-item>

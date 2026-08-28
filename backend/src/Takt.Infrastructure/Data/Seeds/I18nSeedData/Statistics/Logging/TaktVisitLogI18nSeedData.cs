@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Statistics.Logging
 // 文件名称：TaktVisitLogI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitLog 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktVisitLogI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.visitlog.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "en-US", "用户名_us", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.visitlog.username", "en-US", "用户名_us", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "ja-JP", "用户名_jp", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.visitlog.username", "ja-JP", "用户名_jp", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "zh-CN", "用户名", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.visitlog.username", "zh-CN", "用户名", "用户名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.visitlog.username
-            new TranslationSeedItem("entity.visitlog.username", "zh-HK", "用户名_hk", "用户名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.visitlog.username", "zh-HK", "用户名_hk", "用户名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.visitlog.statdate
             new TranslationSeedItem("entity.visitlog.statdate", "en-US", "统计日期_us", "统计日期（自然日，不含时分秒）"),

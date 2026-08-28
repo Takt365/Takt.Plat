@@ -34,22 +34,17 @@ export interface Countersign extends ApprovalDtoBase {
   countersignCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价 名称（填充字段）
-   */
-  purchaseInquiryName?: string;
-
-  /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType: string;
 
@@ -64,7 +59,7 @@ export interface Countersign extends ApprovalDtoBase {
   stepNo: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -84,19 +79,34 @@ export interface Countersign extends ApprovalDtoBase {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -104,7 +114,12 @@ export interface Countersign extends ApprovalDtoBase {
   isBudget: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -139,9 +154,14 @@ export interface Countersign extends ApprovalDtoBase {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -184,17 +204,17 @@ export interface CountersignQuery extends TaktPagedQuery {
   countersignCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType?: string;
 
@@ -209,7 +229,7 @@ export interface CountersignQuery extends TaktPagedQuery {
   stepNo?: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -229,19 +249,34 @@ export interface CountersignQuery extends TaktPagedQuery {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -249,7 +284,12 @@ export interface CountersignQuery extends TaktPagedQuery {
   isBudget?: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -284,9 +324,14 @@ export interface CountersignQuery extends TaktPagedQuery {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -391,17 +436,17 @@ export interface CountersignCreate {
   countersignCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType: string;
 
@@ -416,7 +461,7 @@ export interface CountersignCreate {
   stepNo: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -436,19 +481,34 @@ export interface CountersignCreate {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -456,7 +516,12 @@ export interface CountersignCreate {
   isBudget: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -491,9 +556,14 @@ export interface CountersignCreate {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -579,17 +649,17 @@ export interface CountersignTemplate {
   countersignCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType?: string;
 
@@ -604,7 +674,7 @@ export interface CountersignTemplate {
   stepNo?: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -624,19 +694,34 @@ export interface CountersignTemplate {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -644,7 +729,12 @@ export interface CountersignTemplate {
   isBudget?: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -679,9 +769,14 @@ export interface CountersignTemplate {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -741,17 +836,17 @@ export interface CountersignImport {
   countersignCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType?: string;
 
@@ -766,7 +861,7 @@ export interface CountersignImport {
   stepNo?: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -786,19 +881,34 @@ export interface CountersignImport {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -806,7 +916,12 @@ export interface CountersignImport {
   isBudget?: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -841,9 +956,14 @@ export interface CountersignImport {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -885,17 +1005,17 @@ export interface CountersignExport {
   countersignCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
   /**
-   * 来源采购询价编码（冗余）
+   * 来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）
    */
   purchaseInquiryCode?: string;
 
   /**
-   * 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）
+   * 会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）
    */
   businessType: string;
 
@@ -910,7 +1030,7 @@ export interface CountersignExport {
   stepNo: number;
 
   /**
-   * 会签部门 JSON
+   * 会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）
    */
   countersignDepts?: string;
 
@@ -930,19 +1050,34 @@ export interface CountersignExport {
   executiveOffice?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
    */
-  applicationDept?: string;
+  applicantName?: string;
 
   /**
-   * 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
    */
-  costBearerDept?: string;
+  applicationDeptId?: string;
+
+  /**
+   * 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+   */
+  applicationDeptName?: string;
+
+  /**
+   * 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+   */
+  costBearerDeptId?: string;
+
+  /**
+   * 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+   */
+  costBearerDeptName?: string;
 
   /**
    * 预算否（字典 sys_yes_no）
@@ -950,7 +1085,12 @@ export interface CountersignExport {
   isBudget: number;
 
   /**
-   * 预算项目
+   * 预算项目（选项 TaktBudgetActuals/options；DictValue=Id）
+   */
+  budgetItemId?: string;
+
+  /**
+   * 预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）
    */
   budgetItem?: string;
 
@@ -985,9 +1125,14 @@ export interface CountersignExport {
   targetAndExpectedBenefit?: string;
 
   /**
-   * 附件 JSON
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachments?: string;
+  fileName?: string;
+
+  /**
+   * 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+   */
+  accessUrl?: string;
 
   /**
    * 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）

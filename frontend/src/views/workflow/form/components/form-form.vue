@@ -213,11 +213,11 @@
                 @change="(checked) => { record.isRequired = checked ? 0 : 1 }"
               />
             </template>
-            <!-- 显示类型：gen_display_type 字典 -->
+            <!-- 显示类型：code_generator_display_type 字典 -->
             <template v-else-if="column.key === 'displayType'">
               <TaktSelect
                 v-model="record.displayType"
-                dict-type="gen_display_type"
+                dict-type="code_generator_display_type"
                 :placeholder="t('common.page.form.placeholder.select', { field: t('entity.gentablecolumn.htmltype') })"
                 allow-clear
                 size="small"

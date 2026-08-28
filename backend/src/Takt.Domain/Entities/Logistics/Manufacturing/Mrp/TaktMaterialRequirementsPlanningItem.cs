@@ -33,7 +33,7 @@ public class TaktMaterialRequirementsPlanningItem : TaktCompanyEntityBase
     public long MaterialRequirementsPlanningId { get; set; }
 
     /// <summary>
-    /// MRP 编码（冗余字段，便于查询）
+    /// MRP 编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "MRP编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialRequirementsPlanningCode { get; set; } = string.Empty;
@@ -93,7 +93,7 @@ public class TaktMaterialRequirementsPlanningItem : TaktCompanyEntityBase
     public DateTime RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PlanUnit { get; set; } = "PC";

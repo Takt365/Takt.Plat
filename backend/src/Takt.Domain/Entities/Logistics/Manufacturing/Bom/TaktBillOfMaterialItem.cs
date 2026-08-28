@@ -64,7 +64,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public decimal UsageQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     [SugarColumn(ColumnName = "material_unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string MaterialUnit { get; set; } = "PC";

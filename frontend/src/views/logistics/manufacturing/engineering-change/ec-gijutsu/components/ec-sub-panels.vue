@@ -15,7 +15,7 @@
     >
       <a-tab-pane
         key="attachment"
-        :tab="t('entity.ecattachment._self')"
+        :tab="ai.self()"
         force-render
       >
         <EcAttachmentPanel
@@ -25,7 +25,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="detail"
-        :tab="t('entity.ecdetail._self')"
+        :tab="pi.self()"
         force-render
       >
         <EcDetailPanel
@@ -43,11 +43,13 @@
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import EcAttachmentPanel from './ec-attachment-panel.vue'
 import EcDetailPanel from './ec-detail-panel.vue'
+import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
+import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n'
 
-const { t } = useI18n()
+const pi = useEcDetailI18n()
+const ai = useEcAttachmentI18n()
 /** 当前激活子表 Tab（流程：主表 → 附件 → 明细） */
 const activeTab = ref('attachment')
 /** 附件子表面板 ref */

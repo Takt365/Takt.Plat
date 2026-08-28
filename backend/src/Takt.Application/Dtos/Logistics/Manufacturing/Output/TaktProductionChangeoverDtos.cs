@@ -37,12 +37,12 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string ChangeoverCategory { get; set; } = string.Empty;
 
@@ -154,12 +154,12 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string? ChangeoverCategory { get; set; } = string.Empty;
 
@@ -295,14 +295,14 @@ public class TaktProductionChangeoverCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
-    [Required(ErrorMessage = "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）不能为空")]
+    [Required(ErrorMessage = "切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）不能为空")]
     public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -446,12 +446,12 @@ public class TaktProductionChangeoverTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string? ChangeoverCategory { get; set; } = string.Empty;
 
@@ -568,12 +568,12 @@ public class TaktProductionChangeoverImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string? ChangeoverCategory { get; set; } = string.Empty;
 
@@ -691,12 +691,12 @@ public class TaktProductionChangeoverExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_manufacturing_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string ChangeoverCategory { get; set; } = string.Empty;
 

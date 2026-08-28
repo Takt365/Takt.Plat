@@ -34,7 +34,7 @@ public class TaktPurchaseInvoiceItem : TaktCompanyEntityBase
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_invoice_code", ColumnDescription = "凭证编号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PurchaseInvoiceCode { get; set; } = string.Empty;

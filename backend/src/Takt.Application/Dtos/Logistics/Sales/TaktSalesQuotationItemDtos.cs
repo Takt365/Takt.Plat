@@ -72,7 +72,7 @@ public class TaktSalesQuotationItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktSalesQuotationItemDto : TaktCompanyDtoBase
     public decimal QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -92,7 +92,7 @@ public class TaktSalesQuotationItemDto : TaktCompanyDtoBase
     public decimal QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal DiscountRate { get; set; }
 
@@ -196,7 +196,7 @@ public class TaktSalesQuotationItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -206,7 +206,7 @@ public class TaktSalesQuotationItemQueryDto : TaktPagedQuery
     public decimal? QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -216,7 +216,7 @@ public class TaktSalesQuotationItemQueryDto : TaktPagedQuery
     public decimal? QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal? DiscountRate { get; set; }
 
@@ -334,9 +334,9 @@ public class TaktSalesQuotationItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -345,7 +345,7 @@ public class TaktSalesQuotationItemCreateDto
     public decimal QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -355,7 +355,7 @@ public class TaktSalesQuotationItemCreateDto
     public decimal QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal DiscountRate { get; set; }
 
@@ -505,7 +505,7 @@ public class TaktSalesQuotationItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -515,7 +515,7 @@ public class TaktSalesQuotationItemTemplateDto
     public decimal? QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -525,7 +525,7 @@ public class TaktSalesQuotationItemTemplateDto
     public decimal? QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal? DiscountRate { get; set; }
 
@@ -628,7 +628,7 @@ public class TaktSalesQuotationItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? SalesUnit { get; set; } = string.Empty;
 
@@ -638,7 +638,7 @@ public class TaktSalesQuotationItemImportDto
     public decimal? QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int? SalesPerUnit { get; set; }
 
@@ -648,7 +648,7 @@ public class TaktSalesQuotationItemImportDto
     public decimal? QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal? DiscountRate { get; set; }
 
@@ -757,7 +757,7 @@ public class TaktSalesQuotationItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string SalesUnit { get; set; } = string.Empty;
 
@@ -767,7 +767,7 @@ public class TaktSalesQuotationItemExportDto
     public decimal QuotationQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     public int SalesPerUnit { get; set; } = 0;
 
@@ -777,7 +777,7 @@ public class TaktSalesQuotationItemExportDto
     public decimal QuotationUnitPrice { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     public decimal DiscountRate { get; set; }
 

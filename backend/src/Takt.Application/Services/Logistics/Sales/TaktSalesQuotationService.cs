@@ -502,7 +502,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 || (x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
-                || (x.SalesBy != null && x.SalesBy.Contains(keywords))
+                || (x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
@@ -541,10 +541,10 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesEmployeeName))
         {
-            var salesBy = queryDto.SalesBy;
-            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(salesBy));
+            var salesBy = queryDto.SalesEmployeeName;
+            exp = exp.And(x => x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(salesBy));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -693,7 +693,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesEmployeeName))
         {
             return true;
         }

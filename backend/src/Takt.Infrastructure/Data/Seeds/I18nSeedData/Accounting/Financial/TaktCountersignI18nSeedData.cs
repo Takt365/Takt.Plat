@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCountersignI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCountersign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,31 +100,31 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersign.code", "zh-HK", "会签编码_hk", "会签编码"),
 
             // entity.countersign.purchaseinquiryid
-            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "en-US", "来源采购询价ID_us", "来源采购询价 ID（采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "en-US", "来源采购询价ID_us", "来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）"),
             // entity.countersign.purchaseinquiryid
-            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "ja-JP", "来源采购询价ID_jp", "来源采购询价 ID（采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "ja-JP", "来源采购询价ID_jp", "来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）"),
             // entity.countersign.purchaseinquiryid
-            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "zh-CN", "来源采购询价ID", "来源采购询价 ID（采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "zh-CN", "来源采购询价ID", "来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）"),
             // entity.countersign.purchaseinquiryid
-            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "zh-HK", "来源采购询价ID_hk", "来源采购询价 ID（采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquiryid", "zh-HK", "来源采购询价ID_hk", "来源采购询价（选项 TaktPurchaseInquiries/options；DictValue=Id）"),
 
             // entity.countersign.purchaseinquirycode
-            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "en-US", "来源采购询价编码_us", "来源采购询价编码（冗余）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "en-US", "来源采购询价编码_us", "来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）"),
             // entity.countersign.purchaseinquirycode
-            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "ja-JP", "来源采购询价编码_jp", "来源采购询价编码（冗余）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "ja-JP", "来源采购询价编码_jp", "来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）"),
             // entity.countersign.purchaseinquirycode
-            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "zh-CN", "来源采购询价编码", "来源采购询价编码（冗余）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "zh-CN", "来源采购询价编码", "来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）"),
             // entity.countersign.purchaseinquirycode
-            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "zh-HK", "来源采购询价编码_hk", "来源采购询价编码（冗余）"),
+            new TranslationSeedItem("entity.countersign.purchaseinquirycode", "zh-HK", "来源采购询价编码_hk", "来源采购询价编码（冗余：按 PurchaseInquiryId 取 TaktPurchaseInquiry.PurchaseInquiryCode 联动）"),
 
             // entity.countersign.businesstype
-            new TranslationSeedItem("entity.countersign.businesstype", "en-US", "会签业务类型_us", "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）"),
+            new TranslationSeedItem("entity.countersign.businesstype", "en-US", "会签业务类型_us", "会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）"),
             // entity.countersign.businesstype
-            new TranslationSeedItem("entity.countersign.businesstype", "ja-JP", "会签业务类型_jp", "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）"),
+            new TranslationSeedItem("entity.countersign.businesstype", "ja-JP", "会签业务类型_jp", "会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）"),
             // entity.countersign.businesstype
-            new TranslationSeedItem("entity.countersign.businesstype", "zh-CN", "会签业务类型", "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）"),
+            new TranslationSeedItem("entity.countersign.businesstype", "zh-CN", "会签业务类型", "会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）"),
             // entity.countersign.businesstype
-            new TranslationSeedItem("entity.countersign.businesstype", "zh-HK", "会签业务类型_hk", "会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）"),
+            new TranslationSeedItem("entity.countersign.businesstype", "zh-HK", "会签业务类型_hk", "会签业务类型（字典 accounting_financial_countersign_business_type：inquiry/pr/expense/standalone）"),
 
             // entity.countersign.businesskey
             new TranslationSeedItem("entity.countersign.businesskey", "en-US", "会签业务键_us", "会签业务键（如 inquiry:123、pr:456、expense:789）"),
@@ -145,13 +145,13 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersign.stepno", "zh-HK", "会签步骤序号_hk", "会签步骤序号（询价=1，PR=2，报销=3）"),
 
             // entity.countersign.depts
-            new TranslationSeedItem("entity.countersign.depts", "en-US", "会签部门_us", "会签部门 JSON"),
+            new TranslationSeedItem("entity.countersign.depts", "en-US", "会签部门_us", "会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）"),
             // entity.countersign.depts
-            new TranslationSeedItem("entity.countersign.depts", "ja-JP", "会签部门_jp", "会签部门 JSON"),
+            new TranslationSeedItem("entity.countersign.depts", "ja-JP", "会签部门_jp", "会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）"),
             // entity.countersign.depts
-            new TranslationSeedItem("entity.countersign.depts", "zh-CN", "会签部门", "会签部门 JSON"),
+            new TranslationSeedItem("entity.countersign.depts", "zh-CN", "会签部门", "会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）"),
             // entity.countersign.depts
-            new TranslationSeedItem("entity.countersign.depts", "zh-HK", "会签部门_hk", "会签部门 JSON"),
+            new TranslationSeedItem("entity.countersign.depts", "zh-HK", "会签部门_hk", "会签部门（选项 TaktDepts/tree-options；DictValue=Id；多选 JSON）"),
 
             // entity.countersign.financedept
             new TranslationSeedItem("entity.countersign.financedept", "en-US", "财务部门_us", "财务部门 JSON"),
@@ -181,31 +181,58 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersign.executiveoffice", "zh-HK", "总经室_hk", "总经室 JSON"),
 
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "en-US", "申请人_us", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "en-US", "申请人ID_us", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "ja-JP", "申请人_jp", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "ja-JP", "申请人ID_jp", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "zh-CN", "申请人", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "zh-CN", "申请人ID", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "zh-HK", "申请人_hk", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "zh-HK", "申请人ID_hk", "申请人（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.countersign.applicationdept
-            new TranslationSeedItem("entity.countersign.applicationdept", "en-US", "申请部门_us", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.applicationdept
-            new TranslationSeedItem("entity.countersign.applicationdept", "ja-JP", "申请部门_jp", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.applicationdept
-            new TranslationSeedItem("entity.countersign.applicationdept", "zh-CN", "申请部门", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.applicationdept
-            new TranslationSeedItem("entity.countersign.applicationdept", "zh-HK", "申请部门_hk", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            // entity.countersign.applicantname
+            new TranslationSeedItem("entity.countersign.applicantname", "en-US", "申请人名称_us", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.countersign.applicantname
+            new TranslationSeedItem("entity.countersign.applicantname", "ja-JP", "申请人名称_jp", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.countersign.applicantname
+            new TranslationSeedItem("entity.countersign.applicantname", "zh-CN", "申请人名称", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.countersign.applicantname
+            new TranslationSeedItem("entity.countersign.applicantname", "zh-HK", "申请人名称_hk", "申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）"),
 
-            // entity.countersign.costbearerdept
-            new TranslationSeedItem("entity.countersign.costbearerdept", "en-US", "经费负担部门_us", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.costbearerdept
-            new TranslationSeedItem("entity.countersign.costbearerdept", "ja-JP", "经费负担部门_jp", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.costbearerdept
-            new TranslationSeedItem("entity.countersign.costbearerdept", "zh-CN", "经费负担部门", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
-            // entity.countersign.costbearerdept
-            new TranslationSeedItem("entity.countersign.costbearerdept", "zh-HK", "经费负担部门_hk", "经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+            // entity.countersign.applicationdeptid
+            new TranslationSeedItem("entity.countersign.applicationdeptid", "en-US", "申请部门ID_us", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.applicationdeptid
+            new TranslationSeedItem("entity.countersign.applicationdeptid", "ja-JP", "申请部门ID_jp", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.applicationdeptid
+            new TranslationSeedItem("entity.countersign.applicationdeptid", "zh-CN", "申请部门ID", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.applicationdeptid
+            new TranslationSeedItem("entity.countersign.applicationdeptid", "zh-HK", "申请部门ID_hk", "申请部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.countersign.applicationdeptname
+            new TranslationSeedItem("entity.countersign.applicationdeptname", "en-US", "申请部门名称_us", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.applicationdeptname
+            new TranslationSeedItem("entity.countersign.applicationdeptname", "ja-JP", "申请部门名称_jp", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.applicationdeptname
+            new TranslationSeedItem("entity.countersign.applicationdeptname", "zh-CN", "申请部门名称", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.applicationdeptname
+            new TranslationSeedItem("entity.countersign.applicationdeptname", "zh-HK", "申请部门名称_hk", "申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）"),
+
+            // entity.countersign.costbearerdeptid
+            new TranslationSeedItem("entity.countersign.costbearerdeptid", "en-US", "经费负担部门ID_us", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.costbearerdeptid
+            new TranslationSeedItem("entity.countersign.costbearerdeptid", "ja-JP", "经费负担部门ID_jp", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.costbearerdeptid
+            new TranslationSeedItem("entity.countersign.costbearerdeptid", "zh-CN", "经费负担部门ID", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.countersign.costbearerdeptid
+            new TranslationSeedItem("entity.countersign.costbearerdeptid", "zh-HK", "经费负担部门ID_hk", "经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.countersign.costbearerdeptname
+            new TranslationSeedItem("entity.countersign.costbearerdeptname", "en-US", "经费负担部门名称_us", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.costbearerdeptname
+            new TranslationSeedItem("entity.countersign.costbearerdeptname", "ja-JP", "经费负担部门名称_jp", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.costbearerdeptname
+            new TranslationSeedItem("entity.countersign.costbearerdeptname", "zh-CN", "经费负担部门名称", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.countersign.costbearerdeptname
+            new TranslationSeedItem("entity.countersign.costbearerdeptname", "zh-HK", "经费负担部门名称_hk", "经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.countersign.isbudget
             new TranslationSeedItem("entity.countersign.isbudget", "en-US", "预算否_us", "预算否（字典 sys_yes_no）"),
@@ -216,23 +243,32 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             // entity.countersign.isbudget
             new TranslationSeedItem("entity.countersign.isbudget", "zh-HK", "预算否_hk", "预算否（字典 sys_yes_no）"),
 
+            // entity.countersign.budgetitemid
+            new TranslationSeedItem("entity.countersign.budgetitemid", "en-US", "预算项目ID_us", "预算项目（选项 TaktBudgetActuals/options；DictValue=Id）"),
+            // entity.countersign.budgetitemid
+            new TranslationSeedItem("entity.countersign.budgetitemid", "ja-JP", "预算项目ID_jp", "预算项目（选项 TaktBudgetActuals/options；DictValue=Id）"),
+            // entity.countersign.budgetitemid
+            new TranslationSeedItem("entity.countersign.budgetitemid", "zh-CN", "预算项目ID", "预算项目（选项 TaktBudgetActuals/options；DictValue=Id）"),
+            // entity.countersign.budgetitemid
+            new TranslationSeedItem("entity.countersign.budgetitemid", "zh-HK", "预算项目ID_hk", "预算项目（选项 TaktBudgetActuals/options；DictValue=Id）"),
+
             // entity.countersign.budgetitem
-            new TranslationSeedItem("entity.countersign.budgetitem", "en-US", "预算项目_us", "预算项目"),
+            new TranslationSeedItem("entity.countersign.budgetitem", "en-US", "预算项目名称_us", "预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）"),
             // entity.countersign.budgetitem
-            new TranslationSeedItem("entity.countersign.budgetitem", "ja-JP", "预算项目_jp", "预算项目"),
+            new TranslationSeedItem("entity.countersign.budgetitem", "ja-JP", "预算项目名称_jp", "预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）"),
             // entity.countersign.budgetitem
-            new TranslationSeedItem("entity.countersign.budgetitem", "zh-CN", "预算项目", "预算项目"),
+            new TranslationSeedItem("entity.countersign.budgetitem", "zh-CN", "预算项目名称", "预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）"),
             // entity.countersign.budgetitem
-            new TranslationSeedItem("entity.countersign.budgetitem", "zh-HK", "预算项目_hk", "预算项目"),
+            new TranslationSeedItem("entity.countersign.budgetitem", "zh-HK", "预算项目名称_hk", "预算项目名称（冗余：按 BudgetItemId 取 TaktBudgetActual.BudgetItemName 联动）"),
 
             // entity.countersign.budgetamount
-            new TranslationSeedItem("entity.countersign.budgetamount", "en-US", "预算金额_us", "预算金额"),
+            new TranslationSeedItem("entity.countersign.budgetamount", "en-US", "预算金额_us", "预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）"),
             // entity.countersign.budgetamount
-            new TranslationSeedItem("entity.countersign.budgetamount", "ja-JP", "预算金额_jp", "预算金额"),
+            new TranslationSeedItem("entity.countersign.budgetamount", "ja-JP", "预算金额_jp", "预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）"),
             // entity.countersign.budgetamount
-            new TranslationSeedItem("entity.countersign.budgetamount", "zh-CN", "预算金额", "预算金额"),
+            new TranslationSeedItem("entity.countersign.budgetamount", "zh-CN", "预算金额", "预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）"),
             // entity.countersign.budgetamount
-            new TranslationSeedItem("entity.countersign.budgetamount", "zh-HK", "预算金额_hk", "预算金额"),
+            new TranslationSeedItem("entity.countersign.budgetamount", "zh-HK", "预算金额_hk", "预算金额（按 BudgetItemId 取 TaktBudgetActual.BudgetAmount 联动）"),
 
             // entity.countersign.applicationamount
             new TranslationSeedItem("entity.countersign.applicationamount", "en-US", "申请金额_us", "申请金额"),
@@ -279,14 +315,23 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             // entity.countersign.targetandexpectedbenefit
             new TranslationSeedItem("entity.countersign.targetandexpectedbenefit", "zh-HK", "目标与预期效益_hk", "目标与预期效益"),
 
-            // entity.countersign.attachments
-            new TranslationSeedItem("entity.countersign.attachments", "en-US", "附件_us", "附件 JSON"),
-            // entity.countersign.attachments
-            new TranslationSeedItem("entity.countersign.attachments", "ja-JP", "附件_jp", "附件 JSON"),
-            // entity.countersign.attachments
-            new TranslationSeedItem("entity.countersign.attachments", "zh-CN", "附件", "附件 JSON"),
-            // entity.countersign.attachments
-            new TranslationSeedItem("entity.countersign.attachments", "zh-HK", "附件_hk", "附件 JSON"),
+            // entity.countersign.filename
+            new TranslationSeedItem("entity.countersign.filename", "en-US", "文件名称_us", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.countersign.filename
+            new TranslationSeedItem("entity.countersign.filename", "ja-JP", "文件名称_jp", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.countersign.filename
+            new TranslationSeedItem("entity.countersign.filename", "zh-CN", "文件名称", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+            // entity.countersign.filename
+            new TranslationSeedItem("entity.countersign.filename", "zh-HK", "文件名称_hk", "文件名称（原始文件名，长度对齐 TaktFile.FileName）"),
+
+            // entity.countersign.accessurl
+            new TranslationSeedItem("entity.countersign.accessurl", "en-US", "访问地址_us", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.countersign.accessurl
+            new TranslationSeedItem("entity.countersign.accessurl", "ja-JP", "访问地址_jp", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.countersign.accessurl
+            new TranslationSeedItem("entity.countersign.accessurl", "zh-CN", "访问地址", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
+            // entity.countersign.accessurl
+            new TranslationSeedItem("entity.countersign.accessurl", "zh-HK", "访问地址_hk", "访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）"),
 
             // entity.countersign.status
             new TranslationSeedItem("entity.countersign.status", "en-US", "会签单状态_us", "会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）"),

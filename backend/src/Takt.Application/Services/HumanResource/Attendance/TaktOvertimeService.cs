@@ -500,6 +500,7 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
+                || (x.HandlingByName != null && x.HandlingByName.Contains(keywords))
                 || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -564,6 +565,12 @@ public class TaktOvertimeService : TaktServiceBase, ITaktOvertimeService
         {
             var handlingBy = queryDto.HandlingBy.Value;
             exp = exp.And(x => x.HandlingBy == handlingBy);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlingByName))
+        {
+            var handlingByName = queryDto.HandlingByName;
+            exp = exp.And(x => x.HandlingByName != null && x.HandlingByName.Contains(handlingByName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.HandlingComment))

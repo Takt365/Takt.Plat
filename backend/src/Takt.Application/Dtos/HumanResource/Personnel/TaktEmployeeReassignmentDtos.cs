@@ -52,7 +52,7 @@ public class TaktEmployeeReassignmentDto : TaktApprovalDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int ReassignmentType { get; set; } = 0;
 
@@ -165,7 +165,7 @@ public class TaktEmployeeReassignmentQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int? ReassignmentType { get; set; }
 
@@ -338,7 +338,7 @@ public class TaktEmployeeReassignmentCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int ReassignmentType { get; set; } = 0;
 
@@ -474,7 +474,7 @@ public class TaktEmployeeReassignmentTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int? ReassignmentType { get; set; }
 
@@ -586,7 +586,7 @@ public class TaktEmployeeReassignmentImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int? ReassignmentType { get; set; }
 
@@ -704,7 +704,7 @@ public class TaktEmployeeReassignmentExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）
+    /// 调动类型（字典 humanresource_personnel_reassignment_type；0=转岗 1=调岗）
     /// </summary>
     public int ReassignmentType { get; set; } = 0;
 

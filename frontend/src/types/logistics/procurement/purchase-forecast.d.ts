@@ -50,7 +50,7 @@ export interface PurchaseForecast extends ApprovalDtoBase {
   salesProduct?: string;
 
   /**
-   * 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+   * 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
    */
   productCategoryCode?: string;
 
@@ -188,7 +188,7 @@ export interface PurchaseForecastExport {
   salesProduct: string;
 
   /**
-   * 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+   * 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
    */
   productCategoryCode: string;
 

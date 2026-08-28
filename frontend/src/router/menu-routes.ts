@@ -31,12 +31,12 @@ export const NOT_FOUND_ROUTE_NAME = 'NotFound';
 /** 非菜单注册的 Layout 子路由（执行页等） */
 const AUXILIARY_LAYOUT_ROUTES: RouteRecordRaw[] = [
   {
-    path: 'statistics/report/configurable/run',
-    name: 'Menu_STATISTICS_REPORT_CONFIGURABLE_RUN',
-    component: () => import('@/views/statistics/report/configurable/components/configurable-sqvi-run.vue'),
+    path: 'statistics/quick-query/configurable/run',
+    name: 'Menu_STATISTICS_QUICK_QUERY_CONFIGURABLE_RUN',
+    component: () => import('@/views/statistics/quick-query/configurable/components/configurable-run.vue'),
     meta: {
-      titleKey: 'statistics.report.configurable.page.runreport',
-      permission: 'statistics:report:configurable:run',
+      titleKey: 'statistics.quickquery.configurable.page.run',
+      permission: 'statistics:quickquery:configurable:run',
       requiresAuth: true,
     },
   },

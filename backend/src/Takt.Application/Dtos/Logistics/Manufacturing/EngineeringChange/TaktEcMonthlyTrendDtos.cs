@@ -48,17 +48,17 @@ public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
     public string? DeptCode { get; set; }
 
     /// <summary>
-    /// 区分（字典 logistics_ec_distinction_category；可选，按主表过滤）
+    /// 区分（字典 logistics_manufacturing_ec_distinction_category；可选，按主表过滤）
     /// </summary>
     public int? EcDistinction { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；可选，按主表过滤）
+    /// 变更状态（字典 logistics_manufacturing_ec_status；可选，按主表过滤）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；可选，按主表过滤）
+    /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；可选，按主表过滤）
     /// </summary>
     public int? EcStatus { get; set; }
 

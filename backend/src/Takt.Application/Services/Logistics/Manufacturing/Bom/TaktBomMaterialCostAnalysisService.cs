@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostAnalysisService.cs
 // 创建时间：2026-07-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 成本分析应用服务（转置 / 差异 / 月度涨跌）
+// 功能描述：BOM 成本分析应用服务（转置 / 差异；月度涨跌见 TaktBomMaterialCostAnalysisTrendService）
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -407,136 +407,10 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         return (actualFileName, content);
     }
 
-    /// <summary>
-    /// 获取成本分析月度涨跌（指定机种下单产品或机种内产品平均月成本序列）
-    /// <para>ProductCode 空=机种下全部物料按月取有成本产品的平均；否则为单产品月成本。逐月计算环比。</para>
-    /// </summary>
-    /// <param name="queryDto">须 PlantCode、ModelCode；可选 ProductCode、PeriodStart/End</param>
-    /// <returns>月度涨跌结果（Lines 含期间、成本、环比差额/%、涨跌码）</returns>
-    public async Task<TaktBomMaterialCostAnalysisMonthlyTrendResultDto> GetBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
-        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.PlantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.ModelCode);
-        EnsureThreeLayerContext();
-        var plantCode = queryDto.PlantCode.Trim();
-        var modelCode = queryDto.ModelCode.Trim();
-        var productCode = string.IsNullOrWhiteSpace(queryDto.ProductCode) ? null : queryDto.ProductCode.Trim();
-        var allMaterialsUnderModel = productCode == null;
-        var (rangeStart, rangeEnd) = ResolvePeriodRangeBounds(queryDto.PeriodStart, queryDto.PeriodEnd);
-        var loadQuery = new TaktBomMaterialCostAnalysisTransposedQueryDto
-        {
-            PlantCode = plantCode,
-            ModelCode = modelCode,
-            ProductCode = productCode,
-            CostingDateStart = rangeStart,
-            CostingDateEnd = rangeEnd,
-            PageIndex = 1,
-            PageSize = TaktPagedClamp.DefaultPageSize,
-        };
-        var rows = await LoadTransposedCostHeadersAsync(loadQuery);
-        var periodOrder = BuildCostHeaderPeriodOrder(rows, rangeStart, rangeEnd);
-        var productCodesInScope = ResolveProductCodesInScope(rows, plantCode, modelCode, productCode);
-        var productDescription = allMaterialsUnderModel
-            ? string.Empty
-            : rows.FirstOrDefault(r => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(r.ProductCode, productCode!))?.ProductDescription ?? string.Empty;
-        var trendLines = new List<TaktBomMaterialCostAnalysisMonthlyTrendLineDto>();
-        decimal? previousCost = null;
-        string? previousPeriod = null;
-        foreach (var period in periodOrder)
-        {
-            decimal totalCost;
-            if (allMaterialsUnderModel)
-            {
-                var costs = productCodesInScope
-                    .Select(pc => ResolveProductMonthlyCostFromHeaders(rows, plantCode, modelCode, pc, period))
-                    .Where(c => c > 0m)
-                    .ToList();
-                if (costs.Count == 0)
-                {
-                    continue;
-                }
-                totalCost = TaktBomMaterialCostItemLineCostHelper.RoundCost(costs.Sum() / costs.Count);
-            }
-            else
-            {
-                totalCost = ResolveProductMonthlyCostFromHeaders(rows, plantCode, modelCode, productCode!, period);
-                if (totalCost <= 0m)
-                {
-                    continue;
-                }
-            }
-            var (varianceAmount, variancePercent, trend) = ComputeMonthOverMonthTrend(totalCost, previousCost);
-            trendLines.Add(new TaktBomMaterialCostAnalysisMonthlyTrendLineDto
-            {
-                Period = period,
-                TotalCost = totalCost,
-                BasePeriod = previousPeriod,
-                BaseTotalCost = previousCost,
-                VarianceAmount = varianceAmount,
-                VariancePercent = variancePercent,
-                Trend = trend,
-            });
-            previousCost = totalCost;
-            previousPeriod = period;
-        }
-        return new TaktBomMaterialCostAnalysisMonthlyTrendResultDto
-        {
-            PlantCode = plantCode,
-            ModelCode = modelCode,
-            ProductCode = productCode ?? string.Empty,
-            ProductDescription = productDescription,
-            AllMaterialsUnderModel = allMaterialsUnderModel,
-            Lines = trendLines,
-        };
-    }
-
-    /// <summary>
-    /// 导出成本分析月度涨跌 Excel
-    /// </summary>
-    /// <param name="query">月度涨跌查询条件（与 Get 一致）</param>
-    /// <param name="sheetName">工作表名称；空则由导出辅助默认</param>
-    /// <param name="fileName">导出文件名；空则由导出辅助默认</param>
-    /// <returns>实际文件名与文件字节</returns>
-    public async Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
-        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto query,
-        string? sheetName = null,
-        string? fileName = null)
-    {
-        ArgumentNullException.ThrowIfNull(query);
-        var result = await GetBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(query);
-        var columnKeys = new List<string>
-        {
-            "plantCode", "modelCode", "productCode", "productDescription", "period", "totalCost",
-            "basePeriod", "baseTotalCost", "varianceAmount", "variancePercent", "trend",
-        };
-        var columnLabels = new List<string>
-        {
-            "工厂代码", "机种编码", "产品编码", "产品描述", "年月", "材料总成本",
-            "对比基准月", "基准月成本", "环比差额", "环比%", "涨跌",
-        };
-        var exportRows = result.Lines.Select(line => (IReadOnlyDictionary<string, object?>)new Dictionary<string, object?>(StringComparer.Ordinal)
-        {
-            ["plantCode"] = result.PlantCode,
-            ["modelCode"] = result.ModelCode,
-            ["productCode"] = result.ProductCode,
-            ["productDescription"] = result.ProductDescription,
-            ["period"] = line.Period,
-            ["totalCost"] = line.TotalCost,
-            ["basePeriod"] = line.BasePeriod,
-            ["baseTotalCost"] = line.BaseTotalCost,
-            ["varianceAmount"] = line.VarianceAmount,
-            ["variancePercent"] = TaktBomMaterialCostItemLineCostHelper.ToExcelPercent(line.VariancePercent),
-            ["trend"] = line.Trend,
-        }).ToList();
-        return await TaktExcelHelper.ExportDictionaryRowsAsync(
-            exportRows,
-            columnKeys,
-            columnLabels,
-            sheetName ?? "BOM材料月度涨跌",
-            fileName ?? $"BOM材料月度涨跌_{result.ModelCode}.xlsx");
-    }
+    /// <inheritdoc />
+    public Task<List<TaktBomMaterialCost>> LoadBomMaterialCostAnalysisHeadersAsync(
+        TaktBomMaterialCostAnalysisTransposedQueryDto queryDto)
+        => LoadTransposedCostHeadersAsync(queryDto);
 
     /// <summary>
     /// 加载转置/月度涨跌用成本汇总行（按筛选全量；MaterialType 有值才过滤；空=本表全类型）
@@ -698,14 +572,14 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 构建成本汇总行的期间列顺序（yyyy-MM）
+    /// 构建成本汇总行的期间列顺序（yyyy-MM）；供月度涨跌独立服务复用
     /// </summary>
     /// <param name="rows">已加载汇总行</param>
     /// <param name="start">核算日起（可空）</param>
     /// <param name="end">核算日止（可空）</param>
     /// <param name="includeExtraPeriodsFromData">起止都有值时，是否把数据中落在区间外的期间并入并排序</param>
     /// <returns>升序期间键列表；无起止则仅用数据中出现的期间</returns>
-    private static List<string> BuildCostHeaderPeriodOrder(
+    internal static List<string> BuildCostHeaderPeriodOrder(
         IReadOnlyList<TaktBomMaterialCost> rows,
         DateTime? start,
         DateTime? end,
@@ -1111,7 +985,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// <param name="modelCode">机种编码</param>
     /// <param name="productCode">单产品编码；为空表示机种下全部物料</param>
     /// <returns>产品编码列表</returns>
-    private static List<string> ResolveProductCodesInScope(
+    internal static List<string> ResolveProductCodesInScope(
         IReadOnlyList<TaktBomMaterialCost> rows,
         string plantCode,
         string modelCode,
@@ -1140,7 +1014,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// <param name="productCode">产品编码</param>
     /// <param name="period">期间 yyyy-MM</param>
     /// <returns>产品月成本</returns>
-    private static decimal ResolveProductMonthlyCostFromHeaders(
+    internal static decimal ResolveProductMonthlyCostFromHeaders(
         IReadOnlyList<TaktBomMaterialCost> rows,
         string plantCode,
         string modelCode,
@@ -1163,7 +1037,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// <param name="periodStart">起始年月</param>
     /// <param name="periodEnd">结束年月</param>
     /// <returns>起止日期（可空）</returns>
-    private static (DateTime? Start, DateTime? End) ResolvePeriodRangeBounds(string? periodStart, string? periodEnd)
+    internal static (DateTime? Start, DateTime? End) ResolvePeriodRangeBounds(string? periodStart, string? periodEnd)
     {
         DateTime? start = null;
         DateTime? end = null;
@@ -1186,7 +1060,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     /// <param name="currentCost">当月成本</param>
     /// <param name="previousCost">上月成本</param>
     /// <returns>差额、百分比、涨跌码</returns>
-    private static (decimal? VarianceAmount, decimal? VariancePercent, string Trend) ComputeMonthOverMonthTrend(
+    internal static (decimal? VarianceAmount, decimal? VariancePercent, string Trend) ComputeMonthOverMonthTrend(
         decimal currentCost,
         decimal? previousCost)
     {

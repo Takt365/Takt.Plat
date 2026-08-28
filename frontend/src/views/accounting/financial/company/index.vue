@@ -82,19 +82,19 @@
         <template v-else-if="column.key === 'enterpriseNature'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'enterpriseNature')"
-            dict-type="sys_enterprise_nature_type"
+            dict-type="sys_enterprise_nature"
           />
         </template>
         <template v-else-if="column.key === 'industryAttribute'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'industryAttribute')"
-            dict-type="sys_industry_attribute_type"
+            dict-type="sys_industry_attribute"
           />
         </template>
         <template v-else-if="column.key === 'enterpriseScale'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'enterpriseScale')"
-            dict-type="sys_enterprise_scale_type"
+            dict-type="sys_enterprise_scale"
           />
         </template>
         <template v-else-if="column.key === 'registrationRegion'">
@@ -118,37 +118,37 @@
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'chartOfAccounts'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'chartOfAccounts')"
-            dict-type="accounting_chart_of_accounts"
+            dict-type="accounting_financial_chart_of_accounts"
           />
         </template>
         <template v-else-if="column.key === 'inputTaxCode'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'inputTaxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'outputTaxCode'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'outputTaxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'postingPeriodVariant'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'postingPeriodVariant')"
-            dict-type="accounting_posting_period_variant"
+            dict-type="accounting_financial_posting_period_variant"
           />
         </template>
         <template v-else-if="column.key === 'fiscalYearVariant'">
           <TaktDictTag
             :value="getCompanyDictValue(record, 'fiscalYearVariant')"
-            dict-type="accounting_fiscal_year_variant"
+            dict-type="accounting_financial_fiscal_year_variant"
           />
         </template>
       </template>
@@ -249,7 +249,7 @@
       <a-form-item :label="pi.queryLabel('enterpriseNature')">
         <TaktSelect
           v-model:value="advancedQueryForm.enterpriseNature"
-          dict-type="sys_enterprise_nature_type"
+          dict-type="sys_enterprise_nature"
           :placeholder="pi.queryPh('enterpriseNature', 'select')"
           allow-clear
         />
@@ -259,7 +259,7 @@
       <a-form-item :label="pi.queryLabel('industryAttribute')">
         <TaktSelect
           v-model:value="advancedQueryForm.industryAttribute"
-          dict-type="sys_industry_attribute_type"
+          dict-type="sys_industry_attribute"
           :placeholder="pi.queryPh('industryAttribute', 'select')"
           allow-clear
         />
@@ -269,7 +269,7 @@
       <a-form-item :label="pi.queryLabel('enterpriseScale')">
         <TaktSelect
           v-model:value="advancedQueryForm.enterpriseScale"
-          dict-type="sys_enterprise_scale_type"
+          dict-type="sys_enterprise_scale"
           :placeholder="pi.queryPh('enterpriseScale', 'select')"
           allow-clear
         />
@@ -579,7 +579,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
@@ -589,7 +589,7 @@
       <a-form-item :label="pi.queryLabel('chartOfAccounts')">
         <TaktSelect
           v-model:value="advancedQueryForm.chartOfAccounts"
-          dict-type="accounting_chart_of_accounts"
+          dict-type="accounting_financial_chart_of_accounts"
           :placeholder="pi.queryPh('chartOfAccounts', 'select')"
           allow-clear
         />
@@ -599,7 +599,7 @@
       <a-form-item :label="pi.queryLabel('inputTaxCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.inputTaxCode"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('inputTaxCode', 'select')"
           allow-clear
         />
@@ -609,7 +609,7 @@
       <a-form-item :label="pi.queryLabel('outputTaxCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.outputTaxCode"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('outputTaxCode', 'select')"
           allow-clear
         />
@@ -630,7 +630,7 @@
       <a-form-item :label="pi.queryLabel('postingPeriodVariant')">
         <TaktSelect
           v-model:value="advancedQueryForm.postingPeriodVariant"
-          dict-type="accounting_posting_period_variant"
+          dict-type="accounting_financial_posting_period_variant"
           :placeholder="pi.queryPh('postingPeriodVariant', 'select')"
           allow-clear
         />
@@ -640,7 +640,7 @@
       <a-form-item :label="pi.queryLabel('fiscalYearVariant')">
         <TaktSelect
           v-model:value="advancedQueryForm.fiscalYearVariant"
-          dict-type="accounting_fiscal_year_variant"
+          dict-type="accounting_financial_fiscal_year_variant"
           :placeholder="pi.queryPh('fiscalYearVariant', 'select')"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-item.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -54,7 +54,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   materialCode: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -64,7 +64,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -144,7 +144,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -154,7 +154,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -179,7 +179,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   materialCode?: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -189,7 +189,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -288,7 +288,7 @@ export interface BillOfMaterialItemCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -313,7 +313,7 @@ export interface BillOfMaterialItemCreate {
   materialCode: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -323,7 +323,7 @@ export interface BillOfMaterialItemCreate {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -456,7 +456,7 @@ export interface BillOfMaterialItemTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -481,7 +481,7 @@ export interface BillOfMaterialItemTemplate {
   materialCode?: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -491,7 +491,7 @@ export interface BillOfMaterialItemTemplate {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -585,7 +585,7 @@ export interface BillOfMaterialItemImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -610,7 +610,7 @@ export interface BillOfMaterialItemImport {
   materialCode?: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -620,7 +620,7 @@ export interface BillOfMaterialItemImport {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -709,6 +709,16 @@ export interface BillOfMaterialItemExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialId: string;
@@ -729,7 +739,7 @@ export interface BillOfMaterialItemExport {
   materialCode: string;
 
   /**
-   * 子项物料描述（回填：随物料）
+   * 子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -739,7 +749,7 @@ export interface BillOfMaterialItemExport {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 

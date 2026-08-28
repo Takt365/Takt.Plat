@@ -44,7 +44,7 @@ export interface SopCall extends CompanyDtoBase {
   execId?: string;
 
   /**
-   * 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+   * 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_manufacturing_sop_andon_type）
    */
   callType?: number;
 
@@ -64,7 +64,7 @@ export interface SopCall extends CompanyDtoBase {
   responseSeconds?: number;
 
   /**
-   * 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+   * 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_manufacturing_sop_andon_status）
    */
   callStatus?: number;
 
@@ -107,7 +107,7 @@ export interface SopCallExport {
   execId?: string;
 
   /**
-   * 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_sop_andon_type）
+   * 呼叫类型（1=班长，2=维修，3=品质；字典 logistics_manufacturing_sop_andon_type）
    */
   callType: number;
 
@@ -137,7 +137,7 @@ export interface SopCallExport {
   responseSeconds?: number;
 
   /**
-   * 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_sop_andon_status）
+   * 呼叫状态（1=待响应，2=已响应，3=已关闭；字典 logistics_manufacturing_sop_andon_status）
    */
   callStatus: number;
 

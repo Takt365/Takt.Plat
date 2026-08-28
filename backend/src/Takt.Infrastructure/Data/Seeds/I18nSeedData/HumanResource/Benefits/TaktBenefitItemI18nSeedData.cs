@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktBenefitItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBenefitItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,31 +109,31 @@ public class TaktBenefitItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.benefititem.itemname", "zh-HK", "福利项目名称_hk", "福利项目名称"),
 
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "en-US", "福利大类_us", "福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "en-US", "福利大类_us", "福利大类（字典 humanresource_benefits_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "ja-JP", "福利大类_jp", "福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "ja-JP", "福利大类_jp", "福利大类（字典 humanresource_benefits_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-CN", "福利大类", "福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-CN", "福利大类", "福利大类（字典 humanresource_benefits_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
             // entity.benefititem.benefitcategory
-            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-HK", "福利大类_hk", "福利大类（字典 hr_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
+            new TranslationSeedItem("entity.benefititem.benefitcategory", "zh-HK", "福利大类_hk", "福利大类（字典 humanresource_benefits_benefit_category；1=保险 2=补贴 3=休假 4=其他）"),
 
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "en-US", "福利类型_us", "福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "en-US", "福利类型_us", "福利类型（字典 humanresource_benefits_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "ja-JP", "福利类型_jp", "福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "ja-JP", "福利类型_jp", "福利类型（字典 humanresource_benefits_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "zh-CN", "福利类型", "福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "zh-CN", "福利类型", "福利类型（字典 humanresource_benefits_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
             // entity.benefititem.benefittype
-            new TranslationSeedItem("entity.benefititem.benefittype", "zh-HK", "福利类型_hk", "福利类型（字典 hr_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
+            new TranslationSeedItem("entity.benefititem.benefittype", "zh-HK", "福利类型_hk", "福利类型（字典 humanresource_benefits_benefit_type；1=社保 2=公积金 3=商业保险 4=年假额度 5=餐补 6=培训补贴 7=员工折扣）"),
 
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "en-US", "发放周期_us", "发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "en-US", "发放周期_us", "发放周期（字典 humanresource_benefits_benefit_payment_cycle；1=月度 2=季度 3=年度 4=一次性）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "ja-JP", "发放周期_jp", "发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "ja-JP", "发放周期_jp", "发放周期（字典 humanresource_benefits_benefit_payment_cycle；1=月度 2=季度 3=年度 4=一次性）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-CN", "发放周期", "发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-CN", "发放周期", "发放周期（字典 humanresource_benefits_benefit_payment_cycle；1=月度 2=季度 3=年度 4=一次性）"),
             // entity.benefititem.paymentcycle
-            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-HK", "发放周期_hk", "发放周期（字典 hr_benefit_payment_cycle_type；1=月度 2=季度 3=年度 4=一次性）"),
+            new TranslationSeedItem("entity.benefititem.paymentcycle", "zh-HK", "发放周期_hk", "发放周期（字典 humanresource_benefits_benefit_payment_cycle；1=月度 2=季度 3=年度 4=一次性）"),
 
             // entity.benefititem.defaultamount
             new TranslationSeedItem("entity.benefititem.defaultamount", "en-US", "默认金额_us", "默认金额或补贴标准（元）"),

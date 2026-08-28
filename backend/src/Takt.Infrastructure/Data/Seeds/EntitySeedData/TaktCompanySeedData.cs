@@ -96,7 +96,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "CN", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期",
                 "CN", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期",
                 "+86-10-62600001", "info@takt365.com", "+86-10-62600002", "https://www.takt365.cn",
-                "91110108MA01234567", "91110108MA01234567", "张三", "李四",
+                "91110108MA01234567", "91110108MA01234567", "张三",
                 1000000m, new DateTime(2010, 1, 1), 1),
             new TaktCompanySeedItem(
                 "1000", "ティアック株式会社", "TCJ", "TCJ", "ja-JP", "J100",
@@ -105,7 +105,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "JP", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
                 "JP", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
                 "+81-42-374-1311", "info@teac.co.jp", "+81-42-374-1312", "https://www.teac.co.jp",
-                "T4010001234567", "T4010001234567", "山下 太郎", "田中 花子",
+                "T4010001234567", "T4010001234567", "山下 太郎",
                 2000000m, new DateTime(1953, 8, 1), 2),
             new TaktCompanySeedItem(
                 "2300", "东莞蒂雅克电子有限公司", "DTA", "DTA", "zh-CN", "C100",
@@ -114,7 +114,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "CN", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区",
                 "CN", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区",
                 "+86-769-85331234", "info@teac.com.cn", "+86-769-85331235", "https://www.teac.com.cn",
-                "91441900712345678X", "91441900712345678X", "王二", "王五",
+                "91441900712345678X", "91441900712345678X", "王二",
                 1000000m, new DateTime(1996, 3, 16), 3),
             new TaktCompanySeedItem(
                 "2400", "TEAC AUDIO (CHINA) CO., LTD.", "TAC", "TAC", "zh-HK", "H100",
@@ -123,7 +123,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "HK", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心",
                 "HK", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心",
                 "+852-26461234", "tac@teac.com.hk", "+852-26461235", "https://www.teac.hk",
-                "12345678-000-08-23-A", "12345678-000-08-23-A", "赵六", "钱七",
+                "12345678-000-08-23-A", "12345678-000-08-23-A", "赵六",
                 500000m, new DateTime(1995, 12, 1), 4),
             new TaktCompanySeedItem(
                 "2700", "蒂雅克商贸(深圳)有限公司", "TSZ", "TSZ", "zh-CN", "C270",
@@ -132,7 +132,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "CN", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
                 "CN", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
                 "+86-755-82851234", "tsz@teac.com.cn", "+86-755-82851235", "https://www.teac.cn",
-                "91440300765432109X", "91440300765432109X", "孙八", "周九",
+                "91440300765432109X", "91440300765432109X", "孙八",
                 500000m, new DateTime(2012, 1, 1), 5),
             new TaktCompanySeedItem(
                 "3000", "TEAC AMERICA, INC.", "TCA", "TCA", "en-US", "A300",
@@ -141,7 +141,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "US", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I",
                 "US", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I",
                 "+1-562-903-9600", "info@teac-audio.com", "+1-562-903-9601", "https://www.teac.com",
-                "95-1234567", "95-1234567", "John Smith", "Emily Johnson",
+                "95-1234567", "95-1234567", "John Smith",
                 3000000m, new DateTime(1967, 5, 1), 6),
         ];
     }
@@ -201,7 +201,6 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
         company.UnifiedSocialCreditCode = seed.UnifiedSocialCreditCode;
         company.TaxRegistrationNumber = seed.TaxRegistrationNumber;
         company.LegalRepresentative = seed.LegalRepresentative;
-        company.CompanyManager = seed.CompanyManager;
         company.RegisteredCapital = seed.RegisteredCapital;
         company.EstablishmentDate = seed.EstablishmentDate;
         company.ClosingDate = null;
@@ -244,7 +243,6 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
         string UnifiedSocialCreditCode,
         string TaxRegistrationNumber,
         string LegalRepresentative,
-        string CompanyManager,
         decimal RegisteredCapital,
         DateTime EstablishmentDate,
         int SortOrder);

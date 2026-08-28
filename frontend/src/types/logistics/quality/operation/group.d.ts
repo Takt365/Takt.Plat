@@ -54,16 +54,6 @@ export interface QualityGroup extends CompanyDtoBase {
   qualityGroupDescription?: string;
 
   /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
-   * 质量组负责人用户 名称（填充字段）
-   */
-  responsibleUserName?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -89,7 +79,6 @@ export interface QualityGroup extends CompanyDtoBase {
   groupStatus: number;
 
 }
-
 
 /**
  * QualityGroup 分页查询 DTO
@@ -132,11 +121,6 @@ export interface QualityGroupQuery extends TaktPagedQuery {
    * 质量组描述
    */
   qualityGroupDescription?: string;
-
-  /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话
@@ -184,7 +168,6 @@ export interface QualityGroupQuery extends TaktPagedQuery {
   remark?: string;
 
 }
-
 
 /**
  * 创建QualityGroup DTO
@@ -236,11 +219,6 @@ export interface QualityGroupCreate {
   qualityGroupDescription?: string;
 
   /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -272,7 +250,6 @@ export interface QualityGroupCreate {
 
 }
 
-
 /**
  * 更新QualityGroup DTO
  * 继承 TaktQualityGroupCreateDto，添加 QualityGroupId 字段
@@ -286,7 +263,6 @@ export interface QualityGroupUpdate extends QualityGroupCreate {
   qualityGroupId: string;
 
 }
-
 
 /**
  * QualityGroup 状态更新 DTO
@@ -306,7 +282,6 @@ export interface QualityGroupStatus {
 
 }
 
-
 /**
  * QualityGroup 排序更新 DTO
  * 对应前端 QualityGroupSort
@@ -324,7 +299,6 @@ export interface QualityGroupSort {
   sortOrder: number;
 
 }
-
 
 /**
  * QualityGroup 导入模板行 DTO
@@ -368,11 +342,6 @@ export interface QualityGroupTemplate {
   qualityGroupDescription?: string;
 
   /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -403,7 +372,6 @@ export interface QualityGroupTemplate {
   remark?: string;
 
 }
-
 
 /**
  * QualityGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -455,11 +423,6 @@ export interface QualityGroupImport {
   qualityGroupDescription?: string;
 
   /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -490,7 +453,6 @@ export interface QualityGroupImport {
   remark?: string;
 
 }
-
 
 /**
  * QualityGroup 导出 DTO（独立实现，不继承响应 Dto）
@@ -532,11 +494,6 @@ export interface QualityGroupExport {
    * 质量组描述
    */
   qualityGroupDescription?: string;
-
-  /**
-   * 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话

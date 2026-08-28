@@ -63,7 +63,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
     private readonly ITaktCompanyRepository<TaktApsSchedule> _apsScheduleRepository;
     private readonly ITaktCompanyRepository<TaktApsScheduleItem> _apsScheduleItemRepository;
     private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
-    private readonly ITaktBillOfMaterialService _billOfMaterialService;
+    private readonly ITaktBillOfMaterialExplosionService _billOfMaterialExplosionService;
     private readonly ITaktPurchaseRequestService _purchaseRequestService;
     private readonly ITaktProcurementChainOrchestrator _procurementChainOrchestrator;
 
@@ -89,7 +89,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
         ITaktCompanyRepository<TaktApsSchedule> apsScheduleRepository,
         ITaktCompanyRepository<TaktApsScheduleItem> apsScheduleItemRepository,
         ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
-        ITaktBillOfMaterialService billOfMaterialService,
+        ITaktBillOfMaterialExplosionService billOfMaterialExplosionService,
         ITaktPurchaseRequestService purchaseRequestService,
         ITaktProcurementChainOrchestrator procurementChainOrchestrator,
         ITaktUserContext? userContext = null,
@@ -114,7 +114,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
         _apsScheduleRepository = apsScheduleRepository;
         _apsScheduleItemRepository = apsScheduleItemRepository;
         _productionOrderRepository = productionOrderRepository;
-        _billOfMaterialService = billOfMaterialService;
+        _billOfMaterialExplosionService = billOfMaterialExplosionService;
         _purchaseRequestService = purchaseRequestService;
         _procurementChainOrchestrator = procurementChainOrchestrator;
     }
@@ -679,7 +679,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
             PurchasePlanId = plan.Id,
             PurchasePlanCode = plan.PurchasePlanCode,
             RequestDate = DateTime.Now,
-            RequestBy = CurrentUserName ?? "system",
+            RequestEmployeeName = CurrentUserName ?? "system",
             RequestStatus = 1,
             ChainScheme = 1,
             SupplierCode = supplierCode,
@@ -749,7 +749,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
             return;
         }
 
-        var explosion = await _billOfMaterialService.GetBillOfMaterialExplosionAsync(new TaktBillOfMaterialExplosionQueryDto
+        var explosion = await _billOfMaterialExplosionService.GetBillOfMaterialExplosionAsync(new TaktBillOfMaterialExplosionQueryDto
         {
             BillOfMaterialId = bom.Id,
             Quantity = quantity,

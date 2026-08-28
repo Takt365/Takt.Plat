@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktAdminDivisionI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAdminDivision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktAdminDivisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.admindivision.parentid", "zh-HK", "父级区划ID_hk", "父级区划ID（关联 TaktAdminDivision.Id；不可为空；根/国家必须为 0）"),
 
             // entity.admindivision.level
-            new TranslationSeedItem("entity.admindivision.level", "en-US", "层级_us", "层级（字典 sys_admin_division_level_type；1～6）"),
+            new TranslationSeedItem("entity.admindivision.level", "en-US", "层级_us", "层级（字典 sys_admin_division_level；1～6）"),
             // entity.admindivision.level
-            new TranslationSeedItem("entity.admindivision.level", "ja-JP", "层级_jp", "层级（字典 sys_admin_division_level_type；1～6）"),
+            new TranslationSeedItem("entity.admindivision.level", "ja-JP", "层级_jp", "层级（字典 sys_admin_division_level；1～6）"),
             // entity.admindivision.level
-            new TranslationSeedItem("entity.admindivision.level", "zh-CN", "层级", "层级（字典 sys_admin_division_level_type；1～6）"),
+            new TranslationSeedItem("entity.admindivision.level", "zh-CN", "层级", "层级（字典 sys_admin_division_level；1～6）"),
             // entity.admindivision.level
-            new TranslationSeedItem("entity.admindivision.level", "zh-HK", "层级_hk", "层级（字典 sys_admin_division_level_type；1～6）"),
+            new TranslationSeedItem("entity.admindivision.level", "zh-HK", "层级_hk", "层级（字典 sys_admin_division_level；1～6）"),
 
             // entity.admindivision.divisionpath
             new TranslationSeedItem("entity.admindivision.divisionpath", "en-US", "区划路径_us", "区划路径（如 /1/3/5/，用于快速查询子孙）"),
@@ -163,13 +163,13 @@ public class TaktAdminDivisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.admindivision.postalcode", "zh-HK", "邮政编码_hk", "邮政编码（可选；部分国家区划关联邮编）"),
 
             // entity.admindivision.currencycode
-            new TranslationSeedItem("entity.admindivision.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            new TranslationSeedItem("entity.admindivision.currencycode", "en-US", "币种_us", "币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）"),
             // entity.admindivision.currencycode
-            new TranslationSeedItem("entity.admindivision.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            new TranslationSeedItem("entity.admindivision.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）"),
             // entity.admindivision.currencycode
-            new TranslationSeedItem("entity.admindivision.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            new TranslationSeedItem("entity.admindivision.currencycode", "zh-CN", "币种", "币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）"),
             // entity.admindivision.currencycode
-            new TranslationSeedItem("entity.admindivision.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            new TranslationSeedItem("entity.admindivision.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY/USD）"),
 
             // entity.admindivision.phonecode
             new TranslationSeedItem("entity.admindivision.phonecode", "en-US", "电话区号_us", "电话区号（国际电话区号，如 +86、+81）"),

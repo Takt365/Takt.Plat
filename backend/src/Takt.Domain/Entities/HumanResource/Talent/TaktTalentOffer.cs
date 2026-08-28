@@ -46,6 +46,11 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "关联员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? EmployeeId { get; set; }
     /// <summary>
+    /// 员工名称（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EmployeeName { get; set; }
+    /// <summary>
     /// 拟录用部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "拟录用部门ID", ColumnDataType = "bigint", IsNullable = false)]

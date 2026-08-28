@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAssetI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAsset 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.asset.name", "zh-HK", "资产名称_hk", "资产名称"),
 
             // entity.asset.category
-            new TranslationSeedItem("entity.asset.category", "en-US", "资产分类_us", "资产分类（字典 accounting_asset_category）"),
+            new TranslationSeedItem("entity.asset.category", "en-US", "资产分类_us", "资产分类（字典 accounting_financial_asset_category）"),
             // entity.asset.category
-            new TranslationSeedItem("entity.asset.category", "ja-JP", "资产分类_jp", "资产分类（字典 accounting_asset_category）"),
+            new TranslationSeedItem("entity.asset.category", "ja-JP", "资产分类_jp", "资产分类（字典 accounting_financial_asset_category）"),
             // entity.asset.category
-            new TranslationSeedItem("entity.asset.category", "zh-CN", "资产分类", "资产分类（字典 accounting_asset_category）"),
+            new TranslationSeedItem("entity.asset.category", "zh-CN", "资产分类", "资产分类（字典 accounting_financial_asset_category）"),
             // entity.asset.category
-            new TranslationSeedItem("entity.asset.category", "zh-HK", "资产分类_hk", "资产分类（字典 accounting_asset_category）"),
+            new TranslationSeedItem("entity.asset.category", "zh-HK", "资产分类_hk", "资产分类（字典 accounting_financial_asset_category）"),
 
             // entity.asset.type
-            new TranslationSeedItem("entity.asset.type", "en-US", "资产类型_us", "资产类型（字典 accounting_asset_type；NORM=普通资产）"),
+            new TranslationSeedItem("entity.asset.type", "en-US", "资产类型_us", "资产类型（字典 accounting_financial_asset_type；NORM=普通资产）"),
             // entity.asset.type
-            new TranslationSeedItem("entity.asset.type", "ja-JP", "资产类型_jp", "资产类型（字典 accounting_asset_type；NORM=普通资产）"),
+            new TranslationSeedItem("entity.asset.type", "ja-JP", "资产类型_jp", "资产类型（字典 accounting_financial_asset_type；NORM=普通资产）"),
             // entity.asset.type
-            new TranslationSeedItem("entity.asset.type", "zh-CN", "资产类型", "资产类型（字典 accounting_asset_type；NORM=普通资产）"),
+            new TranslationSeedItem("entity.asset.type", "zh-CN", "资产类型", "资产类型（字典 accounting_financial_asset_type；NORM=普通资产）"),
             // entity.asset.type
-            new TranslationSeedItem("entity.asset.type", "zh-HK", "资产类型_hk", "资产类型（字典 accounting_asset_type；NORM=普通资产）"),
+            new TranslationSeedItem("entity.asset.type", "zh-HK", "资产类型_hk", "资产类型（字典 accounting_financial_asset_type；NORM=普通资产）"),
 
             // entity.asset.originalvalue
             new TranslationSeedItem("entity.asset.originalvalue", "en-US", "资产原值_us", "资产原值"),
@@ -154,58 +154,58 @@ public class TaktAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.asset.accumulateddepreciation", "zh-HK", "累计折旧_hk", "累计折旧"),
 
             // entity.asset.costcenterid
-            new TranslationSeedItem("entity.asset.costcenterid", "en-US", "成本中心ID_us", "成本中心ID"),
+            new TranslationSeedItem("entity.asset.costcenterid", "en-US", "成本中心ID_us", "成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）"),
             // entity.asset.costcenterid
-            new TranslationSeedItem("entity.asset.costcenterid", "ja-JP", "成本中心ID_jp", "成本中心ID"),
+            new TranslationSeedItem("entity.asset.costcenterid", "ja-JP", "成本中心ID_jp", "成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）"),
             // entity.asset.costcenterid
-            new TranslationSeedItem("entity.asset.costcenterid", "zh-CN", "成本中心ID", "成本中心ID"),
+            new TranslationSeedItem("entity.asset.costcenterid", "zh-CN", "成本中心ID", "成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）"),
             // entity.asset.costcenterid
-            new TranslationSeedItem("entity.asset.costcenterid", "zh-HK", "成本中心ID_hk", "成本中心ID"),
+            new TranslationSeedItem("entity.asset.costcenterid", "zh-HK", "成本中心ID_hk", "成本中心（选项 TaktCostCenters/tree-options；DictValue=Id）"),
 
             // entity.asset.costcentername
-            new TranslationSeedItem("entity.asset.costcentername", "en-US", "成本中心名称_us", "成本中心名称"),
+            new TranslationSeedItem("entity.asset.costcentername", "en-US", "成本中心名称_us", "成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）"),
             // entity.asset.costcentername
-            new TranslationSeedItem("entity.asset.costcentername", "ja-JP", "成本中心名称_jp", "成本中心名称"),
+            new TranslationSeedItem("entity.asset.costcentername", "ja-JP", "成本中心名称_jp", "成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）"),
             // entity.asset.costcentername
-            new TranslationSeedItem("entity.asset.costcentername", "zh-CN", "成本中心名称", "成本中心名称"),
+            new TranslationSeedItem("entity.asset.costcentername", "zh-CN", "成本中心名称", "成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）"),
             // entity.asset.costcentername
-            new TranslationSeedItem("entity.asset.costcentername", "zh-HK", "成本中心名称_hk", "成本中心名称"),
+            new TranslationSeedItem("entity.asset.costcentername", "zh-HK", "成本中心名称_hk", "成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）"),
 
             // entity.asset.deptid
-            new TranslationSeedItem("entity.asset.deptid", "en-US", "部门ID_us", "部门ID"),
+            new TranslationSeedItem("entity.asset.deptid", "en-US", "部门ID_us", "部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.asset.deptid
-            new TranslationSeedItem("entity.asset.deptid", "ja-JP", "部门ID_jp", "部门ID"),
+            new TranslationSeedItem("entity.asset.deptid", "ja-JP", "部门ID_jp", "部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.asset.deptid
-            new TranslationSeedItem("entity.asset.deptid", "zh-CN", "部门ID", "部门ID"),
+            new TranslationSeedItem("entity.asset.deptid", "zh-CN", "部门ID", "部门（选项 TaktDepts/tree-options；DictValue=Id）"),
             // entity.asset.deptid
-            new TranslationSeedItem("entity.asset.deptid", "zh-HK", "部门ID_hk", "部门ID"),
+            new TranslationSeedItem("entity.asset.deptid", "zh-HK", "部门ID_hk", "部门（选项 TaktDepts/tree-options；DictValue=Id）"),
 
             // entity.asset.deptname
-            new TranslationSeedItem("entity.asset.deptname", "en-US", "部门名称_us", "部门名称"),
+            new TranslationSeedItem("entity.asset.deptname", "en-US", "部门名称_us", "部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
             // entity.asset.deptname
-            new TranslationSeedItem("entity.asset.deptname", "ja-JP", "部门名称_jp", "部门名称"),
+            new TranslationSeedItem("entity.asset.deptname", "ja-JP", "部门名称_jp", "部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
             // entity.asset.deptname
-            new TranslationSeedItem("entity.asset.deptname", "zh-CN", "部门名称", "部门名称"),
+            new TranslationSeedItem("entity.asset.deptname", "zh-CN", "部门名称", "部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
             // entity.asset.deptname
-            new TranslationSeedItem("entity.asset.deptname", "zh-HK", "部门名称_hk", "部门名称"),
+            new TranslationSeedItem("entity.asset.deptname", "zh-HK", "部门名称_hk", "部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.asset.userid
-            new TranslationSeedItem("entity.asset.userid", "en-US", "使用者ID_us", "使用者ID"),
+            new TranslationSeedItem("entity.asset.userid", "en-US", "使用者ID_us", "使用者（选项 TaktUsers/options；DictValue=Id）"),
             // entity.asset.userid
-            new TranslationSeedItem("entity.asset.userid", "ja-JP", "使用者ID_jp", "使用者ID"),
+            new TranslationSeedItem("entity.asset.userid", "ja-JP", "使用者ID_jp", "使用者（选项 TaktUsers/options；DictValue=Id）"),
             // entity.asset.userid
-            new TranslationSeedItem("entity.asset.userid", "zh-CN", "使用者ID", "使用者ID"),
+            new TranslationSeedItem("entity.asset.userid", "zh-CN", "使用者ID", "使用者（选项 TaktUsers/options；DictValue=Id）"),
             // entity.asset.userid
-            new TranslationSeedItem("entity.asset.userid", "zh-HK", "使用者ID_hk", "使用者ID"),
+            new TranslationSeedItem("entity.asset.userid", "zh-HK", "使用者ID_hk", "使用者（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.asset.username
-            new TranslationSeedItem("entity.asset.username", "en-US", "使用者名称_us", "使用者名称"),
+            new TranslationSeedItem("entity.asset.username", "en-US", "使用者名称_us", "使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）"),
             // entity.asset.username
-            new TranslationSeedItem("entity.asset.username", "ja-JP", "使用者名称_jp", "使用者名称"),
+            new TranslationSeedItem("entity.asset.username", "ja-JP", "使用者名称_jp", "使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）"),
             // entity.asset.username
-            new TranslationSeedItem("entity.asset.username", "zh-CN", "使用者名称", "使用者名称"),
+            new TranslationSeedItem("entity.asset.username", "zh-CN", "使用者名称", "使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）"),
             // entity.asset.username
-            new TranslationSeedItem("entity.asset.username", "zh-HK", "使用者名称_hk", "使用者名称"),
+            new TranslationSeedItem("entity.asset.username", "zh-HK", "使用者名称_hk", "使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）"),
 
             // entity.asset.location
             new TranslationSeedItem("entity.asset.location", "en-US", "资产位置_us", "资产位置"),
@@ -262,13 +262,13 @@ public class TaktAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.asset.expectedlifemonths", "zh-HK", "预计使用月数_hk", "预计使用月数"),
 
             // entity.asset.depreciationmethod
-            new TranslationSeedItem("entity.asset.depreciationmethod", "en-US", "折旧方法_us", "折旧方法（字典 accounting_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
+            new TranslationSeedItem("entity.asset.depreciationmethod", "en-US", "折旧方法_us", "折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
             // entity.asset.depreciationmethod
-            new TranslationSeedItem("entity.asset.depreciationmethod", "ja-JP", "折旧方法_jp", "折旧方法（字典 accounting_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
+            new TranslationSeedItem("entity.asset.depreciationmethod", "ja-JP", "折旧方法_jp", "折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
             // entity.asset.depreciationmethod
-            new TranslationSeedItem("entity.asset.depreciationmethod", "zh-CN", "折旧方法", "折旧方法（字典 accounting_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
+            new TranslationSeedItem("entity.asset.depreciationmethod", "zh-CN", "折旧方法", "折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
             // entity.asset.depreciationmethod
-            new TranslationSeedItem("entity.asset.depreciationmethod", "zh-HK", "折旧方法_hk", "折旧方法（字典 accounting_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
+            new TranslationSeedItem("entity.asset.depreciationmethod", "zh-HK", "折旧方法_hk", "折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）"),
 
             // entity.asset.monthlydepreciation
             new TranslationSeedItem("entity.asset.monthlydepreciation", "en-US", "每月折旧金额_us", "每月折旧金额"),
@@ -280,13 +280,13 @@ public class TaktAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.asset.monthlydepreciation", "zh-HK", "每月折旧金额_hk", "每月折旧金额"),
 
             // entity.asset.status
-            new TranslationSeedItem("entity.asset.status", "en-US", "资产状态_us", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
+            new TranslationSeedItem("entity.asset.status", "en-US", "资产状态_us", "资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
             // entity.asset.status
-            new TranslationSeedItem("entity.asset.status", "ja-JP", "资产状态_jp", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
+            new TranslationSeedItem("entity.asset.status", "ja-JP", "资产状态_jp", "资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
             // entity.asset.status
-            new TranslationSeedItem("entity.asset.status", "zh-CN", "资产状态", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
+            new TranslationSeedItem("entity.asset.status", "zh-CN", "资产状态", "资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
             // entity.asset.status
-            new TranslationSeedItem("entity.asset.status", "zh-HK", "资产状态_hk", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
+            new TranslationSeedItem("entity.asset.status", "zh-HK", "资产状态_hk", "资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
         };
     }
 

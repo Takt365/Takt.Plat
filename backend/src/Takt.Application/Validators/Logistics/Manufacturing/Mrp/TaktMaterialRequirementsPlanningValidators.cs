@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialRequirementsPlanning 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaterialRequirementsPlanning 生成，请按需审阅）
 // 
@@ -48,11 +48,8 @@ public class TaktMaterialRequirementsPlanningCreateValidator : AbstractValidator
             .GreaterThanOrEqualTo(0).WithMessage("来源 MPS 头表 ID不能为负数");
         RuleFor(x => x.MasterDemandScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 头表 ID不能为负数");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(40).WithMessage("计划人长度不能超过40个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ProductionPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("产出生产计划 ID不能为负数");
         RuleFor(x => x.PurchasePlanId)
@@ -99,11 +96,8 @@ public class TaktMaterialRequirementsPlanningUpdateValidator : AbstractValidator
             .GreaterThanOrEqualTo(0).WithMessage("来源 MPS 头表 ID不能为负数");
         RuleFor(x => x.MasterDemandScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 头表 ID不能为负数");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(40).WithMessage("计划人长度不能超过40个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ProductionPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("产出生产计划 ID不能为负数");
         RuleFor(x => x.PurchasePlanId)
@@ -144,11 +138,8 @@ public class TaktMaterialRequirementsPlanningImportValidator : AbstractValidator
             .GreaterThanOrEqualTo(0).WithMessage("来源 MPS 头表 ID不能为负数");
         RuleFor(x => x.MasterDemandScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 头表 ID不能为负数");
-        RuleFor(x => x.PlannerId)
-            .GreaterThanOrEqualTo(0).WithMessage("计划人员工ID不能为负数");
-        RuleFor(x => x.PlanBy)
-            .NotEmpty().WithMessage("计划人不能为空")
-            .MaximumLength(40).WithMessage("计划人长度不能超过40个字符");
+        RuleFor(x => x.PlannerEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("计划人不能为负数");
         RuleFor(x => x.ProductionPlanId)
             .GreaterThanOrEqualTo(0).WithMessage("产出生产计划 ID不能为负数");
         RuleFor(x => x.PurchasePlanId)

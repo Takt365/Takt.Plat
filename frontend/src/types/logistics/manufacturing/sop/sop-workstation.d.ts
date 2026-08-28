@@ -50,7 +50,7 @@ export interface SopWorkstation extends CompanyDtoBase {
   workstationType?: number;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_manufacturing_process_segment_type）
    */
   processSegmentType?: number;
 
@@ -118,7 +118,7 @@ export interface SopWorkstationExport {
   workstationType: number;
 
   /**
-   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+   * 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_manufacturing_process_segment_type）
    */
   processSegmentType: number;
 

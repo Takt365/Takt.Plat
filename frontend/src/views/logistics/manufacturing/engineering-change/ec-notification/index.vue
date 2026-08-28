@@ -110,10 +110,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('common.page.entity.plantcode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
+          :placeholder="pi.queryPh('plantCode', 'optional')"
           show-count
           :maxlength="4"
           allow-clear
@@ -121,10 +121,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationCode')">
-      <a-form-item :label="t('entity.ecnotification.no')">
+      <a-form-item :label="pi.queryLabel('ecNotificationCode')">
         <a-input
           v-model:value="advancedQueryForm.ecNotificationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.no') })"
+          :placeholder="pi.queryPh('ecNotificationCode', 'required')"
           show-count
           :maxlength="30"
           allow-clear
@@ -132,10 +132,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecId')">
-      <a-form-item :label="t('entity.ecnotification.ecid')">
+      <a-form-item :label="pi.queryLabel('ecId')">
         <a-input
           v-model:value="advancedQueryForm.ecId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecid') })"
+          :placeholder="pi.queryPh('ecId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -143,10 +143,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecCode')">
-      <a-form-item :label="t('entity.ecnotification.ecCode')">
+      <a-form-item :label="pi.queryLabel('ecCode')">
         <a-input
           v-model:value="advancedQueryForm.ecCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecCode') })"
+          :placeholder="pi.queryPh('ecCode', 'required')"
           show-count
           :maxlength="30"
           allow-clear
@@ -154,10 +154,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecTitle')">
-      <a-form-item :label="t('entity.ecnotification.ectitle')">
+      <a-form-item :label="pi.queryLabel('ecTitle')">
         <a-input
           v-model:value="advancedQueryForm.ecTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ectitle') })"
+          :placeholder="pi.queryPh('ecTitle', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -165,30 +165,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationDateStart')">
-      <a-form-item :label="t('entity.ecnotification.datestart')">
+      <a-form-item :label="pi.queryLabel('ecNotificationDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecNotificationDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.datestart') })"
+          :placeholder="pi.queryPh('ecNotificationDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationDateEnd')">
-      <a-form-item :label="t('entity.ecnotification.dateend')">
+      <a-form-item :label="pi.queryLabel('ecNotificationDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.ecNotificationDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.dateend') })"
+          :placeholder="pi.queryPh('ecNotificationDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationDeptCodes')">
-      <a-form-item :label="t('entity.ecnotification.deptcodes')">
+      <a-form-item :label="pi.queryLabel('ecNotificationDeptCodes')">
         <a-input
           v-model:value="advancedQueryForm.ecNotificationDeptCodes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.deptcodes') })"
+          :placeholder="pi.queryPh('ecNotificationDeptCodes', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -196,10 +196,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationDeptNames')">
-      <a-form-item :label="t('entity.ecnotification.deptnames')">
+      <a-form-item :label="pi.queryLabel('ecNotificationDeptNames')">
         <a-input
           v-model:value="advancedQueryForm.ecNotificationDeptNames"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.deptnames') })"
+          :placeholder="pi.queryPh('ecNotificationDeptNames', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -207,10 +207,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationNotifierId')">
-      <a-form-item :label="t('entity.ecnotification.notifierid')">
+      <a-form-item :label="pi.queryLabel('ecNotificationNotifierId')">
         <a-input
           v-model:value="advancedQueryForm.ecNotificationNotifierId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.notifierid') })"
+          :placeholder="pi.queryPh('ecNotificationNotifierId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -218,10 +218,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationNotifierName')">
-      <a-form-item :label="t('entity.ecnotification.notifiername')">
+      <a-form-item :label="pi.queryLabel('ecNotificationNotifierName')">
         <a-input
           v-model:value="advancedQueryForm.ecNotificationNotifierName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.notifiername') })"
+          :placeholder="pi.queryPh('ecNotificationNotifierName', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -229,38 +229,38 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationMethod')">
-      <a-form-item :label="t('entity.ecnotification.method')">
+      <a-form-item :label="pi.queryLabel('ecNotificationMethod')">
         <a-input-number
           v-model:value="advancedQueryForm.ecNotificationMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.method') })"
+          :placeholder="pi.queryPh('ecNotificationMethod', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecNotificationStatus')">
-      <a-form-item :label="t('entity.ecnotification.status')">
+      <a-form-item :label="pi.queryLabel('ecNotificationStatus')">
         <a-input-number
           v-model:value="advancedQueryForm.ecNotificationStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.status') })"
+          :placeholder="pi.queryPh('ecNotificationStatus', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.ecnotification.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.ecnotification.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -268,10 +268,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.ecnotification.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -279,20 +279,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.ecnotification.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.ecnotification.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -300,10 +300,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.ecnotification.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -311,20 +311,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.ecnotification.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.ecnotification.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -332,10 +332,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -343,10 +343,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -368,7 +368,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -382,10 +382,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -399,7 +399,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ecnotification._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -407,7 +407,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.ecnotification._self"
+        :entity-i18n-key="ECNOTIFICATION_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -451,14 +451,21 @@ import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import {
+  useEcNotificationI18n,
+  ECNOTIFICATION_QUERY_FIELDS,
+  ECNOTIFICATION_SELF_I18N_KEY,
+} from './composables/use-ec-notification-i18n'
 
+/** 实体字段 i18n（视图只传小驼峰字段名） */
+const pi = useEcNotificationI18n()
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEcNotification')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ecnotification._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -522,32 +529,9 @@ const advancedQueryForm = ref({
   remark: '',
 })
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('common.page.entity.plantcode') },
-  { key: 'ecNotificationCode', label: t('entity.ecnotification.no') },
-  { key: 'ecId', label: t('entity.ecnotification.ecid') },
-  { key: 'ecCode', label: t('entity.ecnotification.ecCode') },
-  { key: 'ecTitle', label: t('entity.ecnotification.ectitle') },
-  { key: 'ecNotificationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
-  { key: 'ecNotificationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
-  { key: 'ecNotificationDeptCodes', label: t('entity.ecnotification.deptcodes') },
-  { key: 'ecNotificationDeptNames', label: t('entity.ecnotification.deptnames') },
-  { key: 'ecNotificationNotifierId', label: t('entity.ecnotification.notifierid') },
-  { key: 'ecNotificationNotifierName', label: t('entity.ecnotification.notifiername') },
-  { key: 'ecNotificationMethod', label: t('entity.ecnotification.method') },
-  { key: 'ecNotificationStatus', label: t('entity.ecnotification.status') },
-  { key: 'approvalStatus', label: t('entity.ecnotification.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.ecnotification.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.ecnotification.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.ecnotification.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.ecnotification.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.ecnotification.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.ecnotification.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.ecnotification.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  ECNOTIFICATION_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -637,7 +621,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationId') ?? ''
   },
   {
-    title: t('common.page.entity.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -646,7 +630,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.ecnotification.no'),
+    title: pi.label('ecNotificationCode'),
     dataIndex: 'ecNotificationCode',
     key: 'ecNotificationCode',
     width: 120,
@@ -655,7 +639,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationCode') ?? ''
   },
   {
-    title: t('entity.ecnotification.ecid'),
+    title: pi.label('ecId'),
     dataIndex: 'ecId',
     key: 'ecId',
     width: 120,
@@ -664,7 +648,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecId') ?? ''
   },
   {
-    title: t('entity.ecnotification.ecCode'),
+    title: pi.label('ecCode'),
     dataIndex: 'ecCode',
     key: 'ecCode',
     width: 120,
@@ -673,7 +657,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecCode') ?? ''
   },
   {
-    title: t('entity.ecnotification.ectitle'),
+    title: pi.label('ecTitle'),
     dataIndex: 'ecTitle',
     key: 'ecTitle',
     width: 120,
@@ -682,7 +666,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecTitle') ?? ''
   },
   {
-    title: t('entity.ecnotification.date'),
+    title: pi.label('ecNotificationDate'),
     dataIndex: 'ecNotificationDate',
     key: 'ecNotificationDate',
     width: 120,
@@ -691,7 +675,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationDate') ?? ''
   },
   {
-    title: t('entity.ecnotification.deptcodes'),
+    title: pi.label('ecNotificationDeptCodes'),
     dataIndex: 'ecNotificationDeptCodes',
     key: 'ecNotificationDeptCodes',
     width: 120,
@@ -700,7 +684,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationDeptCodes') ?? ''
   },
   {
-    title: t('entity.ecnotification.deptnames'),
+    title: pi.label('ecNotificationDeptNames'),
     dataIndex: 'ecNotificationDeptNames',
     key: 'ecNotificationDeptNames',
     width: 120,
@@ -709,7 +693,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationDeptNames') ?? ''
   },
   {
-    title: t('entity.ecnotification.notifierid'),
+    title: pi.label('ecNotificationNotifierId'),
     dataIndex: 'ecNotificationNotifierId',
     key: 'ecNotificationNotifierId',
     width: 120,
@@ -718,7 +702,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationNotifierId') ?? ''
   },
   {
-    title: t('entity.ecnotification.notifiername'),
+    title: pi.label('ecNotificationNotifierName'),
     dataIndex: 'ecNotificationNotifierName',
     key: 'ecNotificationNotifierName',
     width: 120,
@@ -727,7 +711,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationNotifierName') ?? ''
   },
   {
-    title: t('entity.ecnotification.method'),
+    title: pi.label('ecNotificationMethod'),
     dataIndex: 'ecNotificationMethod',
     key: 'ecNotificationMethod',
     width: 120,
@@ -736,22 +720,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationMethod') ?? ''
   },
   {
-    title: t('entity.ecnotification.status'),
+    title: pi.label('ecNotificationStatus'),
     dataIndex: 'ecNotificationStatus',
     key: 'ecNotificationStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationStatus') ?? ''
-  },
-  {
-    title: t('entity.ecnotification.eceng'),
-    dataIndex: 'ecEng',
-    key: 'ecEng',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecEng') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -884,14 +859,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ecnotification._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗 */
 function handleEdit(record: EcNotification) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ecnotification._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formData.value = { ...record }
   formVisible.value = true
 }
@@ -901,7 +876,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ecnotification._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -919,10 +894,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEcNotification(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.ecnotification._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEcNotification(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.ecnotification._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -995,10 +970,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ecnotification._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[EcNotification] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ecnotification._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
@@ -1007,12 +982,12 @@ async function handleExport() {
 async function handleDeleteOne(record: EcNotification) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ecnotification._self'), name: t('common.tip.this.target', { target: t('entity.ecnotification._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEcNotificationById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.ecnotification._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1020,18 +995,18 @@ async function handleDeleteOne(record: EcNotification) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ecnotification._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.ecnotification._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEcNotificationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ecnotification._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })

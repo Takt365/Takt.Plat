@@ -77,7 +77,7 @@
         <template v-if="column.key === 'businessType'">
           <TaktDictTag
             :value="getCountersignDictValue(record, 'businessType')"
-            dict-type="logistics_countersign_business_type"
+            dict-type="accounting_financial_countersign_business_type"
           />
         </template>
         <template v-else-if="column.key === 'isBudget'">
@@ -152,11 +152,10 @@
       </div>
       <div v-show="isFieldVisible('purchaseInquiryId')">
       <a-form-item :label="pi.queryLabel('purchaseInquiryId')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.purchaseInquiryId"
-          :placeholder="pi.queryPh('purchaseInquiryId', 'required')"
-          show-count
-          :maxlength="20"
+          api-url="TaktPurchaseInquiries/options"
+          :placeholder="pi.queryPh('purchaseInquiryId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -176,7 +175,7 @@
       <a-form-item :label="pi.queryLabel('businessType')">
         <TaktSelect
           v-model:value="advancedQueryForm.businessType"
-          dict-type="logistics_countersign_business_type"
+          dict-type="accounting_financial_countersign_business_type"
           :placeholder="pi.queryPh('businessType', 'select')"
           allow-clear
         />
@@ -204,12 +203,14 @@
       </div>
       <div v-show="isFieldVisible('countersignDepts')">
       <a-form-item :label="pi.queryLabel('countersignDepts')">
-        <a-input
+        <TaktTreeSelect
           v-model:value="advancedQueryForm.countersignDepts"
-          :placeholder="pi.queryPh('countersignDepts', 'required')"
-          show-count
-          :maxlength="20"
+          api-url="TaktDepts/tree-options"
+          :lazy="true"
+          multiple
           allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="pi.queryPh('countersignDepts', 'select')"
         />
       </a-form-item>
       </div>
@@ -256,22 +257,59 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('applicationDept')">
-      <a-form-item :label="pi.queryLabel('applicationDept')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.applicationDept"
-          api-url="TaktDepts/tree-options"
-          :placeholder="pi.queryPh('applicationDept', 'select')"
+      <div v-show="isFieldVisible('applicantName')">
+      <a-form-item :label="pi.queryLabel('applicantName')">
+        <a-input
+          v-model:value="advancedQueryForm.applicantName"
+          :placeholder="pi.queryPh('applicantName', 'required')"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costBearerDept')">
-      <a-form-item :label="pi.queryLabel('costBearerDept')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.costBearerDept"
+      <div v-show="isFieldVisible('applicationDeptId')">
+      <a-form-item :label="pi.queryLabel('applicationDeptId')">
+        <TaktTreeSelect
+          v-model:value="advancedQueryForm.applicationDeptId"
           api-url="TaktDepts/tree-options"
-          :placeholder="pi.queryPh('costBearerDept', 'select')"
+          :lazy="true"
+          allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="pi.queryPh('applicationDeptId', 'select')"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('applicationDeptName')">
+      <a-form-item :label="pi.queryLabel('applicationDeptName')">
+        <a-input
+          v-model:value="advancedQueryForm.applicationDeptName"
+          :placeholder="pi.queryPh('applicationDeptName', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costBearerDeptId')">
+      <a-form-item :label="pi.queryLabel('costBearerDeptId')">
+        <TaktTreeSelect
+          v-model:value="advancedQueryForm.costBearerDeptId"
+          api-url="TaktDepts/tree-options"
+          :lazy="true"
+          allow-clear
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="pi.queryPh('costBearerDeptId', 'select')"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costBearerDeptName')">
+      <a-form-item :label="pi.queryLabel('costBearerDeptName')">
+        <a-input
+          v-model:value="advancedQueryForm.costBearerDeptName"
+          :placeholder="pi.queryPh('costBearerDeptName', 'required')"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -282,6 +320,16 @@
           v-model:value="advancedQueryForm.isBudget"
           dict-type="sys_yes_no"
           :placeholder="pi.queryPh('isBudget', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('budgetItemId')">
+      <a-form-item :label="pi.queryLabel('budgetItemId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.budgetItemId"
+          api-url="TaktBudgetActuals/options"
+          :placeholder="pi.queryPh('budgetItemId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -358,13 +406,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="pi.queryLabel('attachments')">
+      <div v-show="isFieldVisible('fileName')">
+      <a-form-item :label="pi.queryLabel('fileName')">
         <a-input
-          v-model:value="advancedQueryForm.attachments"
-          :placeholder="pi.queryPh('attachments', 'required')"
+          v-model:value="advancedQueryForm.fileName"
+          :placeholder="pi.queryPh('fileName', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('accessUrl')">
+      <a-form-item :label="pi.queryLabel('accessUrl')">
+        <a-input
+          v-model:value="advancedQueryForm.accessUrl"
+          :placeholder="pi.queryPh('accessUrl', 'required')"
+          show-count
+          :maxlength="1000"
           allow-clear
         />
       </a-form-item>
@@ -655,6 +714,13 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
+  const countersignDepts = (form as { countersignDepts?: unknown }).countersignDepts
+  if (Array.isArray(countersignDepts) && countersignDepts.length > 0) {
+    return true
+  }
+  if (typeof countersignDepts === 'string' && countersignDepts.trim().length > 0) {
+    return true
+  }
   if (form.stepNo !== undefined && form.stepNo !== null) {
     return true
   }
@@ -687,12 +753,14 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
+    countersignDepts: [] as string[],
     stepNo: undefined as number | undefined,
     isBudget: undefined as number | undefined,
     budgetAmount: undefined as number | undefined,
     applicationAmount: undefined as number | undefined,
     countersignStatus: undefined as number | undefined,
-    approvalStatus: undefined as number | undefined,  }
+    approvalStatus: undefined as number | undefined,
+  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -745,6 +813,12 @@ function buildListQuery(overrides?: Partial<CountersignQuery>): CountersignQuery
   }
   for (const key of COUNTERSIGN_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  const countersignDepts = (form as { countersignDepts?: unknown }).countersignDepts
+  if (Array.isArray(countersignDepts) && countersignDepts.length > 0) {
+    query.countersignDepts = JSON.stringify(countersignDepts.map((item) => String(item)))
+  } else if (typeof countersignDepts === 'string' && countersignDepts.trim().length > 0) {
+    query.countersignDepts = countersignDepts.trim()
   }
   if (form.stepNo !== undefined && form.stepNo !== null) {
     query.stepNo = form.stepNo
@@ -935,22 +1009,49 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCountersignField(record, 'applicantBy') ?? ''
   },
   {
-    title: pi.label('applicationDept'),
-    dataIndex: 'applicationDept',
-    key: 'applicationDept',
+    title: pi.label('applicantName'),
+    dataIndex: 'applicantName',
+    key: 'applicantName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCountersignField(record, 'applicationDept') ?? ''
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'applicantName') ?? ''
   },
   {
-    title: pi.label('costBearerDept'),
-    dataIndex: 'costBearerDept',
-    key: 'costBearerDept',
+    title: pi.label('applicationDeptId'),
+    dataIndex: 'applicationDeptId',
+    key: 'applicationDeptId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCountersignField(record, 'costBearerDept') ?? ''
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'applicationDeptId') ?? ''
+  },
+  {
+    title: pi.label('applicationDeptName'),
+    dataIndex: 'applicationDeptName',
+    key: 'applicationDeptName',
+    width: 140,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'applicationDeptName') ?? ''
+  },
+  {
+    title: pi.label('costBearerDeptId'),
+    dataIndex: 'costBearerDeptId',
+    key: 'costBearerDeptId',
+    width: 140,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'costBearerDeptId') ?? ''
+  },
+  {
+    title: pi.label('costBearerDeptName'),
+    dataIndex: 'costBearerDeptName',
+    key: 'costBearerDeptName',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'costBearerDeptName') ?? ''
   },
   {
     title: pi.label('isBudget'),
@@ -961,10 +1062,19 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: pi.label('budgetItemId'),
+    dataIndex: 'budgetItemId',
+    key: 'budgetItemId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'budgetItemId') ?? ''
+  },
+  {
     title: pi.label('budgetItem'),
     dataIndex: 'budgetItem',
     key: 'budgetItem',
-    width: 120,
+    width: 140,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getCountersignField(record, 'budgetItem') ?? ''
@@ -1024,13 +1134,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCountersignField(record, 'targetAndExpectedBenefit') ?? ''
   },
   {
-    title: pi.label('attachments'),
-    dataIndex: 'attachments',
-    key: 'attachments',
+    title: pi.label('fileName'),
+    dataIndex: 'fileName',
+    key: 'fileName',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCountersignField(record, 'attachments') ?? ''
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'fileName') ?? ''
+  },
+  {
+    title: pi.label('accessUrl'),
+    dataIndex: 'accessUrl',
+    key: 'accessUrl',
+    width: 160,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCountersignField(record, 'accessUrl') ?? ''
   },
   {
     title: pi.label('countersignStatus'),
@@ -1152,44 +1271,7 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  countersignCode: '',
-  purchaseInquiryId: '',
-  purchaseInquiryCode: '',
-  businessType: '',
-  businessKey: '',
-  stepNo: undefined as number | undefined,
-  countersignDepts: '',
-  financeDept: '',
-  budgetReviewComment: '',
-  executiveOffice: '',
-  applicantBy: '',
-  applicationDept: '',
-  costBearerDept: '',
-  isBudget: undefined as number | undefined,
-  budgetItem: '',
-  budgetAmount: undefined as number | undefined,
-  applicationAmount: undefined as number | undefined,
-  countersignTitle: '',
-  applicationReason: '',
-  budgetUsageDescription: '',
-  targetAndExpectedBenefit: '',
-  attachments: '',
-  countersignStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
@@ -1385,44 +1467,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  countersignCode: '',
-  purchaseInquiryId: '',
-  purchaseInquiryCode: '',
-  businessType: '',
-  businessKey: '',
-  stepNo: undefined as number | undefined,
-  countersignDepts: '',
-  financeDept: '',
-  budgetReviewComment: '',
-  executiveOffice: '',
-  applicantBy: '',
-  applicationDept: '',
-  costBearerDept: '',
-  isBudget: undefined as number | undefined,
-  budgetItem: '',
-  budgetAmount: undefined as number | undefined,
-  applicationAmount: undefined as number | undefined,
-  countersignTitle: '',
-  applicationReason: '',
-  budgetUsageDescription: '',
-  targetAndExpectedBenefit: '',
-  attachments: '',
-  countersignStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

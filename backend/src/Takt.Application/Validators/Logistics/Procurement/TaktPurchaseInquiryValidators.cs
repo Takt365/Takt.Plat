@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiry 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseInquiry 生成，请按需审阅）
 // 
@@ -36,19 +36,16 @@ public class TaktPurchaseInquiryCreateValidator : AbstractValidator<TaktPurchase
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.InquiryEmployeeId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.InquiryEmployeeId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.PurchaseInquiryCode)
             .NotEmpty().WithMessage("采购询价编码不能为空")
             .MaximumLength(20).WithMessage("采购询价编码长度不能超过20个字符");
-        RuleFor(x => x.InquiryId)
-            .GreaterThanOrEqualTo(0).WithMessage("询价人员工 ID不能为负数");
-        RuleFor(x => x.InquiryBy)
-            .NotEmpty().WithMessage("询价人不能为空")
-            .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.InquiryEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("询价人员工不能为负数");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("询价供应商编码不能为空")
             .MaximumLength(10).WithMessage("询价供应商编码长度不能超过10个字符");
@@ -91,19 +88,16 @@ public class TaktPurchaseInquiryUpdateValidator : AbstractValidator<TaktPurchase
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.CultureCode)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .NotEmpty().WithMessage("区域文化编码不能为空").When(x => x.InquiryEmployeeId <= 0)
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
+            .NotEmpty().WithMessage("工厂代码不能为空").When(x => x.InquiryEmployeeId <= 0)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.PurchaseInquiryCode)
             .NotEmpty().WithMessage("采购询价编码不能为空")
             .MaximumLength(20).WithMessage("采购询价编码长度不能超过20个字符");
-        RuleFor(x => x.InquiryId)
-            .GreaterThanOrEqualTo(0).WithMessage("询价人员工 ID不能为负数");
-        RuleFor(x => x.InquiryBy)
-            .NotEmpty().WithMessage("询价人不能为空")
-            .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.InquiryEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("询价人员工不能为负数");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("询价供应商编码不能为空")
             .MaximumLength(10).WithMessage("询价供应商编码长度不能超过10个字符");
@@ -148,11 +142,8 @@ public class TaktPurchaseInquiryImportValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.PurchaseInquiryCode)
             .NotEmpty().WithMessage("采购询价编码不能为空")
             .MaximumLength(20).WithMessage("采购询价编码长度不能超过20个字符");
-        RuleFor(x => x.InquiryId)
-            .GreaterThanOrEqualTo(0).WithMessage("询价人员工 ID不能为负数");
-        RuleFor(x => x.InquiryBy)
-            .NotEmpty().WithMessage("询价人不能为空")
-            .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.InquiryEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("询价人员工不能为负数");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("询价供应商编码不能为空")
             .MaximumLength(10).WithMessage("询价供应商编码长度不能超过10个字符");

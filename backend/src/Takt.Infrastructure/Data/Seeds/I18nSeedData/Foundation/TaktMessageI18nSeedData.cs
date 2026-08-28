@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktMessageI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMessage 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/message）
 // 
@@ -91,40 +91,40 @@ public class TaktMessageI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.message._self", "zh-HK", "在线消息信息_hk", "实体名称"),
 
             // entity.message.fromuserid
-            new TranslationSeedItem("entity.message.fromuserid", "en-US", "发送者用户ID_us", "发送者用户 ID"),
+            new TranslationSeedItem("entity.message.fromuserid", "en-US", "发送者用户ID_us", "发送者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.fromuserid
-            new TranslationSeedItem("entity.message.fromuserid", "ja-JP", "发送者用户ID_jp", "发送者用户 ID"),
+            new TranslationSeedItem("entity.message.fromuserid", "ja-JP", "发送者用户ID_jp", "发送者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.fromuserid
-            new TranslationSeedItem("entity.message.fromuserid", "zh-CN", "发送者用户ID", "发送者用户 ID"),
+            new TranslationSeedItem("entity.message.fromuserid", "zh-CN", "发送者用户ID", "发送者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.fromuserid
-            new TranslationSeedItem("entity.message.fromuserid", "zh-HK", "发送者用户ID_hk", "发送者用户 ID"),
+            new TranslationSeedItem("entity.message.fromuserid", "zh-HK", "发送者用户ID_hk", "发送者用户（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.message.fromusername
-            new TranslationSeedItem("entity.message.fromusername", "en-US", "发送者用户名_us", "发送者用户名"),
+            new TranslationSeedItem("entity.message.fromusername", "en-US", "发送者用户名_us", "发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）"),
             // entity.message.fromusername
-            new TranslationSeedItem("entity.message.fromusername", "ja-JP", "发送者用户名_jp", "发送者用户名"),
+            new TranslationSeedItem("entity.message.fromusername", "ja-JP", "发送者用户名_jp", "发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）"),
             // entity.message.fromusername
-            new TranslationSeedItem("entity.message.fromusername", "zh-CN", "发送者用户名", "发送者用户名"),
+            new TranslationSeedItem("entity.message.fromusername", "zh-CN", "发送者用户名", "发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）"),
             // entity.message.fromusername
-            new TranslationSeedItem("entity.message.fromusername", "zh-HK", "发送者用户名_hk", "发送者用户名"),
+            new TranslationSeedItem("entity.message.fromusername", "zh-HK", "发送者用户名_hk", "发送者用户名（冗余：按 FromUserId 取 TaktUser.UserName 联动）"),
 
             // entity.message.touserid
-            new TranslationSeedItem("entity.message.touserid", "en-US", "接收者用户ID_us", "接收者用户 ID"),
+            new TranslationSeedItem("entity.message.touserid", "en-US", "接收者用户ID_us", "接收者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.touserid
-            new TranslationSeedItem("entity.message.touserid", "ja-JP", "接收者用户ID_jp", "接收者用户 ID"),
+            new TranslationSeedItem("entity.message.touserid", "ja-JP", "接收者用户ID_jp", "接收者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.touserid
-            new TranslationSeedItem("entity.message.touserid", "zh-CN", "接收者用户ID", "接收者用户 ID"),
+            new TranslationSeedItem("entity.message.touserid", "zh-CN", "接收者用户ID", "接收者用户（选项 TaktUsers/options；DictValue=Id）"),
             // entity.message.touserid
-            new TranslationSeedItem("entity.message.touserid", "zh-HK", "接收者用户ID_hk", "接收者用户 ID"),
+            new TranslationSeedItem("entity.message.touserid", "zh-HK", "接收者用户ID_hk", "接收者用户（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.message.tousername
-            new TranslationSeedItem("entity.message.tousername", "en-US", "接收者用户名_us", "接收者用户名"),
+            new TranslationSeedItem("entity.message.tousername", "en-US", "接收者用户名_us", "接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）"),
             // entity.message.tousername
-            new TranslationSeedItem("entity.message.tousername", "ja-JP", "接收者用户名_jp", "接收者用户名"),
+            new TranslationSeedItem("entity.message.tousername", "ja-JP", "接收者用户名_jp", "接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）"),
             // entity.message.tousername
-            new TranslationSeedItem("entity.message.tousername", "zh-CN", "接收者用户名", "接收者用户名"),
+            new TranslationSeedItem("entity.message.tousername", "zh-CN", "接收者用户名", "接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）"),
             // entity.message.tousername
-            new TranslationSeedItem("entity.message.tousername", "zh-HK", "接收者用户名_hk", "接收者用户名"),
+            new TranslationSeedItem("entity.message.tousername", "zh-HK", "接收者用户名_hk", "接收者用户名（冗余：按 ToUserId 取 TaktUser.UserName 联动）"),
 
             // entity.message.title
             new TranslationSeedItem("entity.message.title", "en-US", "消息标题_us", "消息标题"),

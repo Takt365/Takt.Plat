@@ -59,7 +59,7 @@ public class TaktSopExecScan : TaktCompanyEntityBase
     public string? ExpectedMaterialCode { get; set; }
 
     /// <summary>
-    /// 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
+    /// 扫码结果（字典 logistics_manufacturing_sop_scan_result；1=PASS，2=NG）
     /// </summary>
     [SugarColumn(ColumnName = "scan_result", ColumnDescription = "扫码结果", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ScanResult { get; set; } = 1;

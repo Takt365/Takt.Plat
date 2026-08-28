@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktEquipmentI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -198,14 +198,23 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipment.workstationby
             new TranslationSeedItem("entity.equipment.workstationby", "zh-HK", "所属工位_hk", "所属工位"),
 
-            // entity.equipment.deptby
-            new TranslationSeedItem("entity.equipment.deptby", "en-US", "所属部门_us", "所属部门"),
-            // entity.equipment.deptby
-            new TranslationSeedItem("entity.equipment.deptby", "ja-JP", "所属部门_jp", "所属部门"),
-            // entity.equipment.deptby
-            new TranslationSeedItem("entity.equipment.deptby", "zh-CN", "所属部门", "所属部门"),
-            // entity.equipment.deptby
-            new TranslationSeedItem("entity.equipment.deptby", "zh-HK", "所属部门_hk", "所属部门"),
+            // entity.equipment.deptid
+            new TranslationSeedItem("entity.equipment.deptid", "en-US", "所属部门ID_us", "所属部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.equipment.deptid
+            new TranslationSeedItem("entity.equipment.deptid", "ja-JP", "所属部门ID_jp", "所属部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.equipment.deptid
+            new TranslationSeedItem("entity.equipment.deptid", "zh-CN", "所属部门ID", "所属部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+            // entity.equipment.deptid
+            new TranslationSeedItem("entity.equipment.deptid", "zh-HK", "所属部门ID_hk", "所属部门（选项 TaktDepts/tree-options；DictValue=Id）"),
+
+            // entity.equipment.deptname
+            new TranslationSeedItem("entity.equipment.deptname", "en-US", "所属部门名称_us", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.equipment.deptname
+            new TranslationSeedItem("entity.equipment.deptname", "ja-JP", "所属部门名称_jp", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.equipment.deptname
+            new TranslationSeedItem("entity.equipment.deptname", "zh-CN", "所属部门名称", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
+            // entity.equipment.deptname
+            new TranslationSeedItem("entity.equipment.deptname", "zh-HK", "所属部门名称_hk", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）"),
 
             // entity.equipment.location
             new TranslationSeedItem("entity.equipment.location", "en-US", "设备位置_us", "设备位置（详细位置描述）"),
@@ -216,23 +225,41 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipment.location
             new TranslationSeedItem("entity.equipment.location", "zh-HK", "设备位置_hk", "设备位置（详细位置描述）"),
 
-            // entity.equipment.responsibleuserby
-            new TranslationSeedItem("entity.equipment.responsibleuserby", "en-US", "负责人_us", "负责人"),
-            // entity.equipment.responsibleuserby
-            new TranslationSeedItem("entity.equipment.responsibleuserby", "ja-JP", "负责人_jp", "负责人"),
-            // entity.equipment.responsibleuserby
-            new TranslationSeedItem("entity.equipment.responsibleuserby", "zh-CN", "负责人", "负责人"),
-            // entity.equipment.responsibleuserby
-            new TranslationSeedItem("entity.equipment.responsibleuserby", "zh-HK", "负责人_hk", "负责人"),
+            // entity.equipment.responsibleuserid
+            new TranslationSeedItem("entity.equipment.responsibleuserid", "en-US", "负责人用户ID_us", "负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.equipment.responsibleuserid
+            new TranslationSeedItem("entity.equipment.responsibleuserid", "ja-JP", "负责人用户ID_jp", "负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.equipment.responsibleuserid
+            new TranslationSeedItem("entity.equipment.responsibleuserid", "zh-CN", "负责人用户ID", "负责人（选项 TaktUsers/options；DictValue=Id）"),
+            // entity.equipment.responsibleuserid
+            new TranslationSeedItem("entity.equipment.responsibleuserid", "zh-HK", "负责人用户ID_hk", "负责人（选项 TaktUsers/options；DictValue=Id）"),
 
-            // entity.equipment.operatorby
-            new TranslationSeedItem("entity.equipment.operatorby", "en-US", "操作人_us", "操作人"),
-            // entity.equipment.operatorby
-            new TranslationSeedItem("entity.equipment.operatorby", "ja-JP", "操作人_jp", "操作人"),
-            // entity.equipment.operatorby
-            new TranslationSeedItem("entity.equipment.operatorby", "zh-CN", "操作人", "操作人"),
-            // entity.equipment.operatorby
-            new TranslationSeedItem("entity.equipment.operatorby", "zh-HK", "操作人_hk", "操作人"),
+            // entity.equipment.responsibleusername
+            new TranslationSeedItem("entity.equipment.responsibleusername", "en-US", "负责人名称_us", "负责人名称（冗余：按 ResponsibleUserId 取 TaktUser.UserName 联动）"),
+            // entity.equipment.responsibleusername
+            new TranslationSeedItem("entity.equipment.responsibleusername", "ja-JP", "负责人名称_jp", "负责人名称（冗余：按 ResponsibleUserId 取 TaktUser.UserName 联动）"),
+            // entity.equipment.responsibleusername
+            new TranslationSeedItem("entity.equipment.responsibleusername", "zh-CN", "负责人名称", "负责人名称（冗余：按 ResponsibleUserId 取 TaktUser.UserName 联动）"),
+            // entity.equipment.responsibleusername
+            new TranslationSeedItem("entity.equipment.responsibleusername", "zh-HK", "负责人名称_hk", "负责人名称（冗余：按 ResponsibleUserId 取 TaktUser.UserName 联动）"),
+
+            // entity.equipment.operatoremployeeid
+            new TranslationSeedItem("entity.equipment.operatoremployeeid", "en-US", "操作人员工ID_us", "操作人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.equipment.operatoremployeeid
+            new TranslationSeedItem("entity.equipment.operatoremployeeid", "ja-JP", "操作人员工ID_jp", "操作人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.equipment.operatoremployeeid
+            new TranslationSeedItem("entity.equipment.operatoremployeeid", "zh-CN", "操作人员工ID", "操作人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.equipment.operatoremployeeid
+            new TranslationSeedItem("entity.equipment.operatoremployeeid", "zh-HK", "操作人员工ID_hk", "操作人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.equipment.operatoremployeename
+            new TranslationSeedItem("entity.equipment.operatoremployeename", "en-US", "操作人名称_us", "操作人名称（冗余：按 OperatorEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.equipment.operatoremployeename
+            new TranslationSeedItem("entity.equipment.operatoremployeename", "ja-JP", "操作人名称_jp", "操作人名称（冗余：按 OperatorEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.equipment.operatoremployeename
+            new TranslationSeedItem("entity.equipment.operatoremployeename", "zh-CN", "操作人名称", "操作人名称（冗余：按 OperatorEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.equipment.operatoremployeename
+            new TranslationSeedItem("entity.equipment.operatoremployeename", "zh-HK", "操作人名称_hk", "操作人名称（冗余：按 OperatorEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.equipment.purchasedate
             new TranslationSeedItem("entity.equipment.purchasedate", "en-US", "购买日期_us", "购买日期"),

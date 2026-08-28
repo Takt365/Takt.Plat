@@ -93,7 +93,7 @@
         <template v-else-if="column.key === 'purchaseUnit'">
           <TaktDictTag
             :value="getSourceOfSupplyDictValue(record, 'purchaseUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
       </template>
@@ -212,7 +212,7 @@
       <a-form-item :label="pi.queryLabel('purchaseUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.purchaseUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('purchaseUnit', 'select')"
           allow-clear
         />

@@ -54,7 +54,7 @@ export interface Numbering extends CompanyDtoBase {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
@@ -159,7 +159,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
@@ -291,7 +291,7 @@ export interface NumberingCreate {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
@@ -439,7 +439,7 @@ export interface NumberingTemplate {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
@@ -561,7 +561,7 @@ export interface NumberingImport {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 
@@ -670,7 +670,7 @@ export interface NumberingExport {
   prefixCode?: string;
 
   /**
-   * 日期格式（字典 sys_numbering_date_format_config；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
+   * 日期格式（字典 sys_numbering_date_format；none/空=不使用日期；yyyy、yyyyMM、yyyyMMdd、yyyyMMddHH；须与 reset_period 粒度匹配）
    */
   dateFormat?: string;
 

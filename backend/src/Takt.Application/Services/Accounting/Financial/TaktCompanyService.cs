@@ -436,7 +436,7 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || (x.UnifiedSocialCreditCode != null && x.UnifiedSocialCreditCode.Contains(keywords))
                 || (x.TaxRegistrationNumber != null && x.TaxRegistrationNumber.Contains(keywords))
                 || (x.LegalRepresentative != null && x.LegalRepresentative.Contains(keywords))
-                || (x.CompanyManager != null && x.CompanyManager.Contains(keywords))
+                || (x.CompanyManagerUserName != null && x.CompanyManagerUserName.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
                 || (x.BankCode != null && x.BankCode.Contains(keywords))
                 || (x.BankAccount != null && x.BankAccount.Contains(keywords))
@@ -611,10 +611,10 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x => x.LegalRepresentative != null && x.LegalRepresentative.Contains(legalRepresentative));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.CompanyManager))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CompanyManagerUserName))
         {
-            var companyManager = queryDto.CompanyManager;
-            exp = exp.And(x => x.CompanyManager != null && x.CompanyManager.Contains(companyManager));
+            var companyManager = queryDto.CompanyManagerUserName;
+            exp = exp.And(x => x.CompanyManagerUserName != null && x.CompanyManagerUserName.Contains(companyManager));
         }
 
         if (queryDto?.RegisteredCapital.HasValue == true)
@@ -889,7 +889,7 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.CompanyManager))
+        if (!string.IsNullOrWhiteSpace(queryDto.CompanyManagerUserName))
         {
             return true;
         }

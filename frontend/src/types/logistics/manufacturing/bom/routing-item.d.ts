@@ -49,7 +49,7 @@ export interface RoutingItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -64,7 +64,7 @@ export interface RoutingItem extends CompanyDtoBase {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -74,12 +74,12 @@ export interface RoutingItem extends CompanyDtoBase {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate: string;
 
@@ -114,7 +114,7 @@ export interface RoutingItem extends CompanyDtoBase {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -184,7 +184,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -199,7 +199,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -209,12 +209,12 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate?: string;
 
@@ -249,7 +249,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -328,7 +328,7 @@ export interface RoutingItemCreate {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -343,7 +343,7 @@ export interface RoutingItemCreate {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -353,12 +353,12 @@ export interface RoutingItemCreate {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate: string;
 
@@ -388,7 +388,7 @@ export interface RoutingItemCreate {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -520,7 +520,7 @@ export interface RoutingItemTemplate {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -535,7 +535,7 @@ export interface RoutingItemTemplate {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -545,12 +545,12 @@ export interface RoutingItemTemplate {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate?: string;
 
@@ -580,7 +580,7 @@ export interface RoutingItemTemplate {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -654,7 +654,7 @@ export interface RoutingItemImport {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -669,7 +669,7 @@ export interface RoutingItemImport {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -679,12 +679,12 @@ export interface RoutingItemImport {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate?: string;
 
@@ -714,7 +714,7 @@ export interface RoutingItemImport {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -778,7 +778,7 @@ export interface RoutingItemExport {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -793,7 +793,7 @@ export interface RoutingItemExport {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_manufacturing_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -803,12 +803,12 @@ export interface RoutingItemExport {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_manufacturing_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
+   * 点数转分钟汇率（字典 logistics_manufacturing_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045；ConvertedMinutes = StandardShorts × rate ÷ BaseQuantity）
    */
   pointsToMinutesRate: string;
 
@@ -843,7 +843,7 @@ export interface RoutingItemExport {
   processDescription?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type：1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 

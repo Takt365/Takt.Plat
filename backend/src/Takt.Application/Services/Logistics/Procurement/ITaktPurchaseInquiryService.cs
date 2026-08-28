@@ -36,7 +36,7 @@ public interface ITaktPurchaseInquiryService
     Task<TaktPurchaseInquiryDto?> GetPurchaseInquiryByIdAsync(long id);
 
     /// <summary>
-    /// 获取采购询价选项列表
+    /// 获取采购询价选项列表（DictValue=Id，ExtValue=PurchaseInquiryCode）
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetPurchaseInquiryOptionsAsync();

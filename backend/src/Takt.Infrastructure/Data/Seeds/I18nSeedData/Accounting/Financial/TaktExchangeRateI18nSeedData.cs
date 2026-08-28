@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExchangeRateI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExchangeRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktExchangeRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.exchangerate._self", "zh-HK", "汇率信息_hk", "实体名称"),
 
             // entity.exchangerate.fromcurrencycode
-            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "en-US", "源币种_us", "源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）"),
+            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "en-US", "源币种_us", "源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）"),
             // entity.exchangerate.fromcurrencycode
-            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "ja-JP", "源币种_jp", "源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）"),
+            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "ja-JP", "源币种_jp", "源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）"),
             // entity.exchangerate.fromcurrencycode
-            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "zh-CN", "源币种", "源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）"),
+            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "zh-CN", "源币种", "源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）"),
             // entity.exchangerate.fromcurrencycode
-            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "zh-HK", "源币种_hk", "源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）"),
+            new TranslationSeedItem("entity.exchangerate.fromcurrencycode", "zh-HK", "源币种_hk", "源币种（字典 accounting_financial_currency_code；ISO 4217，如 USD、CNY）"),
 
             // entity.exchangerate.tocurrencycode
-            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "en-US", "目标币种_us", "目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）"),
+            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "en-US", "目标币种_us", "目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）"),
             // entity.exchangerate.tocurrencycode
-            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "ja-JP", "目标币种_jp", "目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）"),
+            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "ja-JP", "目标币种_jp", "目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）"),
             // entity.exchangerate.tocurrencycode
-            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "zh-CN", "目标币种", "目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）"),
+            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "zh-CN", "目标币种", "目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）"),
             // entity.exchangerate.tocurrencycode
-            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "zh-HK", "目标币种_hk", "目标币种（字典 accounting_currency_code；ISO 4217，如 CNY、USD）"),
+            new TranslationSeedItem("entity.exchangerate.tocurrencycode", "zh-HK", "目标币种_hk", "目标币种（字典 accounting_financial_currency_code；ISO 4217，如 CNY、USD）"),
 
             // entity.exchangerate.type
-            new TranslationSeedItem("entity.exchangerate.type", "en-US", "汇率类型_us", "汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
+            new TranslationSeedItem("entity.exchangerate.type", "en-US", "汇率类型_us", "汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
             // entity.exchangerate.type
-            new TranslationSeedItem("entity.exchangerate.type", "ja-JP", "汇率类型_jp", "汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
+            new TranslationSeedItem("entity.exchangerate.type", "ja-JP", "汇率类型_jp", "汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
             // entity.exchangerate.type
-            new TranslationSeedItem("entity.exchangerate.type", "zh-CN", "汇率类型", "汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
+            new TranslationSeedItem("entity.exchangerate.type", "zh-CN", "汇率类型", "汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
             // entity.exchangerate.type
-            new TranslationSeedItem("entity.exchangerate.type", "zh-HK", "汇率类型_hk", "汇率类型（字典 accounting_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
+            new TranslationSeedItem("entity.exchangerate.type", "zh-HK", "汇率类型_hk", "汇率类型（字典 accounting_financial_exchange_rate_type；M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价）"),
 
             // entity.exchangerate.exchangerate
             new TranslationSeedItem("entity.exchangerate.exchangerate", "en-US", "汇率_us", "汇率（decimal，精度 6 位小数；直接标价：1 单位源币种 = ExchangeRate 单位目标币种）"),

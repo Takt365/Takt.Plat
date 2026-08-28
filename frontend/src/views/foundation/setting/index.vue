@@ -88,7 +88,7 @@
         <template v-else-if="column.key === 'valueType'">
           <TaktDictTag
             :value="getSettingDictValue(record, 'valueType')"
-            dict-type="gen_display_type"
+            dict-type="code_generator_display_type"
           />
         </template>
         <template v-else-if="column.key === 'isReadonly'">
@@ -227,7 +227,7 @@
       <a-form-item :label="pi.queryLabel('valueType')">
         <TaktSelect
           v-model:value="advancedQueryForm.valueType"
-          dict-type="gen_display_type"
+          dict-type="code_generator_display_type"
           :placeholder="pi.queryPh('valueType', 'select')"
           allow-clear
         />

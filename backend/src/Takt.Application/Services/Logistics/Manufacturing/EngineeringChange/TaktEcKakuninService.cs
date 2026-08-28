@@ -97,10 +97,10 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
         {
             throw new TaktBusinessException("设变明细不存在");
         }
-        detail.IsOldProcurement = dto.IsOldProcurement;
-        detail.IsOldCheck = dto.IsOldCheck;
-        detail.IsNewProcurement = dto.IsNewProcurement;
-        detail.IsNewCheck = dto.IsNewCheck;
+        detail.EcOldPurchaseType = dto.EcOldPurchaseType;
+        detail.EcOldRequiresInspection = dto.EcOldRequiresInspection;
+        detail.EcNewPurchaseType = dto.EcNewPurchaseType;
+        detail.EcNewRequiresInspection = dto.EcNewRequiresInspection;
         await _ecDetailRepository.UpdateAsync(detail);
         return detail.Adapt<TaktEcKakuninDto>();
     }
@@ -139,29 +139,29 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
-                || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords))
+                || (x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(keywords)));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcModel))
+        if (!string.IsNullOrEmpty(queryDto?.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcNewItem))
+        if (!string.IsNullOrEmpty(queryDto?.EcNewMaterialCode))
         {
-            exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
+            exp = exp.And(x => x.EcNewMaterialCode != null && x.EcNewMaterialCode.Contains(queryDto.EcNewMaterialCode));
         }
-        if (queryDto?.IsOldCheck.HasValue == true)
+        if (queryDto?.EcOldRequiresInspection.HasValue == true)
         {
-            exp = exp.And(x => x.IsOldCheck == queryDto.IsOldCheck);
+            exp = exp.And(x => x.EcOldRequiresInspection == queryDto.EcOldRequiresInspection);
         }
-        if (queryDto?.IsNewCheck.HasValue == true)
+        if (queryDto?.EcNewRequiresInspection.HasValue == true)
         {
-            exp = exp.And(x => x.IsNewCheck == queryDto.IsNewCheck);
+            exp = exp.And(x => x.EcNewRequiresInspection == queryDto.EcNewRequiresInspection);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CultureCode))

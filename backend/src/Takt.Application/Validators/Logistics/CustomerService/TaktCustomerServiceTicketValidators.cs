@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceTicketValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceTicket 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerServiceTicket 生成，请按需审阅）
 // 
@@ -63,6 +63,8 @@ public class TaktCustomerServiceTicketCreateValidator : AbstractValidator<TaktCu
             .MaximumLength(200).WithMessage("工单主题长度不能超过200个字符");
         RuleFor(x => x.AssignedEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("指派服务人员工ID不能为负数");
+        RuleFor(x => x.AcceptedByEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("验收人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -120,6 +122,8 @@ public class TaktCustomerServiceTicketUpdateValidator : AbstractValidator<TaktCu
             .MaximumLength(200).WithMessage("工单主题长度不能超过200个字符");
         RuleFor(x => x.AssignedEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("指派服务人员工ID不能为负数");
+        RuleFor(x => x.AcceptedByEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("验收人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -171,6 +175,8 @@ public class TaktCustomerServiceTicketImportValidator : AbstractValidator<TaktCu
             .MaximumLength(200).WithMessage("工单主题长度不能超过200个字符");
         RuleFor(x => x.AssignedEmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("指派服务人员工ID不能为负数");
+        RuleFor(x => x.AcceptedByEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("验收人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

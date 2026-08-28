@@ -49,17 +49,17 @@ export interface Vendor extends CompanyDtoBase {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -69,12 +69,12 @@ export interface Vendor extends CompanyDtoBase {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -139,7 +139,7 @@ export interface Vendor extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -159,12 +159,12 @@ export interface Vendor extends CompanyDtoBase {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -189,7 +189,7 @@ export interface Vendor extends CompanyDtoBase {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -204,7 +204,7 @@ export interface Vendor extends CompanyDtoBase {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -229,7 +229,7 @@ export interface Vendor extends CompanyDtoBase {
   purchasingOrganization: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -249,7 +249,7 @@ export interface Vendor extends CompanyDtoBase {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 
@@ -319,17 +319,17 @@ export interface VendorQuery extends TaktPagedQuery {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -339,12 +339,12 @@ export interface VendorQuery extends TaktPagedQuery {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -409,7 +409,7 @@ export interface VendorQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -429,12 +429,12 @@ export interface VendorQuery extends TaktPagedQuery {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -459,7 +459,7 @@ export interface VendorQuery extends TaktPagedQuery {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -474,7 +474,7 @@ export interface VendorQuery extends TaktPagedQuery {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -499,7 +499,7 @@ export interface VendorQuery extends TaktPagedQuery {
   purchasingOrganization?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel?: number;
 
@@ -519,7 +519,7 @@ export interface VendorQuery extends TaktPagedQuery {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel?: number;
 
@@ -608,17 +608,17 @@ export interface VendorCreate {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -628,12 +628,12 @@ export interface VendorCreate {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -698,7 +698,7 @@ export interface VendorCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -718,12 +718,12 @@ export interface VendorCreate {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -748,7 +748,7 @@ export interface VendorCreate {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -763,7 +763,7 @@ export interface VendorCreate {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -788,7 +788,7 @@ export interface VendorCreate {
   purchasingOrganization: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -808,7 +808,7 @@ export interface VendorCreate {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 
@@ -935,17 +935,17 @@ export interface VendorTemplate {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -955,12 +955,12 @@ export interface VendorTemplate {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -1025,7 +1025,7 @@ export interface VendorTemplate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -1045,12 +1045,12 @@ export interface VendorTemplate {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -1075,7 +1075,7 @@ export interface VendorTemplate {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1090,7 +1090,7 @@ export interface VendorTemplate {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -1115,7 +1115,7 @@ export interface VendorTemplate {
   purchasingOrganization?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel?: number;
 
@@ -1135,7 +1135,7 @@ export interface VendorTemplate {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel?: number;
 
@@ -1209,17 +1209,17 @@ export interface VendorImport {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -1229,12 +1229,12 @@ export interface VendorImport {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -1299,7 +1299,7 @@ export interface VendorImport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -1319,12 +1319,12 @@ export interface VendorImport {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -1349,7 +1349,7 @@ export interface VendorImport {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1364,7 +1364,7 @@ export interface VendorImport {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -1389,7 +1389,7 @@ export interface VendorImport {
   purchasingOrganization?: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel?: number;
 
@@ -1409,7 +1409,7 @@ export interface VendorImport {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel?: number;
 
@@ -1483,17 +1483,17 @@ export interface VendorExport {
   vendorShortName?: string;
 
   /**
-   * 经销商类型（字典 logistics_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
+   * 经销商类型（字典 logistics_sales_vendor_category；0=授权经销商，1=一般经销商，2=代理商，3=零售商，4=其他）
    */
   vendorType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -1503,12 +1503,12 @@ export interface VendorExport {
   vendorTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -1573,7 +1573,7 @@ export interface VendorExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -1593,12 +1593,12 @@ export interface VendorExport {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -1623,7 +1623,7 @@ export interface VendorExport {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -1638,7 +1638,7 @@ export interface VendorExport {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -1663,7 +1663,7 @@ export interface VendorExport {
   purchasingOrganization: string;
 
   /**
-   * 信用等级（字典 logistics_credit_rating_category；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
+   * 信用等级（字典 logistics_sales_credit_rating；0=无，1=A级，2=AA级，3=AAA级，4=B级，5=C级）
    */
   creditLevel: number;
 
@@ -1683,7 +1683,7 @@ export interface VendorExport {
   agentRegion?: string;
 
   /**
-   * 经销商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
+   * 经销商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时；业务「核心」对应档位 1）
    */
   vendorLevel: number;
 

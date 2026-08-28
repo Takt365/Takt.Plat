@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktLeaveDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Leave 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktLeave 生成，请按需审阅）
 // 
@@ -35,6 +35,73 @@ public class TaktLeaveDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long LeaveId { get; set; }
 
+    /// <summary>
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 请假类型（字典 sys_leave_type；列存 DictValue）
+    /// </summary>
+    public string LeaveType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 开始日期
+    /// </summary>
+    public DateTime StartDate { get; set; }
+
+    /// <summary>
+    /// 结束日期
+    /// </summary>
+    public DateTime EndDate { get; set; }
+
+    /// <summary>
+    /// 请假事由
+    /// </summary>
+    public string Reason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
+    /// </summary>
+    public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经办时间
+    /// </summary>
+    public DateTime? HandlingAt { get; set; }
+
+    /// <summary>
+    /// 经办备注
+    /// </summary>
+    public string? HandlingComment { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
@@ -59,7 +126,7 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -69,24 +136,29 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -121,15 +193,20 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证明附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间（范围查询-开始）
@@ -145,11 +222,6 @@ public class TaktLeaveQueryDto : TaktPagedQuery
     /// 经办备注
     /// </summary>
     public string? HandlingComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
@@ -244,34 +316,37 @@ public class TaktLeaveCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [Required(ErrorMessage = "员工姓名不能为空")]
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假类型（字典 sys_leave_type；列存 DictValue）
     /// </summary>
-    [Required(ErrorMessage = "请假类型不能为空")]
+    [Required(ErrorMessage = "请假类型（字典 sys_leave_type；列存 DictValue）不能为空")]
     public string LeaveType { get; set; } = string.Empty;
 
     /// <summary>
@@ -291,15 +366,20 @@ public class TaktLeaveCreateDto
     public string Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证明附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -310,12 +390,6 @@ public class TaktLeaveCreateDto
     /// 经办备注
     /// </summary>
     public string? HandlingComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    [Required(ErrorMessage = "关联工厂不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
@@ -374,7 +448,7 @@ public class TaktLeaveStatusDto
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
-    [Required(ErrorMessage = "请假状态不能为空")]
+    [Required(ErrorMessage = "请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）不能为空")]
     public int LeaveStatus { get; set; } = 0;
 }
 
@@ -403,24 +477,29 @@ public class TaktLeaveTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -445,15 +524,20 @@ public class TaktLeaveTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证明附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -464,11 +548,6 @@ public class TaktLeaveTemplateDto
     /// 经办备注
     /// </summary>
     public string? HandlingComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
@@ -507,26 +586,30 @@ public class TaktLeaveImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -551,15 +634,20 @@ public class TaktLeaveImportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证明附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -570,11 +658,6 @@ public class TaktLeaveImportDto
     /// 经办备注
     /// </summary>
     public string? HandlingComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
@@ -610,24 +693,39 @@ public class TaktLeaveExportDto
     public long LeaveId { get; set; }
 
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工姓名
+    /// 员工姓名（冗余：按 EmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -652,15 +750,20 @@ public class TaktLeaveExportDto
     public string Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证明附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 证明附件（JSON 列表，由 TaktFile 统一上传）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -671,11 +774,6 @@ public class TaktLeaveExportDto
     /// 经办备注
     /// </summary>
     public string? HandlingComment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）

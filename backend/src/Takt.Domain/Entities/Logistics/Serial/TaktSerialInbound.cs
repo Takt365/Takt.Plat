@@ -37,7 +37,7 @@ public class TaktSerialInbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inbound_date", ColumnDescription = "入库日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime InboundDate { get; set; } = DateTime.Today;
     /// <summary>
-    /// 入库类型（字典 logistics_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
+    /// 入库类型（字典 logistics_materials_inbound_type；0=采购入库 1=生产入库 2=退货入库 3=调拨入库 4=序列号入库 5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_type", ColumnDescription = "入库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int InboundType { get; set; } = 4;

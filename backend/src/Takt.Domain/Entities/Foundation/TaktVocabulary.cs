@@ -45,10 +45,10 @@ public class TaktVocabulary : TaktTenantCoreEntityBase
     public int FilterLevel { get; set; } = 1;
 
     /// <summary>
-    /// 替换文本（默认 *）
+    /// 替换文本（默认 *Takt*）
     /// </summary>
-    [SugarColumn(ColumnName = "replace_text", ColumnDescription = "替换文本", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "*")]
-    public string ReplaceText { get; set; } = "*";
+    [SugarColumn(ColumnName = "replace_text", ColumnDescription = "替换文本", ColumnDataType = "nvarchar", Length = 6, IsNullable = false, DefaultValue = "*Takt*")]
+    public string ReplaceText { get; set; } = "*Takt*";
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用 0=禁用）

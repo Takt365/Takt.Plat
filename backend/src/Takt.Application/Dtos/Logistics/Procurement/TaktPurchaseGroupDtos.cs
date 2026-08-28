@@ -35,7 +35,6 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseGroupId { get; set; }
 
-
     /// <summary>
     /// 采购组编码（3）
     /// </summary>
@@ -50,17 +49,6 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
-    /// 采购组负责人用户 名称（填充字段）
-    /// </summary>
-    public string? ResponsibleUserName { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -133,12 +121,6 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -232,12 +214,6 @@ public class TaktPurchaseGroupCreateDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -384,12 +360,6 @@ public class TaktPurchaseGroupTemplateDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -460,12 +430,6 @@ public class TaktPurchaseGroupImportDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -539,12 +503,6 @@ public class TaktPurchaseGroupExportDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话

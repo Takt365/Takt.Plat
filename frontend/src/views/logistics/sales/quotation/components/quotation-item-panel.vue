@@ -199,7 +199,7 @@
       <a-form-item :label="pi.queryLabel('salesUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.salesUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('salesUnit', 'select')"
           allow-clear
         />
@@ -218,7 +218,7 @@
       <a-form-item :label="pi.queryLabel('salesPerUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.salesPerUnit"
-          dict-type="logistics_price_unit_param"
+          dict-type="logistics_materials_price_unit_param"
           :placeholder="pi.queryPh('salesPerUnit', 'select')"
           allow-clear
         />
@@ -237,7 +237,7 @@
       <a-form-item :label="pi.queryLabel('discountRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.discountRate"
-          dict-type="logistics_discount_rate_param"
+          dict-type="logistics_sales_discount_rate_param"
           :placeholder="pi.queryPh('discountRate', 'select')"
           allow-clear
         />

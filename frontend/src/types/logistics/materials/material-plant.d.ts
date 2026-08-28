@@ -40,7 +40,7 @@ export interface MaterialPlant extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector?: string;
 
@@ -55,12 +55,12 @@ export interface MaterialPlant extends CompanyDtoBase {
   materialGroup?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -75,12 +75,12 @@ export interface MaterialPlant extends CompanyDtoBase {
   purchaseType?: string;
 
   /**
-   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
+   * 特殊采购（字典 logistics_procurement_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement?: number;
 
   /**
-   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
+   * 是否散装（字典 sys_yes_no；0=否，1=是）
    */
   isBulk?: number;
 
@@ -115,22 +115,22 @@ export interface MaterialPlant extends CompanyDtoBase {
   manufacturerMaterialCode?: string;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit?: number;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
@@ -170,9 +170,9 @@ export interface MaterialPlant extends CompanyDtoBase {
   storageLocation?: string;
 
   /**
-   * 检验（字典 sys_yes_no；0=否，1=是）
+   * 是否需检验（字典 sys_yes_no；0=否，1=是）
    */
-  isInspection?: number;
+  requiresInspection?: number;
 
   /**
    * 批次标识（字典 sys_yes_no；0=否，1=是）
@@ -180,9 +180,9 @@ export interface MaterialPlant extends CompanyDtoBase {
   isBatch?: number;
 
   /**
-   * 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLife?: string;
+  discontinuedStatus?: string;
 
   /**
    * 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）
@@ -238,7 +238,7 @@ export interface MaterialPlantExport {
   materialSpecification?: string;
 
   /**
-   * 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+   * 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
    */
   industrySector: string;
 
@@ -253,12 +253,12 @@ export interface MaterialPlantExport {
   materialGroup: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 基本单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -273,12 +273,12 @@ export interface MaterialPlantExport {
   purchaseType: string;
 
   /**
-   * 特殊采购（字典 logistics_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
+   * 特殊采购（字典 logistics_procurement_special_procurement_type；0=无，10=寄售，30=外协加工，50=虚设品号；默认 0）
    */
   specialProcurement: number;
 
   /**
-   * 是否散装（字典 logistics_bulk_material_type；0=否，1=是）
+   * 是否散装（字典 sys_yes_no；0=否，1=是）
    */
   isBulk: number;
 
@@ -313,22 +313,22 @@ export interface MaterialPlantExport {
   manufacturerMaterialCode?: string;
 
   /**
-   * 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
   /**
-   * 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
+   * 价格控制（字典 logistics_materials_price_control；S=标准价格，V=移动平均价格/周期单价；默认 V）
    */
   priceControl: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
    */
   priceUnit: number;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
@@ -368,9 +368,9 @@ export interface MaterialPlantExport {
   storageLocation: string;
 
   /**
-   * 检验（字典 sys_yes_no；0=否，1=是）
+   * 是否需检验（字典 sys_yes_no；0=否，1=是）
    */
-  isInspection: number;
+  requiresInspection: number;
 
   /**
    * 批次标识（字典 sys_yes_no；0=否，1=是）
@@ -378,9 +378,9 @@ export interface MaterialPlantExport {
   isBatch: number;
 
   /**
-   * 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
-  isEndOfLife: string;
+  discontinuedStatus: string;
 
   /**
    * 物料状态（字典 sys_normal_disable；0=禁用，1=启用，2=锁定）

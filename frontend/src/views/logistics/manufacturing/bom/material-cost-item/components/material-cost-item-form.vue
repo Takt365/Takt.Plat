@@ -256,7 +256,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.movingPriceCurrencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('movingPriceCurrencyCode')"
                   :disabled="!!formData?.bomMaterialCostItemId"
                 />
@@ -342,7 +342,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.purchaseCurrencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   :placeholder="pi.ph('purchaseCurrencyCode')"
                   :disabled="!!formData?.bomMaterialCostItemId"
                 />

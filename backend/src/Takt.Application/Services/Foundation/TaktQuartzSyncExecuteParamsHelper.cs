@@ -21,10 +21,14 @@ namespace Takt.Application.Services.Foundation;
 /// </summary>
 public static class TaktQuartzSyncExecuteParamsHelper
 {
-    /// <summary>源库 JSON 键</summary>
+    /// <summary>
+    /// 源库 JSON 键
+    /// </summary>
     public const string SourceDatabaseKey = "sourceDatabase";
 
-    /// <summary>目标库 JSON 键</summary>
+    /// <summary>
+    /// 目标库 JSON 键
+    /// </summary>
     public const string TargetDatabaseKey = "targetDatabase";
 
     private static readonly Regex DatabaseNamePattern = new(

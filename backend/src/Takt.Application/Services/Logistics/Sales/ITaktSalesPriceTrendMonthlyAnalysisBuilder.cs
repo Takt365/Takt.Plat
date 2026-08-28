@@ -32,30 +32,48 @@ public interface ITaktSalesPriceTrendMonthlyAnalysisBuilder
 /// </summary>
 public sealed class TaktSalesPriceTrendAnalysisBuilt
 {
-    /// <summary>过滤并排序后的全量行</summary>
+    /// <summary>
+    /// 过滤并排序后的全量行
+    /// </summary>
     public List<TaktSalesPriceTrendDto> OrderedRows { get; init; } = new();
 
-    /// <summary>期间列顺序</summary>
+    /// <summary>
+    /// 期间列顺序
+    /// </summary>
     public List<string> PeriodOrder { get; init; } = new();
 
-    /// <summary>基准期间</summary>
+    /// <summary>
+    /// 基准期间
+    /// </summary>
     public string? BasePeriod { get; init; }
 
-    /// <summary>对比期间</summary>
+    /// <summary>
+    /// 对比期间
+    /// </summary>
     public string? ComparePeriod { get; init; }
 
-    /// <summary>上涨行数</summary>
+    /// <summary>
+    /// 上涨行数
+    /// </summary>
     public int UpCount { get; init; }
 
-    /// <summary>下跌行数</summary>
+    /// <summary>
+    /// 下跌行数
+    /// </summary>
     public int DownCount { get; init; }
 
-    /// <summary>持平行数</summary>
+    /// <summary>
+    /// 持平行数
+    /// </summary>
     public int FlatCount { get; init; }
 
-    /// <summary>无趋势行数</summary>
+    /// <summary>
+    /// 无趋势行数
+    /// </summary>
     public int NoneCount { get; init; }
 
-    /// <summary>空结果</summary>
+    /// <summary>
+    /// 空结果
+    /// </summary>
     public static TaktSalesPriceTrendAnalysisBuilt Empty() => new();
 }

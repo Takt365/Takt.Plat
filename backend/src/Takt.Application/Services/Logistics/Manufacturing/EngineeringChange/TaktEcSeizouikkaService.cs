@@ -30,6 +30,8 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
 {
     private readonly ITaktCompanyRepository<TaktEcSeizouikka> _ecSeizouikkaRepository;
+    private readonly TaktEcGijutsuStatusSynchronizer _ecGijutsuStatusSynchronizer;
+    private readonly TaktEcExecPersistence _ecExecPersistence;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +39,16 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
     /// 构造函数
     /// </summary>
     /// <param name="ecSeizouikkaRepository">设变制一执行仓储</param>
+    /// <param name="ecGijutsuStatusSynchronizer">设变技术课状态同步</param>
+    /// <param name="ecExecPersistence">设变部门执行持久化</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcSeizouikkaService(
         ITaktCompanyRepository<TaktEcSeizouikka> ecSeizouikkaRepository,
+        TaktEcGijutsuStatusSynchronizer ecGijutsuStatusSynchronizer,
+        TaktEcExecPersistence ecExecPersistence,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,6 +56,8 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         : base(userContext, localizationService)
     {
         _ecSeizouikkaRepository = ecSeizouikkaRepository;
+        _ecGijutsuStatusSynchronizer = ecGijutsuStatusSynchronizer;
+        _ecExecPersistence = ecExecPersistence;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -131,11 +139,12 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecSeizouikkaRepository.CreateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizouikkaByIdAsync(entity.Id) ?? entity.Adapt<TaktEcSeizouikkaDto>();
     }
 
     /// <summary>
-    /// 更新设变制一执行
+    /// 更新设变制一执行（同设变单号+机种+完成品的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变制一执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -157,6 +166,8 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
             throw new TaktBusinessException("设变制一执行的EcnDetailId已存在");
         }
         await _ecSeizouikkaRepository.UpdateAsync(entity);
+        await _ecExecPersistence.FanOutSeizouikkaFillableByEcModelAndFinishedGoodsAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizouikkaByIdAsync(id) ?? throw new TaktBusinessException("设变制一执行不存在");
     }
 
@@ -182,6 +193,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         }
         entity.IsObsolete = 1;
         await _ecSeizouikkaRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
     }
 
     /// <summary>
@@ -220,6 +232,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         }
         entity.IsObsolete = dto.IsObsolete;
         await _ecSeizouikkaRepository.UpdateAsync(entity);
+        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizouikkaByIdAsync(dto.EcSeizouikkaId) ?? throw new TaktBusinessException("设变制一执行不存在");
     }
 
@@ -280,6 +293,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecSeizouikkaRepository.CreateAsync(entity);
+                await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
                 success += 1;
             }
             catch (Exception ex)
@@ -337,6 +351,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         {
             exp = exp.And(x => x.IsObsolete == 0);
         }
+        exp = exp.And(TaktEcSeizouikkaQueryHelper.VisibleExecExpression());
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

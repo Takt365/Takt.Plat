@@ -17,9 +17,13 @@ namespace Takt.Shared.Enums;
 /// </summary>
 public enum TaktFlowSuspensionState
 {
-    /// <summary>激活</summary>
+    /// <summary>
+    /// 激活
+    /// </summary>
     Active = 1,
-    /// <summary>挂起</summary>
+    /// <summary>
+    /// 挂起
+    /// </summary>
     Suspended = 2
 }
 
@@ -28,17 +32,29 @@ public enum TaktFlowSuspensionState
 /// </summary>
 public enum TaktFlowInstanceStatus
 {
-    /// <summary>运行中</summary>
+    /// <summary>
+    /// 运行中
+    /// </summary>
     Running = 0,
-    /// <summary>已完成</summary>
+    /// <summary>
+    /// 已完成
+    /// </summary>
     Completed = 1,
-    /// <summary>已驳回</summary>
+    /// <summary>
+    /// 已驳回
+    /// </summary>
     Rejected = 2,
-    /// <summary>已挂起</summary>
+    /// <summary>
+    /// 已挂起
+    /// </summary>
     Suspended = 3,
-    /// <summary>已终止</summary>
+    /// <summary>
+    /// 已终止
+    /// </summary>
     Terminated = 4,
-    /// <summary>草稿</summary>
+    /// <summary>
+    /// 草稿
+    /// </summary>
     Draft = 5
 }
 
@@ -47,11 +63,17 @@ public enum TaktFlowInstanceStatus
 /// </summary>
 public enum TaktFlowTaskStatus
 {
-    /// <summary>待办</summary>
+    /// <summary>
+    /// 待办
+    /// </summary>
     Pending = 0,
-    /// <summary>已完成</summary>
+    /// <summary>
+    /// 已完成
+    /// </summary>
     Completed = 1,
-    /// <summary>已取消</summary>
+    /// <summary>
+    /// 已取消
+    /// </summary>
     Cancelled = 2
 }
 
@@ -60,9 +82,13 @@ public enum TaktFlowTaskStatus
 /// </summary>
 public enum TaktFlowSignType
 {
-    /// <summary>或签</summary>
+    /// <summary>
+    /// 或签
+    /// </summary>
     Any = 1,
-    /// <summary>会签</summary>
+    /// <summary>
+    /// 会签
+    /// </summary>
     All = 2
 }
 
@@ -71,15 +97,25 @@ public enum TaktFlowSignType
 /// </summary>
 public enum TaktFlowVariableType
 {
-    /// <summary>字符串</summary>
+    /// <summary>
+    /// 字符串
+    /// </summary>
     String = 0,
-    /// <summary>长整型</summary>
+    /// <summary>
+    /// 长整型
+    /// </summary>
     Long = 1,
-    /// <summary>双精度</summary>
+    /// <summary>
+    /// 双精度
+    /// </summary>
     Double = 2,
-    /// <summary>布尔</summary>
+    /// <summary>
+    /// 布尔
+    /// </summary>
     Boolean = 3,
-    /// <summary>JSON</summary>
+    /// <summary>
+    /// JSON
+    /// </summary>
     Json = 4
 }
 
@@ -88,26 +124,48 @@ public enum TaktFlowVariableType
 /// </summary>
 public enum TaktFlowActionType
 {
-    /// <summary>发起</summary>
+    /// <summary>
+    /// 发起
+    /// </summary>
     Start = 0,
-    /// <summary>通过</summary>
+    /// <summary>
+    /// 通过
+    /// </summary>
     Approve = 1,
-    /// <summary>驳回</summary>
+    /// <summary>
+    /// 驳回
+    /// </summary>
     Reject = 2,
-    /// <summary>撤回</summary>
+    /// <summary>
+    /// 撤回
+    /// </summary>
     Revoke = 3,
-    /// <summary>转办</summary>
+    /// <summary>
+    /// 转办
+    /// </summary>
     Transfer = 4,
-    /// <summary>加签</summary>
+    /// <summary>
+    /// 加签
+    /// </summary>
     AddSign = 5,
-    /// <summary>减签</summary>
+    /// <summary>
+    /// 减签
+    /// </summary>
     ReduceSign = 6,
-    /// <summary>挂起</summary>
+    /// <summary>
+    /// 挂起
+    /// </summary>
     Suspend = 7,
-    /// <summary>恢复</summary>
+    /// <summary>
+    /// 恢复
+    /// </summary>
     Resume = 8,
-    /// <summary>终止</summary>
+    /// <summary>
+    /// 终止
+    /// </summary>
     Terminate = 9,
-    /// <summary>抄送</summary>
+    /// <summary>
+    /// 抄送
+    /// </summary>
     Copy = 10
 }

@@ -67,7 +67,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -102,7 +102,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -114,7 +114,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -186,7 +186,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -221,7 +221,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -233,7 +233,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -318,7 +318,7 @@ public class TaktAssyDefectDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -353,7 +353,7 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -365,7 +365,7 @@ public class TaktAssyDefectDetailCreateDto
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -483,7 +483,7 @@ public class TaktAssyDefectDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -518,7 +518,7 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -530,7 +530,7 @@ public class TaktAssyDefectDetailTemplateDto
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -601,7 +601,7 @@ public class TaktAssyDefectDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -636,7 +636,7 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -648,7 +648,7 @@ public class TaktAssyDefectDetailImportDto
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -725,7 +725,7 @@ public class TaktAssyDefectDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category；存 DictValue）
+    /// 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -760,7 +760,7 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -772,7 +772,7 @@ public class TaktAssyDefectDetailExportDto
     /// <summary>
     /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? RepairOperator { get; set; } = string.Empty;
+    public string? RepairOperatorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

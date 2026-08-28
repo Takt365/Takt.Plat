@@ -340,15 +340,27 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('serviceBy')"
-                name="serviceBy"
+                :label="pi.label('serviceEmployeeId')"
+                name="serviceEmployeeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.serviceEmployeeId"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('serviceEmployeeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('serviceEmployeeName')"
+                name="serviceEmployeeName"
               >
                 <a-input
-                  v-model:value="formState.serviceBy"
-                  :placeholder="pi.ph('serviceBy')"
+                  v-model:value="formState.serviceEmployeeName"
+                  :placeholder="pi.ph('serviceEmployeeName')"
                   show-count
-                  :maxlength="50"
-                  allow-clear
+                  :maxlength="80"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -520,6 +532,8 @@ const dictDataStore = useDictDataStore()
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
+
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceOrderId 才视为编辑） */
 watch(
@@ -740,8 +754,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.customerServiceOrderId) {
     payload.customerServiceOrderId = props.formData.customerServiceOrderId
+    delete payload.numberingRuleCode
   }
   return payload
 }

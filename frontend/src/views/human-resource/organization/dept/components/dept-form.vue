@@ -162,7 +162,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.costCategory"
-                  dict-type="hr_dept_cost_category"
+                  dict-type="humanresource_organization_dept_cost_category"
                   :placeholder="pi.ph('costCategory')"
                 />
               </a-form-item>

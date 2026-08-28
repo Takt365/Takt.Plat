@@ -32,7 +32,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public long SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "sales_order_code", ColumnDescription = "销售订单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesOrderCode { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 销售单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "sales_unit", ColumnDescription = "销售单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
     public string SalesUnit { get; set; } = "PC";
@@ -80,7 +80,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public decimal ShippedQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "sales_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int SalesPerUnit { get; set; } = 1000;
@@ -126,7 +126,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public decimal SalesAmount { get; set; } = 0;
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "行交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;

@@ -44,19 +44,19 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
+    /// PCBA板别（字典 logistics_manufacturing_pcba_function；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "pcba_board_type", ColumnDescription = "PCBA板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? PcbaBoardType { get; set; }
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
+    /// 目视线别（字典 logistics_manufacturing_visual_inspection_line_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "visual_inspection_line", ColumnDescription = "目视线别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? VisualInspectionLine { get; set; }
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
+    /// AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "aoi_line", ColumnDescription = "AOI线别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? AoiLine { get; set; }
@@ -74,7 +74,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public DateTime? TSideAssemblyDate { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
@@ -82,7 +82,13 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     /// <summary>
     /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "inspector_name", ColumnDescription = "检查员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "inspector_id", ColumnDescription = "检查员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? InspectorId { get; set; }
+    /// <summary>
+    /// 检查员名称（冗余：按 InspectorId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "inspector_name", ColumnDescription = "检查员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? InspectorName { get; set; }
 
     /// <summary>
@@ -98,7 +104,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public decimal InspectionQty { get; set; } = 0;
 
     /// <summary>
-    /// 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+    /// 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_status", ColumnDescription = "检查状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int InspectionStatus { get; set; } = 1;
@@ -146,7 +152,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public string? Content { get; set; }
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
+    /// 不良个所（字典 logistics_manufacturing_pcb_location_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "defect_location", ColumnDescription = "不良个所", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectLocation { get; set; }

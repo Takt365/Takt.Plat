@@ -9,8 +9,8 @@
 // ========================================
 
 /** PCB 板别 */
-export const PCBA_DETAIL_PCB_BOARD_TYPE_DICT = 'logistics_pcba_function_category'
+export const PCBA_DETAIL_PCB_BOARD_TYPE_DICT = 'logistics_manufacturing_pcba_function'
 /** 停线原因 */
-export const PCBA_DETAIL_DOWNTIME_REASON_DICT = 'logistics_stop_reason_category'
+export const PCBA_DETAIL_DOWNTIME_REASON_DICT = 'logistics_manufacturing_stop_reason'
 /** 未达成原因 */
-export const PCBA_DETAIL_UNACHIEVED_REASON_DICT = 'logistics_nonachievement_reason_category'
+export const PCBA_DETAIL_UNACHIEVED_REASON_DICT = 'logistics_manufacturing_nonachievement_reason'

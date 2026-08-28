@@ -55,12 +55,12 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
     /// <summary>
-    /// 评论人姓名（冗余字段，便于查询）
+    /// 评论人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "user_name", ColumnDescription = "评论人姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string UserName { get; set; } = string.Empty;
     /// <summary>
-    /// 评论人头像 URL（冗余字段，便于查询）
+    /// 评论人头像 URL（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "user_avatar", ColumnDescription = "评论人头像URL", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? UserAvatar { get; set; }
@@ -71,7 +71,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReplyToUserId { get; set; }
     /// <summary>
-    /// 被回复人姓名（冗余字段，便于查询）
+    /// 被回复人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "reply_to_user_name", ColumnDescription = "被回复人姓名", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ReplyToUserName { get; set; }
@@ -101,7 +101,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "comment_level", ColumnDescription = "评论层级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CommentLevel { get; set; } = 0;
     /// <summary>
-    /// 评论展示状态（字典 routine_news_comment_status；0=待展示 1=已展示 2=已隐藏）
+    /// 评论展示状态（字典 routine_news_center_comment_status；0=待展示 1=已展示 2=已隐藏）
     /// </summary>
     [SugarColumn(ColumnName = "comment_status", ColumnDescription = "评论状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CommentStatus { get; set; } = 0;

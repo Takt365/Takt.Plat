@@ -59,7 +59,7 @@ public class TaktGenTableColumn : TaktTenantCoreEntityBase
     public string DatabaseDataType { get; set; } = "nvarchar";
 
     /// <summary>
-    /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
+    /// C#类型（字典 code_generator_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
     [SugarColumn(ColumnName = "csharp_data_type", ColumnDescription = "C#类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "string")]
     public string CsharpDataType { get; set; } = "string";
@@ -143,13 +143,13 @@ public class TaktGenTableColumn : TaktTenantCoreEntityBase
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// 查询方式（字典 code_generator_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     [SugarColumn(ColumnName = "query_type", ColumnDescription = "查询方式", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "")]
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 显示类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     [SugarColumn(ColumnName = "html_type", ColumnDescription = "显示类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "input")]
     public string HtmlType { get; set; } = "input";

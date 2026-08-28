@@ -140,11 +140,14 @@ function entityShortFromDtoFileName(dtoFileName) {
  * 含大量手工商业务方法的应用服务实体（禁止 generate-services / generate-controllers 覆盖）
  * 扫描阶段仍须能定位 ITaktXxxService；跳过逻辑在 process 阶段（与 generate-services-from-dtos 一致）
  * 附加 API 放同目录 *Extra*.cs 或本服务手工商文件；流水线仅生成标准 CRUD 时请勿列入本表
- * BillOfMaterial：BOM 展开 Explosion；DictData：CreateDictSnapshotAsync / GetDataDictAllAsync；
+ * BillOfMaterial：BOM 展开见独立 Explosion；BomMaterialCostAnalysis：月推移见独立 AnalysisTrend；
+ * DictData：CreateDictSnapshotAsync / GetDataDictAllAsync；
  * Configurable：运行时查询；EcGijutsu / AssyOutput：来源导入扩展；FlowInstance：实例统计
+ * 约定：凡 *Trend / *Explosion / *Stat 分析模块须独立 DTO+Service+Controller+前端 API，禁止挂在 CRUD 服务上。
  */
 const MANUAL_SERVICE_ENTITY_SHORT_NAMES = new Set([
   'BillOfMaterial',
+  'BomMaterialCostAnalysis',
   'GenTable',
   'User',
   'DictData',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktVocabularyValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vocabulary 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktVocabulary 生成，请按需审阅）
 // 
@@ -37,7 +37,7 @@ public class TaktVocabularyCreateValidator : AbstractValidator<TaktVocabularyCre
             .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
         RuleFor(x => x.ReplaceText)
             .NotEmpty().WithMessage("替换文本不能为空")
-            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
+            .MaximumLength(6).WithMessage("替换文本长度不能超过6个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -69,7 +69,7 @@ public class TaktVocabularyUpdateValidator : AbstractValidator<TaktVocabularyUpd
             .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
         RuleFor(x => x.ReplaceText)
             .NotEmpty().WithMessage("替换文本不能为空")
-            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
+            .MaximumLength(6).WithMessage("替换文本长度不能超过6个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -98,7 +98,7 @@ public class TaktVocabularyImportValidator : AbstractValidator<TaktVocabularyImp
             .MaximumLength(100).WithMessage("敏感词文本长度不能超过100个字符");
         RuleFor(x => x.ReplaceText)
             .NotEmpty().WithMessage("替换文本不能为空")
-            .MaximumLength(100).WithMessage("替换文本长度不能超过100个字符");
+            .MaximumLength(6).WithMessage("替换文本长度不能超过6个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

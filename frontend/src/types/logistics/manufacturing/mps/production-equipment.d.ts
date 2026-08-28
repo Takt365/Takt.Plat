@@ -25,7 +25,7 @@ import type {
 export interface ProductionEquipment extends CompanyDtoBase {
 
   /**
-   * 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+   * 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
    */
   equipCategory?: number;
 
@@ -388,7 +388,7 @@ export interface ProductionEquipmentExport {
   plantCode: string;
 
   /**
-   * 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+   * 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
    */
   equipCategory: number;
 

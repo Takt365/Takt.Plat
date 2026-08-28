@@ -106,7 +106,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.accountTitleType"
-                  dict-type="accounting_account_title_type"
+                  dict-type="accounting_financial_account_title_type"
                   :placeholder="pi.ph('accountTitleType')"
                 />
               </a-form-item>
@@ -154,7 +154,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.auxiliaryType"
-                  dict-type="accounting_auxiliary_type"
+                  dict-type="accounting_financial_auxiliary_type"
                   :placeholder="pi.ph('auxiliaryType')"
                 />
               </a-form-item>

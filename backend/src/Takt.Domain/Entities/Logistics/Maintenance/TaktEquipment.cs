@@ -98,10 +98,16 @@ public class TaktEquipment : TaktCompanyEntityBase
     public string? WorkstationBy { get; set; }
 
     /// <summary>
-    /// 所属部门
+    /// 所属部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_by", ColumnDescription = "所属部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? DeptBy { get; set; }
+    [SugarColumn(ColumnName = "dept_id", ColumnDescription = "所属部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+    /// <summary>
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "所属部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? DeptName { get; set; }
 
     /// <summary>
     /// 设备位置（详细位置描述）
@@ -110,16 +116,28 @@ public class TaktEquipment : TaktCompanyEntityBase
     public string? EquipmentLocation { get; set; }
 
     /// <summary>
-    /// 负责人
+    /// 负责人（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "responsible_user_by", ColumnDescription = "负责人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ResponsibleUserBy { get; set; }
+    [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ResponsibleUserId { get; set; }
+    /// <summary>
+    /// 负责人名称（冗余：按 ResponsibleUserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "responsible_user_name", ColumnDescription = "负责人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ResponsibleUserName { get; set; }
 
     /// <summary>
-    /// 操作人
+    /// 操作人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "operator_by", ColumnDescription = "操作人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? OperatorBy { get; set; }
+    [SugarColumn(ColumnName = "operator_employee_id", ColumnDescription = "操作人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? OperatorEmployeeId { get; set; }
+    /// <summary>
+    /// 操作人名称（冗余：按 OperatorEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "operator_employee_name", ColumnDescription = "操作人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? OperatorEmployeeName { get; set; }
 
     /// <summary>
     /// 购买日期

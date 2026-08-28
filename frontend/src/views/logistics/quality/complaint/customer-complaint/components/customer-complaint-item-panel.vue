@@ -457,14 +457,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getCustomerComplaintItemField(record, 'actualCompletionDate') ?? ''),
   },
   {
-    title: pi.label('attachmentPaths'),
-    dataIndex: 'attachmentPaths',
-    key: 'attachmentPaths',
+    title: pi.label('fileName'),
+    dataIndex: 'fileName',
+    key: 'fileName',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: CustomerComplaintItem }) =>
-      String(getCustomerComplaintItemField(record, 'attachmentPaths') ?? ''),
+      String(getCustomerComplaintItemField(record, 'fileName') ?? ''),
+  },
+  {
+    title: pi.label('accessUrl'),
+    dataIndex: 'accessUrl',
+    key: 'accessUrl',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: CustomerComplaintItem }) =>
+      String(getCustomerComplaintItemField(record, 'accessUrl') ?? ''),
   },
   {
     title: pi.label('improvementStatus'),

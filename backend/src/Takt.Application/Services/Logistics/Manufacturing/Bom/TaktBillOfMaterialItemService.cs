@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单明细应用服务实现
 // 
@@ -429,7 +429,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.BomCode = entity.BomCode;
-                childDto.SubstituteGroup = entity.SubstituteGroup;
+                childDto.SubstituteGroup = entity.SubstituteGroup ?? string.Empty;
                 childDto.MaterialUnit = entity.MaterialUnit;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))

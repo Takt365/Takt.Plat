@@ -15,7 +15,7 @@
         v-model:value="filterCurrentDeptCode"
         allow-clear
         class="min-w-[140px]"
-        :placeholder="t(`${localePrefix}.filter.currentDept`)"
+        :placeholder="execI18n.label('deptCode')"
         :options="deptFilterOptions"
         @change="handleFilterChange"
       />
@@ -87,13 +87,19 @@
  * 设变实施跟踪看板：按 8 张部门执行表汇总路径，品管课完成即正式完成
  */
 import { useI18n } from 'vue-i18n';
+import { useEntityFieldI18n } from '@/composables/use-entity-field-i18n';
+import { taktOrgDeptI18nKey } from '@/utils/naming';
 import { getEcKanbanList, exportEcKanbanData } from '@/api/logistics/manufacturing/engineering-change/ec-kanban';
 import { TaktEcKanbanOrder } from '@/constants/logistics/ec-exec-codes';
 import { TaktEcImplementationStatus } from '@/constants/logistics/ec-implementation-status';
 import type { EcKanban } from '@/types/logistics/manufacturing/engineering-change/ec-kanban';
+import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n';
 import EcKanbanStageStrip from './components/ec-kanban-stage-strip.vue';
 
 const { t } = useI18n();
+const gi = useEcGijutsuI18n();
+/** 公共执行字段 entity.ecexec.* */
+const execI18n = useEntityFieldI18n('ecexec');
 const localePrefix = 'logistics.manufacturing.engineering-change.ec-kanban.page';
 /** 列表 loading */
 const loading = ref(false);
@@ -128,14 +134,14 @@ const statusFilterOptions = computed(() => [
   { value: TaktEcImplementationStatus.FullyCompleted, label: t(`${localePrefix}.implementationStatus.fullyCompleted`) }]);
 /** 列定义 */
 const columns = computed(() => [
-  { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 120 },
-  { title: t('entity.ec.title'), dataIndex: 'ecTitle', key: 'ecTitle', width: 200 },
+  { title: gi.label('ecCode'), dataIndex: 'ecCode', key: 'ecCode', width: 120 },
+  { title: gi.label('ecTitle'), dataIndex: 'ecTitle', key: 'ecTitle', width: 200 },
   { title: t(`${localePrefix}.column.implementationStatus`), dataIndex: 'implementationStatus', key: 'implementationStatus', width: 110 },
-  { title: t(`${localePrefix}.column.currentDept`), dataIndex: 'currentDeptCode', key: 'currentDeptCode', width: 100 },
+  { title: execI18n.label('deptCode'), dataIndex: 'currentDeptCode', key: 'currentDeptCode', width: 100 },
   { title: t(`${localePrefix}.column.pendingCount`), dataIndex: 'pendingAtCurrentDeptCount', key: 'pendingAtCurrentDeptCount', width: 90 },
   { title: t(`${localePrefix}.column.detailCount`), dataIndex: 'detailCount', key: 'detailCount', width: 80 },
   { title: t(`${localePrefix}.column.path`), dataIndex: 'deptPath', key: 'deptPath', width: 420 },
-  { title: t('entity.ec.leader'), dataIndex: 'ecLeader', key: 'ecLeader', width: 100 }]);
+  { title: gi.label('ecLeader'), dataIndex: 'ecLeader', key: 'ecLeader', width: 100 }]);
 /** 可见列 keys */
 const visibleColumnKeys = ref([
   'ecCode', 'ecTitle', 'implementationStatus', 'currentDeptCode', 'pendingAtCurrentDeptCount', 'detailCount', 'deptPath', 'ecLeader']);
@@ -154,7 +160,8 @@ const rowSelection = computed(() => ({
  * @returns {string} 文案
  */
 function deptLabel(code: string): string {
-  return t(`${localePrefix}.dept.${code.toLowerCase()}`);
+  const key = taktOrgDeptI18nKey(code);
+  return key ? t(key) : '';
 }
 
 /**

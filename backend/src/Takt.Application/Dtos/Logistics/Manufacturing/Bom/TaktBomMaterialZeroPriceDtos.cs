@@ -218,12 +218,12 @@ public class TaktBomMaterialZeroPriceManualMovingDto
     public decimal MovingAveragePrice { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；默认 1000；回填到 MovingPriceUnit）
+    /// 价格单位（字典 logistics_materials_price_unit_param；默认 1000；回填到 MovingPriceUnit）
     /// </summary>
     public int MovingPriceUnit { get; set; } = 1000;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；默认 CNY；回填到 MovingPriceCurrencyCode）
+    /// 币种（字典 accounting_financial_currency_code；默认 CNY；回填到 MovingPriceCurrencyCode）
     /// </summary>
     public string MovingPriceCurrencyCode { get; set; } = "CNY";
 }

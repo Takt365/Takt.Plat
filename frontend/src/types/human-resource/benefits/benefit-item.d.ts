@@ -63,17 +63,17 @@ export interface BenefitItemExport {
   itemName: string;
 
   /**
-   * 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+   * 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
    */
   benefitCategory: number;
 
   /**
-   * 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+   * 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
    */
   benefitType: number;
 
   /**
-   * 发放周期（字典 hr_benefit_payment_cycle_type）
+   * 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
    */
   paymentCycle: number;
 

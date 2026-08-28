@@ -41,7 +41,9 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
         NullValueHandling = NullValueHandling.Ignore
     };
 
-    /// <summary>执行顺序</summary>
+    /// <summary>
+    /// 执行顺序
+    /// </summary>
     public int Order => 69;
 
     /// <summary>
@@ -139,7 +141,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
         {
             new { field = "expenseCode", title = "费用单编码", type = "input" },
             new { field = "expenseTitle", title = "费用标题", type = "input" },
-            new { field = "expenseType", title = "费用类型", type = "select", props = new { dictType = "accounting_expense_type" } },
+            new { field = "expenseType", title = "费用类型", type = "select", props = new { dictType = "accounting_financial_expense_type" } },
             new { field = "expenseAmount", title = "费用金额", type = "inputNumber" },
             new { field = "expenseDate", title = "费用发生日期", type = "date" },
             new { field = "applicationReason", title = "申请原因", type = "textarea", props = new { rows = 4 } }
@@ -155,7 +157,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
             {
                 new { dbColumnName = "expense_code", csharpColumnName = "expenseCode", columnDescription = "费用单编码", dataType = "varchar", displayType = "input" },
                 new { dbColumnName = "expense_title", csharpColumnName = "expenseTitle", columnDescription = "费用标题", dataType = "nvarchar", displayType = "input" },
-                new { dbColumnName = "expense_type", csharpColumnName = "expenseType", columnDescription = "费用类型", dataType = "int", displayType = "select", dictTypeCode = "accounting_expense_type" },
+                new { dbColumnName = "expense_type", csharpColumnName = "expenseType", columnDescription = "费用类型", dataType = "int", displayType = "select", dictTypeCode = "accounting_financial_expense_type" },
                 new { dbColumnName = "expense_amount", csharpColumnName = "expenseAmount", columnDescription = "费用金额", dataType = "decimal", displayType = "inputNumber" },
                 new { dbColumnName = "expense_date", csharpColumnName = "expenseDate", columnDescription = "费用发生日期", dataType = "datetime", displayType = "date" },
                 new { dbColumnName = "application_reason", csharpColumnName = "applicationReason", columnDescription = "申请原因", dataType = "nvarchar", displayType = "textarea" }

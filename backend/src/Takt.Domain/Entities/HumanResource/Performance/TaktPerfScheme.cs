@@ -39,12 +39,12 @@ public class TaktPerfScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "applicable_department", ColumnDescription = "适用部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string ApplicableDepartment { get; set; } = string.Empty;
     /// <summary>
-    /// 考核周期类型（字典 hr_perf_cycle_type；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）
+    /// 考核周期类型（字典 humanresource_performance_cycle；列存 DictValue：MONTH/QUARTER/HALFYEAR/YEAR）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_type", ColumnDescription = "考核周期类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CycleType { get; set; } = string.Empty;
     /// <summary>
-    /// 评分标准（字典 hr_perf_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）
+    /// 评分标准（字典 humanresource_performance_scoring_standard；列存 DictValue：PERCENT/FIVE/GRADE）
     /// </summary>
     [SugarColumn(ColumnName = "scoring_standard", ColumnDescription = "评分标准", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ScoringStandard { get; set; } = string.Empty;
@@ -69,12 +69,12 @@ public class TaktPerfScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "metric_name", ColumnDescription = "指标名称", ColumnDataType = "nvarchar", Length = 128, IsNullable = false)]
     public string MetricName { get; set; } = string.Empty;
     /// <summary>
-    /// 指标类别（字典 hr_perf_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）
+    /// 指标类别（字典 humanresource_performance_metric_category；列存 DictValue：PERF/CAPABILITY/ATTITUDE/MANAGEMENT/INNOVATION/QUALITY/EFFICIENCY/SAFETY）
     /// </summary>
     [SugarColumn(ColumnName = "category", ColumnDescription = "指标类别", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string Category { get; set; } = string.Empty;
     /// <summary>
-    /// 指标类型（字典 hr_perf_metric_type；列存 DictValue：QUANT/QUAL）
+    /// 指标类型（字典 humanresource_performance_metric_type；列存 DictValue：QUANT/QUAL）
     /// </summary>
     [SugarColumn(ColumnName = "metric_type", ColumnDescription = "指标类型", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MetricType { get; set; } = string.Empty;
@@ -94,7 +94,7 @@ public class TaktPerfScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; }
     /// <summary>
-    /// 状态（字典 hr_perf_scheme_metric_status；0=启用 1=停用）
+    /// 状态（字典 humanresource_performance_scheme_metric_status；0=启用 1=停用）
     /// </summary>
     [SugarColumn(ColumnName = "scheme_metric_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SchemeMetricStatus { get; set; }

@@ -47,7 +47,7 @@
         <a-form-item :label="t('logistics.manufacturing.mrp.page.wizard.bomType')">
           <TaktSelect
             v-model:value="wizardState.options.bomType"
-            dict-type="logistics_bom_type"
+            dict-type="logistics_manufacturing_bom_type"
             :placeholder="t('common.page.form.placeholder.select')"
           />
         </a-form-item>

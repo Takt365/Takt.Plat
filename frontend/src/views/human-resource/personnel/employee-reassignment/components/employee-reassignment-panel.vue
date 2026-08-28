@@ -16,11 +16,11 @@
       @reset="handleQueryReset"
     />
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:reassignment:create"
+      update-permission="human:resource:personnel:employee:reassignment:update"
+      delete-permission="human:resource:personnel:employee:reassignment:delete"
+      import-permission="human:resource:personnel:employee:reassignment:import"
+      export-permission="human:resource:personnel:employee:reassignment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -170,7 +170,7 @@
       <a-form-item :label="pi.queryLabel('reassignmentType')">
         <TaktSelect
           v-model:value="advancedQueryForm.reassignmentType"
-          dict-type="hr_reassignment_type"
+          dict-type="humanresource_personnel_reassignment_type"
           :placeholder="pi.queryPh('reassignmentType', 'select')"
           allow-clear
         />
@@ -840,7 +840,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:reassignment:update',
         onClick: (record: EmployeeReassignment) => void handleEdit(record),
       },
       {
@@ -848,7 +848,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:reassignment:delete',
         onClick: (record: EmployeeReassignment) => void handleDeleteOne(record),
       },
     ],

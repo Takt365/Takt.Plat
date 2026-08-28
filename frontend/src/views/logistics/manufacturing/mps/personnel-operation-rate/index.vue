@@ -74,7 +74,7 @@
         <template v-if="column.key === 'shiftNo'">
           <TaktDictTag
             :value="getPersonnelOperationRateDictValue(record, 'shiftNo')"
-            dict-type="logistics_shift_category"
+            dict-type="logistics_manufacturing_shift_category"
           />
         </template>
       </template>
@@ -220,7 +220,7 @@
       <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />

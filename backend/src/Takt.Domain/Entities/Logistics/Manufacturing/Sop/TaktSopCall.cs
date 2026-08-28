@@ -41,7 +41,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 呼叫类型（字典 logistics_sop_andon_type；1=班长，2=维修，3=品质）
+    /// 呼叫类型（字典 logistics_manufacturing_sop_andon_type；1=班长，2=维修，3=品质）
     /// </summary>
     [SugarColumn(ColumnName = "call_type", ColumnDescription = "呼叫类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CallType { get; set; } = 1;
@@ -52,6 +52,11 @@ public class TaktSopCall : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "caller_id", ColumnDescription = "呼叫人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
+    /// <summary>
+    /// 呼叫人名称（冗余：按 CallerId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "caller_name", ColumnDescription = "呼叫人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? CallerName { get; set; }
 
     /// <summary>
     /// 呼叫时间
@@ -65,6 +70,11 @@ public class TaktSopCall : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "responded_by", ColumnDescription = "响应人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
+    /// <summary>
+    /// 响应人名称（冗余：按 RespondedBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "responded_by_name", ColumnDescription = "响应人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? RespondedByName { get; set; }
 
     /// <summary>
     /// 响应时间
@@ -79,7 +89,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public int? ResponseSeconds { get; set; }
 
     /// <summary>
-    /// 呼叫状态（字典 logistics_sop_andon_status；1=待响应，2=已响应，3=已关闭）
+    /// 呼叫状态（字典 logistics_manufacturing_sop_andon_status；1=待响应，2=已响应，3=已关闭）
     /// </summary>
     [SugarColumn(ColumnName = "call_status", ColumnDescription = "呼叫状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CallStatus { get; set; } = 1;

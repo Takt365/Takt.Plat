@@ -62,7 +62,10 @@ export interface EcGijutsuSourceEcInputQuery extends TaktPagedQuery {
 export interface EcGijutsuImportFromSource {
   /** 目标工厂代码（可选；服务端按来源设变公司代码 1:1 映射） */
   plantCode?: string;
-  /** 公司默认文化 */
+  /** 区域文化编码（写入设变主表 CultureCode；优先于 companyDefaultCulture） */
+  cultureCode?: string;
+  /** @deprecated 请传 cultureCode；兼容旧入参 */
+  companyDefaultCulture?: string;
   /** 待导入来源设变 ID 列表 */
   sourceEcIds: string[];
 }
@@ -89,5 +92,8 @@ export interface EcGijutsuDraftFromSource {
   plantCode?: string;
   /** 来源设变主表 ID */
   sourceEcId: string;
-  /** 公司默认文化 */
+  /** 区域文化编码（写入设变主表 CultureCode；优先于 companyDefaultCulture） */
+  cultureCode?: string;
+  /** @deprecated 请传 cultureCode；兼容旧入参 */
+  companyDefaultCulture?: string;
 }

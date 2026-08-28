@@ -18,17 +18,17 @@ namespace Takt.Shared.Constants;
 public static class TaktProcurementConstants
 {
     /// <summary>
-    /// 询价价格（字典 logistics_price_type=3）
+    /// 询价价格（字典 logistics_procurement_price_type=3）
     /// </summary>
     public const int PriceTypeInquiry = 3;
 
     /// <summary>
-    /// 费用类型：月结供应商货款（字典 accounting_expense_type=2）
+    /// 费用类型：月结供应商货款（字典 accounting_financial_expense_type=2）
     /// </summary>
     public const int ExpenseTypeSupplierPayment = 2;
 
     /// <summary>
-    /// 费用类型：杂项购置（员工报销场景字典 accounting_expense_type=3）
+    /// 费用类型：杂项购置（员工报销场景字典 accounting_financial_expense_type=3）
     /// </summary>
     public const int ExpenseTypeMiscPurchase = 3;
 
@@ -53,7 +53,7 @@ public static class TaktProcurementConstants
     public const int PoDecisionGeneratePo = 1;
 
     /// <summary>
-    /// 会签业务类型：询价审批（字典 logistics_countersign_business_type）
+    /// 会签业务类型：询价审批（字典 accounting_financial_countersign_business_type）
     /// </summary>
     public const string BusinessTypeInquiry = "inquiry";
 
@@ -73,7 +73,7 @@ public static class TaktProcurementConstants
     public const string BusinessTypeStandalone = "standalone";
 
     /// <summary>
-    /// 付款方式：供应商付款（字典 logistics_payment_mode）
+    /// 付款方式：供应商付款（字典 logistics_procurement_payment_mode）
     /// </summary>
     public const string PaymentModeVendorPay = "vendorpay";
 

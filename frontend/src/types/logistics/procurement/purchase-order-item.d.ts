@@ -65,7 +65,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -80,7 +80,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   receivedQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
    */
   purchasePerUnit?: number;
 
@@ -90,7 +90,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   purchaseUnitPrice?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate?: number;
 
@@ -120,7 +120,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   purchaseAmount?: number;
 
   /**
-   * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 行交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
 
@@ -203,7 +203,7 @@ export interface PurchaseOrderItemExport {
   materialSpecification?: string;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -218,7 +218,7 @@ export interface PurchaseOrderItemExport {
   receivedQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
    */
   purchasePerUnit: number;
 
@@ -228,7 +228,7 @@ export interface PurchaseOrderItemExport {
   purchaseUnitPrice: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
    */
   discountRate: number;
 
@@ -258,7 +258,7 @@ export interface PurchaseOrderItemExport {
   purchaseAmount: number;
 
   /**
-   * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+   * 行交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
 

@@ -37,7 +37,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int EquipCategory { get; set; } = 0;
 
@@ -359,7 +359,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）
@@ -404,7 +404,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int? EquipCategory { get; set; }
 
@@ -746,7 +746,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）
@@ -810,7 +810,7 @@ public class TaktProductionEquipmentCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int EquipCategory { get; set; } = 0;
 
@@ -1136,7 +1136,7 @@ public class TaktProductionEquipmentCreateDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -1253,7 +1253,7 @@ public class TaktProductionEquipmentTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int? EquipCategory { get; set; }
 
@@ -1575,7 +1575,7 @@ public class TaktProductionEquipmentTemplateDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -1620,7 +1620,7 @@ public class TaktProductionEquipmentImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int? EquipCategory { get; set; }
 
@@ -1942,7 +1942,7 @@ public class TaktProductionEquipmentImportDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -1988,7 +1988,7 @@ public class TaktProductionEquipmentExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     public int EquipCategory { get; set; } = 0;
 
@@ -2310,7 +2310,7 @@ public class TaktProductionEquipmentExportDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministratorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）

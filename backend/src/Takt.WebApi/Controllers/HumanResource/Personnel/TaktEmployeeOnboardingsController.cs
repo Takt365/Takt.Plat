@@ -41,7 +41,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("human:resource:personnel:employee:list", "入职待办列表")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:list", "入职待办列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEmployeeOnboardingListAsync([FromQuery] TaktEmployeeOnboardingQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:query", "入职待办详情")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:query", "入职待办详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEmployeeOnboardingByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// 获取入职待办选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("human:resource:personnel:employee:query", "入职待办选项")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:query", "入职待办选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEmployeeOnboardingOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:create", "创建入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:create", "创建入职待办")]
     [HttpPost]
     public async Task<IActionResult> CreateEmployeeOnboardingAsync([FromBody] TaktEmployeeOnboardingCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// <param name="id">入职待办ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:update", "更新入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:update", "更新入职待办")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployeeOnboardingAsync(long id, [FromBody] TaktEmployeeOnboardingUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="id">入职待办ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delete", "删除入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:delete", "删除入职待办")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEmployeeOnboardingByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("human:resource:personnel:employee:delete", "批量删除入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:delete", "批量删除入职待办")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEmployeeOnboardingBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +185,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>入职待办DTO</returns>
-    [TaktPermission("human:resource:personnel:employee:update", "更新入职待办状态")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:update", "更新入职待办状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateEmployeeOnboardingStatusAsync([FromBody] TaktEmployeeOnboardingStatusDto dto)
     {
@@ -204,7 +204,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:import", "获取入职待办导入模板")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:import", "获取入职待办导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEmployeeOnboardingTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +224,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("human:resource:personnel:employee:import", "导入入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:import", "导入入职待办")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEmployeeOnboardingAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +254,7 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// 导出入职待办
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("human:resource:personnel:employee:export", "导出入职待办")]
+    [TaktPermission("human:resource:personnel:employee:onboarding:export", "导出入职待办")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEmployeeOnboardingAsync([FromQuery] TaktEmployeeOnboardingQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

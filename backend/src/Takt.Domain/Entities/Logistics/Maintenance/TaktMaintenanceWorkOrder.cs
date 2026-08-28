@@ -220,10 +220,16 @@ public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 验收人（人员编码）
+    /// 验收人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "accepted_by", ColumnDescription = "验收人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? AcceptedBy { get; set; }
+    [SugarColumn(ColumnName = "accepted_by_employee_id", ColumnDescription = "验收人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AcceptedByEmployeeId { get; set; }
+    /// <summary>
+    /// 验收人名称（冗余：按 AcceptedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "accepted_by_employee_name", ColumnDescription = "验收人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? AcceptedByEmployeeName { get; set; }
 
     /// <summary>
     /// 验收时间

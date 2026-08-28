@@ -35,7 +35,6 @@ public class TaktEcGroupDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcGroupId { get; set; }
 
-
     /// <summary>
     /// 设变组编码（3）
     /// </summary>
@@ -50,17 +49,6 @@ public class TaktEcGroupDto : TaktCompanyDtoBase
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
-    /// 设变组负责人用户 名称（填充字段）
-    /// </summary>
-    public string? ResponsibleUserName { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -133,12 +121,6 @@ public class TaktEcGroupQueryDto : TaktPagedQuery
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -232,12 +214,6 @@ public class TaktEcGroupCreateDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -384,12 +360,6 @@ public class TaktEcGroupTemplateDto
     public string? EcGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -460,12 +430,6 @@ public class TaktEcGroupImportDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -539,12 +503,6 @@ public class TaktEcGroupExportDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话

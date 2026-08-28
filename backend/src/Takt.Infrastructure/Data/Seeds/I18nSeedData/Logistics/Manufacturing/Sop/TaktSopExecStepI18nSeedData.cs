@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExecStep 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSopExecStepI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecstep.endedat", "zh-HK", "结束时间_hk", "结束时间"),
 
             // entity.sopexecstep.stepresult
-            new TranslationSeedItem("entity.sopexecstep.stepresult", "en-US", "工步结果_us", "工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexecstep.stepresult", "en-US", "工步结果_us", "工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexecstep.stepresult
-            new TranslationSeedItem("entity.sopexecstep.stepresult", "ja-JP", "工步结果_jp", "工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexecstep.stepresult", "ja-JP", "工步结果_jp", "工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexecstep.stepresult
-            new TranslationSeedItem("entity.sopexecstep.stepresult", "zh-CN", "工步结果", "工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexecstep.stepresult", "zh-CN", "工步结果", "工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
             // entity.sopexecstep.stepresult
-            new TranslationSeedItem("entity.sopexecstep.stepresult", "zh-HK", "工步结果_hk", "工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）"),
+            new TranslationSeedItem("entity.sopexecstep.stepresult", "zh-HK", "工步结果_hk", "工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）"),
 
             // entity.sopexecstep.confirmedby
             new TranslationSeedItem("entity.sopexecstep.confirmedby", "en-US", "确认人ID_us", "确认人 ID（选项 TaktEmployees/options；DictValue=Id）"),
@@ -152,6 +152,15 @@ public class TaktSopExecStepI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexecstep.confirmedby", "zh-CN", "确认人ID", "确认人 ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.sopexecstep.confirmedby
             new TranslationSeedItem("entity.sopexecstep.confirmedby", "zh-HK", "确认人ID_hk", "确认人 ID（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.sopexecstep.confirmedbyname
+            new TranslationSeedItem("entity.sopexecstep.confirmedbyname", "en-US", "确认人名称_us", "确认人名称（冗余：按 ConfirmedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexecstep.confirmedbyname
+            new TranslationSeedItem("entity.sopexecstep.confirmedbyname", "ja-JP", "确认人名称_jp", "确认人名称（冗余：按 ConfirmedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexecstep.confirmedbyname
+            new TranslationSeedItem("entity.sopexecstep.confirmedbyname", "zh-CN", "确认人名称", "确认人名称（冗余：按 ConfirmedBy 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.sopexecstep.confirmedbyname
+            new TranslationSeedItem("entity.sopexecstep.confirmedbyname", "zh-HK", "确认人名称_hk", "确认人名称（冗余：按 ConfirmedBy 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.sopexecstep.confirmedat
             new TranslationSeedItem("entity.sopexecstep.confirmedat", "en-US", "确认时间_us", "确认时间"),

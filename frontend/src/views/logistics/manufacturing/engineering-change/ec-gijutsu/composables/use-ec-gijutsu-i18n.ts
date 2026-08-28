@@ -29,6 +29,7 @@ export const ECGIJUTSU_LIST_FIELDS = [
   'ecLossAmount',
   'ecDistinction',
   'ecEntryDate',
+  'discontinuedStatus',
   'ecStatus',
 ] as const
 
@@ -37,6 +38,7 @@ export const ECGIJUTSU_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
+  plantCode: 'required',
   ecCode: 'required',
   ecIssueDate: 'select',
   changeStatus: 'select',
@@ -46,6 +48,7 @@ export const ECGIJUTSU_PLACEHOLDER = {
   ecLossAmount: 'select',
   ecDistinction: 'select',
   ecEntryDate: 'select',
+  discontinuedStatus: 'select',
   ecStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -63,6 +66,7 @@ export const ECGIJUTSU_QUERY_STRING_FIELDS = [
   'ecTitle',
   'ecContent',
   'ecLeader',
+  'discontinuedStatus',
   'ecEntryDateStart',
   'ecEntryDateEnd',
   'createdAtStart',
@@ -75,13 +79,26 @@ export type EcGijutsuQueryField =
   | (typeof ECGIJUTSU_QUERY_STRING_FIELDS)[number]
   | 'changeStatus' | 'ecLossAmount' | 'ecDistinction' | 'ecStatus'
 
-/** 高级查询抽屉全部字段（含数值） */
+/** 高级查询抽屉全部字段（含数值；顺序与查询抽屉表单项一致） */
 export const ECGIJUTSU_QUERY_FIELDS: readonly EcGijutsuQueryField[] = [
-  ...ECGIJUTSU_QUERY_STRING_FIELDS,
+  'plantCode',
+  'ecCode',
+  'ecIssueDateStart',
+  'ecIssueDateEnd',
   'changeStatus',
+  'ecTitle',
+  'ecContent',
+  'ecLeader',
   'ecLossAmount',
   'ecDistinction',
+  'discontinuedStatus',
+  'ecEntryDateStart',
+  'ecEntryDateEnd',
   'ecStatus',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ]
 
 /**

@@ -106,7 +106,7 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     public string WeightUnit { get; set; } = string.Empty;
 
@@ -116,7 +116,7 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     public string VolumeUnit { get; set; } = string.Empty;
 
@@ -126,12 +126,12 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     public string PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     public string PackingUnit { get; set; } = string.Empty;
 
@@ -258,7 +258,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -268,7 +268,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -278,12 +278,12 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     public string? PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     public string? PackingUnit { get; set; } = string.Empty;
 
@@ -431,9 +431,9 @@ public class TaktPackagingMaterialCreateDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
-    [Required(ErrorMessage = "重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）不能为空")]
+    [Required(ErrorMessage = "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）不能为空")]
     public string WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -442,9 +442,9 @@ public class TaktPackagingMaterialCreateDto
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
-    [Required(ErrorMessage = "体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）不能为空")]
+    [Required(ErrorMessage = "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）不能为空")]
     public string VolumeUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -453,15 +453,15 @@ public class TaktPackagingMaterialCreateDto
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
-    [Required(ErrorMessage = "包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）不能为空")]
+    [Required(ErrorMessage = "包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）不能为空")]
     public string PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
-    [Required(ErrorMessage = "包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）不能为空")]
+    [Required(ErrorMessage = "包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）不能为空")]
     public string PackingUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -635,7 +635,7 @@ public class TaktPackagingMaterialTemplateDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -645,7 +645,7 @@ public class TaktPackagingMaterialTemplateDto
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -655,12 +655,12 @@ public class TaktPackagingMaterialTemplateDto
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     public string? PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     public string? PackingUnit { get; set; } = string.Empty;
 
@@ -787,7 +787,7 @@ public class TaktPackagingMaterialImportDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     public string? WeightUnit { get; set; } = string.Empty;
 
@@ -797,7 +797,7 @@ public class TaktPackagingMaterialImportDto
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     public string? VolumeUnit { get; set; } = string.Empty;
 
@@ -807,12 +807,12 @@ public class TaktPackagingMaterialImportDto
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     public string? PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     public string? PackingUnit { get; set; } = string.Empty;
 
@@ -940,7 +940,7 @@ public class TaktPackagingMaterialExportDto
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     public string WeightUnit { get; set; } = string.Empty;
 
@@ -950,7 +950,7 @@ public class TaktPackagingMaterialExportDto
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     public string VolumeUnit { get; set; } = string.Empty;
 
@@ -960,12 +960,12 @@ public class TaktPackagingMaterialExportDto
     public string? SizeDimension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     public string PackagingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     public string PackingUnit { get; set; } = string.Empty;
 

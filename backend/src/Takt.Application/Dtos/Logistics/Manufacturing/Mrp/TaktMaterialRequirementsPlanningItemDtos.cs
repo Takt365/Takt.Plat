@@ -97,7 +97,7 @@ public class TaktMaterialRequirementsPlanningItemDto : TaktCompanyDtoBase
     public DateTime RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -230,7 +230,7 @@ public class TaktMaterialRequirementsPlanningItemQueryDto : TaktPagedQuery
     public DateTime? RequirementDateEnd { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -378,9 +378,9 @@ public class TaktMaterialRequirementsPlanningItemCreateDto
     public DateTime RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -559,7 +559,7 @@ public class TaktMaterialRequirementsPlanningItemTemplateDto
     public DateTime? RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -692,7 +692,7 @@ public class TaktMaterialRequirementsPlanningItemImportDto
     public DateTime? RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -831,7 +831,7 @@ public class TaktMaterialRequirementsPlanningItemExportDto
     public DateTime RequirementDate { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 

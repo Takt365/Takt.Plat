@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssueMeeting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktQualityIssueMeetingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
 
             // entity.qualityissuemeeting.qualityissuecode
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityissuemeeting.qualityissuecode
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "ja-JP", "品质问题编码_jp", "品质问题编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "ja-JP", "品质问题编码_jp", "品质问题编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityissuemeeting.qualityissuecode
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-CN", "品质问题编码", "品质问题编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-CN", "品质问题编码", "品质问题编码（冗余：按对应 Id 取主数据名称联动）"),
             // entity.qualityissuemeeting.qualityissuecode
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-HK", "品质问题编码_hk", "品质问题编码（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "zh-HK", "品质问题编码_hk", "品质问题编码（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.qualityissuemeeting.linenumber
             new TranslationSeedItem("entity.qualityissuemeeting.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

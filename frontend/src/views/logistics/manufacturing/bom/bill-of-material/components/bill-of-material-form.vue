@@ -129,7 +129,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.bomType"
-                  dict-type="logistics_bom_type"
+                  dict-type="logistics_manufacturing_bom_type"
                   :placeholder="pi.ph('bomType')"
                 />
               </a-form-item>
@@ -191,7 +191,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.parentMaterialUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('parentMaterialUnit')"
                 />
               </a-form-item>
@@ -227,7 +227,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.bomStatus"
-                  dict-type="logistics_bom_status"
+                  dict-type="logistics_manufacturing_bom_status"
                   :placeholder="pi.ph('bomStatus')"
                 />
               </a-form-item>
@@ -342,7 +342,7 @@
       <template #cell-materialUnit="{ record }">
         <TaktSelect
           v-model:value="record.materialUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="billOfMaterialItemPi.ph('materialUnit')"
@@ -650,6 +650,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialId 才视为编辑） */
 watch(
   () => props.formData,
@@ -823,8 +825,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.billOfMaterialId) {
     payload.billOfMaterialId = props.formData.billOfMaterialId
+    delete payload.numberingRuleCode
   }
   return payload
 }

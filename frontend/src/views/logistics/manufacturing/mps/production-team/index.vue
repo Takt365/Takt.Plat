@@ -84,13 +84,13 @@
         <template v-else-if="column.key === 'teamCategory'">
           <TaktDictTag
             :value="getProductionTeamDictValue(record, 'teamCategory')"
-            dict-type="logistics_team_category"
+            dict-type="logistics_manufacturing_team_category"
           />
         </template>
         <template v-else-if="column.key === 'shiftNo'">
           <TaktDictTag
             :value="getProductionTeamDictValue(record, 'shiftNo')"
-            dict-type="logistics_shift_category"
+            dict-type="logistics_manufacturing_shift_category"
           />
         </template>
       </template>

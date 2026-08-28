@@ -61,7 +61,7 @@ public class TaktSettingDto : TaktCompanyDtoBase
     public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string ValueType { get; set; } = string.Empty;
 
@@ -148,7 +148,7 @@ public class TaktSettingQueryDto : TaktPagedQuery
     public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? ValueType { get; set; } = string.Empty;
 
@@ -256,9 +256,9 @@ public class TaktSettingCreateDto
     public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
-    [Required(ErrorMessage = "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
+    [Required(ErrorMessage = "值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
     public string ValueType { get; set; } = string.Empty;
 
     /// <summary>
@@ -440,7 +440,7 @@ public class TaktSettingTemplateDto
     public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? ValueType { get; set; } = string.Empty;
 
@@ -527,7 +527,7 @@ public class TaktSettingImportDto
     public string? SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string? ValueType { get; set; } = string.Empty;
 
@@ -620,7 +620,7 @@ public class TaktSettingExportDto
     public string SettingGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// 值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
     public string ValueType { get; set; } = string.Empty;
 

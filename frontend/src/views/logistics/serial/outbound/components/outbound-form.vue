@@ -102,7 +102,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.destinationPort"
-                  dict-type="logistics_destination_port_code"
+                  dict-type="logistics_serial_destination_port_code"
                   :placeholder="pi.ph('destinationPort')"
                 />
               </a-form-item>
@@ -114,7 +114,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.outboundType"
-                  dict-type="logistics_outbound_type"
+                  dict-type="logistics_materials_outbound_type"
                   :placeholder="pi.ph('outboundType')"
                 />
               </a-form-item>

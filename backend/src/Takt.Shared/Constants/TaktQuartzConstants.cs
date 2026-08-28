@@ -22,19 +22,29 @@ public static class TaktQuartzConstants
     /// </summary>
     public const string HttpClientName = "TaktQuartzHttp";
 
-    /// <summary>默认 Job 分组（字典 sys_quartz_job_group 默认项 default）</summary>
+    /// <summary>
+    /// 默认 Job 分组（字典 sys_quartz_job_group 默认项 default）
+    /// </summary>
     public const string DefaultJobGroup = "default";
 
-    /// <summary>JobGroup 列最大长度</summary>
+    /// <summary>
+    /// JobGroup 列最大长度
+    /// </summary>
     public const int MaxJobGroupLength = 40;
 
-    /// <summary>Serilog 模块名（TaktLogContext.Module）</summary>
+    /// <summary>
+    /// Serilog 模块名（TaktLogContext.Module）
+    /// </summary>
     public const string LogModuleName = "Quartz";
 
-    /// <summary>独立执行日志通道属性名（Filter → logs/quartz-/quartz-.log）</summary>
+    /// <summary>
+    /// 独立执行日志通道属性名（Filter → logs/quartz-/quartz-.log）
+    /// </summary>
     public const string LogChannelPropertyName = "TaktLogChannel";
 
-    /// <summary>独立执行日志通道属性值</summary>
+    /// <summary>
+    /// 独立执行日志通道属性值
+    /// </summary>
     public const string LogChannelValue = "QuartzJob";
 
     /// <summary>
@@ -48,13 +58,19 @@ public static class TaktQuartzConstants
     /// </summary>
     public const int DefaultSqlCommandTimeoutSeconds = 7200;
 
-    /// <summary>任务执行完成落库消息类型（字典 sys_message_type DictValue）</summary>
+    /// <summary>
+    /// 任务执行完成落库消息类型（字典 sys_message_type DictValue）
+    /// </summary>
     public const string ExecutedMessageType = "system";
 
-    /// <summary>任务执行完成落库消息分组（字典 sys_message_group DictValue）</summary>
+    /// <summary>
+    /// 任务执行完成落库消息分组（字典 sys_message_group DictValue）
+    /// </summary>
     public const string ExecutedMessageGroup = "reminder";
 
-    /// <summary>无触发用户时的系统发送者登录名（与种子 admin / SystemAuditUser 对齐）</summary>
+    /// <summary>
+    /// 无触发用户时的系统发送者登录名（与种子 admin / SystemAuditUser 对齐）
+    /// </summary>
     public const string SystemSenderUserName = "admin";
 
     /// <summary>

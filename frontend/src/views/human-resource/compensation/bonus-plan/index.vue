@@ -81,13 +81,13 @@
         <template v-else-if="column.key === 'bonusType'">
           <TaktDictTag
             :value="getBonusPlanField(record, 'bonusType')"
-            dict-type="hr_comp_bonus_type"
+            dict-type="humanresource_compensation_bonus_type"
           />
         </template>
         <template v-else-if="column.key === 'calcMethod'">
           <TaktDictTag
             :value="getBonusPlanField(record, 'calcMethod')"
-            dict-type="hr_comp_bonus_calc_method_type"
+            dict-type="humanresource_compensation_bonus_calc_method"
           />
         </template>
       </template>
@@ -157,7 +157,7 @@
       <a-form-item :label="t('entity.bonusplan.bonustype')">
         <TaktSelect
           v-model:value="advancedQueryForm.bonusType"
-          dict-type="hr_comp_bonus_type"
+          dict-type="humanresource_compensation_bonus_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.bonustype') })"
           allow-clear
         />
@@ -167,7 +167,7 @@
       <a-form-item :label="t('entity.bonusplan.calcmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.calcMethod"
-          dict-type="hr_comp_bonus_calc_method_type"
+          dict-type="humanresource_compensation_bonus_calc_method"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.bonusplan.calcmethod') })"
           allow-clear
         />

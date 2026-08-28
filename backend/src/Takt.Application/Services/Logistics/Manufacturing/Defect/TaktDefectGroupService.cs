@@ -135,9 +135,9 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _defectGroupRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
         entity = await _defectGroupRepository.CreateAsync(entity);
         return await GetDefectGroupByIdAsync(entity.Id) ?? entity.Adapt<TaktDefectGroupDto>();
@@ -310,9 +310,9 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
                 if (entity.SortOrder <= 0)
                 {
                     var maxSort = await _defectGroupRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ResponsibleUserId == entity.ResponsibleUserId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                         x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ResponsibleUserId.GetValueOrDefault(), maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
                 }
                 await _defectGroupRepository.CreateAsync(entity);
                 success += 1;
@@ -424,12 +424,6 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
             exp = exp.And(x => x.DefectGroupDescription != null && x.DefectGroupDescription.Contains(defectGroupDescription));
         }
 
-        if (queryDto?.ResponsibleUserId.HasValue == true)
-        {
-            var responsibleUserId = queryDto.ResponsibleUserId.Value;
-            exp = exp.And(x => x.ResponsibleUserId == responsibleUserId);
-        }
-
         if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
             var contactPhone = queryDto.ContactPhone;
@@ -523,10 +517,6 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.DefectGroupDescription))
-        {
-            return true;
-        }
-        if (queryDto.ResponsibleUserId.HasValue)
         {
             return true;
         }

@@ -17,52 +17,84 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktAuthLoginPhases
 {
-    /// <summary>校验密码（session/verify-password）</summary>
+    /// <summary>
+    /// 校验密码（session/verify-password）
+    /// </summary>
     public const string VerifyPassword = "verify-password";
 
-    /// <summary>建立 Cookie 会话（session/signin）</summary>
+    /// <summary>
+    /// 建立 Cookie 会话（session/signin）
+    /// </summary>
     public const string SignInSession = "signin-session";
 
-    /// <summary>注销 Cookie 会话（session/signout）</summary>
+    /// <summary>
+    /// 注销 Cookie 会话（session/signout）
+    /// </summary>
     public const string SignOutSession = "signout-session";
 
-    /// <summary>OAuth 授权（/connect/authorize）</summary>
+    /// <summary>
+    /// OAuth 授权（/connect/authorize）
+    /// </summary>
     public const string OAuthAuthorize = "oauth-authorize";
 
-    /// <summary>授权码换令牌（grant_type=authorization_code）</summary>
+    /// <summary>
+    /// 授权码换令牌（grant_type=authorization_code）
+    /// </summary>
     public const string AuthorizationCode = "authorization-code";
 
-    /// <summary>刷新令牌（grant_type=refresh_token）</summary>
+    /// <summary>
+    /// 刷新令牌（grant_type=refresh_token）
+    /// </summary>
     public const string RefreshToken = "refresh-token";
 
-    /// <summary>客户端凭证（grant_type=client_credentials）</summary>
+    /// <summary>
+    /// 客户端凭证（grant_type=client_credentials）
+    /// </summary>
     public const string ClientCredentials = "client-credentials";
 
-    /// <summary>OIDC 登出（/connect/logout）</summary>
+    /// <summary>
+    /// OIDC 登出（/connect/logout）
+    /// </summary>
     public const string OidcLogout = "oidc-logout";
 
-    /// <summary>加载当前用户资料（GET api/auths/me）</summary>
+    /// <summary>
+    /// 加载当前用户资料（GET api/auths/me）
+    /// </summary>
     public const string UserProfile = "user-profile";
 
-    /// <summary>解析用户角色与功能权限码</summary>
+    /// <summary>
+    /// 解析用户角色与功能权限码
+    /// </summary>
     public const string UserPermissions = "user-permissions";
 
-    /// <summary>构建用户菜单树</summary>
+    /// <summary>
+    /// 构建用户菜单树
+    /// </summary>
     public const string UserMenus = "user-menus";
 
-    /// <summary>解析可访问路由路径</summary>
+    /// <summary>
+    /// 解析可访问路由路径
+    /// </summary>
     public const string UserRoutes = "user-routes";
 
-    /// <summary>同步 RBAC 到前端 Store</summary>
+    /// <summary>
+    /// 同步 RBAC 到前端 Store
+    /// </summary>
     public const string RbacSync = "rbac-sync";
 
-    /// <summary>注册 Vue 动态路由</summary>
+    /// <summary>
+    /// 注册 Vue 动态路由
+    /// </summary>
     public const string DynamicRoutes = "dynamic-routes";
 
-    /// <summary>登录页预览默认语言（租户→用户默认公司→公司 DefaultCulture）</summary>
+    /// <summary>
+    /// 登录页预览默认语言（租户→用户默认公司→公司 DefaultCulture）
+    /// </summary>
     public const string LoginPreviewLocale = "login-preview-locale";
 
-    /// <summary>Remark 中登录步骤前缀（落库区分 OAuth 多阶段）</summary>
+    /// <summary>
+    /// Remark 中登录步骤前缀（落库区分 OAuth 多阶段）
+    /// </summary>
     public const string LoginStepRemarkPrefix = "login-step:";
 
     /// <summary>

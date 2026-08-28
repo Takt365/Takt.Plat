@@ -45,7 +45,7 @@ public class TaktPurchaseSalesInventory : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+    /// 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
     [SugarColumn(ColumnName = "valuation", ColumnDescription = "评估类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string Valuation { get; set; } = string.Empty;
@@ -125,7 +125,7 @@ public class TaktPurchaseSalesInventory : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "closing_unit_cost", ColumnDescription = "期末单位成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ClosingUnitCost { get; set; } = 0;
     /// <summary>
-    /// 币种（字典 accounting_currency_code）
+    /// 币种（字典 accounting_financial_currency_code）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";

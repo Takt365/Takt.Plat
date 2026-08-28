@@ -56,17 +56,17 @@ public class TaktPlantDto : TaktTenantCultureDtoBase
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     public string EnterpriseScale { get; set; } = string.Empty;
 
@@ -173,7 +173,7 @@ public class TaktPlantDto : TaktTenantCultureDtoBase
     /// <summary>
     /// 工厂负责人
     /// </summary>
-    public string PlantManager { get; set; } = string.Empty;
+    public string PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -318,17 +318,17 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -435,7 +435,7 @@ public class TaktPlantQueryDto : TaktPagedQuery
     /// <summary>
     /// 工厂负责人
     /// </summary>
-    public string? PlantManager { get; set; } = string.Empty;
+    public string? PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -611,21 +611,21 @@ public class TaktPlantCreateDto
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
-    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）不能为空")]
+    [Required(ErrorMessage = "企业性质（字典 sys_enterprise_nature；DictValue=150 等）不能为空")]
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
-    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute_type；DictValue=C 等）不能为空")]
+    [Required(ErrorMessage = "行业属性（字典 sys_industry_attribute；DictValue=C 等）不能为空")]
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
-    [Required(ErrorMessage = "企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）不能为空")]
+    [Required(ErrorMessage = "企业规模（字典 sys_enterprise_scale；DictValue=M 等）不能为空")]
     public string EnterpriseScale { get; set; } = string.Empty;
 
     /// <summary>
@@ -748,7 +748,7 @@ public class TaktPlantCreateDto
     /// 工厂负责人
     /// </summary>
     [Required(ErrorMessage = "工厂负责人不能为空")]
-    public string PlantManager { get; set; } = string.Empty;
+    public string PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -979,17 +979,17 @@ public class TaktPlantTemplateDto
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -1096,7 +1096,7 @@ public class TaktPlantTemplateDto
     /// <summary>
     /// 工厂负责人
     /// </summary>
-    public string? PlantManager { get; set; } = string.Empty;
+    public string? PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -1241,17 +1241,17 @@ public class TaktPlantImportDto
     public string? CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     public string? EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     public string? IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     public string? EnterpriseScale { get; set; } = string.Empty;
 
@@ -1358,7 +1358,7 @@ public class TaktPlantImportDto
     /// <summary>
     /// 工厂负责人
     /// </summary>
-    public string? PlantManager { get; set; } = string.Empty;
+    public string? PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）
@@ -1509,17 +1509,17 @@ public class TaktPlantExportDto
     public string CodeAlias { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+    /// 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
     /// </summary>
     public string EnterpriseNature { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+    /// 行业属性（字典 sys_industry_attribute；DictValue=C 等）
     /// </summary>
     public string IndustryAttribute { get; set; } = string.Empty;
 
     /// <summary>
-    /// 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+    /// 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
     /// </summary>
     public string EnterpriseScale { get; set; } = string.Empty;
 
@@ -1626,7 +1626,7 @@ public class TaktPlantExportDto
     /// <summary>
     /// 工厂负责人
     /// </summary>
-    public string PlantManager { get; set; } = string.Empty;
+    public string PlantManagerUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册资本（万元）

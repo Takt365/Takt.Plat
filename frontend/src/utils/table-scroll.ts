@@ -144,12 +144,67 @@ export function countTreeNodesForVirtualScroll(
  */
 export function resolveTableViewportHeight(viewportHeight?: number): number {
   if (typeof viewportHeight === 'number' && Number.isFinite(viewportHeight) && viewportHeight > 0) {
-    return viewportHeight;
+    return viewportHeight
   }
   if (typeof window !== 'undefined' && typeof window.innerHeight === 'number' && window.innerHeight > 0) {
-    return window.innerHeight;
+    return window.innerHeight
   }
-  return TAKT_TABLE_VIEWPORT_HEIGHT_FALLBACK;
+  return TAKT_TABLE_VIEWPORT_HEIGHT_FALLBACK
+}
+
+/**
+ * 解析弹窗/窗体视口高度（优先 .ant-modal-content，其次 .ant-modal-body / host）
+ * @param hostEl 弹窗内任意宿主元素（如表格外包 div）
+ * @returns 窗体视口像素高度；无法实测时回退 window
+ */
+export function resolveFormHostViewportHeight(hostEl?: HTMLElement | null): number {
+  if (hostEl != null) {
+    const modalContent = hostEl.closest('.ant-modal-content') as HTMLElement | null
+    if (modalContent != null && modalContent.clientHeight > 0) {
+      return modalContent.clientHeight
+    }
+    const modalBody = hostEl.closest('.ant-modal-body') as HTMLElement | null
+    if (modalBody != null && modalBody.clientHeight > 0) {
+      return modalBody.clientHeight
+    }
+    if (hostEl.clientHeight > 0) {
+      return hostEl.clientHeight
+    }
+  }
+  return resolveTableViewportHeight()
+}
+
+/**
+ * 按视口高度 × 分子/分母计算表格 scroll.y（如窗体高 × 5/4）
+ * @param numerator 分子（如 5）
+ * @param denominator 分母（如 4）
+ * @param viewportHeight 视口高度；缺省为 window
+ * @returns scroll.y 像素值
+ */
+export function computeRatioScrollYPx(
+  numerator: number,
+  denominator: number,
+  viewportHeight?: number,
+): number {
+  const vh = resolveTableViewportHeight(viewportHeight)
+  const den = denominator > 0 ? denominator : 1
+  const num = Number.isFinite(numerator) ? numerator : 1
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor((vh * num) / den))
+}
+
+/**
+ * 从窗体内宿主元素计算 scroll.y = 窗体视口 × 分子/分母
+ * @param hostEl 弹窗内宿主
+ * @param numerator 分子
+ * @param denominator 分母
+ * @returns scroll.y 像素值
+ */
+export function computeFormHostRatioScrollYPx(
+  hostEl: HTMLElement | null | undefined,
+  numerator: number,
+  denominator: number,
+): number {
+  return computeRatioScrollYPx(numerator, denominator, resolveFormHostViewportHeight(hostEl))
 }
 
 /** 左右主子表明细侧标题/工具栏/外置分页等占用（px，视口 fallback；组件内优先实测 chrome） */

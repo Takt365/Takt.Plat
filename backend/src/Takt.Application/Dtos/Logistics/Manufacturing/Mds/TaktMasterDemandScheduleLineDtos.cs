@@ -57,7 +57,7 @@ public class TaktMasterDemandScheduleLineDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int DemandSourceType { get; set; } = 0;
 
@@ -114,7 +114,7 @@ public class TaktMasterDemandScheduleLineDto : TaktCompanyDtoBase
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -172,7 +172,7 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int? DemandSourceType { get; set; }
 
@@ -229,7 +229,7 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -306,7 +306,7 @@ public class TaktMasterDemandScheduleLineCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int DemandSourceType { get; set; } = 0;
 
@@ -354,9 +354,9 @@ public class TaktMasterDemandScheduleLineCreateDto
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -465,7 +465,7 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int? DemandSourceType { get; set; }
 
@@ -512,7 +512,7 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -575,7 +575,7 @@ public class TaktMasterDemandScheduleLineImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int? DemandSourceType { get; set; }
 
@@ -622,7 +622,7 @@ public class TaktMasterDemandScheduleLineImportDto
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -691,7 +691,7 @@ public class TaktMasterDemandScheduleLineExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
+    /// 需求来源（字典 mds_demand_source；0=销售订单，1=预测，2=手工）
     /// </summary>
     public int DemandSourceType { get; set; } = 0;
 
@@ -738,7 +738,7 @@ public class TaktMasterDemandScheduleLineExportDto
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 

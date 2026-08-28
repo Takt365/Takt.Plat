@@ -328,7 +328,7 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
-                || (x.AttachmentName != null && x.AttachmentName.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
                 || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -365,10 +365,10 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
             exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(employeeName));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.AttachmentName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
         {
-            var attachmentName = queryDto.AttachmentName;
-            exp = exp.And(x => x.AttachmentName != null && x.AttachmentName.Contains(attachmentName));
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
@@ -439,7 +439,7 @@ public class TaktEmployeeAttachmentService : TaktServiceBase, ITaktEmployeeAttac
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.AttachmentName))
+        if (!string.IsNullOrWhiteSpace(queryDto.FileName))
         {
             return true;
         }

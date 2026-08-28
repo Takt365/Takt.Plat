@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-substitute.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -94,7 +94,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -149,7 +149,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -159,7 +159,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -214,7 +214,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -298,7 +298,7 @@ export interface BillOfMaterialSubstituteCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -353,7 +353,7 @@ export interface BillOfMaterialSubstituteCreate {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -451,7 +451,7 @@ export interface BillOfMaterialSubstituteTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -506,7 +506,7 @@ export interface BillOfMaterialSubstituteTemplate {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -570,7 +570,7 @@ export interface BillOfMaterialSubstituteImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -625,7 +625,7 @@ export interface BillOfMaterialSubstituteImport {
   usageQuantity?: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -684,6 +684,16 @@ export interface BillOfMaterialSubstituteExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialItemId: string;
@@ -734,7 +744,7 @@ export interface BillOfMaterialSubstituteExport {
   usageQuantity: number;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code）
+   * 单位（字典 logistics_materials_unit_of_measure_code）
    */
   materialUnit: string;
 

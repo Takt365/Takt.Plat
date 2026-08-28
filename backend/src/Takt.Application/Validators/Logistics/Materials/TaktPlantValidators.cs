@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktPlantValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -101,9 +101,6 @@ public class TaktPlantCreateValidator : AbstractValidator<TaktPlantCreateDto>
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.PlantManager)
-            .NotEmpty().WithMessage("工厂负责人不能为空")
-            .MaximumLength(50).WithMessage("工厂负责人长度不能超过50个字符");
         RuleFor(x => x.BankCode)
             .NotEmpty().WithMessage("银行代码不能为空")
             .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
@@ -241,9 +238,6 @@ public class TaktPlantUpdateValidator : AbstractValidator<TaktPlantUpdateDto>
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.PlantManager)
-            .NotEmpty().WithMessage("工厂负责人不能为空")
-            .MaximumLength(50).WithMessage("工厂负责人长度不能超过50个字符");
         RuleFor(x => x.BankCode)
             .NotEmpty().WithMessage("银行代码不能为空")
             .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
@@ -377,9 +371,6 @@ public class TaktPlantImportValidator : AbstractValidator<TaktPlantImportDto>
         RuleFor(x => x.LegalRepresentative)
             .NotEmpty().WithMessage("法定代表人不能为空")
             .MaximumLength(50).WithMessage("法定代表人长度不能超过50个字符");
-        RuleFor(x => x.PlantManager)
-            .NotEmpty().WithMessage("工厂负责人不能为空")
-            .MaximumLength(50).WithMessage("工厂负责人长度不能超过50个字符");
         RuleFor(x => x.BankCode)
             .NotEmpty().WithMessage("银行代码不能为空")
             .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");

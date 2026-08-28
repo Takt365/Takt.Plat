@@ -227,6 +227,25 @@ locales/dashboard/workspace/zh-CN.ts
 ❌ 字典项用 enum 又在 Constants 写同语义 int const
 ```
 
+### 9. 全新写法（强制，禁止兼容迁移）
+
+本仓库按**当前目标结构**书写与落地，**不做**「旧形态 → 新形态」的兼容层、过渡桩、软删清理脚本。
+
+| 规则 | 说明 |
+|------|------|
+| **只写目标态** | 菜单/权限/路由/种子/前端页一律按**现行约定**写全；改结构时直接改成新形态（如 L3 并入 L2 页面，则种子只保留二级页面入口） |
+| **删旧即删源** | 废弃的 `MenuCode`、路由、`menu.*` / `entity.*`、独立 views、旧权限段：**从种子与代码中移除**，不再保留创建已废弃」注释块或隐藏菜单 |
+| ❌ **禁止** | `SoftDeleteObsolete*`、按历史 `MenuCode` 列表软删「兼容清理」、双入口并存（旧三级菜单 + 新二级页面）、`IsVisible=0` 留桩、`legacy`/`compat` 双路径 API 或 DTO「仅为兼容旧前端」 |
+| ✅ **允许** | 业务实体 CRUD 的常规 `IsDeleted` 软删（用户删数据）；字典项规范化等**非「结构迁移兼容」**的种子校正须在注释写清业务理由，且不得用「兼容旧菜单/旧路由」作由 |
+
+```text
+✅ 文管/新闻/会议中心：二级页面菜单 + 视图内按钮打开子 CRUD（种子只写 L2）
+❌ 种子末尾 SoftDeleteObsolete… 软删 ROUTINE_*_DOCUMENT / NEWS / COMMENT「历史三级」
+❌ 保留已并入父页的独立三级菜单种子「以防万一」
+```
+
+Agent：结构调整时**只改目标种子与代码**；库内残留旧行由重建库/手工清库处理，**禁止**在种子里写兼容迁移逻辑。
+
 ---
 
 ## 二、注释规范
@@ -351,7 +370,7 @@ fix(dept): 修复部门唯一索引冲突
 
 | 层次 | 文件 | 职责 |
 |------|------|------|
-| 命名/权限/i18n 权威源 | `00-project` §1 | 方法名、翻译键、权限码 |
+| 命名/权限/i18n/全新写法 | `00-project` §1（含 **§1.9**） | 方法名、翻译键、权限码；种子/菜单只写目标态、禁兼容迁移 |
 | CRUD 全栈基线 | `12-crud` | 单表/主子表/树表均须；能力映射、页面壳、交付自检 |
 | 后端/前端专域 | `01-backend`、`02-frontend` | DDD 分层、UI 栈、i18n 落地 |
 | 表形态扩展 | `10-master-detail`、`11-tree-table` | 叠加在 `12-crud` 之上 |
@@ -407,6 +426,7 @@ Shell **仅**在以下情况使用，且 **scripts 入口只能是 `node scripts
 - **空行**：强制执行 `03-format-blank-lines.mdc`，参照 `TaktUser.cs`、`TaktCultureSeedData.cs` 等正常密度
 - **翻译键**：遵守 §1.6（动态键：小写点号、中间目录可多级；**静态 `locales/**`：`export default` 根键必须为 `page`**）；种子与前端 `t()` / 菜单 `I18nKey` 对齐
 - **权限码**：遵守 §1.7（`领域:目录[:子目录…]:实体:操作`，段数随菜单深度、末段为操作、冒号分隔、小写、无下划线）
+- **全新写法**：遵守 §1.9（禁止种子/菜单结构兼容迁移、`SoftDeleteObsolete*`、双入口留桩）
 - **溢出与安全边界**：遵守 §五 五条铁律；详述见 `06-overflow-csharp`、`07-overflow-vue`、`08-overflow-fullstack`
 - **Vue 前端工具类**（`frontend/src/utils/`）：见 `@.cursor/rules/05-utils-vue.mdc`
 - **审批工作流**（`Workflow/`、`takt-flow-*`）：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`

@@ -19,13 +19,19 @@ namespace Takt.Shared.Enums;
 /// </summary>
 public enum TaktFileUploadType
 {
-    /// <summary>普通上传</summary>
+    /// <summary>
+    /// 普通上传
+    /// </summary>
     [Display(Name = "普通上传")]
     Normal = 0,
-    /// <summary>分片上传</summary>
+    /// <summary>
+    /// 分片上传
+    /// </summary>
     [Display(Name = "分片上传")]
     Chunk = 1,
-    /// <summary>直传 OSS</summary>
+    /// <summary>
+    /// 直传 OSS
+    /// </summary>
     [Display(Name = "直传OSS")]
     DirectOss = 2,
 }

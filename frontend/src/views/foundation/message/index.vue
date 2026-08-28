@@ -131,20 +131,42 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('fromUserId')">
+      <a-form-item :label="t('entity.message.fromuserid')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.fromUserId"
+          api-url="TaktUsers/options"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.fromuserid') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('fromUserName')">
-      <a-form-item :label="t('entity.message.fromUserName')">
+      <a-form-item :label="t('entity.message.fromusername')">
         <a-input
           v-model:value="advancedQueryForm.fromUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') })"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('toUserId')">
+      <a-form-item :label="t('entity.message.touserid')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.toUserId"
+          api-url="TaktUsers/options"
+          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.touserid') })"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('toUserName')">
-      <a-form-item :label="t('entity.message.toUserName')">
+      <a-form-item :label="t('entity.message.tousername')">
         <a-input
           v-model:value="advancedQueryForm.toUserName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.toUserName') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.tousername') })"
           allow-clear
         />
       </a-form-item>
@@ -380,7 +402,9 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
+  fromUserId: undefined as string | undefined,
   fromUserName: '',
+  toUserId: undefined as string | undefined,
   toUserName: '',
   messageTitle: '',
   messageContent: '',
@@ -397,8 +421,10 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'fromUserName', label: t('entity.message.fromUserName') },
-  { key: 'toUserName', label: t('entity.message.toUserName') },
+  { key: 'fromUserId', label: t('entity.message.fromuserid') },
+  { key: 'fromUserName', label: t('entity.message.fromusername') },
+  { key: 'toUserId', label: t('entity.message.touserid') },
+  { key: 'toUserName', label: t('entity.message.tousername') },
   { key: 'messageType', label: t('entity.message.type') },
   { key: 'messageGroup', label: t('entity.message.group') },
   { key: 'messageTitle', label: t('entity.message.title') },
@@ -461,7 +487,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMessageField(record, 'messageId') ?? ''
   },
   {
-    title: t('entity.message.fromUserName'),
+    title: t('entity.message.fromusername'),
     dataIndex: 'fromUserName',
     key: 'fromUserName',
     width: 120,
@@ -470,7 +496,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMessageField(record, 'fromUserName') ?? ''
   },
   {
-    title: t('entity.message.toUserName'),
+    title: t('entity.message.tousername'),
     dataIndex: 'toUserName',
     key: 'toUserName',
     width: 120,
@@ -623,7 +649,9 @@ async function loadData() {
       params.keyWords = kw
     }
     const q = advancedQueryForm.value
+    if (q.fromUserId) params.fromUserId = q.fromUserId
     if (q.fromUserName) params.fromUserName = q.fromUserName
+    if (q.toUserId) params.toUserId = q.toUserId
     if (q.toUserName) params.toUserName = q.toUserName
     if (q.messageTitle) params.messageTitle = q.messageTitle
     if (q.messageContent) params.messageContent = q.messageContent
@@ -669,7 +697,9 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+    fromUserId: undefined as string | undefined,
     fromUserName: '',
+    toUserId: undefined as string | undefined,
     toUserName: '',
     messageTitle: '',
     messageContent: '',
@@ -736,7 +766,9 @@ async function handleExport() {
       exportQuery.keyWords = kw
     }
     const q = advancedQueryForm.value
+    if (q.fromUserId) exportQuery.fromUserId = q.fromUserId
     if (q.fromUserName) exportQuery.fromUserName = q.fromUserName
+    if (q.toUserId) exportQuery.toUserId = q.toUserId
     if (q.toUserName) exportQuery.toUserName = q.toUserName
     if (q.messageTitle) exportQuery.messageTitle = q.messageTitle
     if (q.messageContent) exportQuery.messageContent = q.messageContent
@@ -830,7 +862,9 @@ function handleAdvancedQuerySubmit() {
 /** 高级查询重置 */
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+    fromUserId: undefined as string | undefined,
     fromUserName: '',
+    toUserId: undefined as string | undefined,
     toUserName: '',
     messageTitle: '',
     messageContent: '',

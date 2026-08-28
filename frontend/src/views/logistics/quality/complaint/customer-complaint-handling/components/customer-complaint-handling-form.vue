@@ -325,17 +325,46 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplainthandling.attachmentpaths')"
-                name="attachmentPaths"
+                :label="t('entity.customercomplainthandling.filename')"
+                name="fileName"
               >
                 <a-input
-                  v-model:value="formState.attachmentPaths"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.attachmentpaths') })"
+                  v-model:value="formState.fileName"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.filename') })"
                   show-count
-                  :maxlength="2000"
-                  allow-clear
+                  :maxlength="200"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.customercomplainthandling.accessurl')"
+                name="accessUrl"
+              >
+                <takt-upload-file
+                  tabs-type="files"
+                  :files-auto-upload="true"
+                  :files-multiple="false"
+                  :files-max-count="1"
+                  :files-disabled="!!loading || fileUploading"
+                  :files-max-size="taktFileMaxSizeMb"
+                  :files-accept="taktFileAccept"
+                  :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+                  :files-custom-request="handleFilesCustomRequest"
+                  v-model:files-file-list="filesFileList"
+                  @files:remove="handleFileRemove"
+                />
+                <a-input
+                  v-if="formState.accessUrl"
+                  v-model:value="formState.accessUrl"
+                  class="mt-2"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplainthandling.accessurl') })"
+                  show-count
+                  :maxlength="1000"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -392,10 +421,19 @@
  * 客诉处理记录实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/complaint/customer-complaint-handling/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { message } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
+import type { UploadFile, UploadProps } from 'ant-design-vue'
 import type { CustomerComplaintHandlingCreate } from '@/types/logistics/quality/complaint/customer-complaint-handling'
+import { getFileById } from '@/api/foundation/file'
+import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
+import {
+  buildTaktFileAcceptAttribute,
+  loadTaktFileUploadBasePolicy,
+  resolveTaktFileMaxSizeMb,
+} from '@/utils/takt-file-upload-policy'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -433,7 +471,86 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","complaintHandlingCode","complaintId","complaintCode","complaintItemId","handlingStage","handlingMethod","handlingDescription","causeAnalysis","correctiveAction","preventiveAction","responsibleDept","responsibleBy","handlerBy","handlingAt","plannedCompletionDate","actualCompletionDate","handlingStatus","handlingCost","customerFeedback","customerSatisfaction","attachmentPaths","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","complaintHandlingCode","complaintId","complaintCode","complaintItemId","handlingStage","handlingMethod","handlingDescription","causeAnalysis","correctiveAction","preventiveAction","responsibleDept","responsibleBy","handlerBy","handlingAt","plannedCompletionDate","actualCompletionDate","handlingStatus","handlingCost","customerFeedback","customerSatisfaction","fileName","accessUrl","extField","remark"]
+
+/** 文件上传中 */
+const fileUploading = ref(false)
+/** takt-upload-file 文件列表 */
+const filesFileList = ref<UploadFile[]>([])
+/** 上传 accept */
+const taktFileAccept = ref('')
+/** 上传体积上限 MB */
+const taktFileMaxSizeMb = ref(500)
+
+/** 按 fileName / accessUrl 同步上传列表展示 */
+function syncFilesFileListFromFormState() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url) {
+    filesFileList.value = []
+    return
+  }
+  filesFileList.value = [{
+    uid: '-1',
+    name: String(formState.fileName ?? url.split('/').pop() ?? 'file'),
+    status: 'done',
+    url,
+  }]
+}
+
+/** 将 TaktFile 上传结果回填至表单 */
+async function applyUploadResultToForm(file: globalThis.File, result: Awaited<ReturnType<typeof uploadTaktFileSmart>>) {
+  let accessUrl = result.accessUrl?.trim() ?? ''
+  if (!accessUrl && result.fileId) {
+    const detail = await getFileById(result.fileId)
+    accessUrl = detail.accessUrl?.trim() ?? ''
+  }
+  if (!accessUrl) {
+    throw new Error('accessUrl empty')
+  }
+  formState.accessUrl = accessUrl
+  formState.fileName = result.fileOriginalName?.trim()
+    || result.fileName?.trim()
+    || file.name
+  syncFilesFileListFromFormState()
+  formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/** takt-upload-file 自定义上传 */
+const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
+  if (props.loading || fileUploading.value) {
+    options.onError?.(new Error('upload disabled'))
+    return
+  }
+  const originFile = options.file as globalThis.File
+  fileUploading.value = true
+  void (async () => {
+    try {
+      const result = await uploadTaktFileSmart(originFile)
+      await applyUploadResultToForm(originFile, result)
+      options.onSuccess?.(result)
+    } catch (error: unknown) {
+      const err = error instanceof Error ? error : new Error(String(error))
+      message.error(t('common.feedback.failed'))
+      options.onError?.(err)
+    } finally {
+      fileUploading.value = false
+    }
+  })()
+}
+
+/** 移除已上传文件 */
+function handleFileRemove() {
+  formState.accessUrl = ''
+  formState.fileName = ''
+  filesFileList.value = []
+}
+
+onMounted(() => {
+  void loadTaktFileUploadBasePolicy().then((policy) => {
+    taktFileAccept.value = buildTaktFileAcceptAttribute(policy)
+    taktFileMaxSizeMb.value = resolveTaktFileMaxSizeMb(policy)
+  })
+})
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -466,6 +583,7 @@ watch(
 
       applyScopeDefaults(next)
       Object.assign(formState, next)
+      syncFilesFileListFromFormState()
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
@@ -488,6 +606,13 @@ watch(
     if (isCreate) {
       applyScopeDefaults(formState, true)
     }
+  },
+)
+
+watch(
+  () => [formState.fileName, formState.accessUrl],
+  () => {
+    syncFilesFileListFromFormState()
   },
 )
 
@@ -605,6 +730,7 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.customerComplaintHandlingId)
 
   activeTab.value = 'tab-0'
+  filesFileList.value = []
   formRef.value?.clearValidate()
 }
 

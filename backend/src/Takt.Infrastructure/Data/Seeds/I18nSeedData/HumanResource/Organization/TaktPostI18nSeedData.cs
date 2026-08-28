@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktPostI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.requirements", "zh-HK", "任职要求_hk", "任职要求"),
 
             // entity.post.educationrequired
-            new TranslationSeedItem("entity.post.educationrequired", "en-US", "学历要求_us", "学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.post.educationrequired", "en-US", "学历要求_us", "学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.post.educationrequired
-            new TranslationSeedItem("entity.post.educationrequired", "ja-JP", "学历要求_jp", "学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.post.educationrequired", "ja-JP", "学历要求_jp", "学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.post.educationrequired
-            new TranslationSeedItem("entity.post.educationrequired", "zh-CN", "学历要求", "学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.post.educationrequired", "zh-CN", "学历要求", "学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
             // entity.post.educationrequired
-            new TranslationSeedItem("entity.post.educationrequired", "zh-HK", "学历要求_hk", "学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
+            new TranslationSeedItem("entity.post.educationrequired", "zh-HK", "学历要求_hk", "学历要求（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）"),
 
             // entity.post.experienceyears
             new TranslationSeedItem("entity.post.experienceyears", "en-US", "工作经验要求（年）_us", "工作经验要求（年）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesForecast 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesForecast 生成，请按需审阅）
 // 
@@ -61,7 +61,7 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public string SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     public string ProductCategoryCode { get; set; } = string.Empty;
 
@@ -96,20 +96,20 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人员工名称（填充字段）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    public string? PlannerName { get; set; }
+    public string? PlannerEmployeeName { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）
@@ -220,7 +220,7 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public string? SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     public string? ProductCategoryCode { get; set; } = string.Empty;
 
@@ -255,15 +255,15 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）
@@ -421,9 +421,9 @@ public class TaktSalesForecastCreateDto
     public string SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
-    [Required(ErrorMessage = "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）不能为空")]
+    [Required(ErrorMessage = "产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）不能为空")]
     public string ProductCategoryCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -459,16 +459,15 @@ public class TaktSalesForecastCreateDto
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [Required(ErrorMessage = "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）
@@ -626,7 +625,7 @@ public class TaktSalesForecastTemplateDto
     public string? SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     public string? ProductCategoryCode { get; set; } = string.Empty;
 
@@ -661,15 +660,15 @@ public class TaktSalesForecastTemplateDto
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）
@@ -774,7 +773,7 @@ public class TaktSalesForecastImportDto
     public string? SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     public string? ProductCategoryCode { get; set; } = string.Empty;
 
@@ -809,15 +808,15 @@ public class TaktSalesForecastImportDto
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）
@@ -928,7 +927,7 @@ public class TaktSalesForecastExportDto
     public string SalesProduct { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// 产品类别（字典 logistics_manufacturing_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
     /// </summary>
     public string ProductCategoryCode { get; set; } = string.Empty;
 
@@ -963,15 +962,15 @@ public class TaktSalesForecastExportDto
     public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
+    public long? PlannerEmployeeId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string PlanBy { get; set; } = string.Empty;
+    public string? PlannerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划总数量（基本单位数量；通常汇总版本 002）

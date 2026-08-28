@@ -541,6 +541,7 @@ public class TaktFlowEngineService : TaktServiceBase, ITaktFlowEngineService
             ThrowBusinessException("当前用户无待办任务");
         }
         task.OwnerUserId = userId;
+        task.OwnerUserName = task.AssigneeUserName ?? CurrentUserName;
         task.AssigneeUserId = dto.ToUserId;
         task.AssigneeUserName = dto.ToUserName;
         await _flowTaskRepository.UpdateAsync(task);

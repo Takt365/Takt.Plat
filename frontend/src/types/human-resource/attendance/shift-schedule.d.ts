@@ -45,7 +45,7 @@ export interface ShiftScheduleQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+   * 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
@@ -127,7 +127,7 @@ export interface ShiftScheduleCreate {
   cultureCode: string
 
   /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+   * 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
    */
   scheduleType: number;
 
@@ -201,7 +201,7 @@ export interface ShiftScheduleTemplate {
   companyCode?: string;
 
   /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+   * 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
@@ -268,7 +268,7 @@ export interface ShiftScheduleImport {
   cultureCode?: string
 
   /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+   * 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
    */
   scheduleType?: number;
 
@@ -327,7 +327,7 @@ export interface ShiftScheduleExport {
   companyCode: string;
 
   /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
+   * 排班类别（字典 humanresource_attendance_schedule_type；0=部门 1=人员）
    */
   scheduleType: number;
 

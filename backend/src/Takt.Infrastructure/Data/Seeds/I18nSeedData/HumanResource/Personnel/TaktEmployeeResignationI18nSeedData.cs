@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeResignation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktEmployeeResignationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeresignation.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "en-US", "离职类型_us", "离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "en-US", "离职类型_us", "离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "ja-JP", "离职类型_jp", "离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "ja-JP", "离职类型_jp", "离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-CN", "离职类型", "离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-CN", "离职类型", "离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
             // entity.employeeresignation.resignationtype
-            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-HK", "离职类型_hk", "离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
+            new TranslationSeedItem("entity.employeeresignation.resignationtype", "zh-HK", "离职类型_hk", "离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
 
             // entity.employeeresignation.applydate
             new TranslationSeedItem("entity.employeeresignation.applydate", "en-US", "申请日期_us", "申请日期"),

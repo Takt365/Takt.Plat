@@ -31,7 +31,7 @@
           >
             <a-input
               v-model:value="mainFormState.dictTypeCode"
-              :maxlength="80"
+              :maxlength="140"
               :placeholder="t('common.page.form.placeholder.required', { field: t('entity.dicttype.code') })"
               :disabled="!!props.formData?.dictTypeId"
             />
@@ -53,7 +53,7 @@
           >
             <TaktSelect
               v-model:value="mainFormState.dataSource"
-              dict-type="sys_data_source_type"
+              dict-type="sys_data_source"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.datasource') })"
               allow-clear
             />
@@ -158,6 +158,7 @@
               <a-input
                 v-if="editingKey === `${record.dictDataId || index}-dictLabel`"
                 v-model:value="editingRecord.dictLabel"
+                :maxlength="40"
                 size="small"
                 @blur="handleSaveCell(record, index, 'dictLabel')"
                 @press-enter="handleSaveCell(record, index, 'dictLabel')"
@@ -171,11 +172,12 @@
                 {{ record.dictLabel || '-' }}
               </span>
             </template>
-            <!-- 字典本地化键 - 可编辑 -->
+            <!-- 字典国际化键 - 可编辑 -->
             <template v-else-if="column.key === 'i18nKey'">
               <a-input
                 v-if="editingKey === `${record.dictDataId || index}-i18nKey`"
                 v-model:value="editingRecord.i18nKey"
+                :maxlength="140"
                 size="small"
                 @blur="handleSaveCell(record, index, 'i18nKey')"
                 @press-enter="handleSaveCell(record, index, 'i18nKey')"
@@ -194,6 +196,7 @@
               <a-input
                 v-if="editingKey === `${record.dictDataId || index}-dictValue`"
                 v-model:value="editingRecord.dictValue"
+                :maxlength="40"
                 size="small"
                 @blur="handleSaveCell(record, index, 'dictValue')"
                 @press-enter="handleSaveCell(record, index, 'dictValue')"
@@ -252,6 +255,7 @@
               <a-input
                 v-if="editingKey === `${record.dictDataId || index}-extLabel`"
                 v-model:value="editingRecord.extLabel"
+                :maxlength="140"
                 size="small"
                 @blur="handleSaveCell(record, index, 'extLabel')"
                 @press-enter="handleSaveCell(record, index, 'extLabel')"
@@ -270,6 +274,7 @@
               <a-input
                 v-if="editingKey === `${record.dictDataId || index}-extValue`"
                 v-model:value="editingRecord.extValue"
+                :maxlength="140"
                 size="small"
                 @blur="handleSaveCell(record, index, 'extValue')"
                 @press-enter="handleSaveCell(record, index, 'extValue')"

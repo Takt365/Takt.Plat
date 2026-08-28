@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocumentVersion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktDocumentVersionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.documentversion.revisedby", "zh-HK", "修订人ID_hk", "修订人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.documentversion.revisedbyname
-            new TranslationSeedItem("entity.documentversion.revisedbyname", "en-US", "修订人姓名_us", "修订人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "en-US", "修订人姓名_us", "修订人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.documentversion.revisedbyname
-            new TranslationSeedItem("entity.documentversion.revisedbyname", "ja-JP", "修订人姓名_jp", "修订人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "ja-JP", "修订人姓名_jp", "修订人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.documentversion.revisedbyname
-            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-CN", "修订人姓名", "修订人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-CN", "修订人姓名", "修订人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.documentversion.revisedbyname
-            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-HK", "修订人姓名_hk", "修订人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.documentversion.revisedbyname", "zh-HK", "修订人姓名_hk", "修订人姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.documentversion.revisedat
             new TranslationSeedItem("entity.documentversion.revisedat", "en-US", "修订时间_us", "修订时间"),

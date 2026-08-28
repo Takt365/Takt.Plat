@@ -37,7 +37,7 @@ public class TaktPayslipDto : TaktCompanyDtoBase
 
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int IssueStatus { get; set; } = 0;
 
@@ -160,7 +160,7 @@ public class TaktPayslipQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int? IssueStatus { get; set; }
 
@@ -300,7 +300,7 @@ public class TaktPayslipCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int IssueStatus { get; set; } = 0;
 
@@ -354,9 +354,9 @@ public class TaktPayslipStatusDto
     public long PayslipId { get; set; }
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
-    [Required(ErrorMessage = "发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）不能为空")]
+    [Required(ErrorMessage = "发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）不能为空")]
     public int IssueStatus { get; set; } = 0;
 }
 
@@ -471,7 +471,7 @@ public class TaktPayslipTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int? IssueStatus { get; set; }
 
@@ -595,7 +595,7 @@ public class TaktPayslipImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int? IssueStatus { get; set; }
 
@@ -719,7 +719,7 @@ public class TaktPayslipExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
+    /// 发放状态（字典 humanresource_compensation_payslip_issue_status：0=待发放 1=已发放 2=已确认）
     /// </summary>
     public int IssueStatus { get; set; } = 0;
 

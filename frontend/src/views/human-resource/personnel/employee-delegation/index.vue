@@ -40,11 +40,11 @@
           @reset="handleReset"
         />
         <TaktToolsBar
-      create-permission="human:resource:personnel:employee:create"
-      update-permission="human:resource:personnel:employee:update"
-      delete-permission="human:resource:personnel:employee:delete"
-      import-permission="human:resource:personnel:employee:import"
-      export-permission="human:resource:personnel:employee:export"
+      create-permission="human:resource:personnel:employee:delegation:create"
+      update-permission="human:resource:personnel:employee:delegation:update"
+      delete-permission="human:resource:personnel:employee:delegation:delete"
+      import-permission="human:resource:personnel:employee:delegation:import"
+      export-permission="human:resource:personnel:employee:delegation:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -77,37 +77,37 @@
         <template v-if="column.key === 'gender'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'gender')"
-            dict-type="sys_user_gender_category"
+            dict-type="sys_user_gender"
           />
         </template>
         <template v-else-if="column.key === 'nativePlace'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'nativePlace')"
-            dict-type="hr_native_place_code"
+            dict-type="humanresource_personnel_native_place_code"
           />
         </template>
         <template v-else-if="column.key === 'ethnicity'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'ethnicity')"
-            dict-type="hr_ethnic_code"
+            dict-type="humanresource_personnel_ethnic_code"
           />
         </template>
         <template v-else-if="column.key === 'politicalAffiliation'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'politicalAffiliation')"
-            dict-type="hr_political_affiliation"
+            dict-type="humanresource_personnel_political_affiliation"
           />
         </template>
         <template v-else-if="column.key === 'maritalStatus'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'maritalStatus')"
-            dict-type="hr_marital_status"
+            dict-type="humanresource_personnel_marital_status"
           />
         </template>
         <template v-else-if="column.key === 'employeeStatus'">
           <TaktDictTag
             :value="getEmployeeDictValue(record, 'employeeStatus')"
-            dict-type="hr_employee_status"
+            dict-type="humanresource_personnel_employee_status"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
@@ -199,7 +199,7 @@
       <a-form-item :label="pi.queryLabel('gender')">
         <TaktSelect
           v-model:value="advancedQueryForm.gender"
-          dict-type="sys_user_gender_category"
+          dict-type="sys_user_gender"
           :placeholder="pi.queryPh('gender', 'select')"
           allow-clear
         />
@@ -262,7 +262,7 @@
       <a-form-item :label="pi.queryLabel('nativePlace')">
         <TaktSelect
           v-model:value="advancedQueryForm.nativePlace"
-          dict-type="hr_native_place_code"
+          dict-type="humanresource_personnel_native_place_code"
           :placeholder="pi.queryPh('nativePlace', 'select')"
           allow-clear
         />
@@ -272,7 +272,7 @@
       <a-form-item :label="pi.queryLabel('ethnicity')">
         <TaktSelect
           v-model:value="advancedQueryForm.ethnicity"
-          dict-type="hr_ethnic_code"
+          dict-type="humanresource_personnel_ethnic_code"
           :placeholder="pi.queryPh('ethnicity', 'select')"
           allow-clear
         />
@@ -282,7 +282,7 @@
       <a-form-item :label="pi.queryLabel('politicalAffiliation')">
         <TaktSelect
           v-model:value="advancedQueryForm.politicalAffiliation"
-          dict-type="hr_political_affiliation"
+          dict-type="humanresource_personnel_political_affiliation"
           :placeholder="pi.queryPh('politicalAffiliation', 'select')"
           allow-clear
         />
@@ -292,7 +292,7 @@
       <a-form-item :label="pi.queryLabel('maritalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.maritalStatus"
-          dict-type="hr_marital_status"
+          dict-type="humanresource_personnel_marital_status"
           :placeholder="pi.queryPh('maritalStatus', 'select')"
           allow-clear
         />
@@ -302,7 +302,7 @@
       <a-form-item :label="pi.queryLabel('employeeStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.employeeStatus"
-          dict-type="hr_employee_status"
+          dict-type="humanresource_personnel_employee_status"
           :placeholder="pi.queryPh('employeeStatus', 'select')"
           allow-clear
         />
@@ -827,7 +827,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:update',
+        permission: 'human:resource:personnel:employee:delegation:update',
         onClick: (record: EmployeeRowRecord) => handleEdit(record)
       },
       {
@@ -835,7 +835,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:delete',
+        permission: 'human:resource:personnel:employee:delegation:delete',
         onClick: (record: EmployeeRowRecord) => handleDeleteOne(record)
       }
     ]

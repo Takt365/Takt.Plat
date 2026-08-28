@@ -33,7 +33,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public long PurchaseOrderId { get; set; }
 
     /// <summary>
-    /// 采购订单编码（冗余字段，便于查询）
+    /// 采购订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "采购订单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PurchaseOrderCode { get; set; } = string.Empty;
@@ -75,7 +75,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PurchaseUnit { get; set; } = "PC";
@@ -93,7 +93,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal ReceivedQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PurchasePerUnit { get; set; } = 1000;
@@ -105,7 +105,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal PurchaseUnitPrice { get; set; } = 0;
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 折扣率（字典 logistics_sales_discount_rate_param 预设或手输；0-100，表示折扣百分比）
     /// </summary>
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;
@@ -139,7 +139,7 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal PurchaseAmount { get; set; } = 0;
 
     /// <summary>
-    /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
+    /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "行交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;

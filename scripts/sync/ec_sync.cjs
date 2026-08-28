@@ -67,21 +67,22 @@ CREATE TABLE #source_main (source_ec_no NVARCHAR(100));
 CREATE TABLE #source_detail (
   source_ec_no NVARCHAR(100),
   legacy_part_no NVARCHAR(100),
-  source_finished_product NVARCHAR(500),
-  source_parent_part NVARCHAR(500),
-  source_legacy_part_name NVARCHAR(MAX),
-  source_legacy_usage NVARCHAR(MAX),
-  source_legacy_mounting_position NVARCHAR(MAX),
-  source_replacement_part_no NVARCHAR(MAX),
-  source_replacement_part_name NVARCHAR(MAX),
-  source_replacement_usage NVARCHAR(MAX),
-  source_replacement_mounting_position NVARCHAR(MAX),
-  source_bom_no NVARCHAR(MAX),
+  source_finished_goods NVARCHAR(500),
+  source_parent_material_code NVARCHAR(500),
+  source_old_material_description NVARCHAR(MAX),
+  source_old_usage_quantity NVARCHAR(MAX),
+  source_old_item_position NVARCHAR(MAX),
+  source_new_material_code NVARCHAR(MAX),
+  source_new_material_description NVARCHAR(MAX),
+  source_new_usage_quantity NVARCHAR(MAX),
+  source_new_item_position NVARCHAR(MAX),
+  source_bom_code NVARCHAR(MAX),
   source_compatibility NVARCHAR(MAX),
   source_distinction NVARCHAR(MAX),
   source_instruction NVARCHAR(MAX),
-  source_legacy_part_disposition NVARCHAR(MAX),
-  source_bom_effective_date DATE
+  source_old_part_disposition NVARCHAR(MAX),
+  source_bom_effective_date DATE,
+  created_at DATETIME
 );
 CREATE TABLE #main_inserted (id BIGINT, source_ec_no NVARCHAR(100));
 CREATE TABLE #detail_inserted (id BIGINT, source_ec_id BIGINT, legacy_part_no NVARCHAR(100));
@@ -139,7 +140,7 @@ SELECT
   ISNULL(TRY_CAST(S1.[D_SAP_ZPABD_Z025] AS DECIMAL(18,2)), 0),
   ISNULL(CAST(S1.[D_SAP_ZPABD_Z026] AS NVARCHAR(MAX)), ''),
   ISNULL(CAST(S1.[D_SAP_ZPABD_Z027] AS NVARCHAR(MAX)), N''),
-  '000', '2300', '900001', GETDATE(), '900001', GETDATE(), 0
+  '000', '2300', '900001', COALESCE(TRY_CAST(S1.[CreateTime] AS DATETIME), GETDATE()), '900001', GETDATE(), 0
 FROM #source_main S
 INNER JOIN [Sap_Data].[dbo].[PP_SapEcn] S1
   ON LTRIM(RTRIM(S1.[D_SAP_ZPABD_Z001])) = S.source_ec_no
@@ -150,14 +151,14 @@ WHERE NOT EXISTS (
 
 INSERT INTO #source_detail (
   source_ec_no, legacy_part_no,
-  source_finished_product, source_parent_part,
-  source_legacy_part_name, source_legacy_usage,
-  source_legacy_mounting_position, source_replacement_part_no,
-  source_replacement_part_name, source_replacement_usage,
-  source_replacement_mounting_position, source_bom_no,
+  source_finished_goods, source_parent_material_code,
+  source_old_material_description, source_old_usage_quantity,
+  source_old_item_position, source_new_material_code,
+  source_new_material_description, source_new_usage_quantity,
+  source_new_item_position, source_bom_code,
   source_compatibility, source_distinction,
-  source_instruction, source_legacy_part_disposition,
-  source_bom_effective_date
+  source_instruction, source_old_part_disposition,
+  source_bom_effective_date, created_at
 )
 SELECT
   LTRIM(RTRIM(S.[D_SAP_ZPABD_S001])),
@@ -176,50 +177,51 @@ SELECT
   ISNULL(CAST(S.[D_SAP_ZPABD_S014] AS NVARCHAR(MAX)), ''),
   ISNULL(CAST(S.[D_SAP_ZPABD_S015] AS NVARCHAR(MAX)), ''),
   ISNULL(CAST(S.[D_SAP_ZPABD_S016] AS NVARCHAR(MAX)), ''),
-  TRY_CONVERT(DATE, NULLIF(LTRIM(RTRIM(S.[D_SAP_ZPABD_S017])), ''), 23)
+  TRY_CONVERT(DATE, NULLIF(LTRIM(RTRIM(S.[D_SAP_ZPABD_S017])), ''), 23),
+  COALESCE(TRY_CAST(S.[CreateTime] AS DATETIME), GETDATE())
 FROM [Sap_Data].[dbo].[PP_SapEcnSub] S
 INNER JOIN #source_main SM
   ON SM.source_ec_no = LTRIM(RTRIM(S.[D_SAP_ZPABD_S001]))
 WHERE LTRIM(RTRIM(S.[D_SAP_ZPABD_S001])) <> '';
 
 INSERT INTO [takt_logistics_manufacturing_ec_source_detail]
-([id],[source_ec_id],[source_finished_product],[source_parent_part],
- [source_legacy_part_no],[source_legacy_part_name],[source_legacy_usage],
- [source_legacy_mounting_position],[source_replacement_part_no],
- [source_replacement_part_name],[source_replacement_usage],
- [source_replacement_mounting_position],[source_bom_no],
+([id],[source_ec_id],[source_finished_goods],[source_parent_material_code],
+ [source_old_material_code],[source_old_material_description],[source_old_usage_quantity],
+ [source_old_item_position],[source_new_material_code],
+ [source_new_material_description],[source_new_usage_quantity],
+ [source_new_item_position],[source_bom_code],
  [source_compatibility],[source_distinction],
- [source_instruction],[source_legacy_part_disposition],
+ [source_instruction],[source_old_part_disposition],
  [source_bom_effective_date],[tenant_code],[company_code],
  [created_by],[created_at],[updated_by],[updated_at],[is_deleted])
-OUTPUT INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_legacy_part_no] INTO #detail_inserted
+OUTPUT INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_old_material_code] INTO #detail_inserted
 SELECT
   CAST((DATEDIFF_BIG(MICROSECOND, '1970-01-01', GETDATE()) * 1000 + ROW_NUMBER() OVER (ORDER BY D.source_ec_no, D.legacy_part_no)) AS BIGINT),
   M.[id],
-  D.source_finished_product,
-  D.source_parent_part,
+  D.source_finished_goods,
+  D.source_parent_material_code,
   D.legacy_part_no,
-  D.source_legacy_part_name,
-  D.source_legacy_usage,
-  D.source_legacy_mounting_position,
-  D.source_replacement_part_no,
-  D.source_replacement_part_name,
-  D.source_replacement_usage,
-  D.source_replacement_mounting_position,
-  D.source_bom_no,
+  D.source_old_material_description,
+  D.source_old_usage_quantity,
+  D.source_old_item_position,
+  D.source_new_material_code,
+  D.source_new_material_description,
+  D.source_new_usage_quantity,
+  D.source_new_item_position,
+  D.source_bom_code,
   D.source_compatibility,
   D.source_distinction,
   D.source_instruction,
-  D.source_legacy_part_disposition,
+  D.source_old_part_disposition,
   D.source_bom_effective_date,
-  '000', '2300', '900001', GETDATE(), '900001', GETDATE(), 0
+  '000', '2300', '900001', COALESCE(D.created_at, GETDATE()), '900001', GETDATE(), 0
 FROM #source_detail D
 INNER JOIN [takt_logistics_manufacturing_ec_source] M
   ON M.[source_ec_no] = D.source_ec_no
 WHERE NOT EXISTS (
   SELECT 1 FROM [takt_logistics_manufacturing_ec_source_detail] T
   WHERE T.[source_ec_id] = M.[id]
-    AND T.[source_legacy_part_no] = D.legacy_part_no
+    AND T.[source_old_material_code] = D.legacy_part_no
 );
 
 -- ========== 以下为新增日志部分 ==========

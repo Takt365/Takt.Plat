@@ -55,12 +55,12 @@ export interface BudgetActual extends CompanyDtoBase {
   accountTitleCode?: string;
 
   /**
-   * 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+   * 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
    */
   budgetType?: number;
 
   /**
-   * 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+   * 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
    */
   measureType?: number;
 
@@ -105,7 +105,7 @@ export interface BudgetActual extends CompanyDtoBase {
   ytdVarianceAmount?: number;
 
   /**
-   * 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+   * 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
    */
   currencyCode?: string;
 
@@ -178,12 +178,12 @@ export interface BudgetActualExport {
   accountTitleCode?: string;
 
   /**
-   * 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+   * 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
    */
   budgetType: number;
 
   /**
-   * 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+   * 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
    */
   measureType: number;
 
@@ -228,7 +228,7 @@ export interface BudgetActualExport {
   ytdVarianceAmount: number;
 
   /**
-   * 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+   * 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
    */
   currencyCode: string;
 

@@ -56,17 +56,23 @@ public class TaktWarehouse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "varchar", Length = 30, IsNullable = true)]
     public string? ContactPhone { get; set; }
     /// <summary>
-    /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=UserName）
+    /// 仓库负责人（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "manager_user_code", ColumnDescription = "仓库负责人用户编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
-    public string? ManagerUserCode { get; set; }
+    [SugarColumn(ColumnName = "manager_user_id", ColumnDescription = "仓库负责人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManagerUserId { get; set; }
+    /// <summary>
+    /// 仓库负责人姓名（冗余：按 ManagerUserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "manager_user_name", ColumnDescription = "仓库负责人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
+    public string? ManagerUserName { get; set; }
     /// <summary>
     /// 虚拟仓（is_virtual；字典 sys_yes_no；0=实体仓，1=虚拟仓）
     /// </summary>
     [SugarColumn(ColumnName = "is_virtual", ColumnDescription = "虚拟仓", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsVirtual { get; set; } = 0;
     /// <summary>
-    /// 仓库类型（字典 logistics_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
+    /// 仓库类型（字典 logistics_materials_warehouse_type；0=原材料仓，1=半成品仓，2=成品仓，3=不良品仓，4=外协仓，5=其他）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_type", ColumnDescription = "仓库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "2")]
     public int WarehouseType { get; set; } = 2;

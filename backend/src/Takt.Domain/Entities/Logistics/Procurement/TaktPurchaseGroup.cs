@@ -25,48 +25,48 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 [SugarIndex("ix_takt_logistics_procurement_purchase_group_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktPurchaseGroup : TaktCompanyEntityBase
 {
-
     /// <summary>
     /// 采购组编码（3）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group_code", ColumnDescription = "采购组编码", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string PurchaseGroupCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购组名称
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group_name", ColumnDescription = "采购组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string PurchaseGroupName { get; set; } = string.Empty;
+
     /// <summary>
     /// 采购组描述
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group_description", ColumnDescription = "采购组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? PurchaseGroupDescription { get; set; }
-    /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
+
     /// <summary>
     /// 联系电话
     /// </summary>
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ContactPhone { get; set; }
+
     /// <summary>
     /// 联系邮箱
     /// </summary>
     [SugarColumn(ColumnName = "contact_email", ColumnDescription = "联系邮箱", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ContactEmail { get; set; }
+
     /// <summary>
     /// 内置（字典 sys_yes_no；1=是，0=否；内置记录禁止删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBuiltIn { get; set; } = 0;
+
     /// <summary>
     /// 排序号（回填）（越小越靠前）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
+
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>

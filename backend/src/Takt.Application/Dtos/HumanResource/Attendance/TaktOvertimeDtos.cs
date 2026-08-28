@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Overtime 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertime 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     public long OvertimeId { get; set; }
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -77,7 +77,7 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     public decimal TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int OvertimeType { get; set; } = 0;
 
@@ -91,6 +91,11 @@ public class TaktOvertimeDto : TaktApprovalDtoBase
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -146,13 +151,13 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -202,7 +207,7 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     public decimal? TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int? OvertimeType { get; set; }
 
@@ -216,6 +221,11 @@ public class TaktOvertimeQueryDto : TaktPagedQuery
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间（范围查询-开始）
@@ -331,13 +341,13 @@ public class TaktOvertimeCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -372,7 +382,7 @@ public class TaktOvertimeCreateDto
     public decimal TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int OvertimeType { get; set; } = 0;
 
@@ -386,6 +396,11 @@ public class TaktOvertimeCreateDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -498,13 +513,13 @@ public class TaktOvertimeTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -539,7 +554,7 @@ public class TaktOvertimeTemplateDto
     public decimal? TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int? OvertimeType { get; set; }
 
@@ -553,6 +568,11 @@ public class TaktOvertimeTemplateDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -612,13 +632,13 @@ public class TaktOvertimeImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -653,7 +673,7 @@ public class TaktOvertimeImportDto
     public decimal? TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int? OvertimeType { get; set; }
 
@@ -667,6 +687,11 @@ public class TaktOvertimeImportDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间
@@ -732,13 +757,13 @@ public class TaktOvertimeExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 部门名称
+    /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -773,7 +798,7 @@ public class TaktOvertimeExportDto
     public decimal TotalActualHours { get; set; }
 
     /// <summary>
-    /// 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
+    /// 加班类型（字典 humanresource_attendance_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
     /// </summary>
     public int OvertimeType { get; set; } = 0;
 
@@ -787,6 +812,11 @@ public class TaktOvertimeExportDto
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HandlingBy { get; set; }
+
+    /// <summary>
+    /// 经办人名称（冗余：按 HandlingBy 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    public string? HandlingByName { get; set; } = string.Empty;
 
     /// <summary>
     /// 经办时间

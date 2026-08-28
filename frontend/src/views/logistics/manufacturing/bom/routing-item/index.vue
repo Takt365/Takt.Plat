@@ -77,25 +77,25 @@
         <template v-if="column.key === 'baseUnit'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'baseUnit')"
-            dict-type="logistics_unit_of_measure_code"
+            dict-type="logistics_materials_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'timeUnit'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'timeUnit')"
-            dict-type="logistics_time_unit"
+            dict-type="logistics_manufacturing_time_unit"
           />
         </template>
         <template v-else-if="column.key === 'pointsUnit'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'pointsUnit')"
-            dict-type="logistics_points_unit"
+            dict-type="logistics_manufacturing_points_unit"
           />
         </template>
         <template v-else-if="column.key === 'pointsToMinutesRate'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'pointsToMinutesRate')"
-            dict-type="logistics_points_to_minutes_rate"
+            dict-type="logistics_manufacturing_points_to_minutes_rate"
           />
         </template>
         <template v-else-if="column.key === 'isInspection'">
@@ -107,7 +107,7 @@
         <template v-else-if="column.key === 'processSegmentType'">
           <TaktDictTag
             :value="getRoutingItemDictValue(record, 'processSegmentType')"
-            dict-type="logistics_process_segment_type"
+            dict-type="logistics_manufacturing_process_segment_type"
           />
         </template>
         <template v-else-if="column.key === 'isObsolete'">
@@ -198,7 +198,7 @@
       <a-form-item :label="pi.queryLabel('baseUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          dict-type="logistics_unit_of_measure_code"
+          dict-type="logistics_materials_unit_of_measure_code"
           :placeholder="pi.queryPh('baseUnit', 'select')"
           allow-clear
         />
@@ -226,7 +226,7 @@
       <a-form-item :label="pi.queryLabel('timeUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.timeUnit"
-          dict-type="logistics_time_unit"
+          dict-type="logistics_manufacturing_time_unit"
           :placeholder="pi.queryPh('timeUnit', 'select')"
           allow-clear
         />
@@ -245,7 +245,7 @@
       <a-form-item :label="pi.queryLabel('pointsUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.pointsUnit"
-          dict-type="logistics_points_unit"
+          dict-type="logistics_manufacturing_points_unit"
           :placeholder="pi.queryPh('pointsUnit', 'select')"
           allow-clear
         />
@@ -255,7 +255,7 @@
       <a-form-item :label="pi.queryLabel('pointsToMinutesRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.pointsToMinutesRate"
-          dict-type="logistics_points_to_minutes_rate"
+          dict-type="logistics_manufacturing_points_to_minutes_rate"
           :placeholder="pi.queryPh('pointsToMinutesRate', 'select')"
           allow-clear
         />
@@ -312,7 +312,7 @@
       <a-form-item :label="pi.queryLabel('processSegmentType')">
         <TaktSelect
           v-model:value="advancedQueryForm.processSegmentType"
-          dict-type="logistics_process_segment_type"
+          dict-type="logistics_manufacturing_process_segment_type"
           :placeholder="pi.queryPh('processSegmentType', 'select')"
           allow-clear
         />

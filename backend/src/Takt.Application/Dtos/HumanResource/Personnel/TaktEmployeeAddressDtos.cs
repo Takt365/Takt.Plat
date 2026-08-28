@@ -52,7 +52,7 @@ public class TaktEmployeeAddressDto : TaktCompanyDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int AddressType { get; set; } = 0;
 
@@ -141,7 +141,7 @@ public class TaktEmployeeAddressQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int? AddressType { get; set; }
 
@@ -242,7 +242,7 @@ public class TaktEmployeeAddressCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int AddressType { get; set; } = 0;
 
@@ -359,7 +359,7 @@ public class TaktEmployeeAddressTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int? AddressType { get; set; }
 
@@ -447,7 +447,7 @@ public class TaktEmployeeAddressImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int? AddressType { get; set; }
 
@@ -541,7 +541,7 @@ public class TaktEmployeeAddressExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     public int AddressType { get; set; } = 0;
 

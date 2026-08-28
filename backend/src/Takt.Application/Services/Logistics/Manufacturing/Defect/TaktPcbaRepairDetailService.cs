@@ -427,7 +427,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
                 || (x.DefectResponsibility != null && x.DefectResponsibility.Contains(keywords))
                 || (x.DefectNature != null && x.DefectNature.Contains(keywords))
-                || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
+                || (x.RepairOperatorName != null && x.RepairOperatorName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -523,10 +523,10 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.DefectNature != null && x.DefectNature.Contains(defectNature));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepairOperatorName))
         {
-            var repairOperator = queryDto.RepairOperator;
-            exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(repairOperator));
+            var repairOperator = queryDto.RepairOperatorName;
+            exp = exp.And(x => x.RepairOperatorName != null && x.RepairOperatorName.Contains(repairOperator));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -631,7 +631,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperator))
+        if (!string.IsNullOrWhiteSpace(queryDto.RepairOperatorName))
         {
             return true;
         }

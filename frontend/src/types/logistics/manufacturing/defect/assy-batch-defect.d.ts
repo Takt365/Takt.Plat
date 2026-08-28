@@ -25,7 +25,7 @@ import type {
 export interface AssyBatchDefect extends CompanyDtoBase {
 
   /**
-   * 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -100,7 +100,7 @@ export interface AssyBatchDefect extends CompanyDtoBase {
   reportCount?: number;
 
   /**
-   * 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+   * 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
    */
   batchStatus?: number;
 
@@ -138,7 +138,7 @@ export interface AssyBatchDefectExport {
   plantCode: string;
 
   /**
-   * 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（统计维度，字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -213,7 +213,7 @@ export interface AssyBatchDefectExport {
   reportCount: number;
 
   /**
-   * 批次状态（字典 logistics_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
+   * 批次状态（字典 logistics_manufacturing_prod_status；1=进行中 2=已完成；批次工单总数量与累计生实实绩相等时为已完成）
    */
   batchStatus: number;
 

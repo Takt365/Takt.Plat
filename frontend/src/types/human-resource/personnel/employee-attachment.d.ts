@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-attachment.d.ts
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存业务名称与访问地址引用。
+ * 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存文件名称与访问地址引用。
  * 对应前端 TaktEmployeeAttachmentDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EmployeeAttachment
@@ -44,9 +44,9 @@ export interface EmployeeAttachment extends CompanyDtoBase {
   employeeName: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName: string;
+  fileName: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）
@@ -104,9 +104,9 @@ export interface EmployeeAttachmentQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName?: string;
+  fileName?: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）
@@ -178,9 +178,9 @@ export interface EmployeeAttachmentCreate {
   employeeName: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName: string;
+  fileName: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）
@@ -257,9 +257,9 @@ export interface EmployeeAttachmentTemplate {
   employeeName?: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName?: string;
+  fileName?: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）
@@ -321,9 +321,9 @@ export interface EmployeeAttachmentImport {
   employeeName?: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName?: string;
+  fileName?: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）
@@ -385,9 +385,9 @@ export interface EmployeeAttachmentExport {
   employeeName: string;
 
   /**
-   * 附件名称（业务称谓，如毕业证、就业证）
+   * 文件名称（原始文件名，长度对齐 TaktFile.FileName）
    */
-  attachmentName: string;
+  fileName: string;
 
   /**
    * 访问地址（关联 TaktFile.AccessUrl）

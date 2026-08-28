@@ -114,7 +114,7 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode: string;
 
@@ -144,7 +144,7 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode: string;
 
@@ -274,7 +274,7 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode?: string;
 
@@ -304,7 +304,7 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode?: string;
 
@@ -448,7 +448,7 @@ export interface BomMaterialCostItemCreate {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode: string;
 
@@ -478,7 +478,7 @@ export interface BomMaterialCostItemCreate {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode: string;
 
@@ -622,7 +622,7 @@ export interface BomMaterialCostItemTemplate {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode?: string;
 
@@ -652,7 +652,7 @@ export interface BomMaterialCostItemTemplate {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode?: string;
 
@@ -781,7 +781,7 @@ export interface BomMaterialCostItemImport {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode?: string;
 
@@ -811,7 +811,7 @@ export interface BomMaterialCostItemImport {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode?: string;
 
@@ -935,7 +935,7 @@ export interface BomMaterialCostItemExport {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
+   * 移动价格货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   movingPriceCurrencyCode: string;
 
@@ -965,7 +965,7 @@ export interface BomMaterialCostItemExport {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
+   * 采购货币（字典 accounting_financial_currency_code；如 CNY/USD）
    */
   purchaseCurrencyCode: string;
 

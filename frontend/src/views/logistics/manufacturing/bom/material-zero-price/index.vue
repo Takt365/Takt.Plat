@@ -213,7 +213,7 @@
               <a-form-item :label="t(`${localePrefix}.movingPriceManualUnit`)" required>
                 <TaktSelect
                   v-model="manualMovingForm.movingPriceUnit"
-                  dict-type="logistics_price_unit_param"
+                  dict-type="logistics_materials_price_unit_param"
                   class="w-full"
                   :allow-clear="false"
                   show-search
@@ -224,7 +224,7 @@
               <a-form-item :label="t(`${localePrefix}.movingPriceManualCurrency`)" required>
                 <TaktSelect
                   v-model="manualMovingForm.movingPriceCurrencyCode"
-                  dict-type="accounting_currency_code"
+                  dict-type="accounting_financial_currency_code"
                   class="w-full"
                   :allow-clear="false"
                   show-search

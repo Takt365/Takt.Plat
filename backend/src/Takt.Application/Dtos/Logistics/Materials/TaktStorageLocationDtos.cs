@@ -62,7 +62,7 @@ public class TaktStorageLocationDto : TaktCompanyDtoBase
     public string LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int LocationType { get; set; } = 0;
 
@@ -141,7 +141,7 @@ public class TaktStorageLocationQueryDto : TaktPagedQuery
     public string? LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int? LocationType { get; set; }
 
@@ -234,7 +234,7 @@ public class TaktStorageLocationCreateDto
     public string LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int LocationType { get; set; } = 0;
 
@@ -379,7 +379,7 @@ public class TaktStorageLocationTemplateDto
     public string? LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int? LocationType { get; set; }
 
@@ -452,7 +452,7 @@ public class TaktStorageLocationImportDto
     public string? LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int? LocationType { get; set; }
 
@@ -531,7 +531,7 @@ public class TaktStorageLocationExportDto
     public string LocationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位类型（字典 logistics_storage_location_type）
+    /// 库位类型（字典 logistics_materials_storage_location_type）
     /// </summary>
     public int LocationType { get; set; } = 0;
 

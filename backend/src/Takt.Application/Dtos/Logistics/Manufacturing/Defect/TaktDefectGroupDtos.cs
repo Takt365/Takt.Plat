@@ -56,17 +56,6 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
-    /// 不良组负责人用户 名称（填充字段）
-    /// </summary>
-    public string? ResponsibleUserName { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -142,12 +131,6 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -245,12 +228,6 @@ public class TaktDefectGroupCreateDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -402,12 +379,6 @@ public class TaktDefectGroupTemplateDto
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -483,12 +454,6 @@ public class TaktDefectGroupImportDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -572,12 +537,6 @@ public class TaktDefectGroupExportDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话

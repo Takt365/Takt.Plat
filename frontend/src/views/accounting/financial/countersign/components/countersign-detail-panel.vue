@@ -158,7 +158,7 @@
       <a-form-item :label="pi.queryLabel('allocationCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.allocationCategory"
-          dict-type="logistics_allocation_category"
+          dict-type="logistics_sales_allocation_category"
           :placeholder="pi.queryPh('allocationCategory', 'select')"
           allow-clear
         />

@@ -8,26 +8,36 @@
 <!-- ======================================== -->
 
 <template>
-  <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+  <a-form
+    ref="formRef"
+    class="takt-generated-form"
+    :model="formState"
+    layout="horizontal"
+    label-align="right"
+  >
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.scheduledbatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.productionbatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.scheduledproductiondate')"><a-date-picker v-model:value="formState.scheduledProductionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="t('entity.ecdept.productiondate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="seikan.label('scheduledBatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="nika.label('productionBatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="seikan.label('scheduledProductionDate')"><a-date-picker v-model:value="formState.scheduledProductionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="ikka.label('productionDate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
     </a-row>
   </a-form>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
 import type { EcBatch, EcBatchUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-batch';
+import { useEntityFieldI18n } from '@/composables/use-entity-field-i18n';
+import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n';
 
 const props = defineProps<{ formData?: EcBatch | null; loading?: boolean }>();
-const { t } = useI18n();
+const pi = useEcDetailI18n();
+const seikan = useEntityFieldI18n('ecseikan');
+const nika = useEntityFieldI18n('ecseizounika');
+const ikka = useEntityFieldI18n('ecseizouikka');
 const formRef = ref();
-const formState = reactive<EcBatchUpdate & { ecCode?: string; ecModel?: string }>({
+const formState = reactive<EcBatchUpdate & { ecCode?: string; ecModelCode?: string }>({
   ecDetailId: '',
   scheduledBatch: '',
   productionBatch: '',
@@ -38,7 +48,7 @@ watch(() => props.formData, (val) => {
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
     ecCode: val.ecCode,
-    ecModel: val.ecModel,
+    ecModelCode: val.ecModelCode,
     scheduledBatch: val.scheduledBatch ?? '',
     productionBatch: val.productionBatch ?? '',
     scheduledProductionDate: val.scheduledProductionDate,
@@ -48,11 +58,11 @@ watch(() => props.formData, (val) => {
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcBatchUpdate {
-  const { ecCode, ecModel, ...rest } = formState;
+  const { ecCode, ecModelCode, ...rest } = formState;
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', scheduledBatch: '', productionBatch: '', ecCode: '', ecModel: '' });
+  Object.assign(formState, { ecDetailId: '', scheduledBatch: '', productionBatch: '', ecCode: '', ecModelCode: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

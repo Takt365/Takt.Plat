@@ -39,7 +39,16 @@
       :custom-row="onClickRow"
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
-    />
+    >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'ecOldRequiresInspection'">
+          <TaktDictTag dict-type="sys_yes_no" :value="record.ecOldRequiresInspection" />
+        </template>
+        <template v-else-if="column.key === 'ecNewRequiresInspection'">
+          <TaktDictTag dict-type="sys_yes_no" :value="record.ecNewRequiresInspection" />
+        </template>
+      </template>
+    </TaktSingleTable>
     <TaktPagination v-model:current="currentPage" v-model:page-size="pageSize" :total="total" @change="handlePaginationChange" />
     <TaktModal v-model:open="formVisible" :title="t('common.dialog.title.edit', { entity: t('menu.logistics.manufacturing.engineering.change.kakunin') })" width="900px" :confirm-loading="formLoading" @ok="handleFormSubmit">
       <KakuninForm ref="formRef" :form-data="formData" :loading="formLoading" />
@@ -55,9 +64,11 @@ import { message } from 'ant-design-vue';
 import { useI18n } from 'vue-i18n';
 import { getEcKakuninList, updateEcKakunin, exportEcKakuninData } from '@/api/logistics/manufacturing/engineering-change/ec-kakunin';
 import type { EcKakunin, EcKakuninUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-kakunin';
+import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n';
 import KakuninForm from './components/kakunin-form.vue';
 
 const { t } = useI18n();
+const pi = useEcDetailI18n();
 /** 列表 loading */
 const loading = ref(false);
 /** 数据源 */
@@ -82,12 +93,20 @@ const formLoading = ref(false);
 const formData = ref<EcKakunin | null>(null);
 /** 表单 ref */
 const formRef = ref<InstanceType<typeof KakuninForm> | null>(null);
-/** 列定义 */
-const columns = ref([
-  { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 120 }, { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 140 }, { title: t('entity.ecdetail.ecolditem'), dataIndex: 'ecOldItem', key: 'ecOldItem', width: 140 }, { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 140 }
+/** 列定义（entity.ecdetail.*） */
+const columns = computed(() => [
+  { title: pi.label('ecCode'), dataIndex: 'ecCode', key: 'ecCode', width: 120 },
+  { title: pi.label('lineNumber'), dataIndex: 'lineNumber', key: 'lineNumber', width: 80 },
+  { title: pi.label('ecModelCode'), dataIndex: 'ecModelCode', key: 'ecModelCode', width: 140 },
+  { title: pi.label('ecOldMaterialCode'), dataIndex: 'ecOldMaterialCode', key: 'ecOldMaterialCode', width: 140 },
+  { title: pi.label('ecNewMaterialCode'), dataIndex: 'ecNewMaterialCode', key: 'ecNewMaterialCode', width: 140 },
+  { title: pi.label('ecOldPurchaseType'), dataIndex: 'ecOldPurchaseType', key: 'ecOldPurchaseType', width: 120 },
+  { title: pi.label('ecOldRequiresInspection'), dataIndex: 'ecOldRequiresInspection', key: 'ecOldRequiresInspection', width: 120 },
+  { title: pi.label('ecNewPurchaseType'), dataIndex: 'ecNewPurchaseType', key: 'ecNewPurchaseType', width: 120 },
+  { title: pi.label('ecNewRequiresInspection'), dataIndex: 'ecNewRequiresInspection', key: 'ecNewRequiresInspection', width: 120 },
 ]);
 /** 可见列 keys */
-const visibleColumnKeys = ref(columns.value.map(c => String(c.key)));
+const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key)));
 /** 行选择 */
 const rowSelection = computed(() => ({ selectedRowKeys: selectedRowKeys.value, onChange: (keys: (string | number)[], rows: EcKakunin[]) => { selectedRowKeys.value = keys; selectedRows.value = rows; } }));
 /** 更新按钮禁用 */

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购计划应用服务实现
 // 
@@ -408,7 +408,7 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.PurchasePlanCode = entity.PurchasePlanCode;
-                childDto.ProductionPlanCode = entity.ProductionPlanCode;
+                childDto.ProductionPlanCode = entity.ProductionPlanCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -509,7 +509,7 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
                 || (x.MaterialRequirementsPlanningCode != null && x.MaterialRequirementsPlanningCode.Contains(keywords))
                 || (x.ProductionPlanCode != null && x.ProductionPlanCode.Contains(keywords))
                 || (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
-                || (x.PlanBy != null && x.PlanBy.Contains(keywords))
+                || (x.PlannerName != null && x.PlannerName.Contains(keywords))
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -564,16 +564,16 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
             exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(purchaseGroupCode));
         }
 
-        if (queryDto?.PlannerId.HasValue == true)
+        if (queryDto?.PlannerEmployeeId.HasValue == true)
         {
-            var plannerId = queryDto.PlannerId.Value;
-            exp = exp.And(x => x.PlannerId == plannerId);
+            var plannerEmployeeId = queryDto.PlannerEmployeeId.Value;
+            exp = exp.And(x => x.PlannerEmployeeId == plannerEmployeeId);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlannerName))
         {
-            var planBy = queryDto.PlanBy;
-            exp = exp.And(x => x.PlanBy != null && x.PlanBy.Contains(planBy));
+            var plannerName = queryDto.PlannerName;
+            exp = exp.And(x => x.PlannerName != null && x.PlannerName.Contains(plannerName));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -728,11 +728,11 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
         {
             return true;
         }
-        if (queryDto.PlannerId.HasValue)
+        if (queryDto.PlannerEmployeeId.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PlanBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.PlannerName))
         {
             return true;
         }

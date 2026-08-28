@@ -155,7 +155,7 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
-    /// 绑定并校验 <c>Ftp:{provider}</c> 节（提供商标识与 <c>sys_ftp_provider_type</c> 字典值一致）
+    /// 绑定并校验 <c>Ftp:{provider}</c> 节（提供商标识与 <c>sys_ftp_provider</c> 字典值一致）
     /// </summary>
     /// <param name="configuration">应用配置</param>
     /// <param name="provider">FTP 提供商标识，如 <c>teac_cn</c></param>

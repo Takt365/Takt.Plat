@@ -95,7 +95,7 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     [SugarColumn(ColumnName = "destination_port", ColumnDescription = "目的地港", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DestinationPort { get; set; } = string.Empty;

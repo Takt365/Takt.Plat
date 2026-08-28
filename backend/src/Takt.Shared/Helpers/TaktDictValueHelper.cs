@@ -18,7 +18,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktDictValueHelper
 {
     /// <summary>
-    /// 规范化单选字典落库：数值 DictValue（如 logistics_stop_reason_category 的「5」）转为 DictLabel（如「停电」）
+    /// 规范化单选字典落库：数值 DictValue（如 logistics_manufacturing_stop_reason 的「5」）转为 DictLabel（如「停电」）
     /// </summary>
     /// <param name="raw">原始值（DictValue 或 DictLabel）</param>
     /// <param name="snapshot">字典快照</param>

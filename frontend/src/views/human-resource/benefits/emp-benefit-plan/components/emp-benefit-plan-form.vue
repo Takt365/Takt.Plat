@@ -27,68 +27,78 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.employeeid')"
-                name="employeeId"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.employeename')"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('employeeId')"
+                name="employeeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.employeeId"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('employeeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('employeeName')"
                 name="employeeName"
               >
                 <a-input
                   v-model:value="formState.employeeName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeename') })"
+                  :placeholder="pi.ph('employeeName')"
                   show-count
                   :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.benefititemid')"
+                :label="pi.label('benefitItemId')"
                 name="benefitItemId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.benefitItemId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.benefititemid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktBenefitItems/options"
+                  :placeholder="pi.ph('benefitItemId')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.plancode')"
+                :label="pi.label('planCode')"
                 name="planCode"
               >
                 <a-input
                   v-model:value="formState.planCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.plancode') })"
+                  :placeholder="pi.ph('planCode')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -96,41 +106,41 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.enrollmentdate')"
+                :label="pi.label('enrollmentDate')"
                 name="enrollmentDate"
               >
                 <a-date-picker
                   v-model:value="formState.enrollmentDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.enrollmentdate') })"
+                  :placeholder="pi.ph('enrollmentDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.expirydate')"
+                :label="pi.label('expiryDate')"
                 name="expiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.expiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.expirydate') })"
+                  :placeholder="pi.ph('expiryDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.empbenefitstatus')"
+                :label="pi.label('empBenefitStatus')"
                 name="empBenefitStatus"
               >
                 <TaktSelect
                   v-model:value="formState.empBenefitStatus"
-                  dict-type="hr_emp_benefit_plan_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.empbenefitstatus') })"
+                  dict-type="humanresource_benefits_emp_benefit_plan_status"
+                  :placeholder="pi.ph('empBenefitStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -146,14 +156,27 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.empbenefitplan.relatedplant')"
-                name="plantCode"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.relatedplant') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="4"
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
                   disabled
                 />
               </a-form-item>
@@ -171,7 +194,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -186,12 +209,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -214,6 +237,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useEmpBenefitPlanI18n } from '../composables/use-emp-benefit-plan-i18n'
+
+/** 实体字段 i18n */
+const pi = useEmpBenefitPlanI18n()
 import type { EmpBenefitPlanCreate } from '@/types/human-resource/benefits/emp-benefit-plan'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -224,37 +251,38 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","employeeId","employeeName","benefitItemId","planCode","enrollmentDate","expiryDate","empBenefitStatus","plantCode","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -290,6 +318,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 empBenefitPlanId 才视为编辑） */
 watch(
   () => props.formData,
@@ -318,8 +348,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.empBenefitPlanId
-    if (isCreate) {
+    if (!props.formData?.empBenefitPlanId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -330,46 +359,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   employeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeeid') }),
-      trigger: 'blur'
+      message: pi.ph('employeeId'),
+      trigger: 'change'
     }
   ],
   employeeName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.employeename') }),
+      message: pi.ph('employeeName'),
       trigger: 'blur'
     }
   ],
   benefitItemId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.benefititemid') }),
-      trigger: 'blur'
+      message: pi.ph('benefitItemId'),
+      trigger: 'change'
     }
   ],
   planCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.plancode') }),
+      message: pi.ph('planCode'),
       trigger: 'blur'
     }
   ],
   enrollmentDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.enrollmentdate') }),
+      message: pi.ph('enrollmentDate'),
       trigger: 'change'
     }
   ],
   empBenefitStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.empbenefitstatus') }))
+        return Promise.reject(pi.ph('empBenefitStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.empbenefitplan.empbenefitstatus') }))
+        return Promise.reject(pi.ph('empBenefitStatus'))
       }
       return Promise.resolve()
     },
@@ -388,9 +417,25 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('empBenefitStatus' in payload) {
     const rawempBenefitStatus = payload.empBenefitStatus
-    payload.empBenefitStatus = typeof rawempBenefitStatus === 'number' ? rawempBenefitStatus : Number(rawempBenefitStatus)
+    if (rawempBenefitStatus === undefined || rawempBenefitStatus === null || rawempBenefitStatus === '') {
+      delete payload.empBenefitStatus
+    } else {
+      const numempBenefitStatus = typeof rawempBenefitStatus === 'number' ? rawempBenefitStatus : Number(rawempBenefitStatus)
+      if (Number.isFinite(numempBenefitStatus)) payload.empBenefitStatus = numempBenefitStatus
+      else delete payload.empBenefitStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.empBenefitPlanId) {
+    payload.empBenefitPlanId = props.formData.empBenefitPlanId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

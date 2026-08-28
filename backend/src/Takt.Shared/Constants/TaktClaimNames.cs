@@ -17,12 +17,18 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktClaimNames
 {
-    /// <summary>租户编码</summary>
+    /// <summary>
+    /// 租户编码
+    /// </summary>
     public const string TenantCode = "tenant_code";
 
-    /// <summary>公司编码</summary>
+    /// <summary>
+    /// 公司编码
+    /// </summary>
     public const string CompanyCode = "company_code";
 
-    /// <summary>登录账号（OpenID Connect preferred_username / OpenIddict Claims.PreferredUsername）</summary>
+    /// <summary>
+    /// 登录账号（OpenID Connect preferred_username / OpenIddict Claims.PreferredUsername）
+    /// </summary>
     public const string PreferredUsername = "preferred_username";
 }

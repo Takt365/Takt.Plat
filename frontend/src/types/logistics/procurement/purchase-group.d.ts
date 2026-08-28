@@ -40,11 +40,6 @@ export interface PurchaseGroup extends CompanyDtoBase {
   purchaseGroupDescription?: string;
 
   /**
-   * 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
-
-  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -111,11 +106,6 @@ export interface PurchaseGroupExport {
    * 采购组描述
    */
   purchaseGroupDescription?: string;
-
-  /**
-   * 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-   */
-  responsibleUserId?: string;
 
   /**
    * 联系电话

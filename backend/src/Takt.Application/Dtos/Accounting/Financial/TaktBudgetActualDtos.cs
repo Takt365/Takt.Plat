@@ -67,12 +67,12 @@ public class TaktBudgetActualDto : TaktCompanyDtoBase
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int BudgetType { get; set; } = 0;
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int MeasureType { get; set; } = 0;
 
@@ -117,7 +117,7 @@ public class TaktBudgetActualDto : TaktCompanyDtoBase
     public decimal YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -194,12 +194,12 @@ public class TaktBudgetActualQueryDto : TaktPagedQuery
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int? BudgetType { get; set; }
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int? MeasureType { get; set; }
 
@@ -244,7 +244,7 @@ public class TaktBudgetActualQueryDto : TaktPagedQuery
     public decimal? YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -345,12 +345,12 @@ public class TaktBudgetActualCreateDto
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int BudgetType { get; set; } = 0;
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int MeasureType { get; set; } = 0;
 
@@ -395,9 +395,9 @@ public class TaktBudgetActualCreateDto
     public decimal YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code；数量计量时可仍存报告币）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -545,12 +545,12 @@ public class TaktBudgetActualTemplateDto
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int? BudgetType { get; set; }
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int? MeasureType { get; set; }
 
@@ -595,7 +595,7 @@ public class TaktBudgetActualTemplateDto
     public decimal? YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -673,12 +673,12 @@ public class TaktBudgetActualImportDto
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int? BudgetType { get; set; }
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int? MeasureType { get; set; }
 
@@ -723,7 +723,7 @@ public class TaktBudgetActualImportDto
     public decimal? YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -801,12 +801,12 @@ public class TaktBudgetActualExportDto
     public string? AccountTitleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预算类型（字典 accounting_budget_type；1=经营预算，2=资本预算，3=财务预算）
+    /// 预算类型（字典 accounting_financial_budget_type；1=经营预算，2=资本预算，3=财务预算）
     /// </summary>
     public int BudgetType { get; set; } = 0;
 
     /// <summary>
-    /// 计量类型（字典 accounting_budget_measure_type；1=金额，2=数量）
+    /// 计量类型（字典 accounting_financial_budget_measure_type；1=金额，2=数量）
     /// </summary>
     public int MeasureType { get; set; } = 0;
 
@@ -851,7 +851,7 @@ public class TaktBudgetActualExportDto
     public decimal YtdVarianceAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code；数量计量时可仍存报告币）
+    /// 币种（字典 accounting_financial_currency_code；数量计量时可仍存报告币）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 

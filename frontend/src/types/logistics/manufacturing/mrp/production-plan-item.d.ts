@@ -94,7 +94,7 @@ export interface ProductionPlanItem extends CompanyDtoBase {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -222,7 +222,7 @@ export interface ProductionPlanItemExport {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_materials_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 

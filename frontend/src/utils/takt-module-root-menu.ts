@@ -15,9 +15,9 @@ import { translateLocaleMessage } from '@/utils/takt-i18n-message'
 import { normalizeFileTagList } from '@/utils/takt-file-tags'
 
 /**
- * 一级目录 MenuCode → reportDomain（TaktModule 整型，不含仪表盘）
+ * 一级目录 MenuCode → configurableDomain（TaktModule 整型，不含仪表盘）
  */
-export const REPORT_DOMAIN_MENU_CODES: Readonly<Record<string, number>> = {
+export const CONFIGURABLE_DOMAIN_MENU_CODES: Readonly<Record<string, number>> = {
   IDENTITY: 1,
   ROUTINE: 2,
   ACCOUNTING: 3,
@@ -29,9 +29,9 @@ export const REPORT_DOMAIN_MENU_CODES: Readonly<Record<string, number>> = {
   STATISTICS: 9,
 }
 
-/** reportDomain → 一级目录 MenuCode */
-export const MENU_CODE_BY_REPORT_DOMAIN: Readonly<Record<number, string>> = Object.fromEntries(
-  Object.entries(REPORT_DOMAIN_MENU_CODES).map(([code, domain]) => [domain, code])
+/** configurableDomain → 一级目录 MenuCode */
+export const MENU_CODE_BY_CONFIGURABLE_DOMAIN: Readonly<Record<number, string>> = Object.fromEntries(
+  Object.entries(CONFIGURABLE_DOMAIN_MENU_CODES).map(([code, domain]) => [domain, code])
 ) as Record<number, string>
 
 /**
@@ -56,7 +56,7 @@ export function listRootModuleDirectoryMenus(menus: readonly MenuTree[]): MenuTr
     .filter(
       (menu) =>
         menu.menuType === TaktMenuType.Directory &&
-        REPORT_DOMAIN_MENU_CODES[menu.menuCode] != null
+        CONFIGURABLE_DOMAIN_MENU_CODES[menu.menuCode] != null
     )
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
 }
@@ -173,11 +173,11 @@ export function buildDefaultFileTagsFromUploadPath(
 }
 
 /**
- * 从路由路径取末段作为 reportSubCategory（与实体注释对齐）
+ * 从路由路径取末段作为 configurableSubCategory（与实体注释对齐）
  * @param routePath 菜单 RoutePath
  * @returns {string} 末段路径
  */
-export function extractReportSubCategoryFromRoute(routePath?: string): string {
+export function extractConfigurableSubCategoryFromRoute(routePath?: string): string {
   if (!routePath?.trim()) {
     return ''
   }
@@ -186,16 +186,16 @@ export function extractReportSubCategoryFromRoute(routePath?: string): string {
 }
 
 /**
- * 根据 reportDomain 解析一级模块菜单
+ * 根据 configurableDomain 解析一级模块菜单
  * @param menus 菜单树根列表
- * @param reportDomain 报表业务域
+ * @param configurableDomain 报表业务域
  * @returns {MenuTree | undefined} 一级目录菜单
  */
-export function findReportModuleMenu(menus: readonly MenuTree[], reportDomain?: number | null): MenuTree | undefined {
-  if (reportDomain == null) {
+export function findConfigurableDomainMenu(menus: readonly MenuTree[], configurableDomain?: number | null): MenuTree | undefined {
+  if (configurableDomain == null) {
     return undefined
   }
-  const menuCode = MENU_CODE_BY_REPORT_DOMAIN[reportDomain]
+  const menuCode = MENU_CODE_BY_CONFIGURABLE_DOMAIN[configurableDomain]
   if (!menuCode) {
     return undefined
   }
@@ -204,50 +204,50 @@ export function findReportModuleMenu(menus: readonly MenuTree[], reportDomain?: 
 
 /**
  * 解析子分类展示名
- * @param reportDomain 报表业务域
- * @param reportSubCategory 子分类路由末段
+ * @param configurableDomain 报表业务域
+ * @param configurableSubCategory 子分类路由末段
  * @param menus 菜单树
  * @returns {string} 展示文本；无法解析时回退子分类码
  */
-export function resolveReportSubCategoryLabel(
-  reportDomain?: number | null,
-  reportSubCategory?: string | null,
+export function resolveConfigurableSubCategoryLabel(
+  configurableDomain?: number | null,
+  configurableSubCategory?: string | null,
   menus?: readonly MenuTree[]
 ): string {
-  if (!reportSubCategory?.trim() || !menus?.length) {
-    return reportSubCategory?.trim() ?? ''
+  if (!configurableSubCategory?.trim() || !menus?.length) {
+    return configurableSubCategory?.trim() ?? ''
   }
-  const moduleMenu = findReportModuleMenu(menus, reportDomain)
+  const moduleMenu = findConfigurableDomainMenu(menus, configurableDomain)
   if (!moduleMenu?.children?.length) {
-    return reportSubCategory
+    return configurableSubCategory
   }
   const matched = moduleMenu.children.find(
     (child) =>
       child.menuType === TaktMenuType.Directory &&
-      extractReportSubCategoryFromRoute(child.routePath) === reportSubCategory
+      extractConfigurableSubCategoryFromRoute(child.routePath) === configurableSubCategory
   )
-  return matched ? getRootMenuLabel(matched) : reportSubCategory
+  return matched ? getRootMenuLabel(matched) : configurableSubCategory
 }
 
 /**
  * 解析业务域（一级模块菜单）展示名
- * @param reportDomain 报表业务域
+ * @param configurableDomain 报表业务域
  * @param menus 菜单树
  * @returns {string} 展示文本；无法解析时回退数字字符串
  */
-export function resolveReportDomainLabel(
-  reportDomain?: number | null,
+export function resolveConfigurableDomainLabel(
+  configurableDomain?: number | null,
   menus?: readonly MenuTree[]
 ): string {
-  if (reportDomain == null) {
+  if (configurableDomain == null) {
     return ''
   }
   if (!menus?.length) {
-    return String(reportDomain)
+    return String(configurableDomain)
   }
-  const moduleMenu = findReportModuleMenu(menus, reportDomain)
+  const moduleMenu = findConfigurableDomainMenu(menus, configurableDomain)
   if (moduleMenu) {
     return getRootMenuLabel(moduleMenu)
   }
-  return String(reportDomain)
+  return String(configurableDomain)
 }

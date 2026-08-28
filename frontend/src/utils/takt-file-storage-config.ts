@@ -61,7 +61,7 @@ export interface TaktFileStorageConfigPayload {
   storageNaming?: string | number;
   /** OSS 提供商标识（字典 sys_oss_provider；StorageType=1） */
   ossProvider?: string;
-  /** FTP 提供商标识（字典 sys_ftp_provider_type；StorageType=2） */
+  /** FTP 提供商标识（字典 sys_ftp_provider；StorageType=2） */
   ftpProvider?: string;
 }
 

@@ -20,16 +20,24 @@ namespace Takt.Shared.Helpers;
 /// </remarks>
 public static class TaktTableArchiveKeyKindHelper
 {
-    /// <summary>yyyyMMddHHmmss</summary>
+    /// <summary>
+    /// yyyyMMddHHmmss
+    /// </summary>
     public const int YyyyMmDdHhMmSs = 1;
 
-    /// <summary>yyyyMM</summary>
+    /// <summary>
+    /// yyyyMM
+    /// </summary>
     public const int YyyyMm = 2;
 
-    /// <summary>yyyy（默认）</summary>
+    /// <summary>
+    /// yyyy（默认）
+    /// </summary>
     public const int Yyyy = 3;
 
-    /// <summary>默认归档键类型</summary>
+    /// <summary>
+    /// 默认归档键类型
+    /// </summary>
     public const int Default = Yyyy;
 
     /// <summary>

@@ -34,7 +34,7 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     public long SourceEcId { get; set; }
 
     /// <summary>
-    /// 设变号码（冗余字段，便于查询）
+    /// 设变号码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "source_ec_code", ColumnDescription = "设变号码", Length = 6, ColumnDataType = "nvarchar", IsNullable = false)]
     public string SourceEcCode { get; set; } = string.Empty;
@@ -48,62 +48,62 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     /// <summary>
     /// 完成品
     /// </summary>
-    [SugarColumn(ColumnName = "source_finished_product", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string SourceFinishedProduct { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "source_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "source_parent_part", ColumnDescription = "上阶物料", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string SourceParentPart { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "source_parent_material_code", ColumnDescription = "上阶物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_part_code", ColumnDescription = "旧物料号", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceLegacyPartCode { get; set; }
+    [SugarColumn(ColumnName = "source_old_material_code", ColumnDescription = "旧物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceOldMaterialCode { get; set; }
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_part_name", ColumnDescription = "旧物料", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceLegacyPartName { get; set; }
+    [SugarColumn(ColumnName = "source_old_material_description", ColumnDescription = "旧物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceOldMaterialDescription { get; set; }
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_usage", ColumnDescription = "旧物料用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = true)]
-    public decimal? SourceLegacyUsage { get; set; }
+    [SugarColumn(ColumnName = "source_old_usage_quantity", ColumnDescription = "旧物料用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = true)]
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_mounting_position", ColumnDescription = "旧物料安装位置", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceLegacyMountingPosition { get; set; }
+    [SugarColumn(ColumnName = "source_old_item_position", ColumnDescription = "旧物料安装位置", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceOldItemPosition { get; set; }
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "source_replacement_part_code", ColumnDescription = "新物料", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceReplacementPartCode { get; set; }
+    [SugarColumn(ColumnName = "source_new_material_code", ColumnDescription = "新物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceNewMaterialCode { get; set; }
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    [SugarColumn(ColumnName = "source_replacement_part_name", ColumnDescription = "新物料", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceReplacementPartName { get; set; }
+    [SugarColumn(ColumnName = "source_new_material_description", ColumnDescription = "新物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceNewMaterialDescription { get; set; }
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    [SugarColumn(ColumnName = "source_replacement_usage", ColumnDescription = "新物料用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = true)]
-    public decimal? SourceReplacementUsage { get; set; }
+    [SugarColumn(ColumnName = "source_new_usage_quantity", ColumnDescription = "新物料用量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = true)]
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    [SugarColumn(ColumnName = "source_replacement_mounting_position", ColumnDescription = "新物料安装位置", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceReplacementMountingPosition { get; set; }
+    [SugarColumn(ColumnName = "source_new_item_position", ColumnDescription = "新物料安装位置", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceNewItemPosition { get; set; }
 
     /// <summary>
     /// BOM番号
@@ -112,28 +112,28 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     public string? SourceBomCode { get; set; }
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     [SugarColumn(ColumnName = "source_compatibility", ColumnDescription = "兼容性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? SourceCompatibility { get; set; }
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     [SugarColumn(ColumnName = "source_distinction", ColumnDescription = "区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? SourceDistinction { get; set; }
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "source_instruction", ColumnDescription = "安排指示", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? SourceInstruction { get; set; }
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_part_disposition", ColumnDescription = "旧物料处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceLegacyPartDisposition { get; set; }
+    [SugarColumn(ColumnName = "source_old_part_disposition", ColumnDescription = "旧物料处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceOldPartDisposition { get; set; }
 
     /// <summary>
     /// BOM生效日期
@@ -147,12 +147,13 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;
 
-    /// <summary>
-    /// 设变来源主表
-    /// </summary>
     // ========================================
     // 导航属性区域
     // ========================================
+
+    /// <summary>
+    /// 设变来源主表
+    /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(SourceEcId))]
     public TaktSourceEc? SourceEc { get; set; }
 }

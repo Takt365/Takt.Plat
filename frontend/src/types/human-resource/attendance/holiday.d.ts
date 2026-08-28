@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 假日实体 假日条目，用于考勤日历、排班与薪资计算；字典 hr_holiday_category、hr_holiday_working_day_type 与字段取值一致 公司级实体：按 TenantCode + CompanyCode 隔离；同一公司内以开始日期+结束日期+假日类型唯一
+ * 假日实体 假日条目，用于考勤日历、排班与薪资计算；字典 humanresource_attendance_holiday_category、humanresource_attendance_holiday_working_day_type 与字段取值一致 公司级实体：按 TenantCode + CompanyCode 隔离；同一公司内以开始日期+结束日期+假日类型唯一
  * 对应前端 TaktHolidayDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Holiday
@@ -39,7 +39,7 @@ export interface Holiday extends CompanyDtoBase {
   holidayName?: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
+   * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType?: number;
 
@@ -54,7 +54,7 @@ export interface Holiday extends CompanyDtoBase {
   endDate?: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay?: number;
 
@@ -107,7 +107,7 @@ export interface HolidayExport {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
+   * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -122,7 +122,7 @@ export interface HolidayExport {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 
@@ -174,7 +174,7 @@ export interface HolidayTheme {
   holidayName: string;
 
   /**
-   * 假日类型（字典 hr_holiday_category；0=法定 1=调休 2=公司）
+   * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
    */
   holidayType: number;
 
@@ -189,7 +189,7 @@ export interface HolidayTheme {
   endDate: string;
 
   /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
    */
   isWorkingDay: number;
 

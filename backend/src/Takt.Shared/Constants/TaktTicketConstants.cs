@@ -17,28 +17,44 @@ namespace Takt.Shared.Constants;
 /// </summary>
 public static class TaktTicketConstants
 {
-    /// <summary>新建</summary>
+    /// <summary>
+    /// 新建
+    /// </summary>
     public const int New = 0;
 
-    /// <summary>已分配</summary>
+    /// <summary>
+    /// 已分配
+    /// </summary>
     public const int Assigned = 1;
 
-    /// <summary>处理中</summary>
+    /// <summary>
+    /// 处理中
+    /// </summary>
     public const int InProgress = 2;
 
-    /// <summary>待确认</summary>
+    /// <summary>
+    /// 待确认
+    /// </summary>
     public const int PendingConfirm = 3;
 
-    /// <summary>已完成</summary>
+    /// <summary>
+    /// 已完成
+    /// </summary>
     public const int Completed = 4;
 
-    /// <summary>已关闭</summary>
+    /// <summary>
+    /// 已关闭
+    /// </summary>
     public const int Closed = 5;
 
-    /// <summary>已取消</summary>
+    /// <summary>
+    /// 已取消
+    /// </summary>
     public const int Cancelled = 6;
 
-    /// <summary>重新打开（服务台 ITSM 专用）</summary>
+    /// <summary>
+    /// 重新打开（服务台 ITSM 专用）
+    /// </summary>
     public const int Reopened = 7;
 
     /// <summary>

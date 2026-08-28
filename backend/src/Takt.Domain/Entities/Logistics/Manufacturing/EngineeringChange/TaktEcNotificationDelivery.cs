@@ -51,12 +51,12 @@ public class TaktEcNotificationDelivery : TaktCompanyEntityBase
     /// <summary>
     /// 目标部门编码（TaktDept.DeptCode，如 D0710、D0810）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "目标部门编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "目标部门编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
     /// <summary>
-    /// 目标部门名称（冗余）
+    /// 目标部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "目标部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "目标部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? DeptName { get; set; }
     /// <summary>
     /// 优先级（1=普通，2=高，3=紧急）

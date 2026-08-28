@@ -57,7 +57,7 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 
@@ -146,7 +146,7 @@ public class TaktEmployeeFamilyQueryDto : TaktPagedQuery
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -253,7 +253,7 @@ public class TaktEmployeeFamilyCreateDto
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 
@@ -365,7 +365,7 @@ public class TaktEmployeeFamilyTemplateDto
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -453,7 +453,7 @@ public class TaktEmployeeFamilyImportDto
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -547,7 +547,7 @@ public class TaktEmployeeFamilyExportDto
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
+    /// 与员工关系（字典 humanresource_personnel_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 

@@ -78,17 +78,16 @@ public class TaktMaterialRequirementsPlanning : TaktApprovalEntityBase
     public DateTime PlanPeriodEnd { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "planner_employee_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
-
+    public long? PlannerEmployeeId { get; set; }
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlanBy { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "planner_name", ColumnDescription = "计划人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PlannerName { get; set; }
 
     /// <summary>
     /// 运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）

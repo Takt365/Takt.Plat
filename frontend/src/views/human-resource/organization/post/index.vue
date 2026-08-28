@@ -94,7 +94,7 @@
         <template v-else-if="column.key === 'educationRequired'">
           <TaktDictTag
             :value="getPostDictValue(record, 'educationRequired')"
-            dict-type="hr_education_level_category"
+            dict-type="humanresource_personnel_education_level"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
@@ -271,7 +271,7 @@
       <a-form-item :label="pi.queryLabel('educationRequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.educationRequired"
-          dict-type="hr_education_level_category"
+          dict-type="humanresource_personnel_education_level"
           :placeholder="pi.queryPh('educationRequired', 'select')"
           allow-clear
         />

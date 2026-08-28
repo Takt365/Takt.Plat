@@ -59,7 +59,7 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisedBy { get; set; }
     /// <summary>
-    /// 修订人姓名（冗余字段，便于查询）
+    /// 修订人姓名（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "revised_by_name", ColumnDescription = "修订人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? RevisedByName { get; set; }

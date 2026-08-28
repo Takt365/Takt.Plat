@@ -33,7 +33,7 @@ public class TaktFileStorageConfigPayload
     public string? OssProvider { get; set; }
 
     /// <summary>
-    /// FTP 提供商标识（字典 sys_ftp_provider_type，如 teac_cn；StorageType=2 时使用）
+    /// FTP 提供商标识（字典 sys_ftp_provider，如 teac_cn；StorageType=2 时使用）
     /// </summary>
     public string? FtpProvider { get; set; }
 }

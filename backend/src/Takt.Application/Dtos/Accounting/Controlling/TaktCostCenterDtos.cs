@@ -52,7 +52,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int CostCenterType { get; set; }
 
@@ -162,7 +162,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int? CostCenterType { get; set; }
 
@@ -293,7 +293,7 @@ public class TaktCostCenterCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int CostCenterType { get; set; } = 0;
 
@@ -464,7 +464,7 @@ public class TaktCostCenterTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int? CostCenterType { get; set; }
 
@@ -563,7 +563,7 @@ public class TaktCostCenterImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int? CostCenterType { get; set; }
 
@@ -662,7 +662,7 @@ public class TaktCostCenterExportDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// 成本中心类型（字典 accounting_controlling_cost_center_type；0=成本中心 1=利润中心 2=投资中心）
     /// </summary>
     public int CostCenterType { get; set; } = 0;
 

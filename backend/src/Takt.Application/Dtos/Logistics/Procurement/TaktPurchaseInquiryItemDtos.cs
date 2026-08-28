@@ -57,7 +57,7 @@ public class TaktPurchaseInquiryItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     public string AllocationCategory { get; set; } = string.Empty;
 
@@ -77,7 +77,7 @@ public class TaktPurchaseInquiryItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string InquiryUnit { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktPurchaseInquiryItemDto : TaktCompanyDtoBase
     public decimal InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int PurchasePerUnit { get; set; } = 0;
 
@@ -170,7 +170,7 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -190,7 +190,7 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? InquiryUnit { get; set; } = string.Empty;
 
@@ -200,7 +200,7 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     public decimal? InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int? PurchasePerUnit { get; set; }
 
@@ -301,9 +301,9 @@ public class TaktPurchaseInquiryItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
-    [Required(ErrorMessage = "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）不能为空")]
+    [Required(ErrorMessage = "分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）不能为空")]
     public string AllocationCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -323,9 +323,9 @@ public class TaktPurchaseInquiryItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string InquiryUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -334,7 +334,7 @@ public class TaktPurchaseInquiryItemCreateDto
     public decimal InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int PurchasePerUnit { get; set; } = 0;
 
@@ -469,7 +469,7 @@ public class TaktPurchaseInquiryItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -489,7 +489,7 @@ public class TaktPurchaseInquiryItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? InquiryUnit { get; set; } = string.Empty;
 
@@ -499,7 +499,7 @@ public class TaktPurchaseInquiryItemTemplateDto
     public decimal? InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int? PurchasePerUnit { get; set; }
 
@@ -587,7 +587,7 @@ public class TaktPurchaseInquiryItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -607,7 +607,7 @@ public class TaktPurchaseInquiryItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? InquiryUnit { get; set; } = string.Empty;
 
@@ -617,7 +617,7 @@ public class TaktPurchaseInquiryItemImportDto
     public decimal? InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int? PurchasePerUnit { get; set; }
 
@@ -711,7 +711,7 @@ public class TaktPurchaseInquiryItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）
+    /// 分配类别（字典 logistics_sales_allocation_category；A=资产，K=成本中心，F=订单）
     /// </summary>
     public string AllocationCategory { get; set; } = string.Empty;
 
@@ -731,7 +731,7 @@ public class TaktPurchaseInquiryItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 询价单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string InquiryUnit { get; set; } = string.Empty;
 
@@ -741,7 +741,7 @@ public class TaktPurchaseInquiryItemExportDto
     public decimal InquiryQuantity { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+    /// 价格单位（字典 logistics_materials_price_unit_param：1/100/1000/10000；默认 1000）
     /// </summary>
     public int PurchasePerUnit { get; set; } = 0;
 

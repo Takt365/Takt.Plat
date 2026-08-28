@@ -20,6 +20,13 @@ export const COMMON_ENTITY_FIELD_I18N_KEYS: Readonly<Record<string, string>> = {
   companyDefaultCulture: 'common.page.entity.companydefaultculture',
   createdAtStart: 'common.page.entity.createdatstart',
   createdAtEnd: 'common.page.entity.createdatend',
+  approvalStatus: 'common.page.entity.approvalstatus',
+  initiatorId: 'common.page.entity.initiatorid',
+  initiatedAt: 'common.page.entity.initiatedat',
+  approvalOpinion: 'common.page.entity.approvalopinion',
+  approvedBy: 'common.page.entity.approvedby',
+  approvedAt: 'common.page.entity.approvedat',
+  flowInstanceId: 'common.page.entity.flowinstanceid',
 }
 
 /** 全局属性 camelCase → I18nKey 末段覆盖 */
@@ -129,7 +136,12 @@ export function resolveQueryRangeFieldLabel(
   if (rangeMatch) {
     const baseName = rangeMatch[1]
     const baseLower = baseName.toLowerCase()
-    if (baseLower.includes('time') || baseLower.includes('date')) {
+    if (
+      baseLower.includes('time') ||
+      baseLower.includes('date') ||
+      baseName === 'initiatedAt' ||
+      baseName === 'approvedAt'
+    ) {
       const commonKey =
         rangeMatch[2] === 'Start' ? 'common.page.entity.createdatstart' : 'common.page.entity.createdatend'
       const baseLabel = t(resolveEntityFieldI18nKey(entitySlug, baseName))

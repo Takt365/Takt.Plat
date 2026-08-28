@@ -138,7 +138,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 幂等写入家庭/工作/常住三类地址（字典 hr_employee_address_type：1/2/3）
+    /// 幂等写入家庭/工作/常住三类地址（字典 humanresource_personnel_employee_address_type：1/2/3）
     /// </summary>
     private static async Task<(int InsertCount, int UpdateCount)> EnsureSeedAddressesAsync(
         ITaktCompanySeedRepository<TaktEmployeeAddress> addressRepository,

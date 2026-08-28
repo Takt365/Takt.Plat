@@ -75,7 +75,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.benefitCategory"
-                  dict-type="hr_benefit_category"
+                  dict-type="humanresource_benefits_benefit_category"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.benefitcategory') })"
                 />
               </a-form-item>
@@ -87,7 +87,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.benefitType"
-                  dict-type="hr_benefit_type"
+                  dict-type="humanresource_benefits_benefit_type"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.benefittype') })"
                 />
               </a-form-item>
@@ -99,7 +99,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.paymentCycle"
-                  dict-type="hr_benefit_payment_cycle_type"
+                  dict-type="humanresource_benefits_benefit_payment_cycle"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.paymentcycle') })"
                 />
               </a-form-item>

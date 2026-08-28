@@ -59,7 +59,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.addressType"
-                  dict-type="hr_employee_address_type"
+                  dict-type="humanresource_personnel_employee_address_type"
                   :placeholder="pi.ph('addressType')"
                 />
               </a-form-item>

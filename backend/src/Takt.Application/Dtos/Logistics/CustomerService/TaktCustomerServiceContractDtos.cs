@@ -124,7 +124,7 @@ public class TaktCustomerServiceContractDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）（越小越靠前）
@@ -262,7 +262,7 @@ public class TaktCustomerServiceContractQueryDto : TaktPagedQuery
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）（越小越靠前）
@@ -407,7 +407,7 @@ public class TaktCustomerServiceContractCreateDto
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -602,7 +602,7 @@ public class TaktCustomerServiceContractTemplateDto
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -725,7 +725,7 @@ public class TaktCustomerServiceContractImportDto
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -854,7 +854,7 @@ public class TaktCustomerServiceContractExportDto
     /// <summary>
     /// 客户经理（人员代码）
     /// </summary>
-    public string? AccountManager { get; set; } = string.Empty;
+    public string? AccountManagerEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）（越小越靠前）

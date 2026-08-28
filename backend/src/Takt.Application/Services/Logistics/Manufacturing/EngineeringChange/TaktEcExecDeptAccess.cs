@@ -23,23 +23,45 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 /// </summary>
 public sealed class TaktEcExecBaseRow
 {
-    /// <summary>主键</summary>
+    /// <summary>
+    /// 主键
+    /// </summary>
     public long Id { get; init; }
-    /// <summary>设变明细 ID</summary>
+    /// <summary>
+    /// 设变明细 ID
+    /// </summary>
     public long EcnDetailId { get; init; }
-    /// <summary>设变单号</summary>
+    /// <summary>
+    /// 设变单号
+    /// </summary>
     public string EcCode { get; init; } = string.Empty;
-    /// <summary>部门编码</summary>
+    /// <summary>
+    /// 部门编码
+    /// </summary>
     public string DeptCode { get; init; } = string.Empty;
-    /// <summary>行号</summary>
+    /// <summary>
+    /// 行号
+    /// </summary>
     public int LineNumber { get; init; }
-    /// <summary>是否实施</summary>
+    /// <summary>
+    /// 是否实施
+    /// </summary>
     public int IsImplemented { get; init; }
-    /// <summary>执行内容</summary>
+    /// <summary>
+    /// 执行内容
+    /// </summary>
     public string? ExecContent { get; init; }
-    /// <summary>租户编码</summary>
+    /// <summary>
+    /// 是否作废
+    /// </summary>
+    public int IsObsolete { get; init; }
+    /// <summary>
+    /// 租户编码
+    /// </summary>
     public string TenantCode { get; init; } = string.Empty;
-    /// <summary>公司代码</summary>
+    /// <summary>
+    /// 公司代码
+    /// </summary>
     public string CompanyCode { get; init; } = string.Empty;
 }
 
@@ -80,10 +102,14 @@ public class TaktEcExecDeptAccess
         _teRepository = teRepository;
     }
 
-    /// <summary>生管课仓储</summary>
+    /// <summary>
+    /// 生管课仓储
+    /// </summary>
     public ITaktCompanyRepository<TaktEcSeikan> PmcRepository => _pmcRepository;
 
-    /// <summary>制二课仓储</summary>
+    /// <summary>
+    /// 制二课仓储
+    /// </summary>
     public ITaktCompanyRepository<TaktEcSeizounika> PcbaRepository => _pcbaRepository;
 
     /// <summary>
@@ -253,6 +279,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -265,6 +292,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -277,6 +305,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -289,6 +318,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -301,6 +331,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -313,6 +344,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -325,6 +357,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },
@@ -337,6 +370,7 @@ public class TaktEcExecDeptAccess
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
             ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
             TenantCode = e.TenantCode,
             CompanyCode = e.CompanyCode,
         },

@@ -12,6 +12,7 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
+using Takt.Domain.Interfaces;
 
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
@@ -22,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_ec_seikan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_seikan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcnDetailId), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_seikan_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-public class TaktEcSeikan : TaktCompanyEntityBase
+public class TaktEcSeikan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
 {
     /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
@@ -42,10 +43,51 @@ public class TaktEcSeikan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+    /// 机种编码（冗余：来自 TaktEcDetail.EcModelCode）
     /// </summary>
-    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 5, IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_model_code", ColumnDescription = "机种编码", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcFinishedGoods { get; set; }
+
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_finished_goods_description", ColumnDescription = "完成品描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcFinishedGoodsDescription { get; set; }
+
+    /// <summary>
+    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_parent_material_code", ColumnDescription = "上阶物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcParentMaterialCode { get; set; }
+
+    /// <summary>
+    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_parent_material_description", ColumnDescription = "上阶物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcParentMaterialDescription { get; set; }
+
+    /// <summary>
+    /// 完成品物料状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// </summary>
+    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "完成品物料状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
+    public string DiscontinuedStatus { get; set; } = "Z0";
+
+    /// <summary>
+    /// 部门编码（TaktDept.DeptCode；本表固定课别）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? DeptName { get; set; }
     /// <summary>
     /// 是否实施（0=否 1=是，字典 sys_yes_no）
     /// </summary>
@@ -56,19 +98,29 @@ public class TaktEcSeikan : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "exec_content", ColumnDescription = "执行内容", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? ExecContent { get; set; }
-    /// <summary>预计生产日期</summary>
+    /// <summary>
+    /// 预计生产日期
+    /// </summary>
     [SugarColumn(ColumnName = "scheduled_production_date", ColumnDescription = "预计生产日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ScheduledProductionDate { get; set; }
-    /// <summary>预定批次</summary>
+    /// <summary>
+    /// 预定批次
+    /// </summary>
     [SugarColumn(ColumnName = "scheduled_batch", ColumnDescription = "预定批次", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ScheduledBatch { get; set; }
-    /// <summary>Po残</summary>
+    /// <summary>
+    /// Po残
+    /// </summary>
     [SugarColumn(ColumnName = "po_remainder", ColumnDescription = "Po残", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? PoRemainder { get; set; }
-    /// <summary>结余</summary>
+    /// <summary>
+    /// 结余
+    /// </summary>
     [SugarColumn(ColumnName = "balance", ColumnDescription = "结余", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? Balance { get; set; }
-    /// <summary>旧品处理</summary>
+    /// <summary>
+    /// 旧品处理
+    /// </summary>
     [SugarColumn(ColumnName = "old_product_handling", ColumnDescription = "旧品处理", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? OldProductHandling { get; set; }
 

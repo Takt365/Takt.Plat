@@ -51,17 +51,6 @@ public class TaktSalesGroupDto : TaktCompanyDtoBase
     public string? SalesGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
-    /// 销售组负责人用户 名称（填充字段）
-    /// </summary>
-    public string? ResponsibleUserName { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -132,12 +121,6 @@ public class TaktSalesGroupQueryDto : TaktPagedQuery
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -230,12 +213,6 @@ public class TaktSalesGroupCreateDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -406,12 +383,6 @@ public class TaktSalesGroupTemplateDto
     public string? SalesGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
-
-    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -482,12 +453,6 @@ public class TaktSalesGroupImportDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -566,12 +531,6 @@ public class TaktSalesGroupExportDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 销售组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleUserId { get; set; }
 
     /// <summary>
     /// 联系电话

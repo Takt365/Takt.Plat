@@ -69,7 +69,7 @@
           <a-form-item :label="t('foundation.file.page.ftp.provider')" name="ftpProvider">
             <TaktSelect
               v-model:value="formState.ftpProvider"
-              dict-type="sys_ftp_provider_type"
+              dict-type="sys_ftp_provider"
               :placeholder="t('common.page.form.placeholder.select', { field: t('foundation.file.page.ftp.provider') })"
               size="small"
             />

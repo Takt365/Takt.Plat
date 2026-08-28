@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktQualityGroupI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -125,15 +125,6 @@ public class TaktQualityGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualitygroup.description", "zh-CN", "质量组描述", "质量组描述"),
             // entity.qualitygroup.description
             new TranslationSeedItem("entity.qualitygroup.description", "zh-HK", "质量组描述_hk", "质量组描述"),
-
-            // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "en-US", "负责人用户ID_us", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-CN", "负责人用户ID", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
-            // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.qualitygroup.contactphone
             new TranslationSeedItem("entity.qualitygroup.contactphone", "en-US", "联系电话_us", "联系电话"),

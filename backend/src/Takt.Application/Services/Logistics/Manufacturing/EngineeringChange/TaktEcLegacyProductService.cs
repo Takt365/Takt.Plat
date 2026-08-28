@@ -107,7 +107,7 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         {
             throw new TaktBusinessException("设变明细不存在");
         }
-        detail.IsEndOfLine = dto.IsEndOfLine;
+        detail.DiscontinuedStatus = dto.DiscontinuedStatus;
         detail.Remark = dto.Remark;
         await _ecDetailRepository.UpdateAsync(detail);
         var pmcRepo = _ecExecDeptAccess.PmcRepository;
@@ -155,10 +155,8 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         {
             rows.Add(await MapLegacyProductRowAsync(detail));
         }
-        return await TaktExcelHelper.ExportAsync(
-            rows,
-            sheetName ?? "旧品管制",
-            fileName ?? "旧品管制导出.xlsx");
+        var (sheet, fileBase) = TaktNamingHelper.ResolveExcelImportExport(sheetName, fileName, "TaktEcLegacyProduct");
+        return await TaktExcelHelper.ExportAsync(rows, sheet, fileBase);
     }
 
     /// <summary>
@@ -169,45 +167,70 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
     private async Task<TaktEcLegacyProductDto> MapLegacyProductRowAsync(TaktEcDetail detail)
     {
         var dto = detail.Adapt<TaktEcLegacyProductDto>();
+        dto.EcDetailId = detail.Id;
+        dto.EcLegacyProductId = detail.Id;
+        dto.EcIsCompatible = detail.EcIsCompatible;
+        dto.EcSecondDistinction = detail.EcSecondDistinction;
+        dto.EcInstruction = detail.EcInstruction;
+        dto.EcOldPartDisposition = detail.EcOldPartDisposition;
         var pmc = await _ecExecDeptAccess.PmcRepository.FirstAsync(x => x.EcnDetailId == detail.Id);
         dto.OldProductHandling = pmc?.OldProductHandling;
         return dto;
     }
 
     /// <summary>
-    /// 构建旧品管制查询表达式
+    /// 构建旧品管制查询表达式（旧物料非空且不为 0；同机种+旧物料仅保留最大 Id 一行）
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>表达式</returns>
     private static Expression<Func<TaktEcDetail, bool>> QueryExpression(TaktEcLegacyProductQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktEcDetail>();
-        exp = exp.And(x => x.EcOldItem != null && x.EcOldItem != string.Empty);
+        exp = exp.And(x =>
+            x.EcOldMaterialCode != null
+            && x.EcOldMaterialCode != string.Empty
+            && x.EcOldMaterialCode != "0");
+        exp = exp.And(x =>
+            !SqlFunc.Subqueryable<TaktEcDetail>()
+                .Where(s =>
+                    s.TenantCode == x.TenantCode
+                    && s.CompanyCode == x.CompanyCode
+                    && s.IsDeleted == 0
+                    && s.EcModelCode == x.EcModelCode
+                    && s.EcOldMaterialCode == x.EcOldMaterialCode
+                    && s.EcOldMaterialCode != null
+                    && s.EcOldMaterialCode != string.Empty
+                    && s.EcOldMaterialCode != "0"
+                    && s.Id > x.Id)
+                .Any());
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.EcCode != null && x.EcCode.Contains(keywords))
-                || (x.EcModel != null && x.EcModel.Contains(keywords))
-                || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
-                || (x.EcOldText != null && x.EcOldText.Contains(keywords)));
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords))
+                || (x.EcOldMaterialDescription != null && x.EcOldMaterialDescription.Contains(keywords)));
+        }
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
             exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcModel))
+        if (!string.IsNullOrEmpty(queryDto?.EcModelCode))
         {
-            exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
+            exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(queryDto.EcModelCode));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcOldItem))
+        if (!string.IsNullOrEmpty(queryDto?.EcOldMaterialCode))
         {
-            exp = exp.And(x => x.EcOldItem != null && x.EcOldItem.Contains(queryDto.EcOldItem));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            exp = exp.And(x => x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(queryDto.EcOldMaterialCode));
         }
 
         return exp.ToExpression();

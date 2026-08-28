@@ -74,13 +74,13 @@
         <template v-if="column.key === 'holidayType'">
           <TaktDictTag
             :value="getHolidayField(record, 'holidayType')"
-            dict-type="hr_holiday_category"
+            dict-type="humanresource_attendance_holiday_category"
           />
         </template>
         <template v-else-if="column.key === 'isWorkingDay'">
           <TaktDictTag
             :value="getHolidayField(record, 'isWorkingDay')"
-            dict-type="hr_holiday_working_day_type"
+            dict-type="humanresource_attendance_holiday_working_day_type"
           />
         </template>
       </template>
@@ -139,7 +139,7 @@
       <a-form-item :label="t('entity.holiday.type')">
         <TaktSelect
           v-model:value="advancedQueryForm.holidayType"
-          dict-type="hr_holiday_category"
+          dict-type="humanresource_attendance_holiday_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.type') })"
           allow-clear
         />
@@ -189,7 +189,7 @@
       <a-form-item :label="t('entity.holiday.isworkingday')">
         <TaktSelect
           v-model:value="advancedQueryForm.isWorkingDay"
-          dict-type="hr_holiday_working_day_type"
+          dict-type="humanresource_attendance_holiday_working_day_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') })"
           allow-clear
         />

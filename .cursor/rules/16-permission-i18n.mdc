@@ -50,8 +50,9 @@ CRUD 能力 ↔ 权限末段映射见 `12-crud` §三。
 |---|------|------|
 | 1 | **菜单种子** `TaktMenu.Permission`（页面菜单，末段常为 `list`） | `identity:user:list` |
 | 2 | **按钮菜单种子** `TaktMenuButtonSeedData`（`MenuType=2`，末段为操作） | `identity:user:create` |
-| 3 | **后端** `[TaktPermission("…", "显示名")]` | 与对应 API 操作一致 |
-| 4 | **前端** `v-permission` / `TaktToolsBar` 的 `*-permission` | `create-permission="identity:user:create"` |
+| 3 | **附属能力种子** `TaktMenuOtherSeedData`（无独立页面的嵌套资源 `MenuType=2`） | `routine:meeting:center:room:create` |
+| 4 | **后端** `[TaktPermission("…", "显示名")]` | 与对应 API 操作一致 |
+| 5 | **前端** `v-permission` / `TaktToolsBar` 的 `*-permission` | `create-permission="identity:user:create"` |
 
 **页面菜单**参照 `TaktMenuLevel2SeedData`（`I18nKey` 与 `Permission` 分列）：
 
@@ -62,6 +63,8 @@ menu.RoutePath = "/identity/user";
 ```
 
 **按钮菜单**由 `TaktMenuButtonSeedData` 按页面 `Permission` 推导：`{模块}:{菜单段}:{操作}`；按钮文案键为 `common.page.button.{操作}`（翻译键，非权限码；与工具栏 `t()` 共用）。
+
+**无独立页面的附属 CRUD**（会议纪要/会议室/参与人、文管版本、新闻评论/点赞/收藏/分享/阅读等）由 `TaktMenuOtherSeedData` 挂在父级 L2 页面下，权限形如 `{父页去掉:list}:{资源}:{操作}`（含 `list`）；控制器与前端 **必须** 与该码一致，❌ 禁止再虚构独立三级页面菜单仅为了生成按钮。
 
 ### 1.3 标准 CRUD 权限末段
 
@@ -216,4 +219,6 @@ menu.RoutePath = "/identity/user";
 - 禁止把 `identity:user:create` 写入 `t()`；禁止把 `entity.user.name` 写入 `v-permission`
 - 改权限必查：菜单、按钮种子、控制器、前端工具栏/指令
 - 改翻译键必查：菜单 I18nKey、entity 种子、前端 `t()` / 静态 locales
+- **菜单结构调整**：只写目标态（如 L2 页面 + 视图内按钮）；❌ 禁止软删历史三级菜单的兼容种子（`00-project` §1.9）
+- **无独立页面的附属 API**：在 `TaktMenuOtherSeedData` 登记嵌套权限，并对齐控制器 / 前端；❌ 禁止为附属能力新建 L3 页面菜单仅用于出按钮
 - 实现清单：`.cursor/skills/16-permission-i18n/SKILL.md`

@@ -21,8 +21,8 @@ public static class TaktPurchasePriceTaxHelper
     /// 按主表税别/税率，由采购价格换算含税单价与未税单价（decimal 保留 5 位）
     /// </summary>
     /// <param name="purchasePrice">采购价格（录入价）</param>
-    /// <param name="taxCategory">税别（字典 accounting_tax_category；1=含税视为含税价，其余视为未税价）</param>
-    /// <param name="taxRate">税率（字典 accounting_tax_rate_param；13 表示 13%）</param>
+    /// <param name="taxCategory">税别（字典 accounting_financial_tax_category；1=含税视为含税价，其余视为未税价）</param>
+    /// <param name="taxRate">税率（字典 accounting_financial_tax_rate_param；13 表示 13%）</param>
     /// <returns>含税单价与未税单价</returns>
     /// <exception cref="ArgumentOutOfRangeException">税率为负</exception>
     public static (decimal TaxIncludedUnitPrice, decimal TaxExcludedUnitPrice) ResolveRedundantUnitPrices(

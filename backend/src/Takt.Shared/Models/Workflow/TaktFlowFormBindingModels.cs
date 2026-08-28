@@ -17,10 +17,14 @@ namespace Takt.Shared.Models.Workflow;
 /// </summary>
 public class TaktFlowFormBindingRoot
 {
-    /// <summary>表单字段与库列映射</summary>
+    /// <summary>
+    /// 表单字段与库列映射
+    /// </summary>
     public List<TaktFlowFormFieldMapping> Fields { get; set; } = new();
 
-    /// <summary>业务状态列终态映射（可选）</summary>
+    /// <summary>
+    /// 业务状态列终态映射（可选）
+    /// </summary>
     public TaktFlowFormBusinessBinding? Business { get; set; }
 }
 
@@ -29,22 +33,34 @@ public class TaktFlowFormBindingRoot
 /// </summary>
 public class TaktFlowFormFieldMapping
 {
-    /// <summary>数据库列名（蛇形）</summary>
+    /// <summary>
+    /// 数据库列名（蛇形）
+    /// </summary>
     public string DbColumnName { get; set; } = string.Empty;
 
-    /// <summary>C# / FrmData 字段名（camelCase）</summary>
+    /// <summary>
+    /// C# / FrmData 字段名（camelCase）
+    /// </summary>
     public string CsharpColumnName { get; set; } = string.Empty;
 
-    /// <summary>列说明</summary>
+    /// <summary>
+    /// 列说明
+    /// </summary>
     public string? ColumnDescription { get; set; }
 
-    /// <summary>数据类型</summary>
+    /// <summary>
+    /// 数据类型
+    /// </summary>
     public string? DataType { get; set; }
 
-    /// <summary>展示类型</summary>
+    /// <summary>
+    /// 展示类型
+    /// </summary>
     public string? DisplayType { get; set; }
 
-    /// <summary>字典类型编码</summary>
+    /// <summary>
+    /// 字典类型编码
+    /// </summary>
     public string? DictTypeCode { get; set; }
 }
 
@@ -53,21 +69,33 @@ public class TaktFlowFormFieldMapping
 /// </summary>
 public class TaktFlowFormBusinessBinding
 {
-    /// <summary>业务状态列名（蛇形，如 leave_status）</summary>
+    /// <summary>
+    /// 业务状态列名（蛇形，如 leave_status）
+    /// </summary>
     public string? BusinessStatusColumn { get; set; }
 
-    /// <summary>审批中业务状态值</summary>
+    /// <summary>
+    /// 审批中业务状态值
+    /// </summary>
     public int? StatusInProgress { get; set; }
 
-    /// <summary>已通过业务状态值</summary>
+    /// <summary>
+    /// 已通过业务状态值
+    /// </summary>
     public int? StatusApproved { get; set; }
 
-    /// <summary>已驳回业务状态值</summary>
+    /// <summary>
+    /// 已驳回业务状态值
+    /// </summary>
     public int? StatusRejected { get; set; }
 
-    /// <summary>已撤销/撤回业务状态值</summary>
+    /// <summary>
+    /// 已撤销/撤回业务状态值
+    /// </summary>
     public int? StatusCancelled { get; set; }
 
-    /// <summary>允许提交审批的业务状态值列表（未配置则不校验业务状态列）</summary>
+    /// <summary>
+    /// 允许提交审批的业务状态值列表（未配置则不校验业务状态列）
+    /// </summary>
     public List<int>? SubmitAllowedBusinessStatuses { get; set; }
 }

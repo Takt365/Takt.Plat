@@ -49,17 +49,17 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -74,7 +74,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -94,7 +94,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   inspectionQty: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
@@ -134,7 +134,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -189,17 +189,17 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -224,7 +224,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   tSideAssemblyDateEnd?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -244,7 +244,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   inspectionQty?: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
@@ -284,7 +284,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -361,17 +361,17 @@ export interface PcbaInspectionDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -386,7 +386,7 @@ export interface PcbaInspectionDetailCreate {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -406,7 +406,7 @@ export interface PcbaInspectionDetailCreate {
   inspectionQty: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
@@ -446,7 +446,7 @@ export interface PcbaInspectionDetailCreate {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -495,7 +495,7 @@ export interface PcbaInspectionDetailStatus {
   pcbaInspectionDetailId: string;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
@@ -558,17 +558,17 @@ export interface PcbaInspectionDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -583,7 +583,7 @@ export interface PcbaInspectionDetailTemplate {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -603,7 +603,7 @@ export interface PcbaInspectionDetailTemplate {
   inspectionQty?: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
@@ -643,7 +643,7 @@ export interface PcbaInspectionDetailTemplate {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -710,17 +710,17 @@ export interface PcbaInspectionDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -735,7 +735,7 @@ export interface PcbaInspectionDetailImport {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -755,7 +755,7 @@ export interface PcbaInspectionDetailImport {
   inspectionQty?: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus?: number;
 
@@ -795,7 +795,7 @@ export interface PcbaInspectionDetailImport {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -849,17 +849,17 @@ export interface PcbaInspectionDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+   * PCBA板别（字典 logistics_manufacturing_pcba_function，存 DictValue）
    */
   pcbaBoardType?: string;
 
   /**
-   * 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+   * 目视线别（字典 logistics_manufacturing_visual_inspection_line_category，存 DictValue）
    */
   visualInspectionLine?: string;
 
   /**
-   * AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+   * AOI线别（字典 logistics_manufacturing_aoi_inspection_line_category，存 DictValue）
    */
   aoiLine?: string;
 
@@ -874,7 +874,7 @@ export interface PcbaInspectionDetailExport {
   tSideAssemblyDate?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
@@ -894,7 +894,7 @@ export interface PcbaInspectionDetailExport {
   inspectionQty: number;
 
   /**
-   * 检查状态（字典 logistics_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
+   * 检查状态（字典 logistics_manufacturing_pcba_inspection_status；1=检查中 2=测试中 3=检查完成 4=测试完成）
    */
   inspectionStatus: number;
 
@@ -934,7 +934,7 @@ export interface PcbaInspectionDetailExport {
   content?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
 

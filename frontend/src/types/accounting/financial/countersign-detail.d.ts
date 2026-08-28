@@ -49,7 +49,7 @@ export interface CountersignDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory: string;
 
@@ -124,7 +124,7 @@ export interface CountersignDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory?: string;
 
@@ -226,7 +226,7 @@ export interface CountersignDetailCreate {
   lineNumber: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory: string;
 
@@ -344,7 +344,7 @@ export interface CountersignDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory?: string;
 
@@ -436,7 +436,7 @@ export interface CountersignDetailImport {
   lineNumber?: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory?: string;
 
@@ -515,7 +515,7 @@ export interface CountersignDetailExport {
   lineNumber: number;
 
   /**
-   * 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+   * 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
    */
   allocationCategory: string;
 

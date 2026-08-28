@@ -74,7 +74,7 @@ export interface GenTable extends TenantCoreDtoBase {
   inDatabase: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory: string;
 
@@ -99,7 +99,7 @@ export interface GenTable extends TenantCoreDtoBase {
   permsPrefix: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -179,17 +179,17 @@ export interface GenTable extends TenantCoreDtoBase {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath: string;
 
@@ -219,22 +219,22 @@ export interface GenTable extends TenantCoreDtoBase {
   sortField: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle: number;
 
@@ -334,7 +334,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   inDatabase?: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory?: string;
 
@@ -359,7 +359,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   permsPrefix?: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -439,17 +439,17 @@ export interface GenTableQuery extends TaktPagedQuery {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod?: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath?: string;
 
@@ -474,22 +474,22 @@ export interface GenTableQuery extends TaktPagedQuery {
   sortField?: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType?: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi?: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout?: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle?: number;
 
@@ -603,7 +603,7 @@ export interface GenTableCreate {
   inDatabase: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory: string;
 
@@ -628,7 +628,7 @@ export interface GenTableCreate {
   permsPrefix: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -708,17 +708,17 @@ export interface GenTableCreate {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath: string;
 
@@ -743,22 +743,22 @@ export interface GenTableCreate {
   sortField: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle: number;
 
@@ -887,7 +887,7 @@ export interface GenTableTemplate {
   inDatabase?: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory?: string;
 
@@ -912,7 +912,7 @@ export interface GenTableTemplate {
   permsPrefix?: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -992,17 +992,17 @@ export interface GenTableTemplate {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod?: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath?: string;
 
@@ -1027,22 +1027,22 @@ export interface GenTableTemplate {
   sortField?: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType?: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi?: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout?: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle?: number;
 
@@ -1151,7 +1151,7 @@ export interface GenTableImport {
   inDatabase?: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory?: string;
 
@@ -1176,7 +1176,7 @@ export interface GenTableImport {
   permsPrefix?: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -1256,17 +1256,17 @@ export interface GenTableImport {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod?: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath?: string;
 
@@ -1291,22 +1291,22 @@ export interface GenTableImport {
   sortField?: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType?: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi?: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout?: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle?: number;
 
@@ -1415,7 +1415,7 @@ export interface GenTableExport {
   inDatabase: number;
 
   /**
-   * 生成模板类型（字典 gen_template_type；crud/sub/tree）
+   * 生成模板类型（字典 code_generator_template_type；crud/sub/tree）
    */
   genTemplateCategory: string;
 
@@ -1440,7 +1440,7 @@ export interface GenTableExport {
   permsPrefix: string;
 
   /**
-   * 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+   * 菜单权限组（字典 code_generator_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
    */
   menuButtonGroup?: string;
 
@@ -1520,17 +1520,17 @@ export interface GenTableExport {
   repositoryClassName?: string;
 
   /**
-   * 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+   * 生成功能（字典 code_generator_function 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
    */
   genFunction?: string;
 
   /**
-   * 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+   * 生成方式（字典 code_generator_method；0=zip 1=自定义路径 2=当前项目）
    */
   genMethod: number;
 
   /**
-   * 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+   * 生成路径（字典 code_generator_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
    */
   genPath: string;
 
@@ -1555,22 +1555,22 @@ export interface GenTableExport {
   sortField: string;
 
   /**
-   * 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+   * 排序方向（字典 sys_sort_type；ASC=升序 DESC=降序）
    */
   sortType: string;
 
   /**
-   * 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+   * 前端UI框架（字典 code_generator_frontend_ui_type；1=element plus 2=ant design vue）
    */
   frontUi: number;
 
   /**
-   * 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+   * 前端表单布局（字典 code_generator_frontend_form_layout；12=一行一列 24=一行两列）
    */
   frontFormLayout: number;
 
   /**
-   * 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+   * 前端按钮样式（字典 code_generator_button_style；0=文本 1=标准）
    */
   frontBtnStyle: number;
 

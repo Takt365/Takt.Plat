@@ -28,12 +28,68 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.ecCode')"
+                :label="ai.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('tenantCode') })"
+                  show-count
+                  :maxlength="3"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="ai.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('companyCode') })"
+                  show-count
+                  :maxlength="4"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="ai.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('cultureCode') })"
+                  show-count
+                  :maxlength="5"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="ai.label('plantCode')"
+                name="plantCode"
+              >
+                <a-input
+                  v-model:value="formState.plantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('plantCode') })"
+                  show-count
+                  :maxlength="4"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="ai.label('ecCode')"
                 name="ecCode"
               >
                 <a-input
                   v-model:value="formState.ecCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('ecCode') })"
                   show-count
                   :maxlength="10"
                   disabled
@@ -42,12 +98,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.linenumber')"
+                :label="ai.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.linenumber') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('lineNumber') })"
                   style="width: 100%"
                   :min="0"
                   :disabled="loading || fileUploading"
@@ -56,42 +112,43 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.attachmenttype')"
+                :label="ai.label('attachmentType')"
                 name="attachmentType"
               >
                 <TaktSelect
                   v-model:value="formState.attachmentType"
-                  dict-type="logistics_ec_attachment_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') })"
+                  dict-type="logistics_manufacturing_ec_attachment_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: ai.label('attachmentType') })"
                   allow-clear
                   class="w-full"
                   :disabled="loading || fileUploading"
+                  @change="handleAttachmentTypeChange"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.docCode')"
+                :label="ai.label('docCode')"
                 name="docCode"
               >
                 <a-input
                   v-model:value="formState.docCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') })"
+                  :placeholder="docCodePlaceholder"
                   show-count
                   :maxlength="50"
                   allow-clear
-                  :disabled="loading || fileUploading"
+                  :disabled="loading || fileUploading || isDocCodeLocked"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.filename')"
+                :label="ai.label('fileName')"
                 name="fileName"
               >
                 <a-input
                   v-model:value="formState.fileName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.filename') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('fileName') })"
                   show-count
                   :maxlength="200"
                   disabled
@@ -100,7 +157,7 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecattachment.accessurl')"
+                :label="ai.label('accessUrl')"
                 name="accessUrl"
               >
                 <takt-upload-file
@@ -112,6 +169,7 @@
                   :files-max-size="taktFileMaxSizeMb"
                   :files-accept="taktFileAccept"
                   :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+                  :files-before-upload="handleFilesBeforeUpload"
                   :files-custom-request="handleFilesCustomRequest"
                   v-model:files-file-list="filesFileList"
                   @files:remove="handleFileRemove"
@@ -120,7 +178,7 @@
                   v-if="formState.accessUrl"
                   v-model:value="formState.accessUrl"
                   class="mt-2"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.accessurl') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: ai.label('accessUrl') })"
                   show-count
                   :maxlength="500"
                   disabled
@@ -129,12 +187,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.extfield')"
+                :label="ai.label('extField')"
                 name="extField"
               >
                 <a-textarea
                   v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: ai.label('extField') })"
                   :rows="2"
                   show-count
                   :maxlength="400"
@@ -145,12 +203,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="ai.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: ai.label('remark') })"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -173,22 +231,36 @@
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { message } from 'ant-design-vue'
+import { message, Upload } from 'ant-design-vue'
 import type { UploadFile, UploadProps } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { EcAttachmentCreate } from '@/types/logistics/manufacturing/engineering-change/ec-attachment'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { getFileById } from '@/api/foundation/file'
+import { getFileById, getFileList } from '@/api/foundation/file'
+import { getEcAttachmentList } from '@/api/logistics/manufacturing/engineering-change/ec-attachment'
 import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
+import { buildEcAttachmentFileUploadMeta } from '@/utils/takt-ec-attachment-storage'
 import {
   buildTaktFileAcceptAttribute,
   loadTaktFileUploadBasePolicy,
   resolveTaktFileMaxSizeMb,
 } from '@/utils/takt-file-upload-policy'
+import {
+  buildEcAttachmentFileName,
+  getEcAttachmentDocCodeHintKey,
+  isEcAttachmentDocCodeLockedToEcCode,
+  isValidEcAttachmentDocCode,
+} from '@/utils/takt-ec-attachment-doc-code'
+import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+const ai = useEcAttachmentI18n()
+/** 附件 DocCode 文案前缀 */
+const DOC_CODE_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.docCode'
+/** 附件文件名称文案前缀 */
+const FILE_NAME_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.fileName'
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
@@ -199,21 +271,42 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'companyCode','cultureCode', 'ecCode', 'lineNumber', 'attachmentType', 'docCode', 'fileName', 'accessUrl', 'extField', 'remark']
+const formFields = ['tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ecCode', 'lineNumber', 'attachmentType', 'docCode', 'fileName', 'accessUrl', 'extField', 'remark']
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<EcAttachmentCreate & { ecAttachmentId?: string }> | null
+  formData?: Partial<EcAttachmentCreate & { ecAttachmentId?: string; __rowKey?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /**
+   * 同主表已有附件的文件编码（不含当前编辑行），用于前端查重
+   */
+  siblingDocCodes?: string[]
+  /**
+   * 同主表已有附件的文件名称（不含当前编辑行），用于前端查重
+   */
+  siblingFileNames?: string[]
+  /**
+   * 主表当前设变号码（实时）；类型为 EC 时文件编码强制等于此值
+   */
+  currentEcCode?: string
+  /** 主表当前工厂代码（新增态回填） */
+  currentPlantCode?: string
+  /** 主表当前区域文化（新增态回填） */
+  currentCultureCode?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  siblingDocCodes: () => [],
+  siblingFileNames: () => [],
+  currentEcCode: '',
+  currentPlantCode: '',
+  currentCultureCode: '',
 })
 
 /** a-form 实例 ref */
@@ -224,13 +317,15 @@ const formState = reactive<Record<string, any>>({})
 const fileUploading = ref(false)
 /** takt-upload-file 文件列表 */
 const filesFileList = ref<UploadFile[]>([])
+/** 同一重复提示键只弹一次（编码输入防连发） */
+const lastDuplicateToastKey = ref('')
 /** 上传 accept（后端策略） */
 const taktFileAccept = ref('')
 /** 上传体积上限 MB（后端策略） */
 const taktFileMaxSizeMb = ref(500)
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言
+ * 上下文隔离字段：租户 / 公司 / 区域文化 / 工厂
  * @param target 表单数据
  * @param force 为 true 时强制覆盖
  */
@@ -242,12 +337,16 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyCode = tenantStore.companyCode
   }
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+    target.cultureCode = String(props.currentCultureCode ?? '').trim()
+      || userStore.userInfo?.companyDefaultCulture
+      || userStore.userInfo?.cultureCode
+      || ''
   }
-  if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
+    target.plantCode = String(props.currentPlantCode ?? '').trim()
+      || tenantStore.currentCompanyRelatedPlant
+      || ''
   }
-
 }
 
 /** 表单字段默认值 */
@@ -258,9 +357,255 @@ function applyFormDefaults(target: Record<string, unknown>) {
   if (!String(target.attachmentType ?? '').trim()) {
     target.attachmentType = 'EC'
   }
+  syncEcCodeOntoTarget(target)
+  syncDocCodeIfEcType(target)
 }
 
-/** 根据 accessUrl 同步 takt-upload-file 列表展示 */
+/**
+ * 解析当前设变号码（主表 prop > 表单 ecCode/ecNo）
+ * @returns 去空格后的设变单号
+ */
+function resolveCurrentEcCode(): string {
+  const fromProp = String(props.currentEcCode ?? '').trim()
+  if (fromProp) {
+    return fromProp
+  }
+  return String(formState.ecCode ?? formState.ecNo ?? '').trim()
+}
+
+/**
+ * 将当前设变号码写入目标对象的 ecCode
+ * @param target 表单数据
+ */
+function syncEcCodeOntoTarget(target: Record<string, unknown>) {
+  const code = String(props.currentEcCode ?? target.ecCode ?? target.ecNo ?? '').trim()
+  if (code) {
+    target.ecCode = code
+  }
+}
+
+/**
+ * 类型为 EC 时，文件编码强制等于当前设变号码
+ * @param target 表单数据（默认 formState）
+ */
+function syncDocCodeIfEcType(target: Record<string, unknown> = formState) {
+  const type = String(target.attachmentType ?? '').trim()
+  if (!isEcAttachmentDocCodeLockedToEcCode(type)) {
+    return
+  }
+  const code = String(props.currentEcCode ?? target.ecCode ?? target.ecNo ?? '').trim()
+  target.ecCode = code
+  target.docCode = code
+}
+
+/**
+ * 文件类别变更：EC 自动赋文件编码；离开 EC 时若仍是设变号则清空
+ * @param type 新文件类别（TaktSelect change 首参）
+ */
+function handleAttachmentTypeChange(type: string | number | (string | number)[] | null | undefined) {
+  const nextType = Array.isArray(type)
+    ? String(type[0] ?? '')
+    : (type == null ? '' : String(type))
+  formState.attachmentType = nextType
+  if (isEcAttachmentDocCodeLockedToEcCode(nextType)) {
+    syncDocCodeIfEcType(formState)
+    syncFileNameFromDocCode()
+    const dup = getLocalDuplicateMessage(resolveDocCode(), String(formState.fileName ?? '').trim())
+    if (dup) {
+      promptDuplicateNow(dup, `docCode:${resolveDocCode()}`)
+    } else {
+      lastDuplicateToastKey.value = ''
+      formRef.value?.clearValidate(['docCode', 'fileName'])
+    }
+    return
+  }
+  const ec = resolveCurrentEcCode()
+  if (ec && String(formState.docCode ?? '').trim() === ec) {
+    formState.docCode = ''
+  }
+  formRef.value?.validateFields(['docCode']).catch(() => undefined)
+}
+
+/**
+ * 解析当前文件编码（EC 类型锁定为设变单号）
+ * @returns {string} 去空格后的文件编码
+ */
+function resolveDocCode(): string {
+  const attachmentType = String(formState.attachmentType ?? '').trim()
+  const ecCode = resolveCurrentEcCode() || String(formState.ecCode ?? '').trim()
+  if (isEcAttachmentDocCodeLockedToEcCode(attachmentType)) {
+    return ecCode
+  }
+  return String(formState.docCode ?? '').trim()
+}
+
+/**
+ * 规范化文件名称（去空格、小写）便于查重
+ * @param value 文件名称或编码
+ * @returns 规范化后的字符串
+ */
+function normalizeAttachmentName(value: unknown): string {
+  return String(value ?? '').trim().toLowerCase()
+}
+
+/**
+ * 当前编辑行以外的文件编码是否已占用
+ * @param docCode 文件编码
+ * @returns 是否重复
+ */
+function isSiblingDocCodeDuplicate(docCode: string): boolean {
+  const code = String(docCode ?? '').trim()
+  if (!code) {
+    return false
+  }
+  return (props.siblingDocCodes ?? [])
+    .map((x) => String(x ?? '').trim())
+    .filter(Boolean)
+    .includes(code)
+}
+
+/**
+ * 当前编辑行以外的文件名称是否已占用（忽略大小写）
+ * @param fileName 文件名称（DocCode + 扩展名）
+ * @returns 是否重复
+ */
+function isSiblingFileNameDuplicate(fileName: string): boolean {
+  const name = normalizeAttachmentName(fileName)
+  if (!name) {
+    return false
+  }
+  return (props.siblingFileNames ?? [])
+    .map((x) => normalizeAttachmentName(x))
+    .filter(Boolean)
+    .includes(name)
+}
+
+/**
+ * 本地同单附件重复提示（文件编码或文件名称）
+ * @param docCode 文件编码
+ * @param fileName 文件名称（可选）
+ * @returns 提示文案；无重复时为空串
+ */
+function getLocalDuplicateMessage(docCode: string, fileName?: string): string {
+  const name = String(fileName ?? '').trim()
+  if (name && isSiblingFileNameDuplicate(name)) {
+    return t(`${FILE_NAME_I18N}.duplicate`, { name })
+  }
+  const code = String(docCode ?? '').trim()
+  if (code && isSiblingDocCodeDuplicate(code)) {
+    return name
+      ? t(`${FILE_NAME_I18N}.duplicate`, { name })
+      : t(`${DOC_CODE_I18N}.duplicate`, { code })
+  }
+  return ''
+}
+
+/**
+ * 查询租户+公司范围内附件及当日原始文件名是否重复
+ * @param docCode 文件编码
+ * @param fileName 目标文件名称
+ * @param originalName 上传原始文件名
+ * @returns 提示文案；无重复时为空串
+ */
+async function findServerDuplicateMessage(
+  docCode: string,
+  fileName: string,
+  originalName: string,
+): Promise<string> {
+  const editingId = String(props.formData?.ecAttachmentId ?? '')
+  const code = String(docCode ?? '').trim()
+  const name = String(fileName ?? '').trim()
+  try {
+    const [byCode, byName] = await Promise.all([
+      code
+        ? getEcAttachmentList({ docCode: code, pageIndex: 1, pageSize: 50 })
+        : Promise.resolve({ data: [] }),
+      name
+        ? getEcAttachmentList({ fileName: name, pageIndex: 1, pageSize: 50 })
+        : Promise.resolve({ data: [] }),
+    ])
+    const rows = [...(byCode.data ?? []), ...(byName.data ?? [])]
+    const hit = rows.find((row) => {
+      const id = String(row.ecAttachmentId ?? '')
+      if (editingId && id === editingId) {
+        return false
+      }
+      if (code && String(row.docCode ?? '').trim() === code) {
+        return true
+      }
+      return Boolean(name) && normalizeAttachmentName(row.fileName) === normalizeAttachmentName(name)
+    })
+    if (hit) {
+      const hitName = String(hit.fileName ?? '').trim() || name || code
+      return t(`${FILE_NAME_I18N}.duplicate`, { name: hitName })
+    }
+  } catch {
+    // 列表查询失败不阻断选择，最终以上传/保存接口为准
+  }
+  const original = String(originalName ?? '').trim()
+  if (!original) {
+    return ''
+  }
+  try {
+    const dayStart = new Date()
+    dayStart.setHours(0, 0, 0, 0)
+    const files = await getFileList({
+      fileOriginalName: original,
+      createdAtStart: dayStart.toISOString(),
+      pageIndex: 1,
+      pageSize: 50,
+    })
+    const originalHit = (files.data ?? []).some((item) => String(item.fileOriginalName ?? '').trim() === original)
+    if (originalHit) {
+      return t('validation.file.upload.duplicate.original.name.today', { fileName: original })
+    }
+  } catch {
+    // 文件库查询失败不阻断选择
+  }
+  return ''
+}
+
+/**
+ * 立即提示重复并刷新编码/名称校验
+ * @param messageText 提示文案
+ * @param onceKey 同一键只弹一次（编码输入 watch 防连发）；选择文件时不传
+ */
+function promptDuplicateNow(messageText: string, onceKey?: string) {
+  if (!messageText) {
+    return
+  }
+  if (onceKey && lastDuplicateToastKey.value === onceKey) {
+    formRef.value?.validateFields(['docCode', 'fileName']).catch(() => undefined)
+    return
+  }
+  if (onceKey) {
+    lastDuplicateToastKey.value = onceKey
+  }
+  message.error(messageText)
+  formRef.value?.validateFields(['docCode', 'fileName']).catch(() => undefined)
+}
+
+/**
+ * 按文件编码回写 fileName（保留原扩展名；仅已上传时改写，避免未上传就填满 fileName）
+ */
+function syncFileNameFromDocCode() {
+  const url = String(formState.accessUrl ?? '').trim()
+  if (!url || url === '-') {
+    return
+  }
+  const docCode = resolveDocCode()
+  if (!docCode) {
+    return
+  }
+  const next = buildEcAttachmentFileName(docCode, formState.fileName, formState.accessUrl)
+  if (next) {
+    formState.fileName = next
+  }
+}
+
+/**
+ * 根据 accessUrl 同步 takt-upload-file 列表展示
+ */
 function syncUploadFileListFromState() {
   const url = String(formState.accessUrl ?? '').trim()
   if (!url || url === '-') {
@@ -289,11 +634,39 @@ async function applyUploadResultToForm(file: globalThis.File, result: Awaited<Re
     throw new Error('accessUrl empty')
   }
   formState.accessUrl = accessUrl
-  formState.fileName = result.fileOriginalName?.trim()
-    || result.fileName?.trim()
-    || file.name
+  formState.fileName = buildEcAttachmentFileName(resolveDocCode(), file.name, result.fileName || accessUrl)
   syncUploadFileListFromState()
   formRef.value?.validateFields(['accessUrl', 'fileName']).catch(() => undefined)
+}
+
+/**
+ * 选择文件后立即按文件名称/编码查重；重复则中止上传
+ * @param file 待上传文件
+ * @returns 通过则 true；重复或缺少编码则 LIST_IGNORE
+ */
+const handleFilesBeforeUpload: UploadProps['beforeUpload'] = async (file) => {
+  if (props.loading || fileUploading.value) {
+    return Upload.LIST_IGNORE
+  }
+  const originFile = ((file as { originFileObj?: File }).originFileObj ?? file) as File
+  syncDocCodeIfEcType(formState)
+  const docCode = resolveDocCode()
+  if (!docCode) {
+    message.error(t('common.page.form.placeholder.required', { field: ai.label('docCode') }))
+    return Upload.LIST_IGNORE
+  }
+  const targetFileName = buildEcAttachmentFileName(docCode, originFile.name)
+  const localDup = getLocalDuplicateMessage(docCode, targetFileName)
+  if (localDup) {
+    promptDuplicateNow(localDup)
+    return Upload.LIST_IGNORE
+  }
+  const serverDup = await findServerDuplicateMessage(docCode, targetFileName, originFile.name)
+  if (serverDup) {
+    promptDuplicateNow(serverDup)
+    return Upload.LIST_IGNORE
+  }
+  return true
 }
 
 /** takt-upload-file 自定义上传：落库 TaktFile 后回写 accessUrl / fileName */
@@ -303,15 +676,31 @@ const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
     return
   }
   const originFile = options.file as globalThis.File
+  syncDocCodeIfEcType(formState)
+  const docCode = resolveDocCode()
+  if (!docCode) {
+    message.error(t('common.page.form.placeholder.required', { field: ai.label('docCode') }))
+    options.onError?.(new Error('docCode required'))
+    return
+  }
+  const targetFileName = buildEcAttachmentFileName(docCode, originFile.name)
+  const localDup = getLocalDuplicateMessage(docCode, targetFileName)
+  if (localDup) {
+    promptDuplicateNow(localDup)
+    options.onError?.(new Error(localDup))
+    return
+  }
   fileUploading.value = true
   void (async () => {
     try {
-      const result = await uploadTaktFileSmart(originFile)
+      const result = await uploadTaktFileSmart(
+        originFile,
+        buildEcAttachmentFileUploadMeta(targetFileName),
+      )
       await applyUploadResultToForm(originFile, result)
       options.onSuccess?.(result)
     } catch (error: unknown) {
       const err = error instanceof Error ? error : new Error(String(error))
-      message.error(t('common.feedback.failed'))
       options.onError?.(err)
     } finally {
       fileUploading.value = false
@@ -347,9 +736,18 @@ watch(
         next.extField = next.ExtField
         delete next.ExtField
       }
+      if (!next.ecCode && next.ecNo) {
+        next.ecCode = next.ecNo
+      }
+      if (!next.docCode && next.docNo) {
+        next.docCode = next.docNo
+      }
       Object.keys(formState).forEach((k) => delete formState[k])
       applyScopeDefaults(next)
+      syncEcCodeOntoTarget(next)
       Object.assign(formState, next)
+      syncDocCodeIfEcType(formState)
+      syncFileNameFromDocCode()
       syncUploadFileListFromState()
       formRef.value?.clearValidate()
     } else {
@@ -360,24 +758,87 @@ watch(
           next.extField = next.ExtField
           delete next.ExtField
         }
+        if (!next.ecCode && next.ecNo) {
+          next.ecCode = next.ecNo
+        }
         Object.assign(formState, next)
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
+      syncDocCodeIfEcType(formState)
+      syncFileNameFromDocCode()
       syncUploadFileListFromState()
       formRef.value?.clearValidate()
     }
   },
-  { immediate: true }
+  { immediate: true, deep: true },
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [
+    tenantStore.tenantCode,
+    tenantStore.companyCode,
+    userStore.userInfo?.companyDefaultCulture,
+    userStore.userInfo?.cultureCode,
+    props.currentPlantCode,
+    props.currentCultureCode,
+  ] as const,
   () => {
     const isCreate = !props.formData?.ecAttachmentId
     if (isCreate) {
       applyScopeDefaults(formState, true)
+    }
+  },
+)
+
+/** 文件类别为设变(EC)时锁定 DocCode=设变单号 */
+const isDocCodeLocked = computed(() => isEcAttachmentDocCodeLockedToEcCode(formState.attachmentType))
+
+/** 按文件类别动态占位提示 */
+const docCodePlaceholder = computed(() => {
+  const hintKey = getEcAttachmentDocCodeHintKey(formState.attachmentType)
+  return t(`${DOC_CODE_I18N}.hint.${hintKey}`)
+})
+
+/** 主表设变号码变化时：同步 ecCode；EC 类型同步文件编码 */
+watch(
+  () => props.currentEcCode,
+  () => {
+    const code = resolveCurrentEcCode()
+    if (code) {
+      formState.ecCode = code
+    }
+    syncDocCodeIfEcType(formState)
+  },
+)
+
+/** 设变单号变化时，EC 类型同步文件编码 */
+watch(
+  () => formState.ecCode,
+  () => {
+    syncDocCodeIfEcType(formState)
+  },
+)
+
+/** 文件编码变化时，已上传文件的展示名跟随编码；重复立即提示 */
+watch(
+  () => formState.docCode,
+  (value) => {
+    if (String(formState.accessUrl ?? '').trim() && String(formState.accessUrl ?? '').trim() !== '-') {
+      syncFileNameFromDocCode()
+      syncUploadFileListFromState()
+    }
+    const code = String(value ?? '').trim()
+    if (!code) {
+      return
+    }
+    const nextFileName = buildEcAttachmentFileName(code, formState.fileName, formState.accessUrl)
+    const dup = getLocalDuplicateMessage(code, nextFileName)
+    if (dup) {
+      promptDuplicateNow(dup, `docCode:${code}`)
+    } else {
+      lastDuplicateToastKey.value = ''
     }
   },
 )
@@ -387,17 +848,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ecCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') }),
+      message: t('common.page.form.placeholder.required', { field: ai.label('ecCode') }),
       trigger: 'blur',
-    }],
+    },
+  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecattachment.linenumber') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: ai.label('lineNumber') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecattachment.linenumber') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: ai.label('lineNumber') }))
       }
       return Promise.resolve()
     },
@@ -406,7 +868,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   attachmentType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: ai.label('attachmentType') }))
       }
       return Promise.resolve()
     },
@@ -414,22 +876,59 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   }],
   docCode: [
     {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') }),
-      trigger: 'blur',
-    }],
+      validator: async (_rule, value) => {
+        const code = String(value ?? '').trim()
+        const type = String(formState.attachmentType ?? '').trim()
+        const ec = String(formState.ecCode ?? '').trim()
+        if (!code) {
+          return Promise.reject(t('common.page.form.placeholder.required', { field: ai.label('docCode') }))
+        }
+        if (!isValidEcAttachmentDocCode(type, code, ec)) {
+          const hintKey = getEcAttachmentDocCodeHintKey(type)
+          return Promise.reject(t(`${DOC_CODE_I18N}.formatInvalid`, {
+            hint: t(`${DOC_CODE_I18N}.hint.${hintKey}`),
+          }))
+        }
+        const siblings = (props.siblingDocCodes ?? [])
+          .map((x) => String(x ?? '').trim())
+          .filter(Boolean)
+        if (siblings.includes(code)) {
+          return Promise.reject(t(`${DOC_CODE_I18N}.duplicate`, { code }))
+        }
+        return Promise.resolve()
+      },
+      trigger: ['blur', 'change'],
+    },
+  ],
   fileName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.filename') }),
+      message: t('common.page.form.placeholder.required', { field: ai.label('fileName') }),
       trigger: 'change',
-    }],
+    },
+    {
+      validator: async (_rule, value) => {
+        const name = String(value ?? '').trim()
+        if (!name) {
+          return Promise.resolve()
+        }
+        const code = resolveDocCode()
+        const dup = getLocalDuplicateMessage(code, name)
+        if (dup) {
+          return Promise.reject(dup)
+        }
+        return Promise.resolve()
+      },
+      trigger: 'change',
+    },
+  ],
   accessUrl: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.accessurl') }),
+      message: t('common.page.form.placeholder.required', { field: ai.label('accessUrl') }),
       trigger: 'change',
-    }],
+    },
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -440,16 +939,23 @@ async function validate() {
 
 /** 映射为 Create/Update DTO（含主表外键 ecId） */
 function getValues(): Record<string, any> {
+  syncDocCodeIfEcType(formState)
+  const ecCode = resolveCurrentEcCode() || String(formState.ecCode ?? '').trim()
+  const attachmentType = String(formState.attachmentType ?? '').trim()
+  const docCode = isEcAttachmentDocCodeLockedToEcCode(attachmentType)
+    ? ecCode
+    : String(formState.docCode ?? '').trim()
   const payload: Record<string, unknown> = {
     tenantCode: formState.tenantCode,
     companyCode: formState.companyCode,
-    companyDefaultCulture: formState.companyDefaultCulture,
+    cultureCode: formState.cultureCode,
+    plantCode: formState.plantCode,
     ecId: props.masterId,
-    ecCode: String(formState.ecCode ?? '').trim(),
+    ecCode,
     lineNumber: typeof formState.lineNumber === 'number' ? formState.lineNumber : Number(formState.lineNumber),
-    attachmentType: String(formState.attachmentType ?? '').trim(),
-    docCode: String(formState.docCode ?? '').trim(),
-    fileName: String(formState.fileName ?? '').trim(),
+    attachmentType,
+    docCode,
+    fileName: buildEcAttachmentFileName(docCode, formState.fileName, formState.accessUrl),
     accessUrl: String(formState.accessUrl ?? '').trim(),
     extField: formState.extField,
     remark: formState.remark,

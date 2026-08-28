@@ -57,7 +57,7 @@ public class TaktRoutingItemArgumentDto : TaktCompanyDtoBase
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -136,7 +136,7 @@ public class TaktRoutingItemArgumentQueryDto : TaktPagedQuery
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -229,7 +229,7 @@ public class TaktRoutingItemArgumentCreateDto
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -350,7 +350,7 @@ public class TaktRoutingItemArgumentTemplateDto
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -423,7 +423,7 @@ public class TaktRoutingItemArgumentImportDto
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -502,7 +502,7 @@ public class TaktRoutingItemArgumentExportDto
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code）
+    /// 单位（字典 logistics_materials_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 

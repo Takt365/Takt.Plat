@@ -25,12 +25,12 @@ import type {
 export interface ProductionChangeover extends CompanyDtoBase {
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
   /**
-   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   * 切换类别（字典 logistics_manufacturing_changeover_category，存 DictValue：ASSY/PCBA）
    */
   changeoverCategory?: string;
 
@@ -143,12 +143,12 @@ export interface ProductionChangeoverExport {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
   /**
-   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   * 切换类别（字典 logistics_manufacturing_changeover_category，存 DictValue：ASSY/PCBA）
    */
   changeoverCategory: string;
 

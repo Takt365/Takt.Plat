@@ -59,7 +59,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -94,7 +94,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -174,7 +174,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -209,7 +209,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -303,7 +303,7 @@ export interface AssyDefectDetailCreate {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -338,7 +338,7 @@ export interface AssyDefectDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -456,7 +456,7 @@ export interface AssyDefectDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -491,7 +491,7 @@ export interface AssyDefectDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -575,7 +575,7 @@ export interface AssyDefectDetailImport {
   lineNumber?: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -610,7 +610,7 @@ export interface AssyDefectDetailImport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 
@@ -694,7 +694,7 @@ export interface AssyDefectDetailExport {
   lineNumber: number;
 
   /**
-   * 不良区分（字典 logistics_defect_category；存 DictValue）
+   * 不良区分（字典 logistics_manufacturing_defect_category；存 DictValue）
    */
   defectCategory?: string;
 
@@ -729,7 +729,7 @@ export interface AssyDefectDetailExport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_assy_location_category；存 DictValue）
+   * 不良个所（字典 logistics_manufacturing_assy_location_category；存 DictValue）
    */
   defectLocation?: string;
 

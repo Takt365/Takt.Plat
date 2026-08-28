@@ -61,12 +61,12 @@ export interface PurchaseInquiry extends CompanyDtoBase {
   supplierName1?: string;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
   taxCode?: string | null;
   taxRate?: number;
@@ -77,7 +77,7 @@ export interface PurchaseInquiry extends CompanyDtoBase {
   taxAmount?: number;
 
   /**
-   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   * 付款方式（字典 logistics_procurement_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
    */
   paymentMode?: string;
 
@@ -200,12 +200,12 @@ export interface PurchaseInquiryExport {
   supplierName1: string;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
   taxCode?: string | null;
   taxRate: number;
@@ -216,7 +216,7 @@ export interface PurchaseInquiryExport {
   taxAmount: number;
 
   /**
-   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   * 付款方式（字典 logistics_procurement_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
    */
   paymentMode: string;
 

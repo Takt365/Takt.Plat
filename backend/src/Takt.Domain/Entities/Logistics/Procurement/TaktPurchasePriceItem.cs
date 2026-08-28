@@ -33,7 +33,7 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public long PurchasePriceId { get; set; }
 
     /// <summary>
-    /// 定价记录号（冗余字段，便于查询）
+    /// 定价记录号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_price_code", ColumnDescription = "定价记录号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PurchasePriceCode { get; set; } = string.Empty;
@@ -45,19 +45,19 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public int PurchasePriceSeq { get; set; } = 10;
 
     /// <summary>
-    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
+    /// 条件类型（冗余；字典 logistics_procurement_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
     [SugarColumn(ColumnName = "price_type", ColumnDescription = "条件类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "PB00")]
     public string PriceType { get; set; } = "PB00";
 
     /// <summary>
-    /// 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+    /// 等级类型（字典 logistics_procurement_scale；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
     [SugarColumn(ColumnName = "scale_type", ColumnDescription = "等级类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? ScaleType { get; set; }
 
     /// <summary>
-    /// 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
+    /// 等级基础（字典 logistics_procurement_scale_basis；B=价值等级，C=数量规模，…）
     /// </summary>
     [SugarColumn(ColumnName = "scale_basis", ColumnDescription = "等级基础", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? ScaleBasis { get; set; }
@@ -69,7 +69,7 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public decimal ScaleQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 等级单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     [SugarColumn(ColumnName = "scale_unit", ColumnDescription = "等级单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = true)]
     public string? ScaleUnit { get; set; }
@@ -81,13 +81,13 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public decimal ScaleValue { get; set; } = 0;
 
     /// <summary>
-    /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
+    /// 等级货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     [SugarColumn(ColumnName = "scale_currency_code", ColumnDescription = "等级货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? ScaleCurrencyCode { get; set; }
 
     /// <summary>
-    /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
+    /// 计算类型（字典 logistics_procurement_calculation_type；默认 A=百分数）
     /// </summary>
     [SugarColumn(ColumnName = "calculation_type", ColumnDescription = "计算类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = false, DefaultValue = "A")]
     public string CalculationType { get; set; } = "A";
@@ -116,19 +116,19 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public decimal TaxAmount { get; set; } = 0;
 
     /// <summary>
-    /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+    /// 条件货币（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     [SugarColumn(ColumnName = "condition_currency_code", ColumnDescription = "条件货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string ConditionCurrencyCode { get; set; } = "CNY";
 
     /// <summary>
-    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 定价单位（字典 logistics_materials_price_unit_param；1/10/100/1000；默认 1000）
     /// </summary>
     [SugarColumn(ColumnName = "price_unit", ColumnDescription = "定价单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PriceUnit { get; set; } = 1000;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
     public string UnitOfMeasure { get; set; } = "PC";

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktSettingI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSetting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSettingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.setting.group", "zh-HK", "设置类别_hk", "设置类别（字典 sys_resource_type；frontend=前端 backend=后端）"),
 
             // entity.setting.valuetype
-            new TranslationSeedItem("entity.setting.valuetype", "en-US", "值类型_us", "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.setting.valuetype", "en-US", "值类型_us", "值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.setting.valuetype
-            new TranslationSeedItem("entity.setting.valuetype", "ja-JP", "值类型_jp", "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.setting.valuetype", "ja-JP", "值类型_jp", "值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.setting.valuetype
-            new TranslationSeedItem("entity.setting.valuetype", "zh-CN", "值类型", "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.setting.valuetype", "zh-CN", "值类型", "值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
             // entity.setting.valuetype
-            new TranslationSeedItem("entity.setting.valuetype", "zh-HK", "值类型_hk", "值类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
+            new TranslationSeedItem("entity.setting.valuetype", "zh-HK", "值类型_hk", "值类型（字典 code_generator_display_type；input=文本框 select=下拉框 switch=开关 等）"),
 
             // entity.setting.isbuiltin
             new TranslationSeedItem("entity.setting.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no；0=否 1=是）"),

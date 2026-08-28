@@ -83,7 +83,7 @@ public class TaktFqcOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -191,7 +191,7 @@ public class TaktFqcOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期（范围查询-开始）
@@ -313,7 +313,7 @@ public class TaktFqcOrderCreateDto
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -473,7 +473,7 @@ public class TaktFqcOrderTemplateDto
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -580,7 +580,7 @@ public class TaktFqcOrderImportDto
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期
@@ -693,7 +693,7 @@ public class TaktFqcOrderExportDto
     /// <summary>
     /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? JudgeBy { get; set; } = string.Empty;
+    public string? JudgeByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 判定日期

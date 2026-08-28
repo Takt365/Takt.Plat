@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-form.vue -->
-<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecEntryDate/ecContent/ecStatus/remark 可编辑；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
+<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecEntryDate/ecContent/ecStatus/remark 可编辑；明细 Tab 客户端分页且表高为当前窗体视口 × 5/4；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -27,26 +27,56 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.plantcode')"
+                :label="gi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('tenantCode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="gi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('companyCode') })"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="gi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('cultureCode') })"
+                  show-count
+                  :maxlength="5"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="gi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('plantCode') })"
                   show-count
                   :maxlength="4"
                   disabled
@@ -55,12 +85,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.no')"
-                name="ecCode"
+                :label="gi.label('ecCode')"
+                name="ecNo"
               >
                 <a-input
-                  v-model:value="formState.ecCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.no') })"
+                  v-model:value="formState.ecNo"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('ecCode') })"
                   show-count
                   :maxlength="10"
                   disabled
@@ -69,12 +99,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.issuedate')"
+                :label="gi.label('ecIssueDate')"
                 name="ecIssueDate"
               >
                 <a-date-picker
                   v-model:value="formState.ecIssueDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.issuedate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecIssueDate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                   disabled
@@ -83,13 +113,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.changestatus')"
+                :label="gi.label('changeStatus')"
                 name="changeStatus"
               >
                 <TaktSelect
                   v-model:value="formState.changeStatus"
-                  dict-type="logistics_ec_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.changestatus') })"
+                  dict-type="logistics_manufacturing_ec_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('changeStatus') })"
                   allow-clear
                   class="w-full"
                   disabled
@@ -98,12 +128,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.title')"
+                :label="gi.label('ecTitle')"
                 name="ecTitle"
               >
                 <a-input
                   v-model:value="formState.ecTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.title') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('ecTitle') })"
                   show-count
                   :maxlength="500"
                   disabled
@@ -112,13 +142,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.leader')"
+                :label="gi.label('ecLeader')"
                 name="ecLeader"
               >
                 <TaktSelect
                   v-model:value="formState.ecLeader"
-                  api-url="TaktEmployees/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.leader') })"
+                  api-url="TaktEcGroups/options"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecLeader') })"
                   :disabled="loading"
                   allow-clear
                 />
@@ -126,14 +156,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.distinction')"
+                :label="gi.label('ecDistinction')"
                 name="ecDistinction"
               >
                 <TaktSelect
                   v-model:value="formState.ecDistinction"
-                  dict-type="logistics_ec_distinction_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.distinction') })"
+                  dict-type="logistics_manufacturing_ec_distinction_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') })"
                   allow-clear
+                  :apply-dict-default="false"
                   class="w-full"
                   :disabled="loading"
                 />
@@ -141,12 +172,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ec.entrydate')"
+                :label="gi.label('ecEntryDate')"
                 name="ecEntryDate"
               >
                 <a-date-picker
                   v-model:value="formState.ecEntryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.entrydate') })"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecEntryDate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                   :disabled="loading"
@@ -155,12 +186,14 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ec.content')"
+                :label="gi.label('ecContent')"
                 name="ecContent"
               >
-                <takt-rich-editor
+                <a-textarea
                   v-model:value="formState.ecContent"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.content') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('ecContent') })"
+                  :rows="8"
+                  allow-clear
                   :disabled="loading"
                 />
               </a-form-item>
@@ -177,12 +210,12 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ec.lossamount')"
+                :label="gi.label('ecLossAmount')"
                 name="ecLossAmount"
               >
                 <a-input-number
                   v-model:value="formState.ecLossAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.lossamount') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: gi.label('ecLossAmount') })"
                   style="width: 100%"
                   disabled
                 />
@@ -190,13 +223,13 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ec.status')"
+                :label="gi.label('ecStatus')"
                 name="ecStatus"
               >
                 <TaktSelect
                   v-model:value="formState.ecStatus"
-                  dict-type="logistics_ec_gijutsu_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ec.status') })"
+                  dict-type="logistics_manufacturing_ec_gijutsu_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecStatus') })"
                   allow-clear
                   class="w-full"
                   :disabled="loading"
@@ -216,7 +249,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ gi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -231,12 +264,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="gi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: gi.label('remark') })"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -250,29 +283,38 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('entity.ecdetail._self')"
+        :tab="pi.self()"
         force-render
       >
-        <div class="ec-form-sub-table-wrap min-h-0 flex-1">
+        <div
+          ref="ecDetailTableHostEl"
+          class="ec-form-sub-table-wrap ec-form-detail-table-wrap min-h-0 flex-1"
+          :style="{ minHeight: `${ecDetailTableScrollYPx}px` }"
+        >
           <TaktSingleTable
             class="h-full min-h-0"
             entity-scope="company"
             :columns="ecDetailTableColumns"
-            :data-source="childEcDetailRows"
+            :visible-column-keys="ecDetailVisibleColumnKeys"
+            :data-source="paginatedEcDetailRows"
             :loading="loading"
             :stripe="true"
             :row-key="getEcDetailRowKey"
             :show-row-selection="false"
             :include-audit-fields="false"
             scroll-layout="editable"
+            :scroll="ecDetailTableScroll"
             table-mode="single"
-            :show-pagination="false"
+            :show-pagination="true"
+            v-model:current="ecDetailCurrentPage"
+            v-model:page-size="ecDetailPageSize"
+            :total="ecDetailTotal"
           />
         </div>
       </a-tab-pane>
       <a-tab-pane
         key="tab-3"
-        :tab="t('entity.ecattachment._self')"
+        :tab="ai.self()"
         force-render
       >
         <TaktToolsBar
@@ -330,6 +372,11 @@
             ref="attachmentFormRef"
             :form-data="attachmentFormData"
             :master-id="masterEcIdForAttachment"
+            :current-ec-code="currentMasterEcCode"
+            :current-plant-code="String(formState.plantCode ?? '')"
+            :current-culture-code="String(formState.cultureCode ?? '')"
+            :sibling-doc-codes="attachmentSiblingDocCodes"
+            :sibling-file-names="attachmentSiblingFileNames"
             :loading="attachmentFormLoading || loading"
           />
         </TaktModal>
@@ -343,7 +390,7 @@
  * 设变维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
-import { reactive, watch, computed, ref, nextTick, h } from 'vue'
+import { reactive, watch, computed, ref, nextTick, h, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
@@ -355,9 +402,37 @@ import EcAttachmentForm from './ec-attachment-form.vue'
 import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import {
+  computeFormHostRatioScrollYPx,
+  TAKT_TABLE_SCROLL_Y_MIN,
+} from '@/utils/table-scroll'
+import {
+  ECDETAIL_FORM_SUBTABLE_VISIBLE_COLUMN_KEYS,
+  buildEcDetailTableColumns,
+  useEcDetailI18n,
+} from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n'
+import {
+  buildEcAttachmentFileName,
+  getEcAttachmentDocCodeHintKey,
+  isValidEcAttachmentDocCode,
+} from '@/utils/takt-ec-attachment-doc-code'
+import { useEcAttachmentPreview } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-preview'
+import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n'
+import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+const gi = useEcGijutsuI18n()
+const ai = useEcAttachmentI18n()
+const pi = useEcDetailI18n()
+const {
+  canPreviewAttachment,
+  hasPreviewableAccessUrl,
+  handleAttachmentDocCodeClick,
+} = useEcAttachmentPreview()
+/** 附件 DocCode 文案前缀 */
+const ATTACHMENT_DOC_CODE_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.docCode'
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
@@ -365,7 +440,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / 区域文化 / 工厂（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -379,19 +454,105 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-  if (force || !target.plantCode) {
+  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecCode","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","extField","remark"]
 
 const childEcDetailRows = ref<Record<string, unknown>[]>([])
+/** 明细子表当前页 */
+const ecDetailCurrentPage = ref(getTaktDefaultPageIndex())
+/** 明细子表每页条数 */
+const ecDetailPageSize = ref(getTaktDefaultPageSize())
+/** 明细子表总行数 */
+const ecDetailTotal = computed(() => childEcDetailRows.value.length)
+/** 明细子表当前页数据（内存分页） */
+const paginatedEcDetailRows = computed(() => {
+  const rows = childEcDetailRows.value
+  if (rows.length === 0) {
+    return []
+  }
+  const size = Math.max(1, ecDetailPageSize.value)
+  const start = (ecDetailCurrentPage.value - 1) * size
+  return rows.slice(start, start + size)
+})
+
+/** 明细表宿主（用于定位当前弹窗窗体） */
+const ecDetailTableHostEl = ref<HTMLElement | null>(null)
+/** 窗体 ResizeObserver */
+let ecDetailFormHostResizeObserver: ResizeObserver | null = null
+
+/** 明细表 scroll.y = 当前窗体视口高度 × 5/4 */
+function computeEcDetailTableScrollYPx(): number {
+  return Math.max(
+    TAKT_TABLE_SCROLL_Y_MIN,
+    computeFormHostRatioScrollYPx(ecDetailTableHostEl.value, 5, 4),
+  )
+}
+
+/** 明细表纵向滚动高度（px） */
+const ecDetailTableScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
+
+/** 明细表 scroll 配置 */
+const ecDetailTableScroll = computed(() => ({ y: ecDetailTableScrollYPx.value }))
+
+/** 按当前窗体视口重算明细表高度 */
+function recalcEcDetailTableScrollY(): void {
+  ecDetailTableScrollYPx.value = computeEcDetailTableScrollYPx()
+}
+
+/** 绑定窗体 ResizeObserver */
+function bindEcDetailFormHostResizeObserver(): void {
+  ecDetailFormHostResizeObserver?.disconnect()
+  ecDetailFormHostResizeObserver = null
+  const host = ecDetailTableHostEl.value
+  if (host == null || typeof ResizeObserver === 'undefined') {
+    return
+  }
+  const target =
+    (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal-body') as HTMLElement | null)
+    ?? host
+  ecDetailFormHostResizeObserver = new ResizeObserver(() => {
+    recalcEcDetailTableScrollY()
+  })
+  ecDetailFormHostResizeObserver.observe(target)
+}
+
+onMounted(() => {
+  void nextTick(() => {
+    recalcEcDetailTableScrollY()
+    bindEcDetailFormHostResizeObserver()
+  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', recalcEcDetailTableScrollY)
+  }
+})
+
+/** 切到明细 Tab 时再测一次窗体高度（弹窗动画/全屏切换后） */
+watch(activeTab, (key) => {
+  if (key === 'tab-2') {
+    void nextTick(() => {
+      recalcEcDetailTableScrollY()
+      bindEcDetailFormHostResizeObserver()
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  ecDetailFormHostResizeObserver?.disconnect()
+  ecDetailFormHostResizeObserver = null
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', recalcEcDetailTableScrollY)
+  }
+})
+
 const childEcAttachmentRows = ref<Record<string, unknown>[]>([])
 /** 附件子表选中行 */
 const attachmentSelectedRowKeys = ref<(string | number)[]>([])
@@ -403,6 +564,33 @@ const attachmentFormTitle = ref('')
 const attachmentFormData = ref<Record<string, unknown>>({})
 const attachmentFormLoading = ref(false)
 const attachmentFormRef = ref()
+
+/**
+ * 当前编辑行以外的附件文件编码（供弹窗查重）
+ */
+const attachmentSiblingDocCodes = computed(() => {
+  const editing = attachmentFormData.value
+  return childEcAttachmentRows.value
+    .filter((row, index) => !isSameAttachmentRow(row, editing, index))
+    .map((row) => String(row.docCode ?? row.docNo ?? '').trim())
+    .filter(Boolean)
+})
+
+/**
+ * 当前编辑行以外的附件文件名称（供弹窗查重）
+ */
+const attachmentSiblingFileNames = computed(() => {
+  const editing = attachmentFormData.value
+  return childEcAttachmentRows.value
+    .filter((row, index) => !isSameAttachmentRow(row, editing, index))
+    .map((row) => String(row.fileName ?? '').trim())
+    .filter(Boolean)
+})
+
+/** 主表当前设变号码（供附件 EC 类型自动赋文件编码） */
+const currentMasterEcCode = computed(() =>
+  String(formState.ecCode ?? formState.ecNo ?? '').trim(),
+)
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -424,54 +612,27 @@ const masterEcIdForAttachment = computed(() => props.formData?.ecGijutsuId ?? ''
 const attachmentUpdateDisabled = computed(() => attachmentSelectedRows.value.length !== 1)
 const attachmentDeleteDisabled = computed(() => attachmentSelectedRows.value.length === 0)
 
-/** 明细子表列（只读展示） */
-const ecDetailTableColumns = computed<TableColumnsType>(() => [
-  {
-    title: t('entity.ecdetail.ecCode'),
-    dataIndex: 'ecCode',
-    key: 'ecCode',
-    width: 140,
-    ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecCode'),
-  },
-  {
-    title: t('entity.ecdetail.linenumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
-    width: 100,
-    ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'lineNumber'),
-  },
-  {
-    title: t('entity.ecdetail.ecmodel'),
-    dataIndex: 'ecModel',
-    key: 'ecModel',
-    width: 140,
-    ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecModel'),
-  },
-  {
-    title: t('entity.ecdetail.ecbomitem'),
-    dataIndex: 'ecBomItem',
-    key: 'ecBomItem',
-    width: 140,
-    ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecBomItem'),
-  },
-  {
-    title: t('entity.ecdetail.ecbomsubitem'),
-    dataIndex: 'ecBomSubItem',
-    key: 'ecBomSubItem',
-    width: 140,
-    ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecBomSubItem'),
-  }])
+/** 明细子表列（与 TaktEcDetail / 来源设变导入草稿对齐） */
+const ecDetailTableColumns = computed<TableColumnsType>(() =>
+  buildEcDetailTableColumns((field) => pi.columnLabel(field)),
+)
+
+/** 内嵌明细 Tab 可见列（显式全列，绕过 TaktSingleTable 默认 8 列截断） */
+const ecDetailVisibleColumnKeys = computed(() => [...ECDETAIL_FORM_SUBTABLE_VISIBLE_COLUMN_KEYS])
 
 /** 附件子表列（只读展示 + 操作列） */
 const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
     {
-      title: t('entity.ecattachment.linenumber'),
+      title: gi.label('plantCode'),
+      dataIndex: 'plantCode',
+      key: 'plantCode',
+      width: 90,
+      ellipsis: true,
+      customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'plantCode'),
+    },
+    {
+      title: ai.label('lineNumber'),
       dataIndex: 'lineNumber',
       key: 'lineNumber',
       width: 90,
@@ -479,26 +640,26 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'lineNumber'),
     },
     {
-      title: t('entity.ecattachment.attachmenttype'),
+      title: ai.label('attachmentType'),
       dataIndex: 'attachmentType',
       key: 'attachmentType',
       width: 120,
       ellipsis: true,
       customRender: ({ record }) => h(TaktDictTag, {
-        dictType: 'logistics_ec_attachment_type',
+        dictType: 'logistics_manufacturing_ec_attachment_type',
         value: String((record as Record<string, unknown>).attachmentType ?? ''),
       }),
     },
     {
-      title: t('entity.ecattachment.docCode'),
+      title: ai.label('docCode'),
       dataIndex: 'docCode',
       key: 'docCode',
       width: 140,
       ellipsis: true,
-      customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'docCode'),
+      customRender: ({ record }) => renderAttachmentDocCodeCell(record as Record<string, unknown>),
     },
     {
-      title: t('entity.ecattachment.filename'),
+      title: ai.label('fileName'),
       dataIndex: 'fileName',
       key: 'fileName',
       width: 140,
@@ -506,13 +667,14 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'fileName'),
     },
     {
-      title: t('entity.ecattachment.accessurl'),
+      title: ai.label('accessUrl'),
       dataIndex: 'accessUrl',
       key: 'accessUrl',
       width: 200,
       ellipsis: true,
       customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'accessUrl'),
-    }]
+    },
+  ]
   const actions = [
     {
       key: 'update',
@@ -529,7 +691,8 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       icon: RiDeleteBinLine,
       permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
       onClick: (record: Record<string, unknown>) => void handleAttachmentDeleteOne(record),
-    }]
+    },
+  ]
   cols.push(CreateActionColumn({ actions }))
   return cols
 })
@@ -568,17 +731,69 @@ function formatSubTableCell(record: Record<string, unknown>, key: string): strin
   return String(value)
 }
 
+/**
+ * 附件子表文件编码：有访问地址且具备 preview 权限时渲染为超链接（鉴权 preview API，不跳转 /uploads 页面）
+ * @param record 附件行
+ */
+function renderAttachmentDocCodeCell(record: Record<string, unknown>): ReturnType<typeof h> | string {
+  const code = String(record.docCode ?? record.docNo ?? '').trim()
+  const canOpen =
+    canPreviewAttachment.value &&
+    hasPreviewableAccessUrl(record.accessUrl) &&
+    !!code
+  if (canOpen) {
+    return h(
+      'a',
+      {
+        href: '#',
+        class: 'text-primary hover:underline',
+        title: t('common.page.button.preview'),
+        onClick: (e: MouseEvent) => {
+          handleAttachmentDocCodeClick(record, e)
+        },
+      },
+      code,
+    )
+  }
+  return code || '-'
+}
+
 /** 规范化附件行（补全 __rowKey） */
 function normalizeAttachmentRows(rows: Record<string, unknown>[]): Record<string, unknown>[] {
-  return rows.map((row, index) => ({
-    ...row,
-    __rowKey: row.__rowKey ?? row.ecAttachmentId ?? `row-${index}`,
-  }))
+  const plantCode = String(formState.plantCode ?? '').trim()
+  const cultureCode = String(formState.cultureCode ?? '').trim()
+  return rows.map((row, index) => {
+    const docCode = String(row.docCode ?? row.docNo ?? '').trim()
+    return {
+      ...row,
+      tenantCode: row.tenantCode ?? tenantStore.tenantCode,
+      companyCode: row.companyCode ?? tenantStore.companyCode,
+      cultureCode: row.cultureCode ?? cultureCode,
+      plantCode: row.plantCode ?? plantCode,
+      ecCode: row.ecCode ?? row.ecNo ?? '',
+      docCode,
+      fileName: buildEcAttachmentFileName(docCode, String(row.fileName ?? ''), String(row.accessUrl ?? '')) || row.fileName,
+      __rowKey: row.__rowKey ?? row.ecAttachmentId ?? `row-${index}`,
+    }
+  })
+}
+
+/** 重置明细子表分页至第一页 */
+function resetEcDetailPagination(): void {
+  ecDetailCurrentPage.value = getTaktDefaultPageIndex()
 }
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: EcGijutsuFormData | null | undefined) {
-  childEcDetailRows.value = ((val as any)?.ecDetails ?? []) as Record<string, unknown>[]
+  const plantCode = String(val?.plantCode ?? formState.plantCode ?? '')
+  const ecCode = String(val?.ecCode ?? val?.ecNo ?? formState.ecCode ?? formState.ecNo ?? '')
+  childEcDetailRows.value = (((val as any)?.ecDetails ?? []) as Record<string, unknown>[]).map((row, index) => ({
+    ...row,
+    plantCode: row.plantCode ?? plantCode,
+    ecCode: row.ecCode ?? row.ecNo ?? ecCode,
+    __rowKey: row.__rowKey ?? row.ecDetailId ?? `detail-row-${index}`,
+  }))
+  resetEcDetailPagination()
   childEcAttachmentRows.value = normalizeAttachmentRows(((val as any)?.attachments ?? []) as Record<string, unknown>[])
   clearAttachmentSelection()
 }
@@ -664,8 +879,17 @@ function onAttachmentClickRow(record: Record<string, unknown>) {
 
 /** 打开新增附件弹窗 */
 function handleAttachmentCreate() {
-  attachmentFormTitle.value = t('common.dialog.title.create', { entity: t('entity.ecattachment._self') })
-  attachmentFormData.value = { ecCode: String(formState.ecCode ?? '') }
+  attachmentFormTitle.value = t('common.dialog.title.create', { entity: ai.self() })
+  const ecCode = String(formState.ecCode ?? formState.ecNo ?? '').trim()
+  attachmentFormData.value = {
+    tenantCode: String(formState.tenantCode ?? tenantStore.tenantCode ?? ''),
+    companyCode: String(formState.companyCode ?? tenantStore.companyCode ?? ''),
+    cultureCode: String(formState.cultureCode ?? userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''),
+    plantCode: String(formState.plantCode ?? ''),
+    ecCode,
+    attachmentType: 'EC',
+    docCode: ecCode,
+  }
   attachmentFormVisible.value = true
 }
 
@@ -676,7 +900,7 @@ function handleAttachmentUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
     }))
   }
 }
@@ -686,7 +910,7 @@ function handleAttachmentUpdate() {
  * @param record 附件行
  */
 function handleAttachmentEdit(record: Record<string, unknown>) {
-  attachmentFormTitle.value = t('common.dialog.title.edit', { entity: t('entity.ecattachment._self') })
+  attachmentFormTitle.value = t('common.dialog.title.edit', { entity: ai.self() })
   attachmentFormData.value = { ...record }
   attachmentFormVisible.value = true
 }
@@ -734,8 +958,9 @@ async function handleAttachmentFormSubmit() {
           __rowKey: `client-${crypto.randomUUID()}`,
           ...values,
           lineNumber,
-          ecCode: String(formState.ecCode ?? ''),
-        }]
+          ecCode: String(formState.ecCode ?? formState.ecNo ?? ''),
+        },
+      ]
     }
     attachmentFormVisible.value = false
     attachmentFormData.value = {}
@@ -772,21 +997,21 @@ function handleAttachmentDelete() {
   if (attachmentSelectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.ecattachment._self'),
+      entity: ai.self(),
       count: attachmentSelectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: () => {
       removeAttachmentRows([...attachmentSelectedRows.value])
-      message.success(t('common.feedback.deleted', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.deleted', { target: ai.self() }))
     },
   })
 }
@@ -799,38 +1024,57 @@ function handleAttachmentDeleteOne(record: Record<string, unknown>) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.ecattachment._self'),
-      name: t('common.tip.this.target', { target: t('entity.ecattachment._self') }),
+      entity: ai.self(),
+      name: t('common.tip.this.target', { target: ai.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: () => {
       removeAttachmentRows([record])
-      message.success(t('common.feedback.deleted', { target: t('entity.ecattachment._self') }))
+      message.success(t('common.feedback.deleted', { target: ai.self() }))
     },
   })
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
-  const masterId = props.formData?.ecGijutsuId ?? ''
+  const masterId = String(props.formData?.ecGijutsuId ?? '').trim()
+  const ecIdForChild = masterId || '0'
+  const masterEcCode = String(formState.ecCode ?? formState.ecNo ?? '').trim()
+  const masterCulture = String(formState.cultureCode ?? userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '').trim()
+  const masterPlant = String(formState.plantCode ?? '').trim()
   const payload: Record<string, unknown> = {
     ...formState,
-    ecDetails: childEcDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      ecId: masterId,
-    })),
-    attachments: childEcAttachmentRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      ecId: masterId,
-      ecCode: formState.ecCode,
-    })),
+    ecCode: masterEcCode,
+    cultureCode: masterCulture,
+    plantCode: masterPlant,
+    ecDetails: childEcDetailRows.value.map((rest) => {
+      const { __rowKey, ecNo, docNo, ...row } = rest
+      return {
+        ...row,
+        tenantCode: row.tenantCode ?? tenantStore.tenantCode,
+        companyCode: row.companyCode ?? tenantStore.companyCode,
+        cultureCode: row.cultureCode ?? masterCulture,
+        plantCode: row.plantCode ?? masterPlant,
+        ecCode: row.ecCode ?? ecNo ?? masterEcCode,
+        ecId: ecIdForChild,
+      }
+    }),
+    attachments: childEcAttachmentRows.value.map((rest) => {
+      const { __rowKey, ecNo, docNo, ...row } = rest
+      const docCode = String(row.docCode ?? docNo ?? '').trim()
+      return {
+        ...row,
+        tenantCode: row.tenantCode ?? tenantStore.tenantCode,
+        companyCode: row.companyCode ?? tenantStore.companyCode,
+        cultureCode: row.cultureCode ?? masterCulture,
+        plantCode: row.plantCode ?? masterPlant,
+        ecId: ecIdForChild,
+        ecCode: row.ecCode ?? ecNo ?? masterEcCode,
+        docCode,
+        fileName: buildEcAttachmentFileName(docCode, String(row.fileName ?? ''), String(row.accessUrl ?? '')) || row.fileName,
+      }
+    }),
   }
   return payload
 }
@@ -844,6 +1088,18 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+
+/** 将 API ecCode 映射到表单 ecNo（历史表单字段名） */
+function normalizeMasterFormFields(target: Record<string, unknown>): void {
+  const ecCode = target.ecCode
+  if (typeof ecCode === 'string' && ecCode.trim() && !target.ecNo) {
+    target.ecNo = ecCode
+  }
+  if (!target.ecCode && target.ecNo) {
+    target.ecCode = target.ecNo
+  }
+}
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 ecId 才视为编辑） */
 watch(
   () => props.formData,
@@ -853,6 +1109,7 @@ watch(
       Object.keys(formState).forEach((k) => delete formState[k])
       delete (next as any).ecDetails
       delete (next as any).attachments
+      normalizeMasterFormFields(next)
       applyScopeDefaults(next)
       Object.assign(formState, next)
       syncChildRowsFromFormData(val)
@@ -863,10 +1120,12 @@ watch(
         const next = { ...val } as Record<string, unknown>
         delete (next as any).ecDetails
         delete (next as any).attachments
+        normalizeMasterFormFields(next)
         Object.assign(formState, next)
         syncChildRowsFromFormData(val)
       } else {
         childEcDetailRows.value = []
+        resetEcDetailPagination()
         childEcAttachmentRows.value = []
         clearAttachmentSelection()
       }
@@ -878,9 +1137,25 @@ watch(
   { immediate: true }
 )
 
+/** 明细行数变化时校正当前页（避免删行后停留在空页） */
+watch(
+  () => childEcDetailRows.value.length,
+  (total) => {
+    if (total === 0) {
+      resetEcDetailPagination()
+      return
+    }
+    const size = Math.max(1, ecDetailPageSize.value)
+    const maxPage = Math.max(1, Math.ceil(total / size))
+    if (ecDetailCurrentPage.value > maxPage) {
+      ecDetailCurrentPage.value = maxPage
+    }
+  },
+)
+
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, userStore.userInfo?.cultureCode] as const,
   () => {
     const isCreate = !props.formData?.ecGijutsuId
     if (isCreate) {
@@ -894,32 +1169,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: gi.label('plantCode') }),
       trigger: 'blur'
     }
   ],
-  ecCode: [
+  ecNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ec.no') }),
+      message: t('common.page.form.placeholder.required', { field: gi.label('ecCode') }),
       trigger: 'blur'
     }
   ],
   ecIssueDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ec.issuedate') }),
+      message: t('common.page.form.placeholder.select', { field: gi.label('ecIssueDate') }),
       trigger: 'change'
     }
   ],
   changeStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.changestatus') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('changeStatus') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.changestatus') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('changeStatus') }))
       }
       return Promise.resolve()
     },
@@ -928,32 +1203,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ecTitle: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ec.title') }),
+      message: t('common.page.form.placeholder.required', { field: gi.label('ecTitle') }),
       trigger: 'blur'
     }
   ],
   ecContent: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ec.content') }),
+      message: t('common.page.form.placeholder.required', { field: gi.label('ecContent') }),
       trigger: 'blur'
     }
   ],
   ecLeader: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ec.leader') }),
+      message: t('common.page.form.placeholder.select', { field: gi.label('ecLeader') }),
       trigger: 'change'
     }
   ],
   ecLossAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.lossamount') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecLossAmount') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.lossamount') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecLossAmount') }))
       }
       return Promise.resolve()
     },
@@ -962,11 +1237,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ecDistinction: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.distinction') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.distinction') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') }))
       }
       return Promise.resolve()
     },
@@ -975,18 +1250,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ecEntryDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ec.entrydate') }),
+      message: t('common.page.form.placeholder.select', { field: gi.label('ecEntryDate') }),
       trigger: 'change'
     }
   ],
   ecStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.status') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecStatus') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ec.status') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecStatus') }))
       }
       return Promise.resolve()
     },
@@ -1009,10 +1284,20 @@ async function validate() {
     const url = String(row.accessUrl ?? '').trim()
     const fileName = String(row.fileName ?? '').trim()
     const attachmentType = String(row.attachmentType ?? '').trim()
-    const docCode = String(row.docCode ?? '').trim()
+    const docCode = String(row.docCode ?? row.docNo ?? '').trim()
+    const ecCode = String(formState.ecCode ?? formState.ecNo ?? row.ecCode ?? row.ecNo ?? '').trim()
     if (!props.sourceImportMode && (!attachmentType || !docCode)) {
       activeTab.value = 'tab-3'
-      const msg = t('common.page.form.placeholder.required', { field: t('entity.ecattachment._self') })
+      const msg = t('common.page.form.placeholder.required', { field: ai.self() })
+      message.warning(msg)
+      throw new Error(msg)
+    }
+    if (attachmentType && docCode && !isValidEcAttachmentDocCode(attachmentType, docCode, ecCode)) {
+      activeTab.value = 'tab-3'
+      const hintKey = getEcAttachmentDocCodeHintKey(attachmentType)
+      const msg = t(`${ATTACHMENT_DOC_CODE_I18N}.formatInvalid`, {
+        hint: t(`${ATTACHMENT_DOC_CODE_I18N}.hint.${hintKey}`),
+      })
       message.warning(msg)
       throw new Error(msg)
     }
@@ -1022,6 +1307,20 @@ async function validate() {
       message.warning(msg)
       throw new Error(msg)
     }
+  }
+  const seenDocCodes = new Set<string>()
+  for (let i = 0; i < attachmentRows.length; i += 1) {
+    const docCode = String(attachmentRows[i].docCode ?? attachmentRows[i].docNo ?? '').trim()
+    if (!docCode) {
+      continue
+    }
+    if (seenDocCodes.has(docCode)) {
+      activeTab.value = 'tab-3'
+      const msg = t(`${ATTACHMENT_DOC_CODE_I18N}.duplicate`, { code: docCode })
+      message.warning(msg)
+      throw new Error(msg)
+    }
+    seenDocCodes.add(docCode)
   }
   return formState
 }
@@ -1043,9 +1342,11 @@ function getValues(): Record<string, any> {
   }
   if ('ecDistinction' in payload) {
     const rawEcDistinction = payload.ecDistinction
-    payload.ecDistinction = typeof rawEcDistinction === 'number' ? rawEcDistinction : Number(rawEcDistinction)
+    const parsed = typeof rawEcDistinction === 'number' ? rawEcDistinction : Number(rawEcDistinction)
+    payload.ecDistinction = Number.isFinite(parsed) ? parsed : 0
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if ('ecNo' in payload && payload.ecCode) delete payload.ecNo
   return payload
 }
 
@@ -1058,6 +1359,7 @@ function resetFields() {
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.ecGijutsuId)
   childEcDetailRows.value = []
+  resetEcDetailPagination()
   childEcAttachmentRows.value = []
   clearAttachmentSelection()
   attachmentFormVisible.value = false
@@ -1076,5 +1378,10 @@ defineExpose({ validate, getValues, resetFields })
 
 :deep(.ant-tabs-tabpane) {
   min-height: 50vh;
+}
+
+/* 设变明细表：min-height 由 JS 按窗体视口 × 5/4 绑定 */
+.ec-form-detail-table-wrap {
+  min-height: 0;
 }
 </style>

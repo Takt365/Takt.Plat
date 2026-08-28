@@ -74,7 +74,7 @@ export interface PurchaseInvoice extends CompanyDtoBase {
   supplierCode?: string;
 
   /**
-   * 货币（字典 accounting_currency_code）
+   * 货币（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -237,7 +237,7 @@ export interface PurchaseInvoiceExport {
   supplierCode: string;
 
   /**
-   * 货币（字典 accounting_currency_code）
+   * 货币（字典 accounting_financial_currency_code）
    */
   currencyCode: string;
 

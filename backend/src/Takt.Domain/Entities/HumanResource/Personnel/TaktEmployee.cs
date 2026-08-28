@@ -41,7 +41,7 @@ public class TaktEmployee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
+    /// 性别（字典 sys_user_gender；0=未知 1=男 2=女）
     /// </summary>
     [SugarColumn(ColumnName = "gender", ColumnDescription = "性别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int Gender { get; set; } = 0;
@@ -66,27 +66,27 @@ public class TaktEmployee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "email", ColumnDescription = "电子邮箱", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
     public string? Email { get; set; }
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
+    /// 籍贯（字典 humanresource_personnel_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     [SugarColumn(ColumnName = "native_place", ColumnDescription = "籍贯", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string NativePlace { get; set; } = string.Empty;
     /// <summary>
-    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
+    /// 民族（字典 humanresource_personnel_ethnic_code；DictValue 1～56）
     /// </summary>
     [SugarColumn(ColumnName = "ethnicity", ColumnDescription = "民族", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int Ethnicity { get; set; } = 1;
     /// <summary>
-    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
+    /// 政治面貌（字典 humanresource_personnel_political_affiliation；0～12；人事档案必填）
     /// </summary>
     [SugarColumn(ColumnName = "political_affiliation", ColumnDescription = "政治面貌", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PoliticalAffiliation { get; set; } = 0;
     /// <summary>
-    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
+    /// 婚姻状况（字典 humanresource_personnel_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
     [SugarColumn(ColumnName = "marital_status", ColumnDescription = "婚姻状况", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int MaritalStatus { get; set; } = 0;
     /// <summary>
-    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
+    /// 员工状态（字典 humanresource_personnel_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     [SugarColumn(ColumnName = "employee_status", ColumnDescription = "员工状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EmployeeStatus { get; set; } = 1;

@@ -28,6 +28,22 @@ export default {
       importSuccess: '{count} 件の設変を取込しました',
       importPartial: '取込完了：成功 {success} 件、失敗 {fail} 件',
     },
+    attachment: {
+      docCode: {
+        formatInvalid: '文書コード形式が正しくありません（{hint}）',
+        duplicate: '文書コード「{code}」は既に存在します',
+        hint: {
+          empty: '文書コードを入力してください',
+          ec: '設変番号と一致させる',
+          eppFpp: 'P-xxxx（P- + 数字4桁、例 P-0001）',
+          tl: 'DTS-xxxx（DTS- + 数字4桁、例 DTS-0001）',
+          quadDash: 'xxxx-xxxx（各数字4桁、例 1234-5678）',
+        },
+      },
+      fileName: {
+        duplicate: 'ファイル名「{name}」は既に存在します',
+      },
+    },
     tabs: {
       oldNewMaterial: '旧新部品',
     },

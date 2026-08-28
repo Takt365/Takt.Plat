@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowTaskDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowTask 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowTask 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Workflow;
 
@@ -37,7 +36,7 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public long FlowTaskId { get; set; }
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InstanceId { get; set; }
@@ -48,41 +47,41 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public string? InstanceName { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     public string TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 任务所有者 名称（填充字段）
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public string? OwnerUserName { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签类型
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
     /// </summary>
-    public TaktFlowSignType SignType { get; set; }
+    public int SignType { get; set; } = 0;
 
     /// <summary>
     /// 优先级
@@ -105,12 +104,12 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -131,9 +130,9 @@ public class TaktFlowTaskDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 所属流程实例
@@ -174,42 +173,47 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InstanceId { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     public string? TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 会签类型
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public TaktFlowSignType? SignType { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
+    /// </summary>
+    public int? SignType { get; set; }
 
     /// <summary>
     /// 优先级
@@ -247,12 +251,12 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public DateTime? CompletedAtEnd { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -268,9 +272,9 @@ public class TaktFlowTaskQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
+    public int? TaskStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -323,43 +327,48 @@ public class TaktFlowTaskCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InstanceId { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
-    [Required(ErrorMessage = "任务定义键（设计器节点 nodeId）不能为空")]
+    [Required(ErrorMessage = "任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）不能为空")]
     public string TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 会签类型
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public TaktFlowSignType SignType { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
+    /// </summary>
+    public int SignType { get; set; } = 0;
 
     /// <summary>
     /// 优先级
@@ -382,12 +391,12 @@ public class TaktFlowTaskCreateDto
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -398,9 +407,9 @@ public class TaktFlowTaskCreateDto
     public string? Comment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -452,10 +461,10 @@ public class TaktFlowTaskStatusDto
     public long FlowTaskId { get; set; }
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    [Required(ErrorMessage = "任务状态不能为空")]
-    public TaktFlowTaskStatus TaskStatus { get; set; }
+    [Required(ErrorMessage = "任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）不能为空")]
+    public int TaskStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -512,42 +521,47 @@ public class TaktFlowTaskTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InstanceId { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     public string? TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 会签类型
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public TaktFlowSignType? SignType { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
+    /// </summary>
+    public int? SignType { get; set; }
 
     /// <summary>
     /// 优先级
@@ -570,12 +584,12 @@ public class TaktFlowTaskTemplateDto
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -586,9 +600,9 @@ public class TaktFlowTaskTemplateDto
     public string? Comment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
+    public int? TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -628,42 +642,47 @@ public class TaktFlowTaskImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InstanceId { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     public string? TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 会签类型
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public TaktFlowSignType? SignType { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
+    /// </summary>
+    public int? SignType { get; set; }
 
     /// <summary>
     /// 优先级
@@ -686,12 +705,12 @@ public class TaktFlowTaskImportDto
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? IsAddSign { get; set; }
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -702,9 +721,9 @@ public class TaktFlowTaskImportDto
     public string? Comment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus? TaskStatus { get; set; }
+    public int? TaskStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -750,42 +769,47 @@ public class TaktFlowTaskExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 流程实例 ID
+    /// 流程实例 ID（选项 TaktFlowInstances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InstanceId { get; set; }
 
     /// <summary>
-    /// 任务定义键（设计器节点 nodeId）
+    /// 任务定义键（设计器 nodeId；与实例 CurrentActivityId 一致）
     /// </summary>
     public string TaskDefinitionKey { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务名称
+    /// 任务名称（冗余字段，便于查询）
     /// </summary>
     public string? TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 办理人 ID
+    /// 办理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeUserId { get; set; }
 
     /// <summary>
-    /// 办理人姓名
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     public string? AssigneeUserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 任务所有者 ID（转办前原办理人）
+    /// 任务所有者 ID（选项 TaktUsers/options；DictValue=Id；转办前原办理人）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OwnerUserId { get; set; }
 
     /// <summary>
-    /// 会签类型
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public TaktFlowSignType SignType { get; set; }
+    public string? OwnerUserName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
+    /// </summary>
+    public int SignType { get; set; } = 0;
 
     /// <summary>
     /// 优先级
@@ -808,12 +832,12 @@ public class TaktFlowTaskExportDto
     public DateTime? CompletedAt { get; set; }
 
     /// <summary>
-    /// 是否加签任务
+    /// 是否加签任务（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int IsAddSign { get; set; } = 0;
 
     /// <summary>
-    /// 加签记录 ID（TaktFlowAddSign）
+    /// 加签记录 ID（选项 TaktFlowAddSigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AddSignId { get; set; }
@@ -829,9 +853,9 @@ public class TaktFlowTaskExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 任务状态
+    /// 任务状态（字典 sys_flow_task_status；0=待办 1=已完成 2=已取消）
     /// </summary>
-    public TaktFlowTaskStatus TaskStatus { get; set; }
+    public int TaskStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

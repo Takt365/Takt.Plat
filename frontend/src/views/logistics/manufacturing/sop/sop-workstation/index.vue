@@ -89,7 +89,7 @@
         <template v-else-if="column.key === 'processSegmentType'">
           <TaktDictTag
             :value="getSopWorkstationField(record, 'processSegmentType')"
-            dict-type="logistics_process_segment_type"
+            dict-type="logistics_manufacturing_process_segment_type"
           />
         </template>
       </template>
@@ -203,7 +203,7 @@
       <a-form-item :label="t('entity.sopworkstation.processsegmenttype')">
         <TaktSelect
           v-model:value="advancedQueryForm.processSegmentType"
-          dict-type="logistics_process_segment_type"
+          dict-type="logistics_manufacturing_process_segment_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopworkstation.processsegmenttype') })"
           allow-clear
         />

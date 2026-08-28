@@ -36,17 +36,17 @@ public static class TaktProductionStatHelper
     /// </summary>
     public const int StandardOperationTimeApprovalCompleted = 2;
     /// <summary>
-    /// PCBA完成状态：未完成（字典 logistics_pcba_completed_status=0）
+    /// PCBA完成状态：未完成（字典 logistics_manufacturing_pcba_completed_status=0）
     /// </summary>
     public const int PcbaCompletedStatusNotCompleted = 0;
 
     /// <summary>
-    /// PCBA完成状态：部分完成（字典 logistics_pcba_completed_status=1）
+    /// PCBA完成状态：部分完成（字典 logistics_manufacturing_pcba_completed_status=1）
     /// </summary>
     public const int PcbaCompletedStatusPartial = 1;
 
     /// <summary>
-    /// PCBA完成状态：已完成（字典 logistics_pcba_completed_status=2）
+    /// PCBA完成状态：已完成（字典 logistics_manufacturing_pcba_completed_status=2）
     /// </summary>
     public const int PcbaCompletedStatusCompleted = 2;
 
@@ -67,7 +67,7 @@ public static class TaktProductionStatHelper
     }
 
     /// <summary>
-    /// 按累计完成数与批次数量解析 PCBA 完成状态（字典 logistics_pcba_completed_status）
+    /// 按累计完成数与批次数量解析 PCBA 完成状态（字典 logistics_manufacturing_pcba_completed_status）
     /// </summary>
     /// <param name="totalCompletedQty">累计完成数</param>
     /// <param name="batchQty">批次数量</param>

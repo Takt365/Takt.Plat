@@ -23,9 +23,8 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mrp;
 [SugarIndex("ix_purchase_plan_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchasePlanCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_plan_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanBy), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_planner_employee_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannerEmployeeId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_planner_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannerId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_mrp", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_production_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionPlanId), OrderByType.Asc, false)]
 public class TaktPurchasePlan : TaktApprovalEntityBase
@@ -58,7 +57,7 @@ public class TaktPurchasePlan : TaktApprovalEntityBase
     public long? ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 来源生产计划编码（冗余字段，便于查询）
+    /// 来源生产计划编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "production_plan_code", ColumnDescription = "来源生产计划编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? ProductionPlanCode { get; set; }
@@ -88,17 +87,16 @@ public class TaktPurchasePlan : TaktApprovalEntityBase
     public string? PurchaseGroupCode { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "planner_employee_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
-
+    public long? PlannerEmployeeId { get; set; }
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 计划人名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string PlanBy { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "planner_name", ColumnDescription = "计划人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? PlannerName { get; set; }
 
     /// <summary>
     /// 计划总数量（基本单位数量）

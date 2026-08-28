@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomerServiceOrder 生成，请按需审阅）
 // 
@@ -59,6 +59,8 @@ public class TaktCustomerServiceOrderCreateValidator : AbstractValidator<TaktCus
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ServiceEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("服务负责人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -112,6 +114,8 @@ public class TaktCustomerServiceOrderUpdateValidator : AbstractValidator<TaktCus
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ServiceEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("服务负责人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -159,6 +163,8 @@ public class TaktCustomerServiceOrderImportValidator : AbstractValidator<TaktCus
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ServiceEmployeeId)
+            .GreaterThanOrEqualTo(0).WithMessage("服务负责人不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

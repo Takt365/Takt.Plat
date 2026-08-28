@@ -74,17 +74,17 @@ export interface SalesQuotation extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -104,7 +104,7 @@ export interface SalesQuotation extends CompanyDtoBase {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus: number;
 
@@ -199,17 +199,17 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -229,7 +229,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus?: number;
 
@@ -328,17 +328,17 @@ export interface SalesQuotationCreate {
   discountAmount: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -358,7 +358,7 @@ export interface SalesQuotationCreate {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus: number;
 
@@ -412,7 +412,7 @@ export interface SalesQuotationStatus {
   salesQuotationId: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus: number;
 
@@ -491,17 +491,17 @@ export interface SalesQuotationTemplate {
   discountAmount?: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -521,7 +521,7 @@ export interface SalesQuotationTemplate {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus?: number;
 
@@ -615,17 +615,17 @@ export interface SalesQuotationImport {
   discountAmount?: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -645,7 +645,7 @@ export interface SalesQuotationImport {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus?: number;
 
@@ -739,17 +739,17 @@ export interface SalesQuotationExport {
   discountAmount: number;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -769,7 +769,7 @@ export interface SalesQuotationExport {
   salesOrderCode?: string;
 
   /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
+   * 报价状态（字典 logistics_sales_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
    */
   quotationStatus: number;
 

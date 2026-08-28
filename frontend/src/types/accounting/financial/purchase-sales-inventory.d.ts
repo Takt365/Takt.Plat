@@ -40,7 +40,7 @@ export interface PurchaseSalesInventory extends CompanyDtoBase {
   materialDescription?: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation?: string;
 
@@ -120,7 +120,7 @@ export interface PurchaseSalesInventory extends CompanyDtoBase {
   closingUnitCost?: number;
 
   /**
-   * 币种（字典 accounting_currency_code）
+   * 币种（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -178,7 +178,7 @@ export interface PurchaseSalesInventoryExport {
   materialDescription: string;
 
   /**
-   * 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
+   * 评估类别（字典 logistics_materials_valuation_class；Z792=成品，Z790=半成品，Z300=原材料）
    */
   valuation: string;
 
@@ -258,7 +258,7 @@ export interface PurchaseSalesInventoryExport {
   closingUnitCost: number;
 
   /**
-   * 币种（字典 accounting_currency_code）
+   * 币种（字典 accounting_financial_currency_code）
    */
   currencyCode: string;
 

@@ -58,6 +58,7 @@
                 <a-input
                   v-model:value="formState.dictLabel"
                   :placeholder="pi.ph('dictLabel')"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -70,6 +71,7 @@
                 <a-input
                   v-model:value="formState.dictValue"
                   :placeholder="pi.ph('dictValue')"
+                  :maxlength="40"
                   allow-clear
                 />
               </a-form-item>
@@ -82,6 +84,7 @@
                 <a-input
                   v-model:value="formState.i18nKey"
                   :placeholder="pi.ph('i18nKey')"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>

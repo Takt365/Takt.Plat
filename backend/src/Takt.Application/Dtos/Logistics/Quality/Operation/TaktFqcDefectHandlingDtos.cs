@@ -94,17 +94,17 @@ public class TaktFqcDefectHandlingDto : TaktCompanyDtoBase
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -228,17 +228,17 @@ public class TaktFqcDefectHandlingQueryDto : TaktPagedQuery
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间（范围查询-开始）
@@ -383,17 +383,17 @@ public class TaktFqcDefectHandlingCreateDto
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -587,17 +587,17 @@ public class TaktFqcDefectHandlingTemplateDto
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -720,17 +720,17 @@ public class TaktFqcDefectHandlingImportDto
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间
@@ -859,17 +859,17 @@ public class TaktFqcDefectHandlingExportDto
     /// <summary>
     /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
-    public string? ResponsibleDept { get; set; } = string.Empty;
+    public string? ResponsibleDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? ResponsibleBy { get; set; } = string.Empty;
+    public string? ResponsiblePersonName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? HandlerBy { get; set; } = string.Empty;
+    public string? HandlerName { get; set; } = string.Empty;
 
     /// <summary>
     /// 处理时间

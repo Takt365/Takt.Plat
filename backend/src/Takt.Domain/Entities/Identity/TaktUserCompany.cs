@@ -33,7 +33,7 @@ public class TaktUserCompany : TaktCompanyEntityBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 是否默认登录公司（字典 sys_default_type；1=是 0=否）
+    /// 是否默认登录公司（字典 sys_yes_no；1=是 0=否）
     /// 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司
     /// 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>
     /// </summary>

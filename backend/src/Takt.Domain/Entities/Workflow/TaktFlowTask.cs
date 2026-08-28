@@ -35,7 +35,7 @@ public class TaktFlowTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "task_definition_key", ColumnDescription = "任务定义键", ColumnDataType = "varchar", Length = 64, IsNullable = false)]
     public string TaskDefinitionKey { get; set; } = string.Empty;
     /// <summary>
-    /// 任务名称（冗余字段，便于查询）
+    /// 任务名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "task_name", ColumnDescription = "任务名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? TaskName { get; set; }
@@ -45,7 +45,7 @@ public class TaktFlowTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "assignee_user_id", ColumnDescription = "办理人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long AssigneeUserId { get; set; }
     /// <summary>
-    /// 办理人姓名（冗余字段，便于查询）
+    /// 办理人姓名（冗余：按 AssigneeUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_user_name", ColumnDescription = "办理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeUserName { get; set; }
@@ -54,6 +54,11 @@ public class TaktFlowTask : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "owner_user_id", ColumnDescription = "任务所有者ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? OwnerUserId { get; set; }
+    /// <summary>
+    /// 任务所有者姓名（冗余：按 OwnerUserId 取 TaktUser.UserName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "owner_user_name", ColumnDescription = "任务所有者姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
+    public string? OwnerUserName { get; set; }
     /// <summary>
     /// 会签类型（字典 sys_flow_sign_type；1=或签 2=会签）
     /// </summary>

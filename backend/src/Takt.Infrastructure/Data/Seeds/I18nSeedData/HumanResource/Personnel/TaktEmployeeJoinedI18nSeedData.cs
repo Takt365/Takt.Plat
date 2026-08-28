@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeJoined 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -199,22 +199,22 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeejoined.jobtitle", "zh-HK", "职务_hk", "职务/职称"),
 
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "en-US", "工作性质_us", "工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "en-US", "工作性质_us", "工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "ja-JP", "工作性质_jp", "工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "ja-JP", "工作性质_jp", "工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "zh-CN", "工作性质", "工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "zh-CN", "工作性质", "工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
             // entity.employeejoined.worknature
-            new TranslationSeedItem("entity.employeejoined.worknature", "zh-HK", "工作性质_hk", "工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
+            new TranslationSeedItem("entity.employeejoined.worknature", "zh-HK", "工作性质_hk", "工作性质（字典 humanresource_personnel_employee_work_nature；0=全职 1=兼职 2=实习 3=外包 4=其他）"),
 
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "en-US", "任职类型_us", "任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "en-US", "任职类型_us", "任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "ja-JP", "任职类型_jp", "任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "ja-JP", "任职类型_jp", "任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-CN", "任职类型", "任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-CN", "任职类型", "任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
             // entity.employeejoined.employmenttype
-            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-HK", "任职类型_hk", "任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
+            new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-HK", "任职类型_hk", "任职类型（字典 humanresource_personnel_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
 
             // entity.employeejoined.directmanagerid
             new TranslationSeedItem("entity.employeejoined.directmanagerid", "en-US", "直属上级员工ID_us", "直属上级（选项 TaktEmployees/options；DictValue=Id）"),

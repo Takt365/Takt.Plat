@@ -43,13 +43,13 @@ public class TaktCustomerServiceOrder : TaktCompanyEntityBase
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_code", ColumnDescription = "客户端编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_name1", ColumnDescription = "客户端名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
     public string ClientName1 { get; set; } = string.Empty;
@@ -62,7 +62,7 @@ public class TaktCustomerServiceOrder : TaktCompanyEntityBase
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_contract_code", ColumnDescription = "关联服务合同编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceContractCode { get; set; }
@@ -75,7 +75,7 @@ public class TaktCustomerServiceOrder : TaktCompanyEntityBase
     public long? ServiceRequestId { get; set; }
 
     /// <summary>
-    /// 关联服务请求单号（冗余字段，便于查询）
+    /// 关联服务请求单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_request_code", ColumnDescription = "关联服务请求单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceRequestCode { get; set; }
@@ -153,10 +153,16 @@ public class TaktCustomerServiceOrder : TaktCompanyEntityBase
     public DateTime? ActualEndDate { get; set; }
 
     /// <summary>
-    /// 服务负责人（人员代码）
+    /// 服务负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "service_by", ColumnDescription = "服务负责人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? ServiceBy { get; set; }
+    [SugarColumn(ColumnName = "service_employee_id", ColumnDescription = "服务负责人员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ServiceEmployeeId { get; set; }
+    /// <summary>
+    /// 服务负责人名称（冗余：按 ServiceEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "service_employee_name", ColumnDescription = "服务负责人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ServiceEmployeeName { get; set; }
 
     /// <summary>
     /// 排序号（回填）（越小越靠前）

@@ -126,7 +126,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.valueType"
-                  dict-type="gen_display_type"
+                  dict-type="code_generator_display_type"
                   :placeholder="pi.ph('valueType')"
                 />
               </a-form-item>

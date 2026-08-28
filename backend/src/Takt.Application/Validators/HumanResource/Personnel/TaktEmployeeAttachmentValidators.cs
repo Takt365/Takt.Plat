@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeAttachment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeAttachment 生成，请按需审阅）
 // 
@@ -49,9 +49,9 @@ public class TaktEmployeeAttachmentCreateValidator : AbstractValidator<TaktEmplo
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
-        RuleFor(x => x.AttachmentName)
-            .NotEmpty().WithMessage("附件名称不能为空")
-            .MaximumLength(100).WithMessage("附件名称长度不能超过100个字符");
+        RuleFor(x => x.FileName)
+            .NotEmpty().WithMessage("文件名称不能为空")
+            .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");
         RuleFor(x => x.AccessUrl)
             .NotEmpty().WithMessage("访问地址不能为空")
             .MaximumLength(1000).WithMessage("访问地址长度不能超过1000个字符");
@@ -98,9 +98,9 @@ public class TaktEmployeeAttachmentUpdateValidator : AbstractValidator<TaktEmplo
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空").When(x => x.EmployeeId <= 0)
             .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
-        RuleFor(x => x.AttachmentName)
-            .NotEmpty().WithMessage("附件名称不能为空")
-            .MaximumLength(100).WithMessage("附件名称长度不能超过100个字符");
+        RuleFor(x => x.FileName)
+            .NotEmpty().WithMessage("文件名称不能为空")
+            .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");
         RuleFor(x => x.AccessUrl)
             .NotEmpty().WithMessage("访问地址不能为空")
             .MaximumLength(1000).WithMessage("访问地址长度不能超过1000个字符");
@@ -141,9 +141,9 @@ public class TaktEmployeeAttachmentImportValidator : AbstractValidator<TaktEmplo
         RuleFor(x => x.EmployeeName)
             .NotEmpty().WithMessage("员工姓名不能为空")
             .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
-        RuleFor(x => x.AttachmentName)
-            .NotEmpty().WithMessage("附件名称不能为空")
-            .MaximumLength(100).WithMessage("附件名称长度不能超过100个字符");
+        RuleFor(x => x.FileName)
+            .NotEmpty().WithMessage("文件名称不能为空")
+            .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");
         RuleFor(x => x.AccessUrl)
             .NotEmpty().WithMessage("访问地址不能为空")
             .MaximumLength(1000).WithMessage("访问地址长度不能超过1000个字符");

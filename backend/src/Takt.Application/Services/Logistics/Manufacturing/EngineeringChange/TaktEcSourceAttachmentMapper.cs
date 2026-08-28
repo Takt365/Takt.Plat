@@ -13,6 +13,7 @@
 using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Shared.Constants;
+using Takt.Shared.Helpers;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -98,7 +99,7 @@ public static class TaktEcSourceAttachmentMapper
             LineNumber = lineNumber,
             AttachmentType = attachmentType,
             DocCode = trimmedDocCode,
-            FileName = defaultFileName,
+            FileName = TaktEcAttachmentDocCodeHelper.BuildFileNameFromDocCode(trimmedDocCode, defaultFileName),
             AccessUrl = PlaceholderAccessUrl,
         });
     }

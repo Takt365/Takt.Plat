@@ -105,6 +105,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             {
                 DictValue = g.Key,
                 DictLabel = g.Key,
+                I18nKey = TaktNamingHelper.OrgDeptResourceKey(g.Key),
             })
             .ToList();
     }
@@ -891,13 +892,17 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// </summary>
     private sealed class EcMonthlyTrendRowKeyComparer : IEqualityComparer<EcMonthlyTrendRowKey>
     {
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static EcMonthlyTrendRowKeyComparer Instance { get; } = new();
 
         /// <summary>
         /// 月生产推移行键比较器
         /// </summary>
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         /// <summary>
         /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
         /// </summary>
@@ -945,28 +950,44 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// </summary>
     private sealed class EcMonthlyTrendAnalysisBuilt
     {
-        /// <summary>排序后全量行</summary>
+        /// <summary>
+        /// 排序后全量行
+        /// </summary>
         public List<TaktEcMonthlyTrendDto> OrderedRows { get; init; } = new();
 
-        /// <summary>期间列顺序</summary>
+        /// <summary>
+        /// 期间列顺序
+        /// </summary>
         public List<string> PeriodOrder { get; init; } = new();
 
-        /// <summary>环比基准期间</summary>
+        /// <summary>
+        /// 环比基准期间
+        /// </summary>
         public string? BasePeriod { get; init; }
 
-        /// <summary>环比对比期间</summary>
+        /// <summary>
+        /// 环比对比期间
+        /// </summary>
         public string? ComparePeriod { get; init; }
 
-        /// <summary>上涨行数</summary>
+        /// <summary>
+        /// 上涨行数
+        /// </summary>
         public int UpCount { get; init; }
 
-        /// <summary>下跌行数</summary>
+        /// <summary>
+        /// 下跌行数
+        /// </summary>
         public int DownCount { get; init; }
 
-        /// <summary>持平行数</summary>
+        /// <summary>
+        /// 持平行数
+        /// </summary>
         public int FlatCount { get; init; }
 
-        /// <summary>无法比较行数</summary>
+        /// <summary>
+        /// 无法比较行数
+        /// </summary>
         public int NoneCount { get; init; }
 
         /// <summary>
@@ -988,13 +1009,17 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// </summary>
     private sealed class EcImplementationMonthlyTrendRowKeyComparer : IEqualityComparer<EcImplementationMonthlyTrendRowKey>
     {
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         public static EcImplementationMonthlyTrendRowKeyComparer Instance { get; } = new();
 
         /// <summary>
         /// 月生产推移行键比较器
         /// </summary>
-        /// <summary>单例</summary>
+        /// <summary>
+        /// 单例
+        /// </summary>
         /// <summary>
         /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
         /// </summary>
@@ -1033,28 +1058,44 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// </summary>
     private sealed class EcImplementationMonthlyTrendAnalysisBuilt
     {
-        /// <summary>排序后全量行</summary>
+        /// <summary>
+        /// 排序后全量行
+        /// </summary>
         public List<TaktEcImplementationMonthlyTrendDto> OrderedRows { get; init; } = new();
 
-        /// <summary>期间列顺序</summary>
+        /// <summary>
+        /// 期间列顺序
+        /// </summary>
         public List<string> PeriodOrder { get; init; } = new();
 
-        /// <summary>环比基准期间</summary>
+        /// <summary>
+        /// 环比基准期间
+        /// </summary>
         public string? BasePeriod { get; init; }
 
-        /// <summary>环比对比期间</summary>
+        /// <summary>
+        /// 环比对比期间
+        /// </summary>
         public string? ComparePeriod { get; init; }
 
-        /// <summary>上涨行数</summary>
+        /// <summary>
+        /// 上涨行数
+        /// </summary>
         public int UpCount { get; init; }
 
-        /// <summary>下跌行数</summary>
+        /// <summary>
+        /// 下跌行数
+        /// </summary>
         public int DownCount { get; init; }
 
-        /// <summary>持平行数</summary>
+        /// <summary>
+        /// 持平行数
+        /// </summary>
         public int FlatCount { get; init; }
 
-        /// <summary>无法比较行数</summary>
+        /// <summary>
+        /// 无法比较行数
+        /// </summary>
         public int NoneCount { get; init; }
 
         /// <summary>

@@ -109,12 +109,12 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         EnsureThreeLayerContext();
         var list = await _sourceEcDetailRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SourceLegacyPartName ?? string.Empty,
+            x => x.SourceOldMaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.SourceLegacyPartCode ?? string.Empty,
-            DictLabel = e.SourceLegacyPartName ?? e.SourceLegacyPartCode ?? string.Empty,
+            DictValue = e.SourceOldMaterialCode ?? string.Empty,
+            DictLabel = e.SourceOldMaterialDescription ?? e.SourceOldMaterialCode ?? string.Empty,
         }).ToList();
     }
 
@@ -415,19 +415,19 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SourceEcCode != null && x.SourceEcCode.Contains(keywords))
-                || (x.SourceFinishedProduct != null && x.SourceFinishedProduct.Contains(keywords))
-                || (x.SourceParentPart != null && x.SourceParentPart.Contains(keywords))
-                || (x.SourceLegacyPartCode != null && x.SourceLegacyPartCode.Contains(keywords))
-                || (x.SourceLegacyPartName != null && x.SourceLegacyPartName.Contains(keywords))
-                || (x.SourceLegacyMountingPosition != null && x.SourceLegacyMountingPosition.Contains(keywords))
-                || (x.SourceReplacementPartCode != null && x.SourceReplacementPartCode.Contains(keywords))
-                || (x.SourceReplacementPartName != null && x.SourceReplacementPartName.Contains(keywords))
-                || (x.SourceReplacementMountingPosition != null && x.SourceReplacementMountingPosition.Contains(keywords))
+                || (x.SourceFinishedGoods != null && x.SourceFinishedGoods.Contains(keywords))
+                || (x.SourceParentMaterialCode != null && x.SourceParentMaterialCode.Contains(keywords))
+                || (x.SourceOldMaterialCode != null && x.SourceOldMaterialCode.Contains(keywords))
+                || (x.SourceOldMaterialDescription != null && x.SourceOldMaterialDescription.Contains(keywords))
+                || (x.SourceOldItemPosition != null && x.SourceOldItemPosition.Contains(keywords))
+                || (x.SourceNewMaterialCode != null && x.SourceNewMaterialCode.Contains(keywords))
+                || (x.SourceNewMaterialDescription != null && x.SourceNewMaterialDescription.Contains(keywords))
+                || (x.SourceNewItemPosition != null && x.SourceNewItemPosition.Contains(keywords))
                 || (x.SourceBomCode != null && x.SourceBomCode.Contains(keywords))
                 || (x.SourceCompatibility != null && x.SourceCompatibility.Contains(keywords))
                 || (x.SourceDistinction != null && x.SourceDistinction.Contains(keywords))
                 || (x.SourceInstruction != null && x.SourceInstruction.Contains(keywords))
-                || (x.SourceLegacyPartDisposition != null && x.SourceLegacyPartDisposition.Contains(keywords))
+                || (x.SourceOldPartDisposition != null && x.SourceOldPartDisposition.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -463,64 +463,64 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceFinishedProduct))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceFinishedGoods))
         {
-            var sourceFinishedProduct = queryDto.SourceFinishedProduct;
-            exp = exp.And(x => x.SourceFinishedProduct != null && x.SourceFinishedProduct.Contains(sourceFinishedProduct));
+            var sourceFinishedGoods = queryDto.SourceFinishedGoods;
+            exp = exp.And(x => x.SourceFinishedGoods != null && x.SourceFinishedGoods.Contains(sourceFinishedGoods));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceParentPart))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceParentMaterialCode))
         {
-            var sourceParentPart = queryDto.SourceParentPart;
-            exp = exp.And(x => x.SourceParentPart != null && x.SourceParentPart.Contains(sourceParentPart));
+            var sourceParentMaterialCode = queryDto.SourceParentMaterialCode;
+            exp = exp.And(x => x.SourceParentMaterialCode != null && x.SourceParentMaterialCode.Contains(sourceParentMaterialCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceLegacyPartCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceOldMaterialCode))
         {
-            var sourceLegacyPartCode = queryDto.SourceLegacyPartCode;
-            exp = exp.And(x => x.SourceLegacyPartCode != null && x.SourceLegacyPartCode.Contains(sourceLegacyPartCode));
+            var sourceOldMaterialCode = queryDto.SourceOldMaterialCode;
+            exp = exp.And(x => x.SourceOldMaterialCode != null && x.SourceOldMaterialCode.Contains(sourceOldMaterialCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceLegacyPartName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceOldMaterialDescription))
         {
-            var sourceLegacyPartName = queryDto.SourceLegacyPartName;
-            exp = exp.And(x => x.SourceLegacyPartName != null && x.SourceLegacyPartName.Contains(sourceLegacyPartName));
+            var sourceOldMaterialDescription = queryDto.SourceOldMaterialDescription;
+            exp = exp.And(x => x.SourceOldMaterialDescription != null && x.SourceOldMaterialDescription.Contains(sourceOldMaterialDescription));
         }
 
-        if (queryDto?.SourceLegacyUsage.HasValue == true)
+        if (queryDto?.SourceOldUsageQuantity.HasValue == true)
         {
-            var sourceLegacyUsage = queryDto.SourceLegacyUsage.Value;
-            exp = exp.And(x => x.SourceLegacyUsage == sourceLegacyUsage);
+            var sourceOldUsageQuantity = queryDto.SourceOldUsageQuantity.Value;
+            exp = exp.And(x => x.SourceOldUsageQuantity == sourceOldUsageQuantity);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceLegacyMountingPosition))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceOldItemPosition))
         {
-            var sourceLegacyMountingPosition = queryDto.SourceLegacyMountingPosition;
-            exp = exp.And(x => x.SourceLegacyMountingPosition != null && x.SourceLegacyMountingPosition.Contains(sourceLegacyMountingPosition));
+            var sourceOldItemPosition = queryDto.SourceOldItemPosition;
+            exp = exp.And(x => x.SourceOldItemPosition != null && x.SourceOldItemPosition.Contains(sourceOldItemPosition));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceReplacementPartCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceNewMaterialCode))
         {
-            var sourceReplacementPartCode = queryDto.SourceReplacementPartCode;
-            exp = exp.And(x => x.SourceReplacementPartCode != null && x.SourceReplacementPartCode.Contains(sourceReplacementPartCode));
+            var sourceNewMaterialCode = queryDto.SourceNewMaterialCode;
+            exp = exp.And(x => x.SourceNewMaterialCode != null && x.SourceNewMaterialCode.Contains(sourceNewMaterialCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceReplacementPartName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceNewMaterialDescription))
         {
-            var sourceReplacementPartName = queryDto.SourceReplacementPartName;
-            exp = exp.And(x => x.SourceReplacementPartName != null && x.SourceReplacementPartName.Contains(sourceReplacementPartName));
+            var sourceNewMaterialDescription = queryDto.SourceNewMaterialDescription;
+            exp = exp.And(x => x.SourceNewMaterialDescription != null && x.SourceNewMaterialDescription.Contains(sourceNewMaterialDescription));
         }
 
-        if (queryDto?.SourceReplacementUsage.HasValue == true)
+        if (queryDto?.SourceNewUsageQuantity.HasValue == true)
         {
-            var sourceReplacementUsage = queryDto.SourceReplacementUsage.Value;
-            exp = exp.And(x => x.SourceReplacementUsage == sourceReplacementUsage);
+            var sourceNewUsageQuantity = queryDto.SourceNewUsageQuantity.Value;
+            exp = exp.And(x => x.SourceNewUsageQuantity == sourceNewUsageQuantity);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceReplacementMountingPosition))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceNewItemPosition))
         {
-            var sourceReplacementMountingPosition = queryDto.SourceReplacementMountingPosition;
-            exp = exp.And(x => x.SourceReplacementMountingPosition != null && x.SourceReplacementMountingPosition.Contains(sourceReplacementMountingPosition));
+            var sourceNewItemPosition = queryDto.SourceNewItemPosition;
+            exp = exp.And(x => x.SourceNewItemPosition != null && x.SourceNewItemPosition.Contains(sourceNewItemPosition));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SourceBomCode))
@@ -547,10 +547,10 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceInstruction != null && x.SourceInstruction.Contains(sourceInstruction));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceLegacyPartDisposition))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceOldPartDisposition))
         {
-            var sourceLegacyPartDisposition = queryDto.SourceLegacyPartDisposition;
-            exp = exp.And(x => x.SourceLegacyPartDisposition != null && x.SourceLegacyPartDisposition.Contains(sourceLegacyPartDisposition));
+            var sourceOldPartDisposition = queryDto.SourceOldPartDisposition;
+            exp = exp.And(x => x.SourceOldPartDisposition != null && x.SourceOldPartDisposition.Contains(sourceOldPartDisposition));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -627,43 +627,43 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceFinishedProduct))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceFinishedGoods))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceParentPart))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceParentMaterialCode))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceLegacyPartCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceOldMaterialCode))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceLegacyPartName))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceOldMaterialDescription))
         {
             return true;
         }
-        if (queryDto.SourceLegacyUsage.HasValue)
+        if (queryDto.SourceOldUsageQuantity.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceLegacyMountingPosition))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceOldItemPosition))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceReplacementPartCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceNewMaterialCode))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceReplacementPartName))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceNewMaterialDescription))
         {
             return true;
         }
-        if (queryDto.SourceReplacementUsage.HasValue)
+        if (queryDto.SourceNewUsageQuantity.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceReplacementMountingPosition))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceNewItemPosition))
         {
             return true;
         }
@@ -683,7 +683,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceLegacyPartDisposition))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceOldPartDisposition))
         {
             return true;
         }

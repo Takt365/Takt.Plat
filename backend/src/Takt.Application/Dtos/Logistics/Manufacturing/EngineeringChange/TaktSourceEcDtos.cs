@@ -166,7 +166,7 @@ public class TaktSourceEcDto : TaktCompanyDtoBase
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string SourceEcContent { get; set; } = string.Empty;
 
@@ -344,7 +344,7 @@ public class TaktSourceEcQueryDto : TaktPagedQuery
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? SourceEcContent { get; set; } = string.Empty;
 
@@ -533,7 +533,7 @@ public class TaktSourceEcCreateDto
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     [Required(ErrorMessage = "设变内容不能为空")]
     public string SourceEcContent { get; set; } = string.Empty;
@@ -764,7 +764,7 @@ public class TaktSourceEcTemplateDto
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? SourceEcContent { get; set; } = string.Empty;
 
@@ -941,7 +941,7 @@ public class TaktSourceEcImportDto
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string? SourceEcContent { get; set; } = string.Empty;
 
@@ -1124,7 +1124,7 @@ public class TaktSourceEcExportDto
     public string? SourceRelatedDrawing { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     public string SourceEcContent { get; set; } = string.Empty;
 

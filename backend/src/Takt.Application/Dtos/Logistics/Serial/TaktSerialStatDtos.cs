@@ -70,7 +70,7 @@ public class TaktSerialOutboundStatQueryDto
     public string? Destination { get; set; }
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；可选精确筛选）
+    /// 目的地港（字典 logistics_serial_destination_port_code；可选精确筛选）
     /// </summary>
     public string? DestinationPort { get; set; }
 }

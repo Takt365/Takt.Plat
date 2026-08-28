@@ -57,12 +57,12 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -151,12 +151,12 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -268,12 +268,12 @@ public class TaktEmployeeEducationCreateDto
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -385,12 +385,12 @@ public class TaktEmployeeEducationTemplateDto
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -478,12 +478,12 @@ public class TaktEmployeeEducationImportDto
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -577,12 +577,12 @@ public class TaktEmployeeEducationExportDto
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 

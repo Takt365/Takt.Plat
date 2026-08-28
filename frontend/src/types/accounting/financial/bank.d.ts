@@ -84,7 +84,7 @@ export interface Bank extends CompanyDtoBase {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -144,7 +144,7 @@ export interface Bank extends CompanyDtoBase {
   sddCore: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans: number;
 
@@ -244,7 +244,7 @@ export interface BankQuery extends TaktPagedQuery {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -304,7 +304,7 @@ export interface BankQuery extends TaktPagedQuery {
   sddCore?: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans?: number;
 
@@ -423,7 +423,7 @@ export interface BankCreate {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -483,7 +483,7 @@ export interface BankCreate {
   sddCore: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans: number;
 
@@ -607,7 +607,7 @@ export interface BankTemplate {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -667,7 +667,7 @@ export interface BankTemplate {
   sddCore?: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans?: number;
 
@@ -776,7 +776,7 @@ export interface BankImport {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -836,7 +836,7 @@ export interface BankImport {
   sddCore?: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans?: number;
 
@@ -945,7 +945,7 @@ export interface BankExport {
   address2?: string;
 
   /**
-   * SWIFT/BIC（；CHAR 11）
+   * 银行识别码（SWIFT/BIC；CHAR 11）
    */
   swiftBic?: string;
 
@@ -1005,7 +1005,7 @@ export interface BankExport {
   sddCore: number;
 
   /**
-   * SEPA拒付交易支持标识（字典 accounting_sepa_rtrans_type）
+   * SEPA拒付交易支持标识（字典 accounting_financial_sepa_rtrans_type）
    */
   sddRtrans: number;
 

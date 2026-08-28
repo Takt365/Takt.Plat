@@ -4,7 +4,7 @@
 // 文件名称：TaktEcSourceStatusMapper.cs
 // 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：来源设变 SourceStatus（PLM 英文状态）映射为 ChangeStatus（字典 logistics_ec_status 1～7）
+// 功能描述：来源设变 SourceStatus（PLM 英文状态）映射为 ChangeStatus（字典 logistics_manufacturing_ec_status 1～7）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 来源设变 PLM 英文状态 → 设变变更状态（logistics_ec_status）映射
+/// 来源设变 PLM 英文状态 → 设变变更状态（logistics_manufacturing_ec_status）映射
 /// </summary>
 public static class TaktEcSourceStatusMapper
 {
@@ -32,7 +32,7 @@ public static class TaktEcSourceStatusMapper
     ];
 
     /// <summary>
-    /// 尝试将来源设变 SourceStatus 映射为 ChangeStatus（字典 logistics_ec_status；1～7）
+    /// 尝试将来源设变 SourceStatus 映射为 ChangeStatus（字典 logistics_manufacturing_ec_status；1～7）
     /// </summary>
     /// <param name="sourceStatus">来源 PLM 状态文本（如 Work in Process、Issued、Fixed）</param>
     /// <param name="changeStatus">映射后的变更状态</param>

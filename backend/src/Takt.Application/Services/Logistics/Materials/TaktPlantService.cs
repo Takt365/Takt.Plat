@@ -377,7 +377,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || (x.UnifiedSocialCreditCode != null && x.UnifiedSocialCreditCode.Contains(keywords))
                 || (x.TaxRegistrationNumber != null && x.TaxRegistrationNumber.Contains(keywords))
                 || (x.LegalRepresentative != null && x.LegalRepresentative.Contains(keywords))
-                || (x.PlantManager != null && x.PlantManager.Contains(keywords))
+                || (x.PlantManagerUserName != null && x.PlantManagerUserName.Contains(keywords))
                 || (x.BankCode != null && x.BankCode.Contains(keywords))
                 || (x.BankAccount != null && x.BankAccount.Contains(keywords))
                 || (x.AccountHolder != null && x.AccountHolder.Contains(keywords))
@@ -565,10 +565,10 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.LegalRepresentative != null && x.LegalRepresentative.Contains(legalRepresentative));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PlantManager))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantManagerUserName))
         {
-            var plantManager = queryDto.PlantManager;
-            exp = exp.And(x => x.PlantManager != null && x.PlantManager.Contains(plantManager));
+            var plantManager = queryDto.PlantManagerUserName;
+            exp = exp.And(x => x.PlantManagerUserName != null && x.PlantManagerUserName.Contains(plantManager));
         }
 
         if (queryDto?.RegisteredCapital.HasValue == true)
@@ -857,7 +857,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PlantManager))
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantManagerUserName))
         {
             return true;
         }

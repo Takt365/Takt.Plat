@@ -77,13 +77,13 @@
         <template v-if="column.key === 'prodCategory'">
           <TaktDictTag
             :value="getAssyOutputDictValue(record, 'prodCategory')"
-            dict-type="logistics_prod_category"
+            dict-type="logistics_manufacturing_prod_category"
           />
         </template>
         <template v-else-if="column.key === 'shiftNo'">
           <TaktDictTag
             :value="getAssyOutputDictValue(record, 'shiftNo')"
-            dict-type="logistics_shift_category"
+            dict-type="logistics_manufacturing_shift_category"
           />
         </template>
       </template>
@@ -147,7 +147,7 @@
       <a-form-item :label="pi.queryLabel('prodCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          dict-type="logistics_prod_category"
+          dict-type="logistics_manufacturing_prod_category"
           :placeholder="pi.queryPh('prodCategory', 'select')"
           allow-clear
         />
@@ -205,7 +205,7 @@
       <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
-          dict-type="logistics_shift_category"
+          dict-type="logistics_manufacturing_shift_category"
           :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />

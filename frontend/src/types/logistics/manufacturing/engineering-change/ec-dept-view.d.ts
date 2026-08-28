@@ -17,14 +17,18 @@ export interface EcDeptView extends CompanyDtoBase {
   ecId: string;
   ecCode: string;
   lineNumber: number;
-  ecModel: string;
-  ecOldItem?: string;
-  ecNewItem?: string;
-  ecOldText?: string;
-  ecNewText?: string;
+  ecModelCode: string;
+  ecOldMaterialCode?: string;
+  ecNewMaterialCode?: string;
+  ecOldMaterialDescription?: string;
+  ecNewMaterialDescription?: string;
   deptCode: string;
   isImplemented: number;
   content?: string;
+  /** 执行内容（与 content 同源；实体 API 字段） */
+  execContent?: string;
+  /** 完成品物料状态（字典 logistics_materials_material_discontinued_status） */
+  discontinuedStatus?: string;
   /** 录入日期（技术） */
   entryDate?: string;
   /** 担当（EcLeader） */
@@ -57,10 +61,10 @@ export interface EcDeptView extends CompanyDtoBase {
 
 export interface EcDeptViewQuery extends TaktPagedQuery {
   ecCode?: string;
-  ecModel?: string;
+  ecModelCode?: string;
   isImplemented?: number;
-  ecOldItem?: string;
-  ecNewItem?: string;
+  ecOldMaterialCode?: string;
+  ecNewMaterialCode?: string;
 }
 
 export interface EcDeptViewUpdate {

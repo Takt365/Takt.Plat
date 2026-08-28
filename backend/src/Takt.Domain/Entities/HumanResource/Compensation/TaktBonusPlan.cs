@@ -34,12 +34,12 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plan_name", ColumnDescription = "方案名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string PlanName { get; set; } = string.Empty;
     /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）
+    /// 奖金类型（字典 humanresource_compensation_bonus_type；1=绩效奖金 2=项目奖金 3=年终奖金 4=专项奖金）
     /// </summary>
     [SugarColumn(ColumnName = "bonus_type", ColumnDescription = "奖金类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int BonusType { get; set; } = 0;
     /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）
+    /// 计算方式（字典 humanresource_compensation_bonus_calc_method；1=固定金额 2=按比例 3=按公式）
     /// </summary>
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;

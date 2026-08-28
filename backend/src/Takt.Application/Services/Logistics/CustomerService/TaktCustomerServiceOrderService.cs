@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-28
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -450,7 +450,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
         }
         if (string.IsNullOrEmpty(entity.ServiceContractCode))
         {
-            entity.ServiceContractCode = master.ServiceContractCode;
+            entity.ServiceContractCode = master.ServiceContractCode ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.ServiceRequestCode))
         {
@@ -482,7 +482,7 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
                 || (x.ServiceContractCode != null && x.ServiceContractCode.Contains(keywords))
                 || (x.ServiceRequestCode != null && x.ServiceRequestCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || (x.ServiceBy != null && x.ServiceBy.Contains(keywords))
+                || (x.ServiceEmployeeName != null && x.ServiceEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -590,10 +590,16 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceBy))
+        if (queryDto?.ServiceEmployeeId.HasValue == true)
         {
-            var serviceBy = queryDto.ServiceBy;
-            exp = exp.And(x => x.ServiceBy != null && x.ServiceBy.Contains(serviceBy));
+            var serviceEmployeeId = queryDto.ServiceEmployeeId.Value;
+            exp = exp.And(x => x.ServiceEmployeeId == serviceEmployeeId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceEmployeeName))
+        {
+            var serviceEmployeeName = queryDto.ServiceEmployeeName;
+            exp = exp.And(x => x.ServiceEmployeeName != null && x.ServiceEmployeeName.Contains(serviceEmployeeName));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -772,7 +778,11 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ServiceBy))
+        if (queryDto.ServiceEmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceEmployeeName))
         {
             return true;
         }

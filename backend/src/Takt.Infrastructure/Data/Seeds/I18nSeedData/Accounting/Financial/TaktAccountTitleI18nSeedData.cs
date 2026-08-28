@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAccountTitleI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAccountTitle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.accounttitle.parentid", "zh-HK", "父级ID_hk", "父级 ID"),
 
             // entity.accounttitle.type
-            new TranslationSeedItem("entity.accounttitle.type", "en-US", "科目类型_us", "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            new TranslationSeedItem("entity.accounttitle.type", "en-US", "科目类型_us", "科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
             // entity.accounttitle.type
-            new TranslationSeedItem("entity.accounttitle.type", "ja-JP", "科目类型_jp", "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            new TranslationSeedItem("entity.accounttitle.type", "ja-JP", "科目类型_jp", "科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
             // entity.accounttitle.type
-            new TranslationSeedItem("entity.accounttitle.type", "zh-CN", "科目类型", "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            new TranslationSeedItem("entity.accounttitle.type", "zh-CN", "科目类型", "科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
             // entity.accounttitle.type
-            new TranslationSeedItem("entity.accounttitle.type", "zh-HK", "科目类型_hk", "科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
+            new TranslationSeedItem("entity.accounttitle.type", "zh-HK", "科目类型_hk", "科目类型（字典 accounting_financial_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）"),
 
             // entity.accounttitle.balancedirection
             new TranslationSeedItem("entity.accounttitle.balancedirection", "en-US", "余额方向_us", "余额方向（0=借方，1=贷方）"),
@@ -163,13 +163,13 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.accounttitle.isauxiliary", "zh-HK", "辅助核算_hk", "辅助核算（字典 sys_yes_no；1=是，0=否）"),
 
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "en-US", "辅助核算类型_us", "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "en-US", "辅助核算类型_us", "辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "ja-JP", "辅助核算类型_jp", "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "ja-JP", "辅助核算类型_jp", "辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-CN", "辅助核算类型", "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-CN", "辅助核算类型", "辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
             // entity.accounttitle.auxiliarytype
-            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-HK", "辅助核算类型_hk", "辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
+            new TranslationSeedItem("entity.accounttitle.auxiliarytype", "zh-HK", "辅助核算类型_hk", "辅助核算类型 / 统驭标识（字典 accounting_financial_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）"),
 
             // entity.accounttitle.isquantity
             new TranslationSeedItem("entity.accounttitle.isquantity", "en-US", "数量核算_us", "数量核算（字典 sys_yes_no；1=是，0=否）"),

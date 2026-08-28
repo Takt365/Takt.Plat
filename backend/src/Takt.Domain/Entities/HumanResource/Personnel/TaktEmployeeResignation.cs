@@ -40,7 +40,7 @@ public class TaktEmployeeResignation : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
+    /// 离职类型（字典 humanresource_personnel_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
     /// </summary>
     [SugarColumn(ColumnName = "resignation_type", ColumnDescription = "离职类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ResignationType { get; set; }

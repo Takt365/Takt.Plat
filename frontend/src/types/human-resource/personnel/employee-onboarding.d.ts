@@ -89,7 +89,7 @@ export interface EmployeeOnboarding extends CompanyDtoBase {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus: number;
 
@@ -194,7 +194,7 @@ export interface EmployeeOnboardingQuery extends TaktPagedQuery {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus?: number;
 
@@ -298,7 +298,7 @@ export interface EmployeeOnboardingCreate {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus: number;
 
@@ -342,7 +342,7 @@ export interface EmployeeOnboardingStatus {
   employeeOnboardingId: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus: number;
 
@@ -426,7 +426,7 @@ export interface EmployeeOnboardingTemplate {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus?: number;
 
@@ -520,7 +520,7 @@ export interface EmployeeOnboardingImport {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus?: number;
 
@@ -614,7 +614,7 @@ export interface EmployeeOnboardingExport {
   reason?: string;
 
   /**
-   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   * 待办状态（字典 humanresource_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus: number;
 

@@ -75,7 +75,7 @@
         <template v-if="column.key === 'scanResult'">
           <TaktDictTag
             :value="getSopExecScanDictValue(record, 'scanResult')"
-            dict-type="logistics_sop_scan_result_type"
+            dict-type="logistics_manufacturing_sop_scan_result"
           />
         </template>
       </template>
@@ -194,7 +194,7 @@
       <a-form-item :label="pi.queryLabel('scanResult')">
         <TaktSelect
           v-model:value="advancedQueryForm.scanResult"
-          dict-type="logistics_sop_scan_result_type"
+          dict-type="logistics_manufacturing_sop_scan_result"
           :placeholder="pi.queryPh('scanResult', 'select')"
           allow-clear
         />

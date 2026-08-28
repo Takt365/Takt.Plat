@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktCultureValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -34,7 +34,7 @@ public class TaktCultureCreateValidator : AbstractValidator<TaktCultureCreateDto
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
-            .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("本地化名称长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -63,7 +63,7 @@ public class TaktCultureUpdateValidator : AbstractValidator<TaktCultureUpdateDto
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
-            .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("本地化名称长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -89,7 +89,7 @@ public class TaktCultureImportValidator : AbstractValidator<TaktCultureImportDto
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
-            .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");
+            .MaximumLength(40).WithMessage("本地化名称长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

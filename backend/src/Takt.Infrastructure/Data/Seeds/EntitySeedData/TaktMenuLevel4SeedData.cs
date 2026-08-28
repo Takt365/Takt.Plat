@@ -1181,7 +1181,7 @@ public class TaktMenuLevel4SeedData
             updateCount += updateECNMonthlyTrend;
         }
 
-        // ========== 产出管理下的四级菜单 ==========
+        // ========== OPH管理下的四级菜单 ==========
         if (manufacturingOutputMenu != null)
         {
             var (insertOUT2, updateOUT2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PCBA", menu =>

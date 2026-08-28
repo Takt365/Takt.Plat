@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document._self", "zh-HK", "文管中心主信息_hk", "实体名称"),
 
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "en-US", "文档编码_us", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
+            new TranslationSeedItem("entity.document.code", "en-US", "文档编码_us", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文管中心）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "ja-JP", "文档编码_jp", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
+            new TranslationSeedItem("entity.document.code", "ja-JP", "文档编码_jp", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文管中心）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "zh-CN", "文档编码", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
+            new TranslationSeedItem("entity.document.code", "zh-CN", "文档编码", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文管中心）"),
             // entity.document.code
-            new TranslationSeedItem("entity.document.code", "zh-HK", "文档编码_hk", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文档管理）"),
+            new TranslationSeedItem("entity.document.code", "zh-HK", "文档编码_hk", "文档编码（租户+公司内唯一；前端表单选择编码规则后自动通过 TaktNumbering 文档编码规则生成并展示，非手输；单据类型菜单：文管中心）"),
 
             // entity.document.title
             new TranslationSeedItem("entity.document.title", "en-US", "文档标题_us", "文档标题"),
@@ -109,22 +109,22 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.title", "zh-HK", "文档标题_hk", "文档标题"),
 
             // entity.document.category
-            new TranslationSeedItem("entity.document.category", "en-US", "文档分类_us", "文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
+            new TranslationSeedItem("entity.document.category", "en-US", "文档分类_us", "文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
             // entity.document.category
-            new TranslationSeedItem("entity.document.category", "ja-JP", "文档分类_jp", "文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
+            new TranslationSeedItem("entity.document.category", "ja-JP", "文档分类_jp", "文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
             // entity.document.category
-            new TranslationSeedItem("entity.document.category", "zh-CN", "文档分类", "文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
+            new TranslationSeedItem("entity.document.category", "zh-CN", "文档分类", "文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
             // entity.document.category
-            new TranslationSeedItem("entity.document.category", "zh-HK", "文档分类_hk", "文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
+            new TranslationSeedItem("entity.document.category", "zh-HK", "文档分类_hk", "文档分类（字典 routine_document_center_category；0=制度 1=流程 2=模板 3=规范 4=其他）"),
 
             // entity.document.confidentiallevel
-            new TranslationSeedItem("entity.document.confidentiallevel", "en-US", "密级_us", "密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
+            new TranslationSeedItem("entity.document.confidentiallevel", "en-US", "密级_us", "密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
             // entity.document.confidentiallevel
-            new TranslationSeedItem("entity.document.confidentiallevel", "ja-JP", "密级_jp", "密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
+            new TranslationSeedItem("entity.document.confidentiallevel", "ja-JP", "密级_jp", "密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
             // entity.document.confidentiallevel
-            new TranslationSeedItem("entity.document.confidentiallevel", "zh-CN", "密级", "密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
+            new TranslationSeedItem("entity.document.confidentiallevel", "zh-CN", "密级", "密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
             // entity.document.confidentiallevel
-            new TranslationSeedItem("entity.document.confidentiallevel", "zh-HK", "密级_hk", "密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
+            new TranslationSeedItem("entity.document.confidentiallevel", "zh-HK", "密级_hk", "密级（字典 routine_document_center_confidential_level；0=公开 1=内部 2=机密 3=绝密）"),
 
             // entity.document.version
             new TranslationSeedItem("entity.document.version", "en-US", "当前版本号_us", "当前版本号"),
@@ -217,13 +217,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "en-US", "发布人姓名_us", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.publishername", "en-US", "发布人姓名_us", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.publishername", "ja-JP", "发布人姓名_jp", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "zh-CN", "发布人姓名", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.publishername", "zh-CN", "发布人姓名", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.publishername
-            new TranslationSeedItem("entity.document.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.publishername", "zh-HK", "发布人姓名_hk", "发布人姓名（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.document.deptid
             new TranslationSeedItem("entity.document.deptid", "en-US", "归属部门ID_us", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
@@ -235,13 +235,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.deptid", "zh-HK", "归属部门ID_hk", "归属部门 ID（选项 TaktDepts/tree-options；DictValue=Id）"),
 
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "en-US", "归属部门名称_us", "归属部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.deptname", "en-US", "归属部门名称_us", "归属部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "ja-JP", "归属部门名称_jp", "归属部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.deptname", "ja-JP", "归属部门名称_jp", "归属部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "zh-CN", "归属部门名称", "归属部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.deptname", "zh-CN", "归属部门名称", "归属部门名称（冗余：按对应 Id 取主数据名称联动）"),
             // entity.document.deptname
-            new TranslationSeedItem("entity.document.deptname", "zh-HK", "归属部门名称_hk", "归属部门名称（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.document.deptname", "zh-HK", "归属部门名称_hk", "归属部门名称（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.document.istop
             new TranslationSeedItem("entity.document.istop", "en-US", "置顶_us", "置顶（字典 sys_yes_no；0=否 1=是）"),

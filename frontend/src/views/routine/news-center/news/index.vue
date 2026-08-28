@@ -2,24 +2,44 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/news-center/news -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：新闻中心主实体 支持分类、置顶、推荐、社交统计管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：新闻管理主从页（左新闻右互动：评论/点赞/收藏/分享），含查询、增删改；互动明细按选中新闻分页 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="p-4">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+  <div class="p-4 flex flex-col min-h-0 h-full">
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getNewsId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="newsId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="routine:news:center:create"
       update-permission="routine:news:center:update"
       delete-permission="routine:news:center:delete"
@@ -50,26 +70,8 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 表格 -->
-    <TaktSingleTable
-      entity-scope="approval"
-      :columns="columns"
-      :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'newsId'"
-      table-mode="single"
-      :data-source="dataSource"
-      :loading="loading"
-      :stripe="true"
-      :virtual="true"
-      :row-key="getNewsId"
-      :row-selection="rowSelection"
-      :custom-row="onClickRow"
-
-      @change="handleTableChange"
-      @resize-column="handleResizeColumn"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'newsCategory'">
@@ -103,23 +105,66 @@
           />
         </template>
       </template>
-
-    </TaktSingleTable>
-
-    <!-- 分页（服务端分页，外置 TaktPagination） -->
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-      @show-size-change="handlePaginationSizeChange"
-    />
+      <template #detail>
+        <div class="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+          <a-tabs
+            v-model:active-key="detailActiveTab"
+            class="news-engagement-tabs flex h-full min-h-0 flex-1 flex-col overflow-hidden"
+            size="small"
+          >
+            <a-tab-pane
+              key="comment"
+              :tab="t('routine.news.center.news.page.tabs.comment')"
+              class="h-full"
+            >
+              <NewsCommentPanel
+                ref="newsCommentPanelRef"
+                class="h-full min-h-0 flex-1"
+              />
+            </a-tab-pane>
+            <a-tab-pane
+              key="like"
+              :tab="t('routine.news.center.news.page.tabs.like')"
+              class="h-full"
+            >
+              <NewsEngagementPanel
+                ref="newsLikePanelRef"
+                engagement="like"
+                class="h-full min-h-0 flex-1"
+              />
+            </a-tab-pane>
+            <a-tab-pane
+              key="favorite"
+              :tab="t('routine.news.center.news.page.tabs.favorite')"
+              class="h-full"
+            >
+              <NewsEngagementPanel
+                ref="newsFavoritePanelRef"
+                engagement="favorite"
+                class="h-full min-h-0 flex-1"
+              />
+            </a-tab-pane>
+            <a-tab-pane
+              key="share"
+              :tab="t('routine.news.center.news.page.tabs.share')"
+              class="h-full"
+            >
+              <NewsEngagementPanel
+                ref="newsSharePanelRef"
+                engagement="share"
+                class="h-full min-h-0 flex-1"
+              />
+            </a-tab-pane>
+          </a-tabs>
+        </div>
+      </template>
+    </TaktMasterDetailTableLr>
 
     <!-- 新增/编辑对话框 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      width="1100px"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -343,15 +388,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('newsAttachmentCount')">
-      <a-form-item :label="pi.queryLabel('newsAttachmentCount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.newsAttachmentCount"
-          :placeholder="pi.queryPh('newsAttachmentCount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('deptId')">
       <a-form-item :label="pi.queryLabel('deptId')">
         <TaktSelect
@@ -428,7 +464,7 @@
       <a-form-item :label="pi.queryLabel('targetDepartments')">
         <a-input
           v-model:value="advancedQueryForm.targetDepartments"
-          :placeholder="pi.queryPh('targetDepartments', 'optional')"
+          :placeholder="pi.queryPh('targetDepartments', 'required')"
           show-count
           :maxlength="1000"
           allow-clear
@@ -439,7 +475,7 @@
       <a-form-item :label="pi.queryLabel('targetUsers')">
         <a-input
           v-model:value="advancedQueryForm.targetUsers"
-          :placeholder="pi.queryPh('targetUsers', 'optional')"
+          :placeholder="pi.queryPh('targetUsers', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -636,7 +672,7 @@
       :id-column-key="'newsId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -645,7 +681,7 @@
 
 <script setup lang="ts">
 /**
- * 新闻中心主实体 支持分类、置顶、推荐、社交统计管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 新闻管理主从页（左新闻 + 右评论/点赞/收藏/分享）
  * @module views/routine/news-center/news
  */
 import { ref, computed, onMounted } from 'vue'
@@ -655,6 +691,9 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import NewsForm from './components/news-form.vue'
+import NewsCommentPanel from './components/news-comment-panel.vue'
+import NewsEngagementPanel from './components/news-engagement-panel.vue'
+import { provideNewsMasterContext, type NewsRowRecord } from './composables/use-news-master-context'
 import { getNewsList, getNewsById, createNews, updateNews, deleteNewsById, deleteNewsBatch, getNewsTemplate, importNews, exportNews, updateNewsStatus } from '@/api/routine/news-center/news'
 import type { News, NewsQuery } from '@/types/routine/news-center/news'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -673,8 +712,7 @@ import {
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useNewsI18n()
-/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
-type NewsRowRecord = News | Record<string, unknown>
+
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
@@ -755,9 +793,6 @@ function hasAnyListQueryFilter(): boolean {
   if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
     return true
   }
-  if (form.newsAttachmentCount !== undefined && form.newsAttachmentCount !== null) {
-    return true
-  }
   if (form.targetScope !== undefined && form.targetScope !== null) {
     return true
   }
@@ -789,7 +824,6 @@ function createEmptyAdvancedQueryForm() {
     newsCommentCount: undefined as number | undefined,
     newsFavoriteCount: undefined as number | undefined,
     newsShareCount: undefined as number | undefined,
-    newsAttachmentCount: undefined as number | undefined,
     targetScope: undefined as number | undefined,
     newsStatus: undefined as number | undefined,
     approvalStatus: undefined as number | undefined,  }
@@ -817,7 +851,28 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideNewsMasterContext()
+/** 右侧互动 Tab：评论 / 点赞 / 收藏 / 分享 */
+const detailActiveTab = ref<'comment' | 'like' | 'favorite' | 'share'>('comment')
+const newsCommentPanelRef = ref<InstanceType<typeof NewsCommentPanel> | null>(null)
+const newsLikePanelRef = ref<InstanceType<typeof NewsEngagementPanel> | null>(null)
+const newsFavoritePanelRef = ref<InstanceType<typeof NewsEngagementPanel> | null>(null)
+const newsSharePanelRef = ref<InstanceType<typeof NewsEngagementPanel> | null>(null)
 
+/**
+ * 刷新当前选中新闻的右侧互动面板
+ * @returns {void}
+ */
+function reloadEngagementPanels(): void {
+  if (!selectedMasterKey.value) {
+    return
+  }
+  newsCommentPanelRef.value?.reload?.()
+  newsLikePanelRef.value?.reload?.()
+  newsFavoritePanelRef.value?.reload?.()
+  newsSharePanelRef.value?.reload?.()
+}
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
@@ -868,9 +923,6 @@ function buildListQuery(overrides?: Partial<NewsQuery>): NewsQuery {
   if (form.newsShareCount !== undefined && form.newsShareCount !== null) {
     query.newsShareCount = form.newsShareCount
   }
-  if (form.newsAttachmentCount !== undefined && form.newsAttachmentCount !== null) {
-    query.newsAttachmentCount = form.newsAttachmentCount
-  }
   if (form.targetScope !== undefined && form.targetScope !== null) {
     query.targetScope = form.targetScope
   }
@@ -890,32 +942,288 @@ onMounted(async () => {
 })
 
 
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: NewsRowRecord | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getNewsId(record) : ''
+}
+
 /**
- * 构建列表标准文本列
- * @param key 列 key / dataIndex
- * @param title 列标题
- * @param options 宽度与固定列
+ * 左右主子表：主表行选中
+ * @param record 主表行
  */
-function buildNewsListColumn(
-  key: string,
-  title: string,
-  options?: { width?: number; fixed?: 'left' },
-) {
-  return {
-    title,
-    dataIndex: key,
-    key,
-    width: options?.width ?? 120,
-    resizable: true,
-    ellipsis: true,
-    ...(options?.fixed ? { fixed: options.fixed } : {}),
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as NewsRowRecord
+  const key = getNewsId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadNewsDetail(record: NewsRowRecord): Promise<News | null> {
+  const id = getNewsId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getNewsById(id)
+    const index = dataSource.value.findIndex((row) => getNewsId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as News
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
   }
 }
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  buildNewsListColumn('newsId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
-  ...NEWS_LIST_FIELDS.map((key) => buildNewsListColumn(key, pi.label(key))),
+  {
+    title: t('common.page.entity.id'),
+    dataIndex: 'newsId',
+    key: 'newsId',
+    width: 80,
+    resizable: true,
+    ellipsis: true,
+    fixed: 'left',
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsId') ?? ''
+  },
+  {
+    title: pi.label('newsCode'),
+    dataIndex: 'newsCode',
+    key: 'newsCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCode') ?? ''
+  },
+  {
+    title: pi.label('newsCategory'),
+    dataIndex: 'newsCategory',
+    key: 'newsCategory',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('newsTitle'),
+    dataIndex: 'newsTitle',
+    key: 'newsTitle',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsTitle') ?? ''
+  },
+  {
+    title: pi.label('newsSummary'),
+    dataIndex: 'newsSummary',
+    key: 'newsSummary',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsSummary') ?? ''
+  },
+  {
+    title: pi.label('newsTags'),
+    dataIndex: 'newsTags',
+    key: 'newsTags',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsTags') ?? ''
+  },
+  {
+    title: pi.label('newsContent'),
+    dataIndex: 'newsContent',
+    key: 'newsContent',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsContent') ?? ''
+  },
+  {
+    title: pi.label('newsCoverImage'),
+    dataIndex: 'newsCoverImage',
+    key: 'newsCoverImage',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCoverImage') ?? ''
+  },
+  {
+    title: pi.label('newsIsTop'),
+    dataIndex: 'newsIsTop',
+    key: 'newsIsTop',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('newsIsRecommended'),
+    dataIndex: 'newsIsRecommended',
+    key: 'newsIsRecommended',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('newsEffectiveTime'),
+    dataIndex: 'newsEffectiveTime',
+    key: 'newsEffectiveTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsEffectiveTime') ?? ''
+  },
+  {
+    title: pi.label('newsExpireTime'),
+    dataIndex: 'newsExpireTime',
+    key: 'newsExpireTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsExpireTime') ?? ''
+  },
+  {
+    title: pi.label('newsReadCount'),
+    dataIndex: 'newsReadCount',
+    key: 'newsReadCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsReadCount') ?? ''
+  },
+  {
+    title: pi.label('newsLikeCount'),
+    dataIndex: 'newsLikeCount',
+    key: 'newsLikeCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsLikeCount') ?? ''
+  },
+  {
+    title: pi.label('newsCommentCount'),
+    dataIndex: 'newsCommentCount',
+    key: 'newsCommentCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsCommentCount') ?? ''
+  },
+  {
+    title: pi.label('newsFavoriteCount'),
+    dataIndex: 'newsFavoriteCount',
+    key: 'newsFavoriteCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsFavoriteCount') ?? ''
+  },
+  {
+    title: pi.label('newsShareCount'),
+    dataIndex: 'newsShareCount',
+    key: 'newsShareCount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsShareCount') ?? ''
+  },
+  {
+    title: pi.label('deptId'),
+    dataIndex: 'deptId',
+    key: 'deptId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptId') ?? ''
+  },
+  {
+    title: pi.label('deptName'),
+    dataIndex: 'deptName',
+    key: 'deptName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'deptName') ?? ''
+  },
+  {
+    title: pi.label('publisherId'),
+    dataIndex: 'publisherId',
+    key: 'publisherId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherId') ?? ''
+  },
+  {
+    title: pi.label('publisherName'),
+    dataIndex: 'publisherName',
+    key: 'publisherName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'publisherName') ?? ''
+  },
+  {
+    title: pi.label('newsPublishTime'),
+    dataIndex: 'newsPublishTime',
+    key: 'newsPublishTime',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'newsPublishTime') ?? ''
+  },
+  {
+    title: pi.label('targetScope'),
+    dataIndex: 'targetScope',
+    key: 'targetScope',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('targetDepartments'),
+    dataIndex: 'targetDepartments',
+    key: 'targetDepartments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'targetDepartments') ?? ''
+  },
+  {
+    title: pi.label('targetUsers'),
+    dataIndex: 'targetUsers',
+    key: 'targetUsers',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getNewsField(record, 'targetUsers') ?? ''
+  },
+  {
+    title: pi.label('newsStatus'),
+    dataIndex: 'newsStatus',
+    key: 'newsStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
   CreateActionColumn({
     actions: [
       {
@@ -944,6 +1252,12 @@ const getNewsId = (record: NewsRowRecord): string => {
   return id != null ? String(id) : ''
 }
 /**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getNewsField = (record: any, field: string): any => record?.[field]
+/**
  * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
@@ -967,36 +1281,26 @@ const rowSelection = computed(() => ({
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
   },
   onSelect: (record: NewsRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
+      syncMasterSelection(record)
     } else if (selectedRow.value && getNewsId(selectedRow.value) === getNewsId(record)) {
       selectedRow.value = null
+      syncMasterSelection(null)
     }
   },
   onSelectAll: (selected: boolean, selectedRowsData: NewsRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
   }
 }))
-
-/** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: NewsRowRecord) => ({
-  onClick: () => {
-    const key = getNewsId(record)
-    const index = selectedRowKeys.value.indexOf(key)
-    if (index > -1) {
-      selectedRowKeys.value.splice(index, 1)
-    } else {
-      selectedRowKeys.value.push(key)
-    }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getNewsId(item)))
-    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
-    if (rowSelection.value.onChange) {
-      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
-    }
-  }
-})
 
 /** 加载分页列表 */
 async function loadData() {
@@ -1032,7 +1336,50 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
+  advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
+  newsCode: '',
+  newsCategory: undefined as number | undefined,
+  newsTitle: '',
+  newsSummary: '',
+  newsTags: '',
+  newsContent: '',
+  newsCoverImage: '',
+  newsIsTop: undefined as number | undefined,
+  newsIsRecommended: undefined as number | undefined,
+  newsEffectiveTimeStart: '',
+  newsEffectiveTimeEnd: '',
+  newsExpireTimeStart: '',
+  newsExpireTimeEnd: '',
+  newsReadCount: undefined as number | undefined,
+  newsLikeCount: undefined as number | undefined,
+  newsCommentCount: undefined as number | undefined,
+  newsFavoriteCount: undefined as number | undefined,
+  newsShareCount: undefined as number | undefined,
+  deptId: '',
+  deptName: '',
+  publisherId: '',
+  publisherName: '',
+  newsPublishTimeStart: '',
+  newsPublishTimeEnd: '',
+  targetScope: undefined as number | undefined,
+  targetDepartments: '',
+  targetUsers: '',
+  newsStatus: undefined as number | undefined,
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
@@ -1044,20 +1391,14 @@ function handleCreate() {
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: NewsRowRecord) {
-  const id = getNewsId(record)
-  if (!id) {
-    return
-  }
   formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
-    const detail = await getNewsById(id)
-    formData.value = detail ?? ({ ...record } as Partial<News>)
+    const detail = await loadNewsDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
     formVisible.value = true
-  } catch (error: unknown) {
-    message.error(t('common.feedback.load.data.failed'))
   } finally {
     formLoading.value = false
   }
@@ -1094,6 +1435,9 @@ async function handleFormSubmit() {
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+      reloadEngagementPanels()
+    }
     loadData()
   } finally {
     formLoading.value = false
@@ -1126,6 +1470,7 @@ async function handleImportFile(file: File, sheetName?: string): Promise<TaktImp
 /** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
 function handleImportSuccess(result: TaktImportResult) {
   loadData()
+  reloadEngagementPanels()
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
   }
@@ -1183,6 +1528,10 @@ async function handleDeleteOne(record: NewsRowRecord) {
     onOk: async () => {
       await deleteNewsById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1202,6 +1551,10 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteNewsBatch(ids)
       message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
       loadData()
     }
   })
@@ -1219,7 +1572,50 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = createEmptyAdvancedQueryForm()
+  advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
+  newsCode: '',
+  newsCategory: undefined as number | undefined,
+  newsTitle: '',
+  newsSummary: '',
+  newsTags: '',
+  newsContent: '',
+  newsCoverImage: '',
+  newsIsTop: undefined as number | undefined,
+  newsIsRecommended: undefined as number | undefined,
+  newsEffectiveTimeStart: '',
+  newsEffectiveTimeEnd: '',
+  newsExpireTimeStart: '',
+  newsExpireTimeEnd: '',
+  newsReadCount: undefined as number | undefined,
+  newsLikeCount: undefined as number | undefined,
+  newsCommentCount: undefined as number | undefined,
+  newsFavoriteCount: undefined as number | undefined,
+  newsShareCount: undefined as number | undefined,
+  deptId: '',
+  deptName: '',
+  publisherId: '',
+  publisherName: '',
+  newsPublishTimeStart: '',
+  newsPublishTimeEnd: '',
+  targetScope: undefined as number | undefined,
+  targetDepartments: '',
+  targetUsers: '',
+  newsStatus: undefined as number | undefined,
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
 }
 
 /** 打开列设置抽屉 */
@@ -1246,17 +1642,4 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
-/** 分页页码变更 */
-function handlePaginationChange(page: number, size: number) {
-  currentPage.value = page
-  pageSize.value = size
-  loadData()
-}
-
-/** 分页每页条数变更（重置到第 1 页） */
-function handlePaginationSizeChange(_current: number, size: number) {
-  currentPage.value = getTaktDefaultPageIndex()
-  pageSize.value = size
-  loadData()
-}
 </script>

@@ -30,7 +30,7 @@ export interface SalesModelTrendQuery extends TaktPagedQuery {
   materialCode?: string;
   /** 客户编码 */
   customerCode?: string;
-  /** 价格类型（字典 logistics_price_type，如 PR00） */
+  /** 价格类型（字典 logistics_procurement_price_type，如 PR00） */
   priceType?: string;
   /** 仅启用主表 */
   onlyEnabled?: boolean;

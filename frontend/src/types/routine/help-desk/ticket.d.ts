@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：ticket.d.ts
-// 创建时间：2026-08-11
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -64,12 +64,12 @@ export interface Ticket extends CompanyDtoBase {
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
@@ -79,7 +79,7 @@ export interface Ticket extends CompanyDtoBase {
   submitterId: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -89,7 +89,7 @@ export interface Ticket extends CompanyDtoBase {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -149,17 +149,17 @@ export interface Ticket extends CompanyDtoBase {
   itAssetName?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -167,6 +167,11 @@ export interface Ticket extends CompanyDtoBase {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -194,7 +199,7 @@ export interface TicketQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -204,7 +209,7 @@ export interface TicketQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -244,12 +249,12 @@ export interface TicketQuery extends TaktPagedQuery {
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
@@ -259,7 +264,7 @@ export interface TicketQuery extends TaktPagedQuery {
   submitterId?: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -269,7 +274,7 @@ export interface TicketQuery extends TaktPagedQuery {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -339,17 +344,17 @@ export interface TicketQuery extends TaktPagedQuery {
   itAssetId?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -357,6 +362,11 @@ export interface TicketQuery extends TaktPagedQuery {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -408,7 +418,7 @@ export interface TicketCreate {
   cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -448,12 +458,12 @@ export interface TicketCreate {
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
@@ -463,7 +473,7 @@ export interface TicketCreate {
   submitterId: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -473,7 +483,7 @@ export interface TicketCreate {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -518,17 +528,17 @@ export interface TicketCreate {
   itAssetId?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -536,6 +546,11 @@ export interface TicketCreate {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -621,7 +636,7 @@ export interface TicketTemplate {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -661,12 +676,12 @@ export interface TicketTemplate {
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
@@ -676,7 +691,7 @@ export interface TicketTemplate {
   submitterId?: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -686,7 +701,7 @@ export interface TicketTemplate {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -731,17 +746,17 @@ export interface TicketTemplate {
   itAssetId?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -749,6 +764,11 @@ export interface TicketTemplate {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -795,7 +815,7 @@ export interface TicketImport {
   cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -835,12 +855,12 @@ export interface TicketImport {
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
@@ -850,7 +870,7 @@ export interface TicketImport {
   submitterId?: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -860,7 +880,7 @@ export interface TicketImport {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -905,17 +925,17 @@ export interface TicketImport {
   itAssetId?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -923,6 +943,11 @@ export interface TicketImport {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -964,6 +989,16 @@ export interface TicketExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
    * 工单编码（唯一）
    */
   ticketCode: string;
@@ -999,12 +1034,12 @@ export interface TicketExport {
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
+   * 分类编码（业务编码；与 TaktTicketCategoryAssign.CategoryCode 一致）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
+   * 工单来源（字典 routine_help_desk_ticket_source；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
@@ -1014,7 +1049,7 @@ export interface TicketExport {
   submitterId: string;
 
   /**
-   * 提交人姓名
+   * 提交人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   submitterName?: string;
 
@@ -1024,7 +1059,7 @@ export interface TicketExport {
   assigneeId?: string;
 
   /**
-   * 处理人姓名
+   * 处理人姓名（冗余：按对应 Id 取主数据名称联动）
    */
   assigneeName?: string;
 
@@ -1069,17 +1104,17 @@ export interface TicketExport {
   itAssetId?: string;
 
   /**
-   * 资产号码（冗余；与 TaktItAsset.AssetCode 一致）
+   * 资产号码（冗余字段，便于查询；与 TaktItAsset.AssetCode 一致）
    */
   assetCode?: string;
 
   /**
-   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+   * 申请部门 ID（选项 TaktDepts/tree-options；DictValue=Id）
    */
   applicantDeptId?: string;
 
   /**
-   * 申请部门名称
+   * 申请部门名称（冗余：按对应 Id 取主数据名称联动）
    */
   applicantDeptName?: string;
 
@@ -1087,6 +1122,11 @@ export interface TicketExport {
    * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
+
+  /**
+   * 申请人名称（冗余：按 ApplicantBy 取 TaktUser.UserName 联动）
+   */
+  applicantName?: string;
 
   /**
    * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
@@ -1108,5 +1148,30 @@ export interface TicketExport {
    */
   createdAt: string;
 
+}
+
+/**
+ * 当前用户工单关联资产汇总行（门户「我的资产」）
+ */
+export interface TicketMyAsset {
+  /**
+   * 资产编码
+   */
+  assetCode?: string;
+
+  /**
+   * 资产名称
+   */
+  assetName?: string;
+
+  /**
+   * 关联工单数
+   */
+  ticketCount?: number;
+
+  /**
+   * 最近工单时间
+   */
+  lastTicketAt?: string;
 }
 

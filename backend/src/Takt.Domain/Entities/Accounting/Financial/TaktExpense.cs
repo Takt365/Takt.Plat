@@ -39,7 +39,7 @@ public class TaktExpense : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "expense_title", ColumnDescription = "费用标题", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string ExpenseTitle { get; set; } = string.Empty;
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     [SugarColumn(ColumnName = "expense_type", ColumnDescription = "费用类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ExpenseType { get; set; } = 1;
@@ -56,19 +56,33 @@ public class TaktExpense : TaktApprovalEntityBase
     /// <summary>
     /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
+    [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ApplicantBy { get; set; }
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "application_dept", ColumnDescription = "申请部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ApplicationDept { get; set; }
+    [SugarColumn(ColumnName = "applicant_name", ColumnDescription = "申请人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? ApplicantName { get; set; }
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "cost_bearer_dept", ColumnDescription = "经费负担部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? CostBearerDept { get; set; }
+    [SugarColumn(ColumnName = "application_dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? ApplicationDeptId { get; set; }
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "application_dept_name", ColumnDescription = "申请部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? ApplicationDeptName { get; set; }
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "cost_bearer_dept_id", ColumnDescription = "经费负担部门ID", ColumnDataType = "bigint", IsNullable = true)]
+    public long? CostBearerDeptId { get; set; }
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "cost_bearer_dept_name", ColumnDescription = "经费负担部门名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? CostBearerDeptName { get; set; }
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
@@ -78,7 +92,6 @@ public class TaktExpense : TaktApprovalEntityBase
     /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "countersign_id", ColumnDescription = "关联会签单ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
     /// <summary>
     /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
@@ -96,7 +109,7 @@ public class TaktExpense : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "expense_amount", ColumnDescription = "费用金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal ExpenseAmount { get; set; }
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int TaxRate { get; set; }
@@ -116,10 +129,15 @@ public class TaktExpense : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "application_reason", ColumnDescription = "申请原因", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ApplicationReason { get; set; }
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
-    public string? Attachments { get; set; }
+    [SugarColumn(ColumnName = "file_name", ColumnDescription = "文件名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    public string? FileName { get; set; }
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    public string? AccessUrl { get; set; }
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>

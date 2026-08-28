@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictTypeI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictType 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dicttype._self", "zh-HK", "字典类型信息_hk", "实体名称"),
 
             // entity.dicttype.code
-            new TranslationSeedItem("entity.dicttype.code", "en-US", "字典类型编码_us", "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）"),
+            new TranslationSeedItem("entity.dicttype.code", "en-US", "字典类型编码_us", "字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）"),
             // entity.dicttype.code
-            new TranslationSeedItem("entity.dicttype.code", "ja-JP", "字典类型编码_jp", "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）"),
+            new TranslationSeedItem("entity.dicttype.code", "ja-JP", "字典类型编码_jp", "字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）"),
             // entity.dicttype.code
-            new TranslationSeedItem("entity.dicttype.code", "zh-CN", "字典类型编码", "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）"),
+            new TranslationSeedItem("entity.dicttype.code", "zh-CN", "字典类型编码", "字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）"),
             // entity.dicttype.code
-            new TranslationSeedItem("entity.dicttype.code", "zh-HK", "字典类型编码_hk", "字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）"),
+            new TranslationSeedItem("entity.dicttype.code", "zh-HK", "字典类型编码_hk", "字典类型编码（租户内唯一；命名 {领域}_{业务}_{项}，varchar Length=140；如 accounting_controlling_cost_center_type）"),
 
             // entity.dicttype.name
             new TranslationSeedItem("entity.dicttype.name", "en-US", "字典类型名称_us", "字典类型名称（如：订单状态、用户类型）"),
@@ -109,13 +109,13 @@ public class TaktDictTypeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dicttype.name", "zh-HK", "字典类型名称_hk", "字典类型名称（如：订单状态、用户类型）"),
 
             // entity.dicttype.datasource
-            new TranslationSeedItem("entity.dicttype.datasource", "en-US", "数据源_us", "数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）"),
+            new TranslationSeedItem("entity.dicttype.datasource", "en-US", "数据源_us", "数据源（字典 sys_data_source；0=系统表 1=SQL查询）"),
             // entity.dicttype.datasource
-            new TranslationSeedItem("entity.dicttype.datasource", "ja-JP", "数据源_jp", "数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）"),
+            new TranslationSeedItem("entity.dicttype.datasource", "ja-JP", "数据源_jp", "数据源（字典 sys_data_source；0=系统表 1=SQL查询）"),
             // entity.dicttype.datasource
-            new TranslationSeedItem("entity.dicttype.datasource", "zh-CN", "数据源", "数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）"),
+            new TranslationSeedItem("entity.dicttype.datasource", "zh-CN", "数据源", "数据源（字典 sys_data_source；0=系统表 1=SQL查询）"),
             // entity.dicttype.datasource
-            new TranslationSeedItem("entity.dicttype.datasource", "zh-HK", "数据源_hk", "数据源（字典 sys_data_source_type；0=系统表 1=SQL查询）"),
+            new TranslationSeedItem("entity.dicttype.datasource", "zh-HK", "数据源_hk", "数据源（字典 sys_data_source；0=系统表 1=SQL查询）"),
 
             // entity.dicttype.dictscript
             new TranslationSeedItem("entity.dicttype.dictscript", "en-US", "SQL脚本_us", "SQL脚本（仅当DataSource=SqlScript时使用） SQL必须返回DictValue和DictLabel列，可选返回ListClass、CssClass、SortOrder"),

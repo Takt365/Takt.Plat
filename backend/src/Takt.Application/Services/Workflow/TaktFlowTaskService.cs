@@ -326,6 +326,7 @@ public class TaktFlowTaskService : TaktServiceBase, ITaktFlowTaskService
                 || (x.TaskDefinitionKey != null && x.TaskDefinitionKey.Contains(keywords))
                 || (x.TaskName != null && x.TaskName.Contains(keywords))
                 || (x.AssigneeUserName != null && x.AssigneeUserName.Contains(keywords))
+                || (x.OwnerUserName != null && x.OwnerUserName.Contains(keywords))
                 || (x.Comment != null && x.Comment.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -378,6 +379,12 @@ public class TaktFlowTaskService : TaktServiceBase, ITaktFlowTaskService
         {
             var ownerUserId = queryDto.OwnerUserId.Value;
             exp = exp.And(x => x.OwnerUserId == ownerUserId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.OwnerUserName))
+        {
+            var ownerUserName = queryDto.OwnerUserName;
+            exp = exp.And(x => x.OwnerUserName != null && x.OwnerUserName.Contains(ownerUserName));
         }
 
         if (queryDto?.SignType.HasValue == true)

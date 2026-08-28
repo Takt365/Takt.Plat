@@ -59,10 +59,16 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "actual_delivery_date", ColumnDescription = "实际交货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ActualDeliveryDate { get; set; }
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_by", ColumnDescription = "销售员", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? SalesBy { get; set; }
+    [SugarColumn(ColumnName = "sales_employee_id", ColumnDescription = "销售员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? SalesEmployeeId { get; set; }
+    /// <summary>
+    /// 销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_employee_name", ColumnDescription = "销售员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SalesEmployeeName { get; set; }
     /// <summary>
     /// 订单总数量（基本单位数量）
     /// </summary>
@@ -79,7 +85,7 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountAmount { get; set; } = 0;
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
@@ -89,12 +95,12 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "exchange_rate", ColumnDescription = "汇率", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "1.00000")]
     public decimal ExchangeRate { get; set; } = 1.00000m;
     /// <summary>
-    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
     /// </summary>
     [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? TaxCode { get; set; }
     /// <summary>
-    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+    /// 税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
     public int TaxRate { get; set; } = 13;
@@ -124,12 +130,12 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "received_amount", ColumnDescription = "已收款金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal ReceivedAmount { get; set; } = 0;
     /// <summary>
-    /// 交货方式（字典 logistics_delivery_method_type；0=自提 1=送货上门 2=物流配送 3=快递）
+    /// 交货方式（字典 logistics_sales_delivery_method；0=自提 1=送货上门 2=物流配送 3=快递）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_method", ColumnDescription = "交货方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryMethod { get; set; } = 0;
     /// <summary>
-    /// 收款方式（字典 accounting_payment_method_type；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
+    /// 收款方式（字典 accounting_financial_payment_method；0=现金 1=银行转账 2=支票 3=信用证 4=其他）
     /// </summary>
     [SugarColumn(ColumnName = "payment_method", ColumnDescription = "收款方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int PaymentMethod { get; set; } = 0;
@@ -144,7 +150,7 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "order_status", ColumnDescription = "订单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int OrderStatus { get; set; } = 1;
     /// <summary>
-    /// 交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
+    /// 交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DeliveryStatus { get; set; } = 0;

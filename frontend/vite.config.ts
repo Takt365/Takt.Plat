@@ -18,15 +18,24 @@
 //   Vite 代理 → VITE_API_PROXY_TARGET（如 https://localhost:60071）
 //     - VITE_API_BASE_URL       → 业务 REST API
 //     - /health                 → 根路径健康检查（预热 Cookie）
+//     - /uploads                → 本地 AccessUrl 静态文件
 //     - VITE_PROXY_PATH_CONNECT → OAuth /connect/*
 //     - VITE_PROXY_PATH_HUBS    → SignalR /hubs/*
 //
 // 样式：Tailwind CSS 4 + 全局 CSS（Ant Design Vue 全量注册 + reset.css）
+//
+// 生产构建产物目录（build.outDir = dist）：
+//   assets/js/{业务领域}/     入口与分包 chunk（*.js、*.js.map）
+//   assets/css/{业务领域}/    *.css
+//   assets/img/{业务领域}/    图片扩展名（png/jpg/svg/webp/…）
+//   assets/other/{业务领域}/  无扩展名或未识别扩展名
+//   业务领域：与 JS 对齐——优先引用方 chunk / views 目录索引；公共→shared；三方→vendor；入口→app
+//   分类：扩展名决定 js|css|img|other；generateBundle 纠正 CSS 领域（抽出样式常无源路径）
 // ========================================
 
 import tailwindcss from '@tailwindcss/vite';
-import { readFileSync } from 'node:fs';
-import { dirname, extname, resolve } from 'node:path';
+import { readdirSync, readFileSync } from 'node:fs';
+import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import dayjs from 'dayjs';
 import { defineConfig, loadEnv, type Plugin, type PluginOption, type ProxyOptions, type ViteDevServer } from 'vite';
@@ -245,12 +254,14 @@ function buildDevProxy(
   const proxy: Record<string, ProxyOptions> = {
     [apiBaseUrl]: createBackendProxyEntry(),
     '/health': createBackendProxyEntry(),
+    '/uploads': createBackendProxyEntry(),
     [proxyPathConnect]: createBackendProxyEntry(),
     [proxyPathHubs]: createBackendProxyEntry(),
   };
 
   attachForwardedHeaders(proxy[apiBaseUrl]);
   attachForwardedHeaders(proxy['/health']);
+  attachForwardedHeaders(proxy['/uploads']);
   attachForwardedHeaders(proxy[proxyPathConnect]);
   attachForwardedHeaders(proxy[proxyPathHubs]);
 
@@ -270,6 +281,7 @@ function buildPlugins(
 ): PluginOption[] {
   const plugins: PluginOption[] = [
     appInfoPlugin(),
+    classifyBuildAssetsPlugin(resolve(__dirname, 'src/views')),
     devServerUrlHintPlugin(devHttps, devServerPort, devServerHost),
     tailwindcss(),
     vue(),
@@ -355,8 +367,26 @@ function buildPlugins(
           ],
         },
         workbox: {
+          // vendor 分包可达数 MB；默认 2 MiB 会令 generateSW 失败
+          maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
+          // 超大 vendor 不进 SW 预缓存（安装体积）；运行时按需 CacheFirst
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+          globIgnores: ['**/assets/js/vendor/**'],
           runtimeCaching: [
+            {
+              urlPattern: /\/assets\/js\/vendor\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'vendor-js-cache',
+                expiration: {
+                  maxEntries: 30,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+                cacheableResponse: {
+                  statuses: [0, 200],
+                },
+              },
+            },
             {
               urlPattern: /^https:\/\/.*\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
               handler: 'CacheFirst',
@@ -422,12 +452,14 @@ function buildResolveAlias(configRoot: string): Record<string, string> {
   }
 
   alias['@'] = srcDir;
+  // hotkeys-js 的 ESM 产物同时含 module.exports 与 export，Rolldown 会报 COMMONJS_VARIABLE_IN_ESM；改走纯 CJS
+  alias['hotkeys-js'] = resolve(configRoot, 'node_modules/hotkeys-js/dist/hotkeys-js.umd.cjs');
 
   return alias;
 }
 
 // ---------------------------------------------------------------------------
-// 生产构建产物目录
+// 生产构建产物目录：assets/{js|css|img|other}/{业务领域}/
 // ---------------------------------------------------------------------------
 
 const IMAGE_ASSET_EXTENSIONS = new Set([
@@ -442,52 +474,407 @@ const IMAGE_ASSET_EXTENSIONS = new Set([
   '.bmp',
 ]);
 
-const FONT_ASSET_EXTENSIONS = new Set(['.woff', '.woff2', '.eot', '.ttf', '.otf']);
-const MEDIA_ASSET_EXTENSIONS = new Set(['.mp4', '.webm', '.ogg', '.mp3', '.wav', '.m4a']);
+/** src/views|api|locales|types 下已知业务领域首段（与目录名一致） */
+const BUILD_OUTPUT_BUSINESS_DOMAINS = new Set([
+  'about',
+  'accounting',
+  'code',
+  'common',
+  'dashboard',
+  'error',
+  'foundation',
+  'home',
+  'human-resource',
+  'identity',
+  'login',
+  'logistics',
+  'routine',
+  'statistics',
+  'workflow',
+]);
 
+/**
+ * Vite 8 / Rolldown 资源元数据（name / names / originalFileNames 因版本可能不同）
+ */
 interface BuildAssetFileMeta {
   names?: string[];
   name?: string;
+  originalFileNames?: string[];
+  originalFileName?: string | null;
+  source?: string | Uint8Array;
 }
 
-function resolveAssetOutputDir(assetInfo: BuildAssetFileMeta): string {
-  const fileName = assetInfo.names?.[0] ?? assetInfo.name ?? 'asset';
-  const extension = extname(fileName).toLowerCase();
+/**
+ * Rolldown / Rollup PreRenderedChunk 子集（用于 chunk 输出路径）
+ */
+interface BuildChunkFileMeta {
+  name?: string;
+  facadeModuleId?: string | null;
+  moduleIds?: string[];
+}
 
-  if (extension === '.css') {
+/**
+ * 从模块/资源路径解析业务领域目录名
+ * @param filePath 绝对或相对路径、chunk 名
+ * @returns vendor | app | shared | 业务领域 kebab 段
+ */
+function resolveBusinessDomainFromPath(filePath: string | undefined | null): string {
+  if (!filePath?.trim()) {
+    return 'shared';
+  }
+  const normalized = filePath.replace(/\\/g, '/');
+  if (normalized.includes('node_modules')) {
+    return 'vendor';
+  }
+  if (/\b(vue-vendor|antd-vendor|editor-vendor|echarts-vendor|logicflow-vendor|form-create-vendor|vendor)\b/.test(normalized)) {
+    return 'vendor';
+  }
+  const domainMatch = normalized.match(/\/src\/(?:views|api|locales|types)\/([^/]+)\//);
+  if (domainMatch?.[1]) {
+    const segment = domainMatch[1];
+    if (BUILD_OUTPUT_BUSINESS_DOMAINS.has(segment) || /^[a-z][a-z0-9-]*$/.test(segment)) {
+      return segment;
+    }
+  }
+  if (/\/src\/(?:components|composables|utils|styles|layouts|bootstrap|config|directives|router|stores)\//.test(normalized)) {
+    return 'shared';
+  }
+  if (/\/src\/main\.(ts|tsx|js|jsx)$/.test(normalized) || /\/index\.html$/.test(normalized)) {
+    return 'app';
+  }
+  // 抽出 CSS 常仅有裸 chunk 名（如 about），无路径时可对齐已知领域
+  const bareName = (normalized.split('/').pop() ?? '').replace(/\.[^.]+$/, '');
+  if (BUILD_OUTPUT_BUSINESS_DOMAINS.has(bareName)) {
+    return bareName;
+  }
+  return 'shared';
+}
+
+/**
+ * 从 chunk 元数据解析业务领域（优先 facade，再扫 moduleIds）
+ * @param chunkInfo Rolldown PreRenderedChunk
+ */
+function resolveChunkBusinessDomain(chunkInfo: BuildChunkFileMeta): string {
+  if (chunkInfo.name && /\b(vue-vendor|antd-vendor|editor-vendor|echarts-vendor|logicflow-vendor|form-create-vendor|vendor)\b/.test(chunkInfo.name)) {
+    return 'vendor';
+  }
+  const candidates = [
+    chunkInfo.facadeModuleId,
+    ...(chunkInfo.moduleIds ?? []),
+    chunkInfo.name,
+  ].filter((v): v is string => typeof v === 'string' && v.length > 0);
+
+  for (const candidate of candidates) {
+    const domain = resolveBusinessDomainFromPath(candidate);
+    if (domain !== 'shared') {
+      return domain;
+    }
+  }
+  return candidates.length > 0 ? resolveBusinessDomainFromPath(candidates[0]) : 'shared';
+}
+
+/**
+ * 从资源元数据解析业务领域
+ * @param assetInfo Rolldown PreRenderedAsset
+ */
+function resolveAssetBusinessDomain(assetInfo: BuildAssetFileMeta): string {
+  const candidates = [
+    assetInfo.originalFileNames?.[0],
+    assetInfo.originalFileName ?? undefined,
+    assetInfo.names?.[0],
+    assetInfo.name,
+  ].filter((v): v is string => typeof v === 'string' && v.length > 0);
+
+  for (const candidate of candidates) {
+    const domain = resolveBusinessDomainFromPath(candidate);
+    if (domain !== 'shared') {
+      return domain;
+    }
+  }
+  return candidates.length > 0 ? resolveBusinessDomainFromPath(candidates[0]) : 'shared';
+}
+
+/**
+ * 从资源元数据解析扩展名（优先真实文件名，其次占位 name；无则空串）
+ * @param assetInfo Rolldown PreRenderedAsset
+ */
+function resolveAssetExtension(assetInfo: BuildAssetFileMeta): string {
+  const candidates = [
+    assetInfo.originalFileNames?.[0],
+    assetInfo.originalFileName ?? undefined,
+    assetInfo.names?.[0],
+    assetInfo.name,
+  ].filter((v): v is string => typeof v === 'string' && v.length > 0);
+
+  for (const candidate of candidates) {
+    const extension = extname(candidate).toLowerCase();
+    if (extension) {
+      return extension;
+    }
+  }
+  return '';
+}
+
+/**
+ * 仅按扩展名归类：css / img / js；无扩展名或未识别 → other
+ * @param extension 含点号扩展名（可为空）
+ */
+function resolveAssetKindByExtension(extension: string): 'js' | 'css' | 'img' | 'other' {
+  const ext = extension.trim().toLowerCase();
+  if (!ext) {
+    return 'other';
+  }
+  if (ext === '.css') {
     return 'css';
   }
-  if (IMAGE_ASSET_EXTENSIONS.has(extension)) {
+  if (ext === '.js' || ext === '.mjs' || ext === '.cjs' || ext === '.map') {
+    return 'js';
+  }
+  if (IMAGE_ASSET_EXTENSIONS.has(ext)) {
     return 'img';
   }
-  if (FONT_ASSET_EXTENSIONS.has(extension)) {
-    return 'fonts';
-  }
-  if (MEDIA_ASSET_EXTENSIONS.has(extension)) {
-    return 'media';
-  }
-  return 'assets';
+  return 'other';
 }
 
-function buildRollupOutputOptions() {
-  return {
-    entryFileNames: 'js/[name]-[hash].js',
-    chunkFileNames: 'js/[name]-[hash].js',
-    assetFileNames: (assetInfo: BuildAssetFileMeta) => {
-      const dir = resolveAssetOutputDir(assetInfo);
-      return `${dir}/[name]-[hash][extname]`;
-    },
-    manualChunks(id: string) {
-      if (id.includes('node_modules')) {
-        if (id.includes('vue') || id.includes('vue-router') || id.includes('pinia')) {
-          return 'vue-vendor';
-        }
-        if (id.includes('ant-design-vue') || id.includes('@ant-design')) {
-          return 'antd-vendor';
-        }
-        return 'vendor';
+/**
+ * 去掉 Vite 内容哈希后缀：account-title-CywnYFns → account-title
+ * @param fileBase 无扩展名的文件名
+ */
+function stripViteContentHash(fileBase: string): string {
+  return fileBase.replace(/-[A-Za-z0-9_-]{6,}$/, '');
+}
+
+/**
+ * 扫描 src/views/{领域}/**，建立「chunk/组件基名 → 业务领域」索引
+ * （CSS 抽出时常只有基名、无源路径，须与 JS 同源对齐）
+ * @param viewsRoot src/views 绝对路径
+ */
+function buildViewsAssetDomainIndex(viewsRoot: string): Map<string, string> {
+  const index = new Map<string, string>();
+
+  const walk = (absDir: string, domain: string): void => {
+    let entries;
+    try {
+      entries = readdirSync(absDir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const fullPath = join(absDir, entry.name);
+      if (entry.isDirectory()) {
+        index.set(entry.name.toLowerCase(), domain);
+        walk(fullPath, domain);
+        continue;
       }
-      return undefined;
+      if (!/\.(vue|css|scss|less)$/i.test(entry.name)) {
+        continue;
+      }
+      const base = entry.name.replace(/\.(vue|css|scss|less)$/i, '').toLowerCase();
+      if (base && base !== 'index') {
+        index.set(base, domain);
+      }
+    }
+  };
+
+  let topEntries;
+  try {
+    topEntries = readdirSync(viewsRoot, { withFileTypes: true });
+  } catch {
+    return index;
+  }
+  for (const entry of topEntries) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+    walk(join(viewsRoot, entry.name), entry.name);
+  }
+  return index;
+}
+
+/**
+ * 从已输出路径解析领域：assets/js|css|…/{domain}/file
+ * @param fileName 产物相对路径
+ */
+function resolveDomainFromOutputFileName(fileName: string): string | undefined {
+  const normalized = fileName.replace(/\\/g, '/');
+  const match = normalized.match(/^assets\/(?:js|css|img|other)\/([^/]+)\//);
+  if (!match?.[1] || match[1] === 'shared') {
+    return undefined;
+  }
+  return match[1];
+}
+
+/**
+ * 按扩展名归类 + 按 views 索引 / 引用方 chunk 对齐业务领域，并回写引用
+ * @param viewsRoot src/views 绝对路径
+ */
+function classifyBuildAssetsPlugin(viewsRoot: string): Plugin {
+  const viewsBaseToDomain = buildViewsAssetDomainIndex(viewsRoot);
+
+  return {
+    name: 'takt-classify-build-assets',
+    generateBundle(_options, bundle) {
+      const cssImporterDomain = new Map<string, string>();
+      const chunkBaseToDomain = new Map<string, string>();
+
+      for (const output of Object.values(bundle)) {
+        if (output.type !== 'chunk') {
+          continue;
+        }
+        const fromFacade = resolveChunkBusinessDomain(output);
+        const fromPath = resolveDomainFromOutputFileName(output.fileName);
+        const domain =
+          fromPath && fromPath !== 'shared'
+            ? fromPath
+            : fromFacade !== 'shared'
+              ? fromFacade
+              : 'shared';
+
+        if (output.name) {
+          chunkBaseToDomain.set(output.name.toLowerCase(), domain);
+        }
+        const jsBase = stripViteContentHash(basename(output.fileName, extname(output.fileName))).toLowerCase();
+        if (jsBase) {
+          chunkBaseToDomain.set(jsBase, domain);
+        }
+
+        const importedCss = (
+          output as { viteMetadata?: { importedCss?: Set<string> | string[] } }
+        ).viteMetadata?.importedCss;
+        if (!importedCss) {
+          continue;
+        }
+        const cssList = importedCss instanceof Set ? [...importedCss] : [...importedCss];
+        for (const cssPath of cssList) {
+          const key = cssPath.replace(/\\/g, '/');
+          cssImporterDomain.set(key, domain);
+          cssImporterDomain.set(basename(key), domain);
+        }
+      }
+
+      /**
+       * 解析资源应落入的业务领域（与 JS 同规则）
+       * @param fileName 当前产物路径
+       */
+      const resolveAssetOutputDomain = (fileName: string): string => {
+        const normalized = fileName.replace(/\\/g, '/');
+        const fromImporter =
+          cssImporterDomain.get(normalized) ?? cssImporterDomain.get(basename(normalized));
+        if (fromImporter && fromImporter !== 'shared') {
+          return fromImporter;
+        }
+        const base = stripViteContentHash(basename(normalized, extname(normalized))).toLowerCase();
+        const fromChunk = chunkBaseToDomain.get(base);
+        if (fromChunk && fromChunk !== 'shared') {
+          return fromChunk;
+        }
+        const fromViews = viewsBaseToDomain.get(base);
+        if (fromViews) {
+          return fromViews;
+        }
+        const existing = resolveDomainFromOutputFileName(normalized);
+        if (existing) {
+          return existing;
+        }
+        return 'shared';
+      };
+
+      const renames = new Map<string, string>();
+
+      for (const output of Object.values(bundle)) {
+        if (output.type !== 'asset') {
+          continue;
+        }
+        const oldFileName = output.fileName.replace(/\\/g, '/');
+        if (!oldFileName.startsWith('assets/')) {
+          continue;
+        }
+        const extension = extname(oldFileName).toLowerCase();
+        const kind = resolveAssetKindByExtension(extension);
+        const domain = resolveAssetOutputDomain(oldFileName);
+        const nextFileName = `assets/${kind}/${domain}/${basename(oldFileName)}`;
+        if (nextFileName === oldFileName) {
+          continue;
+        }
+        renames.set(oldFileName, nextFileName);
+        output.fileName = nextFileName;
+      }
+
+      if (renames.size === 0) {
+        return;
+      }
+
+      const rewrite = (text: string): string => {
+        let next = text;
+        for (const [from, to] of renames) {
+          if (next.includes(from)) {
+            next = next.split(from).join(to);
+          }
+        }
+        return next;
+      };
+
+      for (const output of Object.values(bundle)) {
+        if (output.type === 'chunk') {
+          output.code = rewrite(output.code);
+          continue;
+        }
+        if (output.type === 'asset' && typeof output.source === 'string') {
+          output.source = rewrite(output.source);
+        }
+      }
+    },
+  };
+}
+
+/**
+ * Vite 8 使用 Rolldown：须写 build.rolldownOptions.output
+ * （build.rollupOptions 仅为兼容别名，部分合并场景仍会落到默认 assets/）
+ */
+function buildRolldownOutputOptions() {
+  return {
+    entryFileNames: (chunkInfo: BuildChunkFileMeta) => {
+      const domain = resolveChunkBusinessDomain(chunkInfo);
+      return `assets/js/${domain}/[name]-[hash].js`;
+    },
+    chunkFileNames: (chunkInfo: BuildChunkFileMeta) => {
+      const domain = resolveChunkBusinessDomain(chunkInfo);
+      return `assets/js/${domain}/[name]-[hash].js`;
+    },
+    sourcemapFileNames: (chunkInfo: BuildChunkFileMeta) => {
+      const domain = resolveChunkBusinessDomain(chunkInfo);
+      return `assets/js/${domain}/[name]-[hash].js.map`;
+    },
+    assetFileNames: (assetInfo: BuildAssetFileMeta) => {
+      // 回调阶段可能尚无后缀/路径 → 暂放 other/shared；generateBundle 再按扩展名+领域纠正
+      const kind = resolveAssetKindByExtension(resolveAssetExtension(assetInfo));
+      const domain = resolveAssetBusinessDomain(assetInfo);
+      return `assets/${kind}/${domain}/[name]-[hash][extname]`;
+    },
+    // Rolldown 仍接受 manualChunks（与历史 Rollup 配置兼容）
+    manualChunks(id: string) {
+      if (!id.includes('node_modules')) {
+        return undefined;
+      }
+      if (id.includes('vue') || id.includes('vue-router') || id.includes('pinia') || id.includes('vue-i18n')) {
+        return 'vue-vendor';
+      }
+      if (id.includes('ant-design-vue') || id.includes('@ant-design')) {
+        return 'antd-vendor';
+      }
+      if (id.includes('@umoteam') || id.includes('hotkeys-js')) {
+        return 'editor-vendor';
+      }
+      if (id.includes('echarts')) {
+        return 'echarts-vendor';
+      }
+      if (id.includes('@logicflow')) {
+        return 'logicflow-vendor';
+      }
+      if (id.includes('@form-create')) {
+        return 'form-create-vendor';
+      }
+      return 'vendor';
     },
   };
 }
@@ -541,11 +928,12 @@ export default defineConfig(({ mode }) => {
     build: {
       target: buildTarget,
       outDir: 'dist',
-      assetsDir: 'assets',
+      // 空字符串：不额外套 Vite 默认 assets/；路径由 rolldownOptions.output → assets/{js|css|img|other}/{领域}/
+      assetsDir: '',
       sourcemap: requireEnvBoolean(env, 'VITE_BUILD_SOURCEMAP'),
-      chunkSizeWarningLimit: 1000,
-      rollupOptions: {
-        output: buildRollupOutputOptions(),
+      chunkSizeWarningLimit: 3500,
+      rolldownOptions: {
+        output: buildRolldownOutputOptions(),
       },
     },
   };

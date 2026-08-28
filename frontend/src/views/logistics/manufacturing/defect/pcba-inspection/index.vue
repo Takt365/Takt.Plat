@@ -77,7 +77,7 @@
         <template v-if="column.key === 'prodCategory'">
           <TaktDictTag
             :value="getPcbaInspectionDictValue(record, 'prodCategory')"
-            dict-type="logistics_prod_category"
+            dict-type="logistics_manufacturing_prod_category"
           />
         </template>
       </template>

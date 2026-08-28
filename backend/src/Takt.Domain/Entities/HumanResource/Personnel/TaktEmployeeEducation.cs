@@ -43,12 +43,12 @@ public class TaktEmployeeEducation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "school_name", ColumnDescription = "学校名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string SchoolName { get; set; } = string.Empty;
     /// <summary>
-    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
+    /// 学历层次（字典 humanresource_personnel_education_level；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     [SugarColumn(ColumnName = "education_level", ColumnDescription = "学历层次", ColumnDataType = "int", IsNullable = true)]
     public int? EducationLevel { get; set; }
     /// <summary>
-    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
+    /// 学位层次（字典 humanresource_personnel_degree_level；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     [SugarColumn(ColumnName = "degree_level", ColumnDescription = "学位层次", ColumnDataType = "int", IsNullable = true)]
     public int? DegreeLevel { get; set; }

@@ -64,7 +64,7 @@ export interface SopExec extends CompanyDtoBase {
   routingItemName?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -124,12 +124,12 @@ export interface SopExec extends CompanyDtoBase {
   endedAt?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
@@ -219,7 +219,7 @@ export interface SopExecQuery extends TaktPagedQuery {
   routingItemId?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -269,12 +269,12 @@ export interface SopExecQuery extends TaktPagedQuery {
   endedAtEnd?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus?: number;
 
@@ -358,7 +358,7 @@ export interface SopExecCreate {
   routingItemId: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -398,12 +398,12 @@ export interface SopExecCreate {
   endedAt?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
@@ -482,7 +482,7 @@ export interface SopExecStatus {
   sopExecId: string;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 
@@ -541,7 +541,7 @@ export interface SopExecTemplate {
   routingItemId?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -581,12 +581,12 @@ export interface SopExecTemplate {
   endedAt?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus?: number;
 
@@ -675,7 +675,7 @@ export interface SopExecImport {
   routingItemId?: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType?: number;
 
@@ -715,12 +715,12 @@ export interface SopExecImport {
   endedAt?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus?: number;
 
@@ -804,7 +804,7 @@ export interface SopExecExport {
   routingItemId: string;
 
   /**
-   * 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
+   * 工艺段类型（字典 logistics_manufacturing_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
    */
   processSegmentType: number;
 
@@ -844,12 +844,12 @@ export interface SopExecExport {
   endedAt?: string;
 
   /**
-   * 自检结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 自检结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   selfCheckResult?: number;
 
   /**
-   * 执行状态（字典 logistics_sop_exec_status；1=进行中，2=完成，3=中断）
+   * 执行状态（字典 logistics_manufacturing_sop_exec_status；1=进行中，2=完成，3=中断）
    */
   execStatus: number;
 

@@ -39,7 +39,7 @@ public class TaktEmployeeAddress : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 地址类型（字典 hr_employee_address_type；1=家庭 2=工作 3=常住）
+    /// 地址类型（字典 humanresource_personnel_employee_address_type；1=家庭 2=工作 3=常住）
     /// </summary>
     [SugarColumn(ColumnName = "address_type", ColumnDescription = "地址类型", ColumnDataType = "int", IsNullable = false)]
     public int AddressType { get; set; }

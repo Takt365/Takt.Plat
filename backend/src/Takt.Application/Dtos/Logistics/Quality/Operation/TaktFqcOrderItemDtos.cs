@@ -124,7 +124,7 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string InspectorBy { get; set; } = string.Empty;
+    public string InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -269,7 +269,7 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? InspectorBy { get; set; } = string.Empty;
+    public string? InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期（范围查询-开始）
@@ -430,7 +430,7 @@ public class TaktFqcOrderItemCreateDto
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [Required(ErrorMessage = "检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
-    public string InspectorBy { get; set; } = string.Empty;
+    public string InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -649,7 +649,7 @@ public class TaktFqcOrderItemTemplateDto
     /// <summary>
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? InspectorBy { get; set; } = string.Empty;
+    public string? InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -792,7 +792,7 @@ public class TaktFqcOrderItemImportDto
     /// <summary>
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? InspectorBy { get; set; } = string.Empty;
+    public string? InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -941,7 +941,7 @@ public class TaktFqcOrderItemExportDto
     /// <summary>
     /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string InspectorBy { get; set; } = string.Empty;
+    public string InspectorName { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期

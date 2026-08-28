@@ -34,7 +34,7 @@ public class TaktSalesForecastItem : TaktCompanyEntityBase
     public long SalesForecastId { get; set; }
 
     /// <summary>
-    /// 销售预测编码（冗余字段，便于查询）
+    /// 销售预测编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "sales_plan_code", ColumnDescription = "销售预测编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesForecastCode { get; set; } = string.Empty;

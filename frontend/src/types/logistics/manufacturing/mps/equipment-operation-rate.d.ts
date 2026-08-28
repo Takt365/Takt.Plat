@@ -60,7 +60,7 @@ export interface EquipmentOperationRate extends CompanyDtoBase {
   equipmentName?: string;
 
   /**
-   * 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+   * 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
    */
   equipmentType?: number;
 
@@ -70,7 +70,7 @@ export interface EquipmentOperationRate extends CompanyDtoBase {
   TeamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -218,7 +218,7 @@ export interface EquipmentOperationRateExport {
   equipmentName: string;
 
   /**
-   * 登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
+   * 登录设备（字典 logistics_maintenance_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）
    */
   equipmentType: number;
 
@@ -228,7 +228,7 @@ export interface EquipmentOperationRateExport {
   TeamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 

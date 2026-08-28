@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPurchaseInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoiceid", "zh-HK", "采购发票ID_hk", "采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）"),
 
             // entity.purchaseinvoiceitem.purchaseinvoicecode
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "en-US", "凭证编号_us", "凭证编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "en-US", "凭证编号_us", "凭证编号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseinvoiceitem.purchaseinvoicecode
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "ja-JP", "凭证编号_jp", "凭证编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "ja-JP", "凭证编号_jp", "凭证编号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseinvoiceitem.purchaseinvoicecode
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "zh-CN", "凭证编号", "凭证编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "zh-CN", "凭证编号", "凭证编号（冗余：按对应 Id 取主数据名称联动）"),
             // entity.purchaseinvoiceitem.purchaseinvoicecode
-            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "zh-HK", "凭证编号_hk", "凭证编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.purchaseinvoiceitem.purchaseinvoicecode", "zh-HK", "凭证编号_hk", "凭证编号（冗余：按对应 Id 取主数据名称联动）"),
 
             // entity.purchaseinvoiceitem.linenumber
             new TranslationSeedItem("entity.purchaseinvoiceitem.linenumber", "en-US", "凭证项目_us", "发票项目（发票行项目；行号步长生成器用 int，固定步长=10）"),

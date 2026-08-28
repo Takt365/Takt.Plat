@@ -130,16 +130,15 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 计划员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "planner_employee_id", ColumnDescription = "计划员员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PlannerId { get; set; }
-
+    public long? PlannerEmployeeId { get; set; }
     /// <summary>
-    /// 计划员姓名
+    /// 计划员名称（冗余：按 PlannerEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [SugarColumn(ColumnName = "planner_name", ColumnDescription = "计划员姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "planner_name", ColumnDescription = "计划员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? PlannerName { get; set; }
 
     /// <summary>

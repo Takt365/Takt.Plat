@@ -32,7 +32,7 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OutboundId { get; set; }
     /// <summary>
-    /// 出库单号（冗余字段，便于查询）
+    /// 出库单号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_code", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string OutboundCode { get; set; } = string.Empty;

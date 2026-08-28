@@ -16,7 +16,7 @@
         class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--plant"
         allow-clear
         show-search
-        :placeholder="t('common.page.entity.plantcode')"
+        :placeholder="gi.label('plantCode')"
       />
       <a-range-picker
         v-model:value="periodRange"
@@ -51,24 +51,24 @@
         />
         <TaktSelect
           v-model:value="ecDistinction"
-          dict-type="logistics_ec_distinction_category"
+          dict-type="logistics_manufacturing_ec_distinction_category"
           class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--distinction"
           allow-clear
-          :placeholder="t('entity.ec.distinction')"
+          :placeholder="gi.label('ecDistinction')"
         />
         <TaktSelect
           v-model:value="changeStatus"
-          dict-type="logistics_ec_status"
+          dict-type="logistics_manufacturing_ec_status"
           class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--status"
           allow-clear
-          :placeholder="t('entity.ecgijutsu.changestatus')"
+          :placeholder="gi.label('changeStatus')"
         />
         <TaktSelect
           v-model:value="ecStatus"
-          dict-type="logistics_ec_gijutsu_status"
+          dict-type="logistics_manufacturing_ec_gijutsu_status"
           class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-status"
           allow-clear
-          :placeholder="t('entity.ecgijutsu.ecstatus')"
+          :placeholder="gi.label('ecStatus')"
         />
       </template>
     </div>
@@ -108,6 +108,7 @@ import {
   getEcMonthlyTrendEcCodeOptionsUrl,
   getEcMonthlyTrendPlantOptionsUrl,
 } from '@/api/logistics/manufacturing/engineering-change/ec-monthly-trend'
+import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n'
 
 /** 工厂代码（第 1 级） */
 const plantCode = defineModel<string | undefined>('plantCode')
@@ -135,6 +136,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const gi = useEcGijutsuI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.engineering-change.ec-monthly-trend.page'
 /** 推移本表级联选项 URL（TaktEcMonthlyTrends） */

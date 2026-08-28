@@ -100,7 +100,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -231,7 +231,7 @@ public class TaktSalaryFormulaCreateDto
     public string FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int FormulaStep { get; set; } = 0;
 
@@ -404,7 +404,7 @@ public class TaktSalaryFormulaTemplateDto
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -503,7 +503,7 @@ public class TaktSalaryFormulaImportDto
     public string? FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int? FormulaStep { get; set; }
 
@@ -602,7 +602,7 @@ public class TaktSalaryFormulaExportDto
     public string FormulaName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
+    /// 公式步骤类型（字典 humanresource_compensation_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
     /// </summary>
     public int FormulaStep { get; set; } = 0;
 

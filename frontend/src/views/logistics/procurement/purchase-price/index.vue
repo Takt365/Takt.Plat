@@ -77,13 +77,13 @@
         <template v-if="column.key === 'priceType'">
           <TaktDictTag
             :value="getPurchasePriceDictValue(record, 'priceType')"
-            dict-type="logistics_price_type"
+            dict-type="logistics_procurement_price_type"
           />
         </template>
         <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
             :value="getPurchasePriceDictValue(record, 'taxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'grBasedInvoiceInspection'">
@@ -95,7 +95,7 @@
         <template v-else-if="column.key === 'pricingDateControl'">
           <TaktDictTag
             :value="getPurchasePriceDictValue(record, 'pricingDateControl')"
-            dict-type="logistics_pricing_date_control"
+            dict-type="logistics_procurement_pricing_date_control"
           />
         </template>
       </template>

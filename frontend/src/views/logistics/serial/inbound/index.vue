@@ -77,7 +77,7 @@
         <template v-if="column.key === 'inboundType'">
           <TaktDictTag
             :value="getSerialInboundDictValue(record, 'inboundType')"
-            dict-type="logistics_inbound_type"
+            dict-type="logistics_materials_inbound_type"
           />
         </template>
       </template>
@@ -162,7 +162,7 @@
       <a-form-item :label="pi.queryLabel('inboundType')">
         <TaktSelect
           v-model:value="advancedQueryForm.inboundType"
-          dict-type="logistics_inbound_type"
+          dict-type="logistics_materials_inbound_type"
           :placeholder="pi.queryPh('inboundType', 'select')"
           allow-clear
         />

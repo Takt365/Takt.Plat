@@ -27,18 +27,54 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  disabled
+                  :placeholder="t('common.page.form.placeholder.input')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  disabled
+                  :placeholder="t('common.page.form.placeholder.input')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  disabled
+                  :placeholder="t('common.page.form.placeholder.input')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <a-input
+                  v-model:value="formState.plantCode"
+                  disabled
+                  :placeholder="t('common.page.form.placeholder.input')"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -115,7 +151,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / 区域文化 / 工厂（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -132,7 +168,6 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.plantCode) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
@@ -200,7 +235,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, userStore.userInfo?.cultureCode, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.ecGroupId) {
       applyScopeDefaults(formState, true)

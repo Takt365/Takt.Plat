@@ -319,7 +319,7 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -658,7 +658,7 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -996,7 +996,7 @@ public class TaktSalesInvoiceItemCreateDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1366,7 +1366,7 @@ public class TaktSalesInvoiceItemTemplateDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1689,7 +1689,7 @@ public class TaktSalesInvoiceItemImportDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -2018,7 +2018,7 @@ public class TaktSalesInvoiceItemExportDto
     /// <summary>
     /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? PostedByEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

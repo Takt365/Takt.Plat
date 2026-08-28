@@ -39,7 +39,7 @@ public class TaktFlowAddSign : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sign_user_id", ColumnDescription = "加签人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long SignUserId { get; set; }
     /// <summary>
-    /// 加签人姓名（冗余字段，便于查询）
+    /// 加签人姓名（冗余：按 SignUserId 取 TaktUser.UserName 联动）
     /// </summary>
     [SugarColumn(ColumnName = "sign_user_name", ColumnDescription = "加签人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SignUserName { get; set; }

@@ -401,7 +401,7 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
                 || SqlFunc.ToString(x.CumulativeRunHours).Contains(keywords)
                 || (x.InterfaceType != null && x.InterfaceType.Contains(keywords))
                 || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
-                || (x.EquipAdministrator != null && x.EquipAdministrator.Contains(keywords))
+                || (x.EquipAdministratorName != null && x.EquipAdministratorName.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ProdEquipStatus).Contains(keywords)
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
@@ -720,9 +720,9 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(queryDto.StorageLocation));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipAdministrator))
+        if (!string.IsNullOrEmpty(queryDto?.EquipAdministratorName))
         {
-            exp = exp.And(x => x.EquipAdministrator != null && x.EquipAdministrator.Contains(queryDto.EquipAdministrator));
+            exp = exp.And(x => x.EquipAdministratorName != null && x.EquipAdministratorName.Contains(queryDto.EquipAdministratorName));
         }
 
         if (queryDto?.SortOrder.HasValue == true)

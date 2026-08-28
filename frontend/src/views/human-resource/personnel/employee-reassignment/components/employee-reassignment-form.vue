@@ -59,7 +59,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.reassignmentType"
-                  dict-type="hr_reassignment_type"
+                  dict-type="humanresource_personnel_reassignment_type"
                   :placeholder="pi.ph('reassignmentType')"
                 />
               </a-form-item>

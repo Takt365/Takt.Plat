@@ -22,7 +22,9 @@ namespace Takt.Shared.Helpers;
 /// <remarks>无状态；<c>DefaultSensitiveFields</c> 为编译期不可变常量数组。</remarks>
 public static class TaktMaskHelper
 {
-    /// <summary>默认敏感字段列表（与前端 DEFAULT_SENSITIVE_FIELDS 一致）。</summary>
+    /// <summary>
+    /// 默认敏感字段列表（与前端 DEFAULT_SENSITIVE_FIELDS 一致）。
+    /// </summary>
     private static readonly string[] DefaultSensitiveFields =
     [
         "password", "pwd", "passwd", "token", "authorization", "auth", "csrf", "cookie",

@@ -76,7 +76,7 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     public string? TeamCodeName { get; set; }
 
     /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
@@ -190,13 +190,13 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     public decimal OvertimeHours { get; set; } = 0;
 
     /// <summary>
-    /// 班组长（选项 TaktEmployees/options，存员工姓名或工号）
+    /// 班组长（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "team_leader", ColumnDescription = "班组长", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? TeamLeader { get; set; }
 
     /// <summary>
-    /// 主管（选项 TaktEmployees/options，存员工姓名或工号）
+    /// 主管（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "supervisor", ColumnDescription = "主管", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? Supervisor { get; set; }

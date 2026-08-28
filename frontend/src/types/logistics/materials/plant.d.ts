@@ -49,17 +49,17 @@ export interface Plant extends TenantCultureDtoBase {
   codeAlias: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale: string;
 
@@ -309,17 +309,17 @@ export interface PlantQuery extends TaktPagedQuery {
   codeAlias?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -598,17 +598,17 @@ export interface PlantCreate {
   codeAlias: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale: string;
 
@@ -915,17 +915,17 @@ export interface PlantTemplate {
   codeAlias?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -1179,17 +1179,17 @@ export interface PlantImport {
   codeAlias?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -1443,17 +1443,17 @@ export interface PlantExport {
   codeAlias: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale；DictValue=M 等）
    */
   enterpriseScale: string;
 

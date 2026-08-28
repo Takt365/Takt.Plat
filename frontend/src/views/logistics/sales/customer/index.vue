@@ -82,31 +82,31 @@
         <template v-else-if="column.key === 'customerType'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'customerType')"
-            dict-type="logistics_customer_category"
+            dict-type="logistics_sales_customer_category"
           />
         </template>
         <template v-else-if="column.key === 'enterpriseNature'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'enterpriseNature')"
-            dict-type="sys_enterprise_nature_type"
+            dict-type="sys_enterprise_nature"
           />
         </template>
         <template v-else-if="column.key === 'industryAttribute'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'industryAttribute')"
-            dict-type="sys_industry_attribute_type"
+            dict-type="sys_industry_attribute"
           />
         </template>
         <template v-else-if="column.key === 'taxCode'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'taxCode')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_code"
+            dict-type="accounting_financial_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'registrationCountry'">
@@ -118,19 +118,19 @@
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'customerGroup'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'customerGroup')"
-            dict-type="logistics_customer_group"
+            dict-type="logistics_sales_customer_group"
           />
         </template>
         <template v-else-if="column.key === 'accountAssignmentGroup'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'accountAssignmentGroup')"
-            dict-type="logistics_account_assignment_group"
+            dict-type="logistics_sales_account_assignment_group"
           />
         </template>
         <template v-else-if="column.key === 'centralPostingBlock'">
@@ -148,49 +148,49 @@
         <template v-else-if="column.key === 'paymentTerms'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'paymentTerms')"
-            dict-type="accounting_payment_terms_param"
+            dict-type="accounting_financial_payment_terms_param"
           />
         </template>
         <template v-else-if="column.key === 'paymentMethod'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'paymentMethod')"
-            dict-type="accounting_payment_method_type"
+            dict-type="accounting_financial_payment_method"
           />
         </template>
         <template v-else-if="column.key === 'incoterms1'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'incoterms1')"
-            dict-type="logistics_incoterms1"
+            dict-type="logistics_sales_incoterms1"
           />
         </template>
         <template v-else-if="column.key === 'shippingConditions'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'shippingConditions')"
-            dict-type="logistics_shipping_conditions"
+            dict-type="logistics_sales_shipping_conditions"
           />
         </template>
         <template v-else-if="column.key === 'customerPricingProcedure'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'customerPricingProcedure')"
-            dict-type="logistics_customer_pricing_procedure"
+            dict-type="logistics_sales_customer_pricing_procedure"
           />
         </template>
         <template v-else-if="column.key === 'creditLevel'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'creditLevel')"
-            dict-type="logistics_credit_rating_category"
+            dict-type="logistics_sales_credit_rating"
           />
         </template>
         <template v-else-if="column.key === 'discountRate'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'discountRate')"
-            dict-type="logistics_discount_rate_param"
+            dict-type="logistics_sales_discount_rate_param"
           />
         </template>
         <template v-else-if="column.key === 'customerLevel'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'customerLevel')"
-            dict-type="logistics_customer_level_category"
+            dict-type="logistics_sales_customer_level"
           />
         </template>
       </template>
@@ -302,7 +302,7 @@
       <a-form-item :label="pi.queryLabel('customerType')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerType"
-          dict-type="logistics_customer_category"
+          dict-type="logistics_sales_customer_category"
           :placeholder="pi.queryPh('customerType', 'select')"
           allow-clear
         />
@@ -312,7 +312,7 @@
       <a-form-item :label="pi.queryLabel('enterpriseNature')">
         <TaktSelect
           v-model:value="advancedQueryForm.enterpriseNature"
-          dict-type="sys_enterprise_nature_type"
+          dict-type="sys_enterprise_nature"
           :placeholder="pi.queryPh('enterpriseNature', 'select')"
           allow-clear
         />
@@ -322,7 +322,7 @@
       <a-form-item :label="pi.queryLabel('industryAttribute')">
         <TaktSelect
           v-model:value="advancedQueryForm.industryAttribute"
-          dict-type="sys_industry_attribute_type"
+          dict-type="sys_industry_attribute"
           :placeholder="pi.queryPh('industryAttribute', 'select')"
           allow-clear
         />
@@ -343,7 +343,7 @@
       <a-form-item :label="pi.queryLabel('taxCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxCode"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('taxCode', 'select')"
           allow-clear
         />
@@ -353,7 +353,7 @@
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_code"
+          dict-type="accounting_financial_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -490,7 +490,7 @@
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          dict-type="accounting_currency_code"
+          dict-type="accounting_financial_currency_code"
           :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
@@ -532,7 +532,7 @@
       <a-form-item :label="pi.queryLabel('customerGroup')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerGroup"
-          dict-type="logistics_customer_group"
+          dict-type="logistics_sales_customer_group"
           :placeholder="pi.queryPh('customerGroup', 'select')"
           allow-clear
         />
@@ -552,7 +552,7 @@
       <a-form-item :label="pi.queryLabel('accountAssignmentGroup')">
         <TaktSelect
           v-model:value="advancedQueryForm.accountAssignmentGroup"
-          dict-type="logistics_account_assignment_group"
+          dict-type="logistics_sales_account_assignment_group"
           :placeholder="pi.queryPh('accountAssignmentGroup', 'select')"
           allow-clear
         />
@@ -623,7 +623,7 @@
       <a-form-item :label="pi.queryLabel('paymentTerms')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
-          dict-type="accounting_payment_terms_param"
+          dict-type="accounting_financial_payment_terms_param"
           :placeholder="pi.queryPh('paymentTerms', 'select')"
           allow-clear
         />
@@ -633,7 +633,7 @@
       <a-form-item :label="pi.queryLabel('paymentMethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentMethod"
-          dict-type="accounting_payment_method_type"
+          dict-type="accounting_financial_payment_method"
           :placeholder="pi.queryPh('paymentMethod', 'select')"
           allow-clear
         />
@@ -653,7 +653,7 @@
       <a-form-item :label="pi.queryLabel('incoterms1')">
         <TaktSelect
           v-model:value="advancedQueryForm.incoterms1"
-          dict-type="logistics_incoterms1"
+          dict-type="logistics_sales_incoterms1"
           :placeholder="pi.queryPh('incoterms1', 'select')"
           allow-clear
         />
@@ -674,7 +674,7 @@
       <a-form-item :label="pi.queryLabel('shippingConditions')">
         <TaktSelect
           v-model:value="advancedQueryForm.shippingConditions"
-          dict-type="logistics_shipping_conditions"
+          dict-type="logistics_sales_shipping_conditions"
           :placeholder="pi.queryPh('shippingConditions', 'select')"
           allow-clear
         />
@@ -684,7 +684,7 @@
       <a-form-item :label="pi.queryLabel('customerPricingProcedure')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerPricingProcedure"
-          dict-type="logistics_customer_pricing_procedure"
+          dict-type="logistics_sales_customer_pricing_procedure"
           :placeholder="pi.queryPh('customerPricingProcedure', 'select')"
           allow-clear
         />
@@ -694,7 +694,7 @@
       <a-form-item :label="pi.queryLabel('creditLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.creditLevel"
-          dict-type="logistics_credit_rating_category"
+          dict-type="logistics_sales_credit_rating"
           :placeholder="pi.queryPh('creditLevel', 'select')"
           allow-clear
         />
@@ -713,7 +713,7 @@
       <a-form-item :label="pi.queryLabel('discountRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.discountRate"
-          dict-type="logistics_discount_rate_param"
+          dict-type="logistics_sales_discount_rate_param"
           :placeholder="pi.queryPh('discountRate', 'select')"
           allow-clear
         />
@@ -733,7 +733,7 @@
       <a-form-item :label="pi.queryLabel('customerLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.customerLevel"
-          dict-type="logistics_customer_level_category"
+          dict-type="logistics_sales_customer_level"
           :placeholder="pi.queryPh('customerLevel', 'select')"
           allow-clear
         />

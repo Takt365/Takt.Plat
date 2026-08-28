@@ -51,7 +51,7 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
@@ -66,7 +66,7 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int RoutingStatus { get; set; } = 0;
 
@@ -139,7 +139,7 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
@@ -154,7 +154,7 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int? RoutingStatus { get; set; }
 
@@ -295,7 +295,7 @@ public class TaktRoutingCreateDto
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
@@ -312,7 +312,7 @@ public class TaktRoutingCreateDto
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int RoutingStatus { get; set; } = 0;
 
@@ -391,9 +391,9 @@ public class TaktRoutingStatusDto
     public long RoutingId { get; set; }
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
-    [Required(ErrorMessage = "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）不能为空")]
+    [Required(ErrorMessage = "状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）不能为空")]
     public int RoutingStatus { get; set; } = 0;
 }
 
@@ -442,7 +442,7 @@ public class TaktRoutingTemplateDto
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
@@ -457,7 +457,7 @@ public class TaktRoutingTemplateDto
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int? RoutingStatus { get; set; }
 
@@ -534,7 +534,7 @@ public class TaktRoutingImportDto
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
@@ -549,7 +549,7 @@ public class TaktRoutingImportDto
     public string? Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int? RoutingStatus { get; set; }
 
@@ -632,7 +632,7 @@ public class TaktRoutingExportDto
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_manufacturing_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
@@ -647,7 +647,7 @@ public class TaktRoutingExportDto
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// 状态（字典 logistics_manufacturing_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
     public int RoutingStatus { get; set; } = 0;
 

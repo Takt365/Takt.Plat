@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcExecutionTaskI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcExecutionTask 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,22 @@ public class TaktEcExecutionTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecexecutiontask.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（可选）"),
 
             // entity.ecexecutiontask.deptcode
-            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "en-US", "责任部门编码_us", "责任部门编码"),
+            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "en-US", "责任部门编码_us", "责任部门编码（TaktDept.DeptCode，如 D0710）"),
             // entity.ecexecutiontask.deptcode
-            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "ja-JP", "责任部门编码_jp", "责任部门编码"),
+            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "ja-JP", "责任部门编码_jp", "责任部门编码（TaktDept.DeptCode，如 D0710）"),
             // entity.ecexecutiontask.deptcode
-            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "zh-CN", "责任部门编码", "责任部门编码"),
+            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "zh-CN", "责任部门编码", "责任部门编码（TaktDept.DeptCode，如 D0710）"),
             // entity.ecexecutiontask.deptcode
-            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "zh-HK", "责任部门编码_hk", "责任部门编码"),
+            new TranslationSeedItem("entity.ecexecutiontask.deptcode", "zh-HK", "责任部门编码_hk", "责任部门编码（TaktDept.DeptCode，如 D0710）"),
+
+            // entity.ecexecutiontask.deptname
+            new TranslationSeedItem("entity.ecexecutiontask.deptname", "en-US", "责任部门名称_us", "责任部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexecutiontask.deptname
+            new TranslationSeedItem("entity.ecexecutiontask.deptname", "ja-JP", "责任部门名称_jp", "责任部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexecutiontask.deptname
+            new TranslationSeedItem("entity.ecexecutiontask.deptname", "zh-CN", "责任部门名称", "责任部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexecutiontask.deptname
+            new TranslationSeedItem("entity.ecexecutiontask.deptname", "zh-HK", "责任部门名称_hk", "责任部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
 
             // entity.ecexecutiontask.tasktitle
             new TranslationSeedItem("entity.ecexecutiontask.tasktitle", "en-US", "任务标题_us", "任务标题"),

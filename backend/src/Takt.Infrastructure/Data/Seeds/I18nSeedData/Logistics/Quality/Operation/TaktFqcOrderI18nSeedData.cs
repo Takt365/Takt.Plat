@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,14 +171,23 @@ public class TaktFqcOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.fqcorder.totalinspectionreturnquantity
             new TranslationSeedItem("entity.fqcorder.totalinspectionreturnquantity", "zh-HK", "总验退数量_hk", "总验退数量（自动计算 = 各明细验退数量合计）"),
 
-            // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "en-US", "判定人_us", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "ja-JP", "判定人_jp", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-CN", "判定人", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-            // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-HK", "判定人_hk", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            // entity.fqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeeid", "en-US", "判定人ID_us", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeeid", "ja-JP", "判定人ID_jp", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeeid", "zh-CN", "判定人ID", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+            // entity.fqcorder.judgebyemployeeid
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeeid", "zh-HK", "判定人ID_hk", "判定人（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.fqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeename", "en-US", "判定人名称_us", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeename", "ja-JP", "判定人名称_jp", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeename", "zh-CN", "判定人名称", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
+            // entity.fqcorder.judgebyemployeename
+            new TranslationSeedItem("entity.fqcorder.judgebyemployeename", "zh-HK", "判定人名称_hk", "判定人名称（冗余：按 JudgeByEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.fqcorder.judgedate
             new TranslationSeedItem("entity.fqcorder.judgedate", "en-US", "判定日期_us", "判定日期"),

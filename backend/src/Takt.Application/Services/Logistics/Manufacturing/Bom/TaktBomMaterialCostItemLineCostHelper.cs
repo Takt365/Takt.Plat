@@ -22,7 +22,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 public static class TaktBomMaterialCostItemLineCostHelper
 {
     /// <summary>
-    /// 成品物料类型（字典 logistics_material_type；成本合计仅统计此类型。机种月均按工厂+物料类型+机种+月份分组，各类型各自平均；空类型分组视为 FERT）
+    /// 成品物料类型（字典 logistics_materials_material_type；成本合计仅统计此类型。机种月均按工厂+物料类型+机种+月份分组，各类型各自平均；空类型分组视为 FERT）
     /// </summary>
     public const string FertMaterialTypeCode = "FERT";
 

@@ -50,13 +50,13 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public string? ClientDeletionFlag { get; set; }
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ROH")]
     public string MaterialType { get; set; } = "ROH";
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
+    /// 行业领域（字典 logistics_materials_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
     /// </summary>
     [SugarColumn(ColumnName = "industry_sector", ColumnDescription = "行业领域", ColumnDataType = "nvarchar", Length = 1, IsNullable = false)]
     public string IndustrySector { get; set; } = string.Empty;
@@ -74,13 +74,13 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public string? OldMaterialNumber { get; set; }
 
     /// <summary>
-    /// 基本计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 基本计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "基本计量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "PC")]
     public string BaseUnit { get; set; } = "PC";
 
     /// <summary>
-    /// 采购订单单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 采购订单单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     [SugarColumn(ColumnName = "order_unit", ColumnDescription = "采购订单单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? OrderUnit { get; set; }
@@ -182,7 +182,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? WeightUnit { get; set; }
@@ -194,7 +194,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? Volume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? VolumeUnit { get; set; }
@@ -326,7 +326,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? Height { get; set; }
 
     /// <summary>
-    /// 长宽高单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 长宽高单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     [SugarColumn(ColumnName = "dimension_unit", ColumnDescription = "长宽高单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? DimensionUnit { get; set; }
@@ -362,7 +362,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? AllowedPackagingWeight { get; set; }
 
     /// <summary>
-    /// 允许包装重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// 允许包装重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
     /// </summary>
     [SugarColumn(ColumnName = "allowed_packaging_weight_unit", ColumnDescription = "允许包装重量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? AllowedPackagingWeightUnit { get; set; }
@@ -374,7 +374,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? AllowedPackagingVolume { get; set; }
 
     /// <summary>
-    /// 允许包装体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// 允许包装体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
     /// </summary>
     [SugarColumn(ColumnName = "allowed_packaging_volume_unit", ColumnDescription = "允许包装体积单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? AllowedPackagingVolumeUnit { get; set; }
@@ -410,13 +410,13 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public string? ConfigurableMaterial { get; set; }
 
     /// <summary>
-    /// 批次管理要求（字典 logistics_batch_management_type；0=否，1=是；同步源可能为 X/空）
+    /// 批次管理要求（字典 sys_yes_no；0=否，1=是；同步源可能为 X/空）
     /// </summary>
     [SugarColumn(ColumnName = "batch_management_required", ColumnDescription = "批次管理要求", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? BatchManagementRequired { get; set; }
 
     /// <summary>
-    /// 包装物料类型（字典 logistics_material_type；DictValue=VERP 等）
+    /// 包装物料类型（字典 logistics_materials_material_type；DictValue=VERP 等）
     /// </summary>
     [SugarColumn(ColumnName = "packaging_material_type", ColumnDescription = "包装物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? PackagingMaterialType { get; set; }
@@ -566,7 +566,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? StoragePercentage { get; set; }
 
     /// <summary>
-    /// 含量单位（字典 logistics_unit_of_measure_code；DictValue=PC/L/KG 等）
+    /// 含量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/L/KG 等）
     /// </summary>
     [SugarColumn(ColumnName = "content_unit", ColumnDescription = "含量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? ContentUnit { get; set; }
@@ -878,7 +878,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? MaximumPackingHeight { get; set; }
 
     /// <summary>
-    /// 最大包装尺寸单位（字典 logistics_unit_of_measure_code；DictValue=M/CM/MM 等）
+    /// 最大包装尺寸单位（字典 logistics_materials_unit_of_measure_code；DictValue=M/CM/MM 等）
     /// </summary>
     [SugarColumn(ColumnName = "maximum_packing_dimension_unit", ColumnDescription = "最大包装尺寸单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? MaximumPackingDimensionUnit { get; set; }
@@ -902,7 +902,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public decimal? QuarantinePeriod { get; set; }
 
     /// <summary>
-    /// 隔离期单位（字典 logistics_unit_of_measure_code；DictValue=计量单位代码）
+    /// 隔离期单位（字典 logistics_materials_unit_of_measure_code；DictValue=计量单位代码）
     /// </summary>
     [SugarColumn(ColumnName = "quarantine_period_unit", ColumnDescription = "隔离期单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? QuarantinePeriodUnit { get; set; }
@@ -926,7 +926,7 @@ public class TaktGeneralMaterial : TaktTenantCoreEntityBase
     public string? FormName { get; set; }
 
     /// <summary>
-    /// 后勤计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
+    /// 后勤计量单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等）
     /// </summary>
     [SugarColumn(ColumnName = "logistics_unit_of_measure", ColumnDescription = "后勤计量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? LogisticsUnitOfMeasure { get; set; }

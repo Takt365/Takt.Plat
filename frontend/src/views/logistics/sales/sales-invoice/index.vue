@@ -77,13 +77,13 @@
         <template v-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getSalesInvoiceDictValue(record, 'currencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'shippingConditions'">
           <TaktDictTag
             :value="getSalesInvoiceDictValue(record, 'shippingConditions')"
-            dict-type="logistics_shipping_conditions"
+            dict-type="logistics_sales_shipping_conditions"
           />
         </template>
         <template v-else-if="column.key === 'countryCode'">
@@ -95,7 +95,7 @@
         <template v-else-if="column.key === 'statisticsCurrencyCode'">
           <TaktDictTag
             :value="getSalesInvoiceDictValue(record, 'statisticsCurrencyCode')"
-            dict-type="accounting_currency_code"
+            dict-type="accounting_financial_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'taxDepartureCountry'">

@@ -77,13 +77,13 @@
         <template v-if="column.key === 'destinationPort'">
           <TaktDictTag
             :value="getSerialOutboundDictValue(record, 'destinationPort')"
-            dict-type="logistics_destination_port_code"
+            dict-type="logistics_serial_destination_port_code"
           />
         </template>
         <template v-else-if="column.key === 'outboundType'">
           <TaktDictTag
             :value="getSerialOutboundDictValue(record, 'outboundType')"
-            dict-type="logistics_outbound_type"
+            dict-type="logistics_materials_outbound_type"
           />
         </template>
       </template>
@@ -189,7 +189,7 @@
       <a-form-item :label="pi.queryLabel('destinationPort')">
         <TaktSelect
           v-model:value="advancedQueryForm.destinationPort"
-          dict-type="logistics_destination_port_code"
+          dict-type="logistics_serial_destination_port_code"
           :placeholder="pi.queryPh('destinationPort', 'select')"
           allow-clear
         />
@@ -199,7 +199,7 @@
       <a-form-item :label="pi.queryLabel('outboundType')">
         <TaktSelect
           v-model:value="advancedQueryForm.outboundType"
-          dict-type="logistics_outbound_type"
+          dict-type="logistics_materials_outbound_type"
           :placeholder="pi.queryPh('outboundType', 'select')"
           allow-clear
         />

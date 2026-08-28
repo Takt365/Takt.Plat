@@ -57,7 +57,7 @@ public class TaktExpenseDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     public string AllocationCategory { get; set; } = string.Empty;
 
@@ -150,7 +150,7 @@ public class TaktExpenseDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -266,9 +266,9 @@ public class TaktExpenseDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
-    [Required(ErrorMessage = "分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）不能为空")]
+    [Required(ErrorMessage = "分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）不能为空")]
     public string AllocationCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -413,7 +413,7 @@ public class TaktExpenseDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -511,7 +511,7 @@ public class TaktExpenseDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     public string? AllocationCategory { get; set; } = string.Empty;
 
@@ -615,7 +615,7 @@ public class TaktExpenseDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
+    /// 分配类别（字典 logistics_sales_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）
     /// </summary>
     public string AllocationCategory { get; set; } = string.Empty;
 

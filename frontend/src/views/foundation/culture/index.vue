@@ -133,7 +133,7 @@
           v-model:value="advancedQueryForm.nativeName"
           :placeholder="pi.queryPh('nativeName', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>

@@ -49,7 +49,7 @@ export interface EmployeeContract extends CompanyDtoBase {
   contractCode: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
 
@@ -79,7 +79,7 @@ export interface EmployeeContract extends CompanyDtoBase {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus: number;
 
@@ -139,7 +139,7 @@ export interface EmployeeContractQuery extends TaktPagedQuery {
   contractCode?: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
 
@@ -189,7 +189,7 @@ export interface EmployeeContractQuery extends TaktPagedQuery {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus?: number;
 
@@ -263,7 +263,7 @@ export interface EmployeeContractCreate {
   contractCode: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
 
@@ -293,7 +293,7 @@ export interface EmployeeContractCreate {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus: number;
 
@@ -337,7 +337,7 @@ export interface EmployeeContractStatus {
   employeeContractId: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus: number;
 
@@ -391,7 +391,7 @@ export interface EmployeeContractTemplate {
   contractCode?: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
 
@@ -421,7 +421,7 @@ export interface EmployeeContractTemplate {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus?: number;
 
@@ -485,7 +485,7 @@ export interface EmployeeContractImport {
   contractCode?: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
 
@@ -515,7 +515,7 @@ export interface EmployeeContractImport {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus?: number;
 
@@ -579,7 +579,7 @@ export interface EmployeeContractExport {
   contractCode: string;
 
   /**
-   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
+   * 合同类型（字典 humanresource_personnel_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
 
@@ -609,7 +609,7 @@ export interface EmployeeContractExport {
   signCompany?: string;
 
   /**
-   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   * 合同状态（字典 humanresource_personnel_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus: number;
 

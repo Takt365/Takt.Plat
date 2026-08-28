@@ -46,7 +46,7 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 
@@ -67,14 +67,31 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -108,7 +125,7 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public decimal ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -128,9 +145,14 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -186,7 +208,7 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -207,14 +229,31 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -243,7 +282,7 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public decimal? ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -268,9 +307,14 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -383,7 +427,7 @@ public class TaktExpenseCreateDto
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 
@@ -404,14 +448,31 @@ public class TaktExpenseCreateDto
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -440,7 +501,7 @@ public class TaktExpenseCreateDto
     public decimal ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -460,9 +521,14 @@ public class TaktExpenseCreateDto
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -575,7 +641,7 @@ public class TaktExpenseTemplateDto
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -596,14 +662,31 @@ public class TaktExpenseTemplateDto
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -632,7 +715,7 @@ public class TaktExpenseTemplateDto
     public decimal? ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -652,9 +735,14 @@ public class TaktExpenseTemplateDto
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -714,7 +802,7 @@ public class TaktExpenseImportDto
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -735,14 +823,31 @@ public class TaktExpenseImportDto
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -771,7 +876,7 @@ public class TaktExpenseImportDto
     public decimal? ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int? TaxRate { get; set; }
 
@@ -791,9 +896,14 @@ public class TaktExpenseImportDto
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
@@ -859,7 +969,7 @@ public class TaktExpenseExportDto
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_financial_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 
@@ -880,14 +990,31 @@ public class TaktExpenseExportDto
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请人名称（冗余：按 ApplicantBy 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? ApplicationDept { get; set; } = string.Empty;
+    public string? ApplicantName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 经费负担部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
+    /// 申请部门（选项 TaktDepts/tree-options；DictValue=Id）
     /// </summary>
-    public string? CostBearerDept { get; set; } = string.Empty;
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ApplicationDeptId { get; set; }
+
+    /// <summary>
+    /// 申请部门名称（冗余：按 ApplicationDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? ApplicationDeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 经费负担部门（选项 TaktDepts/tree-options；DictValue=Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? CostBearerDeptId { get; set; }
+
+    /// <summary>
+    /// 经费负担部门名称（冗余：按 CostBearerDeptId 取 TaktDept.DeptName1 联动）
+    /// </summary>
+    public string? CostBearerDeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
@@ -916,7 +1043,7 @@ public class TaktExpenseExportDto
     public decimal ExpenseAmount { get; set; }
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；整单统一税率）
+    /// 税率（字典 accounting_financial_tax_rate_param；整单统一税率）
     /// </summary>
     public int TaxRate { get; set; } = 0;
 
@@ -936,9 +1063,14 @@ public class TaktExpenseExportDto
     public string? ApplicationReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 JSON
+    /// 文件名称（原始文件名，长度对齐 TaktFile.FileName）
     /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
+    public string? FileName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 访问地址（文件访问 URL，长度对齐 TaktFile.AccessUrl）
+    /// </summary>
+    public string? AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）

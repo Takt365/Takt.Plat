@@ -73,7 +73,7 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
@@ -169,7 +169,7 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public DateTime? EndedAtEnd { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
@@ -272,7 +272,7 @@ public class TaktSopExecStepCreateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
@@ -381,7 +381,7 @@ public class TaktSopExecStepTemplateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
@@ -466,7 +466,7 @@ public class TaktSopExecStepImportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
@@ -557,7 +557,7 @@ public class TaktSopExecStepExportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+    /// 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 

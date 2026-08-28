@@ -17,16 +17,24 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public static class TaktEmailTemplateNames
 {
-    /// <summary>用户注册成功通知（含初始密码）</summary>
+    /// <summary>
+    /// 用户注册成功通知（含初始密码）
+    /// </summary>
     public const string InitialPassword = "InitialPassword";
 
-    /// <summary>密码重置通知</summary>
+    /// <summary>
+    /// 密码重置通知
+    /// </summary>
     public const string ForgotPassword = "ForgotPassword";
 
-    /// <summary>通用通知（系统通知等），占位符：Title、Greeting、Content</summary>
+    /// <summary>
+    /// 通用通知（系统通知等），占位符：Title、Greeting、Content
+    /// </summary>
     public const string Generic = "Generic";
 
-    /// <summary>流程处理通用模板，占位符：Title、Greeting、ProcessName、Applicant、ApplyTime、CurrentNode、Content、ActionHint</summary>
+    /// <summary>
+    /// 流程处理通用模板，占位符：Title、Greeting、ProcessName、Applicant、ApplyTime、CurrentNode、Content、ActionHint
+    /// </summary>
     public const string ProcessNotify = "ProcessNotify";
 }
 

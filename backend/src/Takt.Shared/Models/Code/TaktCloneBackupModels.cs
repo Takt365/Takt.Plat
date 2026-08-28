@@ -17,25 +17,39 @@ namespace Takt.Shared.Models.Code;
 /// </summary>
 public class TaktCloneTargetBackupPreview
 {
-    /// <summary>目标物理表名</summary>
+    /// <summary>
+    /// 目标物理表名
+    /// </summary>
     public string TargetTableName { get; set; } = string.Empty;
 
-    /// <summary>目标公司编码（公司级克隆时有值）</summary>
+    /// <summary>
+    /// 目标公司编码（公司级克隆时有值）
+    /// </summary>
     public string? TargetCompanyCode { get; set; }
 
-    /// <summary>即将备份的行数</summary>
+    /// <summary>
+    /// 即将备份的行数
+    /// </summary>
     public int TargetRowCount { get; set; }
 
-    /// <summary>计划生成的备份表名（执行时按 UTC 时间戳生成）</summary>
+    /// <summary>
+    /// 计划生成的备份表名（执行时按 UTC 时间戳生成）
+    /// </summary>
     public string PlannedBackupTableName { get; set; } = string.Empty;
 
-    /// <summary>备份步骤说明</summary>
+    /// <summary>
+    /// 备份步骤说明
+    /// </summary>
     public string BackupDescription { get; set; } = string.Empty;
 
-    /// <summary>清空步骤说明</summary>
+    /// <summary>
+    /// 清空步骤说明
+    /// </summary>
     public string ClearDescription { get; set; } = string.Empty;
 
-    /// <summary>风险提示</summary>
+    /// <summary>
+    /// 风险提示
+    /// </summary>
     public string WarningMessage { get; set; } = string.Empty;
 }
 
@@ -44,15 +58,23 @@ public class TaktCloneTargetBackupPreview
 /// </summary>
 public class TaktCloneTargetBackupStepResult
 {
-    /// <summary>实际备份表名</summary>
+    /// <summary>
+    /// 实际备份表名
+    /// </summary>
     public string BackupTableName { get; set; } = string.Empty;
 
-    /// <summary>备份行数</summary>
+    /// <summary>
+    /// 备份行数
+    /// </summary>
     public int BackedUpRowCount { get; set; }
 
-    /// <summary>清空行数</summary>
+    /// <summary>
+    /// 清空行数
+    /// </summary>
     public int ClearedRowCount { get; set; }
 
-    /// <summary>执行摘要</summary>
+    /// <summary>
+    /// 执行摘要
+    /// </summary>
     public string SummaryMessage { get; set; } = string.Empty;
 }

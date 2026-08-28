@@ -26,7 +26,7 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
 {
     // ---- 基础标识 ----
     /// <summary>
-    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_maintenance_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
     [SugarColumn(ColumnName = "equip_category", ColumnDescription = "设备类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EquipCategory { get; set; } = 1;
@@ -356,10 +356,16 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "storage_location", ColumnDescription = "存放位置", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string StorageLocation { get; set; } = string.Empty;
     /// <summary>
-    /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
+    /// 设备管理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "equip_administrator", ColumnDescription = "设备管理员", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? EquipAdministrator { get; set; }
+    [SugarColumn(ColumnName = "equip_administrator_id", ColumnDescription = "设备管理员ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? EquipAdministratorId { get; set; }
+    /// <summary>
+    /// 设备管理员名称（冗余：按 EquipAdministratorId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "equip_administrator_name", ColumnDescription = "设备管理员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EquipAdministratorName { get; set; }
     /// <summary>
     /// 排序号（回填）
     /// </summary>

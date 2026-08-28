@@ -46,7 +46,7 @@ public class TaktEcGijutsuSourceEcInputItemDto
     /// <summary>
     /// 设变号码
     /// </summary>
-    public string SourceEcNo { get; set; } = string.Empty;
+    public string SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -77,11 +77,6 @@ public class TaktEcGijutsuSourceEcInputItemDto
     /// 来源明细行数
     /// </summary>
     public int DetailCount { get; set; }
-
-    /// <summary>
-    /// 设变号码
-    /// </summary>
-    public string SourceEcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -97,17 +92,12 @@ public class TaktEcGijutsuSourceEcInputQueryDto : TaktPagedQuery
     /// <summary>
     /// 设变号码（模糊）
     /// </summary>
-    public string? SourceEcNo { get; set; }
+    public string? SourceEcCode { get; set; }
 
     /// <summary>
     /// 标题（模糊）
     /// </summary>
     public string? SourceTitle { get; set; }
-
-    /// <summary>
-    /// 设变号码（模糊）
-    /// </summary>
-    public string SourceEcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -121,7 +111,7 @@ public class TaktEcGijutsuImportFromSourceDto
     public string? PlantCode { get; set; }
 
     /// <summary>
-    /// 公司默认文化
+    /// 公司默认文化（兼容旧入参；写入实体列为 CultureCode，优先使用 CultureCode）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; }
 
@@ -131,7 +121,7 @@ public class TaktEcGijutsuImportFromSourceDto
     public List<string> SourceEcIds { get; set; } = [];
 
     /// <summary>
-    /// CultureCode
+    /// 区域文化编码（业务字段；字典 sys_culture_code）
     /// </summary>
     public string? CultureCode { get; set; }
 }
@@ -153,7 +143,7 @@ public class TaktEcGijutsuDraftFromSourceDto
     public string SourceEcId { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司默认文化
+    /// 公司默认文化（兼容旧入参；写入实体列为 CultureCode，优先使用 CultureCode）
     /// </summary>
     public string? CompanyDefaultCulture { get; set; }
 

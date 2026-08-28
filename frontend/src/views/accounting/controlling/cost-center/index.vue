@@ -101,6 +101,12 @@
           <template v-if="column.key === 'costCenterName'">
             <span>{{ getCostCenterField(record, 'costCenterName') }}</span>
           </template>
+        <template v-else-if="column.key === 'costCenterType'">
+          <TaktDictTag
+            :value="getCostCenterDictValue(record, 'costCenterType')"
+            dict-type="accounting_controlling_cost_center_type"
+          />
+        </template>
         <template v-else-if="column.key === 'costCenterStatus'">
           <a-switch
             :checked="getCostCenterDictValue(record, 'costCenterStatus') === 1"
@@ -176,10 +182,11 @@
       </div>
       <div v-show="isFieldVisible('costCenterType')">
       <a-form-item :label="pi.queryLabel('costCenterType')">
-        <a-input-number
+        <TaktSelect
           v-model:value="advancedQueryForm.costCenterType"
-          :placeholder="pi.queryPh('costCenterType', 'required')"
-          style="width: 100%"
+          dict-type="accounting_controlling_cost_center_type"
+          :placeholder="pi.queryPh('costCenterType', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -921,7 +928,6 @@ watchEffect(() => {
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getCostCenterField(record, 'costCenterType') ?? ''
   },
   {
     title: pi.label('managerId'),

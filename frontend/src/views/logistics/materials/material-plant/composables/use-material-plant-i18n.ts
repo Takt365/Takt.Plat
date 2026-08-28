@@ -50,9 +50,9 @@ export const MATERIALPLANT_LIST_FIELDS = [
   'productionLocation',
   'purchasingLocation',
   'storageLocation',
-  'isInspection',
+  'requiresInspection',
   'isBatch',
-  'isEndOfLife',
+  'discontinuedStatus',
   'materialStatus',
 ] as const
 
@@ -91,9 +91,9 @@ export const MATERIALPLANT_PLACEHOLDER = {
   productionLocation: 'select',
   purchasingLocation: 'select',
   storageLocation: 'select',
-  isInspection: 'select',
+  requiresInspection: 'select',
   isBatch: 'select',
-  isEndOfLife: 'select',
+  discontinuedStatus: 'select',
   materialStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -125,7 +125,7 @@ export const MATERIALPLANT_QUERY_STRING_FIELDS = [
   'productionLocation',
   'purchasingLocation',
   'storageLocation',
-  'isEndOfLife',
+  'discontinuedStatus',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -134,7 +134,7 @@ export const MATERIALPLANT_QUERY_STRING_FIELDS = [
 
 export type MaterialPlantQueryField =
   | (typeof MATERIALPLANT_QUERY_STRING_FIELDS)[number]
-  | 'specialProcurement' | 'isBulk' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'inHouseProductionDays' | 'priceUnit' | 'movingPrice' | 'currentStock' | 'isInspection' | 'isBatch' | 'materialStatus'
+  | 'specialProcurement' | 'isBulk' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'inHouseProductionDays' | 'priceUnit' | 'movingPrice' | 'currentStock' | 'requiresInspection' | 'isBatch' | 'materialStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const MATERIALPLANT_QUERY_FIELDS: readonly MaterialPlantQueryField[] = [
@@ -148,7 +148,7 @@ export const MATERIALPLANT_QUERY_FIELDS: readonly MaterialPlantQueryField[] = [
   'priceUnit',
   'movingPrice',
   'currentStock',
-  'isInspection',
+  'requiresInspection',
   'isBatch',
   'materialStatus',
 ]

@@ -42,7 +42,8 @@ CREATE TABLE #source_main (
   [source_unit_cost] DECIMAL(18,2),
   [source_mold_modification_cost] DECIMAL(18,2),
   [source_related_drawing] NVARCHAR(MAX),
-  [source_ec_content] NVARCHAR(MAX)
+  [source_ec_content] NVARCHAR(MAX),
+  [created_at] DATETIME
 );
 
 CREATE TABLE #source_detail (
@@ -50,22 +51,24 @@ CREATE TABLE #source_detail (
   [id] BIGINT,
   [source_ec_id] BIGINT NULL,
   [source_ec_code] NVARCHAR(100),
-  [source_legacy_part_code] NVARCHAR(100),
-  [source_finished_product] NVARCHAR(500),
-  [source_parent_part] NVARCHAR(500),
-  [source_legacy_part_name] NVARCHAR(MAX),
-  [source_legacy_usage] NVARCHAR(MAX),
-  [source_legacy_mounting_position] NVARCHAR(MAX),
-  [source_replacement_part_code] NVARCHAR(MAX),
-  [source_replacement_part_name] NVARCHAR(MAX),
-  [source_replacement_usage] NVARCHAR(MAX),
-  [source_replacement_mounting_position] NVARCHAR(MAX),
+  [line_number] INT NOT NULL DEFAULT 10,
+  [source_old_material_code] NVARCHAR(100),
+  [source_finished_goods] NVARCHAR(500),
+  [source_parent_material_code] NVARCHAR(500),
+  [source_old_material_description] NVARCHAR(MAX),
+  [source_old_usage_quantity] NVARCHAR(MAX),
+  [source_old_item_position] NVARCHAR(MAX),
+  [source_new_material_code] NVARCHAR(MAX),
+  [source_new_material_description] NVARCHAR(MAX),
+  [source_new_usage_quantity] NVARCHAR(MAX),
+  [source_new_item_position] NVARCHAR(MAX),
   [source_bom_code] NVARCHAR(MAX),
   [source_compatibility] NVARCHAR(MAX),
   [source_distinction] NVARCHAR(MAX),
   [source_instruction] NVARCHAR(MAX),
-  [source_legacy_part_disposition] NVARCHAR(MAX),
-  [source_bom_effective_date] DATE
+  [source_old_part_disposition] NVARCHAR(MAX),
+  [source_bom_effective_date] DATE,
+  [created_at] DATETIME
 );
 
 CREATE TABLE #main_delta (
@@ -80,10 +83,10 @@ CREATE TABLE #detail_delta (
   oper_type NVARCHAR(10),
   id BIGINT,
   source_ec_id BIGINT,
-  source_legacy_part_code NVARCHAR(100)
+  source_old_material_code NVARCHAR(100)
 );
 
--- 主表源：PP_SapEcn 原样全量（空设变号除外）
+-- 主表源：PP_SapEcn 原样全量（空设变号除外）；created_at ← CreateTime
 INSERT INTO #source_main
 SELECT
   S.rn,
@@ -114,7 +117,8 @@ SELECT
   ISNULL(TRY_CAST(S.[D_SAP_ZPABD_Z024] AS DECIMAL(18,2)), 0),
   ISNULL(TRY_CAST(S.[D_SAP_ZPABD_Z025] AS DECIMAL(18,2)), 0),
   ISNULL(CAST(S.[D_SAP_ZPABD_Z026] AS NVARCHAR(MAX)), ''),
-  ISNULL(CAST(S.[D_SAP_ZPABD_Z027] AS NVARCHAR(MAX)), N'')
+  ISNULL(CAST(S.[D_SAP_ZPABD_Z027] AS NVARCHAR(MAX)), N''),
+  COALESCE(TRY_CAST(S.[CreateTime] AS DATETIME), @now)
 FROM (
   SELECT *,
     LTRIM(RTRIM([D_SAP_ZPABD_Z001])) AS source_ec_code,
@@ -147,56 +151,58 @@ BEGIN
   THROW 50001, @main_dup, 1;
 END;
 
--- 子表源：仅按设变号关联主表装入（禁止仅按旧件料号去重丢行；完整业务键见后置 MERGE）
+-- 子表源：仅按设变号关联主表装入；created_at ← PP_SapEcnSub.CreateTime
 INSERT INTO #source_detail (
-  [rn],[id],[source_ec_id],[source_ec_code],[source_legacy_part_code],
-  [source_finished_product],[source_parent_part],[source_legacy_part_name],
-  [source_legacy_usage],[source_legacy_mounting_position],
-  [source_replacement_part_code],[source_replacement_part_name],[source_replacement_usage],
-  [source_replacement_mounting_position],[source_bom_code],
+  [rn],[id],[source_ec_id],[source_ec_code],[source_old_material_code],
+  [source_finished_goods],[source_parent_material_code],[source_old_material_description],
+  [source_old_usage_quantity],[source_old_item_position],
+  [source_new_material_code],[source_new_material_description],[source_new_usage_quantity],
+  [source_new_item_position],[source_bom_code],
   [source_compatibility],[source_distinction],[source_instruction],
-  [source_legacy_part_disposition],[source_bom_effective_date]
+  [source_old_part_disposition],[source_bom_effective_date],[created_at]
 )
 SELECT
   S.rn,
   @base_id + 1000000000 + S.rn,
   NULL,
   S.source_ec_code,
-  S.source_legacy_part_code,
-  S.source_finished_product,
-  S.source_parent_part,
-  S.source_legacy_part_name,
-  S.source_legacy_usage,
-  S.source_legacy_mounting_position,
-  S.source_replacement_part_code,
-  S.source_replacement_part_name,
-  S.source_replacement_usage,
-  S.source_replacement_mounting_position,
+  S.source_old_material_code,
+  S.source_finished_goods,
+  S.source_parent_material_code,
+  S.source_old_material_description,
+  S.source_old_usage_quantity,
+  S.source_old_item_position,
+  S.source_new_material_code,
+  S.source_new_material_description,
+  S.source_new_usage_quantity,
+  S.source_new_item_position,
   S.source_bom_code,
   S.source_compatibility,
   S.source_distinction,
   S.source_instruction,
-  S.source_legacy_part_disposition,
-  S.source_bom_effective_date
+  S.source_old_part_disposition,
+  S.source_bom_effective_date,
+  S.created_at
 FROM (
   SELECT
     LTRIM(RTRIM(Sub.[D_SAP_ZPABD_S001])) AS source_ec_code,
-    ISNULL(Sub.[D_SAP_ZPABD_S004], N'') AS source_legacy_part_code,
-    ISNULL(Sub.[D_SAP_ZPABD_S002], N'') AS source_finished_product,
-    ISNULL(Sub.[D_SAP_ZPABD_S003], N'') AS source_parent_part,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S005] AS NVARCHAR(MAX)), N'') AS source_legacy_part_name,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S006] AS NVARCHAR(MAX)), N'') AS source_legacy_usage,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S007] AS NVARCHAR(MAX)), N'') AS source_legacy_mounting_position,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S008] AS NVARCHAR(MAX)), N'') AS source_replacement_part_code,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S009] AS NVARCHAR(MAX)), N'') AS source_replacement_part_name,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S010] AS NVARCHAR(MAX)), N'') AS source_replacement_usage,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S011] AS NVARCHAR(MAX)), N'') AS source_replacement_mounting_position,
+    ISNULL(Sub.[D_SAP_ZPABD_S004], N'') AS source_old_material_code,
+    ISNULL(Sub.[D_SAP_ZPABD_S002], N'') AS source_finished_goods,
+    ISNULL(Sub.[D_SAP_ZPABD_S003], N'') AS source_parent_material_code,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S005] AS NVARCHAR(MAX)), N'') AS source_old_material_description,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S006] AS NVARCHAR(MAX)), N'') AS source_old_usage_quantity,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S007] AS NVARCHAR(MAX)), N'') AS source_old_item_position,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S008] AS NVARCHAR(MAX)), N'') AS source_new_material_code,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S009] AS NVARCHAR(MAX)), N'') AS source_new_material_description,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S010] AS NVARCHAR(MAX)), N'') AS source_new_usage_quantity,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S011] AS NVARCHAR(MAX)), N'') AS source_new_item_position,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S012] AS NVARCHAR(MAX)), N'') AS source_bom_code,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S013] AS NVARCHAR(MAX)), N'') AS source_compatibility,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S014] AS NVARCHAR(MAX)), N'') AS source_distinction,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S015] AS NVARCHAR(MAX)), N'') AS source_instruction,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S016] AS NVARCHAR(MAX)), N'') AS source_legacy_part_disposition,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S016] AS NVARCHAR(MAX)), N'') AS source_old_part_disposition,
     TRY_CONVERT(DATE, NULLIF(LTRIM(RTRIM(Sub.[D_SAP_ZPABD_S017])), N''), 23) AS source_bom_effective_date,
+    COALESCE(TRY_CAST(Sub.[CreateTime] AS DATETIME), @now) AS created_at,
     ROW_NUMBER() OVER (
       ORDER BY
         LTRIM(RTRIM(Sub.[D_SAP_ZPABD_S001])),
@@ -289,6 +295,7 @@ WHEN MATCHED AND (
   OR ROUND(T.[source_mold_modification_cost], 2) <> ROUND(S.[source_mold_modification_cost], 2)
   OR LTRIM(RTRIM(ISNULL(T.[source_related_drawing], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_related_drawing], N'')))
   OR ISNULL(CAST(T.[source_ec_content] AS NVARCHAR(MAX)), N'') <> ISNULL(S.[source_ec_content], N'')
+  OR ISNULL(T.[created_at], @now) <> ISNULL(S.[created_at], @now)
 ) THEN
   UPDATE SET
   T.[source_model]=S.[source_model],
@@ -317,6 +324,7 @@ WHEN MATCHED AND (
   T.[source_mold_modification_cost]=S.[source_mold_modification_cost],
   T.[source_related_drawing]=S.[source_related_drawing],
   T.[source_ec_content]=S.[source_ec_content],
+  T.[created_at]=COALESCE(S.[created_at], T.[created_at]),
   T.[updated_by]=@sync_user_id,
   T.[updated_at]=@now,
   T.[plant_code]=@plant_code,
@@ -353,7 +361,7 @@ WHEN NOT MATCHED THEN
     S.[source_cost_change],S.[source_unit_cost],
     S.[source_mold_modification_cost],S.[source_related_drawing],
     S.[source_ec_content],@tenant_code,@company_code,@plant_code,@culture_code,
-    @sync_user_id,@now,@sync_user_id,@now,0
+    @sync_user_id,COALESCE(S.[created_at], @now),@sync_user_id,@now,0
   )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[source_ec_code]
 INTO #main_delta(rn, oper_type, id, source_ec_code);
@@ -440,42 +448,46 @@ BEGIN
   THROW 50004, N'子表存在无法关联主表的设变号', 1;
 END;
 
--- 业务键：主表id+完成品+上阶+旧件+新件+BOM+安装位置+生效日（除 id；禁止仅旧件料号）
-IF EXISTS (
-  SELECT 1
+-- 业务键：主表id+完成品+上阶+旧件+新件+BOM+安装位置+生效日（禁止仅按旧件料号丢行）
+-- SAP 源偶发完全同键重复行：保留 rn 最小一行，计入 dedupe_dropped（不再 THROW 中断日链）
+DECLARE @detail_before_dedupe INT = (SELECT COUNT(*) FROM #source_detail);
+;WITH detail_bk AS (
+  SELECT
+    [id],
+    ROW_NUMBER() OVER (
+      PARTITION BY
+        [source_ec_id],
+        LTRIM(RTRIM(ISNULL([source_finished_goods], N''))),
+        LTRIM(RTRIM(ISNULL([source_parent_material_code], N''))),
+        LTRIM(RTRIM(ISNULL([source_old_material_code], N''))),
+        LTRIM(RTRIM(ISNULL([source_new_material_code], N''))),
+        LTRIM(RTRIM(ISNULL([source_bom_code], N''))),
+        LTRIM(RTRIM(ISNULL([source_old_item_position], N''))),
+        LTRIM(RTRIM(ISNULL([source_new_item_position], N''))),
+        ISNULL([source_bom_effective_date], CAST('1900-01-01' AS DATE))
+      ORDER BY [rn]
+    ) AS [bk_rn]
   FROM #source_detail
-  GROUP BY
-    [source_ec_id],
-    LTRIM(RTRIM(ISNULL([source_finished_product], N''))),
-    LTRIM(RTRIM(ISNULL([source_parent_part], N''))),
-    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_bom_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_legacy_mounting_position], N''))),
-    LTRIM(RTRIM(ISNULL([source_replacement_mounting_position], N''))),
-    ISNULL([source_bom_effective_date], CAST('1900-01-01' AS DATE))
-  HAVING COUNT(*) > 1
 )
-BEGIN
-  DECLARE @detail_dup NVARCHAR(400);
-  SELECT TOP 1 @detail_dup = CONCAT(
-    CAST([source_ec_id] AS NVARCHAR(30)), N'/',
-    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))), N'/',
-    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))), N' x', COUNT(*))
+DELETE D
+FROM #source_detail D
+INNER JOIN detail_bk B ON B.[id] = D.[id]
+WHERE B.[bk_rn] > 1;
+
+DECLARE @detail_dedupe_dropped INT = @detail_before_dedupe - (SELECT COUNT(*) FROM #source_detail);
+SET @detail_source_count = (SELECT COUNT(*) FROM #source_detail);
+
+-- 行号：同主表内按 rn 步长 10（唯一索引 Tenant+Company+SourceEcId+LineNumber）
+;WITH detail_line AS (
+  SELECT
+    [id],
+    ROW_NUMBER() OVER (PARTITION BY [source_ec_id] ORDER BY [rn]) * 10 AS [new_line]
   FROM #source_detail
-  GROUP BY
-    [source_ec_id],
-    LTRIM(RTRIM(ISNULL([source_finished_product], N''))),
-    LTRIM(RTRIM(ISNULL([source_parent_part], N''))),
-    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_bom_code], N''))),
-    LTRIM(RTRIM(ISNULL([source_legacy_mounting_position], N''))),
-    LTRIM(RTRIM(ISNULL([source_replacement_mounting_position], N''))),
-    ISNULL([source_bom_effective_date], CAST('1900-01-01' AS DATE))
-  HAVING COUNT(*) > 1;
-  THROW 50001, @detail_dup, 1;
-END;
+)
+UPDATE D
+SET D.[line_number] = L.[new_line]
+FROM #source_detail D
+INNER JOIN detail_line L ON L.[id] = D.[id];
 
 -- 业务键已存在：沿用目标 id
 UPDATE S
@@ -486,20 +498,20 @@ LEFT JOIN [takt_logistics_manufacturing_ec_source_detail] T
  AND T.[company_code] = @company_code
  AND T.[plant_code] = @plant_code
  AND T.[source_ec_id] = S.[source_ec_id]
- AND LTRIM(RTRIM(ISNULL(T.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_product], N'')))
- AND LTRIM(RTRIM(ISNULL(T.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_part], N'')))
- AND LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N'')))
- AND LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_finished_goods], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_parent_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_material_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_old_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_old_material_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_new_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_new_material_code], N'')))
  AND LTRIM(RTRIM(ISNULL(T.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_bom_code], N'')))
- AND LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N'')))
- AND LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_old_item_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_old_item_position], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_new_item_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_new_item_position], N'')))
  AND ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE));
 
 IF OBJECT_ID('tempdb..#detail_soft_deleted_rows') IS NOT NULL DROP TABLE #detail_soft_deleted_rows;
 CREATE TABLE #detail_soft_deleted_rows (
   [id] BIGINT,
   [source_ec_id] BIGINT,
-  [source_legacy_part_code] NVARCHAR(100)
+  [source_old_material_code] NVARCHAR(100)
 );
 
 -- 子表：业务键命中 → UPDATE；未命中 → INSERT 新目标 id；源无键 → 软删
@@ -509,34 +521,36 @@ ON T.[tenant_code] = @tenant_code
 AND T.[company_code] = @company_code
 AND T.[plant_code] = @plant_code
 AND T.[source_ec_id] = S.[source_ec_id]
-AND LTRIM(RTRIM(ISNULL(T.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_product], N'')))
-AND LTRIM(RTRIM(ISNULL(T.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_part], N'')))
-AND LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N'')))
-AND LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_finished_goods], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_parent_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_material_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_old_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_old_material_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_new_material_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_new_material_code], N'')))
 AND LTRIM(RTRIM(ISNULL(T.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_bom_code], N'')))
-AND LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N'')))
-AND LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_old_item_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_old_item_position], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_new_item_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_new_item_position], N'')))
 AND ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE))
 WHEN MATCHED AND (
   T.[is_deleted] <> 0
-  OR LTRIM(RTRIM(ISNULL(T.[source_legacy_part_name], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_legacy_part_name], N'')))
-  OR ISNULL(T.[source_legacy_usage], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')), -1)
-  OR LTRIM(RTRIM(ISNULL(T.[source_replacement_part_name], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_replacement_part_name], N'')))
-  OR ISNULL(T.[source_replacement_usage], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')), -1)
+  OR LTRIM(RTRIM(ISNULL(T.[source_old_material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_old_material_description], N'')))
+  OR ISNULL(T.[source_old_usage_quantity], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_old_usage_quantity] AS NVARCHAR(40)))), N'')), -1)
+  OR LTRIM(RTRIM(ISNULL(T.[source_new_material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_new_material_description], N'')))
+  OR ISNULL(T.[source_new_usage_quantity], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')), -1)
   OR LTRIM(RTRIM(ISNULL(T.[source_compatibility], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_compatibility], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[source_distinction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_distinction], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[source_instruction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_instruction], N'')))
-  OR LTRIM(RTRIM(ISNULL(T.[source_legacy_part_disposition], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_legacy_part_disposition], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[source_old_part_disposition], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_old_part_disposition], N'')))
+  OR ISNULL(T.[created_at], @now) <> ISNULL(S.[created_at], @now)
 ) THEN
   UPDATE SET
-  T.[source_legacy_part_name]=S.[source_legacy_part_name],
-  T.[source_legacy_usage]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')),
-  T.[source_replacement_part_name]=S.[source_replacement_part_name],
-  T.[source_replacement_usage]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')),
+  T.[source_old_material_description]=S.[source_old_material_description],
+  T.[source_old_usage_quantity]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_old_usage_quantity] AS NVARCHAR(40)))), N'')),
+  T.[source_new_material_description]=S.[source_new_material_description],
+  T.[source_new_usage_quantity]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')),
   T.[source_compatibility]=S.[source_compatibility],
   T.[source_distinction]=S.[source_distinction],
   T.[source_instruction]=S.[source_instruction],
-  T.[source_legacy_part_disposition]=S.[source_legacy_part_disposition],
+  T.[source_old_part_disposition]=S.[source_old_part_disposition],
+  T.[created_at]=COALESCE(S.[created_at], T.[created_at]),
   T.[updated_by]=@sync_user_id,
   T.[updated_at]=@now,
   T.[culture_code]=@culture_code,
@@ -545,31 +559,33 @@ WHEN MATCHED AND (
   T.[deleted_at]=NULL
 WHEN NOT MATCHED THEN
   INSERT (
-    [id],[source_ec_id],[source_finished_product],[source_parent_part],
-    [source_legacy_part_code],[source_legacy_part_name],[source_legacy_usage],
-    [source_legacy_mounting_position],[source_replacement_part_code],
-    [source_replacement_part_name],[source_replacement_usage],
-    [source_replacement_mounting_position],[source_bom_code],
+    [id],[source_ec_id],[source_ec_code],[line_number],
+    [source_finished_goods],[source_parent_material_code],
+    [source_old_material_code],[source_old_material_description],[source_old_usage_quantity],
+    [source_old_item_position],[source_new_material_code],
+    [source_new_material_description],[source_new_usage_quantity],
+    [source_new_item_position],[source_bom_code],
     [source_compatibility],[source_distinction],
-    [source_instruction],[source_legacy_part_disposition],
+    [source_instruction],[source_old_part_disposition],
     [source_bom_effective_date],[tenant_code],[company_code],[plant_code],[culture_code],
     [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
   )
   VALUES (
-    S.[id],S.[source_ec_id],S.[source_finished_product],S.[source_parent_part],
-    S.[source_legacy_part_code],S.[source_legacy_part_name],
-    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')),
-    S.[source_legacy_mounting_position],S.[source_replacement_part_code],
-    S.[source_replacement_part_name],
-    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')),
-    S.[source_replacement_mounting_position],S.[source_bom_code],
+    S.[id],S.[source_ec_id],S.[source_ec_code],S.[line_number],
+    S.[source_finished_goods],S.[source_parent_material_code],
+    S.[source_old_material_code],S.[source_old_material_description],
+    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_old_usage_quantity] AS NVARCHAR(40)))), N'')),
+    S.[source_old_item_position],S.[source_new_material_code],
+    S.[source_new_material_description],
+    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')),
+    S.[source_new_item_position],S.[source_bom_code],
     S.[source_compatibility],S.[source_distinction],
-    S.[source_instruction],S.[source_legacy_part_disposition],
+    S.[source_instruction],S.[source_old_part_disposition],
     S.[source_bom_effective_date],@tenant_code,@company_code,@plant_code,@culture_code,
-    @sync_user_id,@now,@sync_user_id,@now,0
+    @sync_user_id,COALESCE(S.[created_at], @now),@sync_user_id,@now,0
   )
-OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_legacy_part_code]
-INTO #detail_delta(rn, oper_type, id, source_ec_id, source_legacy_part_code);
+OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_old_material_code]
+INTO #detail_delta(rn, oper_type, id, source_ec_id, source_old_material_code);
 
 UPDATE T
 SET
@@ -578,8 +594,8 @@ SET
   T.[deleted_at] = @now,
   T.[updated_by] = @sync_user_id,
   T.[updated_at] = @now
-OUTPUT INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_legacy_part_code]
-INTO #detail_soft_deleted_rows ([id], [source_ec_id], [source_legacy_part_code])
+OUTPUT INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_old_material_code]
+INTO #detail_soft_deleted_rows ([id], [source_ec_id], [source_old_material_code])
 FROM [takt_logistics_manufacturing_ec_source_detail] T
 WHERE T.[tenant_code] = @tenant_code
   AND T.[company_code] = @company_code
@@ -589,13 +605,13 @@ WHERE T.[tenant_code] = @tenant_code
     SELECT 1
     FROM #source_detail S
     WHERE S.[source_ec_id] = T.[source_ec_id]
-      AND LTRIM(RTRIM(ISNULL(S.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(T.[source_finished_product], N'')))
-      AND LTRIM(RTRIM(ISNULL(S.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(T.[source_parent_part], N'')))
-      AND LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N'')))
-      AND LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N''))) = LTRIM(RTRIM(ISNULL(T.[source_finished_goods], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_parent_material_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_parent_material_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_old_material_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_old_material_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_new_material_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_new_material_code], N'')))
       AND LTRIM(RTRIM(ISNULL(S.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_bom_code], N'')))
-      AND LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N'')))
-      AND LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_old_item_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_old_item_position], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_new_item_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_new_item_position], N'')))
       AND ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE))
   );
 
@@ -607,13 +623,13 @@ SELECT @detail_soft_deleted_keys = STRING_AGG(
     CONCAT(
     CAST([id] AS NVARCHAR(30)), N'|',
     CAST([source_ec_id] AS NVARCHAR(30)), N'/',
-    ISNULL([source_legacy_part_code], N'')
+    ISNULL([source_old_material_code], N'')
   )
   AS NVARCHAR(MAX)),
   N'; '
 )
 FROM (
-  SELECT TOP (200) [id], [source_ec_id], [source_legacy_part_code]
+  SELECT TOP (200) [id], [source_ec_id], [source_old_material_code]
   FROM #detail_soft_deleted_rows
   ORDER BY [id]
 ) K;
@@ -668,6 +684,7 @@ DECLARE @json_result NVARCHAR(MAX) =
   + N',"main_soft_delete_keys":"' + REPLACE(@main_soft_deleted_keys, N'"', N'''') + N'"'
   + N',"detail_sap_raw":' + CAST(@detail_sap_raw_count AS NVARCHAR)
   + N',"detail_source":' + CAST(@detail_source_count AS NVARCHAR)
+  + N',"detail_dedupe_dropped":' + CAST(@detail_dedupe_dropped AS NVARCHAR)
   + N',"detail_target_before":' + CAST(@detail_target_before AS NVARCHAR)
   + N',"detail_target_after":' + CAST(@detail_target_count AS NVARCHAR)
   + N',"detail_target_physical":' + CAST(@detail_target_physical AS NVARCHAR)
@@ -703,6 +720,7 @@ SELECT
   CAST(N'main' AS NVARCHAR(40)) AS [scope],
   @main_sap_raw_count AS [source_raw_count],
   @main_source_count AS [source_count],
+  CAST(0 AS INT) AS [dedupe_dropped],
   @main_target_before AS [target_before],
   @main_target_count AS [target_after],
   @main_target_physical AS [target_physical],
@@ -718,6 +736,7 @@ SELECT
   CAST(N'detail' AS NVARCHAR(40)),
   @detail_sap_raw_count,
   @detail_source_count,
+  @detail_dedupe_dropped,
   @detail_target_before,
   @detail_target_count,
   @detail_target_physical,

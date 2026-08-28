@@ -54,7 +54,7 @@ export interface SalesInvoice extends CompanyDtoBase {
   documentCategory?: string;
 
   /**
-   * 凭证货币（字典 accounting_currency_code）
+   * 凭证货币（字典 accounting_financial_currency_code）
    */
   currencyCode?: string;
 
@@ -79,7 +79,7 @@ export interface SalesInvoice extends CompanyDtoBase {
   conditionCode?: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions）
+   * 装运条件（字典 logistics_sales_shipping_conditions）
    */
   shippingConditions?: string;
 
@@ -144,7 +144,7 @@ export interface SalesInvoice extends CompanyDtoBase {
   customerCode?: string;
 
   /**
-   * 统计货币（字典 accounting_currency_code）
+   * 统计货币（字典 accounting_financial_currency_code）
    */
   statisticsCurrencyCode?: string;
 
@@ -277,7 +277,7 @@ export interface SalesInvoiceExport {
   documentCategory?: string;
 
   /**
-   * 凭证货币（字典 accounting_currency_code）
+   * 凭证货币（字典 accounting_financial_currency_code）
    */
   currencyCode: string;
 
@@ -302,7 +302,7 @@ export interface SalesInvoiceExport {
   conditionCode?: string;
 
   /**
-   * 装运条件（字典 logistics_shipping_conditions）
+   * 装运条件（字典 logistics_sales_shipping_conditions）
    */
   shippingConditions?: string;
 
@@ -367,7 +367,7 @@ export interface SalesInvoiceExport {
   customerCode: string;
 
   /**
-   * 统计货币（字典 accounting_currency_code）
+   * 统计货币（字典 accounting_financial_currency_code）
    */
   statisticsCurrencyCode?: string;
 

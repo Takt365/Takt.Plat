@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryFormulaI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryFormula 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktSalaryFormulaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryformula.formulaname", "zh-HK", "步骤名称_hk", "步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）"),
 
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "en-US", "公式步骤_us", "公式步骤类型（字典 hr_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "en-US", "公式步骤_us", "公式步骤类型（字典 humanresource_compensation_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "ja-JP", "公式步骤_jp", "公式步骤类型（字典 hr_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "ja-JP", "公式步骤_jp", "公式步骤类型（字典 humanresource_compensation_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-CN", "公式步骤", "公式步骤类型（字典 hr_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-CN", "公式步骤", "公式步骤类型（字典 humanresource_compensation_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
             // entity.salaryformula.formulastep
-            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-HK", "公式步骤_hk", "公式步骤类型（字典 hr_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
+            new TranslationSeedItem("entity.salaryformula.formulastep", "zh-HK", "公式步骤_hk", "公式步骤类型（字典 humanresource_compensation_salary_formula_step_type；1=应发 2=社保个人 3=公积金个人 4=个税 5=实发）"),
 
             // entity.salaryformula.targetfield
             new TranslationSeedItem("entity.salaryformula.targetfield", "en-US", "结果字段_us", "结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）"),

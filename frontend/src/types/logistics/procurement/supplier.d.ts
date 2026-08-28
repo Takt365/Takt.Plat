@@ -49,17 +49,17 @@ export interface Supplier extends CompanyDtoBase {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -69,12 +69,12 @@ export interface Supplier extends CompanyDtoBase {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -139,7 +139,7 @@ export interface Supplier extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -159,12 +159,12 @@ export interface Supplier extends CompanyDtoBase {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -189,7 +189,7 @@ export interface Supplier extends CompanyDtoBase {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -204,7 +204,7 @@ export interface Supplier extends CompanyDtoBase {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -229,7 +229,7 @@ export interface Supplier extends CompanyDtoBase {
   purchasingOrganization: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel: number;
 
@@ -299,17 +299,17 @@ export interface SupplierQuery extends TaktPagedQuery {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -319,12 +319,12 @@ export interface SupplierQuery extends TaktPagedQuery {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -389,7 +389,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -409,12 +409,12 @@ export interface SupplierQuery extends TaktPagedQuery {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -439,7 +439,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -454,7 +454,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -479,7 +479,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   purchasingOrganization?: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel?: number;
 
@@ -568,17 +568,17 @@ export interface SupplierCreate {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -588,12 +588,12 @@ export interface SupplierCreate {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -658,7 +658,7 @@ export interface SupplierCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -678,12 +678,12 @@ export interface SupplierCreate {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -708,7 +708,7 @@ export interface SupplierCreate {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -723,7 +723,7 @@ export interface SupplierCreate {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -748,7 +748,7 @@ export interface SupplierCreate {
   purchasingOrganization: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel: number;
 
@@ -875,17 +875,17 @@ export interface SupplierTemplate {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -895,12 +895,12 @@ export interface SupplierTemplate {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -965,7 +965,7 @@ export interface SupplierTemplate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -985,12 +985,12 @@ export interface SupplierTemplate {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -1015,7 +1015,7 @@ export interface SupplierTemplate {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1030,7 +1030,7 @@ export interface SupplierTemplate {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -1055,7 +1055,7 @@ export interface SupplierTemplate {
   purchasingOrganization?: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel?: number;
 
@@ -1129,17 +1129,17 @@ export interface SupplierImport {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType?: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute?: string;
 
@@ -1149,12 +1149,12 @@ export interface SupplierImport {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate?: number;
 
@@ -1219,7 +1219,7 @@ export interface SupplierImport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
 
@@ -1239,12 +1239,12 @@ export interface SupplierImport {
   clearingWithCustomer?: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
 
@@ -1269,7 +1269,7 @@ export interface SupplierImport {
   grBasedInvoiceInspection?: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1?: string;
 
@@ -1284,7 +1284,7 @@ export interface SupplierImport {
   automaticPurchaseOrder?: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl?: number;
 
@@ -1309,7 +1309,7 @@ export interface SupplierImport {
   purchasingOrganization?: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel?: number;
 
@@ -1383,17 +1383,17 @@ export interface SupplierExport {
   supplierShortName?: string;
 
   /**
-   * 供货商类型（字典 logistics_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
+   * 供货商类型（字典 logistics_procurement_supplier_category；0=生产商，1=代理商，2=经销商，3=贸易商，4=其他）
    */
   supplierType: number;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type）
+   * 企业性质（字典 sys_enterprise_nature）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type）
+   * 行业属性（字典 sys_industry_attribute）
    */
   industryAttribute: string;
 
@@ -1403,12 +1403,12 @@ export interface SupplierExport {
   supplierTaxNumber?: string;
 
   /**
-   * 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   * 税码（字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
    */
   taxCode?: string;
 
   /**
-   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
+   * 税率（百分比整数；由税码 TaxCode / 字典 accounting_financial_tax_code.ExtValue 回填，如 J2→13）
    */
   taxRate: number;
 
@@ -1473,7 +1473,7 @@ export interface SupplierExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_financial_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
 
@@ -1493,12 +1493,12 @@ export interface SupplierExport {
   clearingWithCustomer: number;
 
   /**
-   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   * 付款方式（字典 accounting_financial_payment_method；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
 
   /**
-   * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
+   * 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
 
@@ -1523,7 +1523,7 @@ export interface SupplierExport {
   grBasedInvoiceInspection: number;
 
   /**
-   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   * 国际贸易条件1（字典 logistics_sales_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
    */
   incoterms1: string;
 
@@ -1538,7 +1538,7 @@ export interface SupplierExport {
   automaticPurchaseOrder: number;
 
   /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   * 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
    */
   pricingDateControl: number;
 
@@ -1563,7 +1563,7 @@ export interface SupplierExport {
   purchasingOrganization: string;
 
   /**
-   * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
+   * 供货商等级（字典 logistics_sales_grade；0=普通，1=优选，2=战略，3=临时）
    */
   supplierLevel: number;
 

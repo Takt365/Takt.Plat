@@ -81,19 +81,19 @@
         <template v-else-if="column.key === 'benefitCategory'">
           <TaktDictTag
             :value="getBenefitItemField(record, 'benefitCategory')"
-            dict-type="hr_benefit_category"
+            dict-type="humanresource_benefits_benefit_category"
           />
         </template>
         <template v-else-if="column.key === 'benefitType'">
           <TaktDictTag
             :value="getBenefitItemField(record, 'benefitType')"
-            dict-type="hr_benefit_type"
+            dict-type="humanresource_benefits_benefit_type"
           />
         </template>
         <template v-else-if="column.key === 'paymentCycle'">
           <TaktDictTag
             :value="getBenefitItemField(record, 'paymentCycle')"
-            dict-type="hr_benefit_payment_cycle_type"
+            dict-type="humanresource_benefits_benefit_payment_cycle"
           />
         </template>
         <template v-else-if="column.key === 'isMandatory'">
@@ -169,7 +169,7 @@
       <a-form-item :label="t('entity.benefititem.benefitcategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.benefitCategory"
-          dict-type="hr_benefit_category"
+          dict-type="humanresource_benefits_benefit_category"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.benefitcategory') })"
           allow-clear
         />
@@ -179,7 +179,7 @@
       <a-form-item :label="t('entity.benefititem.benefittype')">
         <TaktSelect
           v-model:value="advancedQueryForm.benefitType"
-          dict-type="hr_benefit_type"
+          dict-type="humanresource_benefits_benefit_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.benefittype') })"
           allow-clear
         />
@@ -189,7 +189,7 @@
       <a-form-item :label="t('entity.benefititem.paymentcycle')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentCycle"
-          dict-type="hr_benefit_payment_cycle_type"
+          dict-type="humanresource_benefits_benefit_payment_cycle"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.benefititem.paymentcycle') })"
           allow-clear
         />

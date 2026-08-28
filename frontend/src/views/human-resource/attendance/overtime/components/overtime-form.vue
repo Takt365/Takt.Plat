@@ -149,7 +149,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.overtimeType"
-                  dict-type="hr_overtime_type"
+                  dict-type="humanresource_attendance_overtime_type"
                   :placeholder="pi.ph('overtimeType')"
                 />
               </a-form-item>

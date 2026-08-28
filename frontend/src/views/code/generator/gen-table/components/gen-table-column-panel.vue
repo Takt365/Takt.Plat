@@ -169,7 +169,7 @@
       <a-form-item :label="pi.queryLabel('csharpDataType')">
         <TaktSelect
           v-model:value="advancedQueryForm.csharpDataType"
-          dict-type="gen_csharp_data_type"
+          dict-type="code_generator_csharp_data_type"
           :placeholder="pi.queryPh('csharpDataType', 'select')"
           allow-clear
         />
@@ -308,7 +308,7 @@
       <a-form-item :label="pi.queryLabel('queryType')">
         <TaktSelect
           v-model:value="advancedQueryForm.queryType"
-          dict-type="gen_query_type"
+          dict-type="code_generator_query_type"
           :placeholder="pi.queryPh('queryType', 'select')"
           allow-clear
         />
@@ -318,7 +318,7 @@
       <a-form-item :label="pi.queryLabel('htmlType')">
         <TaktSelect
           v-model:value="advancedQueryForm.htmlType"
-          dict-type="gen_display_type"
+          dict-type="code_generator_display_type"
           :placeholder="pi.queryPh('htmlType', 'select')"
           allow-clear
         />

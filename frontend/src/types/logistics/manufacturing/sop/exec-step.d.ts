@@ -64,7 +64,7 @@ export interface SopExecStep extends CompanyDtoBase {
   endedAt?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
@@ -154,7 +154,7 @@ export interface SopExecStepQuery extends TaktPagedQuery {
   endedAtEnd?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
@@ -253,7 +253,7 @@ export interface SopExecStepCreate {
   endedAt?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
@@ -352,7 +352,7 @@ export interface SopExecStepTemplate {
   endedAt?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
@@ -436,7 +436,7 @@ export interface SopExecStepImport {
   endedAt?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
@@ -515,7 +515,7 @@ export interface SopExecStepExport {
   endedAt?: string;
 
   /**
-   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
+   * 工步结果（字典 logistics_manufacturing_sop_check_result；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 

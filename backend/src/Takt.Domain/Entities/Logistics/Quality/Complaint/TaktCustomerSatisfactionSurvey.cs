@@ -70,10 +70,16 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "survey_period", ColumnDescription = "调查周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SurveyPeriod { get; set; } = 1;
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "surveyor_by", ColumnDescription = "调查人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? SurveyorBy { get; set; }
+    [SugarColumn(ColumnName = "surveyor_by_employee_id", ColumnDescription = "调查人ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? SurveyorByEmployeeId { get; set; }
+    /// <summary>
+    /// 调查人名称（冗余：按 SurveyorByEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "surveyor_by_employee_name", ColumnDescription = "调查人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SurveyorByEmployeeName { get; set; }
     /// <summary>
     /// 客户联系人
     /// </summary>

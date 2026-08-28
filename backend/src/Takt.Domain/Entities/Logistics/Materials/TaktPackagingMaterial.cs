@@ -111,7 +111,7 @@ public class TaktPackagingMaterial : TaktCompanyEntityBase
     public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 重量单位（字典 logistics_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等；默认 KG）
     /// </summary>
     [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "KG")]
     public string WeightUnit { get; set; } = "KG";
@@ -123,7 +123,7 @@ public class TaktPackagingMaterial : TaktCompanyEntityBase
     public decimal? BusinessVolume { get; set; }
 
     /// <summary>
-    /// 体积单位（字典 logistics_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等；默认 M3）
     /// </summary>
     [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "M3")]
     public string VolumeUnit { get; set; } = "M3";
@@ -135,13 +135,13 @@ public class TaktPackagingMaterial : TaktCompanyEntityBase
     public string? SizeDimension { get; set; }
 
     /// <summary>
-    /// 包装类型（字典 logistics_material_type；DictValue=VERP 等；默认 VERP）
+    /// 包装类型（字典 logistics_materials_material_type；DictValue=VERP 等；默认 VERP）
     /// </summary>
     [SugarColumn(ColumnName = "packaging_type", ColumnDescription = "包装类型", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "VERP")]
     public string PackagingType { get; set; } = "VERP";
 
     /// <summary>
-    /// 包装单位（字典 logistics_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
+    /// 包装单位（字典 logistics_materials_unit_of_measure_code；DictValue=CAR/CT 等；默认 CAR）
     /// </summary>
     [SugarColumn(ColumnName = "packing_unit", ColumnDescription = "包装单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "CAR")]
     public string PackingUnit { get; set; } = "CAR";

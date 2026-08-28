@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceEc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -325,13 +325,13 @@ public class TaktSourceEcI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceec.sourcerelateddrawing", "zh-HK", "相关图纸_hk", "相关图纸"),
 
             // entity.sourceec.content
-            new TranslationSeedItem("entity.sourceec.content", "en-US", "设变内容_us", "设变内容"),
+            new TranslationSeedItem("entity.sourceec.content", "en-US", "设变内容_us", "设变内容（富文本 HTML）"),
             // entity.sourceec.content
-            new TranslationSeedItem("entity.sourceec.content", "ja-JP", "设变内容_jp", "设变内容"),
+            new TranslationSeedItem("entity.sourceec.content", "ja-JP", "设变内容_jp", "设变内容（富文本 HTML）"),
             // entity.sourceec.content
-            new TranslationSeedItem("entity.sourceec.content", "zh-CN", "设变内容", "设变内容"),
+            new TranslationSeedItem("entity.sourceec.content", "zh-CN", "设变内容", "设变内容（富文本 HTML）"),
             // entity.sourceec.content
-            new TranslationSeedItem("entity.sourceec.content", "zh-HK", "设变内容_hk", "设变内容"),
+            new TranslationSeedItem("entity.sourceec.content", "zh-HK", "设变内容_hk", "设变内容（富文本 HTML）"),
 
             // entity.sourceec.details
             new TranslationSeedItem("entity.sourceec.details", "en-US", "设变来源明细列表_us", "设变来源明细列表"),

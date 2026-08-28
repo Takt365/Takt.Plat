@@ -19,7 +19,7 @@ export const ALL_COST_ELEMENT_KATYP = [
   21, 31, 41, 42, 43, 50, 51, 52, 61, 66,
 ] as const
 
-/** 成本要素类型：0=初级，1=次级（字典 accounting_cost_element_type） */
+/** 成本要素类型：0=初级，1=次级（字典 accounting_controlling_cost_element_type） */
 export const COST_ELEMENT_TYPE_PRIMARY = 0
 export const COST_ELEMENT_TYPE_SECONDARY = 1
 

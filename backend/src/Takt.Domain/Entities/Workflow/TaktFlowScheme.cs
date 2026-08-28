@@ -79,7 +79,7 @@ public class TaktFlowScheme : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "form_id", ColumnDescription = "关联表单ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FormId { get; set; }
     /// <summary>
-    /// 关联表单编码（冗余字段，便于查询）
+    /// 关联表单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "form_code", ColumnDescription = "关联表单编码", ColumnDataType = "varchar", Length = 64, IsNullable = true)]
     public string? FormCode { get; set; }

@@ -56,12 +56,12 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 
@@ -144,12 +144,12 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
@@ -242,13 +242,13 @@ public class TaktSerialOutboundCreateDto
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
-    [Required(ErrorMessage = "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）不能为空")]
+    [Required(ErrorMessage = "目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）不能为空")]
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 
@@ -361,12 +361,12 @@ public class TaktSerialOutboundTemplateDto
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
@@ -448,12 +448,12 @@ public class TaktSerialOutboundImportDto
     public string? Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string? DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int? OutboundType { get; set; }
 
@@ -541,12 +541,12 @@ public class TaktSerialOutboundExportDto
     public string Destination { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     public string DestinationPort { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     public int OutboundType { get; set; } = 0;
 

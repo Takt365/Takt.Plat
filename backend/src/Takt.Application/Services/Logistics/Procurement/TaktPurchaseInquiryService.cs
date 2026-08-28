@@ -102,7 +102,7 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
         return dto;    }
 
     /// <summary>
-    /// 获取采购询价选项列表
+    /// 获取采购询价选项列表（DictValue=Id，ExtValue=PurchaseInquiryCode）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetPurchaseInquiryOptionsAsync()
@@ -114,8 +114,9 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.PurchaseInquiryCode,
-            DictLabel = e.PurchaseInquiryCode,
+            DictValue = e.Id,
+            DictLabel = e.PurchaseInquiryCode ?? e.Id.ToString(),
+            ExtValue = e.PurchaseInquiryCode,
         }).ToList();
     }
 
@@ -505,7 +506,7 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
-                || (x.InquiryBy != null && x.InquiryBy.Contains(keywords))
+                || (x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
@@ -535,16 +536,16 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
             exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(purchaseInquiryCode));
         }
 
-        if (queryDto?.InquiryId.HasValue == true)
+        if (queryDto?.InquiryEmployeeId.HasValue == true)
         {
-            var inquiryId = queryDto.InquiryId.Value;
-            exp = exp.And(x => x.InquiryId == inquiryId);
+            var inquiryId = queryDto.InquiryEmployeeId.Value;
+            exp = exp.And(x => x.InquiryEmployeeId == inquiryId);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.InquiryBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InquiryEmployeeName))
         {
-            var inquiryBy = queryDto.InquiryBy;
-            exp = exp.And(x => x.InquiryBy != null && x.InquiryBy.Contains(inquiryBy));
+            var inquiryBy = queryDto.InquiryEmployeeName;
+            exp = exp.And(x => x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(inquiryBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
@@ -715,11 +716,11 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
         {
             return true;
         }
-        if (queryDto.InquiryId.HasValue)
+        if (queryDto.InquiryEmployeeId.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.InquiryBy))
+        if (!string.IsNullOrWhiteSpace(queryDto.InquiryEmployeeName))
         {
             return true;
         }

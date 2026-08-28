@@ -21,52 +21,34 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('billOfMaterialId')"
-                name="billOfMaterialId"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.billOfMaterialId"
-                  :placeholder="pi.ph('billOfMaterialId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('bomCode')"
-                name="bomCode"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
-                <a-input
-                  v-model:value="formState.bomCode"
-                  :placeholder="pi.ph('bomCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.billOfMaterialSubstituteId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('primaryMaterialCode')"
-                name="primaryMaterialCode"
-              >
-                <a-input
-                  v-model:value="formState.primaryMaterialCode"
-                  :placeholder="pi.ph('primaryMaterialCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.billOfMaterialSubstituteId"
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -91,21 +73,6 @@
                   v-model:value="formState.substituteMaterialId"
                   api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('substituteMaterialId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('substituteMaterialCode')"
-                name="substituteMaterialCode"
-              >
-                <a-input
-                  v-model:value="formState.substituteMaterialCode"
-                  :placeholder="pi.ph('substituteMaterialCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.billOfMaterialSubstituteId"
                 />
               </a-form-item>
             </a-col>
@@ -154,21 +121,11 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialUnit"
-                  dict-type="logistics_unit_of_measure_code"
+                  dict-type="logistics_materials_unit_of_measure_code"
                   :placeholder="pi.ph('materialUnit')"
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('usageRatio')"
@@ -193,6 +150,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('effectiveDate')"
@@ -234,6 +201,43 @@
           </a-row>
         </div>
       </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
     </a-tabs>
   </a-form>
 </template>
@@ -254,15 +258,45 @@ const pi = useBillOfMaterialSubstituteI18n()
 import type { BillOfMaterialSubstituteCreate } from '@/types/logistics/manufacturing/bom/bill-of-material-substitute'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
+
+/**
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
+ * @param target 表单数据
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
+ */
+function applyScopeDefaults(target: Record<string, unknown>, force = false) {
+  if (force || !target.tenantCode) {
+    target.tenantCode = tenantStore.tenantCode
+  }
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
+  }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
+  }
+}
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["billOfMaterialId","bomCode","primaryMaterialCode","lineNumber","substituteMaterialId","substituteMaterialCode","substituteGroup","substitutePriority","usageQuantity","materialUnit","usageRatio","isEnabled","effectiveDate","expiryDate","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","substituteMaterialId","substituteGroup","substitutePriority","usageQuantity","materialUnit","usageRatio","isEnabled","effectiveDate","expiryDate","isObsolete"]
 
 
 
@@ -273,12 +307,15 @@ interface Props {
   loading?: boolean
   /** 主表选中行 Id（Create/Update 提交时写入外键） */
   masterId?: string
+  /** 主表选中行快照（冗余 {主表}Code/Name、plantCode 等，供 Stamp 前前端回填） */
+  masterRow?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formData: null,
   loading: false,
   masterId: '',
+  masterRow: null,
 })
 
 /** a-form 实例 ref */
@@ -298,6 +335,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialSubstituteId 才视为编辑） */
 watch(
   () => props.formData,
@@ -306,6 +345,7 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
+      applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
@@ -314,35 +354,25 @@ watch(
         Object.assign(formState, val)
       }
       applyFormDefaults(formState)
+      applyScopeDefaults(formState as Record<string, unknown>, true)
       formRef.value?.clearValidate()
     }
   },
   { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
+watch(
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () => {
+    if (!props.formData?.billOfMaterialSubstituteId) {
+      applyScopeDefaults(formState, true)
+    }
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  billOfMaterialId: [
-    {
-      required: true,
-      message: pi.ph('billOfMaterialId'),
-      trigger: 'blur'
-    }
-  ],
-  bomCode: [
-    {
-      required: true,
-      message: pi.ph('bomCode'),
-      trigger: 'blur'
-    }
-  ],
-  primaryMaterialCode: [
-    {
-      required: true,
-      message: pi.ph('primaryMaterialCode'),
-      trigger: 'blur'
-    }
-  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -361,13 +391,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('substituteMaterialId'),
       trigger: 'change'
-    }
-  ],
-  substituteMaterialCode: [
-    {
-      required: true,
-      message: pi.ph('substituteMaterialCode'),
-      trigger: 'blur'
     }
   ],
   substitutePriority: [{
@@ -455,30 +478,96 @@ function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+    if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
+      delete payload.lineNumber
+    } else {
+      const numlineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+      if (Number.isFinite(numlineNumber)) payload.lineNumber = numlineNumber
+      else delete payload.lineNumber
+    }
   }
   if ('substitutePriority' in payload) {
     const rawsubstitutePriority = payload.substitutePriority
-    payload.substitutePriority = typeof rawsubstitutePriority === 'number' ? rawsubstitutePriority : Number(rawsubstitutePriority)
+    if (rawsubstitutePriority === undefined || rawsubstitutePriority === null || rawsubstitutePriority === '') {
+      delete payload.substitutePriority
+    } else {
+      const numsubstitutePriority = typeof rawsubstitutePriority === 'number' ? rawsubstitutePriority : Number(rawsubstitutePriority)
+      if (Number.isFinite(numsubstitutePriority)) payload.substitutePriority = numsubstitutePriority
+      else delete payload.substitutePriority
+    }
   }
   if ('usageQuantity' in payload) {
     const rawusageQuantity = payload.usageQuantity
-    payload.usageQuantity = typeof rawusageQuantity === 'number' ? rawusageQuantity : Number(rawusageQuantity)
+    if (rawusageQuantity === undefined || rawusageQuantity === null || rawusageQuantity === '') {
+      delete payload.usageQuantity
+    } else {
+      const numusageQuantity = typeof rawusageQuantity === 'number' ? rawusageQuantity : Number(rawusageQuantity)
+      if (Number.isFinite(numusageQuantity)) payload.usageQuantity = numusageQuantity
+      else delete payload.usageQuantity
+    }
   }
   if ('usageRatio' in payload) {
     const rawusageRatio = payload.usageRatio
-    payload.usageRatio = typeof rawusageRatio === 'number' ? rawusageRatio : Number(rawusageRatio)
+    if (rawusageRatio === undefined || rawusageRatio === null || rawusageRatio === '') {
+      delete payload.usageRatio
+    } else {
+      const numusageRatio = typeof rawusageRatio === 'number' ? rawusageRatio : Number(rawusageRatio)
+      if (Number.isFinite(numusageRatio)) payload.usageRatio = numusageRatio
+      else delete payload.usageRatio
+    }
   }
   if ('isEnabled' in payload) {
     const rawisEnabled = payload.isEnabled
-    payload.isEnabled = typeof rawisEnabled === 'number' ? rawisEnabled : Number(rawisEnabled)
+    if (rawisEnabled === undefined || rawisEnabled === null || rawisEnabled === '') {
+      delete payload.isEnabled
+    } else {
+      const numisEnabled = typeof rawisEnabled === 'number' ? rawisEnabled : Number(rawisEnabled)
+      if (Number.isFinite(numisEnabled)) payload.isEnabled = numisEnabled
+      else delete payload.isEnabled
+    }
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete
-    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+    if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
+      delete payload.isObsolete
+    } else {
+      const numisObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+      if (Number.isFinite(numisObsolete)) payload.isObsolete = numisObsolete
+      else delete payload.isObsolete
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.billOfMaterialSubstituteId) {
+    payload.billOfMaterialSubstituteId = props.formData.billOfMaterialSubstituteId
+    delete payload.numberingRuleCode
+  }
   payload.billOfMaterialItemId = props.masterId
+  // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）
+  const masterRow = props.masterRow as Record<string, unknown> | null | undefined
+  if (masterRow) {
+    const masterCode = masterRow.billOfMaterialItemCode ?? masterRow.BillOfMaterialItemCode
+    const masterName = masterRow.billOfMaterialItemName ?? masterRow.BillOfMaterialItemName
+    if (masterCode != null && masterCode !== '' && !payload.billOfMaterialItemCode) {
+      payload.billOfMaterialItemCode = masterCode
+    }
+    if (masterName != null && masterName !== '' && !payload.billOfMaterialItemName) {
+      payload.billOfMaterialItemName = masterName
+    }
+    const masterPlant = masterRow.plantCode ?? masterRow.PlantCode
+    if (masterPlant != null && masterPlant !== '' && !payload.plantCode) {
+      payload.plantCode = masterPlant
+    }
+    const masterCulture = masterRow.cultureCode ?? masterRow.CultureCode
+    if (masterCulture != null && masterCulture !== '' && !payload.cultureCode) {
+      payload.cultureCode = masterCulture
+    }
+  }
   return payload
 }
 
@@ -489,6 +578,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.billOfMaterialSubstituteId)
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

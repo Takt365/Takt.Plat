@@ -340,14 +340,15 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
                 || (x.CauseAnalysis != null && x.CauseAnalysis.Contains(keywords))
                 || (x.CorrectiveAction != null && x.CorrectiveAction.Contains(keywords))
                 || (x.PreventiveAction != null && x.PreventiveAction.Contains(keywords))
-                || (x.ResponsibleDept != null && x.ResponsibleDept.Contains(keywords))
-                || (x.ResponsibleBy != null && x.ResponsibleBy.Contains(keywords))
-                || (x.HandlerBy != null && x.HandlerBy.Contains(keywords))
+                || (x.ResponsibleDeptName != null && x.ResponsibleDeptName.Contains(keywords))
+                || (x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(keywords))
+                || (x.HandlerName != null && x.HandlerName.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingStatus).Contains(keywords)
                 || SqlFunc.ToString(x.HandlingCost).Contains(keywords)
                 || (x.CustomerFeedback != null && x.CustomerFeedback.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerSatisfaction).Contains(keywords)
-                || (x.AttachmentPaths != null && x.AttachmentPaths.Contains(keywords))
+                || (x.FileName != null && x.FileName.Contains(keywords))
+                || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -413,19 +414,19 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
             exp = exp.And(x => x.PreventiveAction != null && x.PreventiveAction.Contains(queryDto.PreventiveAction));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ResponsibleDept))
+        if (!string.IsNullOrEmpty(queryDto?.ResponsibleDeptName))
         {
-            exp = exp.And(x => x.ResponsibleDept != null && x.ResponsibleDept.Contains(queryDto.ResponsibleDept));
+            exp = exp.And(x => x.ResponsibleDeptName != null && x.ResponsibleDeptName.Contains(queryDto.ResponsibleDeptName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ResponsibleBy))
+        if (!string.IsNullOrEmpty(queryDto?.ResponsiblePersonName))
         {
-            exp = exp.And(x => x.ResponsibleBy != null && x.ResponsibleBy.Contains(queryDto.ResponsibleBy));
+            exp = exp.And(x => x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(queryDto.ResponsiblePersonName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HandlerBy))
+        if (!string.IsNullOrEmpty(queryDto?.HandlerName))
         {
-            exp = exp.And(x => x.HandlerBy != null && x.HandlerBy.Contains(queryDto.HandlerBy));
+            exp = exp.And(x => x.HandlerName != null && x.HandlerName.Contains(queryDto.HandlerName));
         }
 
         if (queryDto?.HandlingStatus.HasValue == true)
@@ -448,9 +449,16 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
             exp = exp.And(x => x.CustomerSatisfaction == queryDto.CustomerSatisfaction);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AttachmentPaths))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
         {
-            exp = exp.And(x => x.AttachmentPaths != null && x.AttachmentPaths.Contains(queryDto.AttachmentPaths));
+            var fileName = queryDto.FileName;
+            exp = exp.And(x => x.FileName != null && x.FileName.Contains(fileName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccessUrl))
+        {
+            var accessUrl = queryDto.AccessUrl;
+            exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(accessUrl));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CultureCode))

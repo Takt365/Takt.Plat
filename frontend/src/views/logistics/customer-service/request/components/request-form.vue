@@ -540,6 +540,8 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+
+
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceRequestId 才视为编辑） */
 watch(
   () => props.formData,
@@ -720,8 +722,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.customerServiceRequestId) {
     payload.customerServiceRequestId = props.formData.customerServiceRequestId
+    delete payload.numberingRuleCode
   }
   return payload
 }

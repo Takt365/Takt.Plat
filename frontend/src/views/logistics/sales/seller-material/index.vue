@@ -75,7 +75,7 @@
         <template v-if="column.key === 'materialType'">
           <TaktDictTag
             :value="getSellerMaterialDictValue(record, 'materialType')"
-            dict-type="logistics_material_type"
+            dict-type="logistics_materials_material_type"
           />
         </template>
       </template>
@@ -165,7 +165,7 @@
       <a-form-item :label="pi.queryLabel('materialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialType"
-          dict-type="logistics_material_type"
+          dict-type="logistics_materials_material_type"
           :placeholder="pi.queryPh('materialType', 'select')"
           allow-clear
         />

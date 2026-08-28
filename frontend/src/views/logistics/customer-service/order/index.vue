@@ -383,13 +383,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serviceBy')">
-      <a-form-item :label="pi.queryLabel('serviceBy')">
+      <div v-show="isFieldVisible('serviceEmployeeId')">
+      <a-form-item :label="pi.queryLabel('serviceEmployeeId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.serviceEmployeeId"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('serviceEmployeeId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceEmployeeName')">
+      <a-form-item :label="pi.queryLabel('serviceEmployeeName')">
         <a-input
-          v-model:value="advancedQueryForm.serviceBy"
-          :placeholder="pi.queryPh('serviceBy', 'required')"
+          v-model:value="advancedQueryForm.serviceEmployeeName"
+          :placeholder="pi.queryPh('serviceEmployeeName', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>

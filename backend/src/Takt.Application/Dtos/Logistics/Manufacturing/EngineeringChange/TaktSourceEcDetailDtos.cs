@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-08-26
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEcDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceEcDetail 生成，请按需审阅）
 // 
@@ -57,54 +57,54 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    public string SourceFinishedProduct { get; set; } = string.Empty;
+    public string SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    public string SourceParentPart { get; set; } = string.Empty;
+    public string SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -112,24 +112,24 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期
@@ -196,54 +196,54 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    public string? SourceFinishedProduct { get; set; } = string.Empty;
+    public string? SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    public string? SourceParentPart { get; set; } = string.Empty;
+    public string? SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -251,24 +251,24 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期（范围查询-开始）
@@ -352,56 +352,56 @@ public class TaktSourceEcDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    [Required(ErrorMessage = "完成品不能为空")]
-    public string SourceFinishedProduct { get; set; } = string.Empty;
+    [Required(ErrorMessage = "完成品物料编码不能为空")]
+    public string SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    [Required(ErrorMessage = "上阶物料不能为空")]
-    public string SourceParentPart { get; set; } = string.Empty;
+    [Required(ErrorMessage = "上阶物料编码不能为空")]
+    public string SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -409,24 +409,24 @@ public class TaktSourceEcDetailCreateDto
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期
@@ -539,54 +539,54 @@ public class TaktSourceEcDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    public string? SourceFinishedProduct { get; set; } = string.Empty;
+    public string? SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    public string? SourceParentPart { get; set; } = string.Empty;
+    public string? SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -594,24 +594,24 @@ public class TaktSourceEcDetailTemplateDto
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期
@@ -677,54 +677,54 @@ public class TaktSourceEcDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    public string? SourceFinishedProduct { get; set; } = string.Empty;
+    public string? SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    public string? SourceParentPart { get; set; } = string.Empty;
+    public string? SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -732,24 +732,24 @@ public class TaktSourceEcDetailImportDto
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期
@@ -821,54 +821,54 @@ public class TaktSourceEcDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品
+    /// 完成品物料编码
     /// </summary>
-    public string SourceFinishedProduct { get; set; } = string.Empty;
+    public string SourceFinishedGoods { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上阶物料
+    /// 上阶物料编码
     /// </summary>
-    public string SourceParentPart { get; set; } = string.Empty;
+    public string SourceParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料号
+    /// 旧物料编码
     /// </summary>
-    public string? SourceLegacyPartCode { get; set; } = string.Empty;
+    public string? SourceOldMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料
+    /// 旧物料描述
     /// </summary>
-    public string? SourceLegacyPartName { get; set; } = string.Empty;
+    public string? SourceOldMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料用量
     /// </summary>
-    public decimal? SourceLegacyUsage { get; set; }
+    public decimal? SourceOldUsageQuantity { get; set; }
 
     /// <summary>
     /// 旧物料安装位置
     /// </summary>
-    public string? SourceLegacyMountingPosition { get; set; } = string.Empty;
+    public string? SourceOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料编码
     /// </summary>
-    public string? SourceReplacementPartCode { get; set; } = string.Empty;
+    public string? SourceNewMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新物料
+    /// 新物料描述
     /// </summary>
-    public string? SourceReplacementPartName { get; set; } = string.Empty;
+    public string? SourceNewMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料用量
     /// </summary>
-    public decimal? SourceReplacementUsage { get; set; }
+    public decimal? SourceNewUsageQuantity { get; set; }
 
     /// <summary>
     /// 新物料安装位置
     /// </summary>
-    public string? SourceReplacementMountingPosition { get; set; } = string.Empty;
+    public string? SourceNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM番号
@@ -876,24 +876,24 @@ public class TaktSourceEcDetailExportDto
     public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+    /// 兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+    /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧物料处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
+    public string? SourceOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM生效日期

@@ -84,17 +84,17 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
     /// </summary>
     public int? BenefitCategory { get; set; }
 
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
     /// </summary>
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
@@ -197,17 +197,17 @@ public class TaktBenefitItemCreateDto
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
     /// </summary>
     public int BenefitCategory { get; set; } = 0;
 
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
     /// </summary>
     public int BenefitType { get; set; } = 0;
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
     /// </summary>
     public int PaymentCycle { get; set; } = 0;
 
@@ -362,17 +362,17 @@ public class TaktBenefitItemTemplateDto
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
     /// </summary>
     public int? BenefitCategory { get; set; }
 
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
     /// </summary>
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
@@ -455,17 +455,17 @@ public class TaktBenefitItemImportDto
     public string? ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
     /// </summary>
     public int? BenefitCategory { get; set; }
 
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
     /// </summary>
     public int? BenefitType { get; set; }
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
     /// </summary>
     public int? PaymentCycle { get; set; }
 
@@ -548,17 +548,17 @@ public class TaktBenefitItemExportDto
     public string ItemName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
+    /// 福利大类（字典 humanresource_benefits_benefit_category：保险/补贴/休假/其他）
     /// </summary>
     public int BenefitCategory { get; set; } = 0;
 
     /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
+    /// 福利类型（字典 humanresource_benefits_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
     /// </summary>
     public int BenefitType { get; set; } = 0;
 
     /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
+    /// 发放周期（字典 humanresource_benefits_benefit_payment_cycle）
     /// </summary>
     public int PaymentCycle { get; set; } = 0;
 

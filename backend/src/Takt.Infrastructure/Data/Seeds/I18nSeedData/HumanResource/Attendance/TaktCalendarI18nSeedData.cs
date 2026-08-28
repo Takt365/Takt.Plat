@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktCalendarI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCalendar 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.calendar.date", "zh-HK", "日历日期_hk", "日历日期"),
 
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
             // entity.calendar.isworkingday
-            new TranslationSeedItem("entity.calendar.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            new TranslationSeedItem("entity.calendar.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
 
             // entity.calendar.holidayid
             new TranslationSeedItem("entity.calendar.holidayid", "en-US", "关联假日ID_us", "关联假日（选项 TaktHolidays/options；DictValue=Id）"),

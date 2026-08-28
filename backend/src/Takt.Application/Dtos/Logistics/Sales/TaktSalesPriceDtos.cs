@@ -41,7 +41,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     public string PriceType { get; set; } = string.Empty;
 
@@ -66,7 +66,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -76,7 +76,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 
@@ -155,7 +155,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
@@ -180,7 +180,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -190,7 +190,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -287,9 +287,9 @@ public class TaktSalesPriceCreateDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
-    [Required(ErrorMessage = "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）不能为空")]
+    [Required(ErrorMessage = "条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）不能为空")]
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
@@ -316,7 +316,7 @@ public class TaktSalesPriceCreateDto
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -326,7 +326,7 @@ public class TaktSalesPriceCreateDto
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 
@@ -433,7 +433,7 @@ public class TaktSalesPriceTemplateDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
@@ -458,7 +458,7 @@ public class TaktSalesPriceTemplateDto
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -468,7 +468,7 @@ public class TaktSalesPriceTemplateDto
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -546,7 +546,7 @@ public class TaktSalesPriceImportDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     public string? PriceType { get; set; } = string.Empty;
 
@@ -571,7 +571,7 @@ public class TaktSalesPriceImportDto
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -581,7 +581,7 @@ public class TaktSalesPriceImportDto
     public int? GrBasedInvoiceInspection { get; set; }
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int? PricingDateControl { get; set; }
 
@@ -665,7 +665,7 @@ public class TaktSalesPriceExportDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// 条件类型（字典 logistics_procurement_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     public string PriceType { get; set; } = string.Empty;
 
@@ -690,7 +690,7 @@ public class TaktSalesPriceExportDto
     public string? SalesGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// 税码（字典 accounting_financial_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
@@ -700,7 +700,7 @@ public class TaktSalesPriceExportDto
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
     /// <summary>
-    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// 定价日期控制（字典 logistics_procurement_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
     /// </summary>
     public int PricingDateControl { get; set; } = 0;
 

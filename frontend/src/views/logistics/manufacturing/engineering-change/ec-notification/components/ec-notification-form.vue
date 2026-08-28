@@ -27,26 +27,50 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.plantcode')"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  disabled
+                  :placeholder="pi.ph('tenantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  disabled
+                  :placeholder="pi.ph('companyCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  disabled
+                  :placeholder="pi.ph('cultureCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
                   disabled
@@ -55,12 +79,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.no')"
+                :label="pi.label('ecNotificationCode')"
                 name="ecNotificationCode"
               >
                 <a-input
                   v-model:value="formState.ecNotificationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.no') })"
+                  :placeholder="pi.ph('ecNotificationCode')"
                   show-count
                   :maxlength="30"
                   allow-clear
@@ -69,12 +93,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.ecid')"
+                :label="pi.label('ecId')"
                 name="ecId"
               >
                 <a-input
                   v-model:value="formState.ecId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecid') })"
+                  :placeholder="pi.ph('ecId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -83,12 +107,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.ecCode')"
+                :label="pi.label('ecCode')"
                 name="ecCode"
               >
                 <a-input
                   v-model:value="formState.ecCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecCode') })"
+                  :placeholder="pi.ph('ecCode')"
                   show-count
                   :maxlength="30"
                   allow-clear
@@ -97,12 +121,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.ectitle')"
+                :label="pi.label('ecTitle')"
                 name="ecTitle"
               >
                 <a-input
                   v-model:value="formState.ecTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ectitle') })"
+                  :placeholder="pi.ph('ecTitle')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -111,12 +135,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.date')"
+                :label="pi.label('ecNotificationDate')"
                 name="ecNotificationDate"
               >
                 <a-date-picker
                   v-model:value="formState.ecNotificationDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecnotification.date') })"
+                  :placeholder="pi.ph('ecNotificationDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -124,12 +148,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecnotification.deptcodes')"
+                :label="pi.label('ecNotificationDeptCodes')"
                 name="ecNotificationDeptCodes"
               >
                 <a-input
                   v-model:value="formState.ecNotificationDeptCodes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.deptcodes') })"
+                  :placeholder="pi.ph('ecNotificationDeptCodes')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -148,12 +172,12 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecnotification.deptnames')"
+                :label="pi.label('ecNotificationDeptNames')"
                 name="ecNotificationDeptNames"
               >
                 <a-input
                   v-model:value="formState.ecNotificationDeptNames"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.deptnames') })"
+                  :placeholder="pi.ph('ecNotificationDeptNames')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -162,12 +186,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecnotification.notifierid')"
+                :label="pi.label('ecNotificationNotifierId')"
                 name="ecNotificationNotifierId"
               >
                 <a-input
                   v-model:value="formState.ecNotificationNotifierId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.notifierid') })"
+                  :placeholder="pi.ph('ecNotificationNotifierId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -176,12 +200,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecnotification.notifiername')"
+                :label="pi.label('ecNotificationNotifierName')"
                 name="ecNotificationNotifierName"
               >
                 <a-input
                   v-model:value="formState.ecNotificationNotifierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.notifiername') })"
+                  :placeholder="pi.ph('ecNotificationNotifierName')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -190,24 +214,24 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecnotification.method')"
+                :label="pi.label('ecNotificationMethod')"
                 name="ecNotificationMethod"
               >
                 <a-input-number
                   v-model:value="formState.ecNotificationMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.method') })"
+                  :placeholder="pi.ph('ecNotificationMethod')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.ecnotification.status')"
+                :label="pi.label('ecNotificationStatus')"
                 name="ecNotificationStatus"
               >
                 <a-input-number
                   v-model:value="formState.ecNotificationStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.status') })"
+                  :placeholder="pi.ph('ecNotificationStatus')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -225,7 +249,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -240,12 +264,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -273,6 +297,10 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
+import { useEcNotificationI18n } from '../composables/use-ec-notification-i18n'
+
+/** 实体字段 i18n（标签/占位符传小驼峰字段名） */
+const pi = useEcNotificationI18n()
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
@@ -282,7 +310,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / 区域文化 / 工厂（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -299,7 +327,6 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.plantCode) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -369,46 +396,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
+      message: pi.ph('plantCode'),
       trigger: 'blur'
     }
   ],
   ecNotificationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecnotification.no') }),
+      message: pi.ph('ecNotificationCode'),
       trigger: 'blur'
     }
   ],
   ecId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecid') }),
+      message: pi.ph('ecId'),
       trigger: 'blur'
     }
   ],
   ecCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecCode') }),
+      message: pi.ph('ecCode'),
       trigger: 'blur'
     }
   ],
   ecNotificationDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.ecnotification.date') }),
+      message: pi.ph('ecNotificationDate'),
       trigger: 'change'
     }
   ],
   ecNotificationMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecnotification.method') }))
+        return Promise.reject(pi.ph('ecNotificationMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecnotification.method') }))
+        return Promise.reject(pi.ph('ecNotificationMethod'))
       }
       return Promise.resolve()
     },
@@ -417,11 +444,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ecNotificationStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecnotification.status') }))
+        return Promise.reject(pi.ph('ecNotificationStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecnotification.status') }))
+        return Promise.reject(pi.ph('ecNotificationStatus'))
       }
       return Promise.resolve()
     },

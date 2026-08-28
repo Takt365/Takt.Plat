@@ -15,27 +15,27 @@ export interface EcKakunin extends CompanyDtoBase {
   ecDetailId: string;
   ecCode: string;
   lineNumber: number;
-  ecModel: string;
-  ecOldItem?: string;
-  ecNewItem?: string;
-  isOldProcurement: number;
-  isOldCheck: number;
-  isNewProcurement: number;
-  isNewCheck: number;
+  ecModelCode: string;
+  ecOldMaterialCode?: string;
+  ecNewMaterialCode?: string;
+  ecOldPurchaseType: number;
+  ecOldRequiresInspection: number;
+  ecNewPurchaseType: number;
+  ecNewRequiresInspection: number;
 }
 
 export interface EcKakuninQuery extends TaktPagedQuery {
   ecCode?: string;
-  ecModel?: string;
-  isOldCheck?: number;
-  isNewCheck?: number;
-  ecNewItem?: string;
+  ecModelCode?: string;
+  ecOldRequiresInspection?: number;
+  ecNewRequiresInspection?: number;
+  ecNewMaterialCode?: string;
 }
 
 export interface EcKakuninUpdate {
   ecDetailId: string;
-  isOldProcurement: number;
-  isOldCheck: number;
-  isNewProcurement: number;
-  isNewCheck: number;
+  ecOldPurchaseType: number;
+  ecOldRequiresInspection: number;
+  ecNewPurchaseType: number;
+  ecNewRequiresInspection: number;
 }

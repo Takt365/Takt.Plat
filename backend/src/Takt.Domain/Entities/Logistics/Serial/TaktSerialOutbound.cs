@@ -47,12 +47,12 @@ public class TaktSerialOutbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "destination", ColumnDescription = "仕向地", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string Destination { get; set; } = string.Empty;
     /// <summary>
-    /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
+    /// 目的地港（字典 logistics_serial_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
     [SugarColumn(ColumnName = "destination_port", ColumnDescription = "目的地港", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DestinationPort { get; set; } = string.Empty;
     /// <summary>
-    /// 出库类型（字典 logistics_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
+    /// 出库类型（字典 logistics_materials_outbound_type；0=销售出库 1=生产领料 2=退货出库 3=调拨出库 4=报废出库 5=序列号出库 6=其他）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_type", ColumnDescription = "出库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
     public int OutboundType { get; set; } = 5;

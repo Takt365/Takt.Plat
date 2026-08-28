@@ -17,13 +17,21 @@ namespace Takt.Shared.Helpers;
 /// </summary>
 public sealed class TaktEcDeptBatchTransposedStageCell
 {
-    /// <summary>阶段编码</summary>
+    /// <summary>
+    /// 阶段编码
+    /// </summary>
     public string StageCode { get; init; } = string.Empty;
-    /// <summary>阶段日期</summary>
+    /// <summary>
+    /// 阶段日期
+    /// </summary>
     public DateTime? StageDate { get; init; }
-    /// <summary>批次号/批次说明</summary>
+    /// <summary>
+    /// 批次号/批次说明
+    /// </summary>
     public string? BatchCode { get; init; }
-    /// <summary>日期展示文本（yyyyMMdd）</summary>
+    /// <summary>
+    /// 日期展示文本（yyyyMMdd）
+    /// </summary>
     public string? DateDisplayText { get; init; }
 }
 

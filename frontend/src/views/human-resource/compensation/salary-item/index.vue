@@ -81,13 +81,13 @@
         <template v-else-if="column.key === 'itemType'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'itemType')"
-            dict-type="hr_salary_item_type"
+            dict-type="humanresource_compensation_salary_item_type"
           />
         </template>
         <template v-else-if="column.key === 'calcMethod'">
           <TaktDictTag
             :value="getSalaryItemField(record, 'calcMethod')"
-            dict-type="hr_salary_calc_method_type"
+            dict-type="humanresource_compensation_salary_calc_method"
           />
         </template>
         <template v-else-if="column.key === 'isDeduction'">
@@ -192,7 +192,7 @@
       <a-form-item :label="t('entity.salaryitem.itemtype')">
         <TaktSelect
           v-model:value="advancedQueryForm.itemType"
-          dict-type="hr_salary_item_type"
+          dict-type="humanresource_compensation_salary_item_type"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.itemtype') })"
           allow-clear
         />
@@ -202,7 +202,7 @@
       <a-form-item :label="t('entity.salaryitem.calcmethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.calcMethod"
-          dict-type="hr_salary_calc_method_type"
+          dict-type="humanresource_compensation_salary_calc_method"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.salaryitem.calcmethod') })"
           allow-clear
         />

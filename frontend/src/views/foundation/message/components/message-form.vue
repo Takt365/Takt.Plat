@@ -21,22 +21,23 @@
           :label="t('entity.message.fromuserid')"
           name="fromUserId"
         >
-          <a-input
+          <TaktSelect
             v-model:value="formState.fromUserId"
+            api-url="TaktUsers/options"
+            :field-names="{ label: 'dictLabel', value: 'dictValue' }"
             :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.fromuserid') })"
-            size="small"
             disabled
           />
         </a-form-item>
       </a-col>
       <a-col :span="12">
         <a-form-item
-          :label="t('entity.message.fromUserName')"
+          :label="t('entity.message.fromusername')"
           name="fromUserName"
         >
           <a-input
             v-model:value="formState.fromUserName"
-            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') })"
+            :placeholder="t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') })"
             size="small"
             disabled
           />
@@ -47,7 +48,7 @@
         :span="24"
       >
         <a-form-item
-          :label="t('entity.message.toUserName')"
+          :label="t('entity.message.tousername')"
           name="recipientMode"
         >
           <a-radio-group
@@ -95,11 +96,13 @@
           :label="t('entity.message.touserid')"
           name="toUserId"
         >
-          <a-input
+          <TaktSelect
             v-model:value="formState.toUserId"
-            :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.message.touserid') })"
-            size="small"
-            disabled
+            api-url="TaktUsers/options"
+            :field-names="{ label: 'dictLabel', value: 'dictValue' }"
+            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.message.touserid') })"
+            allow-clear
+            @change="handleToUserChange"
           />
         </a-form-item>
       </a-col>
@@ -108,7 +111,7 @@
         :span="12"
       >
         <a-form-item
-          :label="t('entity.message.toUserName')"
+          :label="t('entity.message.tousername')"
           name="toUserName"
         >
           <a-input
@@ -443,6 +446,23 @@ function resolveUserNameFromSelectOption(
 }
 
 /**
+ * 单条接收者变更：回填 toUserName
+ * @param value 用户 Id
+ * @param option 选项
+ */
+function handleToUserChange(
+  value: string | number | (string | number)[] | undefined,
+  option: { label?: string; dictLabel?: string; extValue?: string | number; dictValue?: string | number; value?: string | number } | { label?: string; dictLabel?: string; extValue?: string | number; dictValue?: string | number; value?: string | number }[] | null,
+) {
+  if (value === undefined || value === null || value === '') {
+    formState.toUserName = ''
+    return
+  }
+  const opt = Array.isArray(option) ? option[0] : option
+  formState.toUserName = resolveUserNameFromSelectOption(opt)
+}
+
+/**
  * 列表模式接收者多选变更：同步 toUserIds 与 recipientUsers
  * @param value 选中用户 ID 列表
  * @param option 选中项列表
@@ -593,7 +613,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   fromUserName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.message.fromUserName') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.message.fromusername') }),
       trigger: 'blur'
     }
   ],

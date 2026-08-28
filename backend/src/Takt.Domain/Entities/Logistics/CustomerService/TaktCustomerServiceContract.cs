@@ -48,13 +48,13 @@ public class TaktCustomerServiceContract : TaktCompanyEntityBase
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_code", ColumnDescription = "客户端编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_name1", ColumnDescription = "客户端名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
     public string ClientName1 { get; set; } = string.Empty;
@@ -126,10 +126,16 @@ public class TaktCustomerServiceContract : TaktCompanyEntityBase
     public int SlaResolveHours { get; set; } = 0;
 
     /// <summary>
-    /// 客户经理（人员代码）
+    /// 客户经理（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "account_manager", ColumnDescription = "客户经理", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? AccountManager { get; set; }
+    [SugarColumn(ColumnName = "account_manager_employee_id", ColumnDescription = "客户经理员工ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? AccountManagerEmployeeId { get; set; }
+    /// <summary>
+    /// 客户经理名称（冗余：按 AccountManagerEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "account_manager_employee_name", ColumnDescription = "客户经理名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? AccountManagerEmployeeName { get; set; }
 
     /// <summary>
     /// 排序号（回填）（越小越靠前）

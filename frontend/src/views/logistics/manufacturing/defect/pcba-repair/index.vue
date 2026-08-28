@@ -77,13 +77,13 @@
         <template v-if="column.key === 'prodCategory'">
           <TaktDictTag
             :value="getPcbaRepairDictValue(record, 'prodCategory')"
-            dict-type="logistics_prod_category"
+            dict-type="logistics_manufacturing_prod_category"
           />
         </template>
         <template v-else-if="column.key === 'shiftNo'">
           <TaktDictTag
             :value="getPcbaRepairDictValue(record, 'shiftNo')"
-            dict-type="logistics_shift_category"
+            dict-type="logistics_manufacturing_shift_category"
           />
         </template>
       </template>

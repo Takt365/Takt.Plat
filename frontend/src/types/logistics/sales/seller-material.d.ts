@@ -49,7 +49,7 @@ export interface SellerMaterial extends TenantCoreDtoBase {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType: string;
 
@@ -124,7 +124,7 @@ export interface SellerMaterialQuery extends TaktPagedQuery {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType?: string;
 
@@ -218,7 +218,7 @@ export interface SellerMaterialCreate {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType: string;
 
@@ -317,7 +317,7 @@ export interface SellerMaterialTemplate {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType?: string;
 
@@ -401,7 +401,7 @@ export interface SellerMaterialImport {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType?: string;
 
@@ -485,7 +485,7 @@ export interface SellerMaterialExport {
   clientShortName?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
+   * 物料类型（字典 logistics_materials_material_type；DictValue=ROH/HALB/HERS 等；默认 HERS）
    */
   materialType: string;
 

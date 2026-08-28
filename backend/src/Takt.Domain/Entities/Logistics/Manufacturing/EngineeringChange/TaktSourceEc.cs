@@ -183,7 +183,7 @@ public class TaktSourceEc : TaktCompanyEntityBase
     public string? SourceRelatedDrawing { get; set; }
 
     /// <summary>
-    /// 设变内容
+    /// 设变内容（富文本 HTML）
     /// </summary>
     [SugarColumn(ColumnName = "source_ec_content", ColumnDescription = "设变内容", ColumnDataType = "ntext", IsNullable = false)]
     public string SourceEcContent { get; set; } = string.Empty;

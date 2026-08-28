@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteI18nSeedData.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialSubstitute 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktBillOfMaterialSubstituteI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialsubstitute.usagequantity", "zh-HK", "替代用量_hk", "替代用量"),
 
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "en-US", "单位_us", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "ja-JP", "单位_jp", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-CN", "单位", "单位（字典 logistics_materials_unit_of_measure_code）"),
             // entity.billofmaterialsubstitute.materialunit
-            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.materialunit", "zh-HK", "单位_hk", "单位（字典 logistics_materials_unit_of_measure_code）"),
 
             // entity.billofmaterialsubstitute.usageratio
             new TranslationSeedItem("entity.billofmaterialsubstitute.usageratio", "en-US", "替代比例_us", "替代比例（相对主件用量，默认1表示等量替代）"),

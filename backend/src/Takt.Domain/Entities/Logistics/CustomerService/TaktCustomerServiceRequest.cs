@@ -42,13 +42,13 @@ public class TaktCustomerServiceRequest : TaktCompanyEntityBase
     public long ClientId { get; set; }
 
     /// <summary>
-    /// 客户端编码（冗余字段，便于查询）
+    /// 客户端编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_code", ColumnDescription = "客户端编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ClientCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户端名称（冗余字段，便于查询）
+    /// 客户端名称（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "client_name1", ColumnDescription = "客户端名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
     public string ClientName1 { get; set; } = string.Empty;
@@ -61,7 +61,7 @@ public class TaktCustomerServiceRequest : TaktCompanyEntityBase
     public long? ServiceContractId { get; set; }
 
     /// <summary>
-    /// 关联服务合同编码（冗余字段，便于查询）
+    /// 关联服务合同编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     [SugarColumn(ColumnName = "service_contract_code", ColumnDescription = "关联服务合同编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ServiceContractCode { get; set; }

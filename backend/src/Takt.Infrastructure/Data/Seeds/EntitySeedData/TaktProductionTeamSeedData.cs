@@ -4,7 +4,7 @@
 // 文件名称：TaktProductionTeamSeedData.cs
 // 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
-// 功能描述：生产班组种子（按 logistics_team_category 分类；仅制造工厂 C100/公司 2300；幂等创建或更新）
+// 功能描述：生产班组种子（按 logistics_manufacturing_team_category 分类；仅制造工厂 C100/公司 2300；幂等创建或更新）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

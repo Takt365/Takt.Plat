@@ -26,14 +26,19 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcSeizouikkasController : TaktControllerBase
 {
     private readonly ITaktEcSeizouikkaService _ecSeizouikkaService;
+    private readonly ITaktEcExecMasterQueryService _ecExecMasterQueryService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecSeizouikkaService">设变制一执行服务</param>
-    public TaktEcSeizouikkasController(ITaktEcSeizouikkaService ecSeizouikkaService)
+    /// <param name="ecExecMasterQueryService">左栏设变明细主表查询</param>
+    public TaktEcSeizouikkasController(
+        ITaktEcSeizouikkaService ecSeizouikkaService,
+        ITaktEcExecMasterQueryService ecExecMasterQueryService)
     {
         _ecSeizouikkaService = ecSeizouikkaService;
+        _ecExecMasterQueryService = ecExecMasterQueryService;
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:list", "设变制一执行列表")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:list", "设变制一执行列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetEcSeizouikkaListAsync([FromQuery] TaktEcSeizouikkaQueryDto queryDto)
     {
@@ -57,12 +62,32 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:list", "设变制一执行主表")]
+    [HttpGet("masters")]
+    public async Task<IActionResult> GetEcSeizouikkaMasterListAsync([FromQuery] TaktEcDetailQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Assy);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取设变制一执行
     /// </summary>
     /// <param name="id">设变制一执行ID</param>
     /// <returns>设变制一执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:query", "设变制一执行详情")]
-    [HttpGet("{id}")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:query", "设变制一执行详情")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetEcSeizouikkaByIdAsync(long id)
     {
         try
@@ -84,7 +109,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// 获取设变制一执行选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:query", "设变制一执行选项")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:query", "设变制一执行选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetEcSeizouikkaOptionsAsync()
     {
@@ -104,7 +129,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>设变制一执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:create", "创建设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:create", "创建设变制一执行")]
     [HttpPost]
     public async Task<IActionResult> CreateEcSeizouikkaAsync([FromBody] TaktEcSeizouikkaCreateDto dto)
     {
@@ -125,7 +150,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// <param name="id">设变制一执行ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>设变制一执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:update", "更新设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:update", "更新设变制一执行")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEcSeizouikkaAsync(long id, [FromBody] TaktEcSeizouikkaUpdateDto dto)
     {
@@ -145,7 +170,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="id">设变制一执行ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:delete", "删除设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:delete", "删除设变制一执行")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteEcSeizouikkaByIdAsync(long id)
     {
@@ -165,7 +190,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:delete", "批量删除设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:delete", "批量删除设变制一执行")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteEcSeizouikkaBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -185,7 +210,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="dto">作废 DTO</param>
     /// <returns>设变制一执行DTO</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:update", "更新设变制一执行作废状态")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:update", "更新设变制一执行作废状态")]
     [HttpPut("obsolete")]
     public async Task<IActionResult> UpdateEcSeizouikkaObsoleteAsync([FromBody] TaktEcSeizouikkaObsoleteDto dto)
     {
@@ -204,7 +229,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:import", "获取设变制一执行导入模板")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:import", "获取设变制一执行导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetEcSeizouikkaTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -224,7 +249,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:import", "导入设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:import", "导入设变制一执行")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportEcSeizouikkaAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -254,7 +279,7 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// 导出设变制一执行
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:manufacturing:engineering:change:ec:seizouikka:export", "导出设变制一执行")]
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:export", "导出设变制一执行")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportEcSeizouikkaAsync([FromQuery] TaktEcSeizouikkaQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

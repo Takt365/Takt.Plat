@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailValidators.cs
-// 创建时间：2026-08-24
+// 创建时间：2026-08-28
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEcDetail 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSourceEcDetail 生成，请按需审阅）
 // 
@@ -46,12 +46,12 @@ public class TaktSourceEcDetailCreateValidator : AbstractValidator<TaktSourceEcD
         RuleFor(x => x.SourceEcCode)
             .NotEmpty().WithMessage("设变号码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
-        RuleFor(x => x.SourceFinishedProduct)
+        RuleFor(x => x.SourceFinishedGoods)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");
-        RuleFor(x => x.SourceParentPart)
-            .NotEmpty().WithMessage("上阶物料不能为空")
-            .MaximumLength(20).WithMessage("上阶物料长度不能超过20个字符");
+        RuleFor(x => x.SourceParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -92,12 +92,12 @@ public class TaktSourceEcDetailUpdateValidator : AbstractValidator<TaktSourceEcD
         RuleFor(x => x.SourceEcCode)
             .NotEmpty().WithMessage("设变号码不能为空").When(x => x.SourceEcId <= 0)
             .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
-        RuleFor(x => x.SourceFinishedProduct)
+        RuleFor(x => x.SourceFinishedGoods)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");
-        RuleFor(x => x.SourceParentPart)
-            .NotEmpty().WithMessage("上阶物料不能为空")
-            .MaximumLength(20).WithMessage("上阶物料长度不能超过20个字符");
+        RuleFor(x => x.SourceParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -132,12 +132,12 @@ public class TaktSourceEcDetailImportValidator : AbstractValidator<TaktSourceEcD
         RuleFor(x => x.SourceEcCode)
             .NotEmpty().WithMessage("设变号码不能为空")
             .MaximumLength(6).WithMessage("设变号码长度不能超过6个字符");
-        RuleFor(x => x.SourceFinishedProduct)
+        RuleFor(x => x.SourceFinishedGoods)
             .NotEmpty().WithMessage("完成品不能为空")
             .MaximumLength(20).WithMessage("完成品长度不能超过20个字符");
-        RuleFor(x => x.SourceParentPart)
-            .NotEmpty().WithMessage("上阶物料不能为空")
-            .MaximumLength(20).WithMessage("上阶物料长度不能超过20个字符");
+        RuleFor(x => x.SourceParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

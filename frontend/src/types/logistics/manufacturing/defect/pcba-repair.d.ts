@@ -25,7 +25,7 @@ import type {
 export interface PcbaRepair extends CompanyDtoBase {
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -40,7 +40,7 @@ export interface PcbaRepair extends CompanyDtoBase {
   TeamCode?: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
@@ -113,7 +113,7 @@ export interface PcbaRepairExport {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -128,7 +128,7 @@ export interface PcbaRepairExport {
   TeamCode: string;
 
   /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+   * 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 

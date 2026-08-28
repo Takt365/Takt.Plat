@@ -25,7 +25,7 @@ import type {
 export interface PcbaInspection extends CompanyDtoBase {
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -98,7 +98,7 @@ export interface PcbaInspectionExport {
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+   * 生产类别（字典 logistics_manufacturing_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
