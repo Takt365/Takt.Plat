@@ -12,14 +12,15 @@ Takt デジタルファクトリー · フロント／バックエンド分離�
 
 ## プロジェクト概要
 
-| 指標 | 数量 | 説明 |
+| 指標 | 概数 | 説明 |
 |------|------|------|
-| ドメインエンティティ | 190 | `backend/src/Takt.Domain/Entities/` |
-| API コントローラ | 190 | `backend/src/Takt.WebApi/Controllers/` |
-| フロント CRUD ページ | 199 | `frontend/src/views/**/index.vue` |
-| 対応 UI 言語 | 3 | `zh-CN` / `en-US` / `ja-JP` |
+| ドメインエンティティ | ~320 | `backend/src/Takt.Domain/Entities/`（`[SugarTable]` 付き） |
+| API コントローラ | ~350 | `backend/src/Takt.WebApi/Controllers/` |
+| フロント一覧ページ | ~300 | `frontend/src/views/**/index.vue` |
+| 対応 UI 言語 | 4 | `zh-CN` / `zh-HK` / `en-US` / `ja-JP` |
+| Cursor rules / skills | 18 / 18 | `.cursor/rules/`、`.cursor/skills/`（00～17） |
 
-**認証・権限、基盤プラットフォーム、人事、物流・製造、会計、日常業務、ワークフロー、統計・ログ、コード生成** 等の業務ドメインをカバー。DDD レイヤリング + マルチテナント DB 分離 + 会社単位データ分離を採用。
+**認証・権限、基盤プラットフォーム、人事、物流・製造、カスタマーサービス、会計、日常業務、ワークフロー、統計ログ／クイッククエリ、コード生成** 等の業務ドメインをカバー。DDD レイヤリング + マルチテナント DB 分離 + 会社単位データ分離を採用。
 
 ---
 
@@ -38,35 +39,57 @@ Takt デジタルファクトリー · フロント／バックエンド分離�
 | ログ | Serilog（コンソール + ローテーションファイル） |
 | API ドキュメント | Scalar（開発環境 `/scalar`） |
 | リアルタイム | SignalR（デュアル Hub） |
+| スケジューリング | Quartz（同期ジョブ、会議リマインド等） |
 
 ### フロントエンド
 
 | カテゴリ | 選定 |
 |----------|------|
-| ビルド | Vite 8 |
+| ビルド | Vite 8（Rolldown） |
 | フレームワーク | Vue 3 Composition API + TypeScript |
 | UI | Ant Design Vue 4.x |
 | スタイル | Tailwind CSS 4.x |
 | 状態 / ルータ / HTTP | Pinia、vue-router 5、Axios |
 | 国際化 | vue-i18n（静的 `locales/**` + バックエンド動的シード） |
-| ワークフロー設計 | LogicFlow + `@form-create/ant-design-vue` |
+| ワークフロー設計 | **主経路** `takt-flow-antflow-designer`（AntFlow 風ツリー）；LogicFlow は実験ビュー |
+| フォーム設計 | `@form-create/ant-design-vue` + antd-designer |
+| リッチテキスト | `@umoteam/editor` |
 | チャート | ECharts 6 |
 | リアルタイム | `@microsoft/signalr` |
-| PWA | vite-plugin-pwa（本番デフォルト有効） |
+| PWA | vite-plugin-pwa（`VITE_PWA_ENABLED` で切替） |
+
+**本番ビルド出力**（`frontend/dist`）：
+
+```text
+assets/js/{業務領域}/     # エントリ／チャンク JS
+assets/css/{業務領域}/    # スタイル（views 領域と整合）
+assets/img/{業務領域}/    # 画像
+assets/other/{業務領域}/  # 拡張子なし／未分類
+```
+
+業務領域は `src/views|api|locales|types` の先頭セグメント；サードパーティ → `vendor`；共通 UI → `shared`；エントリ → `app`。設定は `frontend/vite.config.ts`。
 
 ---
 
-## アーキテクチャレイヤ
+## アーキテクチャ層
 
 ```
 Takt.WebApi          → コントローラ、Program.cs、OpenIddict、ミドルウェア
-Takt.Application     → DTO、アプリケーションサービス、FluentValidation バリデータ
-Takt.Infrastructure  → リポジトリ、シード、SignalR、キャッシュ、マルチ DB マッピング
-Takt.Domain          → エンティティ、リポジトリインターフェース
-Takt.Shared          → ページング、例外、Options、ヘルパー
+Takt.Application     → DTO、アプリケーションサービス、FluentValidation
+Takt.Infrastructure  → リポジトリ、シード、SignalR、キャッシュ、マルチ DB、Quartz
+Takt.Domain          → エンティティ、リポジトリインタフェース
+Takt.Shared          → ページング、例外、Options、ヘルパ、Enums/Constants
 ```
 
-依存方向：`WebApi → Application + Infrastructure + Shared`；`Application → Domain + Shared`；`Domain → Shared`。コントローラは `ITaktXxxService` のみ注入。SqlSugar への直接アクセスは禁止。
+依存方向：`WebApi → Application + Infrastructure + Shared`；`Application → Domain + Shared`；`Domain → Shared`。コントローラは `ITaktXxxService` のみ注入し、SqlSugar 直接アクセスは禁止。
+
+**CRUD テーブル形態**（いずれも先に `12-crud` を満たすこと）：
+
+| 形態 | ルール | 説明 |
+|------|--------|------|
+| 単表 | `12-crud` + `13/14` | 標準 QueryBar / ToolsBar / テーブル / ページング / モーダル |
+| 主従 | + `10-master-detail` | OneToMany Fill/Save；展開行／ドロワ |
+| ツリー | + `11-tree-table` | `ParentId` 1 階層遅延；左ツリー＋右テーブル |
 
 ---
 
@@ -75,72 +98,90 @@ Takt.Shared          → ページング、例外、Options、ヘルパー
 ### テナント → 会社 → 業務データ
 
 ```
-テナント Tenant（テナント別 DB） → 会社 Company（会社コード） → 業務データ（部門/従業員/製造/販売等）
+テナント Tenant（テナント別 DB） → 会社 Company（会社コード） → 業務データ（部門／従業員／製造／販売など）
 ```
 
-| レイヤ | バックエンド | フロントエンド |
-|--------|--------------|----------------|
-| **テナント** | 独立業務 DB `ConnectionStrings:Tenant_{code}`；`TaktTenant`；`TaktTenantEntityBase`（ユーザー/ロール/メニュー/辞書等） | `useTenantStore`、`takt-tenant-toggle`；ログイン前後でテナント選択可 |
-| **会社** | `TaktCompany`；`TaktCompanyEntityBase`（従業員/部門/製造/財務等）；リポジトリ `Where(TenantCode, CompanyCode)` | `takt-company-toggle`；テナント連動でアクセス可能会社を切替 |
-| **貫通** | `ITaktUserContext` + リクエストヘッダ `X-Tenant-Code` / `X-Company-Code` | `api/request.ts` がヘッダを自動付与 |
+| 層 | バックエンド | フロント |
+|----|--------------|----------|
+| **テナント** | 業務 DB `ConnectionStrings:Tenant_{code}`；`TaktTenant`；テナント系基底 | `useTenantStore`、`takt-tenant-toggle`；ログイン前後で選択可 |
+| **会社** | `TaktCompany`；`TaktCompanyEntityBase` 等；`Where(TenantCode, CompanyCode)` | `takt-company-toggle`；テナント連動で切替 |
+| **貫通** | `ITaktUserContext` + ヘッダ `X-Tenant-Code` / `X-Company-Code` | `api/request.ts` が自動付与 |
 
-**起動 Init スイッチ**（`appsettings.json` → `Init` / `Database`）：
+エンティティ基底は「関連工場 × 言語」4 組合せ（`01-backend` / `TaktEntityBase`）。データ分離は **TenantCode + CompanyCode** のみ（CultureCode はテナント分離に使わない）。
 
-1. `InitDb` — `TenantCodes` 順に各テナント業務 DB のテーブルを作成
-2. `SeedData` — `TenantCodes` 順にテナント DB を切替え全シード実行；会社マスタ/休日/組織人事等はシード内で `CompanyCodes` 順に書込；工場マスタは `PlantCodes` 順
-3. `CompanyCodes` / `PlantCodes` の順序はシード定義と一致必須；`CompanyCodes` 先頭はデモアカウント主会社等のデフォルト（`GetSeedCompanyCode()`）
+**起動 Init**（`appsettings.json` → `Init` / `Database`）：
+
+1. `InitDb` — `TenantCodes` 順に各テナント業務 DB の表作成
+2. `SeedData` — `TenantCodes` 順にシード実行；会社／工場マスタ等は `CompanyCodes` / `PlantCodes` 同順
+3. `CompanyCodes` / `PlantCodes` / `CultureCodes` の順序は設定マップと一致；先頭 `CompanyCodes` はデモ帳号の主会社等の既定
 
 ### グローバル SignalR
 
-ログイン後 **デュアル Hub** を維持（`AddTaktSignalR`、JWT は `TaktSignalRTokenMiddleware` で認証）：
+ログイン後 **デュアル Hub**（`AddTaktSignalR`、JWT は `TaktSignalRTokenMiddleware`）：
 
 | Hub | パス | 役割 |
 |-----|------|------|
-| **TaktConnectHub** | `/hubs/TaktConnectHub` | 接続/切断、オンラインユーザー、オンライン統計、強制ログアウト `ForceLogout` |
-| **TaktNotificationHub** | `/hubs/TaktNotificationHub` | ダイレクトメッセージ、会社内ブロードキャスト、メッセージ/オンライン統計プッシュ |
+| **TaktConnectHub** | `/hubs/TaktConnectHub` | 接続／切断、オンライン、統計、強制ログアウト |
+| **TaktNotificationHub** | `/hubs/TaktNotificationHub` | 私信、社内ブロードキャスト、メッセージ／オンライン統計 |
 
-プッシュは **会社 + ユーザー** グループ（`TaktSignalRGroupNames`）で、テナント/会社分離と整合。ディスパッチ入口：`ITaktSignalRDispatchService`。
+配信は **会社 + ユーザ** グループ（`TaktSignalRGroupNames`）。入口：`ITaktSignalRDispatchService`。フロント：`utils/takt-signalr.ts`、`stores/foundation/signalr.ts`。
 
-フロント：`utils/takt-signalr.ts`；`stores/foundation/signalr.ts`；レイアウトログイン後に自動接続。
+### 承認ワークフロー
+
+自作 **AntFlow 風ツリー JSON エンジン**（BPMN ではない）：
+
+```
+フォーム（FrmData） + プロセスノード + 承認者解決 + 条件ゲートウェイ + 例外動作（却下／撤回／転送／加算…）
+```
+
+| 配置 | 説明 |
+|------|------|
+| エンジン | `TaktFlowEngineService` / `TaktFlowEngineController`（ランタイム） |
+| 定義 CRUD | `TaktFlowScheme` / `TaktFlowForm` 等 |
+| フロント設計器 | `components/business/takt-flow-antflow-designer/` |
+| 規約 | `.cursor/rules/09-workflow.mdc` |
 
 ### その他の能力
 
-| 能力 | 説明 | 設定 / 入口 |
-|------|------|-------------|
-| **権限（RBAC）** | OpenIddict；メニュー権限コード `領域:ディレクトリ:…:エンティティ:操作`；`[TaktPermission]` | `OpenIddict`、`Takt.WebApi/Filters/` |
-| **ログ** | Serilog ローテーション；`TaktLoggingMiddleware`；`TaktLoginLog` / `TaktOperLog` / `TaktDeltaLog` | `TaktLogging`、`Serilog` |
-| **ローカライズ** | DB + I18n シード；フロント静的 `locales/**` + 動的 `mergeDynamicLocaleMessages` | `Localization`、`Infrastructure/Data/Seeds/I18nSeedData/` |
+| 能力 | 説明 | 設定／入口 |
+|------|------|------------|
+| **RBAC** | 権限コード `領域:ディレクトリ:…:エンティティ:操作`（コロン）；`[TaktPermission]` をメニュー／フロントと 4 箇所一致 | `16-permission-i18n`、`Takt.WebApi/Filters/` |
+| **翻訳キー** | I18nKey はドット：`menu.*` / `entity.*` / `common.page.*` | バックエンドシード + `mergeDynamicLocaleMessages` |
+| **ログ** | Serilog；`TaktLoginLog` / `TaktOperLog` / `TaktDeltaLog` | `TaktLogging`、`Serilog` |
+| **ローカライズ** | DB + I18n シード；静的 `locales/**` のルートは必ず `page` | `Localization`、`02-frontend` §6.2 |
 | **CAPTCHA** | `Slider` / `Behavior` | `Captcha`、`ITaktCaptchaService` |
 | **キャッシュ** | `ITaktCacheService`（Memory / Redis） | `Cache:Provider` |
-| **セキュリティ** | レート制限、CSRF、XSS、RSA パスワード転送 | `Security`、`PasswordPolicy:Transport` |
-| **ワークフロー** | フロー定義/インスタンス/タスク/フォーム/変数/加签 | `Workflow/` エンティティ + LogicFlow デザイナ |
-| **コード生成** | エンティティ → DTO/サービス/コントローラ/フロント/i18n 一括パイプライン | `scripts/generate-all.cjs` |
+| **セキュリティ** | レート制限、CSRF、XSS、RSA パスワード伝送 | `Security`、`PasswordPolicy:Transport` |
+| **フィールド長** | Domain `SugarColumn` Length（品目／伝票／工場など） | `17-field-length` |
+| **コード生成** | エンティティ → DTO／サービス／コントローラ／フロント／i18n（単体） | `scripts/gen/generate-all.cjs` |
+| **分析拡張** | Trend / Stat / Explosion は CRUD と**独立**のサービス＋コントローラ＋フロント API | `generate-entity-exclusions` のコメント参照 |
 
-フロント：`v-permission`、CAPTCHA（`takt-captcha-slider` / `takt-captcha-behavior`）、標準 CRUD モーダル `takt-modal`。
+フロント：`v-permission`、`takt-captcha-*`、`takt-modal`、標準 CRUD シェル（`13-vue-view` / `14-vue-form`）。
 
 ---
 
 ## 業務モジュール
 
-バックエンド `Controllers/` と `Domain/Entities/` は同一ドメイン構成；フロント `views/`、`api/`、`types/`、`locales/` と整合。
+バックエンド `Controllers/` と `Domain/Entities/` は同一ドメイン構成；フロント `views/`、`api/`、`types/`、`locales/` も整合。
 
 | ドメイン | サブモジュール | 主な能力 |
 |----------|----------------|----------|
-| **Identity** | ユーザー、ロール、メニュー、テナント、RBAC、認証 | ログイン認証、権限割当、マルチテナント/会社認可 |
-| **Foundation** | 辞書、翻訳、設定、採番、メッセージ、オンライン、文化 | 基盤マスタ、站内メッセージ、動的 i18n |
-| **HumanResource** | Organization（部門/役職）、Personnel（従業員）、Attendance（休日）、Talent | 組織構造、人事マスタ |
-| **Logistics · Materials** | 資材、サプライヤ、メーカ、購買申請/発注/価格、工場 | 調達とマスタ |
-| **Logistics · Sales** | 顧客、販売受注/価格 | 販売管理 |
-| **Logistics · Quality** | Operation（IQC/IPQC/サンプリング）、Complaint、Cost | 入荷/工程検査、品質コスト |
-| **Logistics · Manufacturing** | Bom、Scheduling（APS）、Output（PCBA/ASSY 出来高）、Defect（検査/修理/不良）、EngineeringChange（ECN） | 製造実行、出来高と不良 |
+| **Identity** | ユーザ、ロール、メニュー、テナント、RBAC、認証 | ログイン、権限付与、マルチテナント／会社 |
+| **Foundation** | 辞書、翻訳、設定、採番、メッセージ、オンライン、文化、行政区、ファイル | 基盤マスタ、社内メッセージ、動的 i18n |
+| **HumanResource** | Organization、Personnel、Attendance、Talent、Benefits、Compensation、Performance、Training | 組織、人事、勤怠、給与福利、業績・研修 |
+| **Logistics · Materials** | 品目、仕入先、メーカ、工場など | 品目マスタ |
+| **Logistics · Procurement** | 購買依頼／発注／価格など | 購買 |
+| **Logistics · Sales** | 得意先、受注／価格など | 販売 |
+| **Logistics · CustomerService** | 依頼／注文／チケット／契約＋ Stat | CS と統計 |
+| **Logistics · Quality** | Operation（IQC/IPQC/FQC）、Complaint、Cost；独立 Trend | 検査、クレーム、品質コスト／トレンド |
+| **Logistics · Manufacturing** | Bom（Explosion／原価分析 Trend）、Aps、Mds/Mps/Mrp、Output、Defect、EngineeringChange、LaborHour、Sop | 製造、計画、出来高、不良、ECN |
 | **Logistics · Serial** | 製品シリアル入出庫 | シリアル追跡 |
-| **Logistics · Maintenance** | 設備、保全 | 設備メンテナンス |
-| **Accounting** | Financial（会社/科目/資産/会签）、Controlling（原価/利益センタ） | 財務マスタ |
-| **Routine** | Announcement、NewsCenter、HelpDesk、DocumentCenter、ConferenceCenter、VisitorCenter | 公告、ニュース、チケット、文書、会議、来訪者 |
-| **Workflow** | フロー定義、インスタンス、タスク、フォーム、変数、遷移、加签 | 承認エンジン |
-| **Workflow · Engine** | `TaktFlowEngineController` + `ITaktFlowEngineService` | ランタイム：起票/待办/承認/加签（インスタンス CRUD と分離） |
-| **Statistics** | Logging（ログイン/操作/変更ログ） | 監査と運用ログ |
-| **Code** | Generator（コード生成テーブル設定） | オンラインコード生成メタデータ |
+| **Logistics · Maintenance** | 設備、保全作業指示 | 設備保全 |
+| **Accounting** | Financial、Controlling | 会計／原価マスタ |
+| **Routine** | Announcement、NewsCenter、HelpDesk、DocumentCenter、**MeetingCenter**、VisitorCenter | お知らせ、ニュース、ヘルプデスク、文書、会議、来訪 |
+| **Workflow** | 方案／フォーム／インスタンス／タスク／変数／加算＋ **Engine** | 承認定義とランタイム |
+| **Statistics** | Logging、**QuickQuery**（設定可能なクイッククエリ） | 監査ログ、セルフサービス照会 |
+| **Code** | Generator、Database（バックアップ等） | コード生成メタ、DB 保守 |
 
 ---
 
@@ -151,47 +192,41 @@ Takt.Plat/
 ├── backend/
 │   ├── Takt.Plat.slnx
 │   └── src/
-│       ├── Takt.Shared/           # 共通型、Options、例外
-│       ├── Takt.Domain/           # エンティティ、リポジトリ IF（190 エンティティ）
-│       ├── Takt.Application/      # DTO、アプリケーションサービス、バリデータ
-│       ├── Takt.Infrastructure/   # リポジトリ、シード、SignalR、ミドルウェア
-│       └── Takt.WebApi/           # API 入口（Program.cs、Controllers）
+│       ├── Takt.Shared/           # 共有型、Options、例外、Enums/Constants
+│       ├── Takt.Domain/           # エンティティ、リポジトリ IF（~320）
+│       ├── Takt.Application/      # DTO、アプリサービス、バリデータ
+│       ├── Takt.Infrastructure/   # リポジトリ、シード、SignalR、ミドルウェア、Quartz
+│       └── Takt.WebApi/           # API 入口（Program.cs、Controllers ~350）
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                   # バックエンドモジュール別 REST クライアント
-│   │   ├── types/                 # api と 1:1 の TS 型
-│   │   ├── views/                 # ページ（標準 CRUD 構成）
-│   │   ├── components/            # common/ + business/（takt-modal 等）
-│   │   ├── stores/                # Pinia（foundation/signalr 含む）
+│   │   ├── api/                   # バックエンドモジュール別 REST
+│   │   ├── types/                 # api 対応 TS 型（主キー string）
+│   │   ├── views/                 # ページ（単表／主従／ツリー）
+│   │   ├── components/            # common/ + business/（takt-modal、フロー設計器など）
+│   │   ├── stores/ / composables/ / bootstrap/ / config/
 │   │   ├── locales/               # 静的 i18n（export default { page: … }）
-│   │   ├── router/                # 遅延読込ルート
-│   │   └── styles/                # global.css、テーマ token
-│   ├── vite.config.ts
+│   │   ├── router/ / styles/ / utils/
+│   ├── vite.config.ts             # 出力 assets/{js|css|img|other}/{領域}/
 │   └── package.json
-├── scripts/                       # コード生成・エンティティ保守スクリプト
-│   ├── generate-all.cjs           # 一括：DTO → サービス → コントローラ → フロント → i18n
-│   ├── generate-from-backend.cjs  # フロント api/types 生成
-│   ├── generate-vue-all-from-api.cjs  # Vue 3 テンプレート連結（CRUD / TREE / Master-Detail）
-│   ├── generate-vue-crud-from-api.cjs
-│   ├── generate-vue-tree-from-api.cjs
-│   └── generate-vue-master-detail-from-api.cjs
-├── .cursor/rules/                 # 開発規約（00-project / 01-backend / 02-frontend）
+├── scripts/
+│   ├── gen/                       # コード生成パイプライン（.cjs のみ）
+│   └── sync/                      # 外部データ同期
+├── .cursor/
+│   ├── rules/                     # 00-project … 17-field-length
+│   └── skills/                    # ルール同名の実装チェックリスト
 ├── LICENSE
-├── README.md                        # English（デフォルト）
-├── README.zh-CN.md                  # 简体中文
-├── README.ja-JP.md                  # 日本語
-└── README.zh-HK.md                  # 繁體中文（香港）
+├── README.md / README.zh-CN.md / README.ja-JP.md / README.zh-HK.md
 ```
 
 ---
 
 ## ビルドと実行
 
-### 環境要件
+### 要件
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
 - [Node.js](https://nodejs.org/) LTS（フロント）
-- SQL Server（接続文字列はローカル `appsettings*.json`；リポジトリは `appsettings.*.Example.json` テンプレのみ）
+- SQL Server（接続文字列はローカル `appsettings*.json`；リポジトリは `appsettings.*.Example.json` のみ）
 
 ### バックエンド
 
@@ -207,7 +242,7 @@ dotnet run --project backend/src/Takt.WebApi/Takt.WebApi.csproj
 | HTTPS | `https://localhost:60071` |
 | API ドキュメント | `https://localhost:60071/scalar` |
 
-初回起動前に `backend/src/Takt.WebApi/appsettings.Example.json` 等を `appsettings.json` / `appsettings.Development.json` / `appsettings.Production.json` にコピー（Git コミット禁止）し、`ConnectionStrings`（OpenIddict + `Tenant_*`）を設定。`Init:InitDb` / `Init:SeedData` は `appsettings.json` 参照。
+初回前に `appsettings.Example.json` 等を `appsettings.json` / `Development` / `Production` にコピー（Git にコミットしない）し、`ConnectionStrings`（OpenIddict + `Tenant_*`）を記入。`Init:InitDb` / `Init:SeedData` はローカル `appsettings.json` を参照。
 
 ### フロントエンド
 
@@ -217,48 +252,57 @@ cp env.example .env
 cp env.development.example .env.development
 cp env.production.example .env.production
 npm install
-npm run dev      # 開発（デフォルト https://localhost:60081）
-npm run build    # 本番ビルド（vue-tsc + vite build）
+npm run dev         # 開発（既定 https://localhost:60081）
+npm run build       # 本番（vue-tsc + vite build）
+npm run build:vite  # Vite のみ（typecheck 省略）
 ```
 
-（Windows は `copy env.example .env` 等。`.env*` は `.gitignore` 対象；Example は `<...>` プレースホルダのみ。ローカル慣例：フロント `60081`、バック HTTPS `60071` — 各自の `.env*` に記載。）
+（Windows は `copy env.example .env` 等。`.env*` は `.gitignore` 済み。）
 
 | 項目 | 説明 |
 |------|------|
-| 開発 URL | `.env.development` の `VITE_APP_ORIGIN`（`env.development.example` 参照） |
-| API プロキシ | `/api` → `VITE_API_PROXY_TARGET`（ローカルバック HTTPS ルート） |
-| OAuth コールバック | `{VITE_APP_ORIGIN}/auth/callback`、バック `OpenIddict:SpaRedirectUris` と一致必須 |
+| 開発オリジン | `.env.development` の `VITE_APP_ORIGIN` |
+| API プロキシ | `/api` → `VITE_API_PROXY_TARGET`（ローカル HTTPS バックエンド） |
+| OAuth コールバック | `{VITE_APP_ORIGIN}/auth/callback`（`OpenIddict:SpaRedirectUris` と一致） |
+| PWA | `VITE_PWA_ENABLED`；大型 vendor は precache 除外（`vite.config.ts` workbox） |
 
-バックエンド `Cors`、`OpenIddict:SpaRedirectUris` のフロント URL と一致させる（ローカル `appsettings.Development.json` 参照）。
+バックエンド `Cors` / `OpenIddict:SpaRedirectUris` と揃えること。
 
-### デフォルトアカウント（シード）
+### 既定アカウント（シード）
 
-シードユーザー（テナント毎）：`admin`（スーパー管理者）、`guest`、`demo`。初期パスワード：`PasswordPolicy:DefaultPassword`（デフォルト `Takt@123456`）。本番環境では必ず変更。
+テナントごと：`admin`（スーパー管理者）、`guest`、`demo`。初期パスワードは `PasswordPolicy:DefaultPassword`（既定 `Takt@123456`）。本番では必ず変更。
 
 ---
 
 ## コード生成
 
-エンティティ追加後、リポジトリルートで：
+エンティティ追加後、リポジトリルートで**単体**実行（`--all` は無効）：
 
 ```bash
-node scripts/generate-all.cjs              # 全量パイプライン
-node scripts/generate-all.cjs --entity TaktXxx   # 単一エンティティ
-cd frontend && npm run generate            # フロント api/types のみ
-cd frontend && npm run generate:vue        # CRUD ページのみ
+node scripts/gen/generate-all.cjs --Holiday
+node scripts/gen/generate-all.cjs --CostCenter --dry-run
+node scripts/gen/generate-from-backend.cjs --Holiday
+node scripts/gen/generate-vue-all-from-api.cjs --CostCenter
 ```
 
-命名規約：`.cursor/rules/00-project.mdc`（コントローラ複数形、サービス単数形、前後端メソッド名整合等）。
+パイプライン（DTO → Validator → Service → Controller → フロント api/types → i18n → Vue）は `scripts/gen/generate-all.cjs` の `PIPELINE` が正。規約：`.cursor/rules/15-codegen.mdc`。
+
+生成後：バックエンドビルド、権限コード 4 箇所一致、ツリー／除外 Vue は手直し、`*Trend` / `*Stat` / `*Explosion` は独立スタックのまま（CRUD にぶら下げない）。
 
 ---
 
 ## 開発規約
 
-`.cursor/rules/` の要約：
+`.cursor/rules/`（00～17）と `.cursor/skills/` の要約：
 
-- **バックエンド**：DDD レイヤ、コントローラ複数形 / サービス単数形、`GetXxxListAsync` 等の命名、i18n キー `entity.*` / `menu.*`
-- **フロントエンド**：Ant Design Vue + Tailwind、静的 `t('路径.page.*')`、`v-permission` はメニューと一致
-- **フォーマット**：「隔行空行」禁止、`03-format-blank-lines.mdc` 参照
+- **命名／権限／i18n**：`00-project`、`16-permission-i18n`（Permission は `:`、I18nKey は `.`）
+- **バック／フロント**：`01-backend`、`02-frontend`；CRUD 基線 `12-crud`
+- **主従／ツリー／WF**：`10` / `11` / `09`
+- **ビュー／フォーム**：`13-vue-view`、`14-vue-form`
+- **オーバーフロー**：`06` / `07` / `08`（ページング＋仮想リスト＋ ID string）
+- **フィールド長**：`17-field-length`
+- **書式**：1 行おき空行禁止（`03-format-blank-lines.mdc`）
+- **スクリプト**：`.cjs` のみ；リポジトリ横断の PowerShell 置換禁止（`00-project` §6）
 
 ---
 
@@ -266,4 +310,4 @@ cd frontend && npm run generate:vue        # CRUD ページのみ
 
 [MIT License](LICENSE) · Copyright (c) 2026 Takt Technologies Co., Ltd.
 
-**メンテナ**：Takt.Plat（Cursor AI 等）
+**メンテナー**：Takt.Plat（Cursor AI 等）
