@@ -86,11 +86,11 @@ public class TaktMaintenanceWorkOrderLaborsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:maintenance:equipment:query", "维护工单报工选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaintenanceWorkOrderLaborOptionsAsync()
+    public async Task<IActionResult> GetMaintenanceWorkOrderLaborOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _maintenanceWorkOrderLaborService.GetMaintenanceWorkOrderLaborOptionsAsync();
+            var result = await _maintenanceWorkOrderLaborService.GetMaintenanceWorkOrderLaborOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

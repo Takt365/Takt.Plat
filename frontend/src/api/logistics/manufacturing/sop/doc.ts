@@ -130,10 +130,20 @@ export function updateSopDocStatus(dto: SopDocStatus): Promise<SopDoc> {
  * 获取SOP文档头选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSopDocOptions(): Promise<TaktSelectOption[]> {
+export function getSopDocOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOP_DOC_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

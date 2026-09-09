@@ -131,10 +131,20 @@ export function updateFlowInstanceStatus(dto: FlowInstanceStatus): Promise<FlowI
  * 获取流程实例选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getFlowInstanceOptions(): Promise<TaktSelectOption[]> {
+export function getFlowInstanceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${FLOW_INSTANCE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

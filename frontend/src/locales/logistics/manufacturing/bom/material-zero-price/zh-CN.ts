@@ -43,7 +43,7 @@ export default {
       '将按当前工厂与核算月，把组件 {component} 的零价明细回填为建议代替 {suggested} 的移动平均价/单位/货币，并写入 ExtField 履历，同时更新各机种产品月成本与机种月成本。',
     movingPriceBackfillBatchConfirmTitle: '确认批量回填移动价格？',
     movingPriceBackfillBatchConfirmContent:
-      '将按当前工厂与核算月 {month}（及机种条件）对全部有建议代替的零价组件回填移动平均价/单位/货币，写入 ExtField 履历，并更新各机种产品月成本与机种月成本。',
+      '将先标记 PCB SECT，再按当前工厂与核算月 {month}（及机种条件）对全部有建议代替的零价组件回填移动平均价/单位/货币（排除 PcbSectIndicator 非空），写入 ExtField 履历，并更新各机种产品月成本与机种月成本。',
     movingPriceBackfillSuccess:
       '{month} 回填移动价格完成：明细扫描 {scanned}、更新 {updated}、无价格 {skipped}、未变化 {unchanged}；产品月成本 {productCost}、机种月成本 {modelAverage}；{priceInfo}',
     movingPriceBackfillBatchSuccess:

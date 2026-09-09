@@ -140,10 +140,20 @@ export function updateUserStatus(id: string, dto: TaktUserStatusDto): Promise<Ta
  * 获取用户选项列表（用于下拉框等）
  * @returns {Promise<TaktSelectOption[]>} 用户选项列表
  */
-export function getUserOptions(): Promise<TaktSelectOption[]> {
+export function getUserOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${USER_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

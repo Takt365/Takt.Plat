@@ -144,10 +144,20 @@ export function updateBudgetActualSort(dto: BudgetActualSort): Promise<BudgetAct
  * 获取预算实绩选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getBudgetActualOptions(): Promise<TaktSelectOption[]> {
+export function getBudgetActualOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${BUDGET_ACTUAL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

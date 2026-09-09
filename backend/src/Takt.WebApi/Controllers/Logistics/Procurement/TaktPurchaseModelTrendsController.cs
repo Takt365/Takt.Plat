@@ -42,11 +42,11 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:model:trend:list", "机种采购推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetPurchaseModelTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetPurchaseModelTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _purchaseModelTrendService.GetPurchaseModelTrendPlantOptionsAsync();
+            var result = await _purchaseModelTrendService.GetPurchaseModelTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -62,7 +62,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:model:trend:list", "机种采购推移条件类型选项")]
     [HttpGet("price-type-options")]
-    public async Task<IActionResult> GetPurchaseModelTrendPriceTypeOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetPurchaseModelTrendPriceTypeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
@@ -70,7 +70,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _purchaseModelTrendService.GetPurchaseModelTrendPriceTypeOptionsAsync(plantCode);
+            var result = await _purchaseModelTrendService.GetPurchaseModelTrendPriceTypeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -87,9 +87,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:model:trend:list", "机种采购推移供应商选项")]
     [HttpGet("supplier-options")]
-    public async Task<IActionResult> GetPurchaseModelTrendSupplierOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? priceType = null)
+    public async Task<IActionResult> GetPurchaseModelTrendSupplierOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? priceType = null)
     {
         try
         {
@@ -97,7 +95,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _purchaseModelTrendService.GetPurchaseModelTrendSupplierOptionsAsync(plantCode, priceType);
+            var result = await _purchaseModelTrendService.GetPurchaseModelTrendSupplierOptionsAsync(plantCode, keyword, priceType);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -115,10 +113,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:model:trend:list", "机种采购推移物料选项")]
     [HttpGet("material-options")]
-    public async Task<IActionResult> GetPurchaseModelTrendMaterialOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? priceType = null,
-        [FromQuery] string? supplierCode = null)
+    public async Task<IActionResult> GetPurchaseModelTrendMaterialOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? priceType = null, [FromQuery] string? supplierCode = null)
     {
         try
         {
@@ -128,8 +123,7 @@ public class TaktPurchaseModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _purchaseModelTrendService.GetPurchaseModelTrendMaterialOptionsAsync(
-                plantCode, priceType, supplierCode);
+            var result = await _purchaseModelTrendService.GetPurchaseModelTrendMaterialOptionsAsync(plantCode, keyword, priceType, supplierCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

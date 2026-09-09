@@ -1,0 +1,28 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
+// 文件名称：ITaktAssyOutputStatService.cs
+// 创建时间：2026-08-31
+// 创建人：Takt365(Cursor AI)
+// 功能描述：组立产出看板统计服务接口（与 TaktAssyOutput CRUD 分离）
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+
+namespace Takt.Application.Services.Logistics.Manufacturing.Output;
+
+/// <summary>
+/// 组立产出看板统计服务（与 TaktAssyOutputService CRUD 分离）
+/// </summary>
+public interface ITaktAssyOutputStatService
+{
+    /// <summary>
+    /// 获取组立生产统计（数据看板 production-stat；按生产日期、生产班组）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>组立生产统计</returns>
+    Task<TaktAssyOutputProductionStatDto> GetAssyOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto);
+}

@@ -130,10 +130,20 @@ export function updateSourceEcStatus(dto: SourceEcStatus): Promise<SourceEc> {
  * 获取设变来源主选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSourceEcOptions(): Promise<TaktSelectOption[]> {
+export function getSourceEcOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOURCE_EC_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

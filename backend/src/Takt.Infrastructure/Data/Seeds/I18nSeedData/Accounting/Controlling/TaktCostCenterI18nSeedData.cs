@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostCenterI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktCostCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costcenter.parentid", "zh-HK", "父级ID_hk", "父级 ID（0 表示根节点）"),
 
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "en-US", "Cost Center Type", "成本中心类型"),
+            new TranslationSeedItem("entity.costcenter.type", "en-US", "成本中心类型_us", "成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "コストセンタタイプ", "成本中心类型"),
+            new TranslationSeedItem("entity.costcenter.type", "ja-JP", "成本中心类型_jp", "成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "zh-CN", "成本中心类型", "成本中心类型"),
+            new TranslationSeedItem("entity.costcenter.type", "zh-CN", "成本中心类型", "成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）"),
             // entity.costcenter.type
-            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心類型", "成本中心类型"),
+            new TranslationSeedItem("entity.costcenter.type", "zh-HK", "成本中心类型_hk", "成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）"),
 
             // entity.costcenter.managerid
             new TranslationSeedItem("entity.costcenter.managerid", "en-US", "负责人ID_us", "负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),

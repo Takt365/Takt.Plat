@@ -4,7 +4,7 @@
 // 文件名称：TaktEcAttachmentDocCodeHelper.cs
 // 创建时间：2026-08-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变附件 DocCode 格式校验，以及由 DocCode 生成存储/展示文件名（与前端 takt-ec-attachment-doc-code 对齐）
+// 功能描述：设变附件 DocCode 格式校验、PDF 扩展名判定，以及由 DocCode 生成存储/展示文件名（与前端 takt-ec-attachment-doc-code 对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,7 +17,7 @@ namespace Takt.Shared.Helpers;
 
 /// <summary>
 /// 设变附件文件编码格式校验（按 logistics_manufacturing_ec_attachment_type），以及上传后文件名强制为 DocCode + 原扩展名。
-/// EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字。
+/// 附件仅允许 PDF（IsPdfFileName）。EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字。
 /// </summary>
 public static partial class TaktEcAttachmentDocCodeHelper
 {
@@ -89,6 +89,16 @@ public static partial class TaktEcAttachmentDocCodeHelper
         }
 
         return string.IsNullOrEmpty(ext) ? trimmed : trimmed + ext;
+    }
+
+    /// <summary>
+    /// 是否为 PDF 附件文件名（扩展名 .pdf，大小写不敏感；与前端 isEcAttachmentPdfFileName 对齐）。
+    /// </summary>
+    /// <param name="fileName">源文件名或存储文件名</param>
+    /// <returns>扩展名为 .pdf 时 true；空值或非 PDF 为 false</returns>
+    public static bool IsPdfFileName(string? fileName)
+    {
+        return string.Equals(ExtractFileExtension(fileName), ".pdf", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

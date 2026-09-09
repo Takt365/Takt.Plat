@@ -86,11 +86,11 @@ public class TaktProfitCentersController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("accounting:controlling:profit:center:query", "利润中心树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetProfitCenterTreeOptionsAsync()
+    public async Task<IActionResult> GetProfitCenterTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _profitCenterService.GetProfitCenterTreeOptionsAsync();
+            var result = await _profitCenterService.GetProfitCenterTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

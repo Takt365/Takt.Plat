@@ -40,6 +40,20 @@ export const ASSYOUTPUTDETAIL_LIST_FIELDS = [
   'isObsolete',
 ] as const
 
+/** 主表弹窗内嵌子表可编辑列（不含主键/主表冗余只读派生列） */
+export const ASSYOUTPUTDETAIL_EMBEDDED_TABLE_FIELDS = [
+  'lineNumber',
+  'timePeriod',
+  'stdCapacity',
+  'prodActualQty',
+  'downtimeMinutes',
+  'downtimeReason',
+  'downtimeDescription',
+  'unachievedReason',
+  'unachievedDescription',
+  'confirmMinutes',
+] as const
+
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const ASSYOUTPUTDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'assyOutputId',
@@ -155,6 +169,16 @@ export function useAssyOutputDetailI18n() {
     return ef.queryPlaceholder(field, kind)
   }
 
+  /** 子表标准产能列提示 */
+  function stdCapacityHint(): string {
+    return ef.t('logistics.manufacturing.output.assy-output.page.detailstdcapacityhint')
+  }
+
+  /** 子表报工工时列提示 */
+  function confirmMinutesHint(): string {
+    return ef.t('logistics.manufacturing.output.assy-output.page.confirmminuteshint')
+  }
+
   return {
     t: ef.t,
     label: ef.label,
@@ -162,5 +186,7 @@ export function useAssyOutputDetailI18n() {
     queryPh,
     self: ef.self,
     ph,
+    stdCapacityHint,
+    confirmMinutesHint,
   }
 }

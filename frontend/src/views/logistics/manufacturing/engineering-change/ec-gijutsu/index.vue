@@ -72,9 +72,6 @@
         <template v-else-if="column.key === 'ecDistinction'">
           <TaktDictTag dict-type="logistics_manufacturing_ec_distinction_category" :value="getEcField(record, 'ecDistinction')" />
         </template>
-        <template v-else-if="column.key === 'discontinuedStatus'">
-          <TaktDictTag dict-type="logistics_materials_material_discontinued_status" :value="getEcField(record, 'discontinuedStatus')" />
-        </template>
         <template v-else-if="column.key === 'ecStatus'">
           <TaktDictTag dict-type="logistics_manufacturing_ec_gijutsu_status" :value="getEcField(record, 'ecStatus')" />
         </template>
@@ -91,8 +88,8 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
-      wrap-class-name="takt-form-modal-resizable"
+      :width="ecGijutsuModalWidthPx"
+      wrap-class-name="takt-form-modal-resizable ec-gijutsu-modal-no-body-scroll"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -221,17 +218,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('discontinuedStatus')">
-      <a-form-item :label="pi.queryLabel('discontinuedStatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.discontinuedStatus"
-          dict-type="logistics_materials_material_discontinued_status"
-          :placeholder="pi.queryPh('discontinuedStatus', 'select')"
-          allow-clear
-          class="w-full"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('ecEntryDateStart')">
       <a-form-item :label="pi.queryLabel('ecEntryDateStart')">
         <a-date-picker
@@ -332,8 +318,9 @@
     <TaktModal
       v-model:open="sourceEcInputVisible"
       :title="t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.title')"
-      width="960px"
-      :footer="null"
+      :width="ecGijutsuModalWidthPx"
+      wrap-class-name="takt-form-modal-resizable ec-gijutsu-modal-no-body-scroll"
+      :hide-footer="true"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleSourceEcInputCancel"
     >
@@ -405,6 +392,11 @@ import { getEcGroupOptions } from '@/api/logistics/manufacturing/engineering-cha
 import type { EcGijutsu, EcGijutsuFormData, EcGijutsuQuery } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
+import {
+  EC_GIJUTSU_TABLE_NAME,
+  useEcGijutsuPersistSignalR,
+} from '@/composables/use-ec-gijutsu-persist-signalr'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
@@ -450,6 +442,8 @@ const sourceImportMode = ref(false)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 来源设变导入 / 来源设变录入弹窗宽度：（视口 − 左侧菜单）× 80% */
+const ecGijutsuModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -702,14 +696,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcField(record, 'ecEntryDate') ?? ''
   },
   {
-    title: pi.label('discontinuedStatus'),
-    dataIndex: 'discontinuedStatus',
-    key: 'discontinuedStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
     title: pi.label('ecStatus'),
     dataIndex: 'ecStatus',
     key: 'ecStatus',
@@ -826,7 +812,14 @@ async function loadData() {
 }
 
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-useTableRefresh(loadData)
+useTableRefresh(loadData, EC_GIJUTSU_TABLE_NAME)
+
+/** 后台保存完成后刷新子面板（列表由 table:refresh 处理） */
+useEcGijutsuPersistSignalR(() => {
+  if (selectedMasterKey.value) {
+    ecSubPanelsRef.value?.reload?.()
+  }
+})
 
 /** 快捷查询 */
 function handleSearch() {
@@ -872,7 +865,7 @@ function handleUpdate() {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
-/** 提交新增/编辑表单 */
+/** 提交新增/编辑表单（后台落库；立即关窗，完成后 SignalR 刷新） */
 async function handleFormSubmit() {
   const refInst = formRef.value
   if (!refInst?.validate) return
@@ -889,21 +882,28 @@ async function handleFormSubmit() {
   try {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateEcGijutsu(id, payload as any)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createEcGijutsu(payload as any)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
+    const submitted = id
+      ? await updateEcGijutsu(id, payload as any)
+      : await createEcGijutsu(payload as any)
+    message.info(
+      t('logistics.manufacturing.engineering-change.ec-gijutsu.page.persist.submitted', {
+        ecCode: submitted?.ecCode || (payload as any)?.ecCode || '',
+        action: t(
+          id
+            ? 'logistics.manufacturing.engineering-change.ec-gijutsu.page.persist.actionUpdate'
+            : 'logistics.manufacturing.engineering-change.ec-gijutsu.page.persist.actionCreate',
+        ),
+        detailCount:
+          submitted?.detailCount
+          ?? (payload as any)?.deferredDetailCount
+          ?? (payload as any)?.ecDetails?.length
+          ?? 0,
+      }),
+    )
     formVisible.value = false
     formData.value = null
     sourceImportMode.value = false
-  nextTick(() => formRef.value?.resetFields())
-    if (selectedMasterKey.value) {
-  ecSubPanelsRef.value?.reload?.()
-    }
-    loadData()
+    nextTick(() => formRef.value?.resetFields())
   } finally {
     formLoading.value = false
   }
@@ -1083,3 +1083,22 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 </script>
+
+<style>
+/* 设变维护 / 来源设变录入弹窗：body 不出现滚动条，仅内嵌表格滚动 */
+.ec-gijutsu-modal-no-body-scroll.takt-modal.takt-modal-viewport-size .ant-modal-body,
+.ec-gijutsu-modal-no-body-scroll.takt-modal.takt-modal-is-fs .ant-modal-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden !important;
+}
+
+.ec-gijutsu-modal-no-body-scroll.takt-modal.takt-modal-viewport-size .ant-modal-body > *,
+.ec-gijutsu-modal-no-body-scroll.takt-modal.takt-modal-is-fs .ant-modal-body > * {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+}
+</style>

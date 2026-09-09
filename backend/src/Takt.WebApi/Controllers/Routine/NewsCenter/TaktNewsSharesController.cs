@@ -86,11 +86,11 @@ public class TaktNewsSharesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:news:center:share:query", "新闻中心分享记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetNewsShareOptionsAsync()
+    public async Task<IActionResult> GetNewsShareOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _newsShareService.GetNewsShareOptionsAsync();
+            var result = await _newsShareService.GetNewsShareOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

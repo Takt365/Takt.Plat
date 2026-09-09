@@ -62,11 +62,11 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mps:standard:operation:rate:query", "标准生产稼动率选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetStandardOperationRateOptionsAsync()
+    public async Task<IActionResult> GetStandardOperationRateOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _standardOperationRateService.GetStandardOperationRateOptionsAsync();
+            var result = await _standardOperationRateService.GetStandardOperationRateOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

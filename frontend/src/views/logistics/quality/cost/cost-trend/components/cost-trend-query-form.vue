@@ -9,38 +9,50 @@
 
 <template>
   <div class="takt-query-bar cost-trend-query-bar">
-    <div class="cost-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        api-url="TaktPlants/options"
-        class="cost-trend-query-bar__control cost-trend-query-bar__control--plant"
-        allow-clear
-        :placeholder="t('common.page.entity.plantcode')"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        class="cost-trend-query-bar__control cost-trend-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-      />
-      <a-select
-        v-model:value="costCategory"
-        class="cost-trend-query-bar__control cost-trend-query-bar__control--category"
-        allow-clear
-        :placeholder="t(`${localePrefix}.costCategory`)"
-        :options="costCategoryOptions"
-      />
-      <TaktSelect
-        v-model:value="currencyCode"
-        dict-type="accounting_financial_currency_code"
-        class="cost-trend-query-bar__control cost-trend-query-bar__control--currencyCode"
-        allow-clear
-        :placeholder="t(`${localePrefix}.currencyCode`)"
-      />
+    <div class="cost-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          api-url="TaktPlants/options"
+          class="cost-trend-query-bar__control cost-trend-query-bar__control--plant"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          class="cost-trend-query-bar__control cost-trend-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.costCategory`) }}</span>
+        <a-select
+          v-model:value="costCategory"
+          class="cost-trend-query-bar__control cost-trend-query-bar__control--category"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          :options="costCategoryOptions"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.currencyCode`) }}</span>
+        <TaktSelect
+          v-model:value="currencyCode"
+          dict-type="accounting_financial_currency_code"
+          class="cost-trend-query-bar__control cost-trend-query-bar__control--currencyCode"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

@@ -82,7 +82,7 @@
     <TaktModal
       v-model:open="detailVisible"
       :title="t('common.dialog.title.detail', { entity: t('entity.deltalog._self') })"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -297,6 +297,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import DeltaLogDetail from './components/delta-log-detail.vue'
 import { getDeltaLogList, getDeltaLogById, deleteDeltaLogById, deleteDeltaLogBatch, exportDeltaLog } from '@/api/statistics/logging/delta-log'
 import type { DeltaLog, DeltaLogQuery } from '@/types/statistics/logging/delta-log'
@@ -306,6 +307,8 @@ import { RiEyeLine, RiDeleteBinLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktDeltaLog')
 /** 列表快捷查询占位文案 */

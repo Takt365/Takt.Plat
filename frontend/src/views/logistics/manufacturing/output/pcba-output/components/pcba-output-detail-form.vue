@@ -86,6 +86,7 @@
                 <TaktSelect
                   v-model:value="formState.teamCode"
                   api-url="TaktProductionTeams/options"
+                  :api-params="pcbaTeamOptionsParams"
                   :placeholder="pi.ph('teamCode')"
                   :disabled="!!formData?.pcbaOutputDetailId"
                 />
@@ -167,12 +168,10 @@
                 :label="pi.label('pcbBoardType')"
                 name="pcbBoardType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.pcbBoardType"
+                  dict-type="logistics_manufacturing_pcba_function"
                   :placeholder="pi.ph('pcbBoardType')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -462,15 +461,18 @@ import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePcbaOutputDetailI18n } from '../composables/use-pcba-output-detail-i18n'
-
-/** 实体字段 i18n */
-const pi = usePcbaOutputDetailI18n()
-
 import type { PcbaOutputDetailCreate } from '@/types/logistics/manufacturing/output/pcba-output-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
+import { buildPcbaProductionTeamOptionsParams } from '../../composables/production-team-category'
+import { usePcbaOutputDetailDictFormat } from '../composables/use-pcba-output-detail-dict-format'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+
+/** 实体字段 i18n */
+const pi = usePcbaOutputDetailI18n()
+/** PCB板别等字典 Label/Value 转换 */
+const { hydrateDetailDictFields, formatDetailDictFieldsForSubmit } = usePcbaOutputDetailDictFormat()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -533,6 +535,11 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+
+/** 班组下拉：按工厂 + PCBA 分类 */
+const pcbaTeamOptionsParams = computed(() =>
+  buildPcbaProductionTeamOptionsParams(String(formState.plantCode ?? '').trim()),
+)
 /** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
@@ -555,12 +562,14 @@ watch(
       Object.keys(formState).forEach((k) => delete formState[k])
 
       applyScopeDefaults(next)
+      hydrateDetailDictFields(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
       if (val && typeof val === 'object' && Object.keys(val).length > 0) {
         Object.assign(formState, val)
+        hydrateDetailDictFields(formState)
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
@@ -856,6 +865,7 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 pcbaOutputId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  formatDetailDictFieldsForSubmit(payload)
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     if (rawlineNumber === undefined || rawlineNumber === null || rawlineNumber === '') {
@@ -1064,6 +1074,7 @@ function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
     Object.assign(formState, props.formData)
+    hydrateDetailDictFields(formState)
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.pcbaOutputDetailId)

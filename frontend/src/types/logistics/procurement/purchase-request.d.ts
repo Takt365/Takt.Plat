@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-request.d.ts
-// 创建时间：2026-08-28
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -117,6 +117,21 @@ export interface PurchaseRequest extends ApprovalDtoBase {
    * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
   supplierName1: string;
+
+  /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
 
   /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -292,6 +307,21 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
    * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
   supplierName1?: string;
+
+  /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
 
   /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -513,6 +543,21 @@ export interface PurchaseRequestCreate {
   supplierName1: string;
 
   /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
+
+  /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode: string;
@@ -726,6 +771,21 @@ export interface PurchaseRequestTemplate {
   supplierName1?: string;
 
   /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
+
+  /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
@@ -900,6 +960,21 @@ export interface PurchaseRequestImport {
   supplierName1?: string;
 
   /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
+
+  /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
    */
   currencyCode?: string;
@@ -1072,6 +1147,21 @@ export interface PurchaseRequestExport {
    * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
   supplierName1: string;
+
+  /**
+   * 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+   */
+  purchaseRequestType?: string;
+
+  /**
+   * 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+   */
+  pricingProcedure?: string;
+
+  /**
+   * 定价条件编码
+   */
+  pricingConditionCode?: string;
 
   /**
    * 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）

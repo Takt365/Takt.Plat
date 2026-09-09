@@ -57,6 +57,26 @@ public class TaktQualityIncidentsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取品质事故金额统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>品质事故金额统计</returns>
+    [TaktPermission("logistics:quality:cost:incident:list", "品质事故金额统计")]
+    [HttpGet("cost-stat")]
+    public async Task<IActionResult> GetQualityIncidentCostStatAsync([FromQuery] TaktQualityCostStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _qualityIncidentService.GetQualityIncidentCostStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取品质事故主
     /// </summary>
     /// <param name="id">品质事故主ID</param>
@@ -86,11 +106,11 @@ public class TaktQualityIncidentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:cost:incident:query", "品质事故主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityIncidentOptionsAsync()
+    public async Task<IActionResult> GetQualityIncidentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _qualityIncidentService.GetQualityIncidentOptionsAsync();
+            var result = await _qualityIncidentService.GetQualityIncidentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

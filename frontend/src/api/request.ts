@@ -35,6 +35,11 @@ import {
 import { ensureValidAccessToken, refreshOAuthTokens } from '@/utils/oauth';
 import { isLogoutInProgress } from '@/bootstrap/takt-logout-flow';
 import { buildTaktClientProfileHeaders } from '@/utils/takt-client-profile';
+import {
+  isDemoReadonly,
+  isDemoWriteExemptUrl,
+  isMutatingHttpMethod,
+} from '@/utils/takt-demo-mode';
 
 const requestLogger = createLogger('request');
 
@@ -90,7 +95,7 @@ function isTaktApiResult(data: unknown): data is TaktApiResult<unknown> {
     return false;
   }
   const body = data as Record<string, unknown>;
-  return typeof body.code === 'number' && typeof body.message === 'string' && 'data' in body;
+  return typeof body.code === 'number' && typeof body.message === 'string';
 }
 
 /**
@@ -343,7 +348,7 @@ function rejectFromAxiosError(error: unknown): Promise<unknown> {
         } else if (status !== 404) {
           requestLogger.warn(
             '请求失败',
-            { action: 'http', status, url: axiosConfig?.url },
+            { action: 'http', status, url: axiosConfig?.url, message: resolvedMessage },
             axiosError
           );
         }
@@ -429,6 +434,17 @@ axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     if (isLogoutInProgress() && !isSignOutSessionRequest(config)) {
       return Promise.reject(new Error('logout in progress'));
+    }
+
+    // Demo 只读：拦截写请求（鉴权/SignalR 等豁免）
+    if (
+      isDemoReadonly()
+      && isMutatingHttpMethod(config.method)
+      && !isDemoWriteExemptUrl(config.url)
+    ) {
+      const msg = translateLocaleMessage('components.navigation.page.systemsetting.demohint');
+      emitNotification('warning', msg);
+      return Promise.reject(new TaktApiError(msg, TaktResultCode.Forbidden));
     }
 
     const userStore = useUserStore();

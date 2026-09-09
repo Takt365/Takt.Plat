@@ -38,8 +38,10 @@ public interface ITaktProductionPlanService
     /// <summary>
     /// 获取生产计划选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetProductionPlanOptionsAsync();
+    Task<List<TaktSelectOption>> GetProductionPlanOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建生产计划

@@ -325,14 +325,16 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
             var flag = queryDto.IsImplemented.Value;
             exp = DeptCode switch
             {
-                TaktEcDeptCodes.Pmc => exp.And(x => SqlFunc.Subqueryable<TaktEcSeikan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Mp => exp.And(x => SqlFunc.Subqueryable<TaktEcKoubai>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Iqc => exp.And(x => SqlFunc.Subqueryable<TaktEcUkeken>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Mc => exp.And(x => SqlFunc.Subqueryable<TaktEcBukan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Pcba => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizounika>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Assy => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizouikka>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Qa => exp.And(x => SqlFunc.Subqueryable<TaktEcHinkan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Te => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizougijutsu>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Pmc => exp.And(x => SqlFunc.Subqueryable<TaktEcSeikan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Mp => exp.And(x => SqlFunc.Subqueryable<TaktEcKoubai>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Iqc => exp.And(x => SqlFunc.Subqueryable<TaktEcUkeken>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Mc => exp.And(x => SqlFunc.Subqueryable<TaktEcBukan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Pcba => exp.And(x =>
+                    SqlFunc.Subqueryable<TaktEcSmt>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()
+                    || SqlFunc.Subqueryable<TaktEcSeizounika>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Assy => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizouikka>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Qa => exp.And(x => SqlFunc.Subqueryable<TaktEcHinkan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Te => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizougijutsu>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
                 _ => exp
             };
         }

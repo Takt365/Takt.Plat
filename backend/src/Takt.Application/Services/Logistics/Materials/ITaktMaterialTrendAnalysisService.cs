@@ -20,9 +20,9 @@ namespace Takt.Application.Services.Logistics.Materials;
 /// </summary>
 public interface ITaktMaterialTrendAnalysisService
 {
-    Task<List<TaktSelectOption>> GetMaterialMovingTrendPlantOptionsAsync();
-    Task<List<TaktSelectOption>> GetMaterialMovingTrendValuationOptionsAsync(string plantCode);
-    Task<List<TaktSelectOption>> GetMaterialMovingTrendMaterialOptionsAsync(string plantCode, string? valuation = null);
+    Task<List<TaktSelectOption>> GetMaterialMovingTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null);
+    Task<List<TaktSelectOption>> GetMaterialMovingTrendValuationOptionsAsync(string? plantCode = null, string? keyword = null);
+    Task<List<TaktSelectOption>> GetMaterialMovingTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? valuation = null);
     Task<TaktMaterialMovingTrendResultDto> GetMaterialMovingTrendAnalysisAsync(TaktMaterialMovingTrendQueryDto queryDto);
     Task<(string fileName, byte[] fileContent)> ExportMaterialMovingTrendAnalysisAsync(
         TaktMaterialMovingTrendQueryDto query, string? sheetName = null, string? fileName = null);

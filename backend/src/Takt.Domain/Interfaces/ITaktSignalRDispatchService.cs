@@ -151,6 +151,13 @@ public interface ITaktSignalRDispatchService
     Task PushBomMaterialCostItemRecalculateCompletedToUserAsync(TaktSignalRBomMaterialCostItemRecalculatePush push);
 
     /// <summary>
+    /// 向触发用户推送设变技术课主表后台保存完成事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushEcGijutsuPersistCompletedToUserAsync(TaktSignalREcGijutsuPersistPush push);
+
+    /// <summary>
     /// 向发起人推送部门确认通知
     /// </summary>
     /// <param name="companyCode">公司编码</param>

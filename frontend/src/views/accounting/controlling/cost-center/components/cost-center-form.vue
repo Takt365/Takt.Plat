@@ -72,6 +72,21 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('costCenterCode')"
+                name="costCenterCode"
+              >
+                <a-input
+                  v-model:value="formState.costCenterCode"
+                  :placeholder="pi.ph('costCenterCode')"
+                  show-count
+                  :maxlength="6"
+                  allow-clear
+                  :disabled="!!formData?.costCenterId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('costCenterName')"
                 name="costCenterName"
               >
@@ -101,12 +116,10 @@
                 :label="pi.label('managerId')"
                 name="managerId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.managerId"
+                  api-url="TaktUsers/options"
                   :placeholder="pi.ph('managerId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -120,7 +133,7 @@
                   :placeholder="pi.ph('managerName')"
                   show-count
                   :maxlength="50"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -129,12 +142,10 @@
                 :label="pi.label('deptId')"
                 name="deptId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.deptId"
+                  api-url="TaktDepts/tree-options"
                   :placeholder="pi.ph('deptId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -148,7 +159,7 @@
                   :placeholder="pi.ph('deptName')"
                   show-count
                   :maxlength="100"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -164,7 +175,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('validFrom')"
                 name="validFrom"
@@ -177,16 +198,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('validTo')"
@@ -321,31 +332,31 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
  * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
-  if (formFields.includes('plantCode') && (force || !target.plantCode)) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
-  }
-  if (formFields.includes('relatedPlant') && (force || !target.relatedPlant)) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  if (force || !target.plantCode) {
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -353,7 +364,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","costCenterName","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","validFrom","validTo","plantCode","costCenterStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","costCenterCode","costCenterName","costCenterType","managerId","managerName","deptId","deptName","costCenterLevel","validFrom","validTo","costCenterStatus","extField","remark"]
 
 
 
@@ -375,6 +386,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({ parentId: '0' })
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  costCenterType: "F",
   costCenterStatus: 1
 }
 
@@ -397,6 +409,8 @@ const dictDataStore = useDictDataStore()
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
+
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 costCenterId 才视为编辑） */
 watch(
@@ -427,8 +441,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.costCenterId
-    if (isCreate) {
+    if (!props.formData?.costCenterId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -443,6 +456,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
+  costCenterCode: [
+    {
+      required: true,
+      message: pi.ph('costCenterCode'),
+      trigger: 'blur'
+    }
+  ],
   costCenterName: [
     {
       required: true,
@@ -450,15 +470,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  costCenterType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('costCenterType'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  costCenterType: [
+    {
+      required: true,
+      message: pi.ph('costCenterType'),
+      trigger: 'change'
+    }
+  ],
   costCenterLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -486,13 +504,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   costCenterStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -517,21 +528,37 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('costCenterType' in payload && payload.costCenterType != null) {
-    payload.costCenterType = String(payload.costCenterType)
-  }
   if ('costCenterLevel' in payload) {
     const rawcostCenterLevel = payload.costCenterLevel
-    payload.costCenterLevel = typeof rawcostCenterLevel === 'number' ? rawcostCenterLevel : Number(rawcostCenterLevel)
+    if (rawcostCenterLevel === undefined || rawcostCenterLevel === null || rawcostCenterLevel === '') {
+      delete payload.costCenterLevel
+    } else {
+      const numcostCenterLevel = typeof rawcostCenterLevel === 'number' ? rawcostCenterLevel : Number(rawcostCenterLevel)
+      if (Number.isFinite(numcostCenterLevel)) payload.costCenterLevel = numcostCenterLevel
+      else delete payload.costCenterLevel
+    }
   }
   if ('costCenterStatus' in payload) {
     const rawcostCenterStatus = payload.costCenterStatus
-    payload.costCenterStatus = typeof rawcostCenterStatus === 'number' ? rawcostCenterStatus : Number(rawcostCenterStatus)
+    if (rawcostCenterStatus === undefined || rawcostCenterStatus === null || rawcostCenterStatus === '') {
+      delete payload.costCenterStatus
+    } else {
+      const numcostCenterStatus = typeof rawcostCenterStatus === 'number' ? rawcostCenterStatus : Number(rawcostCenterStatus)
+      if (Number.isFinite(numcostCenterStatus)) payload.costCenterStatus = numcostCenterStatus
+      else delete payload.costCenterStatus
+    }
   }
-  const parentRaw = payload.parentId
-  const parentId = parentRaw === '' || parentRaw === undefined || parentRaw === null ? '0' : String(parentRaw)
-  payload.parentId = parentId
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.costCenterId) {
+    payload.costCenterId = props.formData.costCenterId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

@@ -54,7 +54,7 @@ public class TaktSalesOrderStatDto
     public int MonthOrderCount { get; set; }
 
     /// <summary>
-    /// 月订单金额合计（分；前端展示时 ÷100 为元）
+    /// 月订单金额合计（元；优先明细 SalesAmount 未作废行，回退主表 TotalAmount）
     /// </summary>
     public decimal MonthTotalAmount { get; set; }
 

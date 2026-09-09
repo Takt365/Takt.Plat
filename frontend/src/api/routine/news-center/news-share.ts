@@ -130,10 +130,20 @@ export function updateNewsShareObsolete(dto: NewsShareObsolete): Promise<NewsSha
  * 获取新闻分享记录选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getNewsShareOptions(): Promise<TaktSelectOption[]> {
+export function getNewsShareOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${NEWS_SHARE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

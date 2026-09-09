@@ -2,19 +2,21 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/manufacturing/engineering-change/composables
 // 文件名称：use-ec-dept-exec-master-context.ts
-// 功能描述：执行部门页左栏设变明细主表选中行上下文（供右侧部门执行行面板读取）
+// 功能描述：执行部门页左栏执行主表选中行上下文（供右侧设变明细面板读取）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
-import type { EcDetail } from '@/types/logistics/manufacturing/engineering-change/ec-detail'
+
+/** 执行部门页主表选中行（各部门执行 DTO） */
+export type EcDeptExecMasterRow = Record<string, unknown>
 
 /** 执行部门页主表选中行上下文 */
 export interface EcDeptExecMasterContext {
-  /** 当前选中的设变明细行（TaktEcDetail） */
-  selectedMasterRow: Ref<EcDetail | null>
+  /** 当前选中的部门执行行 */
+  selectedMasterRow: Ref<EcDeptExecMasterRow | null>
 }
 
 const ecDeptExecMasterContextKey: InjectionKey<EcDeptExecMasterContext> = Symbol('ecDeptExecMasterContext')
@@ -24,14 +26,14 @@ const ecDeptExecMasterContextKey: InjectionKey<EcDeptExecMasterContext> = Symbol
  * @returns {EcDeptExecMasterContext} 主表上下文
  */
 export function provideEcDeptExecMasterContext(): EcDeptExecMasterContext {
-  const selectedMasterRow = ref<EcDetail | null>(null)
+  const selectedMasterRow = ref<EcDeptExecMasterRow | null>(null)
   const ctx: EcDeptExecMasterContext = { selectedMasterRow }
   provide(ecDeptExecMasterContextKey, ctx)
   return ctx
 }
 
 /**
- * 在右侧执行行面板 inject 主表选中行
+ * 在右侧设变明细面板 inject 主表选中行
  * @returns {EcDeptExecMasterContext} 主表上下文
  */
 export function useEcDeptExecMasterContext(): EcDeptExecMasterContext {

@@ -23,15 +23,15 @@ export const ECDETAIL_SELF_I18N_KEY = buildEntitySelfI18nKey(ECDETAIL_ENTITY_SLU
 
 /** 设变明细业务列（与 TaktEcDetail 实体属性 camelCase 一致；不含主键） */
 export const ECDETAIL_LIST_FIELDS = [
-  'ecCode',
   'lineNumber',
+  'ecCode',
   'ecBomLineCode',
   'ecModelCode',
   'ecFinishedGoods',
   'ecFinishedGoodsDescription',
+  'discontinuedStatus',
   'ecParentMaterialCode',
   'ecParentMaterialDescription',
-  'discontinuedStatus',
   'ecOldMaterialCode',
   'ecOldMaterialDescription',
   'ecOldUsageQuantity',
@@ -74,14 +74,14 @@ export const ECDETAIL_FORM_SUBTABLE_VISIBLE_COLUMN_KEYS = [
  */
 export const ECDETAIL_DEPT_MASTER_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'plantCode',
-  'ecCode',
   'lineNumber',
+  'ecCode',
   'ecModelCode',
   'ecFinishedGoods',
   'ecFinishedGoodsDescription',
+  'discontinuedStatus',
   'ecParentMaterialCode',
   'ecParentMaterialDescription',
-  'discontinuedStatus',
   'ecOldMaterialCode',
   'ecOldMaterialDescription',
   'ecIsCompatible',
@@ -98,15 +98,15 @@ export const ECDETAIL_DEPT_MASTER_DEFAULT_VISIBLE_COLUMN_KEYS = [
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const ECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
-  'ecCode',
   'lineNumber',
+  'ecCode',
   'ecBomLineCode',
   'ecModelCode',
   'ecFinishedGoods',
   'ecFinishedGoodsDescription',
+  'discontinuedStatus',
   'ecParentMaterialCode',
   'ecParentMaterialDescription',
-  'discontinuedStatus',
   'ecOldMaterialCode',
   'ecOldMaterialDescription',
   'ecOldUsageQuantity',
@@ -135,7 +135,9 @@ export const ECDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
 /** 内嵌明细 Tab 字典列（字段 → DictTypeCode） */
 export const ECDETAIL_DICT_TYPE_BY_FIELD: Partial<Record<EcDetailListField | 'plantCode', string>> = {
   discontinuedStatus: 'logistics_materials_material_discontinued_status',
+  ecOldPurchaseType: 'logistics_procurement_type',
   ecOldRequiresInspection: 'sys_yes_no',
+  ecNewPurchaseType: 'logistics_procurement_type',
   ecNewRequiresInspection: 'sys_yes_no',
   ecSecondDistinction: 'logistics_manufacturing_ec_source_distinction',
   ecInstruction: 'logistics_manufacturing_ec_source_instruction',
@@ -264,7 +266,7 @@ export type EcDetailField = keyof typeof ECDETAIL_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const ECDETAIL_QUERY_STRING_FIELDS = [
   'plantCode',
-  'ecId',
+  'ecGijutsuId',
   'ecCode',
   'ecBomLineCode',
   'ecModelCode',

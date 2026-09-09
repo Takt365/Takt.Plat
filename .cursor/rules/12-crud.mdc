@@ -52,7 +52,7 @@ alwaysApply: true
 |------|---------|------|------------|----------|-----------|
 | 分页列表 | `GetXxxListAsync` | GET | `list` | `getXxxList` | `list` |
 | 详情 | `GetXxxByIdAsync` | GET | `{id}` | `getXxxById` | `query` |
-| 下拉选项 | `GetXxxOptionsAsync` | GET | `options` | `getXxxOptions` | `query` |
+| 下拉选项 | `GetXxxOptionsAsync(string? plantCode = null, string? keyword = null)` | GET | `options` | `getXxxOptions` | `query` |
 | 新增 | `CreateXxxAsync` | POST | — | `createXxx` | `create` |
 | 更新 | `UpdateXxxAsync` | PUT | `{id}` | `updateXxx` | `update` |
 | 单删 | `DeleteXxxByIdAsync` | DELETE | `{id}` | `deleteXxxById` | `delete` |

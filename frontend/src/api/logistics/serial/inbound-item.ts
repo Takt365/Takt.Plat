@@ -130,10 +130,20 @@ export function updateSerialInboundItemObsolete(dto: SerialInboundItemObsolete):
  * 获取产品序列号入库明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSerialInboundItemOptions(): Promise<TaktSelectOption[]> {
+export function getSerialInboundItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SERIAL_INBOUND_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -22,9 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 设变明细实体（技术阶段一 ③，隶属 TaktEcGijutsu）。技术维护 BOM/料号变更行；存在明细时保存主表后系统自动生成 TaktEcNotification， 阶段二各部门在 TaktEcSeikan/Mp 等表按明细行（EcnDetailId）填报执行，本实体通过 OneToOne 导航直接关联各课部门执行表。
-/// 对应前端 TaktEcDetailDto
-/// 继承 TaktCompanyDtoBase
+/// 设变明细（技术阶段一 ③，外键 EcGijutsuId 隶属 TaktEcGijutsu；含各部门执行视图外键 EcXxxId）。对应前端 TaktEcDetailDto。
 /// </summary>
 public class TaktEcDetailDto : TaktCompanyDtoBase
 {
@@ -39,7 +37,7 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变主表名称（填充字段）
@@ -87,9 +85,13 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -201,12 +203,6 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
-    /// <summary>
-    /// 设变技术课主表（多对一）
-    /// （主表：TaktEcGijutsu）
-    /// </summary>
-    public TaktEcGijutsuDto? EcGijutsu { get; set; }
-
 }
 
 // ========================================
@@ -243,7 +239,7 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -286,9 +282,13 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -424,11 +424,6 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 制二课主表页签（1=采购 F 且仓库 C003 2=其它；仅 TaktEcSeizounikas/masters 使用）
-    /// </summary>
-    public int? PcbaTab { get; set; }
 }
 
 // ========================================
@@ -464,7 +459,7 @@ public class TaktEcDetailCreateDto
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -508,9 +503,13 @@ public class TaktEcDetailCreateDto
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -710,7 +709,7 @@ public class TaktEcDetailTemplateDto
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -753,9 +752,13 @@ public class TaktEcDetailTemplateDto
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -908,7 +911,7 @@ public class TaktEcDetailImportDto
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -951,9 +954,13 @@ public class TaktEcDetailImportDto
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -1112,7 +1119,7 @@ public class TaktEcDetailExportDto
     /// 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -1155,9 +1162,13 @@ public class TaktEcDetailExportDto
     public string? EcParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// </summary>
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 旧物料编码

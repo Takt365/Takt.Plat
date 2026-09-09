@@ -20,7 +20,7 @@ export const SALESINVOICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESINVOIC
 
 /** 列表业务列（不含主键） */
 export const SALESINVOICEITEM_LIST_FIELDS = [
-  'plantCode',
+  'salesInvoiceId',
   'billingDocumentCode',
   'lineNumber',
   'billingQuantity',
@@ -75,13 +75,12 @@ export const SALESINVOICEITEM_LIST_FIELDS = [
   'taxAmount',
   'grossAmount',
   'exchangeRateDate',
-  'postedBy',
   'isObsolete',
-  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesInvoiceId',
   'billingDocumentCode',
   'lineNumber',
   'billingQuantity',
@@ -136,7 +135,6 @@ export const SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'taxAmount',
   'grossAmount',
   'exchangeRateDate',
-  'postedBy',
   'isObsolete',
   'action',
 ] as const
@@ -169,7 +167,65 @@ export const SALESINVOICEITEM_SUMMARY_SUM_FIELDS = [
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESINVOICEITEM_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  billingDocumentCode: 'optional',
+  lineNumber: 'select',
+  billingQuantity: 'optional',
+  salesUnit: 'optional',
+  baseUnit: 'optional',
+  scaleQuantity: 'optional',
+  billingQuantitySku: 'optional',
+  netWeight: 'optional',
+  grossWeight: 'optional',
+  weightUnit: 'optional',
+  businessAreaCode: 'optional',
+  pricingDate: 'optional',
+  serviceRenderedDate: 'optional',
+  pricingExchangeRate: 'optional',
+  netAmount: 'optional',
+  referenceDocumentCode: 'optional',
+  referenceDocumentItem: 'optional',
+  referenceDocumentCategory: 'optional',
+  salesDocumentCode: 'optional',
+  salesDocumentItem: 'optional',
+  salesDocumentReferenceFlag: 'optional',
+  materialCode: 'select',
+  materialDescription: 'optional',
+  pricingReferenceMaterialCode: 'optional',
+  batchCode: 'optional',
+  materialGroup: 'optional',
+  salesItemCategory: 'optional',
+  productHierarchy: 'optional',
+  shippingPoint: 'optional',
+  division: 'optional',
+  partnerItem: 'optional',
+  departureCountry: 'optional',
+  plantRegion: 'optional',
+  pricingFlag: 'optional',
+  warehouseCode: 'optional',
+  costAmount: 'optional',
+  subtotal1: 'optional',
+  subtotal2: 'optional',
+  subtotal3: 'optional',
+  subtotal4: 'optional',
+  subtotal5: 'optional',
+  subtotal6: 'optional',
+  statisticsExchangeRate: 'optional',
+  profitCenterCode: 'optional',
+  creditPrice: 'optional',
+  customerGroupSalesOrder: 'optional',
+  destinationCountryOrder: 'optional',
+  regionOrder: 'optional',
+  salesOrganizationOrder: 'optional',
+  distributionChannelOrder: 'optional',
+  documentCategory: 'optional',
+  taxAmount: 'optional',
+  grossAmount: 'optional',
+  exchangeRateDate: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -177,13 +233,80 @@ export type SalesInvoiceItemField = keyof typeof SALESINVOICEITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESINVOICEITEM_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'billingDocumentCode',
+  'salesUnit',
+  'baseUnit',
+  'weightUnit',
+  'businessAreaCode',
+  'pricingDateStart',
+  'pricingDateEnd',
+  'serviceRenderedDateStart',
+  'serviceRenderedDateEnd',
+  'referenceDocumentCode',
+  'referenceDocumentCategory',
+  'salesDocumentCode',
+  'salesDocumentReferenceFlag',
+  'materialCode',
+  'materialDescription',
+  'pricingReferenceMaterialCode',
+  'batchCode',
+  'materialGroup',
+  'salesItemCategory',
+  'productHierarchy',
+  'shippingPoint',
+  'division',
+  'departureCountry',
+  'plantRegion',
+  'pricingFlag',
+  'warehouseCode',
+  'profitCenterCode',
+  'customerGroupSalesOrder',
+  'destinationCountryOrder',
+  'regionOrder',
+  'salesOrganizationOrder',
+  'distributionChannelOrder',
+  'documentCategory',
+  'exchangeRateDateStart',
+  'exchangeRateDateEnd',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof SalesInvoiceItemQuery)[]
 
-export type SalesInvoiceItemQueryField = (typeof SALESINVOICEITEM_QUERY_STRING_FIELDS)[number]
+export type SalesInvoiceItemQueryField =
+  | (typeof SALESINVOICEITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'billingQuantity' | 'scaleQuantity' | 'billingQuantitySku' | 'netWeight' | 'grossWeight' | 'pricingExchangeRate' | 'netAmount' | 'referenceDocumentItem' | 'salesDocumentItem' | 'partnerItem' | 'costAmount' | 'subtotal1' | 'subtotal2' | 'subtotal3' | 'subtotal4' | 'subtotal5' | 'subtotal6' | 'statisticsExchangeRate' | 'creditPrice' | 'taxAmount' | 'grossAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESINVOICEITEM_QUERY_FIELDS: readonly SalesInvoiceItemQueryField[] = [...SALESINVOICEITEM_QUERY_STRING_FIELDS]
+export const SALESINVOICEITEM_QUERY_FIELDS: readonly SalesInvoiceItemQueryField[] = [
+  ...SALESINVOICEITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'billingQuantity',
+  'scaleQuantity',
+  'billingQuantitySku',
+  'netWeight',
+  'grossWeight',
+  'pricingExchangeRate',
+  'netAmount',
+  'referenceDocumentItem',
+  'salesDocumentItem',
+  'partnerItem',
+  'costAmount',
+  'subtotal1',
+  'subtotal2',
+  'subtotal3',
+  'subtotal4',
+  'subtotal5',
+  'subtotal6',
+  'statisticsExchangeRate',
+  'creditPrice',
+  'taxAmount',
+  'grossAmount',
+  'isObsolete',
+]
 
 /**
  * SalesInvoiceItem字段 i18n：index / invoice-item-form 统一入口

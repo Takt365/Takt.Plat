@@ -99,8 +99,10 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// <summary>
     /// 获取公告通知选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAnnouncementOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAnnouncementOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _announcementRepository.GetListAsync(
@@ -614,5 +616,39 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取公告通知件数统计（数据看板；按 PublishTime）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>公告通知件数统计</returns>
+    public async Task<TaktAnnouncementStatDto> GetAnnouncementStatAsync(TaktAnnouncementStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.PublishTimeStart,
+            queryDto.PublishTimeEnd,
+            queryDto.StatMonth,
+            defaultMonthsAgo: 0);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktAnnouncement, bool>> inMonth = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.PublishTime != null
+            && x.PublishTime >= start
+            && x.PublishTime <= end;
+        var monthAnnouncementCount = await _announcementRepository.CountAsync(inMonth);
+        return new TaktAnnouncementStatDto
+        {
+            StatMonth = statMonth,
+            MonthAnnouncementCount = monthAnnouncementCount,
+        };
     }
 }

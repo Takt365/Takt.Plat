@@ -38,8 +38,10 @@ public interface ITaktEcSeizouikkaService
     /// <summary>
     /// 获取设变制一执行选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetEcSeizouikkaOptionsAsync();
+    Task<List<TaktSelectOption>> GetEcSeizouikkaOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建设变制一执行
@@ -71,7 +73,14 @@ public interface ITaktEcSeizouikkaService
     Task DeleteEcSeizouikkaBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新设变制一执行作废状态
+    /// 更新设变制造一课执行停产状态（同步明细并自动填充/清除执行内容）
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktEcSeizouikkaDto> UpdateEcSeizouikkaDiscontinuedStatusAsync(TaktEcSeizouikkaDiscontinuedStatusDto dto);
+
+    /// <summary>
+    /// 更新设变执行作废状态
     /// </summary>
     /// <param name="dto">作废DTO</param>
     /// <returns>DTO</returns>

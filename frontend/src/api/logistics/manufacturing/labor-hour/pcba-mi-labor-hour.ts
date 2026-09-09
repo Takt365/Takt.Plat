@@ -116,10 +116,20 @@ export function deletePcbaMiLaborHourBatch(ids: string[]): Promise<void> {
  * 获取PCBA手插工数统计选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPcbaMiLaborHourOptions(): Promise<TaktSelectOption[]> {
+export function getPcbaMiLaborHourOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PCBA_MI_LABOR_HOUR_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

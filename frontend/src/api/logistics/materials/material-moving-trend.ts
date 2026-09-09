@@ -11,6 +11,7 @@
 // ========================================
 
 import request from '@/api/request';
+import type { TaktSelectOption } from '@/types/common';
 import type {
   MaterialMovingTrendQuery,
   MaterialMovingTrendResult,
@@ -25,6 +26,17 @@ const MATERIAL_MOVING_TREND_API_BASE = 'TaktMaterialMovingTrends';
  */
 export function getMaterialMovingTrendPlantOptionsUrl(): string {
   return `${MATERIAL_MOVING_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 拉取本表工厂去重选项（供默认选中当前公司 RelatedPlant 交集校验）
+ * @returns {Promise<TaktSelectOption[]>} 工厂选项
+ */
+export function getMaterialMovingTrendPlantOptions(): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${MATERIAL_MOVING_TREND_API_BASE}/plant-options`,
+    method: 'get',
+  });
 }
 
 /**

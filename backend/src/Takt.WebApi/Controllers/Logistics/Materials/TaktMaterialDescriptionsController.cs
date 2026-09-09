@@ -86,11 +86,11 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:description:query", "物料描述选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialDescriptionOptionsAsync()
+    public async Task<IActionResult> GetMaterialDescriptionOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialDescriptionService.GetMaterialDescriptionOptionsAsync();
+            var result = await _materialDescriptionService.GetMaterialDescriptionOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

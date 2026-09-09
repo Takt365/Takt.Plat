@@ -86,11 +86,11 @@ public class TaktSuppliersController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:supplier:query", "供货商信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSupplierOptionsAsync()
+    public async Task<IActionResult> GetSupplierOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _supplierService.GetSupplierOptionsAsync();
+            var result = await _supplierService.GetSupplierOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

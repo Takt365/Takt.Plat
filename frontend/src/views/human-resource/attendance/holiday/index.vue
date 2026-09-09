@@ -77,10 +77,10 @@
             dict-type="humanresource_attendance_holiday_category"
           />
         </template>
-        <template v-else-if="column.key === 'isWorkingDay'">
+        <template v-else-if="column.key === 'isPaid'">
           <TaktDictTag
-            :value="getHolidayField(record, 'isWorkingDay')"
-            dict-type="humanresource_attendance_holiday_working_day_type"
+            :value="getHolidayField(record, 'isPaid')"
+            dict-type="sys_yes_no"
           />
         </template>
       </template>
@@ -100,7 +100,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -185,12 +185,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isWorkingDay')">
-      <a-form-item :label="t('entity.holiday.isworkingday')">
+      <div v-show="isFieldVisible('compensatoryWorkDates')">
+      <a-form-item :label="t('entity.holiday.compensatoryworkdates')">
+        <a-input
+          v-model:value="advancedQueryForm.compensatoryWorkDates"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.holiday.compensatoryworkdates') })"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isPaid')">
+      <a-form-item :label="t('entity.holiday.ispaid')">
         <TaktSelect
-          v-model:value="advancedQueryForm.isWorkingDay"
-          dict-type="humanresource_attendance_holiday_working_day_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') })"
+          v-model:value="advancedQueryForm.isPaid"
+          dict-type="sys_yes_no"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.ispaid') })"
           allow-clear
         />
       </a-form-item>
@@ -337,6 +348,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import HolidayForm from './components/holiday-form.vue'
 import { getHolidayList, getHolidayById, createHoliday, updateHoliday, deleteHolidayById, deleteHolidayBatch, getHolidayTemplate, importHoliday, exportHoliday } from '@/api/human-resource/attendance/holiday'
@@ -384,6 +396,8 @@ const formData = ref<Partial<Holiday> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -395,7 +409,8 @@ const advancedQueryForm = ref({
   startDateEnd: '',
   endDateStart: '',
   endDateEnd: '',
-  isWorkingDay: undefined as number | undefined,
+  compensatoryWorkDates: '',
+  isPaid: undefined as number | undefined,
   holidayGreeting: '',
   holidayQuote: '',
   holidayTheme: '',
@@ -412,7 +427,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.holiday.startdate')) },
   { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.holiday.enddate')) },
   { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.holiday.enddate')) },
-  { key: 'isWorkingDay', label: t('entity.holiday.isworkingday') },
+  { key: 'compensatoryWorkDates', label: t('entity.holiday.compensatoryworkdates') },
+  { key: 'isPaid', label: t('entity.holiday.ispaid') },
   { key: 'holidayGreeting', label: t('entity.holiday.greeting') },
   { key: 'holidayQuote', label: t('entity.holiday.quote') },
   { key: 'holidayTheme', label: t('entity.holiday.theme') },
@@ -468,8 +484,9 @@ function buildListQuery(overrides?: Partial<HolidayQuery>): HolidayQuery {
   assignTrimmed('startDateEnd', form.startDateEnd)
   assignTrimmed('endDateStart', form.endDateStart)
   assignTrimmed('endDateEnd', form.endDateEnd)
-  if (form.isWorkingDay !== undefined && form.isWorkingDay !== null) {
-    query.isWorkingDay = form.isWorkingDay
+  assignTrimmed('compensatoryWorkDates', form.compensatoryWorkDates)
+  if (form.isPaid !== undefined && form.isPaid !== null) {
+    query.isPaid = form.isPaid
   }
   assignTrimmed('holidayGreeting', form.holidayGreeting)
   assignTrimmed('holidayQuote', form.holidayQuote)
@@ -535,10 +552,27 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getHolidayField(record, 'endDate') ?? ''
   },
   {
-    title: t('entity.holiday.isworkingday'),
-    dataIndex: 'isWorkingDay',
-    key: 'isWorkingDay',
-    width: 120,
+    title: t('entity.holiday.dayscount'),
+    dataIndex: 'daysCount',
+    key: 'daysCount',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: t('entity.holiday.compensatoryworkdates'),
+    dataIndex: 'compensatoryWorkDates',
+    key: 'compensatoryWorkDates',
+    width: 200,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getHolidayField(record, 'compensatoryWorkDates') ?? ''
+  },
+  {
+    title: t('entity.holiday.ispaid'),
+    dataIndex: 'isPaid',
+    key: 'isPaid',
+    width: 100,
     resizable: true,
     ellipsis: true,
   },
@@ -674,7 +708,8 @@ function handleReset() {
   startDateEnd: '',
   endDateStart: '',
   endDateEnd: '',
-  isWorkingDay: undefined as number | undefined,
+  compensatoryWorkDates: '',
+  isPaid: undefined as number | undefined,
   holidayGreeting: '',
   holidayQuote: '',
   holidayTheme: '',
@@ -858,7 +893,8 @@ function handleAdvancedQueryReset() {
   startDateEnd: '',
   endDateStart: '',
   endDateEnd: '',
-  isWorkingDay: undefined as number | undefined,
+  compensatoryWorkDates: '',
+  isPaid: undefined as number | undefined,
   holidayGreeting: '',
   holidayQuote: '',
   holidayTheme: '',

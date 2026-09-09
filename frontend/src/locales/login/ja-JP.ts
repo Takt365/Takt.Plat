@@ -245,5 +245,12 @@ export default {
         },
       },
     },
+    showcase: {
+      split: {
+        practical: "実践的",
+        simple: "シンプル",
+        flexible: "柔軟",
+      },
+    },
   },
 };

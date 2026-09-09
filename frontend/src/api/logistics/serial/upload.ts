@@ -116,10 +116,20 @@ export function deleteSerialUploadBatch(ids: string[]): Promise<void> {
  * 获取序列号上传选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSerialUploadOptions(): Promise<TaktSelectOption[]> {
+export function getSerialUploadOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SERIAL_UPLOAD_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

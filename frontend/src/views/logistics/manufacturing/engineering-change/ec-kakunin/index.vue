@@ -50,7 +50,7 @@
       </template>
     </TaktSingleTable>
     <TaktPagination v-model:current="currentPage" v-model:page-size="pageSize" :total="total" @change="handlePaginationChange" />
-    <TaktModal v-model:open="formVisible" :title="t('common.dialog.title.edit', { entity: t('menu.logistics.manufacturing.engineering.change.kakunin') })" width="900px" :confirm-loading="formLoading" @ok="handleFormSubmit">
+    <TaktModal v-model:open="formVisible" :title="t('common.dialog.title.edit', { entity: t('menu.logistics.manufacturing.engineering.change.kakunin') })" :width="formModalWidthPx" :confirm-loading="formLoading" @ok="handleFormSubmit">
       <KakuninForm ref="formRef" :form-data="formData" :loading="formLoading" />
     </TaktModal>
   </div>
@@ -62,6 +62,7 @@
  */
 import { message } from 'ant-design-vue';
 import { useI18n } from 'vue-i18n';
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width';
 import { getEcKakuninList, updateEcKakunin, exportEcKakuninData } from '@/api/logistics/manufacturing/engineering-change/ec-kakunin';
 import type { EcKakunin, EcKakuninUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-kakunin';
 import { useEcDetailI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-detail-i18n';
@@ -93,6 +94,8 @@ const formLoading = ref(false);
 const formData = ref<EcKakunin | null>(null);
 /** 表单 ref */
 const formRef = ref<InstanceType<typeof KakuninForm> | null>(null);
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 /** 列定义（entity.ecdetail.*） */
 const columns = computed(() => [
   { title: pi.label('ecCode'), dataIndex: 'ecCode', key: 'ecCode', width: 120 },

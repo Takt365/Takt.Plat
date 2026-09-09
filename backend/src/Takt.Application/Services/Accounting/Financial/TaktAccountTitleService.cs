@@ -97,11 +97,50 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     }
 
     /// <summary>
+    /// 获取会计科目平铺选项（DictValue=AccountTitleCode；供统驭科目等业务字段下拉）。
+    /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配编码/名称）</param>
+    /// <param name="reconciliationOnly">为 true 时仅辅助核算科目（IsAuxiliary=1）</param>
+    /// <param name="auxiliaryType">辅助核算类型（可选；D=客户 K=供应商 等）</param>
+    /// <returns>下拉选项（有上限，禁止全表）</returns>
+    public async Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(string? plantCode = null, string? keyword = null, bool reconciliationOnly = false, string? auxiliaryType = null)
+    {
+        EnsureThreeLayerContext();
+        var normalizedPlantCode = plantCode?.Trim();
+        var normalizedKeyword = keyword?.Trim();
+        var normalizedAuxiliaryType = auxiliaryType?.Trim();
+        var predicate = Expressionable.Create<TaktAccountTitle>()
+            .And(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AccountTitleStatus == 1)
+            .AndIF(!string.IsNullOrEmpty(normalizedPlantCode), x => x.PlantCode == normalizedPlantCode)
+            .AndIF(reconciliationOnly, x => x.IsAuxiliary == 1)
+            .AndIF(!string.IsNullOrEmpty(normalizedAuxiliaryType), x => x.AuxiliaryType == normalizedAuxiliaryType)
+            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>
+                (x.AccountTitleCode != null && x.AccountTitleCode.Contains(normalizedKeyword!))
+                || (x.AccountTitleName != null && x.AccountTitleName.Contains(normalizedKeyword!)))
+            .ToExpression();
+        var list = await _accountTitleRepository.GetListForExportAsync(predicate, 500);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .ThenBy(x => x.AccountTitleCode)
+            .Select(e => new TaktSelectOption
+            {
+                DictValue = e.AccountTitleCode,
+                DictLabel = string.IsNullOrWhiteSpace(e.AccountTitleName) ? e.AccountTitleCode : e.AccountTitleName,
+                ExtLabel = e.AccountTitleCode,
+                SortOrder = e.SortOrder,
+            })
+            .ToList();
+    }
+
+    /// <summary>
     /// 获取会计科目树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 AccountTitleCode）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    public async Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0)
+    public async Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _accountTitleRepository.GetListAsync(x =>

@@ -86,11 +86,11 @@ public class TaktFinancialPeriodsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:period:query", "财务期间选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFinancialPeriodOptionsAsync()
+    public async Task<IActionResult> GetFinancialPeriodOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _financialPeriodService.GetFinancialPeriodOptionsAsync();
+            var result = await _financialPeriodService.GetFinancialPeriodOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

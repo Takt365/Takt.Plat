@@ -86,11 +86,11 @@ public class TaktProductionChangeoversController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:output:production:changeover:query", "生产切换记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionChangeoverOptionsAsync()
+    public async Task<IActionResult> GetProductionChangeoverOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _productionChangeoverService.GetProductionChangeoverOptionsAsync();
+            var result = await _productionChangeoverService.GetProductionChangeoverOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

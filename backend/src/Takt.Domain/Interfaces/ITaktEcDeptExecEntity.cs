@@ -24,7 +24,7 @@ public interface ITaktEcDeptExecEntity
     /// <summary>
     /// 设变明细 ID
     /// </summary>
-    long EcnDetailId { get; set; }
+    long EcDetailId { get; set; }
     /// <summary>
     /// 设变单号
     /// </summary>
@@ -34,37 +34,13 @@ public interface ITaktEcDeptExecEntity
     /// </summary>
     int LineNumber { get; set; }
     /// <summary>
-    /// 机种编码（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    string EcModelCode { get; set; }
-    /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
-    /// </summary>
-    string? EcFinishedGoods { get; set; }
-    /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
-    /// </summary>
-    string? EcFinishedGoodsDescription { get; set; }
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    string? EcParentMaterialCode { get; set; }
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    string? EcParentMaterialDescription { get; set; }
-    /// <summary>
-    /// 完成品物料状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
-    /// </summary>
-    string DiscontinuedStatus { get; set; }
-    /// <summary>
     /// 部门编码（TaktDept.DeptCode；本表固定课别，如 D0420）
     /// </summary>
     string DeptCode { get; set; }
     /// <summary>
     /// 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
     /// </summary>
-    string? DeptName { get; set; }
+    string DeptName { get; set; }
     /// <summary>
     /// 是否实施
     /// </summary>

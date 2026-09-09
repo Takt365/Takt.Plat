@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -128,12 +128,18 @@ export function updateEcDetailObsolete(dto: EcDetailObsolete): Promise<EcDetail>
 
 /**
  * 获取设变明细选项列表
+ * @param {string} plantCode plantCode
+ * @param {string} keyword keyword
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEcDetailOptions(): Promise<TaktSelectOption[]> {
+export function getEcDetailOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${EC_DETAIL_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 

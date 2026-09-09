@@ -38,8 +38,10 @@ public interface ITaktFqcOrderService
     /// <summary>
     /// 获取出货检验单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetFqcOrderOptionsAsync();
+    Task<List<TaktSelectOption>> GetFqcOrderOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建出货检验单
@@ -102,4 +104,14 @@ public interface ITaktFqcOrderService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportFqcOrderAsync(TaktFqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取 FQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>FQC 检验统计</returns>
+    Task<TaktFqcOrderStatDto> GetFqcOrderStatAsync(TaktQualityStatQueryDto queryDto);
 }

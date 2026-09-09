@@ -86,11 +86,11 @@ public class TaktSalesGroupsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:group:query", "销售组主数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSalesGroupOptionsAsync()
+    public async Task<IActionResult> GetSalesGroupOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salesGroupService.GetSalesGroupOptionsAsync();
+            var result = await _salesGroupService.GetSalesGroupOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

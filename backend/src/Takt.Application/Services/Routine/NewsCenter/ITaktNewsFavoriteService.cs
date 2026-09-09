@@ -38,8 +38,10 @@ public interface ITaktNewsFavoriteService
     /// <summary>
     /// 获取新闻收藏记录选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetNewsFavoriteOptionsAsync();
+    Task<List<TaktSelectOption>> GetNewsFavoriteOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建新闻中心收藏记录

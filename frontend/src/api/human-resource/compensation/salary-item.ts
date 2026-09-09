@@ -144,10 +144,20 @@ export function updateSalaryItemSort(dto: SalaryItemSort): Promise<SalaryItem> {
  * 获取薪资项目选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSalaryItemOptions(): Promise<TaktSelectOption[]> {
+export function getSalaryItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SALARY_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

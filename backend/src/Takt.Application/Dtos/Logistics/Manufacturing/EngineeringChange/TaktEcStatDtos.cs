@@ -23,7 +23,7 @@ public class TaktEcGijutsuStatDto
     public string StatMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主表数量（distinct EcId）
+    /// 设变主表数量（distinct EcGijutsuId）
     /// </summary>
     public int EcCount { get; set; }
 
@@ -70,7 +70,7 @@ public class TaktEcExecStatDto
     public string StatMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变主表数量（distinct EcId）
+    /// 设变主表数量（distinct EcGijutsuId）
     /// </summary>
     public int EcCount { get; set; }
 

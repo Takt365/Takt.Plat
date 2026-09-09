@@ -130,10 +130,20 @@ export function updateQualityAssuranceCustomerResponseObsolete(dto: QualityAssur
  * 获取品质业务顾客品质要求对应费用明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getQualityAssuranceCustomerResponseOptions(): Promise<TaktSelectOption[]> {
+export function getQualityAssuranceCustomerResponseOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${QUALITY_ASSURANCE_CUSTOMER_RESPONSE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

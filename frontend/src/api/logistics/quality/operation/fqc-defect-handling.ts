@@ -144,10 +144,20 @@ export function updateFqcDefectHandlingObsolete(dto: FqcDefectHandlingObsolete):
  * 获取出货检验不良处理记录选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getFqcDefectHandlingOptions(): Promise<TaktSelectOption[]> {
+export function getFqcDefectHandlingOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${FQC_DEFECT_HANDLING_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

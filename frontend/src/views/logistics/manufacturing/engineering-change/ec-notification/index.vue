@@ -85,7 +85,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -131,11 +131,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecId')">
-      <a-form-item :label="pi.queryLabel('ecId')">
+      <div v-show="isFieldVisible('ecGijutsuId')">
+      <a-form-item :label="pi.queryLabel('ecGijutsuId')">
         <a-input
-          v-model:value="advancedQueryForm.ecId"
-          :placeholder="pi.queryPh('ecId', 'required')"
+          v-model:value="advancedQueryForm.ecGijutsuId"
+          :placeholder="pi.queryPh('ecGijutsuId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -443,6 +443,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import EcNotificationForm from './components/ec-notification-form.vue'
 import { getEcNotificationList, getEcNotificationById, createEcNotification, updateEcNotification, deleteEcNotificationById, deleteEcNotificationBatch, getEcNotificationTemplate, importEcNotification, exportEcNotification, updateEcNotificationStatus } from '@/api/logistics/manufacturing/engineering-change/ec-notification'
@@ -497,6 +498,8 @@ const formData = ref<Partial<EcNotification> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -504,7 +507,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   plantCode: '',
   ecNotificationCode: '',
-  ecId: '',
+  ecGijutsuId: '',
   ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',
@@ -571,7 +574,7 @@ function buildListQuery(overrides?: Partial<EcNotificationQuery>): EcNotificatio
   }
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('ecNotificationCode', form.ecNotificationCode)
-  assignTrimmed('ecId', form.ecId)
+  assignTrimmed('ecGijutsuId', form.ecGijutsuId)
   assignTrimmed('ecCode', form.ecCode)
   assignTrimmed('ecTitle', form.ecTitle)
   assignTrimmed('ecNotificationDateStart', form.ecNotificationDateStart)
@@ -639,13 +642,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationCode') ?? ''
   },
   {
-    title: pi.label('ecId'),
-    dataIndex: 'ecId',
-    key: 'ecId',
+    title: pi.label('ecGijutsuId'),
+    dataIndex: 'ecGijutsuId',
+    key: 'ecGijutsuId',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecId') ?? ''
+    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecGijutsuId') ?? ''
   },
   {
     title: pi.label('ecCode'),
@@ -829,7 +832,7 @@ function handleReset() {
   advancedQueryForm.value = {
   plantCode: '',
   ecNotificationCode: '',
-  ecId: '',
+  ecGijutsuId: '',
   ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',
@@ -1027,7 +1030,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   ecNotificationCode: '',
-  ecId: '',
+  ecGijutsuId: '',
   ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',

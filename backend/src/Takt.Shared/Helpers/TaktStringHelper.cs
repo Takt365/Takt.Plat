@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat 
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktStringHelper.cs
@@ -740,5 +740,83 @@ public static class TaktStringHelper
             }
         }
         return trimmed.Substring(8, 10);
+    }
+
+    /// <summary>
+    /// 自然序比较（数字段按数值：1&lt;2&lt;10；非数字段按序数忽略大小写）。用于编码类下拉排序。
+    /// </summary>
+    /// <param name="left">左字符串（可为 null）</param>
+    /// <param name="right">右字符串（可为 null）</param>
+    /// <returns>小于 0 / 0 / 大于 0</returns>
+    public static int CompareNatural(string? left, string? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return 0;
+        }
+        if (left is null)
+        {
+            return -1;
+        }
+        if (right is null)
+        {
+            return 1;
+        }
+        var i = 0;
+        var j = 0;
+        while (i < left.Length && j < right.Length)
+        {
+            var leftIsDigit = char.IsDigit(left[i]);
+            var rightIsDigit = char.IsDigit(right[j]);
+            if (leftIsDigit && rightIsDigit)
+            {
+                var iStart = i;
+                while (i < left.Length && char.IsDigit(left[i]))
+                {
+                    i++;
+                }
+                var jStart = j;
+                while (j < right.Length && char.IsDigit(right[j]))
+                {
+                    j++;
+                }
+                var iSignificant = iStart;
+                while (iSignificant < i - 1 && left[iSignificant] == '0')
+                {
+                    iSignificant++;
+                }
+                var jSignificant = jStart;
+                while (jSignificant < j - 1 && right[jSignificant] == '0')
+                {
+                    jSignificant++;
+                }
+                var iLen = i - iSignificant;
+                var jLen = j - jSignificant;
+                if (iLen != jLen)
+                {
+                    return iLen.CompareTo(jLen);
+                }
+                var digitCmp = string.CompareOrdinal(left, iSignificant, right, jSignificant, iLen);
+                if (digitCmp != 0)
+                {
+                    return digitCmp;
+                }
+                continue;
+            }
+            if (leftIsDigit != rightIsDigit)
+            {
+                // 数字段排在同位置字母之前（如 "2" &lt; "2A" 已由循环保证；此处 "1" vs "A"）
+                return leftIsDigit ? -1 : 1;
+            }
+            var leftChar = char.ToUpperInvariant(left[i]);
+            var rightChar = char.ToUpperInvariant(right[j]);
+            if (leftChar != rightChar)
+            {
+                return leftChar.CompareTo(rightChar);
+            }
+            i++;
+            j++;
+        }
+        return left.Length.CompareTo(right.Length);
     }
 }

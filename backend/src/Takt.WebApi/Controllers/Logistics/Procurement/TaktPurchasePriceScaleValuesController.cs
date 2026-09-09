@@ -86,11 +86,11 @@ public class TaktPurchasePriceScaleValuesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:price:query", "采购价格价值等级选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPurchasePriceScaleValueOptionsAsync()
+    public async Task<IActionResult> GetPurchasePriceScaleValueOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _purchasePriceScaleValueService.GetPurchasePriceScaleValueOptionsAsync();
+            var result = await _purchasePriceScaleValueService.GetPurchasePriceScaleValueOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

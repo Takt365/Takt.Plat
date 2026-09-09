@@ -2,14 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/accounting/controlling/cost-center -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：成本中心实体树表管理页（左树右表），由 generate-vue-tree-from-api.cjs 自动生成 -->
+<!-- 功能描述：成本中心实体树表管理页（仅 tree API；右表选中后展示子孙），由 generate-vue-tree-from-api.cjs 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="accounting-controlling-cost-center">
-    <!-- 第一行：左树查询栏 | 右表查询栏 -->
+    <!-- 查询栏 -->
     <div class="accounting-controlling-cost-center-query-row">
       <TaktTreeLeftQueryBar
         v-model="treeQueryKeyword"
@@ -24,12 +24,12 @@
       />
     </div>
 
-    <!-- 第二行：左树工具栏 | 右表工具栏 -->
+    <!-- 工具栏 -->
     <div class="accounting-controlling-cost-center-toolbar-row">
       <TaktTreeLeftToolsBar
         v-model:expanded="treeExpanded"
         :loading="loading"
-        @search="loadFullCostCenterTree"
+        @search="loadData"
       />
       <TaktTreeRightToolsBar
         create-permission="accounting:controlling:cost:center:create"
@@ -66,7 +66,7 @@
       />
     </div>
 
-    <!-- 第三行：左树 | 右树表 -->
+    <!-- 左树右表：左导航树；右表仅在选中后展示该节点全部子孙树 -->
     <div class="accounting-controlling-cost-center-tree-table-wrap">
       <TaktTreeLeftTable
         v-model:expanded-keys="treeExpandedKeys"
@@ -77,6 +77,9 @@
         :loading="loading"
         :virtual="true"
         :draggable="true"
+        :accordion="false"
+        :expand-action="false"
+        :load-data="useLazyTree ? handleLeftTreeLoadData : undefined"
         @tree-select="handleTreeSelect"
         @tree-drop="handleTreeDrop"
       />
@@ -89,10 +92,12 @@
         table-mode="tree"
         :data-source="tableFilteredTree"
         v-model:expanded-row-keys="tableExpandedRowKeys"
-        :loading="loading"
+        :load-children="useLazyTree ? handleRightTreeLoadChildren : undefined"
+        :loading="listLoading"
         :row-key="getCostCenterId"
         :stripe="true"
         :row-selection="rowSelection"
+        :virtual="true"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
@@ -101,12 +106,6 @@
           <template v-if="column.key === 'costCenterName'">
             <span>{{ getCostCenterField(record, 'costCenterName') }}</span>
           </template>
-        <template v-else-if="column.key === 'costCenterType'">
-          <TaktDictTag
-            :value="getCostCenterDictValue(record, 'costCenterType')"
-            dict-type="accounting_controlling_cost_center_type"
-          />
-        </template>
         <template v-else-if="column.key === 'costCenterStatus'">
           <a-switch
             :checked="getCostCenterDictValue(record, 'costCenterStatus') === 1"
@@ -114,7 +113,12 @@
             @change="(checked: unknown) => handleCostCenterStatusChange(record, Boolean(checked))"
           />
         </template>
-
+          <template v-else-if="column.key === 'costCenterType'">
+            <TaktDictTag
+              :value="getCostCenterDictValue(record, 'costCenterType')"
+              dict-type="accounting_controlling_cost_center_type"
+            />
+          </template>
         </template>
       </TaktTreeRightTable>
     </div>
@@ -123,7 +127,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -147,13 +151,33 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('costCenterCode')">
       <a-form-item :label="pi.queryLabel('costCenterCode')">
         <a-input
           v-model:value="advancedQueryForm.costCenterCode"
           :placeholder="pi.queryPh('costCenterCode', 'required')"
           show-count
-          :maxlength="4"
+          :maxlength="6"
           allow-clear
         />
       </a-form-item>
@@ -192,11 +216,10 @@
       </div>
       <div v-show="isFieldVisible('managerId')">
       <a-form-item :label="pi.queryLabel('managerId')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.managerId"
-          :placeholder="pi.queryPh('managerId', 'required')"
-          show-count
-          :maxlength="20"
+          api-url="TaktUsers/options"
+          :placeholder="pi.queryPh('managerId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -214,11 +237,10 @@
       </div>
       <div v-show="isFieldVisible('deptId')">
       <a-form-item :label="pi.queryLabel('deptId')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="pi.queryPh('deptId', 'required')"
-          show-count
-          :maxlength="20"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('deptId', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -280,16 +302,6 @@
           :placeholder="pi.queryPh('validToEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
         />
       </a-form-item>
       </div>
@@ -407,16 +419,31 @@
 
 <script setup lang="ts">
 /**
- * 成本中心实体树表管理页 · 全量树左树右表（参照 identity/menu/index.vue）
+ * 成本中心实体树表管理页 · 左树选中后右表展示该节点+直接子级（更深展开懒加载）；默认右表为空
  * @module views/accounting/controlling/cost-center
  */
-import { ref, computed, watch, watchEffect, onMounted } from 'vue'
-import type { TreeDataItem } from 'ant-design-vue/es/tree'
+import { ref, computed, watch, watchEffect, onMounted, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
+import {
+  filterTaktTreeTableNodes,
+  collectTaktTreeTableExpandableKeys,
+  expandTaktLazyTreeFully,
+  runWithTaktTreeLoadConcurrency,
+  taktTreeExpandedKeysEqual,
+  taktTreeTableNodeKey,
+  type TaktTreeTableNode,
+} from '@/utils/takt-tree-table'
 import { useTableRefresh } from '@/composables/use-table-refresh'
+import {
+  mapLazyTreeNodes,
+  mergeLoadedChildren,
+  taktIsLeafFlag,
+  type TaktLazyTreeNode,
+} from '@/composables/use-lazy-tree'
 import CostCenterForm from './components/cost-center-form.vue'
 import { getCostCenterTree, getCostCenterById, createCostCenter, updateCostCenter, deleteCostCenterById, deleteCostCenterBatch, getCostCenterTemplate, importCostCenter, exportCostCenter, updateCostCenterStatus, updateCostCenterSort } from '@/api/accounting/controlling/cost-center'
 import type { CostCenter, CostCenterTree, CostCenterUpdate } from '@/types/accounting/controlling/cost-center'
@@ -427,11 +454,7 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import { useUserStore } from '@/stores/identity/user'
-import {
-  collectTaktTreeTableExpandableKeys,
-  filterTaktTreeTableNodes,
-  taktTreeTableNodeKey,
-} from '@/utils/takt-tree-table'
+
 import {
   useCostCenterI18n,
   COSTCENTER_QUERY_STRING_FIELDS,
@@ -455,11 +478,11 @@ const tableSearchPlaceholder = computed(() =>
   })
 )
 
-/** 左侧树关键字（客户端过滤，不重复请求 API） */
+/** 左侧树关键字（仅过滤已加载节点，不重复请求 API） */
 const treeQueryKeyword = ref('')
 /** 右侧树表快捷查询关键字 */
 const queryKeyword = ref('')
-/** 左侧树工具栏「展开/收缩」状态 */
+/** 左侧树工具栏「展开/收缩」状态（仅已加载层） */
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表 */
 const treeExpandedKeys = ref<(string | number)[]>([])
@@ -467,12 +490,16 @@ const treeExpandedKeys = ref<(string | number)[]>([])
 const tableExpanded = ref(false)
 /** 右侧 a-table 树表当前展开行 key */
 const tableExpandedRowKeys = ref<(string | number)[]>([])
-/** 页面 loading（树加载、提交、导出等） */
+/** 达到阈值后左右树均按 parentId 一层懒加载 */
+const useLazyTree = ref(true)
+/** 左侧树 loading */
 const loading = ref(false)
-/** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
-const fullTableTree = ref<Record<string, unknown>[]>([])
-/** 左侧 a-tree 绑定数据（由 fullTableTree 映射 title/key） */
-const entityTreeData = ref<TreeDataItem[]>([])
+/** 右侧树 loading */
+const listLoading = ref(false)
+/** 左侧 a-tree 数据（懒加载仅已展开路径；低于阈值时为全量树） */
+const entityTreeData = ref<TaktLazyTreeNode[]>([])
+/** 右侧树表数据源（带 children / _hasChildren，组件内拍平 virtual） */
+const tableTreeData = ref<Record<string, unknown>[]>([])
 /** 左侧树当前选中的节点 key 列表 */
 const selectedTreeKeys = ref<(string | number)[]>([])
 /** 工具栏单选时当前行（编辑/删除） */
@@ -492,6 +519,8 @@ const formData = ref<Partial<CostCenter> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -509,9 +538,6 @@ function hasAnyListQueryFilter(): boolean {
     if (String(form[key] ?? '').trim().length > 0) {
       return true
     }
-  }
-  if (form.costCenterType !== undefined && form.costCenterType !== null) {
-    return true
   }
   if (form.costCenterLevel !== undefined && form.costCenterLevel !== null) {
     return true
@@ -533,7 +559,6 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    costCenterType: undefined as string | undefined,
     costCenterLevel: undefined as number | undefined,
     costCenterStatus: undefined as number | undefined,  }
 }
@@ -559,123 +584,6 @@ const treeTitleField = 'costCenterName'
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-/**
- * 将接口树转为树表节点（保留 children，供 getSubtree 与左侧树共用 key）
- * @param nodes 实体树 DTO 列表
- */
-function costCenterTreeToTableNodes(nodes: CostCenterTree[]): Array<Record<string, unknown>> {
-  if (!nodes?.length) return []
-  return nodes.map((node) => {
-    const childNodes = node.children?.length ? costCenterTreeToTableNodes(node.children) : []
-    return {
-      ...node,
-      key: String(node.costCenterId ?? ''),
-      children: childNodes.length > 0 ? childNodes : undefined,
-    }
-  })
-}
-
-/** 解析树节点 key（与列表 costCenterId、左侧树 key 一致） */
-function resolveCostCenterNodeKey(node: Record<string, unknown>): string {
-  const raw = node.key ?? node.costCenterId ?? node.id
-  return raw == null ? '' : String(raw)
-}
-
-/** 将 fullTableTree 转为左侧 a-tree（与右侧表共用 key，保证点选联动） */
-function mapFullTableTreeToTreeData(nodes: Array<Record<string, unknown>>): TreeDataItem[] {
-  if (!nodes?.length) return []
-  return nodes.map((n) => {
-    const title = String(n[treeTitleField] ?? n.title ?? '')
-    const key = resolveCostCenterNodeKey(n)
-    const children = n.children as Array<Record<string, unknown>> | undefined
-    if (!children?.length) return { title, key }
-    const mapped = mapFullTableTreeToTreeData(children)
-    return mapped.length > 0 ? { title, key, children: mapped } : { title, key }
-  })
-}
-
-/**
- * 按 key 查找树节点（左侧树与右侧表共用 fullTableTree）
- * @param nodes 树节点列表
- * @param key 节点 key
- */
-function findTreeNodeByKey(
-  nodes: Array<Record<string, unknown>>,
-  key: string | number,
-): Record<string, unknown> | null {
-  const k = String(key)
-  for (const node of nodes) {
-    if (resolveCostCenterNodeKey(node) === k) return node
-    const children = node.children as Array<Record<string, unknown>> | undefined
-    if (children?.length) {
-      const found = findTreeNodeByKey(children, key)
-      if (found) return found
-    }
-  }
-  return null
-}
-
-/** 从树中取以某 key 为根的子树（返回单元素数组，便于作为表格根） */
-function getSubtree(nodes: Array<Record<string, unknown>>, key: string | number): Array<Record<string, unknown>> {
-  const node = findTreeNodeByKey(nodes, key)
-  return node ? [node] : []
-}
-
-/**
- * 按关键字过滤左侧树：保留 title 匹配的节点及其祖先、子孙
- * @param nodes 树节点
- * @param keyword 关键字
- */
-function filterTreeByKeyword(nodes: TreeDataItem[], keyword: string): TreeDataItem[] {
-  const k = (keyword ?? '').trim().toLowerCase()
-  if (!k) return nodes
-  /** 递归过滤子树 */
-  function filter(list: TreeDataItem[]): TreeDataItem[] {
-    if (!list?.length) return []
-    return list
-      .map((node) => {
-        const title = String(node.title ?? '').toLowerCase()
-        const matched = title.includes(k)
-        const filteredChildren = node.children?.length ? filter(node.children) : undefined
-        const hasMatchInChildren = filteredChildren != null && filteredChildren.length > 0
-        if (matched || hasMatchInChildren) {
-          if (filteredChildren != null && filteredChildren.length > 0) {
-            return { ...node, children: filteredChildren } as TreeDataItem
-          }
-          const { children: _omitChildren, ...rest } = node
-          return rest as TreeDataItem
-        }
-        return null
-      })
-      .filter(Boolean) as TreeDataItem[]
-  }
-  return filter(nodes)
-}
-
-/** 左侧树绑定数据（按 treeQueryKeyword 客户端过滤） */
-const filteredTreeData = computed(() =>
-  filterTreeByKeyword(entityTreeData.value, treeQueryKeyword.value)
-)
-
-/** 从树数据中收集所有有子节点的 key（用于左侧树展开全部） */
-function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
-  return collectTaktTreeTableExpandableKeys(nodes, (node) => taktTreeTableNodeKey(node, 'costCenterId'))
-}
-
-/** 右侧树表数据：选中左侧节点时显示该节点（含子级）；未选中时显示整棵树 */
-const tableTreeData = computed(() => {
-  const tree = fullTableTree.value
-  if (!tree?.length) return []
-  const keys = selectedTreeKeys.value
-  if (keys.length > 0) {
-    const activeKey = keys[keys.length - 1]
-    if (activeKey === undefined) return tree
-    const sub = getSubtree(tree, activeKey)
-    if (sub.length > 0) return sub
-  }
-  return tree
-})
-
 /** 右侧查询条件过滤（仅影响表格展示，不重建左侧树） */
 function matchesCostCenterRightQuery(record: Record<string, unknown>): boolean {
   const kw = queryKeyword.value.trim()
@@ -683,10 +591,12 @@ function matchesCostCenterRightQuery(record: Record<string, unknown>): boolean {
     const k = kw.toLowerCase()
     if (!String(record.costCenterName ?? '').toLowerCase().includes(k) && !String(record.costCenterCode ?? '').toLowerCase().includes(k)) return false
   }
+  if (advancedQueryForm.value.cultureCode && !String(record.cultureCode ?? '').includes(String(advancedQueryForm.value.cultureCode))) return false
+  if (advancedQueryForm.value.plantCode && !String(record.plantCode ?? '').includes(String(advancedQueryForm.value.plantCode))) return false
   if (advancedQueryForm.value.costCenterCode && !String(record.costCenterCode ?? '').includes(String(advancedQueryForm.value.costCenterCode))) return false
   if (advancedQueryForm.value.costCenterName && !String(record.costCenterName ?? '').includes(String(advancedQueryForm.value.costCenterName))) return false
   if (advancedQueryForm.value.parentId && !String(record.parentId ?? '').includes(String(advancedQueryForm.value.parentId))) return false
-  if (advancedQueryForm.value.costCenterType !== undefined && record.costCenterType !== advancedQueryForm.value.costCenterType) return false
+  if (advancedQueryForm.value.costCenterType && !String(record.costCenterType ?? '').includes(String(advancedQueryForm.value.costCenterType))) return false
   if (advancedQueryForm.value.managerId && !String(record.managerId ?? '').includes(String(advancedQueryForm.value.managerId))) return false
   if (advancedQueryForm.value.managerName && !String(record.managerName ?? '').includes(String(advancedQueryForm.value.managerName))) return false
   if (advancedQueryForm.value.deptId && !String(record.deptId ?? '').includes(String(advancedQueryForm.value.deptId))) return false
@@ -696,7 +606,6 @@ function matchesCostCenterRightQuery(record: Record<string, unknown>): boolean {
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
   if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
-  if (advancedQueryForm.value.plantCode && !String(record.plantCode ?? '').includes(String(advancedQueryForm.value.plantCode))) return false
   if (advancedQueryForm.value.costCenterStatus !== undefined && record.costCenterStatus !== advancedQueryForm.value.costCenterStatus) return false
   if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
   if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
@@ -705,32 +614,309 @@ function matchesCostCenterRightQuery(record: Record<string, unknown>): boolean {
   return true
 }
 
-/** 右侧过滤后的树（保留 children，供组件按展开路径拍平） */
-const tableFilteredTree = computed(() =>
-  filterTaktTreeTableNodes(tableTreeData.value, matchesCostCenterRightQuery)
+/**
+ * 将树 API 一层 DTO 映射为左侧懒加载节点
+ * @param rows 一层子节点
+ */
+function mapCostCenterLazyNodes(rows: CostCenterTree[]): TaktLazyTreeNode[] {
+  return mapLazyTreeNodes(rows, {
+    getKey: (n) => String(n.costCenterId ?? ''),
+    getTitle: (n) => String(n.costCenterName || n.costCenterCode || n.costCenterId || ''),
+    isLeaf: (n) => taktIsLeafFlag((n as { isLeaf?: unknown }).isLeaf),
+  })
+}
+
+/**
+ * 将一层 DTO 映射为右侧树表节点（未加载子级用 _hasChildren 显示展开箭头）
+ * @param rows 一层子节点
+ */
+function mapCostCenterRightTreeNodes(rows: CostCenterTree[]): Record<string, unknown>[] {
+  return (rows ?? []).map((row) => {
+    const rec = row as Record<string, unknown>
+    const id = String(rec.costCenterId ?? '')
+    const rawChildren = Array.isArray(rec.children) ? rec.children as CostCenterTree[] : []
+    const children = rawChildren.length > 0 ? mapCostCenterRightTreeNodes(rawChildren) : undefined
+    return {
+      ...rec,
+      key: id,
+      children,
+      _hasChildren: (children != null && children.length > 0) || !taktIsLeafFlag(rec.isLeaf),
+    }
+  })
+}
+
+/**
+ * 按关键字过滤左侧树：仅过滤已加载节点（大规模树不做全量搜索）
+ * @param nodes 树节点
+ * @param keyword 关键字
+ */
+function filterTreeByKeyword(nodes: TaktLazyTreeNode[], keyword: string): TaktLazyTreeNode[] {
+  const k = (keyword ?? '').trim().toLowerCase()
+  if (!k) return nodes
+  /** 递归过滤子树 */
+  function filter(list: TaktLazyTreeNode[]): TaktLazyTreeNode[] {
+    if (!list?.length) return []
+    return list
+      .map((node) => {
+        const title = String(node.title ?? '').toLowerCase()
+        const matched = title.includes(k)
+        const filteredChildren = node.children?.length ? filter(node.children as TaktLazyTreeNode[]) : undefined
+        const hasMatchInChildren = filteredChildren != null && filteredChildren.length > 0
+        if (matched || hasMatchInChildren) {
+          if (filteredChildren != null && filteredChildren.length > 0) {
+            return { ...node, children: filteredChildren }
+          }
+          const { children: _omitChildren, ...rest } = node
+          return rest as TaktLazyTreeNode
+        }
+        return null
+      })
+      .filter(Boolean) as TaktLazyTreeNode[]
+  }
+  return filter(nodes)
+}
+
+/** 左侧树绑定数据（按 treeQueryKeyword 客户端过滤已加载节点） */
+const filteredTreeData = computed(() =>
+  filterTreeByKeyword(entityTreeData.value, treeQueryKeyword.value)
 )
 
 /**
- * 同步右侧树表全部展开/收缩
- * @returns {void}
+ * 收集左侧可展开 key（含尚未拉子的非叶子，供工具栏一次展开逐层 loadData）
+ * @param nodes 树节点
  */
-function applyCostCenterTableExpandState() {
-  tableExpandedRowKeys.value = tableExpanded.value
-    ? collectTaktTreeTableExpandableKeys(tableFilteredTree.value, (node) =>
-        taktTreeTableNodeKey(node, 'costCenterId'),
-      )
-    : []
+function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
+  return collectTaktTreeTableExpandableKeys(
+    nodes,
+    (node) => taktTreeTableNodeKey(node, 'costCenterId'),
+    { includeUnloaded: true },
+  )
 }
 
-watch(tableExpanded, applyCostCenterTableExpandState)
-watch(tableFilteredTree, () => {
-  if (tableExpanded.value) applyCostCenterTableExpandState()
+/**
+ * 展开态下把「当前树中全部可展开节点」写入 expandedKeys（子节点 load 完后会再触发，直至拉齐）
+ */
+function applyLeftTreeExpandKeys() {
+  const next = collectTreeExpandableKeys(filteredTreeData.value)
+  if (taktTreeExpandedKeysEqual(treeExpandedKeys.value, next)) return
+  treeExpandedKeys.value = next
+}
+
+/**
+ * 当前左侧选中节点 Id；未选中返回 null（右表必须为空）
+ * @returns {string | null} 选中节点 Id
+ */
+function getSelectedTreeNodeId(): string | null {
+  const keys = selectedTreeKeys.value
+  if (keys.length > 0 && keys[keys.length - 1] != null) {
+    return String(keys[keys.length - 1])
+  }
+  return null
+}
+
+/** 从树 API 响应中取出一层节点 */
+function unwrapCostCenterTree(res: unknown): CostCenterTree[] {
+  const resAny = res as { data?: CostCenterTree[]; Data?: CostCenterTree[] }
+  if (Array.isArray(res)) return res as CostCenterTree[]
+  return resAny?.data ?? resAny?.Data ?? []
+}
+
+/**
+ * 加载右侧树：仅 tree API；未选中则空；选中则该节点 + 直接子级一层（更深靠展开懒加载）
+ */
+async function loadRightTree() {
+  const selectedId = getSelectedTreeNodeId()
+  if (!selectedId) {
+    tableTreeData.value = []
+    tableExpandedRowKeys.value = []
+    tableExpanded.value = false
+    return
+  }
+  listLoading.value = true
+  try {
+    const detail = await getCostCenterById(selectedId) as Record<string, unknown>
+    const childRows = unwrapCostCenterTree(await getCostCenterTree(selectedId, true))
+    const mappedChildren = mapCostCenterRightTreeNodes(childRows)
+    const children = mappedChildren.length > 0 ? mappedChildren : undefined
+    const root: Record<string, unknown> = {
+      ...detail,
+      key: selectedId,
+      children,
+      _hasChildren: (children?.length ?? 0) > 0 || !taktIsLeafFlag(detail.isLeaf),
+    }
+    tableTreeData.value = [root]
+    // 选中仅加载一层：取消「全部展开」任务；不触发全量子树请求（更深靠行内懒加载 / 工具栏）
+    rightExpandEpoch += 1
+    if (tableExpanded.value) {
+      tableExpanded.value = false
+      await nextTick()
+    }
+    tableExpandedRowKeys.value =
+      (children?.length ?? 0) > 0 || root._hasChildren === true ? [selectedId] : []
+  } catch (error: unknown) {
+    logger.error('[CostCenter] 加载右侧树失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
+    tableTreeData.value = []
+  } finally {
+    listLoading.value = false
+  }
+}
+
+/**
+ * 按父级 Id 拉取并合并右侧一层子节点
+ * @param parentId 父节点 Id
+ */
+async function loadRightChildrenByParentId(parentId: string) {
+  if (!parentId) return
+  const trees = unwrapCostCenterTree(await getCostCenterTree(parentId, true))
+  const children = mapCostCenterRightTreeNodes(trees)
+  tableTreeData.value = mergeLoadedChildren(
+    tableTreeData.value as TaktLazyTreeNode[],
+    parentId,
+    children as TaktLazyTreeNode[],
+    { keyField: 'costCenterId' },
+  )
+}
+
+/**
+ * 右侧树展开：再拉一层子节点（懒加载，并发受限）
+ * @param record 当前行
+ */
+async function handleRightTreeLoadChildren(record: Record<string, unknown>) {
+  const id = getCostCenterId(record)
+  if (!id) return
+  await runWithTaktTreeLoadConcurrency(async () => {
+    await loadRightChildrenByParentId(id)
+  })
+}
+
+/**
+ * 加载左侧树根节点（仅 GET tree?parentId=0，一层）
+ */
+async function reloadLeftTreeRoots() {
+  const trees = unwrapCostCenterTree(await getCostCenterTree('0', true))
+  entityTreeData.value = mapCostCenterLazyNodes(trees)
+  treeExpandedKeys.value = []
+  treeExpanded.value = false
+}
+
+/**
+ * 重新加载指定父节点下已展开的子节点（CRUD 后局部刷新）
+ * @param parentKey 父节点 key
+ */
+async function reloadLeftTreeChildren(parentKey: string) {
+  if (!parentKey || parentKey === '0') {
+    await reloadLeftTreeRoots()
+    return
+  }
+  const trees = unwrapCostCenterTree(await getCostCenterTree(parentKey, true))
+  const children = mapCostCenterLazyNodes(trees)
+  entityTreeData.value = mergeLoadedChildren(
+    entityTreeData.value,
+    parentKey,
+    children,
+  ) as TaktLazyTreeNode[]
+}
+
+/**
+ * 按父级 Id 拉取并合并左侧一层子节点
+ * @param parentId 父节点 Id
+ * @returns {Promise<TaktLazyTreeNode[]>} 子节点
+ */
+async function loadLeftChildrenByParentId(parentId: string): Promise<TaktLazyTreeNode[]> {
+  if (!parentId) return []
+  const trees = unwrapCostCenterTree(await getCostCenterTree(parentId, true))
+  const children = mapCostCenterLazyNodes(trees)
+  entityTreeData.value = mergeLoadedChildren(
+    entityTreeData.value,
+    parentId,
+    children,
+  ) as TaktLazyTreeNode[]
+  return children
+}
+
+/**
+ * 左侧树懒加载子节点（Ant Design loadData；并发受限）
+ * @param treeNode Ant Design Tree 节点
+ */
+async function handleLeftTreeLoadData(treeNode: Record<string, unknown>) {
+  const dataRef = (treeNode.dataRef ?? treeNode) as Record<string, unknown>
+  const key = dataRef.key ?? treeNode.key
+  if (key == null) return
+  if (Array.isArray(dataRef.children) && dataRef.children.length > 0) return
+  await runWithTaktTreeLoadConcurrency(async () => {
+    dataRef.children = await loadLeftChildrenByParentId(String(key))
+  })
+}
+
+/** 右侧展示树：未选中为空；选中后为该节点+直接子级（仅 tree API） */
+const tableDisplayTree = computed(() => {
+  if (!getSelectedTreeNodeId()) return []
+  return tableTreeData.value
 })
 
-/** 左侧树选中：过滤右侧子树 */
-const handleTreeSelect = (selectedKeys: (string | number)[]) => {
-  selectedTreeKeys.value = selectedKeys
+/** 右侧过滤后的树（保留 children，供组件按展开路径拍平） */
+const tableFilteredTree = computed(() =>
+  filterTaktTreeTableNodes(tableDisplayTree.value, matchesCostCenterRightQuery)
+)
+
+/**
+ * 同步右侧树表 expandable keys（展开态；含未加载非叶子）
+ */
+function applyCostCenterTableExpandState() {
+  if (!tableExpanded.value) {
+    tableExpandedRowKeys.value = []
+    return
+  }
+  const next = collectTaktTreeTableExpandableKeys(
+    tableFilteredTree.value,
+    (node) => taktTreeTableNodeKey(node, 'costCenterId'),
+    { includeUnloaded: true },
+  )
+  if (!taktTreeExpandedKeysEqual(tableExpandedRowKeys.value, next)) {
+    tableExpandedRowKeys.value = next
+  }
 }
+
+/** 右侧工具栏展开任务世代 */
+let rightExpandEpoch = 0
+
+/**
+ * 右侧一次全部展开：仅工具栏触发；按层拉齐当前右表子树（选中节点不会自动走此路径）
+ */
+async function expandRightTreeFully() {
+  const epoch = (rightExpandEpoch += 1)
+  await expandTaktLazyTreeFully({
+    getNodes: () => tableFilteredTree.value as TaktTreeTableNode[],
+    getKey: (node) => taktTreeTableNodeKey(node, 'costCenterId'),
+    setExpandedKeys: (keys) => {
+      if (epoch !== rightExpandEpoch) return
+      if (!taktTreeExpandedKeysEqual(tableExpandedRowKeys.value, keys)) {
+        tableExpandedRowKeys.value = keys
+      }
+    },
+    loadChildren: async (parentId) => {
+      await loadRightChildrenByParentId(parentId)
+    },
+    isActive: () => tableExpanded.value && epoch === rightExpandEpoch,
+  })
+}
+
+/** 右侧工具栏展开/收缩：展开才全量拉齐；选中节点不经过此 watch */
+watch(tableExpanded, async (expanded) => {
+  if (!expanded) {
+    rightExpandEpoch += 1
+    tableExpandedRowKeys.value = []
+    return
+  }
+  await expandRightTreeFully()
+})
+
+watch(tableFilteredTree, () => {
+  if (tableExpanded.value) {
+    applyCostCenterTableExpandState()
+  }
+})
 
 /**
  * 将详情 DTO 映射为更新载荷（树拖拽改 parentId/sortOrder 等场景）
@@ -747,6 +933,8 @@ function buildCostCenterUpdateDto(
     tenantCode: costCenter.tenantCode,
     companyCode: costCenter.companyCode,
     cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+    plantCode: costCenter.plantCode,
+    costCenterCode: costCenter.costCenterCode,
     costCenterName: costCenter.costCenterName,
     parentId: overrides.parentId,
     costCenterType: costCenter.costCenterType,
@@ -757,7 +945,6 @@ function buildCostCenterUpdateDto(
     costCenterLevel: costCenter.costCenterLevel,
     validFrom: costCenter.validFrom,
     validTo: costCenter.validTo,
-    plantCode: costCenter.plantCode,
     costCenterStatus: costCenter.costCenterStatus,
     extField: costCenter.extField,
     remark: costCenter.remark,
@@ -796,7 +983,7 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
   if (!pos) return
   try {
     loading.value = true
-    entityTreeData.value = newTreeData as TreeDataItem[]
+    entityTreeData.value = newTreeData as TaktLazyTreeNode[]
     const full = await getCostCenterById(String(dragKey))
     await updateCostCenter(String(dragKey), buildCostCenterUpdateDto(full, {
       parentId: pos.parentId,
@@ -807,34 +994,60 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
     await loadData()
   } catch (error: unknown) {
     message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: pi.self() })))
-    await loadFullCostCenterTree().catch(() => undefined)
+    await reloadLeftTreeRoots().catch(() => undefined)
   } finally {
     loading.value = false
   }
 }
 
-/** 左侧树关键字搜索（客户端过滤，不重复请求接口） */
+/** 左侧工具栏展开任务世代（收缩或再次展开时作废上一次全量展开） */
+let leftExpandEpoch = 0
+
+/** 左侧树关键字搜索（仅过滤已加载节点） */
 const handleTreeQuerySearch = () => {
   if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
+    applyLeftTreeExpandKeys()
   }
 }
 
-/** 左侧展开/收缩：工具栏展开状态与树展开 key 联动 */
-watch(treeExpanded, (expanded) => {
-  if (expanded) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
-  } else {
+/** 左侧工具栏展开/收缩：一次展开主动按层拉齐全部非叶子（不再依赖多次点击） */
+watch(treeExpanded, async (expanded) => {
+  if (!expanded) {
+    leftExpandEpoch += 1
     treeExpandedKeys.value = []
+    return
+  }
+  const epoch = (leftExpandEpoch += 1)
+  await nextTick()
+  if (epoch !== leftExpandEpoch || !treeExpanded.value) return
+  await expandTaktLazyTreeFully({
+    getNodes: () => filteredTreeData.value as TaktTreeTableNode[],
+    getKey: (node) => taktTreeTableNodeKey(node, 'costCenterId'),
+    setExpandedKeys: (keys) => {
+      if (epoch !== leftExpandEpoch) return
+      if (!taktTreeExpandedKeysEqual(treeExpandedKeys.value, keys)) {
+        treeExpandedKeys.value = keys
+      }
+    },
+    loadChildren: async (parentId) => {
+      await loadLeftChildrenByParentId(parentId)
+    },
+    isActive: () => treeExpanded.value && epoch === leftExpandEpoch,
+  })
+})
+
+/** 三角展开 loadData 后：若工具栏仍为展开态，补齐 expandable keys */
+watch(filteredTreeData, () => {
+  if (treeExpanded.value) {
+    applyLeftTreeExpandKeys()
   }
 })
 
-/** 过滤后的左侧树变化且处于展开态时，同步 expandable keys */
-watch(filteredTreeData, () => {
-  if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
-  }
-})
+/** 左侧树选中：右表展示该节点+直接子级；取消选中则右表清空 */
+const handleTreeSelect = (selectedKeys: (string | number)[]) => {
+  selectedTreeKeys.value = selectedKeys
+  void loadRightTree()
+}
 
 /** 表格行记录（实体 DTO 或 ant-design-vue 模板 loose record） */
 type CostCenterRowRecord = CostCenter | Record<string, unknown>
@@ -1040,38 +1253,47 @@ const rowSelection = computed(() => ({
   },
 }))
 
-/** 加载全量树（左侧树 + 右侧树表共用数据源） */
-async function loadFullCostCenterTree() {
-  const res = await getCostCenterTree('0', true)
-  const resAny = res as { data?: CostCenterTree[]; Data?: CostCenterTree[] }
-  const trees: CostCenterTree[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
-  const tableNodes = costCenterTreeToTableNodes(trees)
-  fullTableTree.value = tableNodes
-  entityTreeData.value = mapFullTableTreeToTreeData(tableNodes)
-  if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
-  }
-}
-
-/** 初始化或增删改后刷新全量树 */
+/** 加载左树：仅 GET …/tree?parentId=0；默认不选中、右表为空（禁止走 list） */
 async function loadData() {
   loading.value = true
   try {
-    await loadFullCostCenterTree()
+    useLazyTree.value = true
+    selectedTreeKeys.value = []
+    tableTreeData.value = []
+    tableExpandedRowKeys.value = []
+    tableExpanded.value = false
+    await reloadLeftTreeRoots()
   } catch (error: unknown) {
     logger.error('[CostCenter] 加载树数据失败', undefined, error)
     message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
-    fullTableTree.value = []
     entityTreeData.value = []
+    tableTreeData.value = []
   } finally {
     loading.value = false
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
+/**
+ * CRUD / 状态变更后：刷新左树当前层 + 按选中重载右表（仅 tree）
+ */
+async function refreshAfterMutation() {
+  loading.value = true
+  try {
+    const selectedId = getSelectedTreeNodeId()
+    await reloadLeftTreeChildren(selectedId ?? '0')
+    await loadRightTree()
+  } catch (error: unknown) {
+    logger.error('[CostCenter] 刷新失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 右侧查询（客户端过滤已加载树节点） */
 const handleSearch = () => {}
 
-/** 右侧重置（不影响左侧树与 fullTableTree） */
+/** 右侧重置（客户端过滤，不重建树） */
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
@@ -1146,7 +1368,7 @@ async function handleFormSubmit() {
     formVisible.value = false
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
-    await loadData()
+    await refreshAfterMutation()
   } finally {
     formLoading.value = false
   }
@@ -1169,7 +1391,7 @@ async function handleDeleteOne(record: CostCenterRowRecord) {
     onOk: async () => {
       await deleteCostCenterById((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
+      await refreshAfterMutation()
     }
   })
 }
@@ -1189,7 +1411,7 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteCostCenterBatch(ids)
       message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
+      await refreshAfterMutation()
     }
   })
 }
@@ -1214,7 +1436,7 @@ async function handleImportFile(file: File, sheetName?: string): Promise<TaktImp
 
 /** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
 function handleImportSuccess(result: TaktImportResult) {
-  void loadData()
+  void refreshAfterMutation()
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
   }
@@ -1262,7 +1484,7 @@ function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
-/** 高级查询提交：关闭抽屉（过滤为 computed，无需重新请求） */
+/** 高级查询提交：关闭抽屉，客户端过滤右侧树 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
 }
@@ -1297,7 +1519,7 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载：加载字典与全量树 */
+/** 页面挂载：仅拉左树根（tree API）；右表待选中 */
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
   void loadData()
@@ -1311,28 +1533,21 @@ useTableRefresh(loadData)
   display: flex;
   flex-direction: column;
   min-height: 0;
-  height: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
 }
 .accounting-controlling-cost-center-query-row {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
-  flex-shrink: 0;
 }
 .accounting-controlling-cost-center-toolbar-row {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
-  flex-shrink: 0;
 }
 .accounting-controlling-cost-center-tree-table-wrap {
   display: flex;
   flex: 1;
   min-height: 0;
   gap: 8px;
-  overflow: hidden;
-  align-items: stretch;
 }
 </style>

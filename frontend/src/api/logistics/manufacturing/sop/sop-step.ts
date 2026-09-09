@@ -116,10 +116,20 @@ export function deleteSopStepBatch(ids: string[]): Promise<void> {
  * 获取SOP工步选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSopStepOptions(): Promise<TaktSelectOption[]> {
+export function getSopStepOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOP_STEP_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

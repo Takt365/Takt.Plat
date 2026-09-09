@@ -86,11 +86,11 @@ public class TaktCustomerComplaintHandlingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:complaint:customer:handling:query", "客诉处理记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCustomerComplaintHandlingOptionsAsync()
+    public async Task<IActionResult> GetCustomerComplaintHandlingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _customerComplaintHandlingService.GetCustomerComplaintHandlingOptionsAsync();
+            var result = await _customerComplaintHandlingService.GetCustomerComplaintHandlingOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

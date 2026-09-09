@@ -1,4 +1,4 @@
-﻿<!-- ========================================
+<!-- ========================================
 项目名称：节拍工厂·Takt Plat
 命名空间：@/layouts/top
 文件名称：index.vue
@@ -30,9 +30,11 @@
           <span class="title-text">{{ settingSafe.logoText }}</span>
         </div>
         <TaktTopMenu />
+        <TaktBreadcrumb />
       </template>
     </TaktHeader>
     <div 
+      v-if="settingSafe.showTabs"
       :style="settingSafe.fixedHeader ? {
         position: 'fixed',
         top: `${headerHeight}px`,
@@ -48,7 +50,7 @@
     <a-layout-content 
       :class="['layout-content', `content-width-${settingSafe.contentWidth}`]"
       :style="{
-        marginTop: settingSafe.fixedHeader ? `${headerHeight + 40}px` : '40px',
+        marginTop: settingSafe.fixedHeader ? `${headerHeight + tabsBarHeight}px` : `${tabsBarHeight}px`,
         marginBottom: '2px',
         maxWidth: settingSafe.contentWidth === 'fixed' ? '1200px' : 'none',
         marginLeft: settingSafe.contentWidth === 'fixed' ? 'auto' : '0',
@@ -83,6 +85,8 @@ onMounted(async () => {
   }
 })
 const settingSafe = computed(() => setting.value ?? defaultSetting)
+/** 标签栏占位高度（关闭「显示标签页」时为 0） */
+const tabsBarHeight = computed(() => (settingSafe.value.showTabs ? 40 : 0))
 const logoError = ref(false)
 
 const logoUrl = computed(() => {
@@ -107,10 +111,11 @@ const headerHeight = computed(() => {
 })
 
 const contentMaxHeight = computed(() => {
+  const footerAndGap = 44
   if (settingSafe.value.fixedHeader) {
-    return `calc(100vh - ${headerHeight.value}px - 84px)`
+    return `calc(100vh - ${headerHeight.value}px - ${tabsBarHeight.value}px - ${footerAndGap}px)`
   }
-  return 'calc(100vh - 84px)'
+  return `calc(100vh - ${tabsBarHeight.value}px - ${footerAndGap}px)`
 })
 </script>
 

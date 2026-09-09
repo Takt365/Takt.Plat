@@ -103,8 +103,10 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     /// <summary>
     /// 获取设变明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcDetailOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcDetailOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ecDetailRepository.GetListAsync(
@@ -130,18 +132,22 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         await StampEcDetailEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDetailRepository,
-            x => x.EcId == entity.EcId
+            x => x.EcGijutsuId == entity.EcGijutsuId
+                && x.EcFinishedGoods == entity.EcFinishedGoods
                 && x.LineNumber == entity.LineNumber);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
         {
-            throw new TaktBusinessException("设变明细的EcId、LineNumber已存在");
+            throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _ecDetailRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.EcGijutsuId == entity.EcGijutsuId
+                    && x.EcFinishedGoods == entity.EcFinishedGoods,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecDetailRepository.CreateAsync(entity);
@@ -186,12 +192,13 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         await StampEcDetailEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDetailRepository,
-            x => x.EcId == entity.EcId
+            x => x.EcGijutsuId == entity.EcGijutsuId
+                && x.EcFinishedGoods == entity.EcFinishedGoods
                 && x.LineNumber == entity.LineNumber,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
         {
-            throw new TaktBusinessException("设变明细的EcId、LineNumber已存在");
+            throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
         }
         await _ecDetailRepository.UpdateAsync(entity);
         return await GetEcDetailByIdAsync(id) ?? throw new TaktBusinessException("设变明细不存在");
@@ -298,25 +305,29 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 var entity = rows[i].Adapt<TaktEcDetail>();
                 var importDto = rows[i].Adapt<TaktEcDetailCreateDto>();
                 await StampEcDetailEcGijutsuAsync(entity, importDto);
-                var importKey = $"{entity.EcId}|{entity.LineNumber}";
+                var importKey = $"{entity.EcGijutsuId}|{entity.EcFinishedGoods}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcGijutsuId、EcFinishedGoods、LineNumber）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecDetailRepository,
-                    x => x.EcId == entity.EcId
+                    x => x.EcGijutsuId == entity.EcGijutsuId
+                        && x.EcFinishedGoods == entity.EcFinishedGoods
                         && x.LineNumber == entity.LineNumber);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
                 {
-                    throw new TaktBusinessException("设变明细的EcId、LineNumber已存在");
+                    throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _ecDetailRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
+                        x => x.TenantCode == CurrentTenantCode
+                            && x.CompanyCode == CurrentCompanyCode
+                            && x.EcGijutsuId == entity.EcGijutsuId
+                            && x.EcFinishedGoods == entity.EcFinishedGoods,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecDetailRepository.CreateAsync(entity);
@@ -376,16 +387,16 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     /// <returns>任务</returns>
     private async Task StampEcDetailEcGijutsuAsync(TaktEcDetail entity, TaktEcDetailCreateDto dto)
     {
-        if (dto.EcId <= 0)
+        if (dto.EcGijutsuId <= 0)
         {
             return;
         }
-        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcGijutsuId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
         }
-        entity.EcId = master.Id;
+        entity.EcGijutsuId = master.Id;
         if (string.IsNullOrEmpty(entity.TenantCode))
         {
             entity.TenantCode = master.TenantCode;
@@ -402,10 +413,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             entity.PlantCode = master.PlantCode;
         }
-        if (string.IsNullOrEmpty(entity.EcCode))
-        {
-            entity.EcCode = master.EcCode;
-        }
+        // 冗余：始终由主表带入，禁止客户端默认值
+        entity.EcCode = master.EcCode;
+        entity.EcDistinction = master.EcDistinction;
     }
     // ========================================
     // 查询表达式
@@ -471,10 +481,10 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (queryDto?.EcId.HasValue == true)
+        if (queryDto?.EcGijutsuId.HasValue == true)
         {
-            var ecId = queryDto.EcId.Value;
-            exp = exp.And(x => x.EcId == ecId);
+            var ecGijutsuId = queryDto.EcGijutsuId.Value;
+            exp = exp.And(x => x.EcGijutsuId == ecGijutsuId);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EcCode))
@@ -713,7 +723,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             return true;
         }
-        if (queryDto.EcId.HasValue)
+        if (queryDto.EcGijutsuId.HasValue)
         {
             return true;
         }

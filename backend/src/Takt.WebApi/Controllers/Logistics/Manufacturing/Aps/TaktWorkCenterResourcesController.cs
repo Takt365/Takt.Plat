@@ -86,11 +86,11 @@ public class TaktWorkCenterResourcesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:aps:work:center:query", "工作中心资源选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetWorkCenterResourceOptionsAsync()
+    public async Task<IActionResult> GetWorkCenterResourceOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _workCenterResourceService.GetWorkCenterResourceOptionsAsync();
+            var result = await _workCenterResourceService.GetWorkCenterResourceOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -159,18 +159,6 @@ public class TaktPurchaseInvoice : TaktCompanyEntityBase
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者（选项 TaktEmployees/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "entered_by_employee_id", ColumnDescription = "输入者员工ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EnteredByEmployeeId { get; set; }
-    /// <summary>
-    /// 输入者名称（冗余：按 EnteredByEmployeeId 取 TaktEmployee.EmployeeName 联动）
-    /// </summary>
-    [SugarColumn(ColumnName = "entered_by_employee_name", ColumnDescription = "输入者名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? EnteredByEmployeeName { get; set; }
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     [SugarColumn(ColumnName = "exchange_rate_date", ColumnDescription = "换算日期", ColumnDataType = "datetime", IsNullable = true)]
@@ -183,16 +171,10 @@ public class TaktPurchaseInvoice : TaktCompanyEntityBase
     public string? TransactionCode { get; set; }
 
     /// <summary>
-    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PostedByEmployeeId { get; set; }
-    /// <summary>
-    /// 过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
-    /// </summary>
-    [SugarColumn(ColumnName = "posted_by_employee_name", ColumnDescription = "过账人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? PostedByEmployeeName { get; set; }
+    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "过账人", ColumnDataType = "nvarchar", Length = 6, IsNullable = true)]
+    public string? PostedBy { get; set; }
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktAssetDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-30
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Asset 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAsset 生成，请按需审阅）
 // 
@@ -53,7 +53,7 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string AssetType { get; set; } = "NORM";
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -79,7 +79,7 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本中心名称（冗余：按 CostCenterId 取 TaktCostCenter.CostCenterName 联动）
     /// </summary>
-    public string? CostCenterName { get; set; }
+    public string? CostCenterName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门（选项 TaktDepts/tree-options；DictValue=Id）
@@ -90,7 +90,7 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 部门名称（冗余：按 DeptId 取 TaktDept.DeptName1 联动）
     /// </summary>
-    public string? DeptName { get; set; }
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 使用者（选项 TaktUsers/options；DictValue=Id）
@@ -101,12 +101,12 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 使用者名称（冗余：按 UserId 取 TaktUser.UserName 联动）
     /// </summary>
-    public string? UserName { get; set; }
+    public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产位置
     /// </summary>
-    public string? AssetLocation { get; set; }
+    public string? AssetLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 购买日期
@@ -131,12 +131,12 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 预计使用月数
     /// </summary>
-    public int ExpectedLifeMonths { get; set; }
+    public int ExpectedLifeMonths { get; set; } = 0;
 
     /// <summary>
     /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
-    public int DepreciationMethod { get; set; }
+    public int DepreciationMethod { get; set; } = 0;
 
     /// <summary>
     /// 每月折旧金额
@@ -146,7 +146,8 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// <summary>
     /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    public int AssetStatus { get; set; } = 1;
+    public int AssetStatus { get; set; } = 0;
+
 }
 
 // ========================================
@@ -165,7 +166,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -173,6 +174,11 @@ public class TaktAssetQueryDto : TaktPagedQuery
     /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产代码
@@ -187,12 +193,12 @@ public class TaktAssetQueryDto : TaktPagedQuery
     /// <summary>
     /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
-    public string? AssetCategory { get; set; }
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_financial_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -293,7 +299,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_financial_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -303,12 +309,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     public decimal? MonthlyDepreciation { get; set; }
 
     /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
     public int? AssetStatus { get; set; }
 
@@ -357,6 +358,10 @@ public class TaktAssetCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产代码
@@ -373,12 +378,14 @@ public class TaktAssetCreateDto
     /// <summary>
     /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
+    [Required(ErrorMessage = "资产分类（字典 accounting_financial_asset_category）不能为空")]
     public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_financial_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string AssetType { get; set; } = "NORM";
+    [Required(ErrorMessage = "资产类型（字典 accounting_financial_asset_type；NORM=普通资产）不能为空")]
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -459,7 +466,7 @@ public class TaktAssetCreateDto
     public int ExpectedLifeMonths { get; set; } = 0;
 
     /// <summary>
-    /// 折旧方法（字典 accounting_financial_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
     public int DepreciationMethod { get; set; } = 0;
 
@@ -469,15 +476,11 @@ public class TaktAssetCreateDto
     public decimal MonthlyDepreciation { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
+    public int AssetStatus { get; set; } = 0;
 
     /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
-    /// </summary>
-    public int AssetStatus { get; set; } = 1;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -527,9 +530,9 @@ public class TaktAssetStatusDto
     public long AssetId { get; set; }
 
     /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    [Required(ErrorMessage = "资产状态不能为空")]
+    [Required(ErrorMessage = "资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）不能为空")]
     public int AssetStatus { get; set; } = 0;
 }
 
@@ -558,6 +561,11 @@ public class TaktAssetTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 资产代码
     /// </summary>
     public string? AssetCode { get; set; } = string.Empty;
@@ -570,12 +578,12 @@ public class TaktAssetTemplateDto
     /// <summary>
     /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
-    public string? AssetCategory { get; set; }
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_financial_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -656,7 +664,7 @@ public class TaktAssetTemplateDto
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_financial_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -666,14 +674,11 @@ public class TaktAssetTemplateDto
     public decimal? MonthlyDepreciation { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public int? AssetStatus { get; set; }
 
     /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
-    /// </summary>
-    public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -705,6 +710,10 @@ public class TaktAssetImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产代码
@@ -719,12 +728,12 @@ public class TaktAssetImportDto
     /// <summary>
     /// 资产分类（字典 accounting_financial_asset_category）
     /// </summary>
-    public string? AssetCategory { get; set; }
+    public string? AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_financial_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string? AssetType { get; set; }
+    public string? AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -805,7 +814,7 @@ public class TaktAssetImportDto
     public int? ExpectedLifeMonths { get; set; }
 
     /// <summary>
-    /// 折旧方法（字典 accounting_financial_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
     public int? DepreciationMethod { get; set; }
 
@@ -815,14 +824,11 @@ public class TaktAssetImportDto
     public decimal? MonthlyDepreciation { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
+    public int? AssetStatus { get; set; }
 
     /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
-    /// </summary>
-    public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -856,6 +862,16 @@ public class TaktAssetExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 资产代码
     /// </summary>
     public string AssetCode { get; set; } = string.Empty;
@@ -871,9 +887,9 @@ public class TaktAssetExportDto
     public string AssetCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产类型（字典 accounting_financial_asset_type）
+    /// 资产类型（字典 accounting_financial_asset_type；NORM=普通资产）
     /// </summary>
-    public string AssetType { get; set; } = "NORM";
+    public string AssetType { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产原值
@@ -954,7 +970,7 @@ public class TaktAssetExportDto
     public int ExpectedLifeMonths { get; set; } = 0;
 
     /// <summary>
-    /// 折旧方法（字典 accounting_financial_depreciation_method）
+    /// 折旧方法（字典 accounting_financial_depreciation_method：0=不自动计提，1=直线法，2=双倍余额递减，3=年数总和，4=产量法，5=手工，6=剩余年限直线）
     /// </summary>
     public int DepreciationMethod { get; set; } = 0;
 
@@ -964,14 +980,9 @@ public class TaktAssetExportDto
     public decimal MonthlyDepreciation { get; set; }
 
     /// <summary>
-    /// 关联工厂
+    /// 资产状态（字典 accounting_financial_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产状态（字典 accounting_financial_asset_status）
-    /// </summary>
-    public int AssetStatus { get; set; } = 1;
+    public int AssetStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

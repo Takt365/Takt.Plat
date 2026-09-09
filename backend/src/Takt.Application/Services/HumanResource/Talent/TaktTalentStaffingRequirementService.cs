@@ -100,8 +100,10 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
     /// <summary>
     /// 获取用人需求选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetTalentStaffingRequirementOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetTalentStaffingRequirementOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _talentStaffingRequirementRepository.GetListAsync(

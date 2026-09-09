@@ -38,8 +38,10 @@ public interface ITaktPcbaOutputService
     /// <summary>
     /// 获取PCBA日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetPcbaOutputOptionsAsync();
+    Task<List<TaktSelectOption>> GetPcbaOutputOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建PCBA日报
@@ -95,4 +97,10 @@ public interface ITaktPcbaOutputService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPcbaOutputAsync(TaktPcbaOutputQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取 PCBA 生产统计（数据看板 production-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 生产统计</returns>
+    Task<TaktPcbaOutputProductionStatDto> GetPcbaOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto);
 }

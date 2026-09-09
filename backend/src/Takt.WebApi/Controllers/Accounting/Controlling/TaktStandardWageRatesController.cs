@@ -86,11 +86,11 @@ public class TaktStandardWageRatesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:controlling:standard:wage:rate:query", "标准工资率选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetStandardWageRateOptionsAsync()
+    public async Task<IActionResult> GetStandardWageRateOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _standardWageRateService.GetStandardWageRateOptionsAsync();
+            var result = await _standardWageRateService.GetStandardWageRateOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

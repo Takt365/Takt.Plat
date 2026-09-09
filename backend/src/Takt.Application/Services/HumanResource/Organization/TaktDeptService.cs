@@ -109,8 +109,10 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     /// 获取部门树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    public async Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync(long parentId = 0)
+    public async Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.DeptStatus == 1);
@@ -138,8 +140,10 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     /// 获取部门 ISO 编码树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue=IsoCode）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    public async Task<List<TaktTreeSelectOption>> GetDeptIsoTreeOptionsAsync(long parentId = 0)
+    public async Task<List<TaktTreeSelectOption>> GetDeptIsoTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _deptRepository.GetListAsync(x =>

@@ -259,17 +259,6 @@ public class TaktCustomer : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "discount_rate", ColumnDescription = "折扣率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountRate { get; set; } = 0;
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "sales_employee_id", ColumnDescription = "销售员ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? SalesEmployeeId { get; set; }
-    /// <summary>
-    /// 销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）
-    /// </summary>
-    [SugarColumn(ColumnName = "sales_employee_name", ColumnDescription = "销售员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? SalesEmployeeName { get; set; }
-    /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     [SugarColumn(ColumnName = "customer_level", ColumnDescription = "客户等级", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

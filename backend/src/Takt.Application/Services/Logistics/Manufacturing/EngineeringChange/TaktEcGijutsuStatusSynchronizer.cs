@@ -61,7 +61,7 @@ public class TaktEcGijutsuStatusSynchronizer
         var details = await _ecDetailRepository.GetListAsync(x =>
             x.EcCode == normalized && x.IsObsolete == 0);
         var detailIds = details.Select(x => x.Id).ToList();
-        var execRows = await _ecExecDeptAccess.ListBaseByEcnDetailIdsAsync(detailIds);
+        var execRows = await _ecExecDeptAccess.ListBaseByEcDetailIdsAsync(detailIds);
         var computed = ComputeEcStatus(details, execRows);
         if (gijutsu.EcStatus == computed)
         {
@@ -102,7 +102,7 @@ public class TaktEcGijutsuStatusSynchronizer
         }
         var byDetail = execRows
             .Where(x => x.IsObsolete == 0)
-            .GroupBy(x => x.EcnDetailId)
+            .GroupBy(x => x.EcDetailId)
             .ToDictionary(g => g.Key, g => g.ToList());
         var anyInput = false;
         var allFilled = true;

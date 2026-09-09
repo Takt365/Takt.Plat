@@ -60,8 +60,10 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// <summary>
   /// 推移查询栏：组立/PCBA 产出本表工厂去重选项（并集）
   /// </summary>
+  /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendPlantOptionsAsync()
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
   {
     EnsureThreeLayerContext();
     var assyList = await _assyOutputRepository.GetListAsync(
@@ -91,8 +93,9 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// 推移查询栏：按工厂返回有数据的产出类别（assy / pcba）
   /// </summary>
   /// <param name="plantCode">工厂代码</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendOutputCategoryOptionsAsync(string plantCode)
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendOutputCategoryOptionsAsync(string? plantCode = null, string? keyword = null)
   {
     EnsureThreeLayerContext();
     var plant = plantCode?.Trim() ?? string.Empty;
@@ -133,10 +136,9 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
   /// </summary>
   /// <param name="plantCode">工厂代码</param>
   /// <param name="outputCategory">产出类别（assy/pcba；空则并集）</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendModelOptionsAsync(
-      string plantCode,
-      string? outputCategory = null)
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendModelOptionsAsync(string? plantCode = null, string? keyword = null, string? outputCategory = null)
   {
     EnsureThreeLayerContext();
     var plant = plantCode?.Trim() ?? string.Empty;

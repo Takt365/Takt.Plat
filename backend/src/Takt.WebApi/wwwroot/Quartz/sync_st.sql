@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,9 +23,15 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 -- 生效日期：当前-10天（与组立日报默认生产日期对齐，保证 by-material 有效期命中）
 DECLARE @effective_date DATE = DATEADD(DAY, -10, CAST(@now AS DATE));
+-- 更新履历：ext_field._sync.st[] 追加 { at, 变更列:{o,n} }；仅差异；超 nvarchar(4000) 保留原 JSON
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -76,6 +99,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #st_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @sap_raw_count INT = (SELECT COUNT(*) FROM [Sap_Data].[dbo].[PP_SapManhour]);
 
 -- 全量同步：临时表行数必须等于源表行数
@@ -145,8 +184,13 @@ DECLARE @target_before INT = (
 );
 
 -- 存在则仅在业务字段变化或需恢复软删时 UPDATE；无变化不写入 #delta（避免「更新=全量」）
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #st_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_manufacturing_bom_standard_operation_time] AS T
-USING #st_source AS S
+USING (SELECT * FROM #st_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
@@ -177,7 +221,28 @@ WHEN MATCHED AND (
   T.[approved_at]=T.[created_at],
   T.[approval_status]=2,
   T.[culture_code]=@culture_code,
-  T.[is_deleted]=0
+  T.[is_deleted]=0,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.st') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.st', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.st'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.st', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.st'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.st', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[operation_desc], N''))) <> LTRIM(RTRIM(ISNULL(S.[operation_desc], N''))) THEN CONCAT(N',"operation_desc":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[operation_desc], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[operation_desc], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ROUND(T.[standard_minutes], 2) <> ROUND(S.[standard_minutes], 2) THEN CONCAT(N',"standard_minutes":{"o":', CONVERT(VARCHAR(40), ROUND(T.[standard_minutes], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[standard_minutes], 2)), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[time_unit], N''))) <> LTRIM(RTRIM(ISNULL(S.[time_unit], N''))) THEN CONCAT(N',"time_unit":{"o":"', REPLACE(ISNULL(T.[time_unit], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[time_unit], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN T.[standard_shorts] <> S.[standard_shorts] THEN CONCAT(N',"standard_shorts":{"o":', CONVERT(VARCHAR(20), T.[standard_shorts]), N',"n":', CONVERT(VARCHAR(20), S.[standard_shorts]), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[points_unit], N''))) <> LTRIM(RTRIM(ISNULL(S.[points_unit], N''))) THEN CONCAT(N',"points_unit":{"o":"', REPLACE(ISNULL(T.[points_unit], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[points_unit], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ROUND(T.[points_to_minutes_rate], 3) <> ROUND(S.[points_to_minutes_rate], 3) THEN CONCAT(N',"points_to_minutes_rate":{"o":', CONVERT(VARCHAR(40), ROUND(T.[points_to_minutes_rate], 3)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[points_to_minutes_rate], 3)), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[converted_minutes], 2) <> ROUND(S.[converted_minutes], 2) THEN CONCAT(N',"converted_minutes":{"o":', CONVERT(VARCHAR(40), ROUND(T.[converted_minutes], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[converted_minutes], 2)), N'}') ELSE N'' END,
+      CASE WHEN ISNULL(T.[is_deleted], 0) <> 0 THEN N',"is_deleted":{"o":1,"n":0}' ELSE N'' END,
+      N'}'))) AS [new_ext]) x
+  )
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[material_code],[work_center],[operation_desc],
@@ -230,6 +295,25 @@ INTO #delta(
   ext_field_old, ext_field_new,
   remark_old, remark_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 -- 孤儿软删：目标有而源没有时才软删；存在更新/不存在插入已由 MERGE 完成
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
@@ -240,7 +324,12 @@ CREATE TABLE #soft_deleted_rows (
   [work_center] NVARCHAR(100)
 );
 
-UPDATE T
+
+DECLARE @delete_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -264,8 +353,25 @@ WHERE T.[tenant_code] = @tenant_code
       AND S.[material_code] = LTRIM(RTRIM(T.[material_code]))
       AND S.[work_center] = LTRIM(RTRIM(T.[work_center]))
   );
-
-DECLARE @delete_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @delete_count = @delete_count + @dml_n;
+END
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
   CAST(

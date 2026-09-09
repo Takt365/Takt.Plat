@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="dashboard-data-board">
     <a-row
       ref="rowRef"
@@ -11,9 +11,14 @@
         :span="item.span ?? 24"
       >
         <a-dropdown trigger="contextmenu">
-          <div class="databoard-module-context-target">
+          <div
+            class="databoard-module-context-target"
+            @mouseenter="hoveredModuleId = item.id"
+            @mouseleave="hoveredModuleId = null"
+          >
             <DataBoardModuleCard
               :module="item"
+              :hovered="hoveredModuleId === item.id"
               @remove="removeModule(item.id)"
               @change-span="updateModuleSpan"
             >
@@ -83,8 +88,22 @@ import DataBoardModuleCard from './components/DataBoardModuleCard.vue'
 import StatsOverviewModule from './modules/StatsOverviewModule.vue'
 import StatsChangeModule from './modules/StatsChangeModule.vue'
 import StatsOnlineModule from './modules/StatsOnlineModule.vue'
-import StatsSalesModule from './modules/StatsSalesModule.vue'
-import StatsProductionModule from './modules/StatsProductionModule.vue'
+import StatsSalesInvoiceModule from './modules/StatsSalesInvoiceModule.vue'
+import StatsSalesOrderModule from './modules/StatsSalesOrderModule.vue'
+import StatsAssyOphModule from './modules/StatsAssyOphModule.vue'
+import StatsPcbaOphModule from './modules/StatsPcbaOphModule.vue'
+import StatsAssyDefectModule from './modules/StatsAssyDefectModule.vue'
+import StatsPcbaModule from './modules/StatsPcbaModule.vue'
+import StatsQualityCostModule from './modules/StatsQualityCostModule.vue'
+import StatsQualityOperationModule from './modules/StatsQualityOperationModule.vue'
+import StatsQualityComplaintModule from './modules/StatsQualityComplaintModule.vue'
+import StatsHelpDeskModule from './modules/StatsHelpDeskModule.vue'
+import StatsMeetingNoticeModule from './modules/StatsMeetingNoticeModule.vue'
+import StatsCustomerServiceModule from './modules/StatsCustomerServiceModule.vue'
+import StatsPurchaseInvoiceModule from './modules/StatsPurchaseInvoiceModule.vue'
+import StatsPurchaseOrderModule from './modules/StatsPurchaseOrderModule.vue'
+import StatsPurchaseRequestModule from './modules/StatsPurchaseRequestModule.vue'
+import StatsInventoryModule from './modules/StatsInventoryModule.vue'
 import StatsCustomModule from './modules/StatsCustomModule.vue'
 import type { DataBoardModuleItem, DataBoardModuleKey } from '@/types/dashboard/data-board'
 import {
@@ -100,8 +119,22 @@ const moduleComponents: Record<DataBoardModuleKey, unknown> = {
   overview: markRaw(StatsOverviewModule),
   change: markRaw(StatsChangeModule),
   online: markRaw(StatsOnlineModule),
-  sales: markRaw(StatsSalesModule),
-  production: markRaw(StatsProductionModule),
+  salesInvoice: markRaw(StatsSalesInvoiceModule),
+  salesOrder: markRaw(StatsSalesOrderModule),
+  assyOph: markRaw(StatsAssyOphModule),
+  pcbaOph: markRaw(StatsPcbaOphModule),
+  assyDefect: markRaw(StatsAssyDefectModule),
+  pcba: markRaw(StatsPcbaModule),
+  qualityCost: markRaw(StatsQualityCostModule),
+  qualityOperation: markRaw(StatsQualityOperationModule),
+  qualityComplaint: markRaw(StatsQualityComplaintModule),
+  helpDesk: markRaw(StatsHelpDeskModule),
+  meetingNotice: markRaw(StatsMeetingNoticeModule),
+  customerService: markRaw(StatsCustomerServiceModule),
+  purchaseInvoice: markRaw(StatsPurchaseInvoiceModule),
+  purchaseOrder: markRaw(StatsPurchaseOrderModule),
+  purchaseRequest: markRaw(StatsPurchaseRequestModule),
+  inventory: markRaw(StatsInventoryModule),
   custom: markRaw(StatsCustomModule)
 }
 
@@ -109,8 +142,31 @@ function loadModules(): DataBoardModuleItem[] {
   try {
     const raw = localStorage.getItem(DATA_BOARD_STORAGE_KEY)
     if (raw) {
-      const parsed = JSON.parse(raw) as DataBoardModuleItem[]
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      const parsed = JSON.parse(raw) as Array<DataBoardModuleItem & { moduleKey: string }>
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const validKeys = new Set(Object.keys(moduleComponents))
+        const migrated = parsed.map((item) => {
+          if (item.moduleKey === 'pcbaInspection' || item.moduleKey === 'pcbaRepair') {
+            return { ...item, moduleKey: 'pcba' as DataBoardModuleKey }
+          }
+          return item as DataBoardModuleItem
+        })
+        const deduped: DataBoardModuleItem[] = []
+        let hasPcba = false
+        for (const item of migrated) {
+          if (!validKeys.has(item.moduleKey as string)) {
+            continue
+          }
+          if (item.moduleKey === 'pcba') {
+            if (hasPcba) {
+              continue
+            }
+            hasPcba = true
+          }
+          deduped.push(item)
+        }
+        return deduped
+      }
     }
   } catch {
     // ignore
@@ -123,6 +179,8 @@ function saveModules(list: DataBoardModuleItem[]) {
 }
 
 const modules = ref<DataBoardModuleItem[]>(loadModules())
+/** 当前悬停的模块 Id（控制卡片头按钮显隐） */
+const hoveredModuleId = ref<string | null>(null)
 
 const rowRef = ref<{ $el: HTMLElement } | null>(null)
 let sortableInstance: Sortable | null = null
@@ -154,7 +212,7 @@ onMounted(() => {
     const el = rowRef.value?.$el
     if (!el || !(el instanceof HTMLElement)) return
     sortableInstance = Sortable.create(el, {
-      handle: '.databoard-module-card-drag-handle',
+      handle: '.takt-dashboard-module-card-drag-handle',
       animation: 150,
       ghostClass: 'databoard-module-card-ghost',
       onEnd(evt: Sortable.SortableEvent) {
@@ -216,8 +274,20 @@ function onModuleContextMenuClick(item: DataBoardModuleItem, ev: MenuInfo) {
 .dashboard-data-board {
   padding: 24px 0;
 }
+.dashboard-data-board :deep(.ant-row) {
+  align-items: stretch;
+}
+.dashboard-data-board :deep(.ant-col) {
+  display: flex;
+  flex-direction: column;
+}
 .databoard-module-context-target {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
   height: 100%;
+  width: 100%;
 }
 .databoard-add-tip {
   margin-bottom: 8px;

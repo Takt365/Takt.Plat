@@ -90,14 +90,14 @@ public class TaktEcSeikanI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseikan._self
             new TranslationSeedItem("entity.ecseikan._self", "zh-HK", "设变生管课信息_hk", "实体名称"),
 
-            // entity.ecseikan.ecndetailid
-            new TranslationSeedItem("entity.ecseikan.ecndetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）"),
-            // entity.ecseikan.ecndetailid
-            new TranslationSeedItem("entity.ecseikan.ecndetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）"),
-            // entity.ecseikan.ecndetailid
-            new TranslationSeedItem("entity.ecseikan.ecndetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）"),
-            // entity.ecseikan.ecndetailid
-            new TranslationSeedItem("entity.ecseikan.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）"),
+            // entity.ecseikan.ecdetailid
+            new TranslationSeedItem("entity.ecseikan.ecdetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseikan.ecdetailid
+            new TranslationSeedItem("entity.ecseikan.ecdetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseikan.ecdetailid
+            new TranslationSeedItem("entity.ecseikan.ecdetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseikan.ecdetailid
+            new TranslationSeedItem("entity.ecseikan.ecdetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
 
             // entity.ecseikan.eccode
             new TranslationSeedItem("entity.ecseikan.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
@@ -144,34 +144,25 @@ public class TaktEcSeikanI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseikan.ecfinishedgoodsdescription
             new TranslationSeedItem("entity.ecseikan.ecfinishedgoodsdescription", "zh-HK", "完成品描述_hk", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
 
-            // entity.ecseikan.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialcode", "en-US", "上阶物料编码_us", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseikan.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialcode", "ja-JP", "上阶物料编码_jp", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseikan.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialcode", "zh-CN", "上阶物料编码", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseikan.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialcode", "zh-HK", "上阶物料编码_hk", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
+            // entity.ecseikan.discontinuedstatus
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "en-US", "完成品EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseikan.discontinuedstatus
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "ja-JP", "完成品EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseikan.discontinuedstatus
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-CN", "完成品EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseikan.discontinuedstatus
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-HK", "完成品EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
 
-            // entity.ecseikan.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialdescription", "en-US", "上阶物料描述_us", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseikan.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialdescription", "ja-JP", "上阶物料描述_jp", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseikan.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialdescription", "zh-CN", "上阶物料描述", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseikan.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseikan.ecparentmaterialdescription", "zh-HK", "上阶物料描述_hk", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-
-            // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "en-US", "完成品EOL_us", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "ja-JP", "完成品EOL_jp", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-CN", "完成品EOL", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-HK", "完成品EOL_hk", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-
-            // entity.ecseikan.deptcode
+            
+            // entity.ecseikan.ecdistinction
+            new TranslationSeedItem("entity.ecseikan.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseikan.ecdistinction
+            new TranslationSeedItem("entity.ecseikan.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseikan.ecdistinction
+            new TranslationSeedItem("entity.ecseikan.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseikan.ecdistinction
+            new TranslationSeedItem("entity.ecseikan.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+// entity.ecseikan.deptcode
             new TranslationSeedItem("entity.ecseikan.deptcode", "en-US", "部门编码_us", "部门编码（TaktDept.DeptCode，5 位，如 D0420）"),
             // entity.ecseikan.deptcode
             new TranslationSeedItem("entity.ecseikan.deptcode", "ja-JP", "部门编码_jp", "部门编码（TaktDept.DeptCode，5 位，如 D0420）"),
@@ -234,14 +225,14 @@ public class TaktEcSeikanI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseikan.balance
             new TranslationSeedItem("entity.ecseikan.balance", "zh-HK", "结余_hk", "结余"),
 
-            // entity.ecseikan.oldproducthandling
-            new TranslationSeedItem("entity.ecseikan.oldproducthandling", "en-US", "旧品处理_us", "旧品处理"),
-            // entity.ecseikan.oldproducthandling
-            new TranslationSeedItem("entity.ecseikan.oldproducthandling", "ja-JP", "旧品处理_jp", "旧品处理"),
-            // entity.ecseikan.oldproducthandling
-            new TranslationSeedItem("entity.ecseikan.oldproducthandling", "zh-CN", "旧品处理", "旧品处理"),
-            // entity.ecseikan.oldproducthandling
-            new TranslationSeedItem("entity.ecseikan.oldproducthandling", "zh-HK", "旧品处理_hk", "旧品处理"),
+            // entity.ecseikan.ecoldpartdisposition
+            new TranslationSeedItem("entity.ecseikan.ecoldpartdisposition", "en-US", "旧品处理_us", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            // entity.ecseikan.ecoldpartdisposition
+            new TranslationSeedItem("entity.ecseikan.ecoldpartdisposition", "ja-JP", "旧品处理_jp", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            // entity.ecseikan.ecoldpartdisposition
+            new TranslationSeedItem("entity.ecseikan.ecoldpartdisposition", "zh-CN", "旧品处理", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            // entity.ecseikan.ecoldpartdisposition
+            new TranslationSeedItem("entity.ecseikan.ecoldpartdisposition", "zh-HK", "旧品处理_hk", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
 
             // entity.ecseikan.isobsolete
             new TranslationSeedItem("entity.ecseikan.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

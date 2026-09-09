@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationService.cs
-// 创建时间：2026-08-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价应用服务实现
 // 
@@ -104,8 +104,10 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     /// <summary>
     /// 获取销售报价选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesQuotationOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesQuotationOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesQuotationRepository.GetListAsync(
@@ -405,6 +407,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.SalesQuotationCode = entity.SalesQuotationCode;
+                childDto.TaxCode = entity.TaxCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -502,7 +505,10 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 || (x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
-                || (x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(keywords))
+                || (x.SalesGroup != null && x.SalesGroup.Contains(keywords))
+                || (x.SalesQuotationType != null && x.SalesQuotationType.Contains(keywords))
+                || (x.PricingProcedure != null && x.PricingProcedure.Contains(keywords))
+                || (x.PricingConditionCode != null && x.PricingConditionCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
@@ -541,10 +547,28 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SalesEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesGroup))
         {
-            var salesBy = queryDto.SalesEmployeeName;
-            exp = exp.And(x => x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(salesBy));
+            var salesGroup = queryDto.SalesGroup;
+            exp = exp.And(x => x.SalesGroup != null && x.SalesGroup.Contains(salesGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesQuotationType))
+        {
+            var salesQuotationType = queryDto.SalesQuotationType;
+            exp = exp.And(x => x.SalesQuotationType != null && x.SalesQuotationType.Contains(salesQuotationType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingProcedure))
+        {
+            var pricingProcedure = queryDto.PricingProcedure;
+            exp = exp.And(x => x.PricingProcedure != null && x.PricingProcedure.Contains(pricingProcedure));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingConditionCode))
+        {
+            var pricingConditionCode = queryDto.PricingConditionCode;
+            exp = exp.And(x => x.PricingConditionCode != null && x.PricingConditionCode.Contains(pricingConditionCode));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -693,7 +717,19 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SalesEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesQuotationType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingProcedure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingConditionCode))
         {
             return true;
         }

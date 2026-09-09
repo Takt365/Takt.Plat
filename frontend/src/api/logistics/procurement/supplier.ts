@@ -144,10 +144,20 @@ export function updateSupplierSort(dto: SupplierSort): Promise<Supplier> {
  * 获取供货商信息选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSupplierOptions(): Promise<TaktSelectOption[]> {
+export function getSupplierOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SUPPLIER_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

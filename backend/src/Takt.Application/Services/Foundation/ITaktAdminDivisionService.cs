@@ -36,11 +36,22 @@ public interface ITaktAdminDivisionService
     Task<TaktAdminDivisionDto?> GetAdminDivisionByIdAsync(long id);
 
     /// <summary>
+    /// 获取行政区划平铺选项（DictValue=DivisionCode；供省/市等业务字段下拉，非 parentId）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（可选；本实体无工厂列，忽略）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配编码/名称）</param>
+    /// <param name="level">层级（可选；1～6，对应 sys_admin_division_level）</param>
+    /// <returns>下拉选项（有上限，禁止全表）</returns>
+    Task<List<TaktSelectOption>> GetAdminDivisionOptionsAsync(string? plantCode = null, string? keyword = null, int? level = null);
+
+    /// <summary>
     /// 获取行政区划树形选项（懒加载：仅 parentId 直接子级一层；DictValue=Id 字符串，供表单 parentId）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    Task<List<TaktTreeSelectOption>> GetAdminDivisionTreeOptionsAsync(long parentId = 0);
+    Task<List<TaktTreeSelectOption>> GetAdminDivisionTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 获取行政区划树形列表（懒加载：仅 parentId 直接子级一层）

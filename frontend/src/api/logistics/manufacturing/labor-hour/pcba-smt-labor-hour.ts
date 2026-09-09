@@ -116,10 +116,20 @@ export function deletePcbaSmtLaborHourBatch(ids: string[]): Promise<void> {
  * 获取PCBA SMT工数统计选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPcbaSmtLaborHourOptions(): Promise<TaktSelectOption[]> {
+export function getPcbaSmtLaborHourOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PCBA_SMT_LABOR_HOUR_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

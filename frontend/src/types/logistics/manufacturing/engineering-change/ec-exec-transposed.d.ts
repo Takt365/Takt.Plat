@@ -23,7 +23,7 @@ export interface EcExecTransposedCell {
 /** 设变部门转置行 */
 export interface EcExecTransposed {
   ecDetailId: string;
-  ecId: string;
+  ecGijutsuId: string;
   lineNumber: number;
   ecIssueDate: string;
   ecLeader: string;
@@ -62,7 +62,7 @@ export interface EcExecBatchTransposedStage {
 /** 设变批次转置行 */
 export interface EcExecBatchTransposed {
   ecDetailId: string;
-  ecId: string;
+  ecGijutsuId: string;
   lineNumber: number;
   ecCode: string;
   technicalLiaisonNo?: string | null;

@@ -25,7 +25,8 @@ description: >-
 ```
 - [ ] 8 行 HTML 头；Props：formData?、loading?
 - [ ] defineExpose：validate、getValues、resetFields（+ setServerValidationErrors 可选）
-- [ ] a-form horizontal；标签 t('entity.*')；占位 common.page.form.placeholder.*
+- [ ] a-form：`takt-generated-form` + horizontal + `label-align="right"`；标签 t('entity.*')；占位 common.page.form.placeholder.*
+- [ ] ❌ 表单无 `sortOrder` 控件（`SKIP_FORM_FIELDS`；后端自动回填）
 - [ ] TaktSelect / TaktTreeSelect；主键与 long 字段 string
 - [ ] 「xxx内容」正文用 takt-rich-editor（非 a-input/a-textarea）
 - [ ] fileName + accessUrl 成对时用 takt-upload-file（fileName 上传回填；排除 TaktFile）
@@ -56,7 +57,7 @@ description: >-
 
 ```
 - [ ] parentId：TaktTreeSelect + /api/TaktXxxs/tree-options
-- [ ] sortOrder：a-input-number min 0
+- [ ] ❌ 不入表单：sortOrder（后端自动生成；树拖拽改序走 Sort API）
 - [ ] getValues parentId 为 string；根节点与后端约定（通常 "0"）
 - [ ] index 新增时默认 parentId = 左侧选中树节点
 ```
@@ -68,6 +69,8 @@ await formRef.value?.validate()
 const dto = formRef.value?.getValues()
 // createXxx(dto) 或 updateXxx(id, dto)
 ```
+
+父级 `index.vue` 表单弹窗：`:width="formModalWidthPx"`（`useTaktContentModalWidth`）。导入弹窗仍 `:width="600"`。
 
 ## 代码生成
 

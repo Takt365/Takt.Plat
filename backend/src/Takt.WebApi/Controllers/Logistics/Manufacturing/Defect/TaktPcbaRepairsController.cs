@@ -57,6 +57,26 @@ public class TaktPcbaRepairsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取 PCBA 改修不良统计（数据看板 defect-stat）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 改修统计</returns>
+    [TaktPermission("logistics:manufacturing:defect:pcba:repair:list", "PCBA改修不良统计")]
+    [HttpGet("defect-stat")]
+    public async Task<IActionResult> GetPcbaRepairStatAsync([FromQuery] TaktDefectStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _pcbaRepairService.GetPcbaRepairStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取PCBA改修日报
     /// </summary>
     /// <param name="id">PCBA改修日报ID</param>
@@ -86,11 +106,11 @@ public class TaktPcbaRepairsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:pcba:repair:query", "PCBA改修日报选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaRepairOptionsAsync()
+    public async Task<IActionResult> GetPcbaRepairOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaRepairService.GetPcbaRepairOptionsAsync();
+            var result = await _pcbaRepairService.GetPcbaRepairOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -86,11 +86,11 @@ public class TaktSalesForecastItemsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mds:sales:forecast:query", "销售预测明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSalesForecastItemOptionsAsync()
+    public async Task<IActionResult> GetSalesForecastItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salesForecastItemService.GetSalesForecastItemOptionsAsync();
+            var result = await _salesForecastItemService.GetSalesForecastItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

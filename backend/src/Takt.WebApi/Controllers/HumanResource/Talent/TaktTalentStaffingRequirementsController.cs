@@ -86,11 +86,11 @@ public class TaktTalentStaffingRequirementsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:talent:staffing:requirement:query", "用人需求选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTalentStaffingRequirementOptionsAsync()
+    public async Task<IActionResult> GetTalentStaffingRequirementOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _talentStaffingRequirementService.GetTalentStaffingRequirementOptionsAsync();
+            var result = await _talentStaffingRequirementService.GetTalentStaffingRequirementOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

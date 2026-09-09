@@ -245,5 +245,12 @@ export default {
         },
       },
     },
+    showcase: {
+      split: {
+        practical: "Practical",
+        simple: "Simple",
+        flexible: "Flexible",
+      },
+    },
   },
 };

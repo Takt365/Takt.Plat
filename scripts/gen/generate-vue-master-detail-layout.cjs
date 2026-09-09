@@ -16,6 +16,7 @@ const {
   fieldLabelTExpr,
   fieldPlaceholderTExpr,
   renderFormControl,
+  renderApiSelectParamsAttr,
   renderFormItemOpening,
   buildFormFieldColItems,
   buildFormRowMarkup,
@@ -39,6 +40,9 @@ const {
   resolveScopeFormFieldPresence,
   buildScopeContextFormScriptFragments,
   buildVueImportResultUtilImportLine,
+  TAKT_FORM_MODAL_WIDTH_IMPORT,
+  TAKT_FORM_MODAL_WIDTH_ATTR,
+  buildFormModalWidthStateBlock,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
   buildEntityI18nComposableFile,
@@ -294,7 +298,7 @@ function buildEditableTableCellSlotMarkup(field, childCamel) {
     return `      <template #cell-${field.name}="{ record }">
         <TaktSelect
           v-model:value="record.${field.name}"
-          api-url="${field.apiUrl}"
+          api-url="${field.apiUrl}"${renderApiSelectParamsAttr(field, '          ')}
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="${placeholder}"
@@ -1009,7 +1013,7 @@ ${toolsBarImportExport}
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      ${TAKT_FORM_MODAL_WIDTH_ATTR}
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -1047,7 +1051,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
-import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
+${TAKT_FORM_MODAL_WIDTH_IMPORT}import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 ${excelImportLine ? `${excelImportLine}\n` : ''}${summaryParts.importLines ? `${summaryParts.importLines}\n` : ''}import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 ${remixIconImport}import ${child.childPascal}Form from './${viewChildKebab}-form.vue'
@@ -1083,6 +1087,7 @@ const formTitle = ref('')
 const formData = ref<Partial<${child.childType}>>({})
 const formLoading = ref(false)
 const formRef = ref()
+${buildFormModalWidthStateBlock()}
 ${advancedQueryScript}${columnSettingScript}
 ${childCaps.hasImport && childCaps.hasGetTemplate ? 'const importVisible = ref(false)\n' : ''}
 const entityIdName = '${child.childIdField}'
@@ -1484,6 +1489,135 @@ ${reloadPanels}
 }
 
 /**
+ * 主子表弹窗表单：上主下从各占 body 约 1/2 的样式块
+ * @param {string} viewEntityKebab 视图实体 kebab
+ * @returns {string} scoped style
+ */
+function buildMasterDetailFormHalfPaneStyleBlock(viewEntityKebab) {
+  const masterClass = `${viewEntityKebab}-form__master`;
+  const tabsClass = `${viewEntityKebab}-form-tabs`;
+  return `
+<style scoped lang="css">
+/* 上主下从各占弹窗 body 约 1/2；主表区内部滚动，子表用 scroll.y */
+.${masterClass} {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 无 Tabs 时主表半区直接滚动 */
+.${masterClass} > div {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.${masterClass} :deep(.${tabsClass}.ant-tabs) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.${masterClass} :deep(.ant-tabs-nav) {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.${masterClass} :deep(.ant-tabs-content-holder) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.${masterClass} :deep(.ant-tabs-content),
+.${masterClass} :deep(.ant-tabs-tabpane) {
+  height: 100%;
+}
+</style>`;
+}
+
+/**
+ * 主子表弹窗表单：子表半区 scroll.y 测量脚本
+ * @returns {string}
+ */
+function buildMasterDetailFormHalfPaneScrollScript() {
+  return `
+import {
+  TAKT_TABLE_HEADER_FALLBACK_PX,
+  TAKT_TABLE_SCROLL_Y_MIN,
+  TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+} from '@/utils/table-scroll'
+
+/** 子表半区宿主（弹窗视口约 1/2） */
+const detailHostRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（半区内扣除标题/表头/汇总） */
+const detailScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailHostResizeObserver: ResizeObserver | null = null
+
+/**
+ * 按子表半区实测 scroll.y
+ */
+function recalcDetailScrollYPx(): void {
+  const host = detailHostRef.value
+  if (host == null || host.clientHeight <= 0) {
+    return
+  }
+  const tableRoot = host.querySelector('.takt-editable-table') as HTMLElement | null
+  const toolbar = tableRoot?.querySelector(':scope > .mb-2') as HTMLElement | null
+  const toolbarH = toolbar?.offsetHeight ?? 0
+  const sectionPad = 12
+  const next = Math.floor(
+    host.clientHeight
+      - toolbarH
+      - sectionPad
+      - TAKT_TABLE_HEADER_FALLBACK_PX
+      - TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+  )
+  detailScrollYPx.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, next)
+}
+
+/** 监听弹窗/半区尺寸变化 */
+function bindDetailHostResizeObserver(): void {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  const host = detailHostRef.value
+  if (host == null || typeof ResizeObserver === 'undefined') {
+    return
+  }
+  const target =
+    (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal-body') as HTMLElement | null)
+    ?? host
+  detailHostResizeObserver = new ResizeObserver(() => {
+    recalcDetailScrollYPx()
+  })
+  detailHostResizeObserver.observe(target)
+  detailHostResizeObserver.observe(host)
+}
+
+onMounted(() => {
+  void nextTick(() => {
+    recalcDetailScrollYPx()
+    bindDetailHostResizeObserver()
+  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', recalcDetailScrollYPx)
+  }
+})
+
+onBeforeUnmount(() => {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', recalcDetailScrollYPx)
+  }
+})
+`;
+}
+
+/**
  * *-form.vue 上主下从（TaktEditableTable）片段
  * @param {object} ctx
  * @returns {{ editableBlocks: string, script: string, tableRefs: string, validateLines: string, resetLines: string }}
@@ -1516,8 +1650,7 @@ function generateMasterDetailEditableFormParts(ctx) {
       needsTaktSelect = true;
     }
     const slotBlock = slotMarkups ? `\n${slotMarkups}\n` : '';
-    return `    <!-- 下：子表 ${child.fieldName} -->
-    <TaktEditableTable
+    return `    <TaktEditableTable
       ref="${child.childCamel}TableRef"
       v-model="child${child.childPascal}Rows"
       :columns="${child.childCamel}FormColumns"
@@ -1526,9 +1659,11 @@ function generateMasterDetailEditableFormParts(ctx) {
       id-field="${child.childIdField}"
       :default-row="createDefault${child.childPascal}Row"
       :disabled="loading"
-      :enable-vertical-scroll="false"
+      :enable-vertical-scroll="true"
+      :virtual="false"
+      :scroll="{ y: detailScrollYPx }"
       section-border
-      class="w-full min-w-0"
+      class="w-full min-h-0 min-w-0 flex-1"
     >${slotBlock}    </TaktEditableTable>`;
   }).join('\n');
   const columnDefs = children.map((child) => {
@@ -1585,7 +1720,9 @@ ${defaults}
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
         cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        ${child.masterFkField}: masterId,
+        plantCode: String(formState.plantCode ?? '').trim() || tenantStore.currentCompanyRelatedPlant || userStore.userInfo?.relatedPlant || '',
+        // 新增态外键须为 0；空串会导致 long 绑定 ModelState 400
+        ${child.masterFkField}: isUpdate ? masterId : 0,
       }
 ${parts.submitMapExtra}
       return normalized
@@ -1596,7 +1733,8 @@ ${parts.submitMapExtra}
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-      ${child.masterFkField}: masterId,
+      plantCode: String(formState.plantCode ?? '').trim() || tenantStore.currentCompanyRelatedPlant || userStore.userInfo?.relatedPlant || '',
+      ${child.masterFkField}: isUpdate ? masterId : 0,
     })),`;
   }).join('\n');
   const validateLines = children.map((child) => `  await ${child.childCamel}TableRef.value?.validate?.()`).join('\n');
@@ -1707,6 +1845,8 @@ module.exports = {
   generateMasterDetailEditableFormParts,
   writeMasterDetailLayoutOutputs,
   buildMasterDetailIndexStyleBlock,
+  buildMasterDetailFormHalfPaneStyleBlock,
+  buildMasterDetailFormHalfPaneScrollScript,
   buildChildPanelDetailScrollScript,
   generateChildDetailPanelVue,
   generateChildDetailFormVue,

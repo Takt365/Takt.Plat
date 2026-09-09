@@ -111,11 +111,11 @@ public class TaktEcSeikansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:seikan:query", "设变生管执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcSeikanOptionsAsync()
+    public async Task<IActionResult> GetEcSeikanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecSeikanService.GetEcSeikanOptionsAsync();
+            var result = await _ecSeikanService.GetEcSeikanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcSeikansController : TaktControllerBase
         {
             await _ecSeikanService.DeleteEcSeikanBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变生管执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变生管执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seikan:update", "更新设变生管执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcSeikanDiscontinuedStatusAsync([FromBody] TaktEcSeikanDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecSeikanService.UpdateEcSeikanDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

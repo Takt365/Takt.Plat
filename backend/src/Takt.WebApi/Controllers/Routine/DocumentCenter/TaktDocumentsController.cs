@@ -86,11 +86,11 @@ public class TaktDocumentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:document:center:query", "文管中心选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDocumentOptionsAsync()
+    public async Task<IActionResult> GetDocumentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _documentService.GetDocumentOptionsAsync();
+            var result = await _documentService.GetDocumentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

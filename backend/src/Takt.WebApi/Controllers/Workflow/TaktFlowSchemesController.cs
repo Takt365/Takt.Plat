@@ -86,11 +86,11 @@ public class TaktFlowSchemesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("workflow:scheme:query", "流程定义选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFlowSchemeOptionsAsync()
+    public async Task<IActionResult> GetFlowSchemeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _flowSchemeService.GetFlowSchemeOptionsAsync();
+            var result = await _flowSchemeService.GetFlowSchemeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

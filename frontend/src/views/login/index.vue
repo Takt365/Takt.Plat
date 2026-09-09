@@ -1,4 +1,4 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍工厂·Takt Plat -->
 <!-- 命名空间：frontend/src/views/login -->
 <!-- 文件名称：index.vue -->
@@ -13,6 +13,7 @@
   <div
     v-else
     class="relative min-h-screen w-full bg-gradient-to-br from-[#667eea] to-[#764ba2]"
+    style="background-color: #667eea"
   >
     <login-brand />
 
@@ -42,9 +43,9 @@
       />
       <aside
         v-if="layoutPosition !== 'center'"
-        class="hidden w-full shrink-0 items-center justify-center px-6 lg:flex lg:w-2/3 xl:px-12"
+        class="takt-login-showcase hidden h-auto min-h-screen w-full shrink-0 items-center justify-center px-6 lg:flex lg:w-2/3 xl:px-12"
       >
-        <showcase-form class="w-full" />
+        <showcase-form class="takt-login-showcase h-full w-full" />
       </aside>
     </div>
   </div>

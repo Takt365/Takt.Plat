@@ -48,6 +48,14 @@ const ENTITY_PROPERTY_I18N_SEGMENT_BY_SLUG: Readonly<Record<string, Readonly<Rec
 }
 
 /**
+ * 业务自声明 CultureCode 的实体 slug（组合 4；≠ 基类隔离 CultureCode）
+ * - culture：去重后 entity.culture.code（cultureCode strip → code）
+ * - translation：无相邻重复 → entity.translation.culturecode
+ * 均不走 common.page.entity.culturecode
+ */
+const ENTITY_OWN_CULTURE_CODE_SLUGS = new Set(['culture', 'translation'])
+
+/**
  * 去掉属性名中与实体 slug 重复的前缀（plantCode + plant → code）
  * @param camelName 属性 camelCase
  * @param entitySlug 实体 slug（全小写）
@@ -106,6 +114,11 @@ export function buildEntityI18nKey(entitySlug: string, fieldName: string): strin
  * @param fieldName 属性 camelCase
  */
 export function resolveEntityFieldI18nKey(entitySlug: string, fieldName: string): string {
+  const slug = entitySlug.toLowerCase()
+  // Culture / Translation：业务 CultureCode，走 entity.*（culture→code 去重；translation→culturecode）
+  if (fieldName === 'cultureCode' && ENTITY_OWN_CULTURE_CODE_SLUGS.has(slug)) {
+    return buildEntityI18nKey(slug, fieldName)
+  }
   const common = COMMON_ENTITY_FIELD_I18N_KEYS[fieldName]
   if (common) {
     return common

@@ -27,6 +27,8 @@ export default {
       importSelected: 'Import Selected ({count})',
       importSuccess: 'Successfully imported {count} EC record(s)',
       importPartial: 'Import finished: {success} succeeded, {fail} failed',
+      detailsDeferred:
+        '{count} detail rows will be persisted on the server (not posted from the browser). Fill leader and distinction, then submit.',
     },
     attachment: {
       docCode: {
@@ -43,9 +45,20 @@ export default {
       fileName: {
         duplicate: 'File name "{name}" already exists',
       },
+      upload: {
+        hint: 'PDF only, 1 file at a time, max {max}MB',
+        pdfOnly: 'Only PDF files are allowed',
+      },
     },
     tabs: {
       oldNewMaterial: 'Old / New Material',
+    },
+    persist: {
+      submitted: 'Submitted EC {ecCode} for background {action} ({detailCount} detail lines, incl. dept exec sync). You will be notified when done.',
+      completed: 'EC {ecCode} background {action} completed ({detailCount} lines, {duration})',
+      failed: 'EC {ecCode} background {action} failed ({detailCount} lines)',
+      actionCreate: 'create',
+      actionUpdate: 'update',
     },
   },
 };

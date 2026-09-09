@@ -43,11 +43,11 @@ public class TaktSalesMonthlyTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:monthly:trend:list", "月销售推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetSalesMonthlyTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetSalesMonthlyTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendPlantOptionsAsync();
+            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ public class TaktSalesMonthlyTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:monthly:trend:list", "月销售推移客户选项")]
     [HttpGet("customer-options")]
-    public async Task<IActionResult> GetSalesMonthlyTrendCustomerOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetSalesMonthlyTrendCustomerOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
@@ -71,7 +71,7 @@ public class TaktSalesMonthlyTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendCustomerOptionsAsync(plantCode);
+            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendCustomerOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

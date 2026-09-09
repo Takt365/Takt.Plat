@@ -87,11 +87,11 @@ public class TaktTrackingLogsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:logging:tracking:log:query", "交互日志选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTrackingLogOptionsAsync()
+    public async Task<IActionResult> GetTrackingLogOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _trackingLogService.GetTrackingLogOptionsAsync();
+            var result = await _trackingLogService.GetTrackingLogOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -19,7 +19,7 @@
     :inline-collapsed="collapsed"
     :inline-indent="TAKT_MENU_INLINE_INDENT"
     :accordion="setting.menuAccordion"
-    :class="['takt-mix-menu', `menu-style-${setting.menuStyle}`]"
+    :class="['takt-mix-menu', menuStyleClass]"
     @click="handleMenuClick"
     @openChange="handleOpenChange"
   />
@@ -55,7 +55,12 @@ const route = useRoute()
 const router = useRouter()
 const themeStore = useThemeStore()
 const menuStore = useMenuStore()
-const setting = useSettingStore().setting
+const { setting } = storeToRefs(useSettingStore())
+/** 菜单风格 class（plain / rounded） */
+const menuStyleClass = computed(() => {
+  const style = setting.value.menuStyle === 'rounded' ? 'rounded' : 'plain'
+  return `menu-style-${style}`
+})
 
 const selectedKeys = ref<string[]>([])
 const openKeys = ref<string[]>([])
@@ -81,7 +86,7 @@ const handleMenuClick = (info: MenuInfo) => {
  * @param keys 变更后的 openKeys
  */
 const handleOpenChange = (keys: string[]) => {
-  openKeys.value = normalizeMenuOpenKeys(keys, menuParentKeyMap.value, setting.menuAccordion)
+  openKeys.value = normalizeMenuOpenKeys(keys, menuParentKeyMap.value, setting.value.menuAccordion)
 }
 
 watch(
@@ -97,27 +102,6 @@ watch(
 <style scoped>
 .takt-mix-menu {
   border-right: 0;
-
-  &.menu-style-rounded {
-    :deep(.ant-menu-item) {
-      border-radius: 4px;
-      margin: 4px 8px;
-    }
-    :deep(.ant-menu-submenu-title) {
-      border-radius: 4px;
-      margin: 4px 8px;
-    }
-  }
-
-  &.menu-style-plain {
-    :deep(.ant-menu-item) {
-      border-radius: 0;
-      margin: 0;
-    }
-    :deep(.ant-menu-submenu-title) {
-      border-radius: 0;
-      margin: 0;
-    }
-  }
+  /* 朴素/圆润风格见 menu-base.css html[data-menu-style] */
 }
 </style>

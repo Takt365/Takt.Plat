@@ -44,6 +44,23 @@ public static class TaktEcDeptEntityHelper
     public static object? FindByDeptCode(IReadOnlyList<object> deptList, string deptCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
+        if (deptCode == TaktEcDeptCodes.Pcba)
+        {
+            var pcbaRows = deptList.Where(x => GetDeptCode(x) == deptCode).ToList();
+            var activeElectronic = pcbaRows.OfType<TaktEcSmt>().FirstOrDefault(x => x.IsObsolete == 0);
+            if (activeElectronic != null)
+            {
+                return activeElectronic;
+            }
+            var activeSeizounika = pcbaRows.OfType<TaktEcSeizounika>().FirstOrDefault(x => x.IsObsolete == 0);
+            if (activeSeizounika != null)
+            {
+                return activeSeizounika;
+            }
+            return pcbaRows.OfType<TaktEcSmt>().FirstOrDefault()
+                ?? pcbaRows.OfType<TaktEcSeizounika>().FirstOrDefault()
+                ?? pcbaRows.FirstOrDefault();
+        }
         return deptList.FirstOrDefault(x => GetDeptCode(x) == deptCode);
     }
 
@@ -156,6 +173,11 @@ public static class TaktEcDeptEntityHelper
                 updatedAt = e.UpdatedAt;
                 createdAt = e.CreatedAt;
                 break;
+            case TaktEcSmt e:
+                outboundDate = e.OutboundDate;
+                updatedAt = e.UpdatedAt;
+                createdAt = e.CreatedAt;
+                break;
             case TaktEcSeizounika e:
                 productionDate = e.ProductionDate;
                 updatedAt = e.UpdatedAt;
@@ -217,7 +239,7 @@ public static class TaktEcDeptEntityHelper
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>设变明细 ID</returns>
-    public static long GetEcnDetailId(object exec) => AsExec(exec).EcnDetailId;
+    public static long GetEcDetailId(object exec) => AsExec(exec).EcDetailId;
 
     /// <summary>
     /// 判断是否匹配是否实施筛选

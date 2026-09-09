@@ -57,6 +57,26 @@ public class TaktMaterialMovingPricesController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取在库金额统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>在库金额统计</returns>
+    [TaktPermission("logistics:materials:material:moving:price:list", "在库金额统计")]
+    [HttpGet("stock-stat")]
+    public async Task<IActionResult> GetMaterialMovingPriceStatAsync([FromQuery] TaktMaterialMovingPriceStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取移动价格
     /// </summary>
     /// <param name="id">移动价格ID</param>
@@ -86,11 +106,11 @@ public class TaktMaterialMovingPricesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:moving:price:query", "移动价格选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialMovingPriceOptionsAsync()
+    public async Task<IActionResult> GetMaterialMovingPriceOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialMovingPriceService.GetMaterialMovingPriceOptionsAsync();
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

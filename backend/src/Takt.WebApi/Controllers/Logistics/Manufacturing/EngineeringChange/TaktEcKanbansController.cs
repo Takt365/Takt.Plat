@@ -51,10 +51,10 @@ public class TaktEcKanbansController : TaktControllerBase
     /// 获取设变看板详情
     /// </summary>
     [TaktPermission("logistics:manufacturing:engineering:change:kanban:query", "设变看板详情")]
-    [HttpGet("{ecId}")]
-    public async Task<IActionResult> GetEcKanbanByEcIdAsync(long ecId)
+    [HttpGet("{ecGijutsuId}")]
+    public async Task<IActionResult> GetEcKanbanByEcIdAsync(long ecGijutsuId)
     {
-        try { var result = await _service.GetEcKanbanByEcIdAsync(ecId); if (result == null) return NotFound("设变看板不存在"); return Success(result, "查询成功"); }
+        try { var result = await _service.GetEcKanbanByEcIdAsync(ecGijutsuId); if (result == null) return NotFound("设变看板不存在"); return Success(result, "查询成功"); }
         catch (Exception ex) { return HandleException(ex); }
     }
 

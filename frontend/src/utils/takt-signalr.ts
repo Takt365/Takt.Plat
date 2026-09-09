@@ -36,6 +36,7 @@ import type {
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
 import type { BomMaterialCostItemRecalculateCompletedEvent } from '@/types/logistics/manufacturing/bom/material-cost-item-signal-r';
+import type { EcGijutsuPersistCompletedEvent } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu-persist-signal-r';
 import type {
   EcChangeClosedEvent,
   EcChangeNotificationEvent,
@@ -286,6 +287,31 @@ export function normalizeBomMaterialCostItemRecalculateCompleted(raw: unknown): 
 }
 
 /**
+ * 规范化设变技术课主表后台保存完成载荷
+ * @param raw Hub 原始载荷
+ * @returns 保存完成事件
+ */
+export function normalizeEcGijutsuPersistCompleted(raw: unknown): EcGijutsuPersistCompletedEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    tenantCode: readSignalRPayloadString(payload, 'tenantCode', 'TenantCode'),
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    triggerUserName: readSignalRPayloadString(payload, 'triggerUserName', 'TriggerUserName'),
+    plantCode: readSignalRPayloadString(payload, 'plantCode', 'PlantCode'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
+    isUpdate: Boolean(payload.isUpdate ?? payload.IsUpdate),
+    ecGijutsuId: readSignalRPayloadString(payload, 'ecGijutsuId', 'EcGijutsuId'),
+    detailCount: readSignalRPayloadNumber(payload, 'detailCount', 'DetailCount', 0),
+    executeStatus: readSignalRPayloadNumber(payload, 'executeStatus', 'ExecuteStatus', 0),
+    executeDuration: readSignalRPayloadNumber(payload, 'executeDuration', 'ExecuteDuration', 0),
+    errorMessage: readSignalRPayloadString(payload, 'errorMessage', 'ErrorMessage') || undefined,
+    completedAt: readSignalRPayloadString(payload, 'completedAt', 'CompletedAt'),
+  };
+}
+
+/**
  * 规范化工程变更通知推送载荷
  * @param raw Hub 原始载荷
  * @returns 变更通知事件
@@ -299,7 +325,7 @@ export function normalizeEcChangeNotification(raw: unknown): EcChangeNotificatio
     deliveryId: readSignalRPayloadString(payload, 'deliveryId', 'DeliveryId'),
     ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
     ecNotificationCode: readSignalRPayloadString(payload, 'ecNotificationCode', 'EcNotificationCode'),
-    ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
+    ecGijutsuId: readSignalRPayloadString(payload, 'ecGijutsuId', 'EcGijutsuId'),
     ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     ecTitle: readSignalRPayloadString(payload, 'ecTitle', 'EcTitle') || undefined,
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
@@ -360,7 +386,7 @@ export function normalizeEcChangeClosed(raw: unknown): EcChangeClosedEvent {
     : {};
   return {
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
-    ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
+    ecGijutsuId: readSignalRPayloadString(payload, 'ecGijutsuId', 'EcGijutsuId'),
     ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
     closedAt: readSignalRPayloadString(payload, 'closedAt', 'ClosedAt'),
@@ -498,6 +524,11 @@ export interface TaktSignalRCallbacks {
    * BOM 物料成本机种月平均重算完成
    */
   onBomMaterialCostItemRecalculateCompleted?: (event: BomMaterialCostItemRecalculateCompletedEvent) => void;
+
+  /**
+   * 设变技术课主表后台保存完成
+   */
+  onEcGijutsuPersistCompleted?: (event: EcGijutsuPersistCompletedEvent) => void;
 
   /**
    * 工程变更通知推送
@@ -754,6 +785,10 @@ export class TaktSignalRManager {
 
     this.notificationHub.on('BomMaterialCostItemRecalculateCompleted', (payload: unknown) => {
       callbacks?.onBomMaterialCostItemRecalculateCompleted?.(normalizeBomMaterialCostItemRecalculateCompleted(payload));
+    });
+
+    this.notificationHub.on('EcGijutsuPersistCompleted', (payload: unknown) => {
+      callbacks?.onEcGijutsuPersistCompleted?.(normalizeEcGijutsuPersistCompleted(payload));
     });
   }
 

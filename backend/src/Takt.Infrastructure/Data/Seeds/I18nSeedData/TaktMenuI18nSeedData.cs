@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单导航国际化翻译种子（menu.* 键，与 TaktMenuLevel1~4SeedData I18nKey 对齐）
 // 
@@ -1119,13 +1119,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.aps._self", "zh-HK", "APS排程_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "en-US", "设变_us", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change._self", "en-US", "工程设变_us", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "ja-JP", "设变_jp", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change._self", "ja-JP", "工程设变_jp", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "zh-CN", "设变", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-CN", "工程设变", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "zh-HK", "设变_hk", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-HK", "工程设变_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.output._self
             ("menu.logistics.manufacturing.output._self", "en-US", "OPH管理_us", "菜单导航"),
@@ -1136,14 +1136,23 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.output._self
             ("menu.logistics.manufacturing.output._self", "zh-HK", "OPH管理_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "en-US", "OPH工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "ja-JP", "OPH工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "zh-CN", "OPH工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "zh-HK", "OPH工数_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.defect._self
-            ("menu.logistics.manufacturing.defect._self", "en-US", "不良_us", "菜单导航"),
+            ("menu.logistics.manufacturing.defect._self", "en-US", "生产不良_us", "菜单导航"),
             // menu.logistics.manufacturing.defect._self
-            ("menu.logistics.manufacturing.defect._self", "ja-JP", "不良_jp", "菜单导航"),
+            ("menu.logistics.manufacturing.defect._self", "ja-JP", "生产不良_jp", "菜单导航"),
             // menu.logistics.manufacturing.defect._self
-            ("menu.logistics.manufacturing.defect._self", "zh-CN", "不良", "菜单导航"),
+            ("menu.logistics.manufacturing.defect._self", "zh-CN", "生产不良", "菜单导航"),
             // menu.logistics.manufacturing.defect._self
-            ("menu.logistics.manufacturing.defect._self", "zh-HK", "不良_hk", "菜单导航"),
+            ("menu.logistics.manufacturing.defect._self", "zh-HK", "生产不良_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.sop._self
             ("menu.logistics.manufacturing.sop._self", "en-US", "SOP管理_us", "菜单导航"),
@@ -2333,6 +2342,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.engineering.change.bukan
             ("menu.logistics.manufacturing.engineering.change.bukan", "zh-HK", "部管部门_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.engineering.change.smt
+            ("menu.logistics.manufacturing.engineering.change.smt", "en-US", "SMT Warehouse_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.smt
+            ("menu.logistics.manufacturing.engineering.change.smt", "ja-JP", "SMT倉庫_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.smt
+            ("menu.logistics.manufacturing.engineering.change.smt", "zh-CN", "SMT仓库", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.smt
+            ("menu.logistics.manufacturing.engineering.change.smt", "zh-HK", "SMT倉庫_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.engineering.change.seizounika
             ("menu.logistics.manufacturing.engineering.change.seizounika", "en-US", "制造二课_us", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.seizounika
@@ -2431,6 +2449,51 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.output.production.monthly", "zh-CN", "月生产推移", "菜单导航"),
             // menu.logistics.manufacturing.output.production.monthly
             ("menu.logistics.manufacturing.output.production.monthly", "zh-HK", "月生产推移_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.labor.hour.assy
+            ("menu.logistics.manufacturing.labor.hour.assy", "en-US", "组立工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.assy
+            ("menu.logistics.manufacturing.labor.hour.assy", "ja-JP", "组立工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.assy
+            ("menu.logistics.manufacturing.labor.hour.assy", "zh-CN", "组立工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.assy
+            ("menu.logistics.manufacturing.labor.hour.assy", "zh-HK", "组立工数_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.labor.hour.pcba.ai
+            ("menu.logistics.manufacturing.labor.hour.pcba.ai", "en-US", "自插工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.ai
+            ("menu.logistics.manufacturing.labor.hour.pcba.ai", "ja-JP", "自插工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.ai
+            ("menu.logistics.manufacturing.labor.hour.pcba.ai", "zh-CN", "自插工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.ai
+            ("menu.logistics.manufacturing.labor.hour.pcba.ai", "zh-HK", "自插工数_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.labor.hour.pcba.mi
+            ("menu.logistics.manufacturing.labor.hour.pcba.mi", "en-US", "手插工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.mi
+            ("menu.logistics.manufacturing.labor.hour.pcba.mi", "ja-JP", "手插工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.mi
+            ("menu.logistics.manufacturing.labor.hour.pcba.mi", "zh-CN", "手插工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.mi
+            ("menu.logistics.manufacturing.labor.hour.pcba.mi", "zh-HK", "手插工数_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.labor.hour.pcba.repair
+            ("menu.logistics.manufacturing.labor.hour.pcba.repair", "en-US", "改修工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.repair
+            ("menu.logistics.manufacturing.labor.hour.pcba.repair", "ja-JP", "改修工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.repair
+            ("menu.logistics.manufacturing.labor.hour.pcba.repair", "zh-CN", "改修工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.repair
+            ("menu.logistics.manufacturing.labor.hour.pcba.repair", "zh-HK", "改修工数_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.labor.hour.pcba.smt
+            ("menu.logistics.manufacturing.labor.hour.pcba.smt", "en-US", "SMT工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.smt
+            ("menu.logistics.manufacturing.labor.hour.pcba.smt", "ja-JP", "SMT工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.smt
+            ("menu.logistics.manufacturing.labor.hour.pcba.smt", "zh-CN", "SMT工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour.pcba.smt
+            ("menu.logistics.manufacturing.labor.hour.pcba.smt", "zh-HK", "SMT工数_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.defect.group
             ("menu.logistics.manufacturing.defect.group", "en-US", "不良组_us", "菜单导航"),

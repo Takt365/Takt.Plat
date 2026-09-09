@@ -29,7 +29,6 @@ export const ECGIJUTSU_LIST_FIELDS = [
   'ecLossAmount',
   'ecDistinction',
   'ecEntryDate',
-  'discontinuedStatus',
   'ecStatus',
 ] as const
 
@@ -48,7 +47,6 @@ export const ECGIJUTSU_PLACEHOLDER = {
   ecLossAmount: 'select',
   ecDistinction: 'select',
   ecEntryDate: 'select',
-  discontinuedStatus: 'select',
   ecStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -66,7 +64,6 @@ export const ECGIJUTSU_QUERY_STRING_FIELDS = [
   'ecTitle',
   'ecContent',
   'ecLeader',
-  'discontinuedStatus',
   'ecEntryDateStart',
   'ecEntryDateEnd',
   'createdAtStart',
@@ -91,7 +88,6 @@ export const ECGIJUTSU_QUERY_FIELDS: readonly EcGijutsuQueryField[] = [
   'ecLeader',
   'ecLossAmount',
   'ecDistinction',
-  'discontinuedStatus',
   'ecEntryDateStart',
   'ecEntryDateEnd',
   'ecStatus',

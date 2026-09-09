@@ -227,7 +227,7 @@ const SKIP_FORM_FIELDS = new Set([
   'createdBy',
   'updatedBy',
   'isDeleted',
-  /** 排序号由后端 ITaktSortOrderGenerator 自动生成；专用 SortDto / 树拖拽改序，不入维护表单 */
+  /** 排序号由后端 ITaktSortOrderGenerator 自动生成；专用 SortDto / 树拖拽改序，禁止入维护表单与子表行内编辑 */
   'sortOrder',
   /** RBAC 反向合并（rbac-parent-config RBAC_INVERSE_CREATE_FIELDS）；走 assign-* 弹窗，不入 CRUD 表单 */
   'roleIds',
@@ -349,11 +349,16 @@ const COMMON_ENTITY_FIELD_T_KEYS = {
 /**
  * 解析字段完整 i18n 键（remark / extField 等走 common.page.entity.*，其余走 entity.{slug}.*）
  * 与 generate-entity-i18n-seed.cjs / TaktXxxI18nSeedData 键规则一致（slug 全小写 + 末段别名）
+ * Culture / Translation 的 cultureCode 为业务字段 → entity.culture.code / entity.translation.culturecode（非 common）
  * @param {string} name 属性 camelCase
  * @param {string} entityI18nSlug 实体 slug（全小写，如 itasset）
  * @returns {string}
  */
 function resolveFieldTranslationKey(name, entityI18nSlug) {
+  const slug = String(entityI18nSlug || '').toLowerCase();
+  if (name === 'cultureCode' && (slug === 'culture' || slug === 'translation')) {
+    return buildEntityI18nKey(slug, name);
+  }
   if (COMMON_ENTITY_FIELD_T_KEYS[name]) {
     return COMMON_ENTITY_FIELD_T_KEYS[name];
   }
@@ -1534,6 +1539,47 @@ function extractDictType(doc) {
 function extractOptionsApiUrl(doc) {
   const match = String(doc || '').match(/选项\s+([A-Za-z][\w]*\/(?:tree-)?options)/);
   return match ? match[1] : '';
+}
+
+/**
+ * 从 JSDoc 拼 TaktSelect :api-params（行政区划 Level、统驭科目 auxiliaryType）
+ * @param {{ doc?: string, apiUrl?: string }} field
+ * @returns {string} 如 `{ level: 2 }`，无则空串
+ */
+function resolveApiSelectParamsObjectLiteral(field) {
+  const doc = String(field?.doc || '');
+  const apiUrl = String(field?.apiUrl || '');
+  const parts = [];
+  if (apiUrl.includes('TaktAdminDivisions/options')) {
+    const levelMatch = doc.match(/Level\s*=\s*(\d)/i);
+    if (levelMatch) {
+      parts.push(`level: ${levelMatch[1]}`);
+    }
+  }
+  if (apiUrl.includes('TaktAccountTitles/options')) {
+    if (/reconciliationOnly\s*=\s*true/i.test(doc)) {
+      parts.push('reconciliationOnly: true');
+    }
+    const auxMatch = doc.match(/auxiliaryType\s*=\s*([A-Za-z])/);
+    if (auxMatch) {
+      parts.push(`auxiliaryType: '${auxMatch[1]}'`);
+    }
+  }
+  return parts.length ? `{ ${parts.join(', ')} }` : '';
+}
+
+/**
+ * TaktSelect 的 :api-params 属性行（含前导换行）
+ * @param {{ doc?: string, apiUrl?: string }} field
+ * @param {string} indent
+ * @returns {string}
+ */
+function renderApiSelectParamsAttr(field, indent) {
+  const literal = resolveApiSelectParamsObjectLiteral(field);
+  if (!literal) {
+    return '';
+  }
+  return `\n${indent}  :api-params="${literal}"`;
 }
 
 /** 字段名 → 选项 API 回退（实体注释缺失时） */
@@ -3270,7 +3316,7 @@ ${indent}/>`;
   if (field.htmlType === 'apiSelect' && field.apiUrl) {
     return `${indent}<TaktSelect
 ${indent}  v-model:value="${modelPrefix}${field.name}"
-${indent}  api-url="${field.apiUrl}"
+${indent}  api-url="${field.apiUrl}"${renderApiSelectParamsAttr(field, indent)}
 ${indent}  :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.select')}"${editLockAttrs}
 ${indent}/>`;
   }
@@ -3390,7 +3436,7 @@ function renderQueryFormItemBody(field) {
     return `      <a-form-item :label="${fieldLabelTExpr(field, 'query')}">
         <TaktSelect
           v-model:value="advancedQueryForm.${field.name}"
-          api-url="${field.apiUrl}"
+          api-url="${field.apiUrl}"${renderApiSelectParamsAttr(field, '        ')}
           :placeholder="${fieldPlaceholderTExpr(field, 'common.page.form.placeholder.select', 'query')}"
           allow-clear
         />
@@ -4787,11 +4833,23 @@ function buildVueImportResultUtilImportLine() {
   return "import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'\n";
 }
 
+/** 表单弹窗宽度 import（与 ec-gijutsu 来源导入/主表/附件弹窗一致） */
+const TAKT_FORM_MODAL_WIDTH_IMPORT =
+  "import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'\n";
+
+/** TaktModal 表单弹窗 width 绑定 */
+const TAKT_FORM_MODAL_WIDTH_ATTR = ':width="formModalWidthPx"';
+
 /**
- * 导入 Modal + TaktImportFile 模板（v-if 关闭时销毁组件，避免文件/结果残留）
- * @param {string} entityI18nSlug entity.*._self 的 slug 段
+ * index/panel：表单弹窗宽度（视口 − 左侧菜单）× 80%
  * @returns {string}
  */
+function buildFormModalWidthStateBlock() {
+  return `/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
+`;
+}
+
 /**
  * 导入 Modal + TaktImportFile 模板（v-if 关闭时销毁组件，避免文件/结果残留）
  * @param {string} entityPascal 实体 PascalCase（用于 SELF_I18N_KEY 常量前缀）
@@ -4989,6 +5047,7 @@ module.exports = {
   extractDictType,
   extractOptionsApiUrl,
   resolveOptionsApiUrl,
+  renderApiSelectParamsAttr,
   entityRowRecordTypeName,
   buildEntityRowRecordTypeAlias,
   buildEntityDictValueHelper,
@@ -5031,6 +5090,9 @@ module.exports = {
   buildServerPagedIndexStyleBlock,
   buildFormResetScopeDefaultsBlock,
   buildVueImportResultUtilImportLine,
+  TAKT_FORM_MODAL_WIDTH_IMPORT,
+  TAKT_FORM_MODAL_WIDTH_ATTR,
+  buildFormModalWidthStateBlock,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
 };

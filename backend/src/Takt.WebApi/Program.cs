@@ -46,6 +46,19 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    // 大 JSON（设变明细可达数十万行）：默认 30MB 会 BadHttpRequestException
+    const long maxRequestBodyBytes = 1L * 1024 * 1024 * 1024; // 1GB
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.Limits.MaxRequestBodySize = maxRequestBodyBytes;
+    });
+    builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options =>
+    {
+        options.MultipartBodyLengthLimit = maxRequestBodyBytes;
+        options.ValueLengthLimit = int.MaxValue;
+        options.MultipartHeadersLengthLimit = int.MaxValue;
+    });
+
     builder.Services.AddTaktLogging(builder.Configuration, builder.Environment.EnvironmentName);
 
     // ========================================

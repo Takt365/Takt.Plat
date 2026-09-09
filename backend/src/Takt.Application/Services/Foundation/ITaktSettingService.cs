@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktSettingService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-08
 // 创建人：Takt365(Cursor AI)
 // 功能描述：系统设置应用服务接口
 // 
@@ -38,8 +38,10 @@ public interface ITaktSettingService
     /// <summary>
     /// 获取系统设置选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSettingOptionsAsync();
+    Task<List<TaktSelectOption>> GetSettingOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建系统设置

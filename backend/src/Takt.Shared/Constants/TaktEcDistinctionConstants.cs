@@ -53,6 +53,11 @@ public static class TaktEcDistinctionConstants
     public const string PlannedMaterialStatus = "Z0";
 
     /// <summary>
+    /// 停产操作默认写入的完成品物料状态（字典 logistics_materials_material_discontinued_status；生产结束）
+    /// </summary>
+    public const string EolMaterialStatus = "ZQ";
+
+    /// <summary>
     /// 区分=全仕向时，无需人工填写部门的执行内容
     /// </summary>
     public const string AllDestinationExecContent = "管理区分-全仕向";
@@ -78,14 +83,49 @@ public static class TaktEcDistinctionConstants
     public const string AutoCompletedExecContent = "系统自动完成";
 
     /// <summary>
-    /// 完成品物料状态≠Z0 时自动填充的执行内容（各部门可人工清空以恢复）
+    /// 停产状态≠Z0 时自动填充的执行内容（各部门可人工清空以恢复）
     /// </summary>
     public const string EolExecContent = "EOL";
 
     /// <summary>
-    /// 是否按完成品物料状态视为 EOL（空或 Z0 为否）
+    /// 新物料编码是否有效（空或占位「0」视为无新物料；采购/受检/部管不得因此生成执行行）
     /// </summary>
-    /// <param name="discontinuedStatus">完成品物料状态</param>
+    /// <param name="ecNewMaterialCode">新物料编码</param>
+    /// <returns>是否有效新物料</returns>
+    public static bool HasEffectiveNewMaterialCode(string? ecNewMaterialCode)
+    {
+        var code = ecNewMaterialCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(code))
+        {
+            return false;
+        }
+        return !string.Equals(code, "0", StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// 是否采购/受检/部管课（依赖有效新物料编码才生成执行行）
+    /// </summary>
+    /// <param name="deptCode">部门编码</param>
+    /// <returns>是否为上述三课</returns>
+    public static bool IsNewMaterialDependentDept(string? deptCode)
+    {
+        if (string.IsNullOrWhiteSpace(deptCode))
+        {
+            return false;
+        }
+        return deptCode switch
+        {
+            TaktEcDeptCodes.Mp => true,
+            TaktEcDeptCodes.Iqc => true,
+            TaktEcDeptCodes.Mc => true,
+            _ => false
+        };
+    }
+
+    /// <summary>
+    /// 是否按停产状态视为 EOL（空或 Z0 为否）
+    /// </summary>
+    /// <param name="discontinuedStatus">停产状态</param>
     /// <returns>是否 EOL</returns>
     public static bool IsEolDiscontinued(string? discontinuedStatus)
     {
@@ -143,6 +183,16 @@ public static class TaktEcDistinctionConstants
     public static bool IsPcbaC003ExternalGroup(string? purchaseType, string? newWarehouse)
     {
         return IsExternalPurchaseType(purchaseType) && IsPcbaGateWarehouse(newWarehouse);
+    }
+
+    /// <summary>
+    /// 制二课其它页签：新采购类型不是 F
+    /// </summary>
+    /// <param name="purchaseType">新采购类型</param>
+    /// <returns>是否属于制二 F以外页签</returns>
+    public static bool IsPcbaOtherPurchaseGroup(string? purchaseType)
+    {
+        return !IsExternalPurchaseType(purchaseType);
     }
 
     /// <summary>
@@ -205,7 +255,8 @@ public static class TaktEcDistinctionConstants
             TaktEcDeptCodes.Mp => IsExternalPurchaseType(purchaseType),
             TaktEcDeptCodes.Iqc => IsExternalPurchaseType(purchaseType),
             TaktEcDeptCodes.Mc => IsBukanVisible(purchaseType, newWarehouse),
-            TaktEcDeptCodes.Pcba => IsPcbaC003ExternalGroup(purchaseType, newWarehouse),
+            TaktEcDeptCodes.Pcba => IsPcbaC003ExternalGroup(purchaseType, newWarehouse)
+                || IsPcbaOtherPurchaseGroup(purchaseType),
             _ => false
         };
     }
@@ -236,6 +287,7 @@ public static class TaktEcDistinctionConstants
             || string.Equals(value, "技术为止", StringComparison.Ordinal)
             || string.Equals(value, TaktEcKoubaiConstants.NotPurchasingRelatedExecContent, StringComparison.Ordinal)
             || string.Equals(value, TaktEcUkekenConstants.NotRelatedToIqcExecContent, StringComparison.Ordinal)
-            || string.Equals(value, TaktEcBukanConstants.NotRelatedToMaterialControlExecContent, StringComparison.Ordinal);
+            || string.Equals(value, TaktEcBukanConstants.NotRelatedToMaterialControlExecContent, StringComparison.Ordinal)
+            || string.Equals(value, EolExecContent, StringComparison.OrdinalIgnoreCase);
     }
 }

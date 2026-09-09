@@ -144,10 +144,20 @@ export function updateCustomerServiceContractSort(dto: CustomerServiceContractSo
  * 获取服务合同选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getCustomerServiceContractOptions(): Promise<TaktSelectOption[]> {
+export function getCustomerServiceContractOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CUSTOMER_SERVICE_CONTRACT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

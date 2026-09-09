@@ -38,8 +38,10 @@ public interface ITaktAnnouncementService
     /// <summary>
     /// 获取公告通知选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAnnouncementOptionsAsync();
+    Task<List<TaktSelectOption>> GetAnnouncementOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建公告通知
@@ -102,4 +104,10 @@ public interface ITaktAnnouncementService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportAnnouncementAsync(TaktAnnouncementQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取公告通知件数统计（数据看板；按 PublishTime）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>公告通知件数统计</returns>
+    Task<TaktAnnouncementStatDto> GetAnnouncementStatAsync(TaktAnnouncementStatQueryDto queryDto);
 }

@@ -1,4 +1,4 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍工厂·Takt Plat -->
 <!-- 命名空间：@/views/code/generator/components -->
 <!-- 文件名称：gen-form.vue -->
@@ -22,6 +22,7 @@
           :label-col="{ span: 6 }"
           :wrapper-col="{ span: 18 }"
           layout="horizontal"
+          label-align="right"
         >
           <a-tabs
             v-model:active-key="tableSubTab"

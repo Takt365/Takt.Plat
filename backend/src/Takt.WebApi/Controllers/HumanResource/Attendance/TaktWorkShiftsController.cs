@@ -86,11 +86,11 @@ public class TaktWorkShiftsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:attendance:work:shift:query", "班次信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetWorkShiftOptionsAsync()
+    public async Task<IActionResult> GetWorkShiftOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _workShiftService.GetWorkShiftOptionsAsync();
+            var result = await _workShiftService.GetWorkShiftOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -208,13 +208,13 @@ public static class TaktProductionStatHelper
     }
 
     /// <summary>
-    /// 计算组立日报明细标准产能：无产量且无报工时为 0；有报工工时时按报工工时÷标准工时×稼动率重算；否则继承主表小时标准产能
+    /// 计算组立日报明细标准产能：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行
     /// </summary>
     /// <param name="stdMinutes">主表标准工时(分钟)</param>
     /// <param name="masterHourlyStdCapacity">主表小时标准产能（表头 StdCapacity）</param>
     /// <param name="confirmMinutes">报工工时(分钟)</param>
     /// <param name="operationRate">标准生产稼动率（比例或历史百分数）</param>
-    /// <param name="prodActualQty">实际生产数量</param>
+    /// <param name="prodActualQty">实际生产数量（保留参数，与调用方签名对齐；本公式不参与分支）</param>
     /// <returns>明细标准产能（保留 2 位小数，四舍五入）</returns>
     public static decimal CalculateAssyDetailStdCapacity(
         decimal stdMinutes,
@@ -223,10 +223,7 @@ public static class TaktProductionStatHelper
         decimal operationRate,
         decimal prodActualQty = 0)
     {
-        if (IsAssyDetailWithoutProduction(prodActualQty, confirmMinutes))
-        {
-            return 0;
-        }
+        _ = prodActualQty;
         if (confirmMinutes > 0)
         {
             var rateFactor = NormalizeStandardOperationRate(operationRate);

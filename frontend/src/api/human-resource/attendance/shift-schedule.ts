@@ -116,10 +116,20 @@ export function deleteShiftScheduleBatch(ids: string[]): Promise<void> {
  * 获取排班信息选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getShiftScheduleOptions(): Promise<TaktSelectOption[]> {
+export function getShiftScheduleOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SHIFT_SCHEDULE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

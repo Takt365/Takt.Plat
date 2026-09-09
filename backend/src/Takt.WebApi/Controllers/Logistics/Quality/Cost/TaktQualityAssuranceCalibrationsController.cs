@@ -86,11 +86,11 @@ public class TaktQualityAssuranceCalibrationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:cost:assurance:query", "品质业务设备校正费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityAssuranceCalibrationOptionsAsync()
+    public async Task<IActionResult> GetQualityAssuranceCalibrationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _qualityAssuranceCalibrationService.GetQualityAssuranceCalibrationOptionsAsync();
+            var result = await _qualityAssuranceCalibrationService.GetQualityAssuranceCalibrationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -134,8 +134,10 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <summary>
     /// 获取组立日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAssyOutputOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAssyOutputOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _assyOutputRepository.GetListAsync(
@@ -163,8 +165,10 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// 获取组立不良日报新增用工单选项（来源已生产的组立日报，排除同日同工单已存在不良日报）
     /// </summary>
     /// <param name="excludeAssyDefectId">编辑态当前不良日报 ID（保留其对应组立日报在选项中）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项，DictValue 为组立日报 Id</returns>
-    public async Task<List<TaktSelectOption>> GetAssyOutputProdOrderOptionsAsync(long? excludeAssyDefectId = null)
+    public async Task<List<TaktSelectOption>> GetAssyOutputProdOrderOptionsAsync(string? plantCode = null, string? keyword = null, long? excludeAssyDefectId = null)
     {
         const int maxOptions = TaktPagedOptions.HardMaxPageSize;
         EnsureThreeLayerContext();
@@ -229,15 +233,21 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         await ApplyPlantCodeFromProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputRepository,
-            x => x.ProdDate == entity.ProdDate.Date
+            x => x.TeamCode == entity.TeamCode
+                && x.ProdCategory == entity.ProdCategory
+                && x.ProdDate == entity.ProdDate.Date
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
+            throw new TaktBusinessException("组立日报的生产班组、生产类别、生产日期、工单号已存在");
         }
         await ApplyAssyOutputDerivedFieldsAsync(entity);
         entity = await _assyOutputRepository.CreateAsync(entity);
-        EnsureDefaultAssyOutputDetailsOnCreate(dto);
+        // 仅当主表标准产能 > 0 时自动补齐 13 条固定生产时段明细
+        if (entity.StdCapacity > 0)
+        {
+            EnsureDefaultAssyOutputDetailsOnCreate(dto);
+        }
         await SaveAssyOutputChildrenAsync(entity, dto);
         await SyncDefectFromOutputAsync(entity);
         await RefreshAssyOutputChangeoverBucketsForOutputAsync(entity);
@@ -266,12 +276,14 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         await ApplyPlantCodeFromProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputRepository,
-            x => x.ProdDate == entity.ProdDate.Date
+            x => x.TeamCode == entity.TeamCode
+                && x.ProdCategory == entity.ProdCategory
+                && x.ProdDate == entity.ProdDate.Date
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
         {
-            throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
+            throw new TaktBusinessException("组立日报的生产班组、生产类别、生产日期、工单号已存在");
         }
         await ApplyAssyOutputDerivedFieldsAsync(entity);
         await _assyOutputRepository.UpdateAsync(entity);
@@ -370,18 +382,24 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 ApplyDefaultAssyOutputProdDateIfMissing(entity);
                 EnsureAssyOutputProdDateEditable(entity.ProdDate);
                 await ApplyPlantCodeFromProdOrderAsync(entity);
-                var importKey = TaktOutputOrderUniqueHelper.BuildImportKey(entity.ProdDate, entity.ProdOrderCode);
+                var importKey = TaktOutputOrderUniqueHelper.BuildTeamDailyOrderImportKey(
+                    entity.TeamCode,
+                    entity.ProdCategory,
+                    entity.ProdDate,
+                    entity.ProdOrderCode);
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（TeamCode、ProdCategory、ProdDate、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_assy_unique = await _uniqueValidator.IsUniqueAsync(
                     _assyOutputRepository,
-                    x => x.ProdDate == entity.ProdDate.Date
+                    x => x.TeamCode == entity.TeamCode
+                        && x.ProdCategory == entity.ProdCategory
+                        && x.ProdDate == entity.ProdDate.Date
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_assy_unique)
                 {
-                    throw new TaktBusinessException("组立日报的生产日期、工单号已存在");
+                    throw new TaktBusinessException("组立日报的生产班组、生产类别、生产日期、工单号已存在");
                 }
                 await ApplyAssyOutputDerivedFieldsAsync(entity);
                 await _assyOutputRepository.CreateAsync(entity);
@@ -533,23 +551,27 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         var seenKeys = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < assyoutputdetails.Count; i++)
         {
-            var key = $"{assyoutputdetails[i].CompanyCode}|{assyoutputdetails[i].AssyOutputId}|{assyoutputdetails[i].LineNumber}";
+            var period = (assyoutputdetails[i].TimePeriod ?? string.Empty).Trim();
+            var key = $"{assyoutputdetails[i].CompanyCode}|{assyoutputdetails[i].AssyOutputId}|{period}|{assyoutputdetails[i].LineNumber}";
             if (!seenKeys.Add(key))
             {
-                throw new TaktBusinessException($"组立日报明细第{i + 1}项与本次提交的其他项重复（CompanyCode、AssyOutputId、LineNumber）");
+                throw new TaktBusinessException($"组立日报明细第{i + 1}项与本次提交的其他项重复（CompanyCode、AssyOutputId、TimePeriod、LineNumber）");
             }
         }
         await _assyOutputDetailRepository.DeleteAsync(x => x.AssyOutputId == entity.Id);
         foreach (var child in assyoutputdetails)
         {
-            var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+            var period = (child.TimePeriod ?? string.Empty).Trim();
+            child.TimePeriod = period;
+            var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique = await _uniqueValidator.IsUniqueAsync(
                 _assyOutputDetailRepository,
                 x => x.CompanyCode == child.CompanyCode
                     && x.AssyOutputId == child.AssyOutputId
+                    && x.TimePeriod == period
                     && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique)
+            if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique)
             {
-                throw new TaktBusinessException("组立日报明细的CompanyCode、AssyOutputId、LineNumber已存在");
+                throw new TaktBusinessException("组立日报明细的CompanyCode、AssyOutputId、TimePeriod、LineNumber已存在");
             }
         }
         var operationRatePercent = await TaktAssyOutputDerivedFieldsHelper.ResolvePersonnelOperationRatePercentAsync(
@@ -674,7 +696,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     }
 
     /// <summary>
-    /// 新增组立日报时确保 13 条固定生产时段明细（与客户端已填写的同时段行合并）
+    /// 新增组立日报时，在主表标准产能 &gt; 0 的前提下确保 13 条固定生产时段明细（与客户端已填写的同时段行合并）
     /// </summary>
     /// <param name="dto">创建 DTO</param>
     private static void EnsureDefaultAssyOutputDetailsOnCreate(TaktAssyOutputCreateDto dto)
@@ -1065,5 +1087,76 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         }
 
         return exp.ToExpression();
+    }
+
+    // ========================================
+    // 扩展方法（数据看板）
+    // ========================================
+
+    /// <summary>
+    /// 获取组立生产统计（数据看板 production-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>组立生产统计</returns>
+    public async Task<TaktAssyOutputProductionStatDto> GetAssyOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktAssyOutput, bool>> headerPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var headers = await _assyOutputRepository.GetListAsync(headerPredicate);
+        var outputIds = headers.Select(h => h.Id).ToList();
+        var details = outputIds.Count == 0
+            ? new List<TaktAssyOutputDetail>()
+            : await _assyOutputDetailRepository.GetListAsync(x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.IsObsolete == 0
+                && outputIds.Contains(x.AssyOutputId));
+        var qtyByOutputId = details
+            .GroupBy(d => d.AssyOutputId)
+            .ToDictionary(g => g.Key, g => g.Sum(d => d.ProdActualQty));
+        var teams = headers
+            .GroupBy(h => h.TeamCode ?? string.Empty, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var plan = g.Sum(h => h.StdCapacity);
+                var actual = g.Sum(h => qtyByOutputId.TryGetValue(h.Id, out var qty) ? qty : 0m);
+                return new TaktOutputProductionStatTeamItemDto
+                {
+                    TeamCode = g.Key,
+                    StdCapacity = plan,
+                    ProdActualQty = actual,
+                    AchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(actual, plan),
+                };
+            })
+            .ToList();
+        var monthStdCapacity = teams.Sum(t => t.StdCapacity);
+        var monthProdActualQty = teams.Sum(t => t.ProdActualQty);
+        var monthDowntimeMinutes = details.Sum(d => (decimal)d.DowntimeMinutes);
+        var monthInputMinutes = details.Sum(d => d.InputMinutes);
+        var monthProdMinutes = details.Sum(d => d.ConfirmMinutes);
+        var monthActualMinutes = details.Sum(d => d.ActualMinutes);
+        return new TaktAssyOutputProductionStatDto
+        {
+            StatMonth = statMonth,
+            MonthStdCapacity = monthStdCapacity,
+            MonthProdActualQty = monthProdActualQty,
+            MonthAchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(monthProdActualQty, monthStdCapacity),
+            MonthDowntimeMinutes = monthDowntimeMinutes,
+            MonthInputMinutes = monthInputMinutes,
+            MonthProdMinutes = monthProdMinutes,
+            MonthActualMinutes = monthActualMinutes,
+            Teams = teams,
+        };
     }
 }

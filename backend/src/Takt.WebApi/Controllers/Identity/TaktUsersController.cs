@@ -85,11 +85,11 @@ public class TaktUsersController : TaktControllerBase
     /// <returns>用户选项列表</returns>
     [TaktPermission("identity:user:query", "用户选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetUserOptionsAsync()
+    public async Task<IActionResult> GetUserOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _userService.GetUserOptionsAsync();
+            var result = await _userService.GetUserOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

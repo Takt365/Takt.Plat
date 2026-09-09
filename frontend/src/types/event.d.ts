@@ -127,6 +127,11 @@ export interface Events {
   'logistics:bom-material-cost-item:recalculate-completed': import('@/types/logistics/manufacturing/bom/material-cost-item-signal-r').BomMaterialCostItemRecalculateCompletedEvent;
 
   /**
+   * 设变技术课主表后台保存完成（SignalR）
+   */
+  'logistics:ec-gijutsu:persist-completed': import('@/types/logistics/manufacturing/engineering-change/ec-gijutsu-persist-signal-r').EcGijutsuPersistCompletedEvent;
+
+  /**
    * 刷新菜单
    */
   'menu:refresh': undefined;

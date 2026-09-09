@@ -38,8 +38,10 @@ public interface ITaktStandardOperationRateService
     /// <summary>
     /// 获取标准生产稼动率选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetStandardOperationRateOptionsAsync();
+    Task<List<TaktSelectOption>> GetStandardOperationRateOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 按生产日期解析有效标准生产稼动率（%）

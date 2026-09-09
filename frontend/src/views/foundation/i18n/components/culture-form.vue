@@ -14,10 +14,9 @@
   <div class="culture-form">
     <a-form
       ref="formRef"
+      class="takt-generated-form"
       :model="formState"
       :rules="formRules"
-      :label-col="{ span: 4 }"
-      :wrapper-col="{ span: 20 }"
       layout="horizontal"
       label-align="right"
     >

@@ -29,6 +29,42 @@ public class TaktDefectStatQueryDto
 }
 
 /// <summary>
+/// 不良统计按生产班组行（数据看板：班别/生产数/无不良台数/不良数/直行率/不良率）
+/// </summary>
+public class TaktDefectStatTeamItemDto
+{
+    /// <summary>
+    /// 生产班组编码（TeamCode）
+    /// </summary>
+    public string TeamCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产数（统计分母）
+    /// </summary>
+    public decimal BaseQty { get; set; }
+
+    /// <summary>
+    /// 无不良台数
+    /// </summary>
+    public decimal GoodQty { get; set; }
+
+    /// <summary>
+    /// 不良数
+    /// </summary>
+    public decimal DefectQty { get; set; }
+
+    /// <summary>
+    /// 直行率（%）
+    /// </summary>
+    public decimal YieldRatePercent { get; set; }
+
+    /// <summary>
+    /// 不良率（%）
+    /// </summary>
+    public decimal DefectRatePercent { get; set; }
+}
+
+/// <summary>
 /// 不良统计 DTO（组立/PCBA 检查/改修共用结构）
 /// </summary>
 public class TaktDefectStatDto
@@ -62,6 +98,11 @@ public class TaktDefectStatDto
     /// 月直行率（%）
     /// </summary>
     public decimal MonthYieldRatePercent { get; set; }
+
+    /// <summary>
+    /// 按生产班组（TeamCode）分行汇总
+    /// </summary>
+    public List<TaktDefectStatTeamItemDto> Teams { get; set; } = new();
 }
 
 /// <summary>
@@ -83,4 +124,25 @@ public class TaktPcbaInspectionStatDto : TaktDefectStatDto
 /// </summary>
 public class TaktPcbaRepairStatDto : TaktDefectStatDto
 {
+}
+
+/// <summary>
+/// PCBA 不良看板统计 DTO（SMT 检查数 + 修理数）
+/// </summary>
+public class TaktPcbaDefectBoardStatDto
+{
+    /// <summary>
+    /// 统计月份（yyyy-MM）
+    /// </summary>
+    public string StatMonth { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 检查数：TaktPcbaInspectionDetail.DailyCompletedQty 合计
+    /// </summary>
+    public decimal InspectionQty { get; set; }
+
+    /// <summary>
+    /// 修理数：TaktPcbaRepairDetail.DefectQty 合计
+    /// </summary>
+    public decimal RepairQty { get; set; }
 }

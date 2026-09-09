@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetail.cs
@@ -18,18 +18,18 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// PCBA明细实体
+/// PCBA明细实体（按 PCBA日报ID + 生产班组 + 班次 + PCB板别 + 面板别 + 行号唯一）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_pcba_detail", "PCBA日报明细表")]
 [SugarIndex("ix_pcba_output_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_pcba_output_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PcbaOutputId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_pcba_detail_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PcbaOutputId), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(PcbBoardType), OrderByType.Asc, nameof(PanelSide), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_pcba_detail_pcba_output_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PcbaOutputId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_pcba_detail_completion_bucket", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(PcbBoardType), OrderByType.Asc, nameof(PanelSide), OrderByType.Asc, false)]
 public class TaktPcbaOutputDetail : TaktCompanyEntityBase
 {
     /// <summary>
-    /// PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）
+    /// PCBA日报ID（主表主键；与 TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [SugarColumn(ColumnName = "pcba_output_id", ColumnDescription = "PCBA日报ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -42,7 +42,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（项号/序号，固定步长=10；与 PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
@@ -54,7 +54,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
+    /// 生产班组（选项 TaktProductionTeams/options?teamCategory=P；DictValue=TeamCode，ExtValue=PlantCode；与 PcbaOutputId、ShiftNo、PcbBoardType、PanelSide、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = false)]
     public string TeamCode { get; set; } = string.Empty;
@@ -78,7 +78,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public int IndirectLabor { get; set; } = 0;
 
     /// <summary>
-    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
+    /// 班次（字典 logistics_manufacturing_shift_category；1=早 2=中 3=晚 4=白班 5=夜班；与 PcbaOutputId、TeamCode、PcbBoardType、PanelSide、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
@@ -108,13 +108,13 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal StdEquipmentCapacity { get; set; } = 0;
 
     /// <summary>
-    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
+    /// PCB板别（字典 logistics_manufacturing_pcba_function；存 DictLabel；UI 提交由前端 dict-type 转换；与 PcbaOutputId、TeamCode、ShiftNo、PanelSide、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "pcb_board_type", ColumnDescription = "PCB板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_manufacturing_pcba_side_category；存 DictValue：b= B面 t= T面；与 PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "panel_side", ColumnDescription = "面板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PanelSide { get; set; } = string.Empty;
@@ -162,13 +162,13 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
+    /// 停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeReason { get; set; }
 
     /// <summary>
-    /// 停线说明
+    /// 停线说明（停线原因选定后的补充详细说明）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_description", ColumnDescription = "停线说明", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeDescription { get; set; }
@@ -216,13 +216,13 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal TotalMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
+    /// 未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）
     /// </summary>
     [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
 
     /// <summary>
-    /// 未达成说明
+    /// 未达成说明（未达成原因选定后的补充详细说明）
     /// </summary>
     [SugarColumn(ColumnName = "unachieved_description", ColumnDescription = "未达成说明", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedDescription { get; set; }

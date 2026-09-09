@@ -99,7 +99,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -158,6 +158,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -259,6 +260,8 @@ const formTitle = ref('')
 const formData = ref<Partial<MasterProductionScheduleLine>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key */

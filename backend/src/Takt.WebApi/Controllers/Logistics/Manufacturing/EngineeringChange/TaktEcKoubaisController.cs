@@ -111,11 +111,11 @@ public class TaktEcKoubaisController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:koubai:query", "设变采购执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcKoubaiOptionsAsync()
+    public async Task<IActionResult> GetEcKoubaiOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecKoubaiService.GetEcKoubaiOptionsAsync();
+            var result = await _ecKoubaiService.GetEcKoubaiOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcKoubaisController : TaktControllerBase
         {
             await _ecKoubaiService.DeleteEcKoubaiBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变采购执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变采购执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:koubai:update", "更新设变采购执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcKoubaiDiscontinuedStatusAsync([FromBody] TaktEcKoubaiDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecKoubaiService.UpdateEcKoubaiDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

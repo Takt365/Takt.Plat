@@ -10,8 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Diagnostics;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Shared.Constants;
+using Takt.Shared.Helpers;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -32,41 +34,89 @@ public class TaktEcDistinctionExecOrchestrator
     }
 
     /// <summary>
-    /// 按主表区分与明细生成或刷新各部门执行行。
-    /// 执行内容一律由 UpsertDeptExecWithFillModeAsync 按 ResolveAutoExecContent 写入（管理区分-全仕向/部管/内部/技术）。
-    /// 仅「是否自动填完」随区分变化：内部/技术全自动；全仕向/部管按采购类型、仓库、检验决定待填部门。
+    /// 按主表区分与明细生成或刷新各部门执行行（按部门批量落库）。
     /// </summary>
     /// <param name="gijutsu">设变技术课主</param>
     /// <param name="details">设变明细（通常已过滤作废）</param>
-    /// <returns>本次涉及的部门编码（去重，供通知用）</returns>
-    public async Task<IReadOnlyList<string>> ApplyAsync(
+    /// <returns>各部门写入统计（供日志与完成通知）</returns>
+    public async Task<TaktEcDistinctionExecApplyResult> ApplyAsync(
         TaktEcGijutsu gijutsu,
         IReadOnlyList<TaktEcDetail> details)
     {
         ArgumentNullException.ThrowIfNull(gijutsu);
         if (details == null || details.Count == 0)
         {
-            return Array.Empty<string>();
+            return TaktEcDistinctionExecApplyResult.Empty;
         }
         var active = details.Where(x => x.IsObsolete == 0).ToList();
         if (active.Count == 0)
         {
-            return Array.Empty<string>();
+            return TaktEcDistinctionExecApplyResult.Empty;
         }
-        var touched = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var detail in active)
+
+        var ecCode = gijutsu.EcCode?.Trim() ?? string.Empty;
+        var needPerDetail = active.Count;
+        var deptCount = TaktEcDeptCodes.KanbanOrder.Length;
+        var needTotalMax = checked(needPerDetail * deptCount);
+        TaktLogger.Information(
+            "[EcGijutsuPersist] 派生计划 EcCode={EcCode} 明细数={DetailCount} 部门数={DeptCount} 最大待处理={NeedTotal}（每部门需处理明细={NeedPerDept}）",
+            ecCode,
+            needPerDetail,
+            deptCount,
+            needTotalMax,
+            needPerDetail);
+
+        var counts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var grandCompleted = 0;
+        var grandSkipped = 0;
+        var totalSw = Stopwatch.StartNew();
+        foreach (var deptCode in TaktEcDeptCodes.KanbanOrder)
         {
-            foreach (var deptCode in TaktEcDeptCodes.KanbanOrder)
+            var deptName = TaktEcDeptCodes.GetDisplayName(deptCode);
+            var needCount = needPerDetail;
+            TaktLogger.Information(
+                "[EcGijutsuPersist] {DeptName}开始派生 需要记录数={NeedCount} EcCode={EcCode} DeptCode={DeptCode}",
+                deptName,
+                needCount,
+                ecCode,
+                deptCode);
+
+            var deptSw = Stopwatch.StartNew();
+            var batch = await _ecExecPersistence.UpsertDeptExecBatchWithFillModeAsync(
+                active,
+                deptCode,
+                detail => ShouldAutoCompleteExec(gijutsu.EcDistinction, deptCode, detail),
+                gijutsu.EcDistinction);
+            deptSw.Stop();
+
+            grandCompleted += batch.SavedCount;
+            grandSkipped += batch.SkippedCount;
+            if (batch.SavedCount > 0)
             {
-                await _ecExecPersistence.UpsertDeptExecWithFillModeAsync(
-                    detail,
-                    deptCode,
-                    autoComplete: ShouldAutoCompleteExec(gijutsu.EcDistinction, deptCode, detail),
-                    gijutsu.EcDistinction);
-                touched.Add(deptCode);
+                counts[deptCode] = batch.SavedCount;
             }
+            TaktLogger.Information(
+                "[EcGijutsuPersist] {DeptName}完成 需要记录数={NeedCount} 完成记录数={SavedCount} 跳过={SkippedCount} 耗时={ElapsedMs}ms EcCode={EcCode} DeptCode={DeptCode}",
+                deptName,
+                needCount,
+                batch.SavedCount,
+                batch.SkippedCount,
+                deptSw.ElapsedMilliseconds,
+                ecCode,
+                deptCode);
         }
-        return touched.ToList();
+        totalSw.Stop();
+
+        var result = TaktEcDistinctionExecApplyResult.FromCounts(counts);
+        TaktLogger.Information(
+            "[EcGijutsuPersist] 各部门执行行派生结束 EcCode={EcCode} 需要合计(明细×部门)={NeedTotal} 完成合计={Completed} 跳过合计={Skipped} 耗时={ElapsedMs}ms Summary={Summary}",
+            ecCode,
+            needTotalMax,
+            grandCompleted,
+            grandSkipped,
+            totalSw.ElapsedMilliseconds,
+            string.IsNullOrWhiteSpace(result.FormatSummary()) ? "(无写入)" : result.FormatSummary());
+        return result;
     }
 
     /// <summary>

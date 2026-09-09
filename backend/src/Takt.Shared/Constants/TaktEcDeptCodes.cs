@@ -43,6 +43,10 @@ public static class TaktEcDeptCodes
     /// </summary>
     public const string Pcba = "D0626";
     /// <summary>
+    /// 制二课非F（TaktEcSeizounika）左栏主表过滤键；非组织 DeptCode，仅 GetEcDetailMasterListAsync
+    /// </summary>
+    public const string SeizounikaMaster = "SEIZOUNIKA";
+    /// <summary>
     /// 制造1课（D0610）
     /// </summary>
     public const string Assy = "D0610";
@@ -79,4 +83,30 @@ public static class TaktEcDeptCodes
     [
         Qa, Mp, Pmc, Te, Assy, Pcba, Iqc
     ];
+
+    /// <summary>
+    /// 部门编码对应的中文显示名（日志/站内消息）
+    /// </summary>
+    /// <param name="deptCode">部门编码</param>
+    /// <returns>显示名；未知编码时回退为编码本身</returns>
+    public static string GetDisplayName(string? deptCode)
+    {
+        if (string.IsNullOrWhiteSpace(deptCode))
+        {
+            return string.Empty;
+        }
+        return deptCode.Trim() switch
+        {
+            Eng => "技术课",
+            Pmc => "生管课",
+            Mp => "采购课",
+            Iqc => "受检课",
+            Mc => "部管课",
+            Pcba => "制造二课",
+            Assy => "制造一课",
+            Qa => "品管课",
+            Te => "制造技术课",
+            _ => deptCode.Trim(),
+        };
+    }
 }

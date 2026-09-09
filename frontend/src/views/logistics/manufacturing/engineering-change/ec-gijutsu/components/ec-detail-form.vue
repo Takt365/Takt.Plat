@@ -84,6 +84,18 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="t('common.page.form.placeholder.required', { field: pi.label('lineNumber') })"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('ecCode')"
                 name="ecCode"
               >
@@ -93,18 +105,6 @@
                   show-count
                   :maxlength="10"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: pi.label('lineNumber') })"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -152,6 +152,19 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('discontinuedStatus')"
+                name="discontinuedStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.discontinuedStatus"
+                  dict-type="logistics_materials_material_discontinued_status"
+                  allow-clear
+                  :placeholder="t('common.page.form.placeholder.select', { field: pi.label('discontinuedStatus') })"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('ecParentMaterialCode')"
                 name="ecParentMaterialCode"
               >
@@ -175,19 +188,6 @@
                   show-count
                   :maxlength="40"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('discontinuedStatus')"
-                name="discontinuedStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.discontinuedStatus"
-                  dict-type="logistics_materials_material_discontinued_status"
-                  allow-clear
-                  :placeholder="t('common.page.form.placeholder.select', { field: pi.label('discontinuedStatus') })"
                 />
               </a-form-item>
             </a-col>
@@ -454,7 +454,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecCode","lineNumber","ecModelCode","ecFinishedGoods","ecFinishedGoodsDescription","ecParentMaterialCode","ecParentMaterialDescription","discontinuedStatus","ecOldMaterialCode","ecOldMaterialDescription","ecOldUsageQuantity","ecOldItemPosition","ecOldStock","ecOldWarehouse","ecOldPurchaseType","ecOldRequiresInspection","ecNewMaterialCode","ecNewMaterialDescription","ecNewUsageQuantity","ecNewItemPosition","ecNewStock","ecNewWarehouse","ecNewPurchaseType","ecNewRequiresInspection","ecBomDate"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","ecCode","ecModelCode","ecFinishedGoods","ecFinishedGoodsDescription","discontinuedStatus","ecParentMaterialCode","ecParentMaterialDescription","ecOldMaterialCode","ecOldMaterialDescription","ecOldUsageQuantity","ecOldItemPosition","ecOldStock","ecOldWarehouse","ecOldPurchaseType","ecOldRequiresInspection","ecNewMaterialCode","ecNewMaterialDescription","ecNewUsageQuantity","ecNewItemPosition","ecNewStock","ecNewWarehouse","ecNewPurchaseType","ecNewRequiresInspection","ecBomDate"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -573,7 +573,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 ecId） */
+/** 映射为 Create/Update DTO（含主表外键 ecGijutsuId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
@@ -597,7 +597,7 @@ function getValues(): Record<string, any> {
     payload.ecNewStock = typeof raw === 'number' ? raw : Number(raw)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.ecId = props.masterId
+  payload.ecGijutsuId = props.masterId
   return payload
 }
 

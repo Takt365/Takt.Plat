@@ -39,7 +39,7 @@ export const defaultSetting: AppSetting = {
   siderWidth: 200,
   siderCollapsedWidth: 64,
   showBreadcrumb: true,
-  breadcrumbIcon: true,
+  breadcrumbIcon: false,
   showTabs: true,
   tabStyle: 'google',
   persistTabs: false,
@@ -170,6 +170,53 @@ export function normalizeSetting(raw: Partial<AppSetting>): AppSetting {
 
   if (base.theme !== 'light' && base.theme !== 'dark') {
     base.theme = defaultSetting.theme;
+  }
+
+  if (base.tabStyle !== 'card' && base.tabStyle !== 'google') {
+    base.tabStyle = defaultSetting.tabStyle;
+  }
+
+  if (base.menuStyle !== 'plain' && base.menuStyle !== 'rounded') {
+    base.menuStyle = defaultSetting.menuStyle;
+  }
+
+  if (typeof base.menuAccordion !== 'boolean') {
+    base.menuAccordion = defaultSetting.menuAccordion;
+  }
+  if (typeof base.showBreadcrumb !== 'boolean') {
+    base.showBreadcrumb = defaultSetting.showBreadcrumb;
+  }
+  if (typeof base.breadcrumbIcon !== 'boolean') {
+    base.breadcrumbIcon = defaultSetting.breadcrumbIcon;
+  }
+
+  const allowedRadii = [0, 5, 10, 15, 20];
+  if (typeof base.borderRadius !== 'number' || !allowedRadii.includes(base.borderRadius)) {
+    base.borderRadius = defaultSetting.borderRadius;
+  }
+
+  if (typeof base.showTabs !== 'boolean') {
+    base.showTabs = defaultSetting.showTabs;
+  }
+  if (typeof base.persistTabs !== 'boolean') {
+    base.persistTabs = defaultSetting.persistTabs;
+  }
+  if (typeof base.multiTab !== 'boolean') {
+    base.multiTab = defaultSetting.multiTab;
+  }
+  if (typeof base.demo !== 'boolean') {
+    base.demo = defaultSetting.demo;
+  }
+  if (typeof base.watermark !== 'boolean') {
+    base.watermark = defaultSetting.watermark;
+  }
+  if (typeof base.showFooter !== 'boolean') {
+    base.showFooter = defaultSetting.showFooter;
+  }
+  if (typeof base.maxTabs !== 'number' || !Number.isFinite(base.maxTabs)) {
+    base.maxTabs = defaultSetting.maxTabs;
+  } else {
+    base.maxTabs = Math.min(50, Math.max(5, Math.trunc(base.maxTabs)));
   }
 
   base.appearanceUserOverride = raw.appearanceUserOverride === true;

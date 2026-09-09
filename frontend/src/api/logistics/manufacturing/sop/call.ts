@@ -130,10 +130,20 @@ export function updateSopCallStatus(dto: SopCallStatus): Promise<SopCall> {
  * 获取SOP安灯呼叫选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSopCallOptions(): Promise<TaktSelectOption[]> {
+export function getSopCallOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOP_CALL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

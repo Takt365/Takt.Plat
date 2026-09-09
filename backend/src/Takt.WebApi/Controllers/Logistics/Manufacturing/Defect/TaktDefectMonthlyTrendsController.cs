@@ -43,11 +43,11 @@ public class TaktDefectMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移工厂选项")]
   [HttpGet("plant-options")]
-  public async Task<IActionResult> GetDefectMonthlyTrendPlantOptionsAsync()
-  {
+  public async Task<IActionResult> GetDefectMonthlyTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
+    {
     try
     {
-      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendPlantOptionsAsync();
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendPlantOptionsAsync(plantCode, keyword);
       return Success(result, "查询成功");
     }
     catch (Exception ex)
@@ -63,16 +63,15 @@ public class TaktDefectMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移不良类别选项")]
   [HttpGet("defect-category-options")]
-  public async Task<IActionResult> GetDefectMonthlyTrendDefectCategoryOptionsAsync(
-      [FromQuery] string plantCode)
-  {
+  public async Task<IActionResult> GetDefectMonthlyTrendDefectCategoryOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
+    {
     try
     {
       if (string.IsNullOrWhiteSpace(plantCode))
       {
         return Success(new List<TaktSelectOption>(), "查询成功");
       }
-      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendDefectCategoryOptionsAsync(plantCode);
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendDefectCategoryOptionsAsync(plantCode, keyword);
       return Success(result, "查询成功");
     }
     catch (Exception ex)
@@ -89,18 +88,15 @@ public class TaktDefectMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移机种选项")]
   [HttpGet("model-options")]
-  public async Task<IActionResult> GetDefectMonthlyTrendModelOptionsAsync(
-      [FromQuery] string plantCode,
-      [FromQuery] string? defectCategory = null)
-  {
+  public async Task<IActionResult> GetDefectMonthlyTrendModelOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? defectCategory = null)
+    {
     try
     {
       if (string.IsNullOrWhiteSpace(plantCode))
       {
         return Success(new List<TaktSelectOption>(), "查询成功");
       }
-      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendModelOptionsAsync(
-          plantCode, defectCategory);
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendModelOptionsAsync(plantCode, keyword, defectCategory);
       return Success(result, "查询成功");
     }
     catch (Exception ex)

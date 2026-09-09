@@ -130,10 +130,20 @@ export function updateTenantStatus(dto: TenantStatus): Promise<Tenant> {
  * 获取当前登录会话的租户选项（仅一项，DictValue 为 TenantCode；登录后不可跨租户切换）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTenantOptions(): Promise<TaktSelectOption[]> {
+export function getTenantOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TENANT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

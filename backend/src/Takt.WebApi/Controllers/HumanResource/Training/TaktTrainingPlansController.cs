@@ -86,11 +86,11 @@ public class TaktTrainingPlansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:training:plan:query", "培训计划选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTrainingPlanOptionsAsync()
+    public async Task<IActionResult> GetTrainingPlanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _trainingPlanService.GetTrainingPlanOptionsAsync();
+            var result = await _trainingPlanService.GetTrainingPlanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

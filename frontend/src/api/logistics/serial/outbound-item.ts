@@ -130,10 +130,20 @@ export function updateSerialOutboundItemObsolete(dto: SerialOutboundItemObsolete
  * 获取产品序列号出库明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSerialOutboundItemOptions(): Promise<TaktSelectOption[]> {
+export function getSerialOutboundItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SERIAL_OUTBOUND_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

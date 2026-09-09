@@ -101,32 +101,11 @@ export const PCBAOUTPUTDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'action',
 ] as const
 
-/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+/** 明细右栏 panel 合计列：仅当日完成数、不良台数、报工工时 */
 export const PCBAOUTPUTDETAIL_SUMMARY_SUM_FIELDS = [
-  'directLabor',
-  'indirectLabor',
-  'shiftNo',
-  'stdMinutes',
-  'stdLaborCapacity',
-  'stdShorts',
-  'stdEquipmentCapacity',
-  'batchQty',
   'dailyCompletedQty',
-  'totalCompletedQty',
-  'completedStatus',
   'defectCount',
-  'downtimeMinutes',
-  'inputMinutes',
-  'actualMinutes',
-  'repairMinutes',
-  'switchCount',
-  'switchTime',
-  'stopTime',
-  'totalMinutes',
   'confirmMinutes',
-  'mixedProd',
-  'achievementRate',
-  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */

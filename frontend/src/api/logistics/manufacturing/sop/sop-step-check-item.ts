@@ -130,10 +130,20 @@ export function updateSopStepCheckItemSort(dto: SopStepCheckItemSort): Promise<S
  * 获取SOP工步检验项目选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSopStepCheckItemOptions(): Promise<TaktSelectOption[]> {
+export function getSopStepCheckItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOP_STEP_CHECK_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

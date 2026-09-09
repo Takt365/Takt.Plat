@@ -18,7 +18,7 @@ export interface EcKanbanDeptStage {
 }
 
 export interface EcKanban extends CompanyDtoBase {
-  ecId: string;
+  ecGijutsuId: string;
   ecCode: string;
   ecTitle: string;
   changeStatus: number;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachment.cs
-// 功能描述：设变附件实体（技术阶段一 ②）；技术维护联络/EPP/FPP 等文档，与主表、明细一并保存后触发通知自动生成
+// 功能描述：设变附件实体（技术阶段一 ②）；按设变ID+文件编码+行号唯一；技术维护联络/EPP/FPP 等文档，与主表、明细一并保存后触发通知自动生成
 // ========================================
 
 using SqlSugar;
@@ -11,24 +11,23 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_manufacturing_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
+/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu；按设变ID + 文件编码 + 行号唯一）。文件类别见字典 logistics_manufacturing_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_attachment", "设变附件表")]
 [SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_attachment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcGijutsuId), OrderByType.Asc, nameof(DocCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_attachment_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AttachmentType), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_doc_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DocCode), OrderByType.Asc, false)]
 public class TaktEcAttachment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 设变主表ID
+    /// 技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_id", ColumnDescription = "设变ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
-
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -37,7 +36,7 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（项号/序号，固定步长=10；与 EcGijutsuId、DocCode 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
@@ -49,7 +48,7 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）
+    /// 文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；与 EcGijutsuId、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "doc_code", ColumnDescription = "文件编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string DocCode { get; set; } = string.Empty;
@@ -75,6 +74,6 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     /// <summary>
     /// 设变主表（多对一）
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(EcId))]
+    [Navigate(NavigateType.ManyToOne, nameof(EcGijutsuId))]
     public TaktEcGijutsu? EcGijutsu { get; set; }
 }

@@ -87,11 +87,11 @@ public class TaktDeptsController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("human:resource:organization:dept:query", "部门树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetDeptTreeOptionsAsync([FromQuery] long parentId = 0)
+    public async Task<IActionResult> GetDeptTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _deptService.GetDeptTreeOptionsAsync(parentId);
+            var result = await _deptService.GetDeptTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -107,11 +107,11 @@ public class TaktDeptsController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("human:resource:organization:dept:query", "部门ISO树形选项")]
     [HttpGet("iso-tree-options")]
-    public async Task<IActionResult> GetDeptIsoTreeOptionsAsync([FromQuery] long parentId = 0)
+    public async Task<IActionResult> GetDeptIsoTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _deptService.GetDeptIsoTreeOptionsAsync(parentId);
+            var result = await _deptService.GetDeptIsoTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

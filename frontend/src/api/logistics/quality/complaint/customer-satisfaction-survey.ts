@@ -144,10 +144,20 @@ export function updateCustomerSatisfactionSurveySort(dto: CustomerSatisfactionSu
  * 获取客户满意度调查选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getCustomerSatisfactionSurveyOptions(): Promise<TaktSelectOption[]> {
+export function getCustomerSatisfactionSurveyOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CUSTOMER_SATISFACTION_SURVEY_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -66,8 +66,10 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     /// <summary>
     /// 工厂选项：当前公司 RelatedPlant ∩ 头表未删除 PlantCode
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCostOptionPlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetBomCostOptionPlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var companies = await _companyRepository.GetListAsync(
@@ -100,10 +102,12 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     /// 物料类型去重（头表；工厂+期间；仅未删除）
     /// </summary>
     /// <param name="queryDto">工厂 + 期间</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>物料类型选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCostOptionMaterialTypeOptionsAsync(
-        TaktBomCostOptionDto queryDto)
+    public async Task<List<TaktSelectOption>> GetBomCostOptionMaterialTypeOptionsAsync(string? plantCode = null, string? keyword = null, TaktBomCostOptionDto? queryDto = null)
     {
+        ArgumentNullException.ThrowIfNull(queryDto);
         var headers = await LoadHeaderOptionsAsync(queryDto, requireModelCode: false, requireProductCode: false);
         return headers
             .Select(e => e.MaterialType.Trim())
@@ -118,10 +122,12 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     /// 机种去重（头表 ModelCode；工厂+期间；仅未删除）
     /// </summary>
     /// <param name="queryDto">工厂 + 期间；MaterialType 可选</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>机种选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCostOptionModelOptionsAsync(
-        TaktBomCostOptionDto queryDto)
+    public async Task<List<TaktSelectOption>> GetBomCostOptionModelOptionsAsync(string? plantCode = null, string? keyword = null, TaktBomCostOptionDto? queryDto = null)
     {
+        ArgumentNullException.ThrowIfNull(queryDto);
         var headers = await LoadHeaderOptionsAsync(queryDto, requireModelCode: true, requireProductCode: false);
         var modelNameLookup = await BuildModelNameLookupAsync();
         return headers
@@ -143,10 +149,12 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     /// 产品去重（头表 ProductCode；工厂+期间；仅未删除）
     /// </summary>
     /// <param name="queryDto">工厂 + 期间；MaterialType/ModelCode 可选</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>产品选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCostOptionProductOptionsAsync(
-        TaktBomCostOptionDto queryDto)
+    public async Task<List<TaktSelectOption>> GetBomCostOptionProductOptionsAsync(string? plantCode = null, string? keyword = null, TaktBomCostOptionDto? queryDto = null)
     {
+        ArgumentNullException.ThrowIfNull(queryDto);
         var headers = await LoadHeaderOptionsAsync(queryDto, requireModelCode: false, requireProductCode: true);
         return headers
             .GroupBy(e => e.ProductCode!.Trim(), StringComparer.OrdinalIgnoreCase)
@@ -172,9 +180,10 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     /// 机种/产品可空：空则不过滤；有值则经头表产品编码再过滤明细
     /// </summary>
     /// <param name="queryDto">工厂 + 期间；ModelCode/ModelCodes/ProductCode/Keyword 均可空</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>物料选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCostOptionMaterialOptionsAsync(
-        TaktBomCostOptionDto queryDto)
+    public async Task<List<TaktSelectOption>> GetBomCostOptionMaterialOptionsAsync(string? plantCode = null, string? keyword = null, TaktBomCostOptionDto? queryDto = null)
     {
         ArgumentNullException.ThrowIfNull(queryDto);
         EnsureThreeLayerContext();
@@ -235,7 +244,7 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
     }
 
     /// <summary>
-    /// 头表选项公共加载（工厂+期间+未删除；可选物料类型/机种）
+    /// 头表选项公共加载：期间合集 = 核算日落在期间内且 IsDeleted=0 的主表并集（不用 CostingPeriod 字符串）
     /// </summary>
     /// <param name="queryDto">选项查询</param>
     /// <param name="requireModelCode">是否要求 ModelCode 非空</param>
@@ -250,22 +259,22 @@ public class TaktBomCostOptionService : TaktServiceBase, ITaktBomCostOptionServi
         EnsureThreeLayerContext();
         var plant = queryDto.PlantCode?.Trim() ?? string.Empty;
         if (string.IsNullOrEmpty(plant)
-            || !TryResolveOptionsPeriod(queryDto, out var periodStart, out var periodEnd, out _, out _))
+            || !TryResolveOptionsPeriod(queryDto, out _, out _, out var rangeStart, out var rangeEndExclusive))
         {
             return new List<TaktBomMaterialCost>();
         }
         var materialType = NormalizeMaterialTypeFilter(queryDto.MaterialType);
         var models = ParseModelFilters(queryDto);
         var exp = Expressionable.Create<TaktBomMaterialCost>();
+        // 期间合集 = 核算日落在 [起, 止月下一月) 且未软删的主表并集。
+        // 禁止用 CostingPeriod 字符串区间：否则 6 无数据、7/8 已删时，仍可能被脏 CostingPeriod 行混入。
         exp = exp.And(x =>
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plant
             && x.IsDeleted == 0
-            && x.CostingPeriod != null
-            && x.CostingPeriod != string.Empty
-            && x.CostingPeriod.CompareTo(periodStart) >= 0
-            && x.CostingPeriod.CompareTo(periodEnd) <= 0);
+            && x.CostingDate >= rangeStart
+            && x.CostingDate < rangeEndExclusive);
         if (requireModelCode)
         {
             exp = exp.And(x => x.ModelCode != null && x.ModelCode != string.Empty);

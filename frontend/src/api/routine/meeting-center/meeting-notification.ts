@@ -130,10 +130,20 @@ export function updateMeetingNotificationStatus(dto: MeetingNotificationStatus):
  * 获取会议通知选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMeetingNotificationOptions(): Promise<TaktSelectOption[]> {
+export function getMeetingNotificationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MEETING_NOTIFICATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

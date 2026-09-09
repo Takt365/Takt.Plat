@@ -86,11 +86,11 @@ public class TaktPcbaInspectionDetailsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:pcba:inspection:query", "PCBA检查明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaInspectionDetailOptionsAsync()
+    public async Task<IActionResult> GetPcbaInspectionDetailOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaInspectionDetailService.GetPcbaInspectionDetailOptionsAsync();
+            var result = await _pcbaInspectionDetailService.GetPcbaInspectionDetailOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

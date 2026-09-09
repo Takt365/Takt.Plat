@@ -86,11 +86,11 @@ public class TaktTableArchivesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("code:database:table:archive:query", "数据表归档选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTableArchiveOptionsAsync()
+    public async Task<IActionResult> GetTableArchiveOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _tableArchiveService.GetTableArchiveOptionsAsync();
+            var result = await _tableArchiveService.GetTableArchiveOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -38,8 +38,10 @@ public interface ITaktAssyOutputService
     /// <summary>
     /// 获取组立日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAssyOutputOptionsAsync();
+    Task<List<TaktSelectOption>> GetAssyOutputOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 获取组立日报新增时固定的生产时段列表（13 条）
@@ -51,11 +53,13 @@ public interface ITaktAssyOutputService
     /// 获取组立不良日报新增用工单选项（来源已生产的组立日报，排除同日同工单已存在不良日报）
     /// </summary>
     /// <param name="excludeAssyDefectId">编辑态当前不良日报 ID（保留其对应组立日报在选项中）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项，DictValue 为组立日报 Id</returns>
-    Task<List<TaktSelectOption>> GetAssyOutputProdOrderOptionsAsync(long? excludeAssyDefectId = null);
+    Task<List<TaktSelectOption>> GetAssyOutputProdOrderOptionsAsync(string? plantCode = null, string? keyword = null, long? excludeAssyDefectId = null);
 
     /// <summary>
-    /// 创建组立日报（自动级联创建 13 条固定生产时段明细）
+    /// 创建组立日报（主表标准产能 &gt; 0 时自动级联创建 13 条固定生产时段明细）
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -107,5 +111,4 @@ public interface ITaktAssyOutputService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportAssyOutputAsync(TaktAssyOutputQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
 }

@@ -106,11 +106,11 @@ public class TaktMaintenanceNotificationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:maintenance:equipment:query", "维护通知单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaintenanceNotificationOptionsAsync()
+    public async Task<IActionResult> GetMaintenanceNotificationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _maintenanceNotificationService.GetMaintenanceNotificationOptionsAsync();
+            var result = await _maintenanceNotificationService.GetMaintenanceNotificationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

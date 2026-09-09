@@ -417,6 +417,11 @@ export function syncAntDesignCssVariables(token: GlobalToken, prefix = 'ant'): v
     if (typeof value !== 'string') {
       return;
     }
-    root.style.setProperty(`--${prefix}-${camelToKebab(keyName)}`, value);
+    const cssVar = `--${prefix}-${camelToKebab(keyName)}`;
+    // 值未变则跳过，避免 ConfigProvider 刷新时整批重写 :root
+    if (root.style.getPropertyValue(cssVar) === value) {
+      return;
+    }
+    root.style.setProperty(cssVar, value);
   });
 }

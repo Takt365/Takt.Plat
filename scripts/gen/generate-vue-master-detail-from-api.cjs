@@ -56,6 +56,8 @@ const {
   buildServerPagedPaginationHandlersBlock,
   buildFormResetScopeDefaultsBlock,
   buildVueImportResultUtilImportLine,
+  TAKT_FORM_MODAL_WIDTH_IMPORT,
+  TAKT_FORM_MODAL_WIDTH_ATTR,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
   buildEntityI18nComposableFile,
@@ -74,6 +76,8 @@ const {
   generateMasterDetailLrIndexScript,
   generateMasterDetailEditableFormParts,
   writeMasterDetailLayoutOutputs,
+  buildMasterDetailFormHalfPaneStyleBlock,
+  buildMasterDetailFormHalfPaneScrollScript,
 } = require('./generate-vue-master-detail-layout.cjs');
 const {
   listAssociationsForChild,
@@ -365,7 +369,7 @@ function generateMasterDetailIndexVue(ctx) {
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      ${TAKT_FORM_MODAL_WIDTH_ATTR}
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -689,7 +693,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-${formImports}${mdParts.panelImports}
+${(caps.hasCreate || caps.hasUpdate) ? TAKT_FORM_MODAL_WIDTH_IMPORT : ''}${formImports}${mdParts.panelImports}
 ${mdParts.composableImport}
 import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 import type { ${typeImports.join(', ')} } from '@/types/${modulePath}/${entityKebab}'
@@ -868,7 +872,19 @@ function generateMasterDetailFormVue(ctx) {
     : `    <div :class="formContentClass">
 ${formTemplate.body}
     </div>`;
-  const formTemplateBody = `${mainFormBody}
+  const formTemplateBody = hasMasterDetailChildren
+    ? `    <!-- 上：主表（弹窗视口约 1/2） -->
+    <div class="${viewEntityKebab}-form__master min-h-0 flex-1 overflow-hidden">
+${mainFormBody}
+    </div>
+    <!-- 下：子表（弹窗视口约 1/2） -->
+    <div
+      ref="detailHostRef"
+      class="${viewEntityKebab}-form__detail flex min-h-0 flex-1 flex-col overflow-hidden"
+    >
+${mdFormParts.editableBlocks}
+    </div>`
+    : `${mainFormBody}
 ${mdFormParts.editableBlocks}`;
   const needsTaktSelect = formFields.some((f) => f.htmlType === 'select' && f.dictType)
     || formFields.some((f) => f.htmlType === 'apiSelect' && f.apiUrl)
@@ -920,12 +936,42 @@ ${mdFormParts.editableBlocks}`;
     entityIdField,
     useFormTabs,
   });
+  const halfPaneScrollScript = hasMasterDetailChildren ? buildMasterDetailFormHalfPaneScrollScript() : '';
+  const halfPaneStyleBlock = hasMasterDetailChildren
+    ? buildMasterDetailFormHalfPaneStyleBlock(viewEntityKebab)
+    : buildFormTabsScopedStyleBlock(useFormTabs);
+  const vueImportNormalized = (() => {
+    if (!hasMasterDetailChildren) {
+      return formScriptFragments.vueImportLine;
+    }
+    const names = new Set(
+      (formScriptFragments.vueImportLine.match(/\{([^}]+)\}/)?.[1] || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean),
+    );
+    ['onMounted', 'onBeforeUnmount', 'nextTick'].forEach((n) => names.add(n));
+    return `import { ${[...names].join(', ')} } from 'vue'`;
+  })();
   const activeTabReset = useFormTabs ? "  activeTab.value = 'tab-0'\n" : '';
+  const halfPaneFormDataWatchHook = hasMasterDetailChildren
+    ? `
+watch(
+  () => props.formData,
+  () => {
+    void nextTick(() => {
+      recalcDetailScrollYPx()
+      bindDetailHostResizeObserver()
+    })
+  },
+)
+`
+    : '';
   return `<!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath}/components -->
 <!-- 文件名称：${viewEntityKebab}-form.vue -->
-<!-- 功能描述：${comment}维护弹窗内嵌表单（上主下从级联保存）。由 ${generatorScript} 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：${comment}维护弹窗内嵌表单（上主下从各占约 1/2 级联保存）。由 ${generatorScript} 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -933,7 +979,7 @@ ${mdFormParts.editableBlocks}`;
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form ${viewEntityKebab}-form flex flex-col min-h-0 overflow-visible"
+    class="takt-generated-form ${viewEntityKebab}-form flex h-full min-h-0 flex-col overflow-hidden"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -948,19 +994,21 @@ ${formTemplateBody}
  * ${comment}维护表单 · 由 ${generatorScript} 根据 types/api 生成
  * @module views/${viewModulePath}/components
  */
-${formScriptFragments.vueImportLine}
+${vueImportNormalized}
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 ${buildEntityI18nFormImportBlock(entityPascal, viewEntityKebab)}
 ${masterTypeImport}
 ${taktSelectImport}${extFieldIconImport}${formScriptFragments.dictImportLine}${formScriptFragments.fileUploadImportLine}${formScriptFragments.numberingImportLine || ''}${scopeStoreImports}
 ${formScriptState}
+${halfPaneScrollScript}
 ${formScriptFragments.defaultsBlock}
 ${formScriptFragments.normalizerBlock}
 ${formScriptFragments.dictBootstrap}
 ${formScriptFragments.fileUploadBootstrap}
 ${formScriptFragments.numberingBootstrap || ''}
 ${formScriptFragments.watchBlock}
+${halfPaneFormDataWatchHook}
 ${scopeContextWatch}
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
@@ -992,7 +1040,7 @@ ${activeTabReset}  formRef.value?.clearValidate()
 
 defineExpose({ validate, getValues, resetFields })
 </script>
-${buildFormTabsScopedStyleBlock(useFormTabs)}
+${halfPaneStyleBlock}
 `;
 }
 /**

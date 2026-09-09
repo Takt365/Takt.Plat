@@ -130,10 +130,20 @@ export function updateSalesForecastItemObsolete(dto: SalesForecastItemObsolete):
  * 获取销售计划明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSalesForecastItemOptions(): Promise<TaktSelectOption[]> {
+export function getSalesForecastItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SALES_FORECAST_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -158,10 +158,20 @@ export function updateDictTypeSort(dto: DictTypeSort): Promise<DictType> {
  * 获取字典类型选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getDictTypeOptions(): Promise<TaktSelectOption[]> {
+export function getDictTypeOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${DICT_TYPE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -245,5 +245,12 @@ export default {
         },
       },
     },
+    showcase: {
+      split: {
+        practical: "實用",
+        simple: "簡潔",
+        flexible: "靈活",
+      },
+    },
   },
 };

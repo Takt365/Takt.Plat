@@ -86,11 +86,11 @@ public class TaktPerfAnalysesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:performance:perf:analysis:query", "分析改进选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPerfAnalysisOptionsAsync()
+    public async Task<IActionResult> GetPerfAnalysisOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _perfAnalysisService.GetPerfAnalysisOptionsAsync();
+            var result = await _perfAnalysisService.GetPerfAnalysisOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

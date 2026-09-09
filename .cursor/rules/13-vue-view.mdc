@@ -44,7 +44,7 @@ alwaysApply: true
   → TaktToolsBar（*-permission 与菜单一致）
   → TaktSingleTable（:pagination="false"）
   → TaktPagination（外置）
-  → TaktModal + <xxx-form ref="formRef" />
+  → TaktModal（`:width="formModalWidthPx"` = `useTaktContentModalWidth`）+ <xxx-form ref="formRef" />
   → TaktQueryDrawer（高级查询）
   → TaktColumnDrawer（列设置）
   → （可选）TaktImportFile 独立 Modal
@@ -57,7 +57,7 @@ alwaysApply: true
 | 列表 | `loading`、`dataSource`、`currentPage`、`pageSize`、`total` |
 | 查询 | `queryKeyword`、`advancedQueryVisible`、`advancedQueryForm` |
 | 选择 | `selectedRowKeys`、`selectedRows`、`rowSelection` |
-| 表单 | `formVisible`、`formLoading`、`formData`、`formRef` |
+| 表单 | `formVisible`、`formLoading`、`formData`、`formRef`、`formModalWidthPx` |
 | 列设置 | `columns`、`displayColumns`、`visibleColumnKeys`、`columnSettingVisible` |
 
 ### 2.4 必备 handler（与 12-crud §六 对齐）

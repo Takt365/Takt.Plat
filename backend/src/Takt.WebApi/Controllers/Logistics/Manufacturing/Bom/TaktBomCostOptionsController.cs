@@ -41,11 +41,11 @@ public class TaktBomCostOptionsController : TaktControllerBase
     /// </summary>
     /// <returns>下拉选项</returns>
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetBomCostOptionPlantOptionsAsync()
+    public async Task<IActionResult> GetBomCostOptionPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _bomCostOptionService.GetBomCostOptionPlantOptionsAsync();
+            var result = await _bomCostOptionService.GetBomCostOptionPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -65,7 +65,7 @@ public class TaktBomCostOptionsController : TaktControllerBase
     {
         return await QueryBomCostOptionAsync(
             queryDto,
-            _bomCostOptionService.GetBomCostOptionMaterialTypeOptionsAsync);
+            dto => _bomCostOptionService.GetBomCostOptionMaterialTypeOptionsAsync(dto?.PlantCode, null, dto));
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public class TaktBomCostOptionsController : TaktControllerBase
     {
         return await QueryBomCostOptionAsync(
             queryDto,
-            _bomCostOptionService.GetBomCostOptionModelOptionsAsync);
+            dto => _bomCostOptionService.GetBomCostOptionModelOptionsAsync(dto?.PlantCode, null, dto));
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public class TaktBomCostOptionsController : TaktControllerBase
     {
         return await QueryBomCostOptionAsync(
             queryDto,
-            _bomCostOptionService.GetBomCostOptionProductOptionsAsync);
+            dto => _bomCostOptionService.GetBomCostOptionProductOptionsAsync(dto?.PlantCode, null, dto));
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public class TaktBomCostOptionsController : TaktControllerBase
     {
         return await QueryBomCostOptionAsync(
             queryDto,
-            _bomCostOptionService.GetBomCostOptionMaterialOptionsAsync);
+            dto => _bomCostOptionService.GetBomCostOptionMaterialOptionsAsync(dto?.PlantCode, dto?.Keyword, dto));
     }
 
     /// <summary>
@@ -118,7 +118,7 @@ public class TaktBomCostOptionsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     private async Task<IActionResult> QueryBomCostOptionAsync(
         TaktBomCostOptionDto queryDto,
-        Func<TaktBomCostOptionDto, Task<List<TaktSelectOption>>> loader)
+        Func<TaktBomCostOptionDto?, Task<List<TaktSelectOption>>> loader)
     {
         try
         {

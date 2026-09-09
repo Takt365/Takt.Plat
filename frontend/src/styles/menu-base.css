@@ -54,3 +54,35 @@
 .takt-top-menu .ant-menu-submenu-popup .ant-menu-submenu-title {
   gap: 2px !important;
 }
+
+/**
+ * 菜单风格（html[data-menu-style] 由 applySettings 写入；须压过 Ant Design 默认圆角）
+ * plain：直角紧凑；rounded：圆角 + 左右留白
+ */
+html[data-menu-style='plain'] .takt-side-menu.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='plain'] .takt-side-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='plain'] .takt-side-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='plain'] .takt-side-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='plain'] .takt-mix-menu.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='plain'] .takt-mix-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='plain'] .takt-mix-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='plain'] .takt-mix-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  border-radius: 0 !important;
+  margin-block: 0 !important;
+  margin-inline: 0 !important;
+  width: calc(100% - 0px) !important;
+}
+
+html[data-menu-style='rounded'] .takt-side-menu.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='rounded'] .takt-side-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='rounded'] .takt-side-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='rounded'] .takt-side-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='rounded'] .takt-mix-menu.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='rounded'] .takt-mix-menu.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+html[data-menu-style='rounded'] .takt-mix-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+html[data-menu-style='rounded'] .takt-mix-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  border-radius: 8px !important;
+  margin-block: 4px !important;
+  margin-inline: 8px !important;
+  width: calc(100% - 16px) !important;
+}

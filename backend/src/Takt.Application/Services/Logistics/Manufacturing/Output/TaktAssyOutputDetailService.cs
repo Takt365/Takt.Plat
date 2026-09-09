@@ -103,8 +103,10 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <summary>
     /// 获取组立日报明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAssyOutputDetailOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAssyOutputDetailOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _assyOutputDetailRepository.GetListAsync(
@@ -128,14 +130,6 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         var entity = dto.Adapt<TaktAssyOutputDetail>();
         entity.IsObsolete = 0;
         await StampAssyOutputDetailAssyOutputAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _assyOutputDetailRepository,
-            x => x.AssyOutputId == entity.AssyOutputId
-                && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique)
-        {
-            throw new TaktBusinessException("组立日报明细的AssyOutputId、LineNumber已存在");
-        }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _assyOutputDetailRepository.GetMaxIntAsync(
@@ -143,6 +137,17 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                 x => x.LineNumber);
             var businessCode = entity.AssyOutputId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+        }
+        var timePeriod = (entity.TimePeriod ?? string.Empty).Trim();
+        entity.TimePeriod = timePeriod;
+        var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique = await _uniqueValidator.IsUniqueAsync(
+            _assyOutputDetailRepository,
+            x => x.AssyOutputId == entity.AssyOutputId
+                && x.TimePeriod == timePeriod
+                && x.LineNumber == entity.LineNumber);
+        if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique)
+        {
+            throw new TaktBusinessException("组立日报明细的AssyOutputId、TimePeriod、LineNumber已存在");
         }
         entity = await _assyOutputDetailRepository.CreateAsync(entity);
         return await GetAssyOutputDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyOutputDetailDto>();
@@ -163,14 +168,17 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         }
         dto.Adapt(entity);
         await StampAssyOutputDetailAssyOutputAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var timePeriod = (entity.TimePeriod ?? string.Empty).Trim();
+        entity.TimePeriod = timePeriod;
+        var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
+                && x.TimePeriod == timePeriod
                 && x.LineNumber == entity.LineNumber,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique)
         {
-            throw new TaktBusinessException("组立日报明细的AssyOutputId、LineNumber已存在");
+            throw new TaktBusinessException("组立日报明细的AssyOutputId、TimePeriod、LineNumber已存在");
         }
         await _assyOutputDetailRepository.UpdateAsync(entity);
         return await GetAssyOutputDetailByIdAsync(id) ?? throw new TaktBusinessException("组立日报明细不存在");
@@ -277,19 +285,6 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                 var entity = rows[i].Adapt<TaktAssyOutputDetail>();
                 var importDto = rows[i].Adapt<TaktAssyOutputDetailCreateDto>();
                 await StampAssyOutputDetailAssyOutputAsync(entity, importDto);
-                var importKey = $"{entity.AssyOutputId}|{entity.LineNumber}";
-                if (!importSeenKeys.Add(importKey))
-                {
-                    throw new TaktBusinessException("与Excel中其他行重复（AssyOutputId、LineNumber）");
-                }
-                var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _assyOutputDetailRepository,
-                    x => x.AssyOutputId == entity.AssyOutputId
-                        && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique)
-                {
-                    throw new TaktBusinessException("组立日报明细的AssyOutputId、LineNumber已存在");
-                }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _assyOutputDetailRepository.GetMaxIntAsync(
@@ -297,6 +292,22 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                         x => x.LineNumber);
                     var businessCode = entity.AssyOutputId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                }
+                var timePeriod = (entity.TimePeriod ?? string.Empty).Trim();
+                entity.TimePeriod = timePeriod;
+                var importKey = $"{entity.AssyOutputId}|{timePeriod}|{entity.LineNumber}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（AssyOutputId、TimePeriod、LineNumber）");
+                }
+                var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique = await _uniqueValidator.IsUniqueAsync(
+                    _assyOutputDetailRepository,
+                    x => x.AssyOutputId == entity.AssyOutputId
+                        && x.TimePeriod == timePeriod
+                        && x.LineNumber == entity.LineNumber);
+                if (!isUnique_ix_takt_logistics_manufacturing_output_assy_detail_unique)
+                {
+                    throw new TaktBusinessException("组立日报明细的AssyOutputId、TimePeriod、LineNumber已存在");
                 }
                 await _assyOutputDetailRepository.CreateAsync(entity);
                 success += 1;

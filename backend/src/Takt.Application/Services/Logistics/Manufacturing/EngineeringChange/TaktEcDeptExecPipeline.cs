@@ -28,9 +28,9 @@ internal interface ITaktEcDeptExecPipeline
     /// </summary>
     string DeptCode { get; }
     /// <summary>
-    /// 按明细 ID 查询（去重键：EcnDetailId 唯一）
+    /// 按明细 ID 查询（去重键：EcDetailId 唯一）
     /// </summary>
-    Task<object?> QueryByDetailIdAsync(long ecnDetailId);
+    Task<object?> QueryByDetailIdAsync(long ecDetailId);
     /// <summary>
     /// 按明细 ID 列表查询
     /// </summary>
@@ -81,9 +81,9 @@ internal sealed class TaktEcDeptExecPipeline<TEntity> : ITaktEcDeptExecPipeline
     public string DeptCode { get; }
 
     /// <inheritdoc />
-    public async Task<object?> QueryByDetailIdAsync(long ecnDetailId)
+    public async Task<object?> QueryByDetailIdAsync(long ecDetailId)
     {
-        return await _repository.FirstAsync(x => x.EcnDetailId == ecnDetailId);
+        return await _repository.FirstAsync(x => x.EcDetailId == ecDetailId);
     }
 
     /// <inheritdoc />
@@ -93,7 +93,7 @@ internal sealed class TaktEcDeptExecPipeline<TEntity> : ITaktEcDeptExecPipeline
         {
             return [];
         }
-        var list = await _repository.GetListAsync(x => detailIds.Contains(x.EcnDetailId));
+        var list = await _repository.GetListAsync(x => detailIds.Contains(x.EcDetailId));
         return list.Cast<object>().ToList();
     }
 
@@ -104,20 +104,10 @@ internal sealed class TaktEcDeptExecPipeline<TEntity> : ITaktEcDeptExecPipeline
         var isNew = existing == null;
         var exec = existing as TEntity ?? new TEntity
         {
-            EcnDetailId = detail.Id,
+            EcDetailId = detail.Id,
             DeptCode = DeptCode
         };
-        exec.EcCode = detail.EcCode;
-        if (isNew)
-        {
-            exec.LineNumber = lineNumber;
-        }
-        exec.EcModelCode = detail.EcModelCode ?? string.Empty;
-        exec.EcFinishedGoods = detail.EcFinishedGoods;
-        exec.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription;
-        exec.EcParentMaterialCode = detail.EcParentMaterialCode;
-        exec.EcParentMaterialDescription = detail.EcParentMaterialDescription;
-        exec.DiscontinuedStatus = detail.DiscontinuedStatus;
+        TaktEcDeptExecRedundantBinder.Apply(exec, detail, isNew ? lineNumber : null);
         _afterBind?.Invoke(exec, detail, applyNotRelatedAuto);
         return exec;
     }
@@ -159,11 +149,14 @@ internal sealed class TaktEcDeptExecPipelineHub
         ITaktCompanyRepository<TaktEcKoubai> mpRepository,
         ITaktCompanyRepository<TaktEcUkeken> iqcRepository,
         ITaktCompanyRepository<TaktEcBukan> mcRepository,
-        ITaktCompanyRepository<TaktEcSeizounika> pcbaRepository,
+        ITaktCompanyRepository<TaktEcSeizounika> seizounikaRepository,
+        ITaktCompanyRepository<TaktEcSmt> smtRepository,
         ITaktCompanyRepository<TaktEcSeizouikka> assyRepository,
         ITaktCompanyRepository<TaktEcHinkan> qaRepository,
         ITaktCompanyRepository<TaktEcSeizougijutsu> teRepository)
     {
+        // Pcba Hub 仍挂 Seizounika；PCBA 表运行时 Upsert 由 Persistence 双表路由，Hub 保留 pcba 注入供后续扩展
+        _ = smtRepository;
         _pipelines = new Dictionary<string, ITaktEcDeptExecPipeline>(StringComparer.Ordinal)
         {
             [TaktEcDeptCodes.Pmc] = new TaktEcDeptExecPipeline<TaktEcSeikan>(pmcRepository, TaktEcDeptCodes.Pmc),
@@ -179,7 +172,7 @@ internal sealed class TaktEcDeptExecPipelineHub
                 mcRepository,
                 TaktEcDeptCodes.Mc,
                 (e, d, auto) => { if (auto) { TaktEcExecNotRelated.TryBukan(e, d); } }),
-            [TaktEcDeptCodes.Pcba] = new TaktEcDeptExecPipeline<TaktEcSeizounika>(pcbaRepository, TaktEcDeptCodes.Pcba),
+            [TaktEcDeptCodes.Pcba] = new TaktEcDeptExecPipeline<TaktEcSeizounika>(seizounikaRepository, TaktEcDeptCodes.Pcba),
             [TaktEcDeptCodes.Assy] = new TaktEcDeptExecPipeline<TaktEcSeizouikka>(assyRepository, TaktEcDeptCodes.Assy),
             [TaktEcDeptCodes.Qa] = new TaktEcDeptExecPipeline<TaktEcHinkan>(qaRepository, TaktEcDeptCodes.Qa),
             [TaktEcDeptCodes.Te] = new TaktEcDeptExecPipeline<TaktEcSeizougijutsu>(teRepository, TaktEcDeptCodes.Te)

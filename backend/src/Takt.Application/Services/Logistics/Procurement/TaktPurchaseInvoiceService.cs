@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票应用服务实现
 // 
@@ -104,8 +104,10 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     /// <summary>
     /// 获取采购发票选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchaseInvoiceOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseInvoiceOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchaseInvoiceRepository.GetListAsync(
@@ -301,6 +303,59 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     }
 
     // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取采购发票统计（数据看板采购金额）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>采购发票统计</returns>
+    public async Task<TaktPurchaseInvoiceStatDto> GetPurchaseInvoiceStatAsync(TaktProcurementStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.PostingDateStart ?? queryDto.OrderDateStart,
+            queryDto.PostingDateEnd ?? queryDto.OrderDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPurchaseInvoice, bool>> invoicePredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.PostingDate >= start
+            && x.PostingDate <= end;
+        var monthInvoiceCount = await _purchaseInvoiceRepository.CountAsync(invoicePredicate);
+        // 采购金额取明细 amount（未作废行）；主表 gross_amount 作回退
+        Expression<Func<TaktPurchaseInvoiceItem, bool>> itemPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsObsolete == 0
+            && SqlFunc.Subqueryable<TaktPurchaseInvoice>()
+                .Where(h =>
+                    h.Id == x.PurchaseInvoiceId
+                    && h.TenantCode == tenantCode
+                    && h.CompanyCode == companyCode
+                    && h.PostingDate >= start
+                    && h.PostingDate <= end
+                    && h.IsDeleted == 0)
+                .Any();
+        var monthTotalAmount = await _purchaseInvoiceItemRepository.SumAsync(
+            x => x.Amount ?? 0m,
+            itemPredicate);
+        if (monthTotalAmount == 0 && monthInvoiceCount > 0)
+        {
+            monthTotalAmount = await _purchaseInvoiceRepository.SumAsync(x => x.GrossAmount, invoicePredicate);
+        }
+        return new TaktPurchaseInvoiceStatDto
+        {
+            StatMonth = statMonth,
+            MonthInvoiceCount = monthInvoiceCount,
+            MonthTotalAmount = monthTotalAmount,
+        };
+    }
+
+    // ========================================
     // 主子表级联（OneToMany）
     // ========================================
 
@@ -388,8 +443,8 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.PurchaseInvoiceCode = entity.PurchaseInvoiceCode;
-                childDto.TaxCode = entity.TaxCode;
-                childDto.ReferenceCode = entity.ReferenceCode;
+                childDto.TaxCode = entity.TaxCode ?? string.Empty;
+                childDto.ReferenceCode = entity.ReferenceCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -498,9 +553,8 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                 || (x.ReversalFiscalYear != null && x.ReversalFiscalYear.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.SupplyingCountry != null && x.SupplyingCountry.Contains(keywords))
-                || (x.EnteredByEmployeeName != null && x.EnteredByEmployeeName.Contains(keywords))
                 || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
-                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
+                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -632,22 +686,16 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             exp = exp.And(x => x.TaxExchangeRate == taxExchangeRate);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EnteredByEmployeeName))
-        {
-            var enteredBy = queryDto.EnteredByEmployeeName;
-            exp = exp.And(x => x.EnteredByEmployeeName != null && x.EnteredByEmployeeName.Contains(enteredBy));
-        }
-
         if (!string.IsNullOrWhiteSpace(queryDto?.TransactionCode))
         {
             var transactionCode = queryDto.TransactionCode;
             exp = exp.And(x => x.TransactionCode != null && x.TransactionCode.Contains(transactionCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
         {
-            var postedBy = queryDto.PostedByEmployeeName;
-            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -824,15 +872,11 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EnteredByEmployeeName))
-        {
-            return true;
-        }
         if (!string.IsNullOrWhiteSpace(queryDto.TransactionCode))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
         {
             return true;
         }

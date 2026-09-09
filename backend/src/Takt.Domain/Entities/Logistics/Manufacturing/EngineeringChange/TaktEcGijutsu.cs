@@ -85,12 +85,6 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "完成品物料状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
-    public string DiscontinuedStatus { get; set; } = "Z0";
-
-    /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）
     /// </summary>
     [SugarColumn(ColumnName = "ec_status", ColumnDescription = "设变状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
@@ -99,18 +93,18 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     /// <summary>
     /// 设变明细列表（技术阶段一：③，BOM/料号变更行）
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktEcDetail.EcId))]
+    [Navigate(NavigateType.OneToMany, nameof(TaktEcDetail.EcGijutsuId))]
     public List<TaktEcDetail>? EcDetails { get; set; }
 
     /// <summary>
     /// 设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktEcAttachment.EcId))]
+    [Navigate(NavigateType.OneToMany, nameof(TaktEcAttachment.EcGijutsuId))]
     public List<TaktEcAttachment>? Attachments { get; set; }
 
     /// <summary>
     /// 设变通知列表（技术阶段一：④，发行通知至各部门）
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktEcNotification.EcId))]
+    [Navigate(NavigateType.OneToMany, nameof(TaktEcNotification.EcGijutsuId))]
     public List<TaktEcNotification>? Notifications { get; set; }
 }

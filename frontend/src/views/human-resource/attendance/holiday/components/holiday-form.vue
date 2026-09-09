@@ -93,13 +93,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.holiday.isworkingday')"
-                name="isWorkingDay"
+                :label="t('entity.holiday.compensatoryworkdates')"
+                name="compensatoryWorkDates"
+              >
+                <a-input
+                  v-model:value="formState.compensatoryWorkDates"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.holiday.compensatoryworkdates') })"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="t('entity.holiday.ispaid')"
+                name="isPaid"
               >
                 <TaktSelect
-                  v-model:value="formState.isWorkingDay"
-                  dict-type="humanresource_attendance_holiday_working_day_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') })"
+                  v-model:value="formState.isPaid"
+                  dict-type="sys_yes_no"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.holiday.ispaid') })"
                 />
               </a-form-item>
             </a-col>
@@ -247,7 +261,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","holidayName","holidayType","startDate","endDate","isWorkingDay","holidayGreeting","holidayQuote","holidayTheme","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","holidayName","holidayType","startDate","endDate","compensatoryWorkDates","isPaid","holidayGreeting","holidayQuote","holidayTheme","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -265,9 +279,14 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值 */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  if (target.compensatoryWorkDates === undefined || target.compensatoryWorkDates === null) {
+    target.compensatoryWorkDates = ''
+  }
+  if (target.isPaid === undefined || target.isPaid === null || target.isPaid === '') {
+    target.isPaid = 1
+  }
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -349,19 +368,26 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  isWorkingDay: [{
+  isPaid: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.holiday.ispaid') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.holiday.isworkingday') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.holiday.ispaid') }))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
+  compensatoryWorkDates: [
+    {
+      max: 200,
+      message: t('common.page.form.placeholder.optional', { field: t('entity.holiday.compensatoryworkdates') }),
+      trigger: 'blur'
+    }
+  ],
   holidayGreeting: [
     {
       required: true,
@@ -398,10 +424,14 @@ function getValues(): Record<string, any> {
     const rawholidayType = payload.holidayType
     payload.holidayType = typeof rawholidayType === 'number' ? rawholidayType : Number(rawholidayType)
   }
-  if ('isWorkingDay' in payload) {
-    const rawisWorkingDay = payload.isWorkingDay
-    payload.isWorkingDay = typeof rawisWorkingDay === 'number' ? rawisWorkingDay : Number(rawisWorkingDay)
+  if ('isPaid' in payload) {
+    const rawisPaid = payload.isPaid
+    payload.isPaid = typeof rawisPaid === 'number' ? rawisPaid : Number(rawisPaid)
   }
+  if ('compensatoryWorkDates' in payload) {
+    payload.compensatoryWorkDates = (payload.compensatoryWorkDates ?? '').toString().trim()
+  }
+  if ('daysCount' in payload) delete payload.daysCount
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

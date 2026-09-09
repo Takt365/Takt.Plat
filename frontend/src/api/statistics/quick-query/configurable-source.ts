@@ -130,10 +130,20 @@ export function updateConfigurableSourceSort(dto: ConfigurableSourceSort): Promi
  * 获取定制报表数据源选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getConfigurableSourceOptions(): Promise<TaktSelectOption[]> {
+export function getConfigurableSourceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CONFIGURABLE_SOURCE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

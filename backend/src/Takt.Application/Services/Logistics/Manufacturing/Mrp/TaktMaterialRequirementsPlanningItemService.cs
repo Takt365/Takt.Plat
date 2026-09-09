@@ -99,8 +99,10 @@ public class TaktMaterialRequirementsPlanningItemService : TaktServiceBase, ITak
     /// <summary>
     /// 获取物料需求计划MRP明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetMaterialRequirementsPlanningItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetMaterialRequirementsPlanningItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _materialRequirementsPlanningItemRepository.GetListAsync(

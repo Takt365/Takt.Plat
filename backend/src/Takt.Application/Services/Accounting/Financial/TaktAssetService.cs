@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktAssetService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-30
 // 创建人：Takt365(Cursor AI)
 // 功能描述：资产应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     }
 
     /// <summary>
-    /// 获取资产列表（分页）
+    /// 获取资产列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAssetDto>> GetAssetListAsync(TaktAssetQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAssetDto>.Create(
+                new List<TaktAssetDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _assetRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -81,25 +89,34 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktAssetDto>();
-        await FillAssetDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktAssetDto>();
+    }
 
     /// <summary>
     /// 获取资产选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAssetOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAssetOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
+        var normalizedPlantCode = plantCode?.Trim();
+        var normalizedKeyword = keyword?.Trim();
+        var predicate = Expressionable.Create<TaktAsset>()
+            .And(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AssetStatus == 1)
+            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>
+                (x.AssetCode != null && x.AssetCode.Contains(normalizedKeyword!))
+                || (x.AssetName != null && x.AssetName.Contains(normalizedKeyword!)))
+            .ToExpression();
         var list = await _assetRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AssetStatus == 1,
+            predicate,
             x => x.AssetName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.AssetName ?? e.Id.ToString(),
+            DictValue = e.AssetCode,
+            DictLabel = e.AssetName ?? e.AssetCode,
         }).ToList();
     }
 
@@ -119,7 +136,6 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             throw new TaktBusinessException("资产的AssetCode已存在");
         }
         entity = await _assetRepository.CreateAsync(entity);
-                await SaveAssetChildrenAsync(entity, dto);
         return await GetAssetByIdAsync(entity.Id) ?? entity.Adapt<TaktAssetDto>();
     }
 
@@ -146,7 +162,6 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             throw new TaktBusinessException("资产的AssetCode已存在");
         }
         await _assetRepository.UpdateAsync(entity);
-                await SaveAssetChildrenAsync(entity, dto);
         return await GetAssetByIdAsync(id) ?? throw new TaktBusinessException("资产不存在");
     }
 
@@ -157,11 +172,7 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     /// <returns>任务</returns>
     public async Task DeleteAssetByIdAsync(long id)
     {
-        var entity = await _assetRepository.GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("资产不存在或已删除");
-        }        var deleted = await _assetRepository.DeleteAsync(id);
+        var deleted = await _assetRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("资产不存在或已删除");
@@ -272,7 +283,15 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAssetAsync(TaktAssetQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAssetQueryDto());
+        var queryDto = query ?? new TaktAssetQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAssetExportDto>(),
+                sheetName ?? "资产数据",
+                fileName ?? "资产导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _assetRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -289,33 +308,6 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充资产详情（加载 OneToMany 子表：资产变更记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillAssetDetailsAsync(TaktAssetDto dto, TaktAsset entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 保存资产子表级联（资产变更记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveAssetChildrenAsync(TaktAsset entity, TaktAssetCreateDto dto)
-    {
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -328,200 +320,343 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
     {
         var exp = Expressionable.Create<TaktAsset>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.AssetCode != null && x.AssetCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.AssetCode != null && x.AssetCode.Contains(keywords))
                 || (x.AssetName != null && x.AssetName.Contains(keywords))
                 || (x.AssetCategory != null && x.AssetCategory.Contains(keywords))
-                || SqlFunc.ToString(x.AssetType).Contains(keywords)
-                || SqlFunc.ToString(x.AssetOriginalValue).Contains(keywords)
-                || SqlFunc.ToString(x.AssetNetValue).Contains(keywords)
-                || SqlFunc.ToString(x.AccumulatedDepreciation).Contains(keywords)
-                || SqlFunc.ToString(x.CostCenterId).Contains(keywords)
+                || (x.AssetType != null && x.AssetType.Contains(keywords))
                 || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
-                || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
-                || SqlFunc.ToString(x.UserId).Contains(keywords)
                 || (x.UserName != null && x.UserName.Contains(keywords))
                 || (x.AssetLocation != null && x.AssetLocation.Contains(keywords))
-                || SqlFunc.ToString(x.ExpectedLifeMonths).Contains(keywords)
-                || SqlFunc.ToString(x.DepreciationMethod).Contains(keywords)
-                || SqlFunc.ToString(x.MonthlyDepreciation).Contains(keywords)
-                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.AssetStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
-                || SqlFunc.ToString(x.StartDate).Contains(keywords)
-                || SqlFunc.ToString(x.ScrapDate).Contains(keywords)
-                || SqlFunc.ToString(x.DisposalDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.AssetCode != null && x.AssetCode.Contains(queryDto.AssetCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.AssetName != null && x.AssetName.Contains(queryDto.AssetName));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssetCode))
         {
-            exp = exp.And(x => x.AssetCategory != null && x.AssetCategory.Contains(queryDto.AssetCategory));
+            var assetCode = queryDto.AssetCode;
+            exp = exp.And(x => x.AssetCode != null && x.AssetCode.Contains(assetCode));
         }
 
-        if (queryDto?.AssetType != null)
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssetName))
         {
-            exp = exp.And(x => x.AssetType == queryDto.AssetType);
+            var assetName = queryDto.AssetName;
+            exp = exp.And(x => x.AssetName != null && x.AssetName.Contains(assetName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssetCategory))
+        {
+            var assetCategory = queryDto.AssetCategory;
+            exp = exp.And(x => x.AssetCategory != null && x.AssetCategory.Contains(assetCategory));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssetType))
+        {
+            var assetType = queryDto.AssetType;
+            exp = exp.And(x => x.AssetType != null && x.AssetType.Contains(assetType));
         }
 
         if (queryDto?.AssetOriginalValue.HasValue == true)
         {
-            exp = exp.And(x => x.AssetOriginalValue == queryDto.AssetOriginalValue);
+            var assetOriginalValue = queryDto.AssetOriginalValue.Value;
+            exp = exp.And(x => x.AssetOriginalValue == assetOriginalValue);
         }
 
         if (queryDto?.AssetNetValue.HasValue == true)
         {
-            exp = exp.And(x => x.AssetNetValue == queryDto.AssetNetValue);
+            var assetNetValue = queryDto.AssetNetValue.Value;
+            exp = exp.And(x => x.AssetNetValue == assetNetValue);
         }
 
         if (queryDto?.AccumulatedDepreciation.HasValue == true)
         {
-            exp = exp.And(x => x.AccumulatedDepreciation == queryDto.AccumulatedDepreciation);
+            var accumulatedDepreciation = queryDto.AccumulatedDepreciation.Value;
+            exp = exp.And(x => x.AccumulatedDepreciation == accumulatedDepreciation);
         }
 
         if (queryDto?.CostCenterId.HasValue == true)
         {
-            exp = exp.And(x => x.CostCenterId == queryDto.CostCenterId);
+            var costCenterId = queryDto.CostCenterId.Value;
+            exp = exp.And(x => x.CostCenterId == costCenterId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterName))
         {
-            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.CostCenterName));
+            var costCenterName = queryDto.CostCenterName;
+            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(costCenterName));
         }
 
         if (queryDto?.DeptId.HasValue == true)
         {
-            exp = exp.And(x => x.DeptId == queryDto.DeptId);
+            var deptId = queryDto.DeptId.Value;
+            exp = exp.And(x => x.DeptId == deptId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
         {
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
         }
 
         if (queryDto?.UserId.HasValue == true)
         {
-            exp = exp.And(x => x.UserId == queryDto.UserId);
+            var userId = queryDto.UserId.Value;
+            exp = exp.And(x => x.UserId == userId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.UserName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.UserName))
         {
-            exp = exp.And(x => x.UserName != null && x.UserName.Contains(queryDto.UserName));
+            var userName = queryDto.UserName;
+            exp = exp.And(x => x.UserName != null && x.UserName.Contains(userName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssetLocation))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssetLocation))
         {
-            exp = exp.And(x => x.AssetLocation != null && x.AssetLocation.Contains(queryDto.AssetLocation));
+            var assetLocation = queryDto.AssetLocation;
+            exp = exp.And(x => x.AssetLocation != null && x.AssetLocation.Contains(assetLocation));
         }
 
         if (queryDto?.ExpectedLifeMonths.HasValue == true)
         {
-            exp = exp.And(x => x.ExpectedLifeMonths == queryDto.ExpectedLifeMonths);
+            var expectedLifeMonths = queryDto.ExpectedLifeMonths.Value;
+            exp = exp.And(x => x.ExpectedLifeMonths == expectedLifeMonths);
         }
 
         if (queryDto?.DepreciationMethod.HasValue == true)
         {
-            exp = exp.And(x => x.DepreciationMethod == queryDto.DepreciationMethod);
+            var depreciationMethod = queryDto.DepreciationMethod.Value;
+            exp = exp.And(x => x.DepreciationMethod == depreciationMethod);
         }
 
         if (queryDto?.MonthlyDepreciation.HasValue == true)
         {
-            exp = exp.And(x => x.MonthlyDepreciation == queryDto.MonthlyDepreciation);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var monthlyDepreciation = queryDto.MonthlyDepreciation.Value;
+            exp = exp.And(x => x.MonthlyDepreciation == monthlyDepreciation);
         }
 
         if (queryDto?.AssetStatus.HasValue == true)
         {
-            exp = exp.And(x => x.AssetStatus == queryDto.AssetStatus);
+            var assetStatus = queryDto.AssetStatus.Value;
+            exp = exp.And(x => x.AssetStatus == assetStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.PurchaseDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseDate >= queryDto.PurchaseDateStart);
+            var purchaseDateStart = queryDto.PurchaseDateStart.Value;
+            exp = exp.And(x => x.PurchaseDate >= purchaseDateStart);
         }
 
         if (queryDto?.PurchaseDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseDate <= queryDto.PurchaseDateEnd);
+            var purchaseDateEnd = queryDto.PurchaseDateEnd.Value;
+            exp = exp.And(x => x.PurchaseDate <= purchaseDateEnd);
         }
 
         if (queryDto?.StartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate >= queryDto.StartDateStart);
+            var startDateStart = queryDto.StartDateStart.Value;
+            exp = exp.And(x => x.StartDate >= startDateStart);
         }
 
         if (queryDto?.StartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.StartDate <= queryDto.StartDateEnd);
+            var startDateEnd = queryDto.StartDateEnd.Value;
+            exp = exp.And(x => x.StartDate <= startDateEnd);
         }
 
         if (queryDto?.ScrapDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ScrapDate >= queryDto.ScrapDateStart);
+            var scrapDateStart = queryDto.ScrapDateStart.Value;
+            exp = exp.And(x => x.ScrapDate >= scrapDateStart);
         }
 
         if (queryDto?.ScrapDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ScrapDate <= queryDto.ScrapDateEnd);
+            var scrapDateEnd = queryDto.ScrapDateEnd.Value;
+            exp = exp.And(x => x.ScrapDate <= scrapDateEnd);
         }
 
         if (queryDto?.DisposalDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.DisposalDate >= queryDto.DisposalDateStart);
+            var disposalDateStart = queryDto.DisposalDateStart.Value;
+            exp = exp.And(x => x.DisposalDate >= disposalDateStart);
         }
 
         if (queryDto?.DisposalDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.DisposalDate <= queryDto.DisposalDateEnd);
+            var disposalDateEnd = queryDto.DisposalDateEnd.Value;
+            exp = exp.And(x => x.DisposalDate <= disposalDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAssetQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssetCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssetName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssetCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssetType))
+        {
+            return true;
+        }
+        if (queryDto.AssetOriginalValue.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AssetNetValue.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AccumulatedDepreciation.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CostCenterId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterName))
+        {
+            return true;
+        }
+        if (queryDto.DeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (queryDto.UserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UserName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AssetLocation))
+        {
+            return true;
+        }
+        if (queryDto.ExpectedLifeMonths.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DepreciationMethod.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MonthlyDepreciation.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.AssetStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.PurchaseDateStart.HasValue || queryDto.PurchaseDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StartDateStart.HasValue || queryDto.StartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ScrapDateStart.HasValue || queryDto.ScrapDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DisposalDateStart.HasValue || queryDto.DisposalDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

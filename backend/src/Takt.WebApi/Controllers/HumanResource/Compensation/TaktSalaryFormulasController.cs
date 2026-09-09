@@ -86,11 +86,11 @@ public class TaktSalaryFormulasController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:compensation:salary:formula:query", "薪资计算公式选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSalaryFormulaOptionsAsync()
+    public async Task<IActionResult> GetSalaryFormulaOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salaryFormulaService.GetSalaryFormulaOptionsAsync();
+            var result = await _salaryFormulaService.GetSalaryFormulaOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

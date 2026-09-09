@@ -116,10 +116,20 @@ export function deleteEmployeeResignationBatch(ids: string[]): Promise<void> {
  * 获取员工离职选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEmployeeResignationOptions(): Promise<TaktSelectOption[]> {
+export function getEmployeeResignationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${EMPLOYEE_RESIGNATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

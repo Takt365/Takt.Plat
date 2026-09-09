@@ -309,30 +309,56 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
     }
 
     /// <summary>
-    /// 批量创建实体
+    /// 批量创建实体（公司/工厂/文化码只解析一次；插入由 InsertEntitiesAsync 自动分批）
     /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>插入行数</returns>
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
+        ArgumentNullException.ThrowIfNull(entities);
+        if (entities.Count == 0)
+        {
+            return 0;
+        }
+
         var now = DateTime.Now;
+        var defaultTenant = CurrentTenantCode;
+        var defaultCompany = CurrentCompanyCode;
+        _database.NormalizeAndValidate();
+        string? mappedCulture = null;
+        string? mappedPlant = null;
+        if (!string.IsNullOrWhiteSpace(defaultTenant) && !string.IsNullOrWhiteSpace(defaultCompany))
+        {
+            mappedCulture = _database.GetCultureCodeForCompanyCode(defaultCompany);
+            mappedPlant = _database.GetPlantCodeForCompanyCode(defaultCompany);
+        }
+
         foreach (var entity in entities)
         {
-            // 自动设置租户和公司编码(仅在未设置时才自动填充)
             if (string.IsNullOrEmpty(entity.TenantCode))
             {
-                entity.TenantCode = CurrentTenantCode;
+                entity.TenantCode = defaultTenant;
             }
 
             if (string.IsNullOrEmpty(entity.CompanyCode))
             {
-                entity.CompanyCode = CurrentCompanyCode;
+                entity.CompanyCode = defaultCompany;
             }
 
-            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
-                Db,
-                entity,
-                entity.TenantCode,
-                entity.CompanyCode,
-                _database);
+            if (string.Equals(entity.CompanyCode, defaultCompany, StringComparison.Ordinal)
+                && mappedCulture != null)
+            {
+                TaktCompanyScopeFillHelper.ApplyCompanyScope(entity, mappedCulture, mappedPlant ?? string.Empty);
+            }
+            else
+            {
+                await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                    Db,
+                    entity,
+                    entity.TenantCode,
+                    entity.CompanyCode,
+                    _database);
+            }
 
             entity.ApplyCreate(CurrentUserId, now);
         }

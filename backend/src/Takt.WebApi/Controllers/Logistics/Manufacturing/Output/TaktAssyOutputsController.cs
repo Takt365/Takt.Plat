@@ -86,11 +86,30 @@ public class TaktAssyOutputsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:output:assy:query", "组立日报选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetAssyOutputOptionsAsync()
+    public async Task<IActionResult> GetAssyOutputOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _assyOutputService.GetAssyOutputOptionsAsync();
+            var result = await _assyOutputService.GetAssyOutputOptionsAsync(plantCode, keyword);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取组立日报新增时固定的生产时段列表（13 条）
+    /// </summary>
+    /// <returns>生产时段字符串列表</returns>
+    [TaktPermission("logistics:manufacturing:output:assy:query", "组立日报默认生产时段")]
+    [HttpGet("default-time-periods")]
+    public async Task<IActionResult> GetAssyOutputDefaultTimePeriodsAsync()
+    {
+        try
+        {
+            var result = await _assyOutputService.GetAssyOutputDefaultTimePeriodsAsync();
             return Success(result, "查询成功");
         }
         catch (Exception ex)

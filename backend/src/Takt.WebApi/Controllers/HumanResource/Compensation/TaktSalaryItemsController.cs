@@ -86,11 +86,11 @@ public class TaktSalaryItemsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:compensation:salary:item:query", "薪资项目选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSalaryItemOptionsAsync()
+    public async Task<IActionResult> GetSalaryItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salaryItemService.GetSalaryItemOptionsAsync();
+            var result = await _salaryItemService.GetSalaryItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

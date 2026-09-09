@@ -130,10 +130,20 @@ export function updateAssyOrderDefectStatus(dto: AssyOrderDefectStatus): Promise
  * 获取组立工单不良统计选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getAssyOrderDefectOptions(): Promise<TaktSelectOption[]> {
+export function getAssyOrderDefectOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ASSY_ORDER_DEFECT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

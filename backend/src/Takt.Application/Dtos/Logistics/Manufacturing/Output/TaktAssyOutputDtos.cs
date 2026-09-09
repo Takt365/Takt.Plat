@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Output;
 // ========================================
 
 /// <summary>
-/// 组立日报（产出）主表实体 <para>业务唯一键：TenantCode+CompanyCode+PlantCode+ProdDate+ProdOrderCode。</para> 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
+/// 组立日报（产出）主表实体 <para>业务唯一键：TenantCode+CompanyCode+TeamCode+ProdCategory+ProdDate+ProdOrderCode。</para> 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
 /// 对应前端 TaktAssyOutputDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>

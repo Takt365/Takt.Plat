@@ -144,10 +144,20 @@ export function updatePayScaleSort(dto: PayScaleSort): Promise<PayScale> {
  * 获取薪级选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPayScaleOptions(): Promise<TaktSelectOption[]> {
+export function getPayScaleOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PAY_SCALE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

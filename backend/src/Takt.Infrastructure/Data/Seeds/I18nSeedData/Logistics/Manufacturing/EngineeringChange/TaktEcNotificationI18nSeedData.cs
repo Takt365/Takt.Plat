@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotification 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-notification）
 // 
@@ -99,14 +99,14 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotification.code
             new TranslationSeedItem("entity.ecnotification.code", "zh-HK", "通知单号_hk", "通知单号（唯一，如：EC-2026-0001）"),
 
-            // entity.ecnotification.ecid
-            new TranslationSeedItem("entity.ecnotification.ecid", "en-US", "设变ID_us", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecnotification.ecid
-            new TranslationSeedItem("entity.ecnotification.ecid", "ja-JP", "设变ID_jp", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecnotification.ecid
-            new TranslationSeedItem("entity.ecnotification.ecid", "zh-CN", "设变ID", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
-            // entity.ecnotification.ecid
-            new TranslationSeedItem("entity.ecnotification.ecid", "zh-HK", "设变ID_hk", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
+            // entity.ecnotification.ecgijutsuid
+            new TranslationSeedItem("entity.ecnotification.ecgijutsuid", "en-US", "技术课主表ID_us", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecnotification.ecgijutsuid
+            new TranslationSeedItem("entity.ecnotification.ecgijutsuid", "ja-JP", "技术课主表ID_jp", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecnotification.ecgijutsuid
+            new TranslationSeedItem("entity.ecnotification.ecgijutsuid", "zh-CN", "技术课主表ID", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecnotification.ecgijutsuid
+            new TranslationSeedItem("entity.ecnotification.ecgijutsuid", "zh-HK", "技术课主表ID_hk", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
 
             // entity.ecnotification.eccode
             new TranslationSeedItem("entity.ecnotification.eccode", "en-US", "设变单号_us", "设变单号（冗余：按对应 Id 取主数据名称联动）"),

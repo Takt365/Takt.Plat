@@ -106,11 +106,11 @@ public class TaktMaintenanceHistoriesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:maintenance:equipment:query", "设备维护履历选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaintenanceHistoryOptionsAsync()
+    public async Task<IActionResult> GetMaintenanceHistoryOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _maintenanceHistoryService.GetMaintenanceHistoryOptionsAsync();
+            var result = await _maintenanceHistoryService.GetMaintenanceHistoryOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

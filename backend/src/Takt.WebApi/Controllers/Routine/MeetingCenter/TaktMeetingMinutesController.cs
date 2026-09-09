@@ -86,11 +86,11 @@ public class TaktMeetingMinutesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:meeting:center:minutes:query", "会后纪要选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMeetingMinutesOptionsAsync()
+    public async Task<IActionResult> GetMeetingMinutesOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _meetingMinutesService.GetMeetingMinutesOptionsAsync();
+            var result = await _meetingMinutesService.GetMeetingMinutesOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

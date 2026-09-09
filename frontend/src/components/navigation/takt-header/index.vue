@@ -27,7 +27,7 @@
             <RiMenuFoldLine class="takt-remix-icon" v-else />
           </template>
         </a-button>
-        <TaktBreadcrumb />
+        <TaktBreadcrumb v-if="settingSafe.showBreadcrumb" />
       </slot>
     </div>
     <div class="header-right">

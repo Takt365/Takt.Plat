@@ -86,11 +86,11 @@ public class TaktEmployeeExperiencesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:experience:query", "员工工作经历选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeExperienceOptionsAsync()
+    public async Task<IActionResult> GetEmployeeExperienceOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeExperienceService.GetEmployeeExperienceOptionsAsync();
+            var result = await _employeeExperienceService.GetEmployeeExperienceOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

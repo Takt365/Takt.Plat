@@ -44,7 +44,7 @@ public class TaktEcNotificationDto : TaktApprovalDtoBase
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 关联的设变主表名称（填充字段）
@@ -144,7 +144,7 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
@@ -300,7 +300,7 @@ public class TaktEcNotificationCreateDto
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
@@ -442,7 +442,7 @@ public class TaktEcNotificationTemplateDto
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
@@ -536,7 +536,7 @@ public class TaktEcNotificationImportDto
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
@@ -636,7 +636,7 @@ public class TaktEcNotificationExportDto
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段，便于查询）

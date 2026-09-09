@@ -51,6 +51,8 @@ const {
   INDEX_FORM_RESET_NEXT_TICK,
   buildFormResetScopeDefaultsBlock,
   buildVueImportResultUtilImportLine,
+  TAKT_FORM_MODAL_WIDTH_IMPORT,
+  TAKT_FORM_MODAL_WIDTH_ATTR,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
   buildEntityI18nComposableFile,
@@ -389,7 +391,7 @@ ${dictBodyCellExtra}
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      ${TAKT_FORM_MODAL_WIDTH_ATTR}
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -587,7 +589,7 @@ import {
   type TaktTreeTableNode,
 } from '@/utils/takt-tree-table'
 import { useTableRefresh } from '@/composables/use-table-refresh'
-import {
+${(caps.hasCreate || caps.hasUpdate) ? TAKT_FORM_MODAL_WIDTH_IMPORT : ''}import {
   mapLazyTreeNodes,
   mergeLoadedChildren,
   taktIsLeafFlag,

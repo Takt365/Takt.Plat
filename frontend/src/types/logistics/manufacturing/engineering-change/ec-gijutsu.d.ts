@@ -72,11 +72,6 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecEntryDate: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
@@ -184,11 +179,6 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecEntryDateEnd?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus?: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
@@ -291,11 +281,6 @@ export interface EcGijutsuCreate {
   ecEntryDate: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
@@ -304,6 +289,21 @@ export interface EcGijutsuCreate {
    * 设变明细列表（子表，级联保存）
    */
   ecDetails?: EcDetailCreate[];
+
+  /**
+   * 来源设变主表 ID；大明细延后由服务端物化
+   */
+  sourceEcId?: string;
+
+  /**
+   * 草稿是否省略明细
+   */
+  detailsDeferred?: boolean;
+
+  /**
+   * 省略时的明细行数
+   */
+  deferredDetailCount?: number;
 
   /**
    * 设变附件列表（一个设变可对应多个附件）（子表，级联保存）
@@ -424,11 +424,6 @@ export interface EcGijutsuTemplate {
   ecEntryDate?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus?: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
@@ -531,11 +526,6 @@ export interface EcGijutsuImport {
   ecEntryDate?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus?: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus?: number;
@@ -630,11 +620,6 @@ export interface EcGijutsuExport {
   ecEntryDate: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-   */
-  discontinuedStatus: string;
-
-  /**
    * 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
    */
   ecStatus: number;
@@ -680,5 +665,22 @@ export interface EcGijutsuStatQuery {
   ecEntryDateEnd?: string;
   /** 工厂代码 */
   plantCode?: string;
+}
+
+/**
+ * 设变技术课主表后台保存已提交回执（Create/Update 入队后立即返回）
+ * @description 对应后端 TaktEcGijutsuSubmittedDto
+ */
+export interface EcGijutsuSubmitted {
+  /** 工厂代码 */
+  plantCode: string;
+  /** 设变单号 */
+  ecCode: string;
+  /** 是否为更新 */
+  isUpdate: boolean;
+  /** 明细行数 */
+  detailCount: number;
+  /** 更新时的主表主键（新增为 "0"） */
+  ecGijutsuId: string;
 }
 

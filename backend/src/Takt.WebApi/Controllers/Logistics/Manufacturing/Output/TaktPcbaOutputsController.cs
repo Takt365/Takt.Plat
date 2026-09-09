@@ -57,6 +57,26 @@ public class TaktPcbaOutputsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取 PCBA 生产统计（数据看板 production-stat）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 生产统计</returns>
+    [TaktPermission("logistics:manufacturing:output:pcba:list", "PCBA生产统计")]
+    [HttpGet("production-stat")]
+    public async Task<IActionResult> GetPcbaOutputProductionStatAsync([FromQuery] TaktOutputProductionStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _pcbaOutputService.GetPcbaOutputProductionStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取PCBA日报
     /// </summary>
     /// <param name="id">PCBA日报ID</param>
@@ -86,11 +106,11 @@ public class TaktPcbaOutputsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaOutputOptionsAsync()
+    public async Task<IActionResult> GetPcbaOutputOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaOutputService.GetPcbaOutputOptionsAsync();
+            var result = await _pcbaOutputService.GetPcbaOutputOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

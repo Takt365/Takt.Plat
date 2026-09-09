@@ -74,7 +74,19 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'currencyCode'">
+        <template v-if="column.key === 'salesQuotationType'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'salesQuotationType')"
+            dict-type="logistics_sales_order_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'pricingProcedure'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'pricingProcedure')"
+            dict-type="logistics_sales_pricing_procedure"
+          />
+        </template>
+        <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'currencyCode')"
             dict-type="accounting_financial_currency_code"
@@ -111,7 +123,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -227,12 +239,43 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('salesBy')">
-      <a-form-item :label="pi.queryLabel('salesBy')">
+      <div v-show="isFieldVisible('salesGroup')">
+      <a-form-item :label="pi.queryLabel('salesGroup')">
         <TaktSelect
-          v-model:value="advancedQueryForm.salesBy"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('salesBy', 'select')"
+          v-model:value="advancedQueryForm.salesGroup"
+          api-url="TaktSalesGroups/options"
+          :placeholder="pi.queryPh('salesGroup', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesQuotationType')">
+      <a-form-item :label="pi.queryLabel('salesQuotationType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesQuotationType"
+          dict-type="logistics_sales_order_type"
+          :placeholder="pi.queryPh('salesQuotationType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingProcedure')">
+      <a-form-item :label="pi.queryLabel('pricingProcedure')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.pricingProcedure"
+          dict-type="logistics_sales_pricing_procedure"
+          :placeholder="pi.queryPh('pricingProcedure', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingConditionCode')">
+      <a-form-item :label="pi.queryLabel('pricingConditionCode')">
+        <a-input
+          v-model:value="advancedQueryForm.pricingConditionCode"
+          :placeholder="pi.queryPh('pricingConditionCode', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -445,6 +488,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import SalesQuotationForm from './components/quotation-form.vue'
 import SalesQuotationItemPanel from './components/quotation-item-panel.vue'
 import { provideSalesQuotationMasterContext, type SalesQuotationRowRecord } from './composables/use-quotation-master-context'
@@ -505,6 +549,8 @@ const formData = ref<Partial<SalesQuotation> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -757,13 +803,38 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'validUntilDate') ?? ''
   },
   {
-    title: pi.label('salesBy'),
-    dataIndex: 'salesBy',
-    key: 'salesBy',
+    title: pi.label('salesGroup'),
+    dataIndex: 'salesGroup',
+    key: 'salesGroup',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesBy') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'salesGroup') ?? ''
+  },
+  {
+    title: pi.label('salesQuotationType'),
+    dataIndex: 'salesQuotationType',
+    key: 'salesQuotationType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('pricingProcedure'),
+    dataIndex: 'pricingProcedure',
+    key: 'pricingProcedure',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('pricingConditionCode'),
+    dataIndex: 'pricingConditionCode',
+    key: 'pricingConditionCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'pricingConditionCode') ?? ''
   },
   {
     title: pi.label('totalQuantity'),
@@ -973,7 +1044,10 @@ function handleReset() {
   quotationDateEnd: '',
   validUntilDateStart: '',
   validUntilDateEnd: '',
-  salesBy: '',
+  salesGroup: '',
+  salesQuotationType: '',
+  pricingProcedure: '',
+  pricingConditionCode: '',
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
@@ -1194,7 +1268,10 @@ function handleAdvancedQueryReset() {
   quotationDateEnd: '',
   validUntilDateStart: '',
   validUntilDateEnd: '',
-  salesBy: '',
+  salesGroup: '',
+  salesQuotationType: '',
+  pricingProcedure: '',
+  pricingConditionCode: '',
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,

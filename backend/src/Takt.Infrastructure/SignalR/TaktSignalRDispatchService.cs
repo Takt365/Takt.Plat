@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using Microsoft.AspNetCore.SignalR;
 using Takt.Application.Dtos.Foundation;
 using Takt.Application.Services.Foundation;
@@ -494,6 +495,42 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
         await _notificationHubContext.Clients.Group(userGroup).SendAsync("BomMaterialCostItemRecalculateCompleted", payload);
         TaktSignalRLogging.LogWorkflowPushed("bom-material-cost-item-recalculate", companyCode, push.ProcessedMonth, UserName);
+    }
+
+    /// <summary>
+    /// 向触发用户推送设变技术课主表后台保存完成事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    public async Task PushEcGijutsuPersistCompletedToUserAsync(TaktSignalREcGijutsuPersistPush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        var UserName = push.TriggerUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(UserName))
+        {
+            return;
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            TriggerUserName = UserName,
+            push.PlantCode,
+            push.EcCode,
+            push.IsUpdate,
+            EcGijutsuId = push.EcGijutsuId.ToString(CultureInfo.InvariantCulture),
+            push.DetailCount,
+            push.ExecuteStatus,
+            push.ExecuteDuration,
+            push.ErrorMessage,
+            CompletedAt = push.CompletedAt,
+        };
+
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, UserName);
+        await _notificationHubContext.Clients.Group(userGroup).SendAsync("EcGijutsuPersistCompleted", payload);
+        TaktSignalRLogging.LogWorkflowPushed("ec-gijutsu-persist", companyCode, push.EcCode, UserName);
     }
 
     /// <summary>

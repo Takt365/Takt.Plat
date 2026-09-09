@@ -86,11 +86,11 @@ public class TaktBillOfMaterialItemsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "物料清单明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBillOfMaterialItemOptionsAsync()
+    public async Task<IActionResult> GetBillOfMaterialItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _billOfMaterialItemService.GetBillOfMaterialItemOptionsAsync();
+            var result = await _billOfMaterialItemService.GetBillOfMaterialItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

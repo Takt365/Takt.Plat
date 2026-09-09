@@ -86,11 +86,11 @@ public class TaktWarehousesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:warehouse:query", "仓库主数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetWarehouseOptionsAsync()
+    public async Task<IActionResult> GetWarehouseOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _warehouseService.GetWarehouseOptionsAsync();
+            var result = await _warehouseService.GetWarehouseOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

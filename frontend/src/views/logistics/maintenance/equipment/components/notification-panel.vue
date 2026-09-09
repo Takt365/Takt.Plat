@@ -83,7 +83,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -511,6 +511,7 @@ import { ref, computed, watch } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
@@ -555,6 +556,8 @@ const formTitle = ref('')
 const formData = ref<Partial<MaintenanceNotification>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({

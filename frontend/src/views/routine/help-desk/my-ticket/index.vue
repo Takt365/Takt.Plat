@@ -71,7 +71,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="t('common.dialog.title.create', { entity: t('entity.ticket._self') })"
-      width="50%"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
     >
@@ -138,6 +138,7 @@ import { ref, computed, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import type { Rule } from 'ant-design-vue/es/form'
 import { getMyTicketList, submitTicket } from '@/api/routine/help-desk/ticket'
@@ -178,6 +179,8 @@ const workflowVisible = ref(false)
 const workflowTicketId = ref<string | null>(null)
 /** 新建表单 */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 /** 新建表单模型 */
 const formState = ref<TicketSubmit>({
   title: '',

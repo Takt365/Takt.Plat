@@ -38,11 +38,11 @@ public class TaktEcNotificationDelivery : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_notification_code", ColumnDescription = "通知单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string EcNotificationCode { get; set; } = string.Empty;
     /// <summary>
-    /// 设变 ID
+    /// 技术课主表 ID（TaktEcGijutsu 主键）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_id", ColumnDescription = "设变ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 设变单号（冗余）
     /// </summary>

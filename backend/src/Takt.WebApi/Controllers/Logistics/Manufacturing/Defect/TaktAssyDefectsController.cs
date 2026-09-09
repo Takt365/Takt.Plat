@@ -57,6 +57,26 @@ public class TaktAssyDefectsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取组立不良统计（数据看板 defect-stat）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>组立不良统计</returns>
+    [TaktPermission("logistics:manufacturing:defect:assy:list", "组立不良统计")]
+    [HttpGet("defect-stat")]
+    public async Task<IActionResult> GetAssyDefectStatAsync([FromQuery] TaktDefectStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _assyDefectService.GetAssyDefectStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取组立不良日报
     /// </summary>
     /// <param name="id">组立不良日报ID</param>
@@ -86,11 +106,11 @@ public class TaktAssyDefectsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:assy:query", "组立不良日报选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetAssyDefectOptionsAsync()
+    public async Task<IActionResult> GetAssyDefectOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _assyDefectService.GetAssyDefectOptionsAsync();
+            var result = await _assyDefectService.GetAssyDefectOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

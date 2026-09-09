@@ -41,7 +41,7 @@ public class TaktEcSeikanCreateValidator : AbstractValidator<TaktEcSeikanCreateD
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
@@ -84,7 +84,7 @@ public class TaktEcSeikanUpdateValidator : AbstractValidator<TaktEcSeikanUpdateD
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
@@ -121,7 +121,7 @@ public class TaktEcSeikanImportValidator : AbstractValidator<TaktEcSeikanImportD
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")

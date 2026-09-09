@@ -86,11 +86,11 @@ public class TaktBanksController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:bank:query", "银行信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBankOptionsAsync()
+    public async Task<IActionResult> GetBankOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _bankService.GetBankOptionsAsync();
+            var result = await _bankService.GetBankOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

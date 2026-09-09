@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：customer-complaint.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -53,8 +53,11 @@ export function getCustomerComplaintList(queryDto: any): Promise<TaktPagedResult
  */
 export function getCustomerComplaintById(id: string): Promise<CustomerComplaint> {
   return request<CustomerComplaint>({
-    url: `${CUSTOMER_COMPLAINT_API_BASE}/${id}`,
+    url: `${CUSTOMER_COMPLAINT_API_BASE}/{id:long}`,
     method: 'get',
+    params: {
+      id
+    },
   });
 }
 
@@ -142,12 +145,18 @@ export function updateCustomerComplaintSort(dto: CustomerComplaintSort): Promise
 
 /**
  * 获取客诉主选项列表
+ * @param {string} plantCode 工厂代码（可选，用于按工厂过滤）
+ * @param {string} keyword 搜索关键字（可选，模糊匹配）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getCustomerComplaintOptions(): Promise<TaktSelectOption[]> {
+export function getCustomerComplaintOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${CUSTOMER_COMPLAINT_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 
@@ -219,4 +228,3 @@ export function exportCustomerComplaint(
     responseType: 'blob',
   });
 }
-

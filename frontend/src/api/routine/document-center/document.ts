@@ -144,10 +144,20 @@ export function updateDocumentSort(dto: DocumentSort): Promise<Document> {
  * 获取文管中心主选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getDocumentOptions(): Promise<TaktSelectOption[]> {
+export function getDocumentOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${DOCUMENT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -41,14 +41,19 @@ public class TaktEcSeizounikaCreateValidator : AbstractValidator<TaktEcSeizounik
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(5).WithMessage("部门编码长度不能超过5个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
+        RuleFor(x => x.EcParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符");
+        RuleFor(x => x.EcParentMaterialDescription)
+            .MaximumLength(40).WithMessage("上阶物料描述长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -84,14 +89,19 @@ public class TaktEcSeizounikaUpdateValidator : AbstractValidator<TaktEcSeizounik
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(5).WithMessage("部门编码长度不能超过5个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
+        RuleFor(x => x.EcParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符");
+        RuleFor(x => x.EcParentMaterialDescription)
+            .MaximumLength(40).WithMessage("上阶物料描述长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -121,14 +131,19 @@ public class TaktEcSeizounikaImportValidator : AbstractValidator<TaktEcSeizounik
             .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
-        RuleFor(x => x.EcnDetailId)
+        RuleFor(x => x.EcDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
         RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)
             .NotEmpty().WithMessage("部门编码不能为空")
-            .MaximumLength(5).WithMessage("部门编码长度不能超过5个字符");
+            .MaximumLength(6).WithMessage("部门编码长度不能超过6个字符");
+        RuleFor(x => x.EcParentMaterialCode)
+            .NotEmpty().WithMessage("上阶物料编码不能为空")
+            .MaximumLength(20).WithMessage("上阶物料编码长度不能超过20个字符").When(x => !string.IsNullOrWhiteSpace(x.EcParentMaterialCode));
+        RuleFor(x => x.EcParentMaterialDescription)
+            .MaximumLength(40).WithMessage("上阶物料描述长度不能超过40个字符").When(x => !string.IsNullOrWhiteSpace(x.EcParentMaterialDescription));
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

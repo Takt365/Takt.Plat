@@ -130,10 +130,20 @@ export function updateDocumentVersionObsolete(dto: DocumentVersionObsolete): Pro
  * 获取文管文档版本选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getDocumentVersionOptions(): Promise<TaktSelectOption[]> {
+export function getDocumentVersionOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${DOCUMENT_VERSION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

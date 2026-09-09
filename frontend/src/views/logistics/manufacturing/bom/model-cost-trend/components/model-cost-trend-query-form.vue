@@ -8,65 +8,80 @@
 
 <template>
   <div class="takt-query-bar model-cost-trend-query-bar">
-    <div class="model-cost-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model="plantCode"
-        :api-url="plantOptionsUrl"
-        class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--plant"
-        allow-clear
-        show-search
-        :placeholder="t('common.page.entity.plantcode')"
-        @change="handlePlantChange"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        :disabled-date="isCostingPeriodMonthDisabled"
-        class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-        @change="handlePeriodChange"
-      />
-      <TaktSelect
-        v-model:value="materialType"
-        :options="materialTypeOptions"
-        class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--type"
-        :allow-clear="false"
-        show-search
-        :disabled="!canSelectType || materialTypeOptionsLoading"
-        :placeholder="t('entity.bommaterialcost.materialtype')"
-        @change="handleMaterialTypeChange"
-      />
-      <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
-        v-model="modelCodes"
-        :api-url="modelOptionsUrl"
-        :api-params="modelApiParams"
-        class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--model"
-        multiple
-        allow-clear
-        show-search
-        :disabled="!canSelectModel"
-        :placeholder="t(`${localePrefix}.modelCodesOptional`)"
-        @change="handleModelCodesChange"
-      />
-      <TaktSelect
-        :key="`component-${componentSelectKey}-${periodKey}-${modelCodesKey}`"
-        v-model="componentCodes"
-        :api-url="componentOptionsUrl"
-        :api-params="componentApiParams"
-        class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--component"
-        multiple
-        allow-clear
-        show-search
-        remote-search
-        virtual
-        :disabled="!canSelectComponent"
-        :placeholder="t(`${localePrefix}.componentCodesOptional`)"
-      />
+    <div class="model-cost-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model="plantCode"
+          :api-url="plantOptionsUrl"
+          class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--plant"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handlePlantChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          :disabled-date="isCostingPeriodMonthDisabled"
+          class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+          @change="handlePeriodChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.materialtype') }}</span>
+        <TaktSelect
+          v-model:value="materialType"
+          :options="materialTypeOptions"
+          class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--type"
+          :allow-clear="false"
+          show-search
+          :disabled="!canSelectType || materialTypeOptionsLoading"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handleMaterialTypeChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.modelcode') }}</span>
+        <TaktSelect
+          :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
+          v-model="modelCodes"
+          :api-url="modelOptionsUrl"
+          :api-params="modelApiParams"
+          class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--model"
+          multiple
+          allow-clear
+          show-search
+          :disabled="!canSelectModel"
+          :placeholder="t(`${localePrefix}.modelCodesOptional`)"
+          @change="handleModelCodesChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcostitem.componentcode') }}</span>
+        <TaktSelect
+          :key="`component-${componentSelectKey}-${periodKey}-${modelCodesKey}`"
+          v-model="componentCodes"
+          :api-url="componentOptionsUrl"
+          :api-params="componentApiParams"
+          class="model-cost-trend-query-bar__control model-cost-trend-query-bar__control--component"
+          multiple
+          allow-clear
+          show-search
+          remote-search
+          virtual
+          :disabled="!canSelectComponent"
+          :placeholder="t(`${localePrefix}.componentCodesOptional`)"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

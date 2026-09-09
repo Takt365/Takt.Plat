@@ -144,10 +144,20 @@ export function updateProductionTeamEquipmentObsolete(dto: ProductionTeamEquipme
  * 获取生产班组设备组选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getProductionTeamEquipmentOptions(): Promise<TaktSelectOption[]> {
+export function getProductionTeamEquipmentOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PRODUCTION_TEAM_EQUIPMENT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

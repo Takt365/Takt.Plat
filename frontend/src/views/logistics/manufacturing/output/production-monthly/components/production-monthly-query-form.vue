@@ -9,45 +9,57 @@
 
 <template>
   <div class="takt-query-bar production-monthly-query-bar">
-    <div class="production-monthly-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        :api-url="plantOptionsUrl"
-        class="production-monthly-query-bar__control production-monthly-query-bar__control--plant"
-        allow-clear
-        show-search
-        :placeholder="t('common.page.entity.plantcode')"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        class="production-monthly-query-bar__control production-monthly-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-      />
-      <TaktSelect
-        v-model:value="outputCategory"
-        :api-url="outputCategoryOptionsUrl"
-        :api-params="outputCategoryApiParams"
-        :disabled="!plantCode?.trim()"
-        class="production-monthly-query-bar__control production-monthly-query-bar__control--category"
-        allow-clear
-        :placeholder="t(`${localePrefix}.outputCategory`)"
-      />
-      <TaktSelect
-        :key="modelSelectKey"
-        v-model:value="modelCode"
-        :api-url="modelOptionsUrl"
-        :api-params="modelApiParams"
-        :disabled="!plantCode?.trim()"
-        class="production-monthly-query-bar__control production-monthly-query-bar__control--model"
-        allow-clear
-        show-search
-        :placeholder="t(`${localePrefix}.modelCode`)"
-      />
+    <div class="production-monthly-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          :api-url="plantOptionsUrl"
+          class="production-monthly-query-bar__control production-monthly-query-bar__control--plant"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          class="production-monthly-query-bar__control production-monthly-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.outputCategory`) }}</span>
+        <TaktSelect
+          v-model:value="outputCategory"
+          :api-url="outputCategoryOptionsUrl"
+          :api-params="outputCategoryApiParams"
+          :disabled="!plantCode?.trim()"
+          class="production-monthly-query-bar__control production-monthly-query-bar__control--category"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.modelCode`) }}</span>
+        <TaktSelect
+          :key="modelSelectKey"
+          v-model:value="modelCode"
+          :api-url="modelOptionsUrl"
+          :api-params="modelApiParams"
+          :disabled="!plantCode?.trim()"
+          class="production-monthly-query-bar__control production-monthly-query-bar__control--model"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

@@ -86,11 +86,11 @@ public class TaktPerfObjectivesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:performance:perf:objective:query", "绩效目标选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPerfObjectiveOptionsAsync()
+    public async Task<IActionResult> GetPerfObjectiveOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _perfObjectiveService.GetPerfObjectiveOptionsAsync();
+            var result = await _perfObjectiveService.GetPerfObjectiveOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

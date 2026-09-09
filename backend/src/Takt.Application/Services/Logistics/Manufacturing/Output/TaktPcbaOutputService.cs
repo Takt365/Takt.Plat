@@ -104,8 +104,10 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     /// <summary>
     /// 获取PCBA日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPcbaOutputOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPcbaOutputOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _pcbaOutputRepository.GetListAsync(
@@ -395,10 +397,13 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                 childDto.PlantCode = entity.PlantCode;
                 childDto.ProdOrderCode = entity.ProdOrderCode;
                 childDto.SerialCode = entity.SerialCode ?? string.Empty;
-                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                childDto.TeamCode = (childDto.TeamCode ?? string.Empty).Trim();
+                childDto.PcbBoardType = (childDto.PcbBoardType ?? string.Empty).Trim();
+                childDto.PanelSide = (childDto.PanelSide ?? string.Empty).Trim();
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.TeamCode}|{childDto.ShiftNo}|{childDto.PcbBoardType}|{childDto.PanelSide}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
-                    throw new TaktBusinessException("PCBA日报明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PcbaOutputId、LineNumber）");
+                    throw new TaktBusinessException($"PCBA日报明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber）");
                 }
                 if (childDto.PcbaOutputDetailId > 0)
                 {
@@ -411,14 +416,18 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                         throw new TaktBusinessException("PCBA日报明细不属于当前主表（PcbaOutputDetailId={childDto.PcbaOutputDetailId}）");
                     }
                     submittedIds.Add(childDto.PcbaOutputDetailId);
-                    var isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_unique = await _uniqueValidator.IsUniqueAsync(
                         _pcbaOutputDetailRepository,
-                        x => x.PcbaOutputId == x.PcbaOutputId
-                && x.LineNumber == x.LineNumber,
+                        x => x.PcbaOutputId == entity.Id
+                            && x.TeamCode == childDto.TeamCode
+                            && x.ShiftNo == childDto.ShiftNo
+                            && x.PcbBoardType == childDto.PcbBoardType
+                            && x.PanelSide == childDto.PanelSide
+                            && x.LineNumber == childDto.LineNumber,
                         childDto.PcbaOutputDetailId);
-                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_unique)
                     {
-                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
+                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.PcbaOutputDetailId;
@@ -428,13 +437,17 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_unique = await _uniqueValidator.IsUniqueAsync(
                         _pcbaOutputDetailRepository,
-                        x => x.PcbaOutputId == x.PcbaOutputId
-                && x.LineNumber == x.LineNumber);
-                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
+                        x => x.PcbaOutputId == entity.Id
+                            && x.TeamCode == childDto.TeamCode
+                            && x.ShiftNo == childDto.ShiftNo
+                            && x.PcbBoardType == childDto.PcbBoardType
+                            && x.PanelSide == childDto.PanelSide
+                            && x.LineNumber == childDto.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_unique)
                     {
-                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
+                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktPcbaOutputDetail>();
                     child.Id = 0;
@@ -672,5 +685,74 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（数据看板）
+    // ========================================
+
+    /// <summary>
+    /// 获取 PCBA 生产统计（数据看板 production-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 生产统计</returns>
+    public async Task<TaktPcbaOutputProductionStatDto> GetPcbaOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPcbaOutputDetail, bool>> detailPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsObsolete == 0
+            && SqlFunc.Subqueryable<TaktPcbaOutput>()
+                .Where(h =>
+                    h.Id == x.PcbaOutputId
+                    && h.TenantCode == tenantCode
+                    && h.CompanyCode == companyCode
+                    && h.ProdDate >= start
+                    && h.ProdDate <= end
+                    && h.IsDeleted == 0)
+                .Any();
+        var details = await _pcbaOutputDetailRepository.GetListAsync(detailPredicate);
+        var teams = details
+            .GroupBy(d => d.TeamCode ?? string.Empty, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var plan = g.Sum(d => d.StdLaborCapacity);
+                var actual = g.Sum(d => d.DailyCompletedQty);
+                return new TaktOutputProductionStatTeamItemDto
+                {
+                    TeamCode = g.Key,
+                    StdCapacity = plan,
+                    ProdActualQty = actual,
+                    AchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(actual, plan),
+                };
+            })
+            .ToList();
+        var monthStdCapacity = teams.Sum(t => t.StdCapacity);
+        var monthProdActualQty = teams.Sum(t => t.ProdActualQty);
+        var monthStopTime = details.Sum(d => d.StopTime);
+        var monthSwitchTime = details.Sum(d => d.SwitchTime);
+        var monthInputMinutes = details.Sum(d => d.InputMinutes);
+        var monthProdMinutes = details.Sum(d => d.TotalMinutes);
+        var monthRepairMinutes = details.Sum(d => d.RepairMinutes);
+        return new TaktPcbaOutputProductionStatDto
+        {
+            StatMonth = statMonth,
+            MonthStdCapacity = monthStdCapacity,
+            MonthProdActualQty = monthProdActualQty,
+            MonthAchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(monthProdActualQty, monthStdCapacity),
+            MonthDowntimeMinutes = monthStopTime + monthSwitchTime,
+            MonthInputMinutes = monthInputMinutes,
+            MonthProdMinutes = monthProdMinutes,
+            MonthActualMinutes = monthInputMinutes + monthRepairMinutes,
+            Teams = teams,
+        };
     }
 }

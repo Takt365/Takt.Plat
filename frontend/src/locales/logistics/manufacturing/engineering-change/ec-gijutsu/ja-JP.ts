@@ -27,6 +27,8 @@ export default {
       importSelected: '選択取込（{count}）',
       importSuccess: '{count} 件の設変を取込しました',
       importPartial: '取込完了：成功 {success} 件、失敗 {fail} 件',
+      detailsDeferred:
+        '明細は {count} 行あり、サーバー側で登録します（ブラウザからは送信しません）。担当者・区分を入力して送信してください。',
     },
     attachment: {
       docCode: {
@@ -43,9 +45,20 @@ export default {
       fileName: {
         duplicate: 'ファイル名「{name}」は既に存在します',
       },
+      upload: {
+        hint: 'PDFのみ、1回1ファイル、最大 {max}MB',
+        pdfOnly: 'PDFファイルのみアップロードできます',
+      },
     },
     tabs: {
       oldNewMaterial: '旧新部品',
+    },
+    persist: {
+      submitted: '設変 {ecCode} のバックグラウンド{action}を受付しました（明細 {detailCount} 行・部門実行派生含む）。完了後に通知します',
+      completed: '設変 {ecCode} のバックグラウンド{action}が完了しました（明細 {detailCount} 行、所要 {duration}）',
+      failed: '設変 {ecCode} のバックグラウンド{action}に失敗しました（明細 {detailCount} 行）',
+      actionCreate: '新規',
+      actionUpdate: '更新',
     },
   },
 };

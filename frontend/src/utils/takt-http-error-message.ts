@@ -120,6 +120,32 @@ export function resolveHttpErrorMessage(error: unknown): string {
       }
     }
 
+    // ASP.NET [ApiController] ValidationProblemDetails：errors 字段汇总
+    if (typeof responseData === 'object' && responseData !== null && 'errors' in responseData) {
+      const errors = (responseData as { errors?: unknown }).errors;
+      if (errors && typeof errors === 'object') {
+        const parts: string[] = [];
+        for (const value of Object.values(errors as Record<string, unknown>)) {
+          if (Array.isArray(value)) {
+            for (const item of value) {
+              if (typeof item === 'string' && item.trim()) {
+                parts.push(item.trim());
+              }
+            }
+          } else if (typeof value === 'string' && value.trim()) {
+            parts.push(value.trim());
+          }
+        }
+        if (parts.length > 0) {
+          return parts.join('; ');
+        }
+      }
+      const title = (responseData as { title?: unknown }).title;
+      if (typeof title === 'string' && title.trim()) {
+        return title.trim();
+      }
+    }
+
     return resolveHttpStatusMessage(axiosError.response?.status);
   }
 

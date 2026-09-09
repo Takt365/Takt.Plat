@@ -86,11 +86,11 @@ public class TaktInspectionStandardsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:inspection:standard:query", "检验标准选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetInspectionStandardOptionsAsync()
+    public async Task<IActionResult> GetInspectionStandardOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _inspectionStandardService.GetInspectionStandardOptionsAsync();
+            var result = await _inspectionStandardService.GetInspectionStandardOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

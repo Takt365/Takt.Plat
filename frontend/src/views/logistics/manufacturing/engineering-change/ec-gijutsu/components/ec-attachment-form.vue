@@ -168,7 +168,7 @@
                   :files-disabled="loading || fileUploading"
                   :files-max-size="taktFileMaxSizeMb"
                   :files-accept="taktFileAccept"
-                  :files-hint="t('foundation.file.page.upload.hint', { max: taktFileMaxSizeMb })"
+                  :files-hint="t(`${ATTACHMENT_UPLOAD_I18N}.hint`, { max: taktFileMaxSizeMb })"
                   :files-before-upload="handleFilesBeforeUpload"
                   :files-custom-request="handleFilesCustomRequest"
                   v-model:files-file-list="filesFileList"
@@ -182,22 +182,6 @@
                   show-count
                   :maxlength="500"
                   disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="ai.label('extField')"
-                name="extField"
-              >
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: ai.label('extField') })"
-                  :rows="2"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                  :disabled="loading || fileUploading"
                 />
               </a-form-item>
             </a-col>
@@ -242,7 +226,6 @@ import { getEcAttachmentList } from '@/api/logistics/manufacturing/engineering-c
 import { uploadTaktFileSmart } from '@/utils/takt-file-chunk-upload'
 import { buildEcAttachmentFileUploadMeta } from '@/utils/takt-ec-attachment-storage'
 import {
-  buildTaktFileAcceptAttribute,
   loadTaktFileUploadBasePolicy,
   resolveTaktFileMaxSizeMb,
 } from '@/utils/takt-file-upload-policy'
@@ -250,6 +233,7 @@ import {
   buildEcAttachmentFileName,
   getEcAttachmentDocCodeHintKey,
   isEcAttachmentDocCodeLockedToEcCode,
+  isEcAttachmentPdfFileName,
   isValidEcAttachmentDocCode,
 } from '@/utils/takt-ec-attachment-doc-code'
 import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
@@ -261,6 +245,8 @@ const ai = useEcAttachmentI18n()
 const DOC_CODE_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.docCode'
 /** 附件文件名称文案前缀 */
 const FILE_NAME_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.fileName'
+/** 附件上传文案前缀 */
+const ATTACHMENT_UPLOAD_I18N = 'logistics.manufacturing.engineering-change.ec-gijutsu.page.attachment.upload'
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
@@ -271,7 +257,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ecCode', 'lineNumber', 'attachmentType', 'docCode', 'fileName', 'accessUrl', 'extField', 'remark']
+const formFields = ['tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ecCode', 'lineNumber', 'attachmentType', 'docCode', 'fileName', 'accessUrl', 'remark']
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -319,8 +305,8 @@ const fileUploading = ref(false)
 const filesFileList = ref<UploadFile[]>([])
 /** 同一重复提示键只弹一次（编码输入防连发） */
 const lastDuplicateToastKey = ref('')
-/** 上传 accept（后端策略） */
-const taktFileAccept = ref('')
+/** 上传 accept（仅 PDF） */
+const taktFileAccept = ref('.pdf,application/pdf')
 /** 上传体积上限 MB（后端策略） */
 const taktFileMaxSizeMb = ref(500)
 
@@ -501,7 +487,7 @@ function getLocalDuplicateMessage(docCode: string, fileName?: string): string {
 }
 
 /**
- * 查询租户+公司范围内附件及当日原始文件名是否重复
+ * 查询同设变下附件及当日原始文件名是否重复（唯一键：EcGijutsuId+DocCode+LineNumber；跨设变允许同文件编码）
  * @param docCode 文件编码
  * @param fileName 目标文件名称
  * @param originalName 上传原始文件名
@@ -513,12 +499,19 @@ async function findServerDuplicateMessage(
   originalName: string,
 ): Promise<string> {
   const editingId = String(props.formData?.ecAttachmentId ?? '')
+  const currentEcId = String(props.masterId || formState.ecGijutsuId || props.formData?.ecGijutsuId || '').trim()
+  const currentLine = Number(formState.lineNumber ?? props.formData?.lineNumber ?? 0)
   const code = String(docCode ?? '').trim()
   const name = String(fileName ?? '').trim()
   try {
     const [byCode, byName] = await Promise.all([
       code
-        ? getEcAttachmentList({ docCode: code, pageIndex: 1, pageSize: 50 })
+        ? getEcAttachmentList({
+            docCode: code,
+            ...(currentEcId ? { ecGijutsuId: currentEcId } : {}),
+            pageIndex: 1,
+            pageSize: 50,
+          })
         : Promise.resolve({ data: [] }),
       name
         ? getEcAttachmentList({ fileName: name, pageIndex: 1, pageSize: 50 })
@@ -530,7 +523,15 @@ async function findServerDuplicateMessage(
       if (editingId && id === editingId) {
         return false
       }
+      const rowEcId = String(row.ecGijutsuId ?? '').trim()
       if (code && String(row.docCode ?? '').trim() === code) {
+        if (!currentEcId || rowEcId !== currentEcId) {
+          return false
+        }
+        const rowLine = Number(row.lineNumber ?? 0)
+        if (currentLine > 0 && rowLine > 0 && rowLine !== currentLine) {
+          return false
+        }
         return true
       }
       return Boolean(name) && normalizeAttachmentName(row.fileName) === normalizeAttachmentName(name)
@@ -649,6 +650,10 @@ const handleFilesBeforeUpload: UploadProps['beforeUpload'] = async (file) => {
     return Upload.LIST_IGNORE
   }
   const originFile = ((file as { originFileObj?: File }).originFileObj ?? file) as File
+  if (!isEcAttachmentPdfFileName(originFile.name)) {
+    message.error(t(`${ATTACHMENT_UPLOAD_I18N}.pdfOnly`))
+    return Upload.LIST_IGNORE
+  }
   syncDocCodeIfEcType(formState)
   const docCode = resolveDocCode()
   if (!docCode) {
@@ -676,6 +681,12 @@ const handleFilesCustomRequest: UploadProps['customRequest'] = (options) => {
     return
   }
   const originFile = options.file as globalThis.File
+  if (!isEcAttachmentPdfFileName(originFile.name)) {
+    const pdfOnly = t(`${ATTACHMENT_UPLOAD_I18N}.pdfOnly`)
+    message.error(pdfOnly)
+    options.onError?.(new Error(pdfOnly))
+    return
+  }
   syncDocCodeIfEcType(formState)
   const docCode = resolveDocCode()
   if (!docCode) {
@@ -715,11 +726,10 @@ function handleFileRemove() {
   filesFileList.value = []
 }
 
-/** 挂载后加载后端上传策略（accept / maxSize） */
+/** 挂载后加载后端上传体积上限（类型固定 PDF，不走全局扩展名白名单） */
 onMounted(async () => {
   try {
     const policy = await loadTaktFileUploadBasePolicy()
-    taktFileAccept.value = buildTaktFileAcceptAttribute(policy.allowedExtensions ?? [])
     taktFileMaxSizeMb.value = resolveTaktFileMaxSizeMb(policy)
   } catch {
     // 回退默认值；实际上传校验仍由后端 API 返回
@@ -912,6 +922,9 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         if (!name) {
           return Promise.resolve()
         }
+        if (!isEcAttachmentPdfFileName(name)) {
+          return Promise.reject(t(`${ATTACHMENT_UPLOAD_I18N}.pdfOnly`))
+        }
         const code = resolveDocCode()
         const dup = getLocalDuplicateMessage(code, name)
         if (dup) {
@@ -937,7 +950,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 ecId） */
+/** 映射为 Create/Update DTO（含主表外键 ecGijutsuId） */
 function getValues(): Record<string, any> {
   syncDocCodeIfEcType(formState)
   const ecCode = resolveCurrentEcCode() || String(formState.ecCode ?? '').trim()
@@ -950,7 +963,7 @@ function getValues(): Record<string, any> {
     companyCode: formState.companyCode,
     cultureCode: formState.cultureCode,
     plantCode: formState.plantCode,
-    ecId: props.masterId,
+    ecGijutsuId: props.masterId,
     ecCode,
     lineNumber: typeof formState.lineNumber === 'number' ? formState.lineNumber : Number(formState.lineNumber),
     attachmentType,

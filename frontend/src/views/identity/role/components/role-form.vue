@@ -84,19 +84,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.role.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.role.sortorder') })"
-                  :min="0"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.role.isbuiltin')"
                 name="isBuiltIn"
               >
@@ -269,7 +256,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'roleCode', 'roleName', 'dataScope', 'sortOrder', 'isBuiltIn', 'roleStatus', 'description', 'roleMenuIds', 'roleCompanyCodes', 'roleDeptIds', 'ExtField', 'remark']
+const formFields = ['tenantCode', 'roleCode', 'roleName', 'dataScope', 'isBuiltIn', 'roleStatus', 'description', 'roleMenuIds', 'roleCompanyCodes', 'roleDeptIds', 'ExtField', 'remark']
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -290,7 +277,6 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   dataScope: 1,
-  sortOrder: 0,
   isBuiltIn: 0,
   roleStatus: 1,
 }
@@ -373,20 +359,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       message: t('common.page.form.placeholder.required', { field: t('entity.role.name') }),
       trigger: 'blur',
     }],
-  sortOrder: [
-    {
-      validator: async (_rule, value) => {
-        if (value === undefined || value === null || value === '') {
-          return Promise.reject(t('common.page.form.placeholder.required', { field: t('entity.role.sortorder') }))
-        }
-        const num = typeof value === 'number' ? value : Number(value)
-        if (!Number.isFinite(num) || num < 0) {
-          return Promise.reject(t('common.page.form.placeholder.required', { field: t('entity.role.sortorder') }))
-        }
-        return Promise.resolve()
-      },
-      trigger: 'change',
-    }],
   dataScope: [dictIntRule('entity.role.datascope')],
   isBuiltIn: [dictIntRule('entity.role.isbuiltin')],
   roleStatus: [dictIntRule('entity.role.status')],
@@ -401,12 +373,13 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  for (const key of ['dataScope', 'sortOrder', 'isBuiltIn', 'roleStatus'] as const) {
+  for (const key of ['dataScope', 'isBuiltIn', 'roleStatus'] as const) {
     if (key in payload) {
       const raw = payload[key]
       payload[key] = typeof raw === 'number' ? raw : Number(raw)
     }
   }
+  if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }
 

@@ -53,18 +53,6 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// </summary>
     private readonly ITaktCompanyRepository<TaktBomMaterialCost> _bomMaterialCostRepository;
     /// <summary>
-    /// 工厂物料仓储
-    /// </summary>
-    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
-    /// <summary>
-    /// 通用物料仓储
-    /// </summary>
-    private readonly ITaktTenantRepository<TaktGeneralMaterial> _generalMaterialRepository;
-    /// <summary>
-    /// 型号目的地仓储
-    /// </summary>
-    private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
-    /// <summary>
     /// 公司仓储（RelatedPlant）
     /// </summary>
     private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
@@ -90,9 +78,6 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// </summary>
     /// <param name="bomMaterialCostItemRepository">BOM 成本明细仓储</param>
     /// <param name="bomMaterialCostRepository">BOM 成本汇总仓储</param>
-    /// <param name="materialPlantRepository">工厂物料仓储</param>
-    /// <param name="generalMaterialRepository">通用物料仓储</param>
-    /// <param name="modelDestinationRepository">型号目的地仓储</param>
     /// <param name="companyRepository">公司仓储（RelatedPlant）</param>
     /// <param name="purchasePriceRepository">采购价格主表仓储</param>
     /// <param name="purchasePriceItemRepository">采购价格条件行仓储</param>
@@ -103,9 +88,6 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     public TaktBomCalculateService(
         ITaktCompanyRepository<TaktBomMaterialCostItem> bomMaterialCostItemRepository,
         ITaktCompanyRepository<TaktBomMaterialCost> bomMaterialCostRepository,
-        ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
-        ITaktTenantRepository<TaktGeneralMaterial> generalMaterialRepository,
-        ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
         ITaktTenantRepository<TaktCompany> companyRepository,
         ITaktCompanyRepository<TaktPurchasePrice> purchasePriceRepository,
         ITaktCompanyRepository<TaktPurchasePriceItem> purchasePriceItemRepository,
@@ -117,9 +99,6 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     {
         _bomMaterialCostItemRepository = bomMaterialCostItemRepository;
         _bomMaterialCostRepository = bomMaterialCostRepository;
-        _materialPlantRepository = materialPlantRepository;
-        _generalMaterialRepository = generalMaterialRepository;
-        _modelDestinationRepository = modelDestinationRepository;
         _companyRepository = companyRepository;
         _purchasePriceRepository = purchasePriceRepository;
         _purchasePriceItemRepository = purchasePriceItemRepository;
@@ -175,8 +154,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// <summary>
     /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomCalculatePlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetBomCalculatePlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var companies = await _companyRepository.GetListAsync(
@@ -335,7 +316,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 计算平均成本：先回填空机种/空物料类型，再按工厂+物料类型+机种+核算月全量重算机种月均
+    /// 计算平均成本：按主表已有机种/物料类型分组重算机种月均（空机种/空类型由 QT_SYNC_BV_BK 回填，此处不写）
     /// （固定口径：核算月 &lt; 2026-06 用产品月成本，≥ 2026-06 用产品月计算；比较后有变化才落库并写 ExtField；忽略查询栏 MaterialType）
     /// </summary>
     /// <param name="queryDto">工厂 + 核算期间；机种可选；MaterialType 忽略</param>
@@ -376,79 +357,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                     && modelSet.Contains(h.ModelCode.Trim()))
                 .ToList();
         }
-        var needBackfill = headers
-            .Where(h => string.IsNullOrWhiteSpace(h.ModelCode) || string.IsNullOrWhiteSpace(h.MaterialType))
-            .ToList();
-        IReadOnlyList<TaktModelDestination> destinations = Array.Empty<TaktModelDestination>();
-        if (needBackfill.Exists(h => string.IsNullOrWhiteSpace(h.ModelCode)))
-        {
-            destinations = await _modelDestinationRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        }
-        IReadOnlyList<TaktGeneralMaterial> generalMaterials = Array.Empty<TaktGeneralMaterial>();
-        IReadOnlyList<TaktMaterialPlant> materialPlants = Array.Empty<TaktMaterialPlant>();
-        if (needBackfill.Exists(h => string.IsNullOrWhiteSpace(h.MaterialType)))
-        {
-            generalMaterials = await LoadGeneralMaterialsByProductCodesAsync(
-                needBackfill
-                    .Where(h => string.IsNullOrWhiteSpace(h.MaterialType))
-                    .Select(h => h.ProductCode));
-            materialPlants = await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && x.PlantCode == plant);
-        }
         var modelCodeUpdated = 0;
         var materialTypeUpdated = 0;
-        foreach (var header in needBackfill)
-        {
-            var previousModel = header.ModelCode?.Trim() ?? string.Empty;
-            var storedType = header.MaterialType?.Trim() ?? string.Empty;
-            var modelChanged = false;
-            var typeChanged = false;
-            if (string.IsNullOrWhiteSpace(previousModel))
-            {
-                var resolvedModel = ResolveModelCodeFromDestinations(destinations, header.ProductCode);
-                if (!string.IsNullOrWhiteSpace(resolvedModel))
-                {
-                    var clash = await _bomMaterialCostRepository.FirstAsync(
-                        x => x.TenantCode == CurrentTenantCode
-                            && x.CompanyCode == CurrentCompanyCode
-                            && x.PlantCode == plant
-                            && x.ModelCode == resolvedModel
-                            && x.ProductCode == header.ProductCode
-                            && x.CostingPeriod == periodKey
-                            && x.Id != header.Id);
-                    if (clash != null)
-                    {
-                        ThrowBusinessException(
-                            $"产品 {header.ProductCode} 在期间 {periodKey} 已存在机种 {resolvedModel} 的主表行，无法更新机种编码");
-                    }
-                    header.ModelCode = resolvedModel;
-                    modelChanged = true;
-                    modelCodeUpdated = checked(modelCodeUpdated + 1);
-                }
-            }
-            if (string.IsNullOrWhiteSpace(storedType))
-            {
-                var resolvedType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-                    generalMaterials,
-                    materialPlants,
-                    plant,
-                    header.ProductCode);
-                if (!string.IsNullOrWhiteSpace(resolvedType))
-                {
-                    header.MaterialType = resolvedType;
-                    typeChanged = true;
-                    materialTypeUpdated = checked(materialTypeUpdated + 1);
-                }
-            }
-            if (!modelChanged && !typeChanged)
-            {
-                continue;
-            }
-            await _bomMaterialCostRepository.UpdateAsync(header);
-        }
         var groups = headers
             .Where(h => !string.IsNullOrWhiteSpace(h.ModelCode))
             .GroupBy(h => BuildModelAverageGroupKey(h.MaterialType, h.ModelCode), StringComparer.OrdinalIgnoreCase)
@@ -620,34 +530,20 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             .Select(k => k.PlantCode)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var materialPlants = plantCodes.Count == 0
-            ? new List<TaktMaterialPlant>()
-            : await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && plantCodes.Contains(x.PlantCode));
-        var destinations = await _modelDestinationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var generalMaterials = await LoadGeneralMaterialsByProductCodesAsync(
-            groupedKeys.Select(k => k.ProductCode));
+        var headerScope = await LoadBomHeaderScopeLookupAsync(periodKey, plantCodes);
         var syncKeys = new List<(string PlantCode, string ProductCode, DateTime CostingDate)>();
         var skippedCount = 0;
         foreach (var key in groupedKeys)
         {
-            var resolvedType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-                generalMaterials,
-                materialPlants,
-                key.PlantCode,
-                key.ProductCode);
-            if (!MatchesSelectedMaterialType(resolvedType, filterMaterialType))
+            var (headerType, headerModel) = ResolveBomHeaderScope(headerScope, key.PlantCode, key.ProductCode);
+            if (!MatchesSelectedMaterialType(headerType, filterMaterialType))
             {
                 skippedCount = checked(skippedCount + 1);
                 continue;
             }
             if (modelFilterSet.Count > 0)
             {
-                var resolvedModel = ResolveModelCodeFromDestinations(destinations, key.ProductCode);
-                if (string.IsNullOrWhiteSpace(resolvedModel) || !modelFilterSet.Contains(resolvedModel))
+                if (string.IsNullOrWhiteSpace(headerModel) || !modelFilterSet.Contains(headerModel))
                 {
                     skippedCount = checked(skippedCount + 1);
                     continue;
@@ -666,18 +562,18 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             {
                 await SyncLatestPurchaseCostFromItemsBatchAsync(
                     syncKeys,
-                    destinations,
-                    materialPlants,
-                    generalMaterials,
+                    Array.Empty<TaktModelDestination>(),
+                    Array.Empty<TaktMaterialPlant>(),
+                    Array.Empty<TaktGeneralMaterial>(),
                     filterMaterialType);
             }
             else
             {
                 await SyncBomMaterialCostFromItemsBatchAsync(
                     syncKeys,
-                    destinations,
-                    materialPlants,
-                    generalMaterials,
+                    Array.Empty<TaktModelDestination>(),
+                    Array.Empty<TaktMaterialPlant>(),
+                    Array.Empty<TaktGeneralMaterial>(),
                     archiveOldCost: forceRecalculate,
                     filterMaterialType);
             }
@@ -871,11 +767,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             .GroupBy(k => $"{k.PlantCode}|{k.ProductCode}|{k.Period}", StringComparer.OrdinalIgnoreCase)
             .Select(g => g.OrderByDescending(x => x.CostingDate).First())
             .ToList();
-        var destList = destinations
-            ?? await _modelDestinationRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var generalList = generalMaterials
-            ?? await LoadGeneralMaterialsByProductCodesAsync(distinct.Select(k => k.ProductCode));
+        var destList = destinations ?? Array.Empty<TaktModelDestination>();
+        var generalList = generalMaterials ?? Array.Empty<TaktGeneralMaterial>();
         foreach (var plantPeriodGroup in distinct.GroupBy(
                      k => $"{k.PlantCode}|{k.Period}",
                      StringComparer.OrdinalIgnoreCase))
@@ -987,11 +880,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             .GroupBy(k => $"{k.PlantCode}|{k.ProductCode}|{k.Period}", StringComparer.OrdinalIgnoreCase)
             .Select(g => g.OrderByDescending(x => x.CostingDate).First())
             .ToList();
-        var destList = destinations
-            ?? await _modelDestinationRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var generalList = generalMaterials
-            ?? await LoadGeneralMaterialsByProductCodesAsync(distinct.Select(k => k.ProductCode));
+        var destList = destinations ?? Array.Empty<TaktModelDestination>();
+        var generalList = generalMaterials ?? Array.Empty<TaktGeneralMaterial>();
         foreach (var plantPeriodGroup in distinct.GroupBy(
                      k => $"{k.PlantCode}|{k.Period}",
                      StringComparer.OrdinalIgnoreCase))
@@ -1111,21 +1001,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             : await FindHeaderByProductCostingDateAsync(plant, product, matchCostingDate);
         var modelCode = existing != null && !string.IsNullOrWhiteSpace(existing.ModelCode)
             ? existing.ModelCode.Trim()
-            : ResolveModelCodeFromDestinations(destinations, product);
-        var plants = materialPlants
-            ?? await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && x.PlantCode == plant);
-        var generals = generalMaterials
-            ?? await LoadGeneralMaterialsByProductCodesAsync(new[] { product });
+            : string.Empty;
         var materialType = existing != null && !string.IsNullOrWhiteSpace(existing.MaterialType)
             ? existing.MaterialType.Trim()
-            : TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-                generals,
-                plants,
-                plant,
-                product);
+            : string.Empty;
         if (string.IsNullOrWhiteSpace(materialType) && !string.IsNullOrWhiteSpace(filterMaterialType))
         {
             materialType = filterMaterialType.Trim() ?? string.Empty;
@@ -1303,21 +1182,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             : await FindHeaderByProductCostingDateAsync(plant, product, matchCostingDate);
         var modelCode = existing != null && !string.IsNullOrWhiteSpace(existing.ModelCode)
             ? existing.ModelCode.Trim()
-            : ResolveModelCodeFromDestinations(destinations, product);
-        var plants = materialPlants
-            ?? await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && x.PlantCode == plant);
-        var generals = generalMaterials
-            ?? await LoadGeneralMaterialsByProductCodesAsync(new[] { product });
+            : string.Empty;
         var materialType = existing != null && !string.IsNullOrWhiteSpace(existing.MaterialType)
             ? existing.MaterialType.Trim()
-            : TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-                generals,
-                plants,
-                plant,
-                product);
+            : string.Empty;
         if (string.IsNullOrWhiteSpace(materialType) && !string.IsNullOrWhiteSpace(filterMaterialType))
         {
             materialType = filterMaterialType.Trim();
@@ -1682,55 +1550,86 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 从型号目的地解析机种编码
+    /// 按期间+工厂加载主表已有机种/物料类型（供筛选；不回填）
     /// </summary>
-    /// <param name="destinations">型号目的地</param>
-    /// <param name="productCode">产品编码</param>
-    /// <returns>机种；未匹配为空</returns>
-    private static string ResolveModelCodeFromDestinations(
-        IReadOnlyList<TaktModelDestination> destinations,
-        string? productCode)
+    /// <param name="periodKey">核算月 yyyy-MM</param>
+    /// <param name="plantCodes">工厂</param>
+    /// <returns>键为工厂|产品</returns>
+    private async Task<Dictionary<string, (string MaterialType, string ModelCode)>> LoadBomHeaderScopeLookupAsync(
+        string periodKey,
+        IReadOnlyCollection<string> plantCodes)
     {
-        ArgumentNullException.ThrowIfNull(destinations);
-        if (string.IsNullOrWhiteSpace(productCode))
+        ArgumentException.ThrowIfNullOrWhiteSpace(periodKey);
+        ArgumentNullException.ThrowIfNull(plantCodes);
+        var plants = plantCodes
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .Select(p => p.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var map = new Dictionary<string, (string MaterialType, string ModelCode, DateTime CostingDate)>(
+            StringComparer.OrdinalIgnoreCase);
+        if (plants.Count == 0)
         {
-            return string.Empty;
+            return new Dictionary<string, (string MaterialType, string ModelCode)>(StringComparer.OrdinalIgnoreCase);
         }
-        var match = destinations.FirstOrDefault(x =>
-            TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.MaterialCode, productCode));
-        return match?.ModelCode?.Trim() ?? string.Empty;
+        var headers = await _bomMaterialCostRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.CostingPeriod == periodKey
+                && plants.Contains(x.PlantCode),
+            includeSoftDeleted: true);
+        foreach (var header in headers)
+        {
+            var plant = header.PlantCode?.Trim() ?? string.Empty;
+            var product = TaktStringHelper.NormalizeSapNumericMaterialCode(header.ProductCode?.Trim() ?? string.Empty);
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                product = header.ProductCode?.Trim() ?? string.Empty;
+            }
+            if (string.IsNullOrWhiteSpace(plant) || string.IsNullOrWhiteSpace(product))
+            {
+                continue;
+            }
+            var key = $"{plant}|{product}";
+            if (!map.TryGetValue(key, out var previous) || header.CostingDate > previous.CostingDate)
+            {
+                map[key] = (
+                    header.MaterialType?.Trim() ?? string.Empty,
+                    header.ModelCode?.Trim() ?? string.Empty,
+                    header.CostingDate);
+            }
+        }
+        return map.ToDictionary(
+            p => p.Key,
+            p => (p.Value.MaterialType, p.Value.ModelCode),
+            StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>
-    /// 按产品编码分批加载通用物料
+    /// 取主表已有物料类型/机种（无主表行为空）
     /// </summary>
-    /// <param name="productCodes">产品编码</param>
-    /// <returns>通用物料</returns>
-    private async Task<List<TaktGeneralMaterial>> LoadGeneralMaterialsByProductCodesAsync(
-        IEnumerable<string?> productCodes)
+    /// <param name="lookup">LoadBomHeaderScopeLookupAsync 结果</param>
+    /// <param name="plantCode">工厂</param>
+    /// <param name="productCode">产品</param>
+    /// <returns>物料类型、机种</returns>
+    private static (string MaterialType, string ModelCode) ResolveBomHeaderScope(
+        IReadOnlyDictionary<string, (string MaterialType, string ModelCode)> lookup,
+        string plantCode,
+        string? productCode)
     {
-        ArgumentNullException.ThrowIfNull(productCodes);
-        var lookupCodes = productCodes
-            .SelectMany(TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var result = new List<TaktGeneralMaterial>();
-        if (lookupCodes.Count == 0)
+        ArgumentNullException.ThrowIfNull(lookup);
+        var plant = plantCode?.Trim() ?? string.Empty;
+        var product = TaktStringHelper.NormalizeSapNumericMaterialCode(productCode?.Trim() ?? string.Empty);
+        if (string.IsNullOrWhiteSpace(product))
         {
-            return result;
+            product = productCode?.Trim() ?? string.Empty;
         }
-        const int chunkSize = 200;
-        for (var i = 0; i < lookupCodes.Count; i += chunkSize)
+        if (string.IsNullOrWhiteSpace(plant) || string.IsNullOrWhiteSpace(product))
         {
-            var chunk = lookupCodes.Skip(i).Take(chunkSize).ToList();
-            var rows = await _generalMaterialRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode && chunk.Contains(x.MaterialCode));
-            if (rows.Count > 0)
-            {
-                result.AddRange(rows);
-            }
+            return (string.Empty, string.Empty);
         }
-        return result;
+        var key = $"{plant}|{product}";
+        return lookup.TryGetValue(key, out var hit) ? hit : (string.Empty, string.Empty);
     }
 
     /// <summary>
@@ -1762,34 +1661,23 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var materialPlants = plantCodes.Count == 0
-            ? new List<TaktMaterialPlant>()
-            : await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && plantCodes.Contains(x.PlantCode));
-        var destinations = await _modelDestinationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var generalMaterials = await LoadGeneralMaterialsByProductCodesAsync(productCodes);
+        var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(
+            query.CostingDateStart ?? DateTime.Today);
+        var headerScope = await LoadBomHeaderScopeLookupAsync(periodKey, plantCodes);
         var allowedProducts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var product in productCodes)
         {
             var plant = itemRows
                 .First(r => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(r.ProductCode, product))
                 .PlantCode?.Trim() ?? string.Empty;
-            var resolvedType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-                generalMaterials,
-                materialPlants,
-                plant,
-                product);
-            if (!MatchesSelectedMaterialType(resolvedType, filterMaterialType))
+            var (headerType, headerModel) = ResolveBomHeaderScope(headerScope, plant, product);
+            if (!MatchesSelectedMaterialType(headerType, filterMaterialType))
             {
                 continue;
             }
             if (modelFilterSet.Count > 0)
             {
-                var resolvedModel = ResolveModelCodeFromDestinations(destinations, product);
-                if (string.IsNullOrWhiteSpace(resolvedModel) || !modelFilterSet.Contains(resolvedModel))
+                if (string.IsNullOrWhiteSpace(headerModel) || !modelFilterSet.Contains(headerModel))
                 {
                     continue;
                 }

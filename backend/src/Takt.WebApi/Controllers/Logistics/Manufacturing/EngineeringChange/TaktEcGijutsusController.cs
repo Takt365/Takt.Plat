@@ -10,10 +10,13 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
+using Takt.Application.Services.Foundation;
 using Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 using Takt.Shared.Constants;
+using Takt.Shared.Helpers;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 
@@ -26,14 +29,23 @@ namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcGijutsusController : TaktControllerBase
 {
     private readonly ITaktEcGijutsuService _ecEngService;
+    private readonly ITaktEcGijutsuPersistBackgroundService _persistBackgroundService;
+    private readonly ITaktMessageService _messageService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="ecEngService">设变技术课主服务</param>
-    public TaktEcGijutsusController(ITaktEcGijutsuService ecEngService)
+    /// <param name="persistBackgroundService">新增/更新后台调度</param>
+    /// <param name="messageService">在线消息</param>
+    public TaktEcGijutsusController(
+        ITaktEcGijutsuService ecEngService,
+        ITaktEcGijutsuPersistBackgroundService persistBackgroundService,
+        ITaktMessageService messageService)
     {
         _ecEngService = ecEngService;
+        _persistBackgroundService = persistBackgroundService;
+        _messageService = messageService;
     }
 
     /// <summary>
@@ -185,11 +197,11 @@ public class TaktEcGijutsusController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:gijutsu:query", "设变技术课主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcGijutsuOptionsAsync()
+    public async Task<IActionResult> GetEcGijutsuOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecEngService.GetEcGijutsuOptionsAsync();
+            var result = await _ecEngService.GetEcGijutsuOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -199,18 +211,27 @@ public class TaktEcGijutsusController : TaktControllerBase
     }
 
     /// <summary>
-    /// 创建设变技术课主
+    /// 创建设变技术课主（后台落库并派生各部门执行行；完成后 SignalR 通知）
     /// </summary>
     /// <param name="dto">创建DTO</param>
-    /// <returns>设变技术课主DTO</returns>
+    /// <returns>已提交回执</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:gijutsu:create", "创建设变技术课主")]
     [HttpPost]
+    [RequestSizeLimit(1_073_741_824)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 1_073_741_824)]
     public async Task<IActionResult> CreateEcGijutsuAsync([FromBody] TaktEcGijutsuCreateDto dto)
     {
         try
         {
-            var result = await _ecEngService.CreateEcGijutsuAsync(dto);
-            return Success(result, "创建成功");
+            var result = await _persistBackgroundService.EnqueueCreateAsync(dto);
+            TaktLogger.Information(
+                "[EcGijutsuPersist] API 已接受后台新增 EcCode={EcCode} DetailCount={DetailCount}",
+                result.EcCode,
+                result.DetailCount);
+            await TaktEcGijutsuPersistMessageHelper.TryNotifyAsync(
+                _messageService,
+                TaktEcGijutsuPersistMessageHelper.BuildJobSubmitted(result.EcCode, isUpdate: false, result.DetailCount));
+            return Success(result, "已提交后台新增，完成后将通知您");
         }
         catch (Exception ex)
         {
@@ -219,19 +240,28 @@ public class TaktEcGijutsusController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新设变技术课主
+    /// 更新设变技术课主（后台落库并同步各部门执行行；完成后 SignalR 通知）
     /// </summary>
     /// <param name="id">设变技术课主ID</param>
     /// <param name="dto">更新DTO</param>
-    /// <returns>设变技术课主DTO</returns>
+    /// <returns>已提交回执</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:gijutsu:update", "更新设变技术课主")]
     [HttpPut("{id}")]
+    [RequestSizeLimit(1_073_741_824)]
+    [RequestFormLimits(MultipartBodyLengthLimit = 1_073_741_824)]
     public async Task<IActionResult> UpdateEcGijutsuAsync(long id, [FromBody] TaktEcGijutsuUpdateDto dto)
     {
         try
         {
-            var result = await _ecEngService.UpdateEcGijutsuAsync(id, dto);
-            return Success(result, "更新成功");
+            var result = await _persistBackgroundService.EnqueueUpdateAsync(id, dto);
+            TaktLogger.Information(
+                "[EcGijutsuPersist] API 已接受后台更新 EcCode={EcCode} DetailCount={DetailCount}",
+                result.EcCode,
+                result.DetailCount);
+            await TaktEcGijutsuPersistMessageHelper.TryNotifyAsync(
+                _messageService,
+                TaktEcGijutsuPersistMessageHelper.BuildJobSubmitted(result.EcCode, isUpdate: true, result.DetailCount));
+            return Success(result, "已提交后台更新，完成后将通知您");
         }
         catch (Exception ex)
         {

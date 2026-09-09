@@ -125,7 +125,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -631,6 +631,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QuartzTaskForm from './components/quartz-task-form.vue'
 import {
@@ -719,6 +720,8 @@ const formData = ref<Partial<QuartzTask> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 操作列「立即执行」loading 行 Id */
 const executeLoadingId = ref('')
@@ -923,6 +926,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.execute'),
         shape: 'plain',
         icon: RiFlashlightLine,
+        buttonClass: 'takt-button-run',
         permission: 'foundation:quartz:task:execute',
         loadingFn: (record: QuartzTaskRowRecord) =>
           executeLoadingId.value === getQuartzTaskId(record),
@@ -1063,7 +1067,7 @@ useTableRefresh(loadData)
 useQuartzSignalRRefresh(loadData)
 
 /**
- * 是否为 BOM / PCB SECT 任务（立即执行须选目标库 + 核算月份）
+ * 是否为 BOM / PCB SECT / BC 采购价回填任务（立即执行须选目标库 + 核算月份）
  * @param record 任务行
  */
 function needsBomCostingMonthPicker(record: QuartzTask): boolean {
@@ -1149,10 +1153,32 @@ async function handleExecuteNow(record: QuartzTaskRowRecord): Promise<void> {
   })
 }
 
+/**
+ * 核算月规范为 yyyy-MM（月份选择器可能给出 yyyy-MM-dd / Dayjs）
+ * @param value 弹窗选中值
+ * @returns {string} yyyy-MM；无法识别则空串
+ */
+function resolveCostingPeriodMonth(value: unknown): string {
+  if (typeof value === 'string') {
+    const s = value.trim()
+    const matched = s.match(/^(\d{4}-\d{2})/)
+    return matched?.[1] ?? ''
+  }
+  if (
+    value
+    && typeof value === 'object'
+    && 'format' in value
+    && typeof (value as { format: (f: string) => string }).format === 'function'
+  ) {
+    return (value as { format: (f: string) => string }).format('YYYY-MM')
+  }
+  return ''
+}
+
 /** 核算月份 + 目标库弹窗确认 */
 async function handleExecuteMonthSubmit(): Promise<void> {
   const id = executeTargetTask.value ? getQuartzTaskId(executeTargetTask.value) : ''
-  const month = executeCostingMonth.value?.trim()
+  const month = resolveCostingPeriodMonth(executeCostingMonth.value)
   const targetDatabase = executeTargetDatabase.value?.trim()
   if (!id) {
     return

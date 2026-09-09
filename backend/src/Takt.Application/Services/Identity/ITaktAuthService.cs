@@ -118,8 +118,10 @@ public interface ITaktAuthService
     /// <summary>
     /// 获取当前用户可切换的公司选项（已登录；按权限过滤；ExtValue=关联工厂 RelatedPlant）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>公司下拉选项</returns>
-    Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync();
+    Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 获取用户角色编码列表（写入 Token Claims）
@@ -132,8 +134,10 @@ public interface ITaktAuthService
     /// <summary>
     /// 获取登录页租户选项（登录前；来源配置 TenantCodes，登录后不可跨租户切换）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>TaktSelectOption（DictValue=TenantCode，DictLabel=TenantName，ExtLabel=IsDefault 1/0）</returns>
-    Task<List<TaktSelectOption>> GetSessionTenantOptionsAsync();
+    Task<List<TaktSelectOption>> GetSessionTenantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 校验登录页输入的租户编码是否存在且启用
@@ -146,8 +150,10 @@ public interface ITaktAuthService
     /// 获取登录页语言切换选项（匿名；未传租户时合并全部配置租户）
     /// </summary>
     /// <param name="tenantCode">租户编码（可选）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>语言下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSessionCultureOptionsAsync(string? tenantCode = null);
+    Task<List<TaktSelectOption>> GetSessionCultureOptionsAsync(string? plantCode = null, string? keyword = null, string? tenantCode = null);
 
     /// <summary>
     /// 登录前预览：解析用户默认公司、用户 CultureCode 与公司 CultureCode（与假日无关）

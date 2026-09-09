@@ -84,6 +84,7 @@
                 <TaktSelect
                   v-model:value="formState.province"
                   api-url="TaktAdminDivisions/options"
+                  :api-params="{ level: 2 }"
                   :placeholder="pi.ph('province')"
                 />
               </a-form-item>
@@ -96,6 +97,7 @@
                 <TaktSelect
                   v-model:value="formState.city"
                   api-url="TaktAdminDivisions/options"
+                  :api-params="{ level: 3 }"
                   :placeholder="pi.ph('city')"
                 />
               </a-form-item>
@@ -108,6 +110,7 @@
                 <TaktSelect
                   v-model:value="formState.district"
                   api-url="TaktAdminDivisions/options"
+                  :api-params="{ level: 4 }"
                   :placeholder="pi.ph('district')"
                 />
               </a-form-item>

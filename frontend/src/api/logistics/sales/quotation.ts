@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：quotation.ts
-// 创建时间：2026-08-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -52,8 +52,11 @@ export function getSalesQuotationList(queryDto: any): Promise<TaktPagedResult<Sa
  */
 export function getSalesQuotationById(id: string): Promise<SalesQuotation> {
   return request<SalesQuotation>({
-    url: `${SALES_QUOTATION_API_BASE}/${id}`,
+    url: `${SALES_QUOTATION_API_BASE}/{id:long}`,
     method: 'get',
+    params: {
+      id
+    },
   });
 }
 
@@ -128,12 +131,18 @@ export function updateSalesQuotationStatus(dto: SalesQuotationStatus): Promise<S
 
 /**
  * 获取销售报价选项列表
+ * @param {string} plantCode 工厂代码（可选，用于按工厂过滤）
+ * @param {string} keyword 搜索关键字（可选，模糊匹配）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSalesQuotationOptions(): Promise<TaktSelectOption[]> {
+export function getSalesQuotationOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${SALES_QUOTATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 

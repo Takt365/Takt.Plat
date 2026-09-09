@@ -47,6 +47,8 @@ public class TaktHolidayCreateValidator : AbstractValidator<TaktHolidayCreateDto
         RuleFor(x => x.HolidayTheme)
             .NotEmpty().WithMessage("假日主题不能为空")
             .MaximumLength(20).WithMessage("假日主题长度不能超过20个字符");
+        RuleFor(x => x.CompensatoryWorkDates)
+            .MaximumLength(200).WithMessage("调休上班日长度不能超过200个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
@@ -92,6 +94,8 @@ public class TaktHolidayUpdateValidator : AbstractValidator<TaktHolidayUpdateDto
         RuleFor(x => x.HolidayTheme)
             .NotEmpty().WithMessage("假日主题不能为空")
             .MaximumLength(20).WithMessage("假日主题长度不能超过20个字符");
+        RuleFor(x => x.CompensatoryWorkDates)
+            .MaximumLength(200).WithMessage("调休上班日长度不能超过200个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)

@@ -86,11 +86,11 @@ public class TaktIpqcDefectHandlingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:ipqc:order:query", "制程检验不良处理记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetIpqcDefectHandlingOptionsAsync()
+    public async Task<IActionResult> GetIpqcDefectHandlingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ipqcDefectHandlingService.GetIpqcDefectHandlingOptionsAsync();
+            var result = await _ipqcDefectHandlingService.GetIpqcDefectHandlingOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

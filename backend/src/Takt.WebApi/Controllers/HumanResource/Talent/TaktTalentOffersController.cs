@@ -86,11 +86,11 @@ public class TaktTalentOffersController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:talent:job:posting:query", "录用信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTalentOfferOptionsAsync()
+    public async Task<IActionResult> GetTalentOfferOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _talentOfferService.GetTalentOfferOptionsAsync();
+            var result = await _talentOfferService.GetTalentOfferOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

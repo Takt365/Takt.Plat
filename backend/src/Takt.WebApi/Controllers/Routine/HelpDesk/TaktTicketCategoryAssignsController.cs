@@ -86,11 +86,11 @@ public class TaktTicketCategoryAssignsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:ticket:category:assign:query", "工单分类默认处理人选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTicketCategoryAssignOptionsAsync()
+    public async Task<IActionResult> GetTicketCategoryAssignOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ticketCategoryAssignService.GetTicketCategoryAssignOptionsAsync();
+            var result = await _ticketCategoryAssignService.GetTicketCategoryAssignOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -156,7 +156,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -223,6 +223,102 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('pricingDate')"
+                name="pricingDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.pricingDate"
+                  :placeholder="pi.ph('pricingDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('grossWeight')"
+                name="grossWeight"
+              >
+                <a-input-number
+                  v-model:value="formState.grossWeight"
+                  :placeholder="pi.ph('grossWeight')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('netWeight')"
+                name="netWeight"
+              >
+                <a-input-number
+                  v-model:value="formState.netWeight"
+                  :placeholder="pi.ph('netWeight')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('weightUnit')"
+                name="weightUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.weightUnit"
+                  dict-type="logistics_materials_unit_of_measure_code"
+                  :placeholder="pi.ph('weightUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('volume')"
+                name="volume"
+              >
+                <a-input-number
+                  v-model:value="formState.volume"
+                  :placeholder="pi.ph('volume')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('volumeUnit')"
+                name="volumeUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.volumeUnit"
+                  dict-type="logistics_materials_unit_of_measure_code"
+                  :placeholder="pi.ph('volumeUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('profitCenterCode')"
+                name="profitCenterCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.profitCenterCode"
+                  api-url="TaktProfitCenters/options"
+                  :placeholder="pi.ph('profitCenterCode')"
+                  :disabled="!!formData?.purchaseRequestItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('isObsolete')"
                 name="isObsolete"
               >
@@ -237,8 +333,8 @@
         </div>
       </a-tab-pane>
       <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -331,7 +427,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchasePlanItemId","lineNumber","allocationCategory","materialCode","requestUnit","requestQuantity","convertedQuantity","purchasePerUnit","purchaseRequestUnitPrice","taxIncludedAmount","untaxedAmount","taxAmount","requestAmount","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","purchasePlanItemId","lineNumber","allocationCategory","materialCode","requestUnit","requestQuantity","convertedQuantity","purchasePerUnit","purchaseRequestUnitPrice","taxIncludedAmount","untaxedAmount","taxAmount","requestAmount","pricingDate","grossWeight","netWeight","weightUnit","volume","volumeUnit","profitCenterCode","isObsolete"]
 
 
 
@@ -656,6 +752,36 @@ function getValues(): Record<string, any> {
       const numrequestAmount = typeof rawrequestAmount === 'number' ? rawrequestAmount : Number(rawrequestAmount)
       if (Number.isFinite(numrequestAmount)) payload.requestAmount = numrequestAmount
       else delete payload.requestAmount
+    }
+  }
+  if ('grossWeight' in payload) {
+    const rawgrossWeight = payload.grossWeight
+    if (rawgrossWeight === undefined || rawgrossWeight === null || rawgrossWeight === '') {
+      delete payload.grossWeight
+    } else {
+      const numgrossWeight = typeof rawgrossWeight === 'number' ? rawgrossWeight : Number(rawgrossWeight)
+      if (Number.isFinite(numgrossWeight)) payload.grossWeight = numgrossWeight
+      else delete payload.grossWeight
+    }
+  }
+  if ('netWeight' in payload) {
+    const rawnetWeight = payload.netWeight
+    if (rawnetWeight === undefined || rawnetWeight === null || rawnetWeight === '') {
+      delete payload.netWeight
+    } else {
+      const numnetWeight = typeof rawnetWeight === 'number' ? rawnetWeight : Number(rawnetWeight)
+      if (Number.isFinite(numnetWeight)) payload.netWeight = numnetWeight
+      else delete payload.netWeight
+    }
+  }
+  if ('volume' in payload) {
+    const rawvolume = payload.volume
+    if (rawvolume === undefined || rawvolume === null || rawvolume === '') {
+      delete payload.volume
+    } else {
+      const numvolume = typeof rawvolume === 'number' ? rawvolume : Number(rawvolume)
+      if (Number.isFinite(numvolume)) payload.volume = numvolume
+      else delete payload.volume
     }
   }
   if ('isObsolete' in payload) {

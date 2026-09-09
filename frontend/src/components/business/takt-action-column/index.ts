@@ -16,8 +16,10 @@ import type { TableColumnsType } from 'ant-design-vue';
 import { Button, Space, Tooltip, Dropdown, Menu, MenuItem } from 'ant-design-vue';
 import { MoreOutlined } from '@ant-design/icons-vue';
 import { usePermissionStore } from '@/stores/identity/permission';
+import { isDemoBlockedAction } from '@/utils/takt-demo-mode';
 import { createLogger } from '@/utils/logger';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
+import { emitNotification } from '@/utils/event-bus';
 import './index.vue';
 
 const actionColumnLogger = createLogger('takt-action-column');
@@ -118,6 +120,9 @@ export function CreateActionColumn<TRow = ActionRecord>(
               return false;
             }
           }
+          if (isDemoBlockedAction(action.key, action.permission)) {
+            return false;
+          }
           return true;
         } catch (error) {
           actionColumnLogger.error(
@@ -138,7 +143,8 @@ export function CreateActionColumn<TRow = ActionRecord>(
           typeof action.loading === 'function'
             ? action.loading(row, index)
             : action.loading || (action.loadingFn ? action.loadingFn(row, index) : false);
-        const disabled = Boolean(disabledRaw);
+        const disabled =
+          Boolean(disabledRaw) || isDemoBlockedAction(action.key, action.permission);
         const loading = Boolean(loadingRaw);
         const buttonClass = [
           action.buttonClass || (action.key ? `takt-button-${action.key}` : undefined),
@@ -154,6 +160,13 @@ export function CreateActionColumn<TRow = ActionRecord>(
           disabled,
           loading,
           onClick: () => {
+            if (isDemoBlockedAction(action.key, action.permission)) {
+              emitNotification(
+                'warning',
+                translateLocaleMessage('components.navigation.page.systemsetting.demohint'),
+              );
+              return;
+            }
             if (action.onClick) {
               action.onClick(row, index);
             }
@@ -206,7 +219,9 @@ export function CreateActionColumn<TRow = ActionRecord>(
             typeof action.loading === 'function'
               ? action.loading(row, index)
               : action.loading || (action.loadingFn ? action.loadingFn(row, index) : false);
-          const menuItemDisabled = Boolean(disabledRaw || loadingRaw);
+          const menuItemDisabled =
+            Boolean(disabledRaw || loadingRaw)
+            || isDemoBlockedAction(action.key, action.permission);
           const menuItemClass = action.buttonClass || (action.key ? `takt-button-${action.key}` : '');
           return h(
             MenuItem,
@@ -215,6 +230,13 @@ export function CreateActionColumn<TRow = ActionRecord>(
               class: menuItemClass,
               disabled: menuItemDisabled,
               onClick: () => {
+                if (isDemoBlockedAction(action.key, action.permission)) {
+                  emitNotification(
+                    'warning',
+                    translateLocaleMessage('components.navigation.page.systemsetting.demohint'),
+                  );
+                  return;
+                }
                 if (action.onClick && !menuItemDisabled) {
                   action.onClick(row, index);
                 }

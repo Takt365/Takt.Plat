@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktCustomerI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -494,24 +494,6 @@ public class TaktCustomerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customer.discountrate", "zh-CN", "折扣率", "折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）"),
             // entity.customer.discountrate
             new TranslationSeedItem("entity.customer.discountrate", "zh-HK", "折扣率_hk", "折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）"),
-
-            // entity.customer.salesemployeeid
-            new TranslationSeedItem("entity.customer.salesemployeeid", "en-US", "销售员ID_us", "销售员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.customer.salesemployeeid
-            new TranslationSeedItem("entity.customer.salesemployeeid", "ja-JP", "销售员ID_jp", "销售员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.customer.salesemployeeid
-            new TranslationSeedItem("entity.customer.salesemployeeid", "zh-CN", "销售员ID", "销售员（选项 TaktEmployees/options；DictValue=Id）"),
-            // entity.customer.salesemployeeid
-            new TranslationSeedItem("entity.customer.salesemployeeid", "zh-HK", "销售员ID_hk", "销售员（选项 TaktEmployees/options；DictValue=Id）"),
-
-            // entity.customer.salesemployeename
-            new TranslationSeedItem("entity.customer.salesemployeename", "en-US", "销售员名称_us", "销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
-            // entity.customer.salesemployeename
-            new TranslationSeedItem("entity.customer.salesemployeename", "ja-JP", "销售员名称_jp", "销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
-            // entity.customer.salesemployeename
-            new TranslationSeedItem("entity.customer.salesemployeename", "zh-CN", "销售员名称", "销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
-            // entity.customer.salesemployeename
-            new TranslationSeedItem("entity.customer.salesemployeename", "zh-HK", "销售员名称_hk", "销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）"),
 
             // entity.customer.level
             new TranslationSeedItem("entity.customer.level", "en-US", "客户等级_us", "客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）"),

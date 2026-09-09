@@ -86,11 +86,11 @@ public class TaktLoginLogsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:logging:login:log:query", "登录日志选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetLoginLogOptionsAsync()
+    public async Task<IActionResult> GetLoginLogOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _loginLogService.GetLoginLogOptionsAsync();
+            var result = await _loginLogService.GetLoginLogOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,8 +23,14 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_epoch BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', GETUTCDATE()) * 1000;
+-- 更新履历：ext_field._sync.mdl[] 追加 { at, 变更列:{o,n} }；仅差异；超 nvarchar(4000) 保留原 JSON
 
 IF OBJECT_ID('tempdb..#cjs_source') IS NOT NULL DROP TABLE #cjs_source;
 CREATE TABLE #cjs_source (
@@ -55,6 +78,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #cjs_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @sap_raw_count INT = (SELECT COUNT(*) FROM [Sap_Data].[dbo].[PP_SapModelDest]);
 DECLARE @sap_key_count INT = (
   SELECT COUNT(*)
@@ -120,6 +159,11 @@ DECLARE @target_before INT = (
 );
 
 -- 存在则仅在仕向地/软删/默认字段变化时 UPDATE；描述不在 MERGE 内处理（见后置回填）
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #cjs_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_materials_model_destination] AS T
 USING (
   SELECT
@@ -129,6 +173,7 @@ USING (
     S.[model_code],
     S.[destination_code]
   FROM #cjs_source S
+  WHERE S.[rn] >= @merge_from_rn AND S.[rn] <= @merge_to_rn
 ) AS S
 ON T.[tenant_code] = @tenant_code
 AND LTRIM(RTRIM(T.[material_code])) = S.[material_code]
@@ -145,7 +190,24 @@ WHEN MATCHED AND (
   T.[remark]=N'幂等更新',
   T.[updated_by]=@sync_user_id,
   T.[updated_at]=@now,
-  T.[is_deleted]=0
+  T.[is_deleted]=0,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.mdl') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.mdl', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mdl'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.mdl', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mdl'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.mdl', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[destination_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[destination_code], N''))) THEN CONCAT(N',"destination_code":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[destination_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[destination_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN T.[sort_order] <> 0 THEN CONCAT(N',"sort_order":{"o":', CONVERT(VARCHAR(20), T.[sort_order]), N',"n":0}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> N'幂等更新' THEN CONCAT(N',"remark":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[remark], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"幂等更新"}') ELSE N'' END,
+      CASE WHEN ISNULL(T.[is_deleted], 0) <> 0 THEN N',"is_deleted":{"o":1,"n":0}' ELSE N'' END,
+      N'}'))) AS [new_ext]) x
+  )
 WHEN NOT MATCHED THEN
   INSERT (
     [id],
@@ -200,6 +262,25 @@ INTO #cjs_delta(
   ext_field_old, ext_field_new,
   remark_old, remark_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 -- 孤儿软删：目标有而源没有时才软删；存在更新/不存在插入已由 MERGE 完成
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
@@ -209,7 +290,11 @@ CREATE TABLE #soft_deleted_rows (
   [model_code] NVARCHAR(100)
 );
 
-UPDATE T
+DECLARE @delete_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -230,8 +315,25 @@ WHERE T.[tenant_code] = @tenant_code
     WHERE S.[material_code] = LTRIM(RTRIM(T.[material_code]))
       AND S.[model_code] = LTRIM(RTRIM(T.[model_code]))
   );
-
-DECLARE @delete_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @delete_count = @delete_count + @dml_n;
+END
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
   CAST(
@@ -249,7 +351,11 @@ SET @soft_deleted_keys = ISNULL(@soft_deleted_keys, N'');
 -- 同步完成后回填（两字段语言切勿混用）：
 --   MaterialDescription ← material_code + culture_code=ja-JP（Length=40）
 --   ModelName ← model_code + culture_code=Z1（Length=80）
-UPDATE T
+DECLARE @desc_backfill_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[material_description] = LEFT(LTRIM(RTRIM(D.[material_description])), 40),
   T.[updated_by] = @sync_user_id,
@@ -265,10 +371,15 @@ WHERE T.[tenant_code] = @tenant_code
   AND LTRIM(RTRIM(ISNULL(D.[material_description], N''))) <> N''
   AND LTRIM(RTRIM(ISNULL(T.[material_description], N'')))
     <> LEFT(LTRIM(RTRIM(D.[material_description])), 40);
+  SET @dml_n = @@ROWCOUNT;
+  SET @desc_backfill_count = @desc_backfill_count + @dml_n;
+END
 
-DECLARE @desc_backfill_count INT = @@ROWCOUNT;
-
-UPDATE T
+DECLARE @model_name_backfill_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[model_name] = LEFT(LTRIM(RTRIM(D.[material_description])), 80),
   T.[updated_by] = @sync_user_id,
@@ -284,8 +395,9 @@ WHERE T.[tenant_code] = @tenant_code
   AND LTRIM(RTRIM(ISNULL(D.[material_description], N''))) <> N''
   AND LTRIM(RTRIM(ISNULL(T.[model_name], N'')))
     <> LEFT(LTRIM(RTRIM(D.[material_description])), 80);
-
-DECLARE @model_name_backfill_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @model_name_backfill_count = @model_name_backfill_count + @dml_n;
+END
 
 DECLARE @target_count INT = (
   SELECT COUNT(*)
@@ -371,8 +483,6 @@ DECLARE @json_result NVARCHAR(MAX) =
   + N',"desc_backfill":' + CAST(@desc_backfill_count AS NVARCHAR)
   + N',"model_name_backfill":' + CAST(@model_name_backfill_count AS NVARCHAR)
   + N',"soft_delete_keys":"' + REPLACE(@soft_deleted_keys, N'"', N'''') + N'"}';
-
-
 
 INSERT INTO [takt_statistics_logging_oper_log] (
   [id],[user_name],[oper_type],[oper_module],[oper_method],

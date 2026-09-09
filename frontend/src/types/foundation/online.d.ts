@@ -413,11 +413,6 @@ export interface OnlineDashboardStatistics {
    * 当日总访问量（与在线时长无关）
    */
   todayVisitCount: number;
-
-  /**
-   * 当前活跃会话数
-   */
-  activeSessionCount: number;
 }
 
 /**

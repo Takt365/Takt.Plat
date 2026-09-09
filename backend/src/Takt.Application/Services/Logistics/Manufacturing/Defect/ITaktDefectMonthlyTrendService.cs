@@ -23,25 +23,27 @@ public interface ITaktDefectMonthlyTrendService
     /// <summary>
     /// 推移查询栏：组立不良 ∪ PCBA 检查工厂去重选项
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync();
+    Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂可用不良类别（assy / pcba；级联第 2 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string plantCode);
+    Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂（及可选不良类别）去重机种（级联第 3 级，查询时可空）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="defectCategory">不良类别（assy / pcba；空则两表并集）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(
-        string plantCode,
-        string? defectCategory = null);
+    Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(string? plantCode = null, string? keyword = null, string? defectCategory = null);
 
     /// <summary>
     /// 获取月生产不良推移转置分析（分页）

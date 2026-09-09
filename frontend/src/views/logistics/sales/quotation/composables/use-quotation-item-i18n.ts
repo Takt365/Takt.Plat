@@ -33,10 +33,18 @@ export const SALESQUOTATIONITEM_LIST_FIELDS = [
   'quotationUnitPrice',
   'discountRate',
   'discountAmount',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
   'quotationAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
 ] as const
 
@@ -55,10 +63,18 @@ export const SALESQUOTATIONITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'quotationUnitPrice',
   'discountRate',
   'discountAmount',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
   'quotationAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
   'action',
 ] as const
@@ -74,6 +90,9 @@ export const SALESQUOTATIONITEM_SUMMARY_SUM_FIELDS = [
   'untaxedAmount',
   'taxAmount',
   'quotationAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'isObsolete',
 ] as const
 
@@ -93,10 +112,18 @@ export const SALESQUOTATIONITEM_PLACEHOLDER = {
   quotationUnitPrice: 'select',
   discountRate: 'select',
   discountAmount: 'select',
+  taxCode: 'optional',
   taxIncludedAmount: 'select',
   untaxedAmount: 'select',
   taxAmount: 'select',
   quotationAmount: 'select',
+  pricingDate: 'optional',
+  grossWeight: 'optional',
+  netWeight: 'optional',
+  weightUnit: 'optional',
+  volume: 'optional',
+  volumeUnit: 'optional',
+  profitCenterCode: 'optional',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -112,6 +139,12 @@ export const SALESQUOTATIONITEM_QUERY_STRING_FIELDS = [
   'materialDescription',
   'materialSpecification',
   'salesUnit',
+  'taxCode',
+  'pricingDateStart',
+  'pricingDateEnd',
+  'weightUnit',
+  'volumeUnit',
+  'profitCenterCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -120,7 +153,7 @@ export const SALESQUOTATIONITEM_QUERY_STRING_FIELDS = [
 
 export type SalesQuotationItemQueryField =
   | (typeof SALESQUOTATIONITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'quotationUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'quotationAmount' | 'isObsolete'
+  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'quotationUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'quotationAmount' | 'grossWeight' | 'netWeight' | 'volume' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryField[] = [
@@ -135,6 +168,9 @@ export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryFi
   'untaxedAmount',
   'taxAmount',
   'quotationAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'isObsolete',
 ]
 

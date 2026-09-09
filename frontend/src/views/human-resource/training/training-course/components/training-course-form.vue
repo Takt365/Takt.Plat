@@ -10,6 +10,7 @@
 <template>
   <a-form
     ref="formRef"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -193,19 +194,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingcourse.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingcourse.sortorder') })"
-                  size="small"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="t('entity.trainingcourse.status')"
                 name="trainingCourseStatus"
               >
@@ -310,7 +298,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","courseCode","courseName","courseType","courseLevel","courseDescription","courseObjectives","trainingHours","mainInstructor","trainingMethod","assessmentMethod","passingScore","sortOrder","trainingCourseStatus","plantCode","ExtField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","courseCode","courseName","courseType","courseLevel","courseDescription","courseObjectives","trainingHours","mainInstructor","trainingMethod","assessmentMethod","passingScore","trainingCourseStatus","plantCode","ExtField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -432,13 +420,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  sortOrder: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.trainingcourse.sortorder') }),
-      trigger: 'change'
-    }
-  ],
   trainingCourseStatus: [
     {
       required: true,
@@ -456,7 +437,9 @@ async function validate() {
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  return { ...formState }
+  const payload = { ...formState }
+  if ('sortOrder' in payload) delete payload.sortOrder
+  return payload
 }
 
 /** 重置表单与子表行 */

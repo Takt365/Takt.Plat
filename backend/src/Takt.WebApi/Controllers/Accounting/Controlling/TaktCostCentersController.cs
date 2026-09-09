@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Controlling
 // 文件名称：TaktCostCentersController.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-08-31
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心控制器
 // 
@@ -81,17 +81,19 @@ public class TaktCostCentersController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue=Id，DictLabel=成本中心名称）
+    /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
     /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项</returns>
     [TaktPermission("accounting:controlling:cost:center:query", "成本中心树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetCostCenterTreeOptionsAsync([FromQuery] long parentId = 0)
+    public async Task<IActionResult> GetCostCenterTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _costCenterService.GetCostCenterTreeOptionsAsync(parentId);
+            var result = await _costCenterService.GetCostCenterTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -101,9 +103,10 @@ public class TaktCostCentersController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取成本中心树形列表
+    /// 获取成本中心树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>
+    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>
+    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 字段）</param>
     /// <returns>树形数据</returns>
     [TaktPermission("accounting:controlling:cost:center:query", "成本中心树")]
     [HttpGet("tree")]

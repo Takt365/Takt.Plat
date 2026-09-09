@@ -94,7 +94,7 @@ export interface MaterialDocument extends CompanyDtoBase {
   transactionCode?: string;
 
   /**
-   * 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   * 过账人（当前登录用户对应的 EmployeeCode）
    */
   postedBy?: string;
 
@@ -192,7 +192,7 @@ export interface MaterialDocumentExport {
   transactionCode?: string;
 
   /**
-   * 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   * 过账人（当前登录用户对应的 EmployeeCode）
    */
   postedBy?: string;
 

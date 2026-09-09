@@ -39,6 +39,8 @@ export const COSTCENTER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   cultureCode: 'optional',
+  plantCode: 'optional',
+  costCenterCode: 'required',
   costCenterName: 'required',
   parentId: 'required',
   costCenterType: 'select',
@@ -49,7 +51,6 @@ export const COSTCENTER_PLACEHOLDER = {
   costCenterLevel: 'select',
   validFrom: 'select',
   validTo: 'select',
-  plantCode: 'select',
   costCenterStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -60,9 +61,12 @@ export type CostCenterField = keyof typeof COSTCENTER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const COSTCENTER_QUERY_STRING_FIELDS = [
+  'cultureCode',
+  'plantCode',
   'costCenterCode',
   'costCenterName',
   'parentId',
+  'costCenterType',
   'managerId',
   'managerName',
   'deptId',
@@ -71,7 +75,6 @@ export const COSTCENTER_QUERY_STRING_FIELDS = [
   'validFromEnd',
   'validToStart',
   'validToEnd',
-  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -80,12 +83,11 @@ export const COSTCENTER_QUERY_STRING_FIELDS = [
 
 export type CostCenterQueryField =
   | (typeof COSTCENTER_QUERY_STRING_FIELDS)[number]
-  | 'costCenterType' | 'costCenterLevel' | 'costCenterStatus'
+  | 'costCenterLevel' | 'costCenterStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const COSTCENTER_QUERY_FIELDS: readonly CostCenterQueryField[] = [
   ...COSTCENTER_QUERY_STRING_FIELDS,
-  'costCenterType',
   'costCenterLevel',
   'costCenterStatus',
 ]

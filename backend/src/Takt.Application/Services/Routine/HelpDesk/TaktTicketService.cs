@@ -95,8 +95,10 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <summary>
     /// 获取工单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetTicketOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetTicketOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ticketRepository.GetListAsync(
@@ -706,5 +708,62 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取服务台工单件数统计（数据看板；按 CreatedAt 与 TicketStatus）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>工单件数统计</returns>
+    public async Task<TaktTicketStatDto> GetTicketStatAsync(TaktTicketStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.CreatedAtStart,
+            queryDto.CreatedAtEnd,
+            queryDto.StatMonth);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        // 字典 sys_ticket_status：0新建 1已分配 2处理中 3待确认 4已完成 5已关闭 6已取消 7重新打开
+        Expression<Func<TaktTicket, bool>> inMonth = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end;
+        Expression<Func<TaktTicket, bool>> pending = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && (x.TicketStatus == 0 || x.TicketStatus == 1);
+        Expression<Func<TaktTicket, bool>> inProgress = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && (x.TicketStatus == 2 || x.TicketStatus == 3 || x.TicketStatus == 7);
+        Expression<Func<TaktTicket, bool>> processed = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.CreatedAt >= start
+            && x.CreatedAt <= end
+            && (x.TicketStatus == 4 || x.TicketStatus == 5 || x.TicketStatus == 6);
+        var monthTicketCount = await _ticketRepository.CountAsync(inMonth);
+        var monthPendingCount = await _ticketRepository.CountAsync(pending);
+        var monthInProgressCount = await _ticketRepository.CountAsync(inProgress);
+        var monthProcessedCount = await _ticketRepository.CountAsync(processed);
+        return new TaktTicketStatDto
+        {
+            StatMonth = statMonth,
+            MonthTicketCount = monthTicketCount,
+            MonthPendingCount = monthPendingCount,
+            MonthInProgressCount = monthInProgressCount,
+            MonthProcessedCount = monthProcessedCount,
+        };
     }
 }

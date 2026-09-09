@@ -86,11 +86,11 @@ public class TaktMaterialGroupsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:group:query", "物料组主数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialGroupOptionsAsync()
+    public async Task<IActionResult> GetMaterialGroupOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialGroupService.GetMaterialGroupOptionsAsync();
+            var result = await _materialGroupService.GetMaterialGroupOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

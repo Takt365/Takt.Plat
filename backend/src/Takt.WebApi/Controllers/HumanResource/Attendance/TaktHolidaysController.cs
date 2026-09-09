@@ -86,11 +86,11 @@ public class TaktHolidaysController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:attendance:holiday:query", "假日信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetHolidayOptionsAsync()
+    public async Task<IActionResult> GetHolidayOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _holidayService.GetHolidayOptionsAsync();
+            var result = await _holidayService.GetHolidayOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

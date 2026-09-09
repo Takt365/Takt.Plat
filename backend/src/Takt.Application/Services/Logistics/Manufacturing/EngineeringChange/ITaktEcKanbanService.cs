@@ -30,9 +30,9 @@ public interface ITaktEcKanbanService
     /// <summary>
     /// 根据设变主表 ID 获取看板行
     /// </summary>
-    /// <param name="ecId">设变主表 ID</param>
+    /// <param name="ecGijutsuId">设变主表 ID</param>
     /// <returns>看板 DTO</returns>
-    Task<TaktEcKanbanDto?> GetEcKanbanByEcIdAsync(long ecId);
+    Task<TaktEcKanbanDto?> GetEcKanbanByEcIdAsync(long ecGijutsuId);
 
     /// <summary>
     /// 导出设变看板

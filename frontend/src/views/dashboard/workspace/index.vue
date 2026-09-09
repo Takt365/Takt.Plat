@@ -11,9 +11,14 @@
         :span="item.span ?? 24"
       >
         <a-dropdown trigger="contextmenu">
-          <div class="workspace-module-context-target">
+          <div
+            class="workspace-module-context-target"
+            @mouseenter="hoveredModuleId = item.id"
+            @mouseleave="hoveredModuleId = null"
+          >
             <WorkspaceModuleCard
               :module="item"
+              :hovered="hoveredModuleId === item.id"
               @remove="removeModule(item.id)"
               @change-span="updateModuleSpan"
             >
@@ -25,11 +30,11 @@
                 >
                   <a-button
                     type="text"
-                    size="small"
+                    class="takt-dashboard-module-card-head-btn"
                     @click="shortcutRefs[item.id]?.openManage?.()"
                   >
                     <template #icon>
-                      <RiSettings3Line />
+                      <RiSettings3Line class="takt-dashboard-module-card__head-icon" />
                     </template>
                   </a-button>
                 </a-tooltip>
@@ -143,6 +148,8 @@ function saveModules(list: WorkspaceModuleItem[]) {
 }
 
 const modules = ref<WorkspaceModuleItem[]>(loadModules())
+/** 当前悬停的模块 Id（控制卡片头按钮显隐） */
+const hoveredModuleId = ref<string | null>(null)
 
 const rowRef = ref<{ $el: HTMLElement } | null>(null)
 let sortableInstance: Sortable | null = null
@@ -188,7 +195,7 @@ onMounted(() => {
     const el = rowRef.value?.$el
     if (!el || !(el instanceof HTMLElement)) return
     sortableInstance = Sortable.create(el, {
-      handle: '.workspace-module-card-drag-handle',
+      handle: '.takt-dashboard-module-card-drag-handle',
       animation: 150,
       ghostClass: 'workspace-module-card-ghost',
       onEnd(evt: Sortable.SortableEvent) {
@@ -263,10 +270,22 @@ function onModuleContextMenuClick(
 
 <style scoped lang="css">
 .dashboard-workspace {
-  padding: 0;
+  padding: 24px 0;
+}
+.dashboard-workspace :deep(.ant-row) {
+  align-items: stretch;
+}
+.dashboard-workspace :deep(.ant-col) {
+  display: flex;
+  flex-direction: column;
 }
 .workspace-module-context-target {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
   height: 100%;
+  width: 100%;
 }
 .workspace-add-tip {
   margin-bottom: 8px;

@@ -4,7 +4,7 @@
 // 文件名称：takt-ec-attachment-doc-code.ts
 // 创建时间：2026-08-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变附件 DocCode 格式校验，以及由 DocCode 生成存储/展示文件名（与后端 TaktEcAttachmentDocCodeHelper 对齐）
+// 功能描述：设变附件 DocCode 格式校验、PDF 扩展名判定，以及由 DocCode 生成存储/展示文件名（与后端 TaktEcAttachmentDocCodeHelper 对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -100,6 +100,15 @@ export function isEcAttachmentDocCodeLockedToEcCode(
   attachmentType: string | null | undefined,
 ): boolean {
   return String(attachmentType ?? '').trim() === EcAttachmentType.EC
+}
+
+/**
+ * 是否为 PDF 附件文件名（扩展名 .pdf，大小写不敏感；与后端 TaktEcAttachmentDocCodeHelper.IsPdfFileName 对齐）
+ * @param fileName 源文件名或存储文件名
+ * @returns 扩展名为 .pdf 时 true
+ */
+export function isEcAttachmentPdfFileName(fileName?: string | null): boolean {
+  return extractFileExtension(fileName).toLowerCase() === '.pdf'
 }
 
 /**

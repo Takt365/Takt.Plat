@@ -40,6 +40,7 @@ export default {
       copyright: "版權信息",
       defaultlanguage: "默認語言",
       demoswitch: "Demo開關",
+      demohint: "開啓後全站只讀：可查詢/導出，禁止新增、修改、刪除、導入等寫操作",
       enablemultitab: "啓用多標籤頁",
       fixed: "固定",
       fixedheader: "固定頭部",

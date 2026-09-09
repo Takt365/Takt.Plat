@@ -26,8 +26,8 @@ export function getEcKanbanList(queryDto: EcKanbanQuery) {
 /**
  * 获取设变看板详情
  */
-export function getEcKanbanByEcId(ecId: string) {
-  return request.get<EcKanban>(`/${TAKTECKANBANS_API_BASE}/${ecId}`);
+export function getEcKanbanByEcId(ecGijutsuId: string) {
+  return request.get<EcKanban>(`/${TAKTECKANBANS_API_BASE}/${ecGijutsuId}`);
 }
 
 

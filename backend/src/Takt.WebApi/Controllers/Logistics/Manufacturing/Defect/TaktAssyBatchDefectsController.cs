@@ -86,11 +86,11 @@ public class TaktAssyBatchDefectsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:assy:batch:query", "组立批量不良统计选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetAssyBatchDefectOptionsAsync()
+    public async Task<IActionResult> GetAssyBatchDefectOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _assyBatchDefectService.GetAssyBatchDefectOptionsAsync();
+            var result = await _assyBatchDefectService.GetAssyBatchDefectOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

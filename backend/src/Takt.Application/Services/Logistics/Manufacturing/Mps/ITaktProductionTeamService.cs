@@ -38,8 +38,11 @@ public interface ITaktProductionTeamService
     /// <summary>
     /// 获取生产班组选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="teamCategory">班组分类（字典 logistics_manufacturing_team_category；有值时精确匹配 TeamCategory，如 A=组立 P=PCBA）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetProductionTeamOptionsAsync();
+    Task<List<TaktSelectOption>> GetProductionTeamOptionsAsync(string? plantCode = null, string? keyword = null, string? teamCategory = null);
 
     /// <summary>
     /// 创建生产班组

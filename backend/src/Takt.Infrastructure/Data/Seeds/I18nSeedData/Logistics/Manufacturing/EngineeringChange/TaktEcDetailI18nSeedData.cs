@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdetail._self
             new TranslationSeedItem("entity.ecdetail._self", "zh-HK", "设变明细信息_hk", "实体名称"),
 
-            // entity.ecdetail.ecid
-            new TranslationSeedItem("entity.ecdetail.ecid", "en-US", "设变ID_us", "设变主表ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.ecdetail.ecid
-            new TranslationSeedItem("entity.ecdetail.ecid", "ja-JP", "设变ID_jp", "设变主表ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.ecdetail.ecid
-            new TranslationSeedItem("entity.ecdetail.ecid", "zh-CN", "设变ID", "设变主表ID（主表主键,序列化为string以避免Javascript精度问题）"),
-            // entity.ecdetail.ecid
-            new TranslationSeedItem("entity.ecdetail.ecid", "zh-HK", "设变ID_hk", "设变主表ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "en-US", "技术课主表ID_us", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "ja-JP", "技术课主表ID_jp", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-CN", "技术课主表ID", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-HK", "技术课主表ID_hk", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
 
             // entity.ecdetail.eccode
             new TranslationSeedItem("entity.ecdetail.eccode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
@@ -172,15 +172,24 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "zh-HK", "上阶物料描述_hk", "上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）"),
 
             // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "en-US", "完成品物料状态_us", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "en-US", "停产状态_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
             // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "ja-JP", "完成品物料状态_jp", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "ja-JP", "停产状态_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
             // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-CN", "完成品物料状态", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-CN", "停产状态", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
             // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-HK", "完成品物料状态_hk", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-HK", "停产状态_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
 
-            // entity.ecdetail.ecoldmaterialcode
+            
+            // entity.ecdetail.ecdistinction
+            new TranslationSeedItem("entity.ecdetail.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
+            // entity.ecdetail.ecdistinction
+            new TranslationSeedItem("entity.ecdetail.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
+            // entity.ecdetail.ecdistinction
+            new TranslationSeedItem("entity.ecdetail.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
+            // entity.ecdetail.ecdistinction
+            new TranslationSeedItem("entity.ecdetail.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
+// entity.ecdetail.ecoldmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecoldmaterialcode", "en-US", "旧物料编码_us", "旧物料编码"),
             // entity.ecdetail.ecoldmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecoldmaterialcode", "ja-JP", "旧物料编码_jp", "旧物料编码"),
@@ -378,86 +387,86 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdetail.isobsolete
             new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
 
-            // entity.ecdetail.ecgijutsu
-            new TranslationSeedItem("entity.ecdetail.ecgijutsu", "en-US", "设变技术课主表_us", "设变技术课主表（多对一）"),
-            // entity.ecdetail.ecgijutsu
-            new TranslationSeedItem("entity.ecdetail.ecgijutsu", "ja-JP", "设变技术课主表_jp", "设变技术课主表（多对一）"),
-            // entity.ecdetail.ecgijutsu
-            new TranslationSeedItem("entity.ecdetail.ecgijutsu", "zh-CN", "设变技术课主表", "设变技术课主表（多对一）"),
-            // entity.ecdetail.ecgijutsu
-            new TranslationSeedItem("entity.ecdetail.ecgijutsu", "zh-HK", "设变技术课主表_hk", "设变技术课主表（多对一）"),
+            // entity.ecdetail.ecseikans
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "en-US", "生管执行行列表_us", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseikans
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "ja-JP", "生管执行行列表_jp", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseikans
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-CN", "生管执行行列表", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseikans
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-HK", "生管执行行列表_hk", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecseikan
-            new TranslationSeedItem("entity.ecdetail.ecseikan", "en-US", "生管课执行行_us", "生管课执行行（TaktEcSeikan，每明细一行）"),
-            // entity.ecdetail.ecseikan
-            new TranslationSeedItem("entity.ecdetail.ecseikan", "ja-JP", "生管课执行行_jp", "生管课执行行（TaktEcSeikan，每明细一行）"),
-            // entity.ecdetail.ecseikan
-            new TranslationSeedItem("entity.ecdetail.ecseikan", "zh-CN", "生管课执行行", "生管课执行行（TaktEcSeikan，每明细一行）"),
-            // entity.ecdetail.ecseikan
-            new TranslationSeedItem("entity.ecdetail.ecseikan", "zh-HK", "生管课执行行_hk", "生管课执行行（TaktEcSeikan，每明细一行）"),
+            // entity.ecdetail.eckoubais
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "en-US", "采购执行行列表_us", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.eckoubais
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "ja-JP", "采购执行行列表_jp", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.eckoubais
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-CN", "采购执行行列表", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.eckoubais
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-HK", "采购执行行列表_hk", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.eckoubai
-            new TranslationSeedItem("entity.ecdetail.eckoubai", "en-US", "采购课执行行_us", "采购课执行行（TaktEcKoubai，每明细一行）"),
-            // entity.ecdetail.eckoubai
-            new TranslationSeedItem("entity.ecdetail.eckoubai", "ja-JP", "采购课执行行_jp", "采购课执行行（TaktEcKoubai，每明细一行）"),
-            // entity.ecdetail.eckoubai
-            new TranslationSeedItem("entity.ecdetail.eckoubai", "zh-CN", "采购课执行行", "采购课执行行（TaktEcKoubai，每明细一行）"),
-            // entity.ecdetail.eckoubai
-            new TranslationSeedItem("entity.ecdetail.eckoubai", "zh-HK", "采购课执行行_hk", "采购课执行行（TaktEcKoubai，每明细一行）"),
+            // entity.ecdetail.ecukekens
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "en-US", "受检执行行列表_us", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecukekens
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "ja-JP", "受检执行行列表_jp", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecukekens
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-CN", "受检执行行列表", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecukekens
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-HK", "受检执行行列表_hk", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecukeken
-            new TranslationSeedItem("entity.ecdetail.ecukeken", "en-US", "受检课执行行_us", "受检课执行行（TaktEcUkeken，每明细一行）"),
-            // entity.ecdetail.ecukeken
-            new TranslationSeedItem("entity.ecdetail.ecukeken", "ja-JP", "受检课执行行_jp", "受检课执行行（TaktEcUkeken，每明细一行）"),
-            // entity.ecdetail.ecukeken
-            new TranslationSeedItem("entity.ecdetail.ecukeken", "zh-CN", "受检课执行行", "受检课执行行（TaktEcUkeken，每明细一行）"),
-            // entity.ecdetail.ecukeken
-            new TranslationSeedItem("entity.ecdetail.ecukeken", "zh-HK", "受检课执行行_hk", "受检课执行行（TaktEcUkeken，每明细一行）"),
+            // entity.ecdetail.ecbukans
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "en-US", "部管执行行列表_us", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecbukans
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "ja-JP", "部管执行行列表_jp", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecbukans
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-CN", "部管执行行列表", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecbukans
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-HK", "部管执行行列表_hk", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecbukan
-            new TranslationSeedItem("entity.ecdetail.ecbukan", "en-US", "部管课执行行_us", "部管课执行行（TaktEcBukan，每明细一行）"),
-            // entity.ecdetail.ecbukan
-            new TranslationSeedItem("entity.ecdetail.ecbukan", "ja-JP", "部管课执行行_jp", "部管课执行行（TaktEcBukan，每明细一行）"),
-            // entity.ecdetail.ecbukan
-            new TranslationSeedItem("entity.ecdetail.ecbukan", "zh-CN", "部管课执行行", "部管课执行行（TaktEcBukan，每明细一行）"),
-            // entity.ecdetail.ecbukan
-            new TranslationSeedItem("entity.ecdetail.ecbukan", "zh-HK", "部管课执行行_hk", "部管课执行行（TaktEcBukan，每明细一行）"),
+            // entity.ecdetail.ecseizounikas
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "en-US", "制二执行行列表_us", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizounikas
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "ja-JP", "制二执行行列表_jp", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizounikas
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-CN", "制二执行行列表", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizounikas
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-HK", "制二执行行列表_hk", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecseizounika
-            new TranslationSeedItem("entity.ecdetail.ecseizounika", "en-US", "制二课执行行_us", "制二课执行行（TaktEcSeizounika，每明细一行）"),
-            // entity.ecdetail.ecseizounika
-            new TranslationSeedItem("entity.ecdetail.ecseizounika", "ja-JP", "制二课执行行_jp", "制二课执行行（TaktEcSeizounika，每明细一行）"),
-            // entity.ecdetail.ecseizounika
-            new TranslationSeedItem("entity.ecdetail.ecseizounika", "zh-CN", "制二课执行行", "制二课执行行（TaktEcSeizounika，每明细一行）"),
-            // entity.ecdetail.ecseizounika
-            new TranslationSeedItem("entity.ecdetail.ecseizounika", "zh-HK", "制二课执行行_hk", "制二课执行行（TaktEcSeizounika，每明细一行）"),
+            // entity.ecdetail.ecsmts
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "en-US", "SMT执行行列表_us", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecsmts
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "ja-JP", "SMT执行行列表_jp", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecsmts
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-CN", "SMT执行行列表", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecsmts
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-HK", "SMT执行行列表_hk", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecseizouikka
-            new TranslationSeedItem("entity.ecdetail.ecseizouikka", "en-US", "制一课执行行_us", "制一课执行行（TaktEcSeizouikka，每明细一行）"),
-            // entity.ecdetail.ecseizouikka
-            new TranslationSeedItem("entity.ecdetail.ecseizouikka", "ja-JP", "制一课执行行_jp", "制一课执行行（TaktEcSeizouikka，每明细一行）"),
-            // entity.ecdetail.ecseizouikka
-            new TranslationSeedItem("entity.ecdetail.ecseizouikka", "zh-CN", "制一课执行行", "制一课执行行（TaktEcSeizouikka，每明细一行）"),
-            // entity.ecdetail.ecseizouikka
-            new TranslationSeedItem("entity.ecdetail.ecseizouikka", "zh-HK", "制一课执行行_hk", "制一课执行行（TaktEcSeizouikka，每明细一行）"),
+            // entity.ecdetail.ecseizouikkas
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "en-US", "制一执行行列表_us", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizouikkas
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "ja-JP", "制一执行行列表_jp", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizouikkas
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-CN", "制一执行行列表", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizouikkas
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-HK", "制一执行行列表_hk", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.echinkan
-            new TranslationSeedItem("entity.ecdetail.echinkan", "en-US", "品管课执行行_us", "品管课执行行（TaktEcHinkan，每明细一行）"),
-            // entity.ecdetail.echinkan
-            new TranslationSeedItem("entity.ecdetail.echinkan", "ja-JP", "品管课执行行_jp", "品管课执行行（TaktEcHinkan，每明细一行）"),
-            // entity.ecdetail.echinkan
-            new TranslationSeedItem("entity.ecdetail.echinkan", "zh-CN", "品管课执行行", "品管课执行行（TaktEcHinkan，每明细一行）"),
-            // entity.ecdetail.echinkan
-            new TranslationSeedItem("entity.ecdetail.echinkan", "zh-HK", "品管课执行行_hk", "品管课执行行（TaktEcHinkan，每明细一行）"),
+            // entity.ecdetail.echinkans
+            new TranslationSeedItem("entity.ecdetail.echinkans", "en-US", "品管执行行列表_us", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.echinkans
+            new TranslationSeedItem("entity.ecdetail.echinkans", "ja-JP", "品管执行行列表_jp", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.echinkans
+            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-CN", "品管执行行列表", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.echinkans
+            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-HK", "品管执行行列表_hk", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
 
-            // entity.ecdetail.ecseizougijutsu
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsu", "en-US", "制技课执行行_us", "制技课执行行（TaktEcSeizougijutsu，每明细一行）"),
-            // entity.ecdetail.ecseizougijutsu
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsu", "ja-JP", "制技课执行行_jp", "制技课执行行（TaktEcSeizougijutsu，每明细一行）"),
-            // entity.ecdetail.ecseizougijutsu
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsu", "zh-CN", "制技课执行行", "制技课执行行（TaktEcSeizougijutsu，每明细一行）"),
-            // entity.ecdetail.ecseizougijutsu
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsu", "zh-HK", "制技课执行行_hk", "制技课执行行（TaktEcSeizougijutsu，每明细一行）"),
+            // entity.ecdetail.ecseizougijutsus
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "en-US", "制技执行行列表_us", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizougijutsus
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "ja-JP", "制技执行行列表_jp", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizougijutsus
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-CN", "制技执行行列表", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            // entity.ecdetail.ecseizougijutsus
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-HK", "制技执行行列表_hk", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
         };
     }
 

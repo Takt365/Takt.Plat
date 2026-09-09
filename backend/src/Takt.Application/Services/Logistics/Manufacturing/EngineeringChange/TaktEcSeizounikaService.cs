@@ -17,11 +17,11 @@ using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Constants;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -94,14 +94,18 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
         {
             return null;
         }
-        return entity.Adapt<TaktEcSeizounikaDto>();
+        var dto = entity.Adapt<TaktEcSeizounikaDto>();
+        await _ecExecPersistence.FillExecViewDetailsAsync(entity, dto);
+        return dto;
     }
 
     /// <summary>
     /// 获取设变制二执行选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcSeizounikaOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcSeizounikaOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ecSeizounikaRepository.GetListAsync(
@@ -126,17 +130,18 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
         entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique = await _uniqueValidator.IsUniqueAsync(
             _ecSeizounikaRepository,
-            x => x.EcnDetailId == entity.EcnDetailId);
+            x => x.EcDetailId == entity.EcDetailId
+                && x.EcFinishedGoods == entity.EcFinishedGoods);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique)
         {
-            throw new TaktBusinessException("设变制二执行的EcnDetailId已存在");
+            throw new TaktBusinessException("设变制二执行的EcDetailId、EcFinishedGoods已存在");
         }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _ecSeizounikaRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == entity.EcDetailId,
                 x => x.LineNumber);
-            var businessCode = entity.EcnDetailId.ToString();
+            var businessCode = entity.EcDetailId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecSeizounikaRepository.CreateAsync(entity);
@@ -145,7 +150,7 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
     }
 
     /// <summary>
-    /// 更新设变制二执行
+    /// 更新设变制二执行（同设变单号+机种+完成品的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变制二执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -160,19 +165,16 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique = await _uniqueValidator.IsUniqueAsync(
             _ecSeizounikaRepository,
-            x => x.EcnDetailId == entity.EcnDetailId,
+            x => x.EcDetailId == entity.EcDetailId
+                && x.EcFinishedGoods == entity.EcFinishedGoods,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique)
         {
-            throw new TaktBusinessException("设变制二执行的EcnDetailId已存在");
+            throw new TaktBusinessException("设变制二执行的EcDetailId、EcFinishedGoods已存在");
         }
         await _ecSeizounikaRepository.UpdateAsync(entity);
-        await _ecExecPersistence.FanOutSeizounikaFillableByEcAndParentMaterialAsync(entity);
+        await _ecExecPersistence.FanOutSeizounikaFillableByEcModelAndFinishedGoodsAsync(entity);
         await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
-        await _ecExecPersistence.TryCascadeAfterGateDeptCompletedByDetailIdAsync(
-            entity.EcnDetailId,
-            TaktEcDeptCodes.Pcba,
-            entity);
         return await GetEcSeizounikaByIdAsync(id) ?? throw new TaktBusinessException("设变制二执行不存在");
     }
 
@@ -220,7 +222,30 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
     }
 
     /// <summary>
-    /// 更新设变制二执行作废状态
+    /// 更新设变制造二课执行停产状态（同步明细并自动填充/清除执行内容）
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcSeizounikaDto> UpdateEcSeizounikaDiscontinuedStatusAsync(TaktEcSeizounikaDiscontinuedStatusDto dto)
+    {
+        var entity = await _ecSeizounikaRepository.GetByIdAsync(dto.EcSeizounikaId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变制造二课执行不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变制造二课执行不存在");
+        }
+        var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
+            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            : dto.DiscontinuedStatus.Trim();
+        await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
+        return await GetEcSeizounikaByIdAsync(dto.EcSeizounikaId) ?? throw new TaktBusinessException("设变制造二课执行不存在");
+    }
+
+    /// <summary>
+    /// 更新设变制造二课执行作废状态
     /// </summary>
     /// <param name="dto">作废DTO</param>
     /// <returns>DTO</returns>
@@ -277,24 +302,25 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
             try
             {
                 var entity = rows[i].Adapt<TaktEcSeizounika>();
-                var importKey = $"{entity.EcnDetailId}";
+                var importKey = $"{entity.EcDetailId}|{entity.EcFinishedGoods}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcnDetailId）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcFinishedGoods）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecSeizounikaRepository,
-                    x => x.EcnDetailId == entity.EcnDetailId);
+                    x => x.EcDetailId == entity.EcDetailId
+                        && x.EcFinishedGoods == entity.EcFinishedGoods);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_seizounika_unique)
                 {
-                    throw new TaktBusinessException("设变制二执行的EcnDetailId已存在");
+                    throw new TaktBusinessException("设变制二执行的EcDetailId、EcFinishedGoods已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _ecSeizounikaRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == entity.EcDetailId,
                         x => x.LineNumber);
-                    var businessCode = entity.EcnDetailId.ToString();
+                    var businessCode = entity.EcDetailId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecSeizounikaRepository.CreateAsync(entity);
@@ -356,32 +382,23 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
         {
             exp = exp.And(x => x.IsObsolete == 0);
         }
-
-        if (queryDto?.PcbaTab.HasValue == true)
-        {
-            if (queryDto.PcbaTab == TaktEcSeizounikaConstants.ListTabOther)
-            {
-                exp = exp.And(TaktEcSeizounikaQueryHelper.VisibleOtherExecExpression());
-            }
-            else
-            {
-                exp = exp.And(TaktEcSeizounikaQueryHelper.VisibleC003ExecExpression());
-            }
-        }
+        exp = exp.And(TaktEcSeizounikaQueryHelper.VisibleExecExpression());
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EcnDetailId).Contains(keywords)
+                SqlFunc.ToString(x.EcDetailId).Contains(keywords)
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || SqlFunc.ToString(x.IsImplemented).Contains(keywords)
                 || (x.ExecContent != null && x.ExecContent.Contains(keywords))
-                || (x.ProductionBatch != null && x.ProductionBatch.Contains(keywords))
                 || (x.ProductionTeam != null && x.ProductionTeam.Contains(keywords))
-                || (x.OutboundOrderCode != null && x.OutboundOrderCode.Contains(keywords))
+                || (x.ImplementationBatch != null && x.ImplementationBatch.Contains(keywords))
+                || (x.EcParentMaterialCode != null && x.EcParentMaterialCode.Contains(keywords))
+                || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
+                || (x.EcFinishedGoods != null && x.EcFinishedGoods.Contains(keywords))
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -390,9 +407,9 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
             );
         }
 
-        if (queryDto?.EcnDetailId.HasValue == true)
+        if (queryDto?.EcDetailId.HasValue == true)
         {
-            exp = exp.And(x => x.EcnDetailId == queryDto.EcnDetailId);
+            exp = exp.And(x => x.EcDetailId == queryDto.EcDetailId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EcCode))
@@ -420,19 +437,14 @@ public class TaktEcSeizounikaService : TaktServiceBase, ITaktEcSeizounikaService
             exp = exp.And(x => x.ExecContent != null && x.ExecContent.Contains(queryDto.ExecContent));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionBatch))
-        {
-            exp = exp.And(x => x.ProductionBatch != null && x.ProductionBatch.Contains(queryDto.ProductionBatch));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.ProductionTeam))
         {
             exp = exp.And(x => x.ProductionTeam != null && x.ProductionTeam.Contains(queryDto.ProductionTeam));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundOrderCode))
+        if (!string.IsNullOrEmpty(queryDto?.ImplementationBatch))
         {
-            exp = exp.And(x => x.OutboundOrderCode != null && x.OutboundOrderCode.Contains(queryDto.OutboundOrderCode));
+            exp = exp.And(x => x.ImplementationBatch != null && x.ImplementationBatch.Contains(queryDto.ImplementationBatch));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CultureCode))

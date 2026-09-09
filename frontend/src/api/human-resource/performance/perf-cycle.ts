@@ -130,10 +130,20 @@ export function updatePerfCycleStatus(dto: PerfCycleStatus): Promise<PerfCycle> 
  * 获取绩效周期日程选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPerfCycleOptions(): Promise<TaktSelectOption[]> {
+export function getPerfCycleOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PERF_CYCLE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

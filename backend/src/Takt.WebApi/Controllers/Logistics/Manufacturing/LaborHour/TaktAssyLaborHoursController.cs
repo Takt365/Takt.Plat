@@ -86,11 +86,11 @@ public class TaktAssyLaborHoursController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:labor:hour:assy:query", "组立工数统计选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetAssyLaborHourOptionsAsync()
+    public async Task<IActionResult> GetAssyLaborHourOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _assyLaborHourService.GetAssyLaborHourOptionsAsync();
+            var result = await _assyLaborHourService.GetAssyLaborHourOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

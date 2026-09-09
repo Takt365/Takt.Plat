@@ -86,11 +86,11 @@ public class TaktProductionPlansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mrp:production:plan:query", "生产计划选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionPlanOptionsAsync()
+    public async Task<IActionResult> GetProductionPlanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _productionPlanService.GetProductionPlanOptionsAsync();
+            var result = await _productionPlanService.GetProductionPlanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

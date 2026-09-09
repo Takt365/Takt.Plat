@@ -198,15 +198,13 @@ public class TaktLoggingMiddleware
             return null;
         }
 
+        // 超大 Body（如设变 10 万+ 明细）禁止读入操作日志，也不触碰 Body（避免与 Kestrel 限流交互）
         if (request.ContentLength > MaxOperLogBodyBytes)
         {
-            request.EnableBuffering(MaxOperLogBodyBytes);
-        }
-        else
-        {
-            request.EnableBuffering();
+            return $"(body omitted, ContentLength={request.ContentLength})";
         }
 
+        request.EnableBuffering();
         request.Body.Position = 0;
         var buffer = new char[MaxOperLogBodyBytes];
         using var reader = new StreamReader(
@@ -222,13 +220,7 @@ public class TaktLoggingMiddleware
             return null;
         }
 
-        var body = new string(buffer, 0, readCount);
-        if (request.ContentLength > MaxOperLogBodyBytes)
-        {
-            body += "…[truncated]";
-        }
-
-        return body;
+        return new string(buffer, 0, readCount);
     }
 
     /// <summary>

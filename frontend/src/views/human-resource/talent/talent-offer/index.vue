@@ -85,7 +85,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -357,6 +357,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import TalentOfferForm from './components/talent-offer-form.vue'
 import { getTalentOfferList, getTalentOfferById, createTalentOffer, updateTalentOffer, deleteTalentOfferById, deleteTalentOfferBatch, getTalentOfferTemplate, importTalentOffer, exportTalentOffer } from '@/api/human-resource/talent/talent-offer'
 import type { TalentOffer, TalentOfferQuery, TalentOfferCreate, TalentOfferUpdate } from '@/types/human-resource/talent/talent-offer'
@@ -385,6 +386,8 @@ const formTitle = ref('')
 const formData = ref<Partial<TalentOffer>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   jobPostingId: '',

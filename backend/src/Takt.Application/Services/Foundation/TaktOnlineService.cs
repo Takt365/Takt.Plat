@@ -99,8 +99,10 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     /// <summary>
     /// 获取在线用户选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetOnlineOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetOnlineOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _onlineRepository.GetListAsync(
@@ -452,7 +454,7 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
     }
 
     /// <summary>
-    /// 获取在线看板统计（公司维度：在线人数、当日总访问量、当前会话）
+    /// 获取在线看板统计（公司维度：在线人数、当日总访问量）
     /// </summary>
     /// <returns>看板统计 DTO</returns>
     public async Task<TaktOnlineDashboardStatisticsDto> GetOnlineDashboardStatisticsAsync()
@@ -474,7 +476,6 @@ public class TaktOnlineService : TaktServiceBase, ITaktOnlineService
         {
             OnlineUserCount = onlineUserCount,
             TodayVisitCount = todayVisitCount,
-            ActiveSessionCount = onlineUserCount,
         };
     }
 

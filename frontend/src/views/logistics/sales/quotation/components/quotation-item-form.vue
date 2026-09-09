@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -154,7 +154,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -209,6 +209,102 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('pricingDate')"
+                name="pricingDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.pricingDate"
+                  :placeholder="pi.ph('pricingDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('grossWeight')"
+                name="grossWeight"
+              >
+                <a-input-number
+                  v-model:value="formState.grossWeight"
+                  :placeholder="pi.ph('grossWeight')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('netWeight')"
+                name="netWeight"
+              >
+                <a-input-number
+                  v-model:value="formState.netWeight"
+                  :placeholder="pi.ph('netWeight')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('weightUnit')"
+                name="weightUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.weightUnit"
+                  dict-type="logistics_materials_unit_of_measure_code"
+                  :placeholder="pi.ph('weightUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('volume')"
+                name="volume"
+              >
+                <a-input-number
+                  v-model:value="formState.volume"
+                  :placeholder="pi.ph('volume')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('volumeUnit')"
+                name="volumeUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.volumeUnit"
+                  dict-type="logistics_materials_unit_of_measure_code"
+                  :placeholder="pi.ph('volumeUnit')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('profitCenterCode')"
+                name="profitCenterCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.profitCenterCode"
+                  api-url="TaktProfitCenters/options"
+                  :placeholder="pi.ph('profitCenterCode')"
+                  :disabled="!!formData?.salesQuotationItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('isObsolete')"
                 name="isObsolete"
               >
@@ -223,8 +319,8 @@
         </div>
       </a-tab-pane>
       <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -317,7 +413,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","materialCode","salesUnit","quotationQuantity","salesPerUnit","quotationUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","quotationAmount","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","materialCode","salesUnit","quotationQuantity","salesPerUnit","quotationUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","quotationAmount","pricingDate","grossWeight","netWeight","weightUnit","volume","volumeUnit","profitCenterCode","isObsolete"]
 
 
 
@@ -361,6 +457,8 @@ const dictDataStore = useDictDataStore()
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
+
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesQuotationItemId 才视为编辑） */
 watch(
@@ -666,6 +764,36 @@ function getValues(): Record<string, any> {
       else delete payload.quotationAmount
     }
   }
+  if ('grossWeight' in payload) {
+    const rawgrossWeight = payload.grossWeight
+    if (rawgrossWeight === undefined || rawgrossWeight === null || rawgrossWeight === '') {
+      delete payload.grossWeight
+    } else {
+      const numgrossWeight = typeof rawgrossWeight === 'number' ? rawgrossWeight : Number(rawgrossWeight)
+      if (Number.isFinite(numgrossWeight)) payload.grossWeight = numgrossWeight
+      else delete payload.grossWeight
+    }
+  }
+  if ('netWeight' in payload) {
+    const rawnetWeight = payload.netWeight
+    if (rawnetWeight === undefined || rawnetWeight === null || rawnetWeight === '') {
+      delete payload.netWeight
+    } else {
+      const numnetWeight = typeof rawnetWeight === 'number' ? rawnetWeight : Number(rawnetWeight)
+      if (Number.isFinite(numnetWeight)) payload.netWeight = numnetWeight
+      else delete payload.netWeight
+    }
+  }
+  if ('volume' in payload) {
+    const rawvolume = payload.volume
+    if (rawvolume === undefined || rawvolume === null || rawvolume === '') {
+      delete payload.volume
+    } else {
+      const numvolume = typeof rawvolume === 'number' ? rawvolume : Number(rawvolume)
+      if (Number.isFinite(numvolume)) payload.volume = numvolume
+      else delete payload.volume
+    }
+  }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete
     if (rawisObsolete === undefined || rawisObsolete === null || rawisObsolete === '') {
@@ -682,8 +810,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.salesQuotationItemId) {
     payload.salesQuotationItemId = props.formData.salesQuotationItemId
+    delete payload.numberingRuleCode
   }
   payload.salesQuotationId = props.masterId
   // 主表冗余码/名：左侧选中行回填（后端 Stamp 仍按主表 FK 兜底；不限人事）

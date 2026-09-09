@@ -1,32 +1,33 @@
-﻿<!-- ======================================== -->
+<!-- ======================================== -->
 <!-- 项目名称：节拍工厂·Takt Plat -->
 <!-- 命名空间：frontend/src/views/dashboard/data-board/modules -->
 <!-- 文件名称：StatsChangeModule.vue -->
-<!-- 功能描述：数据看板设变统计（TaktEc 主表数量 + TaktEcExec/Kanban 实施） -->
+<!-- 功能描述：数据看板设变统计（设变摘要 + 未实施/实施中/已实施） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="min-h-[80px]">
-    <a-spin :spinning="loading">
-      <p class="mb-2 text-xs text-text-secondary">
-        {{ t('dashboard.data-board.page.periodmonth') }}
-      </p>
-      <p class="mb-4 text-base font-medium leading-relaxed text-text">
-        {{ ecSummaryLine }}
-      </p>
-      <StatsMetricGrid
-        :loading="false"
-        :items="metricItems"
-      />
-    </a-spin>
+    <p class="mb-3 text-base font-medium leading-relaxed text-text">
+      {{ ecSummaryLine }}
+    </p>
+    <StatsMetricGrid
+      card-variant="dashboard-compact"
+      :loading="loading"
+      :period-label="t('dashboard.data-board.page.periodmonth')"
+      :items="metricItems"
+      :col-xs="12"
+      :col-sm="12"
+      :col-md="8"
+      :col-lg="8"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * 设变统计：TaktEcGijutsus/stat 主表+子表数量；TaktEcKanbans 部门行 + 实施路径
+ * 设变统计：TaktEcGijutsus/stat 当月摘要；Kanban 实施中；部门行未实施/已实施
  */
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -34,6 +35,7 @@ import StatsMetricGrid from '../components/stats-metric-grid.vue'
 import { usePermissionStore } from '@/stores/identity/permission'
 import { TaktEcImplementationStatus } from '@/constants/logistics/ec-implementation-status'
 import type { EcGijutsuStat } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
+import { enrichDashboardMetricItems } from '../utils/stats-metric-dashboard'
 import {
   DASHBOARD_STATS_API,
   DASHBOARD_STATS_PERMISSION,
@@ -64,13 +66,11 @@ const permissionStore = usePermissionStore()
 const loading = ref(false)
 /** 设变主表统计 */
 const ecStat = ref<EcGijutsuStat>({ ...EMPTY_EC_STAT })
-/** 设变部门实施统计 */
+/** 设变实施统计（未实施 / 实施中 / 已实施） */
 const changeData = ref({
-  total: 0,
   notImplemented: 0,
-  implemented: 0,
   inProgressEc: 0,
-  notOfficiallyCompletedEc: 0,
+  implemented: 0,
 })
 
 /** 当月设变摘要行，如「当月设变1（18）」 */
@@ -81,13 +81,14 @@ const ecSummaryLine = computed(() =>
   }),
 )
 
-/** a-statistic 指标 */
-const metricItems = computed(() => [
-  { key: 'total', title: t('dashboard.data-board.page.change.total'), value: changeData.value.total },
-  { key: 'notimplemented', title: t('dashboard.data-board.page.change.notimplemented'), value: changeData.value.notImplemented },
-  { key: 'implemented', title: t('dashboard.data-board.page.change.implemented'), value: changeData.value.implemented },
-  { key: 'inprogress', title: t('dashboard.data-board.page.change.inprogressec'), value: changeData.value.inProgressEc },
-  { key: 'notofficial', title: t('dashboard.data-board.page.change.notofficiallycompleted'), value: changeData.value.notOfficiallyCompletedEc }])
+/** dashboard KPI：未实施、实施中、已实施 */
+const metricItems = computed(() =>
+  enrichDashboardMetricItems([
+    { key: 'notimplemented', title: t('dashboard.data-board.page.change.notimplemented'), value: changeData.value.notImplemented },
+    { key: 'inprogress', title: t('dashboard.data-board.page.change.inprogress'), value: changeData.value.inProgressEc },
+    { key: 'implemented', title: t('dashboard.data-board.page.change.implemented'), value: changeData.value.implemented },
+  ]),
+)
 
 /**
  * 加载设变主表统计（当月录入日期范围）
@@ -103,7 +104,7 @@ async function loadEcGijutsuStat(): Promise<EcGijutsuStat> {
 }
 
 /**
- * 加载设变部门实施统计
+ * 加载设变统计（摘要 + 三项 KPI）
  * @returns {Promise<void>}
  */
 async function loadData(): Promise<void> {
@@ -112,7 +113,7 @@ async function loadData(): Promise<void> {
   const canListKanban = permissionStore.hasPermission(DASHBOARD_STATS_PERMISSION.ecKanbanList)
   loading.value = true
   try {
-    const [stat, total, notImplemented, implemented, inProgressEc, notOfficiallyCompletedEc] = await Promise.all([
+    const [stat, notImplemented, inProgressEc, implemented] = await Promise.all([
       fetchDashboardMetricIfPermitted(
         canListEc,
         'ecStat',
@@ -121,20 +122,8 @@ async function loadData(): Promise<void> {
       ),
       fetchDashboardMetricIfPermitted(
         canListDept,
-        'ecDeptTotal',
-        () => fetchDashboardDeptExecutionCount(),
-        0,
-      ),
-      fetchDashboardMetricIfPermitted(
-        canListDept,
         'ecDeptNotImplemented',
         () => fetchDashboardDeptExecutionCount(EC_DEPT_NOT_IMPLEMENTED),
-        0,
-      ),
-      fetchDashboardMetricIfPermitted(
-        canListDept,
-        'ecDeptImplemented',
-        () => fetchDashboardDeptExecutionCount(EC_DEPT_IMPLEMENTED),
         0,
       ),
       fetchDashboardMetricIfPermitted(
@@ -146,13 +135,14 @@ async function loadData(): Promise<void> {
         0,
       ),
       fetchDashboardMetricIfPermitted(
-        canListKanban,
-        'ecKanbanNotOfficial',
-        () => fetchDashboardPagedTotal(DASHBOARD_STATS_API.ecKanbanList, { onlyNotOfficiallyCompleted: 1 }),
+        canListDept,
+        'ecDeptImplemented',
+        () => fetchDashboardDeptExecutionCount(EC_DEPT_IMPLEMENTED),
         0,
-      )])
+      ),
+    ])
     ecStat.value = stat
-    changeData.value = { total, notImplemented, implemented, inProgressEc, notOfficiallyCompletedEc }
+    changeData.value = { notImplemented, inProgressEc, implemented }
   } finally {
     loading.value = false
   }

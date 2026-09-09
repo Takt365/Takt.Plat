@@ -1,8 +1,30 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 DECLARE @now DATETIME = GETDATE();
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @desc_updated INT = 0;
 
 -- =============================================================================
@@ -75,7 +97,10 @@ WHERE rn = 1
   AND EXISTS (SELECT 1 FROM #mat_key k WHERE k.[mat_key] = src.[mat_key]);
 
 -- ---------- 仅 UPDATE 主表空 material_description（无其它业务列） ----------
-UPDATE t
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) t
 SET
   t.[material_description] = m.[material_description],
   t.[ext_field] = LEFT(x.[new_ext], 4000),
@@ -123,8 +148,25 @@ WHERE t.[tenant_code] = @tenant_code
   AND LTRIM(RTRIM(ISNULL(t.[material_code], N''))) <> N''
   -- 仅空：禁止覆盖已有 material_description
   AND (t.[material_description] IS NULL OR LTRIM(RTRIM(t.[material_description])) = N'');
-
-SET @desc_updated = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @desc_updated = @desc_updated + @dml_n;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    CASE WHEN @desc_updated - @dml_n + 1 < 1 THEN 0 ELSE @desc_updated - @dml_n + 1 END AS [from_rn],
+    @desc_updated AS [to_rn],
+    @desc_updated AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((CASE WHEN @desc_updated - @dml_n + 1 < 1 THEN 0 ELSE @desc_updated - @dml_n + 1 END) AS NVARCHAR(20)), N'|',
+    CAST((@desc_updated) AS NVARCHAR(20)), N'|',
+    CAST((@desc_updated) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+END
 
 DROP TABLE #mat_key;
 DROP TABLE #mat_desc_ja;

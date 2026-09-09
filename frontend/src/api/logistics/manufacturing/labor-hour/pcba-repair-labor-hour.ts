@@ -116,10 +116,20 @@ export function deletePcbaRepairLaborHourBatch(ids: string[]): Promise<void> {
  * 获取PCBA改修工数统计选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPcbaRepairLaborHourOptions(): Promise<TaktSelectOption[]> {
+export function getPcbaRepairLaborHourOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PCBA_REPAIR_LABOR_HOUR_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

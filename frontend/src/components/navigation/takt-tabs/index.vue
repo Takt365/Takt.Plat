@@ -17,7 +17,7 @@
     <div class="tabs-wrapper">
       <a-tabs
         v-model:active-key="activeKey"
-        :class="['takt-tabs', `tab-style-${settingSafe.tabStyle}`]"
+        :class="['takt-tabs', tabStyleClass]"
         type="editable-card"
         hide-add
         @edit="handleEdit"
@@ -178,8 +178,13 @@ const settingSafe = computed(() => setting.value ?? defaultSetting)
 const { t, locale: i18nLocale } = useI18n()
 const menuStore = useMenuStore()
 
-// 显示标签页：showTabs 或 multiTab 任一为 true 时显示
-const show = computed(() => settingSafe.value.showTabs || settingSafe.value.multiTab)
+/** 是否显示标签栏（仅由 showTabs 控制；multiTab 控制是否累积多页签） */
+const show = computed(() => !!settingSafe.value.showTabs)
+/** 标签风格 class（card / google） */
+const tabStyleClass = computed(() => {
+  const style = settingSafe.value.tabStyle === 'card' ? 'card' : 'google'
+  return `tab-style-${style}`
+})
 const activeKey = ref<string>('')
 const tabsList = ref<Tab[]>([])
 const isFullscreen = ref(false)
@@ -312,18 +317,23 @@ const manageTabs = async () => {
   const existingTab = tabsList.value.find(t => t.key === currentPath && t.key !== homePath)
   
   if (!existingTab && currentPath !== homePath) {
-    // 如果标签数量达到上限，移除最后一个标签（但保留首页）
-    const maxTabsValue = props.maxTabs || settingSafe.value.maxTabs || 10
-    if (tabsList.value.length >= maxTabsValue) {
-      const lastTab = tabsList.value[tabsList.value.length - 1]
-      if (lastTab && lastTab.key !== homePath) {
-        tabsList.value.pop()
-      } else {
-        // 如果最后一个是首页，移除倒数第二个
-        tabsList.value.splice(tabsList.value.length - 2, 1)
+    // 未启用多页签：只保留首页 + 当前页（替换非首页标签）
+    if (!settingSafe.value.multiTab) {
+      tabsList.value = tabsList.value.filter((t) => t.key === homePath)
+    } else {
+      // 如果标签数量达到上限，移除最后一个标签（但保留首页）
+      const maxTabsValue = props.maxTabs || settingSafe.value.maxTabs || 10
+      if (tabsList.value.length >= maxTabsValue) {
+        const lastTab = tabsList.value[tabsList.value.length - 1]
+        if (lastTab && lastTab.key !== homePath) {
+          tabsList.value.pop()
+        } else {
+          // 如果最后一个是首页，移除倒数第二个
+          tabsList.value.splice(tabsList.value.length - 2, 1)
+        }
       }
     }
-    
+
     // 添加新标签（在首页之后）
     tabsList.value.push({
       key: currentPath,
@@ -391,7 +401,7 @@ const saveTabsToStorage = () => {
       path: tab.path,
       closable: tab.closable
     }))
-    localStorage.setItem('takt-tabs', JSON.stringify({
+    localStorage.setItem(TAKT_TABS_STORAGE_KEY, JSON.stringify({
       tabs: tabsData,
       activeKey: activeKey.value
     }))
@@ -401,7 +411,7 @@ const saveTabsToStorage = () => {
 // 从 localStorage 恢复标签页
 const loadTabsFromStorage = () => {
   if (settingSafe.value.persistTabs) {
-    const stored = localStorage.getItem('takt-tabs')
+    const stored = localStorage.getItem(TAKT_TABS_STORAGE_KEY)
     if (stored) {
       try {
         const data = JSON.parse(stored)
@@ -480,7 +490,7 @@ watch(() => i18nLocale.value, async (newLocale, oldLocale) => {
 // 监听设置变化，如果关闭持久化则清除存储
 watch(() => settingSafe.value.persistTabs, (enabled) => {
   if (!enabled) {
-    localStorage.removeItem('takt-tabs')
+    localStorage.removeItem(TAKT_TABS_STORAGE_KEY)
   } else {
     saveTabsToStorage()
   }
@@ -692,26 +702,6 @@ onUnmounted(() => {
   transition: border-bottom-color 0.25s ease, background-color 0.25s ease;
 }
 
-/* 朴素/卡片/谷歌共用同一容器背景，仅底部分隔线不同，避免谷歌→朴素时整条变白出现白边 */
-[data-doc-theme='light'] .takt-tabs-container {
-  background: #f5f5f5;
-  border-bottom: 1px solid #d9d9d9;
-}
-
-[data-doc-theme='dark'] .takt-tabs-container {
-  background: #1f1f1f;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* 谷歌风格：底边与背景同色，视觉上无分隔线 */
-[data-doc-theme='light'] .takt-tabs-container:has(.takt-tabs.tab-style-google) {
-  border-bottom-color: #f5f5f5;
-}
-
-[data-doc-theme='dark'] .takt-tabs-container:has(.takt-tabs.tab-style-google) {
-  border-bottom-color: #1f1f1f;
-}
-
 .tabs-wrapper {
   flex: 1;
   display: flex;
@@ -724,19 +714,17 @@ onUnmounted(() => {
   flex: 1;
   height: 40px;
 
-  /* 风格切换时 tab 与 nav 过渡统一，避免谷歌→朴素出现白边或闪烁 */
   :deep(.ant-tabs-nav) {
     transition: background-color 0.25s ease;
   }
   :deep(.ant-tabs-tab) {
     transition: background-color 0.25s ease, border-color 0.25s ease, border-radius 0.25s ease, margin 0.25s ease;
   }
-  
+
   :deep(.ant-tabs-content-holder) {
     display: none;
   }
-  
-  /* 标签内图标与文本间隔 4px：用 .tab-icon margin 明确覆盖 Ant Design 对 [iconCls] 的 marginSM，避免 gap 被库样式干扰 */
+
   :deep(.ant-tabs-tab .ant-tabs-tab-btn) {
     .tab-content {
       display: inline-flex;
@@ -749,7 +737,6 @@ onUnmounted(() => {
     }
   }
 
-  /* 标签页风格：卡片（与容器同底色 + 边框，谷歌→卡片时伪元素消失不会白闪） */
   &.tab-style-card {
     :deep(.ant-tabs-nav) {
       background: transparent;
@@ -758,15 +745,12 @@ onUnmounted(() => {
       border-radius: 5px 5px 0 0;
       border-bottom: none;
       margin-right: 4px;
-      transition: background-color 0.25s ease, border-color 0.25s ease, border-radius 0.25s ease, margin 0.25s ease;
     }
   }
 
-  /* 标签页风格：谷歌（box-shadow + clip-path 实现底部反向圆角，参考 Svelte 官网 tab） */
   &.tab-style-google {
     :deep(.ant-tabs-nav) {
       background: transparent;
-      transition: background-color 0.25s ease;
     }
     :deep(.ant-tabs-ink-bar) {
       display: none;
@@ -778,7 +762,6 @@ onUnmounted(() => {
       margin-right: 2px;
       background-color: transparent;
       overflow: visible;
-      transition: background-color 0.25s ease, border-color 0.25s ease, border-radius 0.25s ease, margin 0.25s ease;
 
       &::before,
       &::after {
@@ -803,66 +786,12 @@ onUnmounted(() => {
   }
 }
 
-/* 卡片风格：透明背景 + 边框，与谷歌同底，切换无背景闪烁 */
-[data-doc-theme='light'] .takt-tabs.tab-style-card :deep(.ant-tabs-tab) {
-  border: 1px solid #d9d9d9;
-  background: transparent;
-  &.ant-tabs-tab-active {
-    background: transparent;
-  }
-}
-
-[data-doc-theme='dark'] .takt-tabs.tab-style-card :deep(.ant-tabs-tab) {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: transparent;
-  &.ant-tabs-tab-active {
-    background: transparent;
-  }
-}
-
-/* 谷歌风格：边框与容器同色（视觉无框），与卡片切换时仅 border-color 过渡，无闪烁 */
-[data-doc-theme='light'] .takt-tabs.tab-style-google :deep(.ant-tabs-tab) {
-  border-color: #f5f5f5;
-  &:hover {
-    background-color: #f0f0f0;
-    &::before,
-    &::after {
-      box-shadow: 0 0 0 30px #f0f0f0;
-    }
-  }
-  &.ant-tabs-tab-active {
-    background-color: #fff;
-    &::before,
-    &::after {
-      box-shadow: 0 0 0 30px #fff;
-    }
-  }
-}
-
-[data-doc-theme='dark'] .takt-tabs.tab-style-google :deep(.ant-tabs-tab) {
-  border-color: #1f1f1f;
-  &:hover {
-    background-color: #2a2a2a;
-    &::before,
-    &::after {
-      box-shadow: 0 0 0 30px #2a2a2a;
-    }
-  }
-  &.ant-tabs-tab-active {
-    background-color: #262626;
-    &::before,
-    &::after {
-      box-shadow: 0 0 0 30px #262626;
-    }
-  }
-}
-
 .tabs-extra {
   display: flex;
   align-items: center;
   height: 40px;
   gap: 4px;
-  
+
   .tabs-dropdown-btn,
   .tabs-fullscreen-btn {
     height: 32px;
@@ -872,5 +801,94 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
   }
+}
+</style>
+
+<!-- 非 scoped：须匹配 html[data-theme]，并压过 Ant Design editable-card 默认样式 -->
+<style>
+html[data-theme='light'] .takt-tabs-container {
+  background: #f5f5f5;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+html[data-theme='dark'] .takt-tabs-container {
+  background: #1f1f1f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme='light'] .takt-tabs-container:has(.takt-tabs.tab-style-google) {
+  border-bottom-color: #f5f5f5;
+}
+
+html[data-theme='dark'] .takt-tabs-container:has(.takt-tabs.tab-style-google) {
+  border-bottom-color: #1f1f1f;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-card.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  border: 1px solid #d9d9d9 !important;
+  background: transparent !important;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-card.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background: #fff !important;
+  border-bottom-color: #fff !important;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-card.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: transparent !important;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-card.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background: #141414 !important;
+  border-bottom-color: #141414 !important;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  border-color: #f5f5f5 !important;
+  background: transparent !important;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover {
+  background-color: #f0f0f0 !important;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover::before,
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover::after {
+  box-shadow: 0 0 0 30px #f0f0f0;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background-color: #fff !important;
+  border-color: #fff !important;
+}
+
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active::before,
+html[data-theme='light'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active::after {
+  box-shadow: 0 0 0 30px #fff;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+  border-color: #1f1f1f !important;
+  background: transparent !important;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover {
+  background-color: #2a2a2a !important;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover::before,
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover::after {
+  box-shadow: 0 0 0 30px #2a2a2a;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
+  background-color: #262626 !important;
+  border-color: #262626 !important;
+}
+
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active::before,
+html[data-theme='dark'] .takt-tabs.tab-style-google.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active::after {
+  box-shadow: 0 0 0 30px #262626;
 }
 </style>

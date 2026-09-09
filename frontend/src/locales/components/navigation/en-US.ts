@@ -40,6 +40,7 @@ export default {
       copyright: "Copyright",
       defaultlanguage: "Default Language",
       demoswitch: "Demo Switch",
+      demohint: "When on, the app is view-only: query/export allowed; create, update, delete, and import are blocked",
       enablemultitab: "Enable Multi Tab",
       fixed: "Fixed",
       fixedheader: "Fixed Header",

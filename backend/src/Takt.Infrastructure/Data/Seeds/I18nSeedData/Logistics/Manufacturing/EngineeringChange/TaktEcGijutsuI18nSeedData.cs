@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -170,15 +170,6 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "zh-CN", "录入日期", "录入日期"),
             // entity.ecgijutsu.ecentrydate
             new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "zh-HK", "录入日期_hk", "录入日期"),
-
-            // entity.ecgijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "en-US", "完成品物料状态_us", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecgijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "ja-JP", "完成品物料状态_jp", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecgijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "zh-CN", "完成品物料状态", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecgijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecgijutsu.discontinuedstatus", "zh-HK", "完成品物料状态_hk", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
 
             // entity.ecgijutsu.ecstatus
             new TranslationSeedItem("entity.ecgijutsu.ecstatus", "en-US", "设变状态_us", "设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；由各部门执行表自动回写：任一有输入→2，全部填写→3，否则→1）"),

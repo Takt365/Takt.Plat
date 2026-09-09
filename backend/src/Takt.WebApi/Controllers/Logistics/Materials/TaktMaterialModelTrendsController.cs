@@ -34,11 +34,11 @@ public class TaktMaterialModelTrendsController : TaktControllerBase
 
     [TaktPermission("logistics:materials:material:model:trend:list", "物料机种推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetMaterialModelTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetMaterialModelTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialModelTrendService.GetMaterialModelTrendPlantOptionsAsync();
+            var result = await _materialModelTrendService.GetMaterialModelTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex) { return HandleException(ex); }
@@ -46,12 +46,12 @@ public class TaktMaterialModelTrendsController : TaktControllerBase
 
     [TaktPermission("logistics:materials:material:model:trend:list", "物料机种推移评估类别选项")]
     [HttpGet("valuation-options")]
-    public async Task<IActionResult> GetMaterialModelTrendValuationOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetMaterialModelTrendValuationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(plantCode)) return Success(new List<TaktSelectOption>(), "查询成功");
-            var result = await _materialModelTrendService.GetMaterialModelTrendValuationOptionsAsync(plantCode);
+            var result = await _materialModelTrendService.GetMaterialModelTrendValuationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex) { return HandleException(ex); }
@@ -59,14 +59,13 @@ public class TaktMaterialModelTrendsController : TaktControllerBase
 
     [TaktPermission("logistics:materials:material:model:trend:list", "物料机种推移物料选项")]
     [HttpGet("material-options")]
-    public async Task<IActionResult> GetMaterialModelTrendMaterialOptionsAsync(
-        [FromQuery] string plantCode, [FromQuery] string? valuation = null)
+    public async Task<IActionResult> GetMaterialModelTrendMaterialOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? valuation = null)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(valuation))
                 return Success(new List<TaktSelectOption>(), "查询成功");
-            var result = await _materialModelTrendService.GetMaterialModelTrendMaterialOptionsAsync(plantCode, valuation);
+            var result = await _materialModelTrendService.GetMaterialModelTrendMaterialOptionsAsync(plantCode, keyword, valuation);
             return Success(result, "查询成功");
         }
         catch (Exception ex) { return HandleException(ex); }

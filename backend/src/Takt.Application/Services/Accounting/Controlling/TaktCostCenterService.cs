@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：TaktCostCenterService.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-08-31
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     }
 
     /// <summary>
-    /// 获取成本中心列表（分页）
+    /// 获取成本中心列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCostCenterDto>> GetCostCenterListAsync(TaktCostCenterQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCostCenterDto>.Create(
+                new List<TaktCostCenterDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _costCenterRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -85,16 +93,17 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         {
             return null;
         }
-        var dto = entity.Adapt<TaktCostCenterDto>();
-        await FillCostCenterDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktCostCenterDto>();
+    }
 
     /// <summary>
     /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    public async Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync(long parentId = 0)
+    public async Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _costCenterRepository.GetListAsync(x =>
@@ -133,7 +142,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             .Select(item =>
             {
                 var treeDto = item.Adapt<TaktCostCenterTreeDto>();
-                treeDto.Children = new List<TaktCostCenterTreeDto>();
+                treeDto.Children = null;
                 return treeDto;
             })
             .ToList();
@@ -162,7 +171,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             entity.SortOrder = _sortOrderGenerator.GenerateNext(entity.ParentId, maxSort);
         }
         entity = await _costCenterRepository.CreateAsync(entity);
-                await SaveCostCenterChildrenAsync(entity, dto);
         return await GetCostCenterByIdAsync(entity.Id) ?? entity.Adapt<TaktCostCenterDto>();
     }
 
@@ -189,7 +197,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             throw new TaktBusinessException("成本中心的CostCenterCode已存在");
         }
         await _costCenterRepository.UpdateAsync(entity);
-                await SaveCostCenterChildrenAsync(entity, dto);
         return await GetCostCenterByIdAsync(id) ?? throw new TaktBusinessException("成本中心不存在");
     }
 
@@ -200,11 +207,13 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// <returns>任务</returns>
     public async Task DeleteCostCenterByIdAsync(long id)
     {
-        var entity = await _costCenterRepository.GetByIdAsync(id);
-        if (entity == null)
+
+        var hasChildren = await _costCenterRepository.ExistsAsync(x => x.ParentId == id);
+        if (hasChildren)
         {
-            throw new TaktBusinessException("成本中心不存在或已删除");
-        }        var deleted = await _costCenterRepository.DeleteAsync(id);
+            throw new TaktBusinessException("存在子节点，无法删除");
+        }
+        var deleted = await _costCenterRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("成本中心不存在或已删除");
@@ -339,7 +348,15 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCostCenterAsync(TaktCostCenterQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCostCenterQueryDto());
+        var queryDto = query ?? new TaktCostCenterQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCostCenterExportDto>(),
+                sheetName ?? "成本中心数据",
+                fileName ?? "成本中心导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _costCenterRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -356,33 +373,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充成本中心详情（加载 OneToMany 子表：成本中心变更记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillCostCenterDetailsAsync(TaktCostCenterDto dto, TaktCostCenter entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 保存成本中心子表级联（成本中心变更记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveCostCenterChildrenAsync(TaktCostCenter entity, TaktCostCenterCreateDto dto)
-    {
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -395,136 +385,238 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     {
         var exp = Expressionable.Create<TaktCostCenter>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
-                || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || SqlFunc.ToString(x.CostCenterType).Contains(keywords)
-                || SqlFunc.ToString(x.ManagerId).Contains(keywords)
-                || (x.ManagerName != null && x.ManagerName.Contains(keywords))
-                || SqlFunc.ToString(x.DeptId).Contains(keywords)
-                || (x.DeptName != null && x.DeptName.Contains(keywords))
-                || SqlFunc.ToString(x.CostCenterLevel).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.CostCenterStatus).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
+                || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
+                || (x.CostCenterType != null && x.CostCenterType.Contains(keywords))
+                || (x.ManagerName != null && x.ManagerName.Contains(keywords))
+                || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.ValidTo).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(queryDto.CostCenterCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(queryDto.CostCenterName));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterCode))
+        {
+            var costCenterCode = queryDto.CostCenterCode;
+            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(costCenterCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterName))
+        {
+            var costCenterName = queryDto.CostCenterName;
+            exp = exp.And(x => x.CostCenterName != null && x.CostCenterName.Contains(costCenterName));
         }
 
         if (queryDto?.ParentId.HasValue == true)
         {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
+            var parentId = queryDto.ParentId.Value;
+            exp = exp.And(x => x.ParentId == parentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterType))
         {
-            exp = exp.And(x => x.CostCenterType == queryDto.CostCenterType);
+            var costCenterType = queryDto.CostCenterType;
+            exp = exp.And(x => x.CostCenterType != null && x.CostCenterType.Contains(costCenterType));
         }
 
         if (queryDto?.ManagerId.HasValue == true)
         {
-            exp = exp.And(x => x.ManagerId == queryDto.ManagerId);
+            var managerId = queryDto.ManagerId.Value;
+            exp = exp.And(x => x.ManagerId == managerId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManagerName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManagerName))
         {
-            exp = exp.And(x => x.ManagerName != null && x.ManagerName.Contains(queryDto.ManagerName));
+            var managerName = queryDto.ManagerName;
+            exp = exp.And(x => x.ManagerName != null && x.ManagerName.Contains(managerName));
         }
 
         if (queryDto?.DeptId.HasValue == true)
         {
-            exp = exp.And(x => x.DeptId == queryDto.DeptId);
+            var deptId = queryDto.DeptId.Value;
+            exp = exp.And(x => x.DeptId == deptId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
         {
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
         }
 
         if (queryDto?.CostCenterLevel.HasValue == true)
         {
-            exp = exp.And(x => x.CostCenterLevel == queryDto.CostCenterLevel);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
-        {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var costCenterLevel = queryDto.CostCenterLevel.Value;
+            exp = exp.And(x => x.CostCenterLevel == costCenterLevel);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder.Value;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.CostCenterStatus.HasValue == true)
         {
-            exp = exp.And(x => x.CostCenterStatus == queryDto.CostCenterStatus);
+            var costCenterStatus = queryDto.CostCenterStatus.Value;
+            exp = exp.And(x => x.CostCenterStatus == costCenterStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.ValidFromStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom >= queryDto.ValidFromStart);
+            var validFromStart = queryDto.ValidFromStart.Value;
+            exp = exp.And(x => x.ValidFrom >= validFromStart);
         }
 
         if (queryDto?.ValidFromEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom <= queryDto.ValidFromEnd);
+            var validFromEnd = queryDto.ValidFromEnd.Value;
+            exp = exp.And(x => x.ValidFrom <= validFromEnd);
         }
 
         if (queryDto?.ValidToStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo >= queryDto.ValidToStart);
+            var validToStart = queryDto.ValidToStart.Value;
+            exp = exp.And(x => x.ValidTo >= validToStart);
         }
 
         if (queryDto?.ValidToEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo <= queryDto.ValidToEnd);
+            var validToEnd = queryDto.ValidToEnd.Value;
+            exp = exp.And(x => x.ValidTo <= validToEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart.Value;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd.Value;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCostCenterQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterName))
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterType))
+        {
+            return true;
+        }
+        if (queryDto.ManagerId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ManagerName))
+        {
+            return true;
+        }
+        if (queryDto.DeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (queryDto.CostCenterLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CostCenterStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ValidFromStart.HasValue || queryDto.ValidFromEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ValidToStart.HasValue || queryDto.ValidToEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

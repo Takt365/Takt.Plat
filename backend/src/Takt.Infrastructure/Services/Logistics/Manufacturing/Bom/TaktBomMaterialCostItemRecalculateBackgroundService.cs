@@ -123,7 +123,30 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
             prepared.ProcessedMonth,
             forceRecalculate,
             jobKey);
-        _ = ExecuteRecalculateJobAsync(captured);
+        // SuppressFlow：避免后台改写 IHttpContextAccessor 污染请求 AsyncLocal
+        var flow = ExecutionContext.SuppressFlow();
+        try
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await ExecuteRecalculateJobAsync(captured).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    RunningJobs.TryRemove(captured.JobKey, out _);
+                    TaktLogger.Error(
+                        ex,
+                        "[BomMaterialCostItem] 后台任务未捕获异常 Month={ProcessedMonth}",
+                        captured.ProcessedMonth);
+                }
+            });
+        }
+        finally
+        {
+            flow.Undo();
+        }
         return Task.CompletedTask;
     }
 

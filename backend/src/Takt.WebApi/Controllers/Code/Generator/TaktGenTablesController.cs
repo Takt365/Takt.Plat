@@ -86,11 +86,11 @@ public class TaktGenTablesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("code:generator:gen:table:query", "代码生成数据表配置选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetGenTableOptionsAsync()
+    public async Task<IActionResult> GetGenTableOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _genTableService.GetGenTableOptionsAsync();
+            var result = await _genTableService.GetGenTableOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

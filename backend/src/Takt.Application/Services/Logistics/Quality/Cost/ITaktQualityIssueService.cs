@@ -38,8 +38,10 @@ public interface ITaktQualityIssueService
     /// <summary>
     /// 获取品质问题应对主选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityIssueOptionsAsync();
+    Task<List<TaktSelectOption>> GetQualityIssueOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建品质问题应对主
@@ -95,4 +97,10 @@ public interface ITaktQualityIssueService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportQualityIssueAsync(TaktQualityIssueQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取品质应对金额统计（数据看板；按 IssueDate 汇总 TotalCost）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>品质应对金额统计</returns>
+    Task<TaktQualityCostStatDto> GetQualityIssueCostStatAsync(TaktQualityCostStatQueryDto queryDto);
 }

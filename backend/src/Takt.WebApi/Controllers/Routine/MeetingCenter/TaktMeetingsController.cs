@@ -57,6 +57,26 @@ public class TaktMeetingsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取会议件数统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>会议件数统计</returns>
+    [TaktPermission("routine:meeting:center:list", "会议件数统计")]
+    [HttpGet("meeting-stat")]
+    public async Task<IActionResult> GetMeetingStatAsync([FromQuery] TaktMeetingStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _meetingService.GetMeetingStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取会议中心
     /// </summary>
     /// <param name="id">会议中心ID</param>
@@ -86,11 +106,11 @@ public class TaktMeetingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:meeting:center:query", "会议中心选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMeetingOptionsAsync()
+    public async Task<IActionResult> GetMeetingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _meetingService.GetMeetingOptionsAsync();
+            var result = await _meetingService.GetMeetingOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

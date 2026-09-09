@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintsController.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉主控制器
 // 
@@ -62,7 +62,7 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// <param name="id">客诉主ID</param>
     /// <returns>客诉主DTO</returns>
     [TaktPermission("logistics:quality:complaint:customer:query", "客诉主详情")]
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetCustomerComplaintByIdAsync(long id)
     {
         try
@@ -83,14 +83,16 @@ public class TaktCustomerComplaintsController : TaktControllerBase
     /// <summary>
     /// 获取客诉主选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:complaint:customer:query", "客诉主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCustomerComplaintOptionsAsync()
+    public async Task<IActionResult> GetCustomerComplaintOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _customerComplaintService.GetCustomerComplaintOptionsAsync();
+            var result = await _customerComplaintService.GetCustomerComplaintOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

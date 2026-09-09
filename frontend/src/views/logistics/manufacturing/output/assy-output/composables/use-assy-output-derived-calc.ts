@@ -116,7 +116,8 @@ export function calculateAssyOutputDetailDerived(
     stdMinutes,
     masterHourlyStdCapacity,
     confirmMinutes,
-    Number.isFinite(master.operationRatePercent) ? master.operationRatePercent : 0
+    Number.isFinite(master.operationRatePercent) ? master.operationRatePercent : 0,
+    prodActualQty
   )
   const actualMinutes = calculateAssyActualMinutes(
     inputMinutes,

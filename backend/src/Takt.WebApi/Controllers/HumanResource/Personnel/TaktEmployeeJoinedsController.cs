@@ -86,11 +86,11 @@ public class TaktEmployeeJoinedsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:joined:query", "员工入职上岗选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeJoinedOptionsAsync()
+    public async Task<IActionResult> GetEmployeeJoinedOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeJoinedService.GetEmployeeJoinedOptionsAsync();
+            var result = await _employeeJoinedService.GetEmployeeJoinedOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

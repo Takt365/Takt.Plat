@@ -86,11 +86,11 @@ public class TaktRoutingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:bom:routing:query", "工艺路线主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetRoutingOptionsAsync()
+    public async Task<IActionResult> GetRoutingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _routingService.GetRoutingOptionsAsync();
+            var result = await _routingService.GetRoutingOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

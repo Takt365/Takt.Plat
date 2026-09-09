@@ -69,19 +69,19 @@
           key="navigation"
           :tab="$t('components.navigation.page.systemsetting.navigation')"
         >
-          <NavigationSettings @change="handleSettingChange" />
+          <NavigationSettings />
         </a-tab-pane>
         <a-tab-pane
           key="tabs"
           :tab="$t('components.navigation.page.systemsetting.tabs')"
         >
-          <TabsSettings @change="handleSettingChange" />
+          <TabsSettings />
         </a-tab-pane>
         <a-tab-pane
           key="other"
           :tab="$t('components.navigation.page.systemsetting.other')"
         >
-          <OtherSettings @change="handleSettingChange" />
+          <OtherSettings />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -110,30 +110,64 @@ defineProps<Props>()
 
 const visible = ref(false)
 const activeTab = ref('layout')
+const settingStore = useSettingStore()
 
-// 当前设置状态
+/** 抽屉内编辑用快照（布局/主题等 tab 仍用 inject）；标签页 tab 直接写 Pinia */
 const currentSetting = reactive<AppSetting>({ ...getSetting() })
 
-// 通过 provide 传递设置对象给子组件
 provide('setting', currentSetting)
 
+/**
+ * 打开抽屉时从 Pinia / 存储同步快照
+ */
 const handleClick = () => {
   visible.value = true
-  // 重新加载设置
-  Object.assign(currentSetting, getSetting())
+  Object.assign(currentSetting, settingStore.setting)
 }
 
-// 处理设置变化（实时保存并立即生效）
-const handleSettingChange = () => {
-  useSettingStore().setSetting(currentSetting)
+/**
+ * 将抽屉快照提交到 Pinia（须 nextTick，保证 v-model 已写入）
+ * 标签页字段以 Store 为准，避免 TabsSettings 直写后被快照旧值覆盖
+ */
+const handleSettingChange = async () => {
+  await nextTick()
+  const latest = settingStore.setting
+  Object.assign(currentSetting, {
+    showTabs: latest.showTabs,
+    tabStyle: latest.tabStyle,
+    persistTabs: latest.persistTabs,
+    maxTabs: latest.maxTabs,
+    multiTab: latest.multiTab,
+    menuAccordion: latest.menuAccordion,
+    menuStyle: latest.menuStyle,
+    showBreadcrumb: latest.showBreadcrumb,
+    breadcrumbIcon: latest.breadcrumbIcon,
+    borderRadius: latest.borderRadius,
+    showFooter: latest.showFooter,
+    copyright: latest.copyright,
+    watermark: latest.watermark,
+    watermarkContent: latest.watermarkContent,
+    demo: latest.demo,
+    showForgotPassword: latest.showForgotPassword,
+    showRegister: latest.showRegister,
+  })
+  const raw = toRaw(currentSetting)
+  settingStore.setSetting({
+    ...raw,
+    themeColor: { ...raw.themeColor },
+  })
+  Object.assign(currentSetting, settingStore.setting)
   applySettings()
   notifySettingsChanged()
 }
 
-// 复制偏好设置到剪贴板
+/**
+ * 复制偏好设置到剪贴板
+ */
 const handleCopy = async () => {
   try {
-    const settingJson = JSON.stringify(currentSetting, null, 2)
+    Object.assign(currentSetting, settingStore.setting)
+    const settingJson = JSON.stringify(toRaw(currentSetting), null, 2)
     await navigator.clipboard.writeText(settingJson)
     message.success(t('common.feedback.copied.clipboard'))
   } catch (error) {
@@ -142,10 +176,12 @@ const handleCopy = async () => {
   }
 }
 
-// 重置设置为默认值
+/**
+ * 重置设置为默认值
+ */
 const handleReset = () => {
   Object.assign(currentSetting, defaultSetting)
-  useSettingStore().resetSetting()
+  settingStore.resetSetting()
   applySettings()
   notifySettingsChanged()
   message.success(t('common.feedback.action.success', { action: t('common.page.button.reset') }))

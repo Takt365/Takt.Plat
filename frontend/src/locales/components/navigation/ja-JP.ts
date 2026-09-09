@@ -37,6 +37,7 @@ export default {
       copyright: "著作権",
       defaultlanguage: "既定言語",
       demoswitch: "デモ",
+      demohint: "オンで参照専用：照会/エクスポート可、新規・更新・削除・取込は不可",
       enablemultitab: "複数タブ",
       fixed: "固定",
       fixedheader: "ヘッダー固定",

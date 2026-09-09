@@ -38,8 +38,10 @@ public interface ITaktMaterialMovingPriceService
     /// <summary>
     /// 获取物料移动价格选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetMaterialMovingPriceOptionsAsync();
+    Task<List<TaktSelectOption>> GetMaterialMovingPriceOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建移动价格
@@ -95,4 +97,14 @@ public interface ITaktMaterialMovingPriceService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceAsync(TaktMaterialMovingPriceQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取在库金额统计（数据看板；按评估期间汇总 StockAmount）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>在库金额统计</returns>
+    Task<TaktMaterialMovingPriceStatDto> GetMaterialMovingPriceStatAsync(TaktMaterialMovingPriceStatQueryDto queryDto);
 }

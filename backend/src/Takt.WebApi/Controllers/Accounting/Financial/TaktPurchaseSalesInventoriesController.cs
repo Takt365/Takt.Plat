@@ -86,11 +86,11 @@ public class TaktPurchaseSalesInventoriesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:purchase:sales:inventory:query", "进销存选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPurchaseSalesInventoryOptionsAsync()
+    public async Task<IActionResult> GetPurchaseSalesInventoryOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _purchaseSalesInventoryService.GetPurchaseSalesInventoryOptionsAsync();
+            var result = await _purchaseSalesInventoryService.GetPurchaseSalesInventoryOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -34,6 +34,81 @@ export function buildDefaultCostingPeriodRange(monthCount = 3): [string, string]
 }
 
 /**
+ * 将核算月 yyyy-MM 平移指定月数
+ * @param month 核算月
+ * @param deltaMonths 平移月数（负=往前）
+ * @returns {string} yyyy-MM；无法解析则原值
+ */
+export function shiftCostingMonth(month: string, deltaMonths: number): string {
+  const value = month?.trim()
+  if (!value) {
+    return month
+  }
+  const parts = value.split('-').map(Number)
+  const year = parts[0]
+  const mon = parts[1]
+  if (!year || !mon) {
+    return value
+  }
+  const next = new Date(year, mon - 1 + deltaMonths, 1)
+  return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, '0')}`
+}
+
+/**
+ * 成本差异推移默认：基准月=前月，比较月=基准月减一月
+ * @returns 基准月 / 比较月 yyyy-MM
+ */
+export function buildDefaultPriceDeltaMonths(
+  range?: [string, string] | null,
+): { basePeriod: string; comparePeriod: string } {
+  const period = range?.[0] && range[1] ? range : buildDefaultCostingPeriodRange(3)
+  const start = period[0]
+  const end = period[1]
+  const previous = shiftCostingMonth(end, -1)
+  return {
+    basePeriod: end,
+    comparePeriod: previous < start ? start : previous,
+  }
+}
+
+/**
+ * 核算月是否落在期间闭区间内（yyyy-MM 字典序）
+ * @param month 核算月
+ * @param range 期间 [起, 止]
+ * @returns {boolean} 在区间内
+ */
+export function isCostingMonthInRange(
+  month: string | null | undefined,
+  range: [string, string] | null | undefined,
+): boolean {
+  const value = month?.trim()
+  if (!value || !range?.[0] || !range[1]) {
+    return false
+  }
+  return value >= range[0] && value <= range[1]
+}
+
+/**
+ * 成本差异推移基准月/比较月禁用：当月及以后，或不在核算期间列内
+ * @param current Ant Design month picker 当前格
+ * @param range 核算期间
+ * @returns {boolean} true=禁用
+ */
+export function isPriceDeltaMonthDisabled(
+  current: { year: () => number; month: () => number } | null | undefined,
+  range: [string, string] | null | undefined,
+): boolean {
+  if (isCostingPeriodMonthDisabled(current)) {
+    return true
+  }
+  if (!current || !range?.[0] || !range[1]) {
+    return true
+  }
+  const key = `${current.year()}-${String(current.month() + 1).padStart(2, '0')}`
+  return key < range[0] || key > range[1]
+}
+
+/**
  * 年月选择禁用：当月及以后（分析页当月无实绩）
  * @param current Ant Design month picker 当前格（dayjs 兼容：year/month）
  * @returns {boolean} true=禁用

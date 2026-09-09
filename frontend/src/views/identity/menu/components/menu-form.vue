@@ -114,19 +114,6 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.menu.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.ordernumhint')"
-                  :min="0"
-                  class="w-full"
-                />
-              </a-form-item>
-            </a-col>
           </a-row>
           <a-row :gutter="24">
             <a-col :span="24">
@@ -348,7 +335,6 @@ function createEmptyFormState(): FormState {
     routePath: '',
     componentPath: '',
     icon: '',
-    sortOrder: 0,
     menuType: 0,
     menuStatus: 1,
     permission: '',
@@ -382,7 +368,6 @@ watch(() => props.formData, (newData) => {
       routePath: newData.routePath ?? '',
       componentPath: newData.componentPath ?? '',
       icon: newData.icon ?? '',
-      sortOrder: newData.sortOrder ?? 0,
       menuType: newData.menuType ?? 0,
       menuStatus: newData.menuStatus ?? 1,
       permission: newData.permission ?? '',
@@ -425,7 +410,6 @@ const getValues = (): MenuCreate => {
     routePath: formState.routePath,
     componentPath: formState.componentPath,
     icon: formState.icon,
-    sortOrder: formState.sortOrder,
     isExternal: formState.isExternal,
     externalUrl: formState.externalUrl,
     isCached: formState.isCached,

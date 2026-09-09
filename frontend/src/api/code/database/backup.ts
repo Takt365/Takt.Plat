@@ -130,10 +130,20 @@ export function updateDatabaseBackupStatus(dto: DatabaseBackupStatus): Promise<D
  * 获取数据库备份选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getDatabaseBackupOptions(): Promise<TaktSelectOption[]> {
+export function getDatabaseBackupOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${DATABASE_BACKUP_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

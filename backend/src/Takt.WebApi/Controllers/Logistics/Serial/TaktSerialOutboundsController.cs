@@ -86,11 +86,11 @@ public class TaktSerialOutboundsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:serial:outbound:query", "序列号出库选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSerialOutboundOptionsAsync()
+    public async Task<IActionResult> GetSerialOutboundOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _serialOutboundService.GetSerialOutboundOptionsAsync();
+            var result = await _serialOutboundService.GetSerialOutboundOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

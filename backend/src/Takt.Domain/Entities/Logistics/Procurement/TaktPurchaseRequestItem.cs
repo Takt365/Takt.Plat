@@ -104,6 +104,12 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     public decimal PurchaseRequestUnitPrice { get; set; } = 0;
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? TaxCode { get; set; }
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     [SugarColumn(ColumnName = "tax_included_amount", ColumnDescription = "含税金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
@@ -124,6 +130,48 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "request_amount", ColumnDescription = "请购金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal RequestAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_date", ColumnDescription = "价格日期", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    [SugarColumn(ColumnName = "gross_weight", ColumnDescription = "毛重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    [SugarColumn(ColumnName = "net_weight", ColumnDescription = "净重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? WeightUnit { get; set; }
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    [SugarColumn(ColumnName = "volume", ColumnDescription = "体积", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? VolumeUnit { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? ProfitCenterCode { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

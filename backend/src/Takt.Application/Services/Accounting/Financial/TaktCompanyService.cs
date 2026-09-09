@@ -108,8 +108,10 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
     /// <summary>
     /// 获取公司选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetCompanyOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetCompanyOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _companyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyStatus == 1,

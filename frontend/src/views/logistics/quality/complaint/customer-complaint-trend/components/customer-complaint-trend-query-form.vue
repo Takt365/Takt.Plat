@@ -9,38 +9,50 @@
 
 <template>
   <div class="takt-query-bar customer-complaint-trend-query-bar">
-    <div class="customer-complaint-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        api-url="TaktPlants/options"
-        class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--plant"
-        allow-clear
-        :placeholder="t('entity.customercomplaint.relatedplant')"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-      />
-      <TaktSelect
-        v-model:value="customerCode"
-        api-url="TaktCustomers/options"
-        class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--customer"
-        allow-clear
-        :placeholder="t(`${localePrefix}.customerCode`)"
-      />
-      <TaktSelect
-        v-model:value="complaintType"
-        dict-type="logistics_quality_complaint_type"
-        class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--complaint-type"
-        allow-clear
-        :placeholder="t('entity.customercomplaint.complainttype')"
-      />
+    <div class="customer-complaint-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          api-url="TaktPlants/options"
+          class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--plant"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.customercomplaint.customercode') }}</span>
+        <TaktSelect
+          v-model:value="customerCode"
+          api-url="TaktCustomers/options"
+          class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--customer"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.customercomplaint.complainttype') }}</span>
+        <TaktSelect
+          v-model:value="complaintType"
+          dict-type="logistics_quality_complaint_type"
+          class="customer-complaint-trend-query-bar__control customer-complaint-trend-query-bar__control--complaint-type"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

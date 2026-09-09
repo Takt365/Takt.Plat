@@ -43,11 +43,11 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetEcMonthlyTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetEcMonthlyTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendPlantOptionsAsync();
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移部门选项")]
     [HttpGet("dept-options")]
-    public async Task<IActionResult> GetEcMonthlyTrendDeptOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetEcMonthlyTrendDeptOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
@@ -71,7 +71,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendDeptOptionsAsync(plantCode);
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendDeptOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -88,9 +88,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移设变单号选项")]
     [HttpGet("ec-code-options")]
-    public async Task<IActionResult> GetEcMonthlyTrendEcCodeOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? deptCode = null)
+    public async Task<IActionResult> GetEcMonthlyTrendEcCodeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? deptCode = null)
     {
         try
         {
@@ -98,7 +96,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendEcCodeOptionsAsync(plantCode, deptCode);
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendEcCodeOptionsAsync(plantCode, keyword, deptCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

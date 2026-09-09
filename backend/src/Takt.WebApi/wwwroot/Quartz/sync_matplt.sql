@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,8 +23,14 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
+-- 更新履历：ext_field._sync.matplt[] 追加 { at, 变更列:{o,n} }；仅差异；超 nvarchar(4000) 保留原 JSON
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
 CREATE TABLE #st_source (
@@ -140,6 +163,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #st_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @sap_raw_count INT = (SELECT COUNT(*) FROM [Sap_Data].[dbo].[PP_SapMaterial]);
 
 -- 全量同步：临时表行数必须等于源表行数
@@ -202,8 +241,13 @@ DECLARE @target_before INT = (
 );
 
 -- 存在则仅在业务字段变化或需恢复软删时 UPDATE；无变化不写入 #delta
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #st_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_materials_material_plant] AS T
-USING #st_source AS S
+USING (SELECT * FROM #st_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
@@ -281,7 +325,54 @@ WHEN MATCHED AND (
   T.[culture_code]=@culture_code,
   T.[updated_by]=S.[updated_by],
   T.[updated_at]=@now,
-  T.[is_deleted]=0
+  T.[is_deleted]=0,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.matplt') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.matplt', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.matplt'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.matplt', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.matplt'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.matplt', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_description], N''))) THEN CONCAT(N',"material_description":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_specification], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_specification], N''))) THEN CONCAT(N',"material_specification":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_specification], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_specification], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[industry_sector], N''))) <> LTRIM(RTRIM(ISNULL(S.[industry_sector], N''))) THEN CONCAT(N',"industry_sector":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[industry_sector], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[industry_sector], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_hierarchy], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_hierarchy], N''))) THEN CONCAT(N',"material_hierarchy":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_hierarchy], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_hierarchy], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_group], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_group], N''))) THEN CONCAT(N',"material_group":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_group], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_group], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_type], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_type], N''))) THEN CONCAT(N',"material_type":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_type], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_type], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[base_unit], N''))) <> LTRIM(RTRIM(ISNULL(S.[base_unit], N''))) THEN CONCAT(N',"base_unit":{"o":"', REPLACE(ISNULL(T.[base_unit], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[base_unit], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[purchase_group], N''))) <> LTRIM(RTRIM(ISNULL(S.[purchase_group], N''))) THEN CONCAT(N',"purchase_group":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[purchase_group], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[purchase_group], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[purchase_type], N''))) <> LTRIM(RTRIM(ISNULL(S.[purchase_type], N''))) THEN CONCAT(N',"purchase_type":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[purchase_type], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[purchase_type], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[special_procurement], N''))) <> LTRIM(RTRIM(ISNULL(S.[special_procurement], N''))) THEN CONCAT(N',"special_procurement":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[special_procurement], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[special_procurement], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN T.[is_bulk] <> S.[is_bulk] THEN CONCAT(N',"is_bulk":{"o":', CONVERT(VARCHAR(20), T.[is_bulk]), N',"n":', CONVERT(VARCHAR(20), S.[is_bulk]), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[min_order_quantity], 2) <> ROUND(S.[min_order_quantity], 2) THEN CONCAT(N',"min_order_quantity":{"o":', CONVERT(VARCHAR(40), ROUND(T.[min_order_quantity], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[min_order_quantity], 2)), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[rounding_value], 2) <> ROUND(S.[rounding_value], 2) THEN CONCAT(N',"rounding_value":{"o":', CONVERT(VARCHAR(40), ROUND(T.[rounding_value], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[rounding_value], 2)), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[planned_delivery_time_days], 2) <> ROUND(S.[planned_delivery_time_days], 2) THEN CONCAT(N',"planned_delivery_time_days":{"o":', CONVERT(VARCHAR(40), ROUND(T.[planned_delivery_time_days], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[planned_delivery_time_days], 2)), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[in_house_production_days], 2) <> ROUND(S.[in_house_production_days], 2) THEN CONCAT(N',"in_house_production_days":{"o":', CONVERT(VARCHAR(40), ROUND(T.[in_house_production_days], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[in_house_production_days], 2)), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[manufacturer], N''))) <> LTRIM(RTRIM(ISNULL(S.[manufacturer], N''))) THEN CONCAT(N',"manufacturer":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[manufacturer], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[manufacturer], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[manufacturer_material_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[manufacturer_material_code], N''))) THEN CONCAT(N',"manufacturer_material_code":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[manufacturer_material_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[manufacturer_material_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[currency_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[currency], N''))) THEN CONCAT(N',"currency_code":{"o":"', REPLACE(ISNULL(T.[currency_code], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[currency], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[price_control], N''))) <> LTRIM(RTRIM(ISNULL(S.[price_control], N''))) THEN CONCAT(N',"price_control":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[price_control], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[price_control], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[price_unit], N''))) <> LTRIM(RTRIM(ISNULL(S.[price_unit], N''))) THEN CONCAT(N',"price_unit":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[price_unit], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[price_unit], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[valuation], N''))) <> LTRIM(RTRIM(ISNULL(S.[valuation], N''))) THEN CONCAT(N',"valuation":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[valuation], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[valuation], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ROUND(T.[moving_price], 2) <> ROUND(S.[moving_price], 2) THEN CONCAT(N',"moving_price":{"o":', CONVERT(VARCHAR(40), ROUND(T.[moving_price], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[moving_price], 2)), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[difference_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[difference_code], N''))) THEN CONCAT(N',"difference_code":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[difference_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[difference_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[profit_center], N''))) <> LTRIM(RTRIM(ISNULL(S.[profit_center], N''))) THEN CONCAT(N',"profit_center":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[profit_center], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[profit_center], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ROUND(T.[current_stock], 2) <> ROUND(S.[current_stock], 2) THEN CONCAT(N',"current_stock":{"o":', CONVERT(VARCHAR(40), ROUND(T.[current_stock], 2)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[current_stock], 2)), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[production_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[production_location], N''))) THEN CONCAT(N',"production_location":{"o":"', REPLACE(ISNULL(T.[production_location], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[production_location], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[purchasing_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[purchasing_location], N''))) THEN CONCAT(N',"purchasing_location":{"o":"', REPLACE(ISNULL(T.[purchasing_location], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[purchasing_location], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[storage_location], N''))) <> LTRIM(RTRIM(ISNULL(S.[storage_location], N''))) THEN CONCAT(N',"storage_location":{"o":"', REPLACE(ISNULL(T.[storage_location], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[storage_location], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN T.[requires_inspection] <> S.[is_inspection] THEN CONCAT(N',"requires_inspection":{"o":', CONVERT(VARCHAR(20), T.[requires_inspection]), N',"n":', CONVERT(VARCHAR(20), S.[is_inspection]), N'}') ELSE N'' END,
+      CASE WHEN T.[is_batch] <> S.[is_batch] THEN CONCAT(N',"is_batch":{"o":', CONVERT(VARCHAR(20), T.[is_batch]), N',"n":', CONVERT(VARCHAR(20), S.[is_batch]), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[discontinued_status], N''))) <> LTRIM(RTRIM(ISNULL(S.[discontinued_status], N''))) THEN CONCAT(N',"discontinued_status":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[discontinued_status], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[discontinued_status], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_status], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_status], N''))) THEN CONCAT(N',"material_status":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_status], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_status], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> LTRIM(RTRIM(ISNULL(S.[remark], N''))) THEN CONCAT(N',"remark":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[remark], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[remark], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ISNULL(T.[is_deleted], 0) <> 0 THEN N',"is_deleted":{"o":1,"n":0}' ELSE N'' END,
+      N'}'))) AS [new_ext]) x
+  )
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[material_code],[material_description],[material_specification],
@@ -331,6 +422,25 @@ INTO #delta(
   ext_field_old, ext_field_new,
   remark_old, remark_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 -- 孤儿软删：目标有而源没有时才软删；存在更新/不存在插入已由 MERGE 完成
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
@@ -340,7 +450,12 @@ CREATE TABLE #soft_deleted_rows (
   [material_code] NVARCHAR(100)
 );
 
-UPDATE T
+
+DECLARE @delete_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -362,8 +477,25 @@ WHERE T.[tenant_code] = @tenant_code
     WHERE S.[plant_code] = LTRIM(RTRIM(T.[plant_code]))
       AND S.[material_code] = LTRIM(RTRIM(T.[material_code]))
   );
-
-DECLARE @delete_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @delete_count = @delete_count + @dml_n;
+END
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
   CAST(

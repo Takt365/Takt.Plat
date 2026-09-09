@@ -130,10 +130,20 @@ export function updateApsScheduleStatus(dto: ApsScheduleStatus): Promise<ApsSche
  * 获取APS排程主选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getApsScheduleOptions(): Promise<TaktSelectOption[]> {
+export function getApsScheduleOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${APS_SCHEDULE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

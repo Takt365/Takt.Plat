@@ -116,10 +116,20 @@ export function deleteGenTableBatch(ids: string[]): Promise<void> {
  * 获取代码生成表配置选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getGenTableOptions(): Promise<TaktSelectOption[]> {
+export function getGenTableOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${GEN_TABLE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

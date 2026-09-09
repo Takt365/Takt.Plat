@@ -29,7 +29,8 @@ function applyLayoutSettings(setting: AppSetting): void {
   const body = document.body;
 
   root.style.fontSize = `${setting.fontSize}px`;
-  root.style.setProperty('--takt-font-size', `${setting.fontSize}px`);
+  root.style.setProperty('--takt-font-size', `${String(setting.fontSize)}px`);
+  // Ant Design 圆角由 App.vue ConfigProvider token.borderRadius 权威写入；此处仅保留业务 CSS 变量
   root.style.setProperty('--takt-border-radius', `${String(setting.borderRadius)}px`);
 
   root.dataset.layout = setting.layout;

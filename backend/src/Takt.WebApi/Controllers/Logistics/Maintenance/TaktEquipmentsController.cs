@@ -106,11 +106,11 @@ public class TaktEquipmentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:maintenance:equipment:query", "工厂设备选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEquipmentOptionsAsync()
+    public async Task<IActionResult> GetEquipmentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _equipmentService.GetEquipmentOptionsAsync();
+            var result = await _equipmentService.GetEquipmentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

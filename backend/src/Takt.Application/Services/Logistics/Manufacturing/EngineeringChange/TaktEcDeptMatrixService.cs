@@ -96,12 +96,12 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             : await _ecDetailRepository.GetListAsync(x =>
                 x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && ecIdsInRange.Contains(x.EcId));
+                && ecIdsInRange.Contains(x.EcGijutsuId));
         var detailIds = ecDetails.Select(x => x.Id).ToList();
         var ecDeptCount = 0;
         if (detailIds.Count > 0)
         {
-            var execRows = await _ecExecDeptAccess.ListBaseByEcnDetailIdsAsync(detailIds);
+            var execRows = await _ecExecDeptAccess.ListBaseByEcDetailIdsAsync(detailIds);
             ecDeptCount = execRows.Count(x =>
                 (string.IsNullOrEmpty(queryDto.DeptCode) || x.DeptCode == queryDto.DeptCode)
                 && (!queryDto.IsImplemented.HasValue || x.IsImplemented == queryDto.IsImplemented.Value));
@@ -109,7 +109,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         return new TaktEcExecStatDto
         {
             StatMonth = statMonth,
-            EcCount = ecDetails.Select(x => x.EcId).Distinct().Count(),
+            EcCount = ecDetails.Select(x => x.EcGijutsuId).Distinct().Count(),
             EcDetailCount = ecDetails.Count,
             EcExecCount = ecDeptCount,
             DeptCode = queryDto.DeptCode,
@@ -136,7 +136,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             x => x.EcCode,
             false);
         var detailIds = details.Select(x => x.Id).ToList();
-        var ecIds = details.Select(x => x.EcId).Distinct().ToList();
+        var ecIds = details.Select(x => x.EcGijutsuId).Distinct().ToList();
         var deptGroups = await LoadTransposedDeptGroupsAsync(detailIds);
         var ecMap = await LoadEcMapAsync(ecIds);
         var rows = details.Select(detail => BuildTransposedRow(detail, ecMap, deptGroups)).ToList();
@@ -192,7 +192,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         IReadOnlyDictionary<long, TaktEcGijutsu> ecMap,
         IReadOnlyDictionary<long, List<object>> deptGroups)
     {
-        ecMap.TryGetValue(detail.EcId, out var ec);
+        ecMap.TryGetValue(detail.EcGijutsuId, out var ec);
         deptGroups.TryGetValue(detail.Id, out var deptList);
         deptList ??= [];
         var deptByCode = deptList.ToDictionary(TaktEcDeptEntityHelper.GetDeptCode, StringComparer.Ordinal);
@@ -205,7 +205,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         return new TaktEcExecTransposedDto
         {
             EcDetailId = detail.Id,
-            EcId = detail.EcId,
+            EcGijutsuId = detail.EcGijutsuId,
             LineNumber = detail.LineNumber,
             EcIssueDate = ec?.EcIssueDate ?? default,
             EcLeader = ec?.EcLeader ?? string.Empty,
@@ -282,21 +282,21 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             var start = queryDto.EcIssueDateStart.Value;
             exp = exp.And(x => SqlFunc.Subqueryable<TaktEcGijutsu>()
-                .Where(ec => ec.Id == x.EcId && ec.EcIssueDate >= start)
+                .Where(ec => ec.Id == x.EcGijutsuId && ec.EcIssueDate >= start)
                 .Any());
         }
         if (queryDto.EcIssueDateEnd.HasValue)
         {
             var end = queryDto.EcIssueDateEnd.Value;
             exp = exp.And(x => SqlFunc.Subqueryable<TaktEcGijutsu>()
-                .Where(ec => ec.Id == x.EcId && ec.EcIssueDate <= end)
+                .Where(ec => ec.Id == x.EcGijutsuId && ec.EcIssueDate <= end)
                 .Any());
         }
         if (!string.IsNullOrEmpty(queryDto.EcLeader))
         {
             var leader = queryDto.EcLeader;
             exp = exp.And(x => SqlFunc.Subqueryable<TaktEcGijutsu>()
-                .Where(ec => ec.Id == x.EcId && ec.EcLeader != null && ec.EcLeader.Contains(leader))
+                .Where(ec => ec.Id == x.EcGijutsuId && ec.EcLeader != null && ec.EcLeader.Contains(leader))
                 .Any());
         }
         if (!string.IsNullOrEmpty(queryDto.DeptCode) && queryDto.IsImplemented.HasValue)
@@ -305,14 +305,16 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             var flag = queryDto.IsImplemented.Value;
             exp = deptCode switch
             {
-                TaktEcDeptCodes.Pmc => exp.And(x => SqlFunc.Subqueryable<TaktEcSeikan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Mp => exp.And(x => SqlFunc.Subqueryable<TaktEcKoubai>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Iqc => exp.And(x => SqlFunc.Subqueryable<TaktEcUkeken>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Mc => exp.And(x => SqlFunc.Subqueryable<TaktEcBukan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Pcba => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizounika>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Assy => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizouikka>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Qa => exp.And(x => SqlFunc.Subqueryable<TaktEcHinkan>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
-                TaktEcDeptCodes.Te => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizougijutsu>().Where(d => d.EcnDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Pmc => exp.And(x => SqlFunc.Subqueryable<TaktEcSeikan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Mp => exp.And(x => SqlFunc.Subqueryable<TaktEcKoubai>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Iqc => exp.And(x => SqlFunc.Subqueryable<TaktEcUkeken>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Mc => exp.And(x => SqlFunc.Subqueryable<TaktEcBukan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Pcba => exp.And(x =>
+                    SqlFunc.Subqueryable<TaktEcSmt>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()
+                    || SqlFunc.Subqueryable<TaktEcSeizounika>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Assy => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizouikka>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Qa => exp.And(x => SqlFunc.Subqueryable<TaktEcHinkan>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
+                TaktEcDeptCodes.Te => exp.And(x => SqlFunc.Subqueryable<TaktEcSeizougijutsu>().Where(d => d.EcDetailId == x.Id && d.IsImplemented == flag).Any()),
                 _ => exp
             };
         }
@@ -345,7 +347,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             x => x.EcCode,
             false);
         var detailIds = details.Select(x => x.Id).ToList();
-        var ecIds = details.Select(x => x.EcId).Distinct().ToList();
+        var ecIds = details.Select(x => x.EcGijutsuId).Distinct().ToList();
         var deptGroups = await LoadTransposedDeptGroupsAsync(detailIds);
         var ecMap = await LoadEcMapAsync(ecIds);
         var attachmentGroups = await LoadAttachmentGroupsAsync(ecIds);
@@ -373,9 +375,9 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             return new Dictionary<long, List<TaktEcAttachment>>();
         }
-        var attachments = await _ecAttachmentRepository.GetListAsync(x => ecIds.Contains(x.EcId));
+        var attachments = await _ecAttachmentRepository.GetListAsync(x => ecIds.Contains(x.EcGijutsuId));
         return attachments
-            .GroupBy(x => x.EcId)
+            .GroupBy(x => x.EcGijutsuId)
             .ToDictionary(g => g.Key, g => g.ToList());
     }
 
@@ -393,14 +395,15 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         IReadOnlyDictionary<long, List<object>> deptGroups,
         IReadOnlyDictionary<long, List<TaktEcAttachment>> attachmentGroups)
     {
-        ecMap.TryGetValue(detail.EcId, out var ec);
+        ecMap.TryGetValue(detail.EcGijutsuId, out var ec);
         deptGroups.TryGetValue(detail.Id, out var deptList);
         deptList ??= [];
-        attachmentGroups.TryGetValue(detail.EcId, out var attachments);
+        attachmentGroups.TryGetValue(detail.EcGijutsuId, out var attachments);
         attachments ??= [];
         var pmc = TaktEcDeptEntityHelper.FindByDeptCode(deptList, TaktEcDeptCodes.Pmc) as TaktEcSeikan;
         var mc = TaktEcDeptEntityHelper.FindByDeptCode(deptList, TaktEcDeptCodes.Mc) as TaktEcBukan;
-        var pcba = TaktEcDeptEntityHelper.FindByDeptCode(deptList, TaktEcDeptCodes.Pcba) as TaktEcSeizounika;
+        var smt = deptList.OfType<TaktEcSmt>().FirstOrDefault();
+        var pcbaSeizounika = deptList.OfType<TaktEcSeizounika>().FirstOrDefault();
         var assy = TaktEcDeptEntityHelper.FindByDeptCode(deptList, TaktEcDeptCodes.Assy) as TaktEcSeizouikka;
         var qa = TaktEcDeptEntityHelper.FindByDeptCode(deptList, TaktEcDeptCodes.Qa);
         var stageCells = new Dictionary<string, TaktEcExecBatchTransposedStageDto>(StringComparer.Ordinal)
@@ -415,8 +418,8 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
                 mc?.OutboundBatch),
             [TaktEcBatchStageCodes.PcbaProduction] = MapBatchStageCell(
                 TaktEcBatchStageCodes.PcbaProduction,
-                pcba?.ProductionDate,
-                pcba?.ProductionBatch),
+                smt?.OutboundDate ?? pcbaSeizounika?.ProductionDate,
+                smt?.OutboundBatch ?? pcbaSeizounika?.ImplementationBatch),
             [TaktEcBatchStageCodes.AssyProduction] = MapBatchStageCell(
                 TaktEcBatchStageCodes.AssyProduction,
                 assy?.ProductionDate,
@@ -429,7 +432,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         return new TaktEcExecBatchTransposedDto
         {
             EcDetailId = detail.Id,
-            EcId = detail.EcId,
+            EcGijutsuId = detail.EcGijutsuId,
             LineNumber = detail.LineNumber,
             EcCode = detail.EcCode,
             TechnicalLiaisonNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Liaison),
@@ -512,14 +515,14 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             var start = queryDto.EcIssueDateStart.Value;
             exp = exp.And(x => SqlFunc.Subqueryable<TaktEcGijutsu>()
-                .Where(ec => ec.Id == x.EcId && ec.EcIssueDate >= start)
+                .Where(ec => ec.Id == x.EcGijutsuId && ec.EcIssueDate >= start)
                 .Any());
         }
         if (queryDto.EcIssueDateEnd.HasValue)
         {
             var end = queryDto.EcIssueDateEnd.Value;
             exp = exp.And(x => SqlFunc.Subqueryable<TaktEcGijutsu>()
-                .Where(ec => ec.Id == x.EcId && ec.EcIssueDate <= end)
+                .Where(ec => ec.Id == x.EcGijutsuId && ec.EcIssueDate <= end)
                 .Any());
         }
         if (!string.IsNullOrEmpty(queryDto.BatchCode))
@@ -527,16 +530,19 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             var batchCode = queryDto.BatchCode;
             exp = exp.And(x =>
                 SqlFunc.Subqueryable<TaktEcSeikan>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchCode))
+                    .Where(d => d.EcDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcBukan>()
-                    .Where(d => d.EcnDetailId == x.Id && d.OutboundBatch != null && d.OutboundBatch.Contains(batchCode))
+                    .Where(d => d.EcDetailId == x.Id && d.OutboundBatch != null && d.OutboundBatch.Contains(batchCode))
+                    .Any()
+                || SqlFunc.Subqueryable<TaktEcSmt>()
+                    .Where(d => d.EcDetailId == x.Id && d.OutboundBatch != null && d.OutboundBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcSeizounika>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ProductionBatch != null && d.ProductionBatch.Contains(batchCode))
+                    .Where(d => d.EcDetailId == x.Id && d.ImplementationBatch != null && d.ImplementationBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcSeizouikka>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ProductionTeam != null && d.ProductionTeam.Contains(batchCode))
+                    .Where(d => d.EcDetailId == x.Id && d.ProductionTeam != null && d.ProductionTeam.Contains(batchCode))
                     .Any());
         }
         return exp.ToExpression();

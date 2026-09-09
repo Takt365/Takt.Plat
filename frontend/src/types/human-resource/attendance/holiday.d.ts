@@ -5,7 +5,7 @@
 // 创建时间：2026-06-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/attendance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
-// 
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -16,200 +16,174 @@ import type {
 } from '@/types/common';
 
 /**
- * 假日实体 假日条目，用于考勤日历、排班与薪资计算；字典 humanresource_attendance_holiday_category、humanresource_attendance_holiday_working_day_type 与字段取值一致 公司级实体：按 TenantCode + CompanyCode 隔离；同一公司内以开始日期+结束日期+假日类型唯一
- * 对应前端 TaktHolidayDto
- * 继承 TaktCompanyDtoBase
- * 对应前端 Holiday
+ * 假日实体
  * @description 对应后端 TaktHolidayDto
  */
 export interface Holiday extends CompanyDtoBase {
   /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
-   */
-  cultureCode: string
-
-  /**
-   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   * 区域文化编码
    */
   cultureCode?: string
 
   /**
    * 假日名称
    */
-  holidayName?: string;
+  holidayName?: string
 
   /**
    * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
    */
-  holidayType?: number;
+  holidayType?: number
 
   /**
    * 假日开始日期
    */
-  startDate?: string;
+  startDate?: string
 
   /**
    * 假日结束日期
    */
-  endDate?: string;
+  endDate?: string
 
   /**
-   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+   * 假期天数（含起止日）
    */
-  isWorkingDay?: number;
+  daysCount?: number
 
   /**
-   * 假日问候语（简短，用于界面问候展示）
+   * 调休对应（上班日=>所补放假日；多对分号分隔）
    */
-  holidayGreeting?: string;
+  compensatoryWorkDates?: string
 
   /**
-   * 假日引用/诗句（用于引用区展示）
+   * 是否带薪假（字典 sys_yes_no；0=否 1=是）
    */
-  holidayQuote?: string;
+  isPaid?: number
 
   /**
-   * 假日主题（对应前端主题色 key，用于日历等非工作日展示）
+   * 假日问候语
    */
-  holidayTheme?: string;
+  holidayGreeting?: string
+
+  /**
+   * 假日引用/诗句
+   */
+  holidayQuote?: string
+
+  /**
+   * 假日主题
+   */
+  holidayTheme?: string
 
   /**
    * 扩展字段JSON
    */
-  extField?: string;
+  extField?: string
 
   /**
    * 备注
    */
-  remark?: string;
-
+  remark?: string
 }
 
 /**
- * Holiday 导出 DTO（独立实现，不继承响应 Dto）
- * 对应前端 HolidayExport
+ * Holiday 分页查询
+ * @description 对应后端 TaktHolidayQueryDto
+ */
+export interface HolidayQuery extends TaktPagedQuery {
+  tenantCode?: string
+  companyCode?: string
+  cultureCode?: string
+  plantCode?: string
+  holidayName?: string
+  holidayType?: number
+  startDateStart?: string
+  startDateEnd?: string
+  endDateStart?: string
+  endDateEnd?: string
+  daysCount?: number
+  compensatoryWorkDates?: string
+  isPaid?: number
+  holidayGreeting?: string
+  holidayQuote?: string
+  holidayTheme?: string
+  createdAtStart?: string
+  createdAtEnd?: string
+  extField?: string
+  remark?: string
+}
+
+/**
+ * Holiday 创建 DTO
+ * @description 对应后端 TaktHolidayCreateDto
+ */
+export interface HolidayCreate {
+  tenantCode?: string
+  companyCode?: string
+  cultureCode?: string
+  plantCode?: string
+  holidayName: string
+  holidayType: number
+  startDate: string
+  endDate: string
+  daysCount?: number
+  compensatoryWorkDates?: string
+  isPaid?: number
+  holidayGreeting: string
+  holidayQuote: string
+  holidayTheme: string
+  extField?: string
+  remark?: string
+}
+
+/**
+ * Holiday 更新 DTO
+ * @description 对应后端 TaktHolidayUpdateDto
+ */
+export interface HolidayUpdate extends HolidayCreate {
+  holidayId: string
+}
+
+/**
+ * Holiday 导出 DTO
  * @description 对应后端 TaktHolidayExportDto
  */
 export interface HolidayExport {
-  /**
-   * HolidayID
-   */
-  holidayId: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode: string;
-
-  /**
-   * 假日名称
-   */
-  holidayName: string;
-
-  /**
-   * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
-   */
-  holidayType: number;
-
-  /**
-   * 假日开始日期
-   */
-  startDate: string;
-
-  /**
-   * 假日结束日期
-   */
-  endDate: string;
-
-  /**
-   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
-   */
-  isWorkingDay: number;
-
-  /**
-   * 假日问候语（简短，用于界面问候展示）
-   */
-  holidayGreeting: string;
-
-  /**
-   * 假日引用/诗句（用于引用区展示）
-   */
-  holidayQuote: string;
-
-  /**
-   * 假日主题（对应前端主题色 key，用于日历等非工作日展示）
-   */
-  holidayTheme: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-  /**
-   * 创建时间
-   */
-  createdAt: string;
-
+  holidayId: string
+  companyCode: string
+  holidayName: string
+  holidayType: number
+  startDate: string
+  endDate: string
+  daysCount: number
+  compensatoryWorkDates: string
+  isPaid: number
+  holidayGreeting: string
+  holidayQuote: string
+  holidayTheme: string
+  extField?: string
+  remark?: string
+  createdAt: string
 }
 
 /**
- * 服务器当日、用户默认登录公司下的假日主题响应 DTO
- * @description 对应后端 TaktHolidayThemeDto；业务字段与 TaktHoliday 实体一致，并含 isHolidayToday
+ * 服务器当日假日主题响应
+ * @description 对应后端 TaktHolidayThemeDto
  */
 export interface HolidayTheme {
+  companyCode: string
+  holidayName: string
+  holidayType: number
+  startDate: string
+  endDate: string
+  daysCount: number
+  compensatoryWorkDates: string
+  isPaid: number
+  holidayGreeting: string
+  holidayQuote: string
+  holidayTheme: string
   /**
-   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+   * 服务器当日是否处于假日放假区间（无匹配记录时为 false）
    */
-  companyCode: string;
-
-  /**
-   * 假日名称
-   */
-  holidayName: string;
-
-  /**
-   * 假日类型（字典 humanresource_attendance_holiday_category；0=法定 1=调休 2=公司）
-   */
-  holidayType: number;
-
-  /**
-   * 假日开始日期
-   */
-  startDate: string;
-
-  /**
-   * 假日结束日期
-   */
-  endDate: string;
-
-  /**
-   * 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
-   */
-  isWorkingDay: number;
-
-  /**
-   * 假日问候语（简短，用于界面问候展示）
-   */
-  holidayGreeting: string;
-
-  /**
-   * 假日引用/诗句（用于引用区展示）
-   */
-  holidayQuote: string;
-
-  /**
-   * 假日主题（对应前端主题色 key，用于日历等非工作日展示）
-   */
-  holidayTheme: string;
-
-  /**
-   * 服务器当日是否处于假日区间且为非工作日（无匹配记录时为 false）
-   */
-  isHolidayToday: boolean;
+  isHolidayToday: boolean
 }

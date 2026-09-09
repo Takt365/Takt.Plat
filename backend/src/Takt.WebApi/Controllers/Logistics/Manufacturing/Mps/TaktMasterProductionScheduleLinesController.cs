@@ -86,11 +86,11 @@ public class TaktMasterProductionScheduleLinesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mps:master:production:schedule:query", "主生产计划MPS行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMasterProductionScheduleLineOptionsAsync()
+    public async Task<IActionResult> GetMasterProductionScheduleLineOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _masterProductionScheduleLineService.GetMasterProductionScheduleLineOptionsAsync();
+            var result = await _masterProductionScheduleLineService.GetMasterProductionScheduleLineOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

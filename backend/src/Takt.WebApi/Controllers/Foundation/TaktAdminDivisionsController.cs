@@ -57,12 +57,34 @@ public class TaktAdminDivisionsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取行政区划平铺选项（DictValue=DivisionCode）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（可选；本实体无工厂列，忽略）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
+    /// <param name="level">层级（可选；1～6）</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("foundation:admin:division:query", "行政区划选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetAdminDivisionOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] int? level = null)
+    {
+        try
+        {
+            var result = await _adminDivisionService.GetAdminDivisionOptionsAsync(plantCode, keyword, level);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取行政区划
     /// </summary>
     /// <param name="id">行政区划ID</param>
     /// <returns>行政区划DTO</returns>
     [TaktPermission("foundation:admin:division:query", "行政区划详情")]
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetAdminDivisionByIdAsync(long id)
     {
         try
@@ -87,11 +109,11 @@ public class TaktAdminDivisionsController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("foundation:admin:division:query", "行政区划树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetAdminDivisionTreeOptionsAsync([FromQuery] long parentId = 0)
+    public async Task<IActionResult> GetAdminDivisionTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _adminDivisionService.GetAdminDivisionTreeOptionsAsync(parentId);
+            var result = await _adminDivisionService.GetAdminDivisionTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

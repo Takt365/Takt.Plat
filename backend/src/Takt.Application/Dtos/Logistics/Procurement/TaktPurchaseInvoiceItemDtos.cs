@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoiceItem 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     public string? PurchaseInvoiceName { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -271,7 +271,7 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -507,7 +507,7 @@ public class TaktPurchaseInvoiceItemCreateDto
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -777,7 +777,7 @@ public class TaktPurchaseInvoiceItemTemplateDto
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -1000,7 +1000,7 @@ public class TaktPurchaseInvoiceItemImportDto
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
@@ -1229,7 +1229,7 @@ public class TaktPurchaseInvoiceItemExportDto
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 凭证编号（冗余字段，便于查询）
+    /// 凭证编号（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 

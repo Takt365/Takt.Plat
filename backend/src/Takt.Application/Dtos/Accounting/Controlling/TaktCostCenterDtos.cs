@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Controlling
 // 文件名称：TaktCostCenterDtos.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-08-31
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     public long CostCenterId { get; set; }
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
@@ -54,34 +54,34 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string CostCenterType { get; set; } = "F";
+    public string CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
-    public string? ManagerName { get; set; }
+    public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
-    public string? DeptName { get; set; }
+    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本中心层级
     /// </summary>
-    public int CostCenterLevel { get; set; } = 1;
+    public int CostCenterLevel { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -102,6 +102,7 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int CostCenterStatus { get; set; } = 0;
+
 }
 
 // ========================================
@@ -136,7 +137,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -146,7 +147,12 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -164,27 +170,27 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -212,11 +218,6 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     /// 失效日期（范围查询-结束）
     /// </summary>
     public DateTime? ValidToEnd { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）
@@ -273,11 +274,15 @@ public class TaktCostCenterCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
-    [Required(ErrorMessage = "成本中心编码（4位，租户+公司内唯一）不能为空")]
+    [Required(ErrorMessage = "成本中心编码（6 位，与部门编码同长；租户+公司内唯一）不能为空")]
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -295,27 +300,28 @@ public class TaktCostCenterCreateDto
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string CostCenterType { get; set; } = "F";
+    [Required(ErrorMessage = "成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）不能为空")]
+    public string CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -335,15 +341,11 @@ public class TaktCostCenterCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int CostCenterStatus { get; set; } = 0;    /// <summary>
+    public int CostCenterStatus { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -419,7 +421,7 @@ public class TaktCostCenterSortDto
     /// <summary>
     /// 排序号（回填）
     /// </summary>
-    [Required(ErrorMessage = "排序号不能为空")]
+    [Required(ErrorMessage = "排序号（回填）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -448,7 +450,12 @@ public class TaktCostCenterTemplateDto
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -466,27 +473,27 @@ public class TaktCostCenterTemplateDto
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -506,14 +513,11 @@ public class TaktCostCenterTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }    /// <summary>
+    public int? CostCenterStatus { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -545,9 +549,13 @@ public class TaktCostCenterImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
@@ -565,27 +573,27 @@ public class TaktCostCenterImportDto
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string? CostCenterType { get; set; }
+    public string? CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -605,14 +613,11 @@ public class TaktCostCenterImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }    /// <summary>
+    public int? CostCenterStatus { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -646,7 +651,17 @@ public class TaktCostCenterExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 成本中心编码（4位，租户+公司内唯一）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
@@ -664,27 +679,27 @@ public class TaktCostCenterExportDto
     /// <summary>
     /// 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
     /// </summary>
-    public string CostCenterType { get; set; } = "F";
+    public string CostCenterType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人用户 ID
+    /// 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManagerId { get; set; }
 
     /// <summary>
-    /// 负责人姓名
+    /// 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
     /// </summary>
     public string? ManagerName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门 ID
+    /// 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
 
@@ -702,11 +717,6 @@ public class TaktCostCenterExportDto
     /// 失效日期
     /// </summary>
     public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（回填）

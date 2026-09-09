@@ -104,8 +104,10 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     /// <summary>
     /// 获取出货检验单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetFqcOrderOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetFqcOrderOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _fqcOrderRepository.GetListAsync(
@@ -315,6 +317,44 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
             exportData,
             sheetName ?? "出货检验单数据",
             fileName ?? "出货检验单导出.xlsx");
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取 FQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>FQC 检验统计</returns>
+    public async Task<TaktFqcOrderStatDto> GetFqcOrderStatAsync(TaktQualityStatQueryDto queryDto)
+    {
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.InspectionDateStart,
+            queryDto.InspectionDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktFqcOrder, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.InspectionDate != null
+            && x.InspectionDate >= start
+            && x.InspectionDate <= end;
+        var monthOrderCount = await _fqcOrderRepository.CountAsync(predicate);
+        var monthSampleQuantity = await _fqcOrderRepository.SumAsync(x => x.TotalSampleQuantity, predicate);
+        var monthQualifiedQuantity = await _fqcOrderRepository.SumAsync(x => x.TotalQualifiedQuantity, predicate);
+        var monthUnqualifiedQuantity = await _fqcOrderRepository.SumAsync(x => x.TotalUnqualifiedQuantity, predicate);
+        return new TaktFqcOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthSampleQuantity = monthSampleQuantity,
+            MonthQualifiedQuantity = monthQualifiedQuantity,
+            MonthUnqualifiedQuantity = monthUnqualifiedQuantity,
+            MonthPassRatePercent = TaktQualityStatHelper.CalculatePassRatePercent(monthQualifiedQuantity, monthSampleQuantity),
+        };
     }
 
     // ========================================

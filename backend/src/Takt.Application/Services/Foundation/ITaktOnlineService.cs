@@ -38,8 +38,10 @@ public interface ITaktOnlineService
     /// <summary>
     /// 获取在线用户选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetOnlineOptionsAsync();
+    Task<List<TaktSelectOption>> GetOnlineOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 注册 SignalR 在线会话（租户+公司+UserId 唯一一行：存在则更新，不存在则插入）

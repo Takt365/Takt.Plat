@@ -57,6 +57,26 @@ public class TaktFqcOrdersController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取 FQC 检验统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>FQC 检验统计</returns>
+    [TaktPermission("logistics:quality:operation:fqc:order:list", "FQC 检验统计")]
+    [HttpGet("inspection-stat")]
+    public async Task<IActionResult> GetFqcOrderStatAsync([FromQuery] TaktQualityStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _fqcOrderService.GetFqcOrderStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取出货检验单
     /// </summary>
     /// <param name="id">出货检验单ID</param>
@@ -86,11 +106,11 @@ public class TaktFqcOrdersController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:fqc:order:query", "出货检验单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFqcOrderOptionsAsync()
+    public async Task<IActionResult> GetFqcOrderOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _fqcOrderService.GetFqcOrderOptionsAsync();
+            var result = await _fqcOrderService.GetFqcOrderOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

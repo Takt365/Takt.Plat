@@ -50,7 +50,7 @@ public class TaktEcExecutionTaskDto : TaktCompanyDtoBase
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变 名称（填充字段）
@@ -77,12 +77,12 @@ public class TaktEcExecutionTaskDto : TaktCompanyDtoBase
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变明细 名称（填充字段）
     /// </summary>
-    public string? EcnDetailName { get; set; }
+    public string? EcDetailName { get; set; }
 
     /// <summary>
     /// 责任部门编码
@@ -161,7 +161,7 @@ public class TaktEcExecutionTaskQueryDto : TaktPagedQuery
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余）
@@ -178,7 +178,7 @@ public class TaktEcExecutionTaskQueryDto : TaktPagedQuery
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 责任部门编码
@@ -285,7 +285,7 @@ public class TaktEcExecutionTaskCreateDto
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余）
@@ -303,7 +303,7 @@ public class TaktEcExecutionTaskCreateDto
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 责任部门编码
@@ -437,7 +437,7 @@ public class TaktEcExecutionTaskTemplateDto
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余）
@@ -454,7 +454,7 @@ public class TaktEcExecutionTaskTemplateDto
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 责任部门编码
@@ -538,7 +538,7 @@ public class TaktEcExecutionTaskImportDto
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余）
@@ -555,7 +555,7 @@ public class TaktEcExecutionTaskImportDto
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 责任部门编码
@@ -635,7 +635,7 @@ public class TaktEcExecutionTaskExportDto
     /// 设变 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余）
@@ -652,7 +652,7 @@ public class TaktEcExecutionTaskExportDto
     /// 设变明细 ID（可选）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 责任部门编码

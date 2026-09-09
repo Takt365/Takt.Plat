@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票明细应用服务实现
 // 
@@ -103,8 +103,10 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     /// <summary>
     /// 获取销售发票明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesInvoiceItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesInvoiceItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesInvoiceItemRepository.GetListAsync(
@@ -387,15 +389,11 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         }
         if (string.IsNullOrEmpty(entity.Division))
         {
-            entity.Division = master.Division;
+            entity.Division = master.Division ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.DocumentCategory))
         {
-            entity.DocumentCategory = master.DocumentCategory;
-        }
-        if (string.IsNullOrEmpty(entity.PostedByEmployeeName))
-        {
-            entity.PostedByEmployeeName = master.PostedByEmployeeName;
+            entity.DocumentCategory = master.DocumentCategory ?? string.Empty;
         }
     }
     // ========================================
@@ -455,7 +453,6 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
                 || (x.SalesOrganizationOrder != null && x.SalesOrganizationOrder.Contains(keywords))
                 || (x.DistributionChannelOrder != null && x.DistributionChannelOrder.Contains(keywords))
                 || (x.DocumentCategory != null && x.DocumentCategory.Contains(keywords))
-                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -785,12 +782,6 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.GrossAmount == grossAmount);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
-        {
-            var postedBy = queryDto.PostedByEmployeeName;
-            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
-        }
-
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
             var extField = queryDto.ExtField;
@@ -1082,10 +1073,6 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             return true;
         }
         if (queryDto.GrossAmount.HasValue)
-        {
-            return true;
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
         {
             return true;
         }

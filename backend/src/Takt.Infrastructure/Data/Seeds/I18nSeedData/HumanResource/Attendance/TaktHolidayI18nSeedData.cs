@@ -126,14 +126,23 @@ public class TaktHolidayI18nSeedData : ITaktSeedDataCoordinator
             // entity.holiday.enddate
             new TranslationSeedItem("entity.holiday.enddate", "zh-HK", "假日结束日期_hk", "假日结束日期"),
 
-            // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
-            // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "ja-JP", "是否工作日_jp", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
-            // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-CN", "是否工作日", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
-            // entity.holiday.isworkingday
-            new TranslationSeedItem("entity.holiday.isworkingday", "zh-HK", "是否工作日_hk", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),
+            // entity.holiday.dayscount
+            new TranslationSeedItem("entity.holiday.dayscount", "en-US", "假期天数_us", "假期天数（含起止日；由 StartDate～EndDate 派生）"),
+            new TranslationSeedItem("entity.holiday.dayscount", "ja-JP", "假期天数_jp", "假期天数（含起止日；由 StartDate～EndDate 派生）"),
+            new TranslationSeedItem("entity.holiday.dayscount", "zh-CN", "假期天数", "假期天数（含起止日；由 StartDate～EndDate 派生）"),
+            new TranslationSeedItem("entity.holiday.dayscount", "zh-HK", "假期天数_hk", "假期天数（含起止日；由 StartDate～EndDate 派生）"),
+
+            // entity.holiday.compensatoryworkdates
+            new TranslationSeedItem("entity.holiday.compensatoryworkdates", "en-US", "调休对应_us", "调休对应（上班日=>所补放假日；多对分号分隔）"),
+            new TranslationSeedItem("entity.holiday.compensatoryworkdates", "ja-JP", "调休对应_jp", "调休对应（上班日=>所补放假日；多对分号分隔）"),
+            new TranslationSeedItem("entity.holiday.compensatoryworkdates", "zh-CN", "调休对应", "调休对应（上班日=>所补放假日；多对分号分隔，如 2026-09-20=>2026-10-06;2026-10-10=>2026-10-07）"),
+            new TranslationSeedItem("entity.holiday.compensatoryworkdates", "zh-HK", "调休对应_hk", "调休对应（上班日=>所补放假日；多对分号分隔）"),
+
+            // entity.holiday.ispaid
+            new TranslationSeedItem("entity.holiday.ispaid", "en-US", "是否带薪假_us", "是否带薪假（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.holiday.ispaid", "ja-JP", "是否带薪假_jp", "是否带薪假（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.holiday.ispaid", "zh-CN", "是否带薪假", "是否带薪假（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.holiday.ispaid", "zh-HK", "是否带薪假_hk", "是否带薪假（字典 sys_yes_no；0=否 1=是）"),
 
             // entity.holiday.greeting
             new TranslationSeedItem("entity.holiday.greeting", "en-US", "假日问候语_us", "假日问候语（简短，用于界面问候展示）"),

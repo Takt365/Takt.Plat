@@ -20,6 +20,8 @@ export const SALESORDERITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESORDERITE
 
 /** 列表业务列（不含主键） */
 export const SALESORDERITEM_LIST_FIELDS = [
+  'salesOrderId',
+  'salesOrderName',
   'salesOrderCode',
   'lineNumber',
   'materialCode',
@@ -27,6 +29,7 @@ export const SALESORDERITEM_LIST_FIELDS = [
   'materialSpecification',
   'salesUnit',
   'orderQuantity',
+  'targetQuantity',
   'shippedQuantity',
   'salesPerUnit',
   'salesUnitPrice',
@@ -36,13 +39,20 @@ export const SALESORDERITEM_LIST_FIELDS = [
   'untaxedAmount',
   'taxAmount',
   'salesAmount',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'deliveryStatus',
   'isObsolete',
-  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesOrderId',
+  'salesOrderName',
   'salesOrderCode',
   'lineNumber',
   'materialCode',
@@ -50,6 +60,7 @@ export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'materialSpecification',
   'salesUnit',
   'orderQuantity',
+  'targetQuantity',
   'shippedQuantity',
   'salesPerUnit',
   'salesUnitPrice',
@@ -59,6 +70,12 @@ export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'untaxedAmount',
   'taxAmount',
   'salesAmount',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'deliveryStatus',
   'isObsolete',
   'action',
@@ -67,6 +84,7 @@ export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
 /** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
 export const SALESORDERITEM_SUMMARY_SUM_FIELDS = [
   'orderQuantity',
+  'targetQuantity',
   'shippedQuantity',
   'salesPerUnit',
   'salesUnitPrice',
@@ -76,13 +94,43 @@ export const SALESORDERITEM_SUMMARY_SUM_FIELDS = [
   'untaxedAmount',
   'taxAmount',
   'salesAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'deliveryStatus',
   'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESORDERITEM_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  lineNumber: 'select',
+  materialCode: 'select',
+  materialDescription: 'optional',
+  materialSpecification: 'optional',
+  salesUnit: 'select',
+  orderQuantity: 'select',
+  targetQuantity: 'select',
+  shippedQuantity: 'select',
+  salesPerUnit: 'select',
+  salesUnitPrice: 'select',
+  discountRate: 'select',
+  discountAmount: 'select',
+  taxIncludedAmount: 'select',
+  untaxedAmount: 'select',
+  taxAmount: 'select',
+  salesAmount: 'select',
+  grossWeight: 'optional',
+  netWeight: 'optional',
+  weightUnit: 'optional',
+  volume: 'optional',
+  volumeUnit: 'optional',
+  profitCenterCode: 'optional',
+  deliveryStatus: 'select',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -90,13 +138,47 @@ export type SalesOrderItemField = keyof typeof SALESORDERITEM_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESORDERITEM_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'salesOrderCode',
+  'materialCode',
+  'materialDescription',
+  'materialSpecification',
+  'salesUnit',
+  'weightUnit',
+  'volumeUnit',
+  'profitCenterCode',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof SalesOrderItemQuery)[]
 
-export type SalesOrderItemQueryField = (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number]
+export type SalesOrderItemQueryField =
+  | (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'orderQuantity' | 'targetQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'salesUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'salesAmount' | 'grossWeight' | 'netWeight' | 'volume' | 'deliveryStatus' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = [...SALESORDERITEM_QUERY_STRING_FIELDS]
+export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = [
+  ...SALESORDERITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'orderQuantity',
+  'targetQuantity',
+  'shippedQuantity',
+  'salesPerUnit',
+  'salesUnitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'salesAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
+  'deliveryStatus',
+  'isObsolete',
+]
 
 /**
  * SalesOrderItem字段 i18n：index / order-item-form 统一入口

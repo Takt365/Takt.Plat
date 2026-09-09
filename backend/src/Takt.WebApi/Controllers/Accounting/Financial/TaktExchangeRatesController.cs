@@ -86,11 +86,11 @@ public class TaktExchangeRatesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:exchange:rate:query", "汇率选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetExchangeRateOptionsAsync()
+    public async Task<IActionResult> GetExchangeRateOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _exchangeRateService.GetExchangeRateOptionsAsync();
+            var result = await _exchangeRateService.GetExchangeRateOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -132,7 +132,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -285,6 +285,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.registrationProvince"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 2 }"
           :placeholder="pi.queryPh('registrationProvince', 'select')"
           allow-clear
         />
@@ -295,6 +296,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.registrationCity"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 3 }"
           :placeholder="pi.queryPh('registrationCity', 'select')"
           allow-clear
         />
@@ -315,6 +317,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.businessProvince"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 2 }"
           :placeholder="pi.queryPh('businessProvince', 'select')"
           allow-clear
         />
@@ -325,6 +328,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.businessCity"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 3 }"
           :placeholder="pi.queryPh('businessCity', 'select')"
           allow-clear
         />
@@ -788,6 +792,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PlantForm from './components/plant-form.vue'
 import { getPlantList, getPlantById, createPlant, updatePlant, deletePlantById, deletePlantBatch, getPlantTemplate, importPlant, exportPlant, updatePlantStatus } from '@/api/logistics/materials/plant'
@@ -848,6 +853,8 @@ const formData = ref<Partial<Plant> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)

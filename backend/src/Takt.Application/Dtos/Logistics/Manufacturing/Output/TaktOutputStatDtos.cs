@@ -29,6 +29,32 @@ public class TaktOutputProductionStatQueryDto
 }
 
 /// <summary>
+/// 生产统计按生产班组行（数据看板 OPH：班别/计划数/生产数/达成率）
+/// </summary>
+public class TaktOutputProductionStatTeamItemDto
+{
+    /// <summary>
+    /// 生产班组编码（TeamCode）
+    /// </summary>
+    public string TeamCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计划数（标准产能合计）
+    /// </summary>
+    public decimal StdCapacity { get; set; }
+
+    /// <summary>
+    /// 生产数（实际产量合计）
+    /// </summary>
+    public decimal ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 达成率（%）
+    /// </summary>
+    public decimal AchievementRate { get; set; }
+}
+
+/// <summary>
 /// 生产统计 DTO（组立/PCBA 共用结构）
 /// </summary>
 public class TaktOutputProductionStatDto
@@ -72,6 +98,11 @@ public class TaktOutputProductionStatDto
     /// 月实际工时（分钟；组立：ActualMinutes；PCBA：InputMinutes + RepairMinutes）
     /// </summary>
     public decimal MonthActualMinutes { get; set; }
+
+    /// <summary>
+    /// 按生产班组（TeamCode）分行汇总
+    /// </summary>
+    public List<TaktOutputProductionStatTeamItemDto> Teams { get; set; } = new();
 }
 
 /// <summary>

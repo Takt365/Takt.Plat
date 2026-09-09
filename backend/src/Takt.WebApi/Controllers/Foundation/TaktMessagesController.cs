@@ -126,11 +126,11 @@ public class TaktMessagesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:message:query", "在线消息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMessageOptionsAsync()
+    public async Task<IActionResult> GetMessageOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _messageService.GetMessageOptionsAsync();
+            var result = await _messageService.GetMessageOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

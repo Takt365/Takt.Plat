@@ -100,7 +100,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -180,6 +180,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.teamCode"
           api-url="TaktProductionTeams/options"
+          :api-params="pcbaTeamQueryOptionsParams"
           :placeholder="pi.queryPh('teamCode', 'select')"
           allow-clear
         />
@@ -597,6 +598,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -613,6 +615,7 @@ import { formatSummaryValue } from '@/components/business/takt-editable-table/ed
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PcbaOutputDetailForm from './pcba-output-detail-form.vue'
+import { buildPcbaProductionTeamOptionsParams } from '../../composables/production-team-category'
 import { usePcbaOutputMasterContext } from '../composables/use-pcba-output-master-context'
 import {
   getPcbaOutputDetailList,
@@ -698,6 +701,8 @@ const formTitle = ref('')
 const formData = ref<Partial<PcbaOutputDetail>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 const advancedQueryVisible = ref(false)
 /**
@@ -831,6 +836,11 @@ function createEmptyAdvancedQueryForm() {
     isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
+
+/** 高级查询班组下拉（按工厂 + PCBA 分类） */
+const pcbaTeamQueryOptionsParams = computed(() =>
+  buildPcbaProductionTeamOptionsParams(advancedQueryForm.value.plantCode),
+)
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */

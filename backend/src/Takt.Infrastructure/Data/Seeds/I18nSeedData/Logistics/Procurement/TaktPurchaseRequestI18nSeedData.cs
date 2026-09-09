@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseRequest 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -224,6 +224,33 @@ public class TaktPurchaseRequestI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaserequest.suppliername1", "zh-CN", "供应商名称1", "供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）"),
             // entity.purchaserequest.suppliername1
             new TranslationSeedItem("entity.purchaserequest.suppliername1", "zh-HK", "供应商名称1_hk", "供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）"),
+
+            // entity.purchaserequest.type
+            new TranslationSeedItem("entity.purchaserequest.type", "en-US", "采购申请类型_us", "采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）"),
+            // entity.purchaserequest.type
+            new TranslationSeedItem("entity.purchaserequest.type", "ja-JP", "采购申请类型_jp", "采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）"),
+            // entity.purchaserequest.type
+            new TranslationSeedItem("entity.purchaserequest.type", "zh-CN", "采购申请类型", "采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）"),
+            // entity.purchaserequest.type
+            new TranslationSeedItem("entity.purchaserequest.type", "zh-HK", "采购申请类型_hk", "采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）"),
+
+            // entity.purchaserequest.pricingprocedure
+            new TranslationSeedItem("entity.purchaserequest.pricingprocedure", "en-US", "定价过程_us", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaserequest.pricingprocedure
+            new TranslationSeedItem("entity.purchaserequest.pricingprocedure", "ja-JP", "定价过程_jp", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaserequest.pricingprocedure
+            new TranslationSeedItem("entity.purchaserequest.pricingprocedure", "zh-CN", "定价过程", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaserequest.pricingprocedure
+            new TranslationSeedItem("entity.purchaserequest.pricingprocedure", "zh-HK", "定价过程_hk", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+
+            // entity.purchaserequest.pricingconditioncode
+            new TranslationSeedItem("entity.purchaserequest.pricingconditioncode", "en-US", "定价条件编码_us", "定价条件编码"),
+            // entity.purchaserequest.pricingconditioncode
+            new TranslationSeedItem("entity.purchaserequest.pricingconditioncode", "ja-JP", "定价条件编码_jp", "定价条件编码"),
+            // entity.purchaserequest.pricingconditioncode
+            new TranslationSeedItem("entity.purchaserequest.pricingconditioncode", "zh-CN", "定价条件编码", "定价条件编码"),
+            // entity.purchaserequest.pricingconditioncode
+            new TranslationSeedItem("entity.purchaserequest.pricingconditioncode", "zh-HK", "定价条件编码_hk", "定价条件编码"),
 
             // entity.purchaserequest.currencycode
             new TranslationSeedItem("entity.purchaserequest.currencycode", "en-US", "结算币种_us", "结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）"),

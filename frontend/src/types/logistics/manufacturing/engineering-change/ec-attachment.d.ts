@@ -36,7 +36,7 @@ export interface EcAttachment extends CompanyDtoBase {
   /**
    * 设变主表ID
    */
-  ecId?: string;
+  ecGijutsuId?: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -104,7 +104,7 @@ export interface EcAttachmentExport {
   /**
    * 设变主表ID
    */
-  ecId: string;
+  ecGijutsuId: string;
 
   /**
    * 设变单号（冗余字段,便于查询）

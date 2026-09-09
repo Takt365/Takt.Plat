@@ -38,8 +38,10 @@ public interface ITaktPcbaRepairService
     /// <summary>
     /// 获取PCBA改修日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetPcbaRepairOptionsAsync();
+    Task<List<TaktSelectOption>> GetPcbaRepairOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建PCBA改修日报
@@ -95,4 +97,10 @@ public interface ITaktPcbaRepairService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPcbaRepairAsync(TaktPcbaRepairQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 获取 PCBA 改修不良统计（数据看板 defect-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 改修统计</returns>
+    Task<TaktPcbaRepairStatDto> GetPcbaRepairStatAsync(TaktDefectStatQueryDto queryDto);
 }

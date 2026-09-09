@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutput.cs
@@ -20,13 +20,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
 /// 组立日报（产出）主表实体
-/// <para>业务唯一键：TenantCode+CompanyCode+PlantCode+ProdDate+ProdOrderCode。</para>
+/// <para>业务唯一键：TenantCode+CompanyCode+TeamCode+ProdCategory+ProdDate+ProdOrderCode。</para>
 /// 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_assy", "组立日报表")]
 [SugarIndex("ix_assy_output_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_assy_output_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]
@@ -34,19 +34,19 @@ public class TaktAssyOutput : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_manufacturing_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP；与 TeamCode、ProdDate、ProdOrderCode 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产日期
+    /// 生产日期（与 TeamCode、ProdCategory、ProdOrderCode 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "prod_date", ColumnDescription = "生产日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
+    /// 生产班组（选项 TaktProductionTeams/options?teamCategory=A；DictValue=TeamCode，ExtValue=PlantCode；与 ProdCategory、ProdDate、ProdOrderCode 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = false)]
     public string TeamCode { get; set; } = string.Empty;
@@ -76,7 +76,7 @@ public class TaktAssyOutput : TaktCompanyEntityBase
     public string? ProdOrderType { get; set; }
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode；与 TeamCode、ProdCategory、ProdDate 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 12, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;

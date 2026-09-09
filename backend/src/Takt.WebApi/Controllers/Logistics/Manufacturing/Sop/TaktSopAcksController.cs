@@ -86,11 +86,11 @@ public class TaktSopAcksController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:sop:ack:query", "SOP确认选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSopAckOptionsAsync()
+    public async Task<IActionResult> GetSopAckOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _sopAckService.GetSopAckOptionsAsync();
+            var result = await _sopAckService.GetSopAckOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -58,6 +58,8 @@ const {
   buildServerPagedIndexStyleBlock,
   buildFormResetScopeDefaultsBlock,
   buildVueImportResultUtilImportLine,
+  TAKT_FORM_MODAL_WIDTH_IMPORT,
+  TAKT_FORM_MODAL_WIDTH_ATTR,
   buildImportModalVueBlock,
   buildImportHandlersScriptBlock,
   entityRowRecordTypeName,
@@ -178,7 +180,7 @@ function generateCrudIndexVue(ctx) {
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      ${TAKT_FORM_MODAL_WIDTH_ATTR}
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -533,7 +535,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-${formImports}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
+${(caps.hasCreate || caps.hasUpdate) ? TAKT_FORM_MODAL_WIDTH_IMPORT : ''}${formImports}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 ${mdParts.childApiImports ? `${mdParts.childApiImports}\n` : ''}${childTypeImportLines ? `${childTypeImportLines}\n` : ''}import type { ${typeImports.join(', ')} } from '@/types/${modulePath}/${entityKebab}'
 ${indexDictImport}${excelImport}${exportImport}${importResultImport}${iconImports}
 ${entityI18nIndexImport}${rowRecordTypeAlias}${singleStateBlock}

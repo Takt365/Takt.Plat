@@ -86,11 +86,11 @@ public class TaktManufacturerMaterialsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:manufacturer:material:query", "制造商物料选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetManufacturerMaterialOptionsAsync()
+    public async Task<IActionResult> GetManufacturerMaterialOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _manufacturerMaterialService.GetManufacturerMaterialOptionsAsync();
+            var result = await _manufacturerMaterialService.GetManufacturerMaterialOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

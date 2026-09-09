@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Controlling
 // 文件名称：ITaktCostCenterService.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-08-31
 // 创建人：Takt365(Cursor AI)
 // 功能描述：成本中心应用服务接口
 // 
@@ -39,15 +39,17 @@ public interface ITaktCostCenterService
     /// 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync(long parentId = 0);
+    Task<List<TaktTreeSelectOption>> GetCostCenterTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null);
 
     /// <summary>
-    /// 获取成本中心树形列表
+    /// 获取成本中心树形列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     Task<List<TaktCostCenterTreeDto>> GetCostCenterTreeAsync(long parentId = 0, bool includeDisabled = false);
 
     /// <summary>

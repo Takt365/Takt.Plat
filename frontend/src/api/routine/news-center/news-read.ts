@@ -130,10 +130,20 @@ export function updateNewsReadObsolete(dto: NewsReadObsolete): Promise<NewsRead>
  * 获取新闻阅读记录选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getNewsReadOptions(): Promise<TaktSelectOption[]> {
+export function getNewsReadOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${NEWS_READ_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

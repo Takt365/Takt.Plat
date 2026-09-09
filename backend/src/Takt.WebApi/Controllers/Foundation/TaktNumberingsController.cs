@@ -113,11 +113,11 @@ public class TaktNumberingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:numbering:query", "编码规则选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetNumberingOptionsAsync([FromQuery] string? documentType = null)
+    public async Task<IActionResult> GetNumberingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? documentType = null)
     {
         try
         {
-            var result = await _numberingService.GetNumberingOptionsAsync(documentType);
+            var result = await _numberingService.GetNumberingOptionsAsync(plantCode, keyword, documentType);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -86,11 +86,11 @@ public class TaktTicketEvaluationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:ticket:evaluation:query", "工单服务评价选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTicketEvaluationOptionsAsync()
+    public async Task<IActionResult> GetTicketEvaluationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ticketEvaluationService.GetTicketEvaluationOptionsAsync();
+            var result = await _ticketEvaluationService.GetTicketEvaluationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

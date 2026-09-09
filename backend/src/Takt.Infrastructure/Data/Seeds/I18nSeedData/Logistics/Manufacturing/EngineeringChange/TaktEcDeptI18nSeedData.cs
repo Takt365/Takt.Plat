@@ -90,14 +90,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept._self
             new TranslationSeedItem("entity.ecdept._self", "zh-HK", "设变-部门通用信息_hk", "实体名称"),
 
-            // entity.ecdept.ecndetailid
-            new TranslationSeedItem("entity.ecdept.ecndetailid", "en-US", "设变明细ID_us", "设变明细ID（TaktEcDetail 主键）"),
-            // entity.ecdept.ecndetailid
-            new TranslationSeedItem("entity.ecdept.ecndetailid", "ja-JP", "设变明细ID_jp", "设变明细ID（TaktEcDetail 主键）"),
-            // entity.ecdept.ecndetailid
-            new TranslationSeedItem("entity.ecdept.ecndetailid", "zh-CN", "设变明细ID", "设变明细ID（TaktEcDetail 主键）"),
-            // entity.ecdept.ecndetailid
-            new TranslationSeedItem("entity.ecdept.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细ID（TaktEcDetail 主键）"),
+            // entity.ecdept.ecdetailid
+            new TranslationSeedItem("entity.ecdept.ecdetailid", "en-US", "设变明细ID_us", "设变明细ID（TaktEcDetail 主键）"),
+            // entity.ecdept.ecdetailid
+            new TranslationSeedItem("entity.ecdept.ecdetailid", "ja-JP", "设变明细ID_jp", "设变明细ID（TaktEcDetail 主键）"),
+            // entity.ecdept.ecdetailid
+            new TranslationSeedItem("entity.ecdept.ecdetailid", "zh-CN", "设变明细ID", "设变明细ID（TaktEcDetail 主键）"),
+            // entity.ecdept.ecdetailid
+            new TranslationSeedItem("entity.ecdept.ecdetailid", "zh-HK", "设变明细ID_hk", "设变明细ID（TaktEcDetail 主键）"),
 
             // entity.ecdept.ecCode
             new TranslationSeedItem("entity.ecdept.ecCode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
@@ -360,14 +360,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.issopupdated
             new TranslationSeedItem("entity.ecdept.issopupdated", "zh-HK", "是否更新SOP_hk", "是否更新SOP（0=否 1=是）"),
 
-            // entity.ecdept.ecndetail
-            new TranslationSeedItem("entity.ecdept.ecndetail", "en-US", "设变明细_us", "设变明细（多对一）"),
-            // entity.ecdept.ecndetail
-            new TranslationSeedItem("entity.ecdept.ecndetail", "ja-JP", "设变明细_jp", "设变明细（多对一）"),
-            // entity.ecdept.ecndetail
-            new TranslationSeedItem("entity.ecdept.ecndetail", "zh-CN", "设变明细", "设变明细（多对一）"),
-            // entity.ecdept.ecndetail
-            new TranslationSeedItem("entity.ecdept.ecndetail", "zh-HK", "设变明细_hk", "设变明细（多对一）"),
+            // entity.ecdept.ecdetail
+            new TranslationSeedItem("entity.ecdept.ecdetail", "en-US", "设变明细_us", "设变明细（多对一）"),
+            // entity.ecdept.ecdetail
+            new TranslationSeedItem("entity.ecdept.ecdetail", "ja-JP", "设变明细_jp", "设变明细（多对一）"),
+            // entity.ecdept.ecdetail
+            new TranslationSeedItem("entity.ecdept.ecdetail", "zh-CN", "设变明细", "设变明细（多对一）"),
+            // entity.ecdept.ecdetail
+            new TranslationSeedItem("entity.ecdept.ecdetail", "zh-HK", "设变明细_hk", "设变明细（多对一）"),
         };
     }
 

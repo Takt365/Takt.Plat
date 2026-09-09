@@ -87,8 +87,10 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
     /// <summary>
     /// 获取工厂日历选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetCalendarOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetCalendarOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _calendarRepository.GetListAsync(
@@ -110,6 +112,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
     public async Task<TaktCalendarDto> CreateCalendarAsync(TaktCalendarCreateDto dto)
     {
         var entity = dto.Adapt<TaktCalendar>();
+        FillCalendarDateDerivedFields(entity);
         var isUnique_ix_calendar_plant_date_unique = await _uniqueValidator.IsUniqueAsync(
             _calendarRepository,
             x => x.PlantCode == entity.PlantCode
@@ -136,6 +139,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
             throw new TaktBusinessException("工厂日历不存在");
         }
         dto.Adapt(entity);
+        FillCalendarDateDerivedFields(entity);
         var isUnique_ix_calendar_plant_date_unique = await _uniqueValidator.IsUniqueAsync(
             _calendarRepository,
             x => x.PlantCode == entity.PlantCode
@@ -217,6 +221,7 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
             try
             {
                 var entity = rows[i].Adapt<TaktCalendar>();
+                FillCalendarDateDerivedFields(entity);
                 var importKey = $"{entity.PlantCode}|{entity.CalendarDate}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -352,5 +357,23 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 由 CalendarDate 回填月内日/星期/周次/季度/季内日/年内日（与种子口径一致）
+    /// </summary>
+    /// <param name="entity">日历实体</param>
+    private static void FillCalendarDateDerivedFields(TaktCalendar entity)
+    {
+        var date = entity.CalendarDate.Date;
+        entity.CalendarDate = date;
+        entity.DayOfMonth = date.Day;
+        var dow = (int)date.DayOfWeek;
+        entity.Weekday = dow == 0 ? 7 : dow;
+        entity.WeekOfYear = System.Globalization.ISOWeek.GetWeekOfYear(date);
+        entity.Quarter = (date.Month - 1) / 3 + 1;
+        var quarterStart = new DateTime(date.Year, (entity.Quarter - 1) * 3 + 1, 1);
+        entity.DayOfQuarter = (date - quarterStart).Days + 1;
+        entity.DayOfYear = date.DayOfYear;
     }
 }

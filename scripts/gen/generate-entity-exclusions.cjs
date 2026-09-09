@@ -35,6 +35,8 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
   'TaktRbac',
   'TaktFlowEngine',
   'TaktFileUploadEngine',
+  'TaktProductionOrderFormFill',
+  'TaktCustomerServiceStat',
 ]);
 
 /**
@@ -75,6 +77,16 @@ const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'NewsRead',
   'NewsShare',
 ]);
+
+/**
+ * 是否为看板/分析统计短名（*Stat / *Trend / *Explosion）
+ * 须独立 DTO+Service+Controller，禁止挂在 CRUD 上，禁止流水线按标准聚合 DTO 覆盖
+ * @param {string} entityShort
+ * @returns {boolean}
+ */
+function isAnalysisStatEntity(entityShort) {
+  return /(?:Stat|Trend|Explosion)$/.test(entityShort || '');
+}
 
 /**
  * @param {string} entityShort 实体短名（全字）
@@ -144,6 +156,7 @@ function entityShortFromDtoFileName(dtoFileName) {
  * DictData：CreateDictSnapshotAsync / GetDataDictAllAsync；
  * Configurable：运行时查询；EcGijutsu / AssyOutput：来源导入扩展；FlowInstance：实例统计
  * 约定：凡 *Trend / *Explosion / *Stat 分析模块须独立 DTO+Service+Controller+前端 API，禁止挂在 CRUD 服务上。
+ * 短名以 Stat/Trend/Explosion 结尾时由 isAnalysisStatEntity 统一跳过流水线覆盖。
  */
 const MANUAL_SERVICE_ENTITY_SHORT_NAMES = new Set([
   'BillOfMaterial',
@@ -166,6 +179,9 @@ function shouldExcludeStandaloneService(entityName) {
     return true;
   }
   const short = entityName?.startsWith('Takt') ? entityName.slice(4) : entityName;
+  if (isAnalysisStatEntity(short)) {
+    return true;
+  }
   return MANUAL_SERVICE_ENTITY_SHORT_NAMES.has(short);
 }
 
@@ -179,6 +195,9 @@ function shouldExcludeDtoFile(dtoFile) {
   if (entityShort != null && isRbacJunctionEntity(entityShort)) {
     return true;
   }
+  if (entityShort != null && isAnalysisStatEntity(entityShort)) {
+    return true;
+  }
   return entityShort != null && isManualDtoEntity(entityShort);
 }
 
@@ -190,6 +209,9 @@ function shouldExcludeDtoFile(dtoFile) {
 function shouldExcludeDtoSourceBase(sourceFileBase) {
   const entityShort = entityShortFromDtoFileName(`${sourceFileBase}.cs`);
   if (entityShort != null && isRbacJunctionEntity(entityShort)) {
+    return true;
+  }
+  if (entityShort != null && isAnalysisStatEntity(entityShort)) {
     return true;
   }
   return entityShort != null && isManualDtoEntity(entityShort);
@@ -214,6 +236,9 @@ function shouldExcludeController(controllerName) {
     return true;
   }
   if (isManualDtoEntity(entityShort)) {
+    return true;
+  }
+  if (isAnalysisStatEntity(entityShort)) {
     return true;
   }
   const entityName = entityShort ? `Takt${entityShort}` : '';
@@ -248,6 +273,7 @@ module.exports = {
   STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES,
   isRbacJunctionEntity,
   isManualDtoEntity,
+  isAnalysisStatEntity,
   assertNotRbacJunctionEntityCli,
   assertNotManualDtoEntityCli,
   shouldExcludeStandaloneService,

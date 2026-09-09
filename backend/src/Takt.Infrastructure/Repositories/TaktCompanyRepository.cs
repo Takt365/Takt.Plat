@@ -404,30 +404,57 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     }
 
     /// <summary>
-    /// 批量创建实体
+    /// 批量创建实体（公司/工厂/文化码只解析一次；插入由 InsertEntitiesAsync 自动分批）
     /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <returns>插入行数</returns>
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
+        ArgumentNullException.ThrowIfNull(entities);
+        if (entities.Count == 0)
+        {
+            return 0;
+        }
+
         var now = DateTime.Now;
+        var defaultTenant = CurrentTenantCode;
+        var defaultCompany = CurrentCompanyCode;
+        _database.NormalizeAndValidate();
+        // 同批通常同公司：先解析映射，避免 10 万次 await Task.CompletedTask
+        string? mappedCulture = null;
+        string? mappedPlant = null;
+        if (!string.IsNullOrWhiteSpace(defaultTenant) && !string.IsNullOrWhiteSpace(defaultCompany))
+        {
+            mappedCulture = _database.GetCultureCodeForCompanyCode(defaultCompany);
+            mappedPlant = _database.GetPlantCodeForCompanyCode(defaultCompany);
+        }
+
         foreach (var entity in entities)
         {
-            // 自动设置租户和公司编码(仅在未设置时才自动填充)
             if (string.IsNullOrEmpty(entity.TenantCode))
             {
-                entity.TenantCode = CurrentTenantCode;
+                entity.TenantCode = defaultTenant;
             }
 
             if (string.IsNullOrEmpty(entity.CompanyCode))
             {
-                entity.CompanyCode = CurrentCompanyCode;
+                entity.CompanyCode = defaultCompany;
             }
 
-            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
-                Db,
-                entity,
-                entity.TenantCode,
-                entity.CompanyCode,
-                _database);
+            if (string.Equals(entity.CompanyCode, defaultCompany, StringComparison.Ordinal)
+                && mappedCulture != null)
+            {
+                TaktCompanyScopeFillHelper.ApplyCompanyScope(entity, mappedCulture, mappedPlant ?? string.Empty);
+            }
+            else
+            {
+                await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                    Db,
+                    entity,
+                    entity.TenantCode,
+                    entity.CompanyCode,
+                    _database);
+            }
 
             entity.ApplyCreate(CurrentUserId, now);
         }
@@ -471,10 +498,82 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         {
             entity.ApplyUpdate(CurrentUserId, now);
         }
+
+        // 大批量走 BulkUpdate（Updateable 十万行会极慢/超时）
+        if (string.IsNullOrWhiteSpace(asTableName) && entities.Count >= TaktPrimaryKeyInsertHelper.BulkCopyThreshold)
+        {
+            const int chunk = TaktPrimaryKeyInsertHelper.DefaultInsertBatchSize;
+            var total = 0;
+            for (var offset = 0; offset < entities.Count; offset = checked(offset + chunk))
+            {
+                var take = Math.Min(chunk, entities.Count - offset);
+                var batch = entities.GetRange(offset, take);
+                var n = await Db.Fastest<TEntity>().BulkUpdateAsync(batch);
+                total = checked(total + (n > 0 ? n : take));
+            }
+            return total;
+        }
+
         var updateable = string.IsNullOrWhiteSpace(asTableName)
             ? Db.Updateable(entities)
             : Db.Updateable(entities).AS(asTableName.Trim());
         return await updateable.ExecuteCommandAsync();
+    }
+
+    /// <summary>
+    /// 批量更新指定列（大数据回写外键；走 BulkUpdate 指定列）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <param name="columnNames">属性名</param>
+    /// <returns>更新行数</returns>
+    public virtual async Task<int> UpdateRangeColumnsAsync(List<TEntity> entities, params string[] columnNames)
+    {
+        ArgumentNullException.ThrowIfNull(entities);
+        ArgumentNullException.ThrowIfNull(columnNames);
+        if (entities.Count == 0 || columnNames.Length == 0)
+        {
+            return 0;
+        }
+
+        var now = DateTime.Now;
+        foreach (var entity in entities)
+        {
+            entity.ApplyUpdate(CurrentUserId, now);
+        }
+
+        var cols = new List<string>(columnNames.Length + 2);
+        foreach (var name in columnNames)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && !cols.Contains(name, StringComparer.Ordinal))
+            {
+                cols.Add(name.Trim());
+            }
+        }
+        if (!cols.Contains(nameof(TaktCompanyEntityBase.UpdatedBy), StringComparer.Ordinal))
+        {
+            cols.Add(nameof(TaktCompanyEntityBase.UpdatedBy));
+        }
+        if (!cols.Contains(nameof(TaktCompanyEntityBase.UpdatedAt), StringComparer.Ordinal))
+        {
+            cols.Add(nameof(TaktCompanyEntityBase.UpdatedAt));
+        }
+
+        var colArray = cols.ToArray();
+        if (entities.Count >= TaktPrimaryKeyInsertHelper.BulkCopyThreshold)
+        {
+            const int chunk = TaktPrimaryKeyInsertHelper.DefaultInsertBatchSize;
+            var total = 0;
+            for (var offset = 0; offset < entities.Count; offset = checked(offset + chunk))
+            {
+                var take = Math.Min(chunk, entities.Count - offset);
+                var batch = entities.GetRange(offset, take);
+                var n = await Db.Fastest<TEntity>().BulkUpdateAsync(batch, colArray);
+                total = checked(total + (n > 0 ? n : take));
+            }
+            return total;
+        }
+
+        return await Db.Updateable(entities).UpdateColumns(colArray).ExecuteCommandAsync();
     }
 
     /// <summary>

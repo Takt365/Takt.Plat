@@ -95,8 +95,10 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     /// <summary>
     /// 获取银行信息选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBankOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetBankOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _bankRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,

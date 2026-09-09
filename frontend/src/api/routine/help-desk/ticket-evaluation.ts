@@ -116,10 +116,20 @@ export function deleteTicketEvaluationBatch(ids: string[]): Promise<void> {
  * 获取工单服务评价选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTicketEvaluationOptions(): Promise<TaktSelectOption[]> {
+export function getTicketEvaluationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TICKET_EVALUATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

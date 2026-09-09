@@ -20,6 +20,7 @@
       >
         <a-form
           ref="mainFormRef"
+          class="takt-generated-form"
           :model="mainFormState"
           :rules="mainFormRules"
           layout="horizontal"
@@ -80,18 +81,6 @@
               dict-type="sys_yes_no"
               :placeholder="t('common.page.form.placeholder.select', { field: t('entity.dicttype.isbuiltin') })"
               allow-clear
-            />
-          </a-form-item>
-
-          <a-form-item
-            :label="t('entity.dicttype.sortorder')"
-            name="sortOrder"
-          >
-            <a-input-number
-              v-model:value="mainFormState.sortOrder"
-              :min="0"
-              :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dicttype.sortorder') })"
-              style="width: 100%"
             />
           </a-form-item>
 
@@ -288,26 +277,6 @@
                 {{ record.extValue || '-' }}
               </span>
             </template>
-            <!-- 排序号 - 可编辑 -->
-            <template v-else-if="column.key === 'sortOrder'">
-              <a-input-number
-                v-if="editingKey === `${record.dictDataId || index}-sortOrder`"
-                v-model:value="editingRecord.sortOrder"
-                :min="0"
-                size="small"
-                style="width: 100%"
-                @blur="handleSaveCell(record, index, 'sortOrder')"
-                @press-enter="handleSaveCell(record, index, 'sortOrder')"
-                @keydown.esc="handleCancelEdit"
-              />
-              <span
-                v-else
-                style="cursor: pointer; padding: 4px 8px; display: inline-block; min-height: 24px; width: 100%"
-                @click="handleStartEdit(record, index, 'sortOrder')"
-              >
-                {{ record.sortOrder ?? 0 }}
-              </span>
-            </template>
             <!-- 操作列 -->
             <template v-else-if="column.key === 'action'">
               <a-button
@@ -353,7 +322,6 @@ type DictDataEditableField =
   | 'listClass'
   | 'extLabel'
   | 'extValue'
-  | 'sortOrder'
 
 /** 子表行内编辑缓冲区：禁止 `Partial<DictData>`，否则 `v-model` 与 exactOptionalPropertyTypes 不兼容 */
 type DictDataInlineEditState = {
@@ -364,7 +332,6 @@ type DictDataInlineEditState = {
   listClass: number
   extLabel: string
   extValue: string
-  sortOrder: number
 }
 
 function dictDataToInlineEditState(r: DictData): DictDataInlineEditState {
@@ -375,8 +342,7 @@ function dictDataToInlineEditState(r: DictData): DictDataInlineEditState {
     cssClass: r.cssClass ?? 0,
     listClass: r.listClass ?? 0,
     extLabel: r.extLabel ?? '',
-    extValue: r.extValue ?? '',
-    sortOrder: r.sortOrder ?? 0
+    extValue: r.extValue ?? ''
   }
 }
 
@@ -388,8 +354,7 @@ function emptyDictDataInlineEditState(): DictDataInlineEditState {
     cssClass: 0,
     listClass: 0,
     extLabel: '',
-    extValue: '',
-    sortOrder: 0
+    extValue: ''
   }
 }
 
@@ -426,7 +391,6 @@ const mainFormState = reactive<DictTypeMainFormState>({
   dataSource: 0,
   dictScript: '',
   isBuiltIn: 1,
-  sortOrder: 0,
   dictStatus: 1,
   remark: ''
 })
@@ -514,12 +478,6 @@ const dictDataColumns = computed<TableColumnsType>(() => [
     ellipsis: true
   },
   {
-    title: t('entity.dictdata.sortorder'),
-    dataIndex: 'sortOrder',
-    key: 'sortOrder',
-    width: 100
-  },
-  {
     title: t('common.action.operation'),
     key: 'action',
     width: 80,
@@ -544,7 +502,6 @@ watch(
         dataSource: newData.dataSource ?? 0,
         dictScript: newData.dictScript || '',
         isBuiltIn: newData.isBuiltIn ?? 1,
-        sortOrder: newData.sortOrder ?? 0,
         dictStatus: newData.dictStatus ?? 1,
         remark: newData.remark || ''
       })
@@ -560,7 +517,6 @@ watch(
         dataSource: 0,
         dictScript: '',
         isBuiltIn: 1,
-        sortOrder: 0,
         dictStatus: 1,
         remark: ''
       })
@@ -585,8 +541,7 @@ const handleAddDictData = () => {
     listClass: 0,
     isDefault: 0,
     extLabel: '',
-    extValue: '',
-    sortOrder: dictDataList.value.length
+    extValue: ''
   } as DictData)
 }
 
@@ -622,7 +577,6 @@ const getFormData = (): DictTypeCreate | DictTypeUpdate => {
     dataSource: mainFormState.dataSource,
     dictScript: mainFormState.dictScript || undefined,
     isBuiltIn: mainFormState.isBuiltIn,
-    sortOrder: mainFormState.sortOrder,
     dictStatus: mainFormState.dictStatus,
     remark: mainFormState.remark || undefined,
     dictDataList: dictDataList.value
@@ -638,7 +592,6 @@ const getFormData = (): DictTypeCreate | DictTypeUpdate => {
         isDefault: item.isDefault ?? 0,
         extLabel: item.extLabel || undefined,
         extValue: item.extValue || undefined,
-        sortOrder: item.sortOrder ?? 0,
         remark: item.remark || undefined
       }))
   }

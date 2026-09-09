@@ -86,11 +86,11 @@ public class TaktEmployeeReassignmentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:reassignment:query", "员工调动选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeReassignmentOptionsAsync()
+    public async Task<IActionResult> GetEmployeeReassignmentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeReassignmentService.GetEmployeeReassignmentOptionsAsync();
+            var result = await _employeeReassignmentService.GetEmployeeReassignmentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

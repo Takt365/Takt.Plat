@@ -86,11 +86,11 @@ public class TaktMasterDemandSchedulesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mds:master:demand:schedule:query", "主需求计划MDS头选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMasterDemandScheduleOptionsAsync()
+    public async Task<IActionResult> GetMasterDemandScheduleOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _masterDemandScheduleService.GetMasterDemandScheduleOptionsAsync();
+            var result = await _masterDemandScheduleService.GetMasterDemandScheduleOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

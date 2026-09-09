@@ -20,6 +20,7 @@ export const PURCHASEINQUIRYITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASE
 
 /** 列表业务列（不含主键） */
 export const PURCHASEINQUIRYITEM_LIST_FIELDS = [
+  'purchaseInquiryId',
   'purchaseInquiryCode',
   'lineNumber',
   'allocationCategory',
@@ -30,15 +31,24 @@ export const PURCHASEINQUIRYITEM_LIST_FIELDS = [
   'inquiryQuantity',
   'purchasePerUnit',
   'quotedUnitPrice',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'inquiryAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
-  'remark',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PURCHASEINQUIRYITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'purchaseInquiryId',
   'purchaseInquiryCode',
   'lineNumber',
   'allocationCategory',
@@ -49,9 +59,18 @@ export const PURCHASEINQUIRYITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'inquiryQuantity',
   'purchasePerUnit',
   'quotedUnitPrice',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'inquiryAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
   'action',
 ] as const
@@ -64,12 +83,41 @@ export const PURCHASEINQUIRYITEM_SUMMARY_SUM_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'inquiryAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEINQUIRYITEM_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  lineNumber: 'select',
+  allocationCategory: 'select',
+  materialCode: 'optional',
+  materialDescription: 'optional',
+  materialSpecification: 'optional',
+  inquiryUnit: 'select',
+  inquiryQuantity: 'select',
+  purchasePerUnit: 'select',
+  quotedUnitPrice: 'optional',
+  taxCode: 'optional',
+  taxIncludedAmount: 'select',
+  untaxedAmount: 'select',
+  taxAmount: 'select',
+  inquiryAmount: 'select',
+  pricingDate: 'optional',
+  grossWeight: 'optional',
+  netWeight: 'optional',
+  weightUnit: 'optional',
+  volume: 'optional',
+  volumeUnit: 'optional',
+  profitCenterCode: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -77,13 +125,46 @@ export type PurchaseInquiryItemField = keyof typeof PURCHASEINQUIRYITEM_PLACEHOL
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'purchaseInquiryCode',
+  'allocationCategory',
+  'materialCode',
+  'materialDescription',
+  'materialSpecification',
+  'inquiryUnit',
+  'taxCode',
+  'pricingDateStart',
+  'pricingDateEnd',
+  'weightUnit',
+  'volumeUnit',
+  'profitCenterCode',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof PurchaseInquiryItemQuery)[]
 
-export type PurchaseInquiryItemQueryField = (typeof PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS)[number]
+export type PurchaseInquiryItemQueryField =
+  | (typeof PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS)[number]
+  | 'lineNumber' | 'inquiryQuantity' | 'purchasePerUnit' | 'quotedUnitPrice' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'inquiryAmount' | 'grossWeight' | 'netWeight' | 'volume' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEINQUIRYITEM_QUERY_FIELDS: readonly PurchaseInquiryItemQueryField[] = [...PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS]
+export const PURCHASEINQUIRYITEM_QUERY_FIELDS: readonly PurchaseInquiryItemQueryField[] = [
+  ...PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
+  'inquiryQuantity',
+  'purchasePerUnit',
+  'quotedUnitPrice',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'inquiryAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
+  'isObsolete',
+]
 
 /**
  * PurchaseInquiryItem字段 i18n：index / purchase-inquiry-item-form 统一入口

@@ -80,6 +80,18 @@
             dict-type="logistics_procurement_chain_scheme"
           />
         </template>
+        <template v-else-if="column.key === 'purchaseRequestType'">
+          <TaktDictTag
+            :value="getPurchaseRequestDictValue(record, 'purchaseRequestType')"
+            dict-type="logistics_procurement_purchase_order_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'pricingProcedure'">
+          <TaktDictTag
+            :value="getPurchaseRequestDictValue(record, 'pricingProcedure')"
+            dict-type="logistics_procurement_pricing_procedure"
+          />
+        </template>
         <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getPurchaseRequestDictValue(record, 'currencyCode')"
@@ -123,7 +135,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -339,6 +351,37 @@
           :placeholder="pi.queryPh('supplierName1', 'required')"
           show-count
           :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseRequestType')">
+      <a-form-item :label="pi.queryLabel('purchaseRequestType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.purchaseRequestType"
+          dict-type="logistics_procurement_purchase_order_type"
+          :placeholder="pi.queryPh('purchaseRequestType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingProcedure')">
+      <a-form-item :label="pi.queryLabel('pricingProcedure')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.pricingProcedure"
+          dict-type="logistics_procurement_pricing_procedure"
+          :placeholder="pi.queryPh('pricingProcedure', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingConditionCode')">
+      <a-form-item :label="pi.queryLabel('pricingConditionCode')">
+        <a-input
+          v-model:value="advancedQueryForm.pricingConditionCode"
+          :placeholder="pi.queryPh('pricingConditionCode', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -647,6 +690,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import PurchaseRequestForm from './components/purchase-request-form.vue'
 import PurchaseRequestItemPanel from './components/purchase-request-item-panel.vue'
 import { providePurchaseRequestMasterContext, type PurchaseRequestRowRecord } from './composables/use-purchase-request-master-context'
@@ -707,6 +751,8 @@ const formData = ref<Partial<PurchaseRequest> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -1076,6 +1122,31 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'supplierName1') ?? ''
   },
   {
+    title: pi.label('purchaseRequestType'),
+    dataIndex: 'purchaseRequestType',
+    key: 'purchaseRequestType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('pricingProcedure'),
+    dataIndex: 'pricingProcedure',
+    key: 'pricingProcedure',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('pricingConditionCode'),
+    dataIndex: 'pricingConditionCode',
+    key: 'pricingConditionCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseRequestField(record, 'pricingConditionCode') ?? ''
+  },
+  {
     title: pi.label('currencyCode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
@@ -1301,6 +1372,9 @@ function handleReset() {
   requestEmployeeName: '',
   supplierCode: '',
   supplierName1: '',
+  purchaseRequestType: '',
+  pricingProcedure: '',
+  pricingConditionCode: '',
   currencyCode: '',
   taxCode: '',
   taxRate: undefined as number | undefined,
@@ -1540,6 +1614,9 @@ function handleAdvancedQueryReset() {
   requestEmployeeName: '',
   supplierCode: '',
   supplierName1: '',
+  purchaseRequestType: '',
+  pricingProcedure: '',
+  pricingConditionCode: '',
   currencyCode: '',
   taxCode: '',
   taxRate: undefined as number | undefined,

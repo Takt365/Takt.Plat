@@ -99,8 +99,10 @@ public class TaktEmployeeFamilyService : TaktServiceBase, ITaktEmployeeFamilySer
     /// <summary>
     /// 获取员工家庭成员选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEmployeeFamilyOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEmployeeFamilyOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _employeeFamilyRepository.GetListAsync(

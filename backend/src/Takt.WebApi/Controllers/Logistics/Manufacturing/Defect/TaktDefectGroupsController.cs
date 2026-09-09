@@ -86,11 +86,11 @@ public class TaktDefectGroupsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:group:query", "不良组主数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDefectGroupOptionsAsync()
+    public async Task<IActionResult> GetDefectGroupOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _defectGroupService.GetDefectGroupOptionsAsync();
+            var result = await _defectGroupService.GetDefectGroupOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

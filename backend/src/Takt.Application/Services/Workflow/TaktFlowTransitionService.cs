@@ -95,8 +95,10 @@ public class TaktFlowTransitionService : TaktServiceBase, ITaktFlowTransitionSer
     /// <summary>
     /// 获取流程流转历史选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetFlowTransitionOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetFlowTransitionOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _flowTransitionRepository.GetListAsync(

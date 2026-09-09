@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,6 +23,11 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
@@ -202,6 +224,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #st_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @table_total INT = (
   SELECT COUNT(*)
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_manufacturing_bom_material_cost]
@@ -289,7 +327,10 @@ DECLARE @target_before INT = (
 );
 
 -- 目标 costing_date 统一为日（与源装入一致，便于业务键匹配）
-UPDATE T
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET T.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
 FROM [takt_logistics_manufacturing_bom_material_cost] T
 WHERE EXISTS (
@@ -297,6 +338,8 @@ WHERE EXISTS (
   WHERE S.[tenant_code] = T.[tenant_code] AND S.[company_code] = T.[company_code]
 )
 AND T.[costing_date] <> CAST(CAST(T.[costing_date] AS DATE) AS DATETIME);
+  SET @dml_n = @@ROWCOUNT;
+END
 
 -- 业务键已存在于目标：沿用目标 id（目标 id 本地唯一，与源 id 无关）
 UPDATE S
@@ -309,8 +352,13 @@ LEFT JOIN [takt_logistics_manufacturing_bom_material_cost] T
  AND LTRIM(RTRIM(T.[product_code])) = S.[product_code]
  AND CAST(CAST(T.[costing_date] AS DATE) AS DATETIME) = S.[costing_date];
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #st_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_manufacturing_bom_material_cost] AS T
-USING #st_source AS S
+USING (SELECT * FROM #st_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
@@ -402,6 +450,25 @@ INTO #delta(
   currency_code_old, currency_code_new,
   costing_date_old, costing_date_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
 CREATE TABLE #soft_deleted_rows (
@@ -411,7 +478,12 @@ CREATE TABLE #soft_deleted_rows (
   [costing_date] DATETIME
 );
 
-UPDATE T
+
+DECLARE @delete_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -436,8 +508,25 @@ WHERE T.[is_deleted] = 0
       AND S.[product_code] = LTRIM(RTRIM(T.[product_code]))
       AND S.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
   );
-
-DECLARE @delete_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @delete_count = @delete_count + @dml_n;
+END
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(

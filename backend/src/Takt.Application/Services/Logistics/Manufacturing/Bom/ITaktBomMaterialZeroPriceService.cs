@@ -41,7 +41,7 @@ public interface ITaktBomMaterialZeroPriceService
         string? fileName = null);
 
     /// <summary>
-    /// 按当前条件回填移动平均价（ComponentCode 空=批量；有值=操作列单条；明细与主表 ExtField 履历；重算产品/机种月成本）
+    /// 按当前条件回填移动平均价（PcbSectIndicator=X 或用量≤0 永不回填；ComponentCode 空=批量）
     /// </summary>
     /// <param name="dto">工厂+核算月；组件可选；机种可选</param>
     /// <returns>回填统计</returns>
@@ -49,7 +49,7 @@ public interface ITaktBomMaterialZeroPriceService
         TaktBomMaterialZeroPriceMovingBackfillDto dto);
 
     /// <summary>
-    /// 手工替换更新零价组件移动平均价（不按机种过滤；工厂+核算月+组件全部明细；主表各机种产品/机种月成本+ExtField）
+    /// 手工替换更新移动平均价（PcbSectIndicator=X 或用量≤0 永不回填；主表产品/机种月成本+ExtField）
     /// </summary>
     /// <param name="dto">工厂+核算月+原组件+新组件+价/单位/币种</param>
     /// <returns>更新统计</returns>

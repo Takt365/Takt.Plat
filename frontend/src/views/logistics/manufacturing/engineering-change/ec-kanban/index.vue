@@ -49,7 +49,7 @@
       entity-scope="company"
       :columns="columns"
       :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'ecId'"
+      :id-column-key="'ecGijutsuId'"
       table-mode="single"
       :data-source="dataSource"
       :loading="loading"
@@ -207,10 +207,10 @@ function implementationStatusColor(status: number): string {
 /**
  * 行主键
  * @param record 行数据
- * @returns {string} ecId
+ * @returns {string} ecGijutsuId
  */
 function getEcId(record: Record<string, unknown>) {
-  return String(record.ecId ?? '');
+  return String(record.ecGijutsuId ?? '');
 }
 
 /**

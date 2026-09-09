@@ -20,22 +20,27 @@
       <a-col :span="12"><a-form-item :label="pi.label('companyCode')"><a-input v-model:value="formState.companyCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('cultureCode')"><a-input v-model:value="formState.cultureCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('plantCode')"><a-input v-model:value="formState.plantCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('lineNumber')"><a-input-number v-model:value="formState.lineNumber" class="w-full" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
       <a-col :span="12">
         <a-form-item :label="pi.label('discontinuedStatus')">
           <TaktSelect v-model:value="formState.discontinuedStatus" dict-type="logistics_materials_material_discontinued_status" disabled />
         </a-form-item>
       </a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="24">
+        <a-form-item :label="pi.label('execContent')">
+          <a-textarea v-model:value="formState.execContent" :rows="3" :placeholder="pi.t('common.page.form.placeholder.input')" />
+        </a-form-item>
+      </a-col>
       <a-col :span="12"><a-form-item :label="pi.label('scheduledProductionDate')"><a-date-picker v-model:value="formState.scheduledProductionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('scheduledBatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('poRemainder')"><a-input v-model:value="formState.poRemainder" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('balance')"><a-input v-model:value="formState.balance" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('oldProductHandling')"><a-input v-model:value="formState.oldProductHandling" /></a-form-item></a-col>
-      <a-col :span="24">
-        <a-form-item :label="pi.label('execContent')">
-          <a-textarea v-model:value="formState.execContent" :rows="3" :placeholder="pi.t('common.page.form.placeholder.input')" />
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecOldPartDisposition')">
+          <TaktSelect v-model:value="formState.ecOldPartDisposition" dict-type="logistics_manufacturing_ec_old_part_disposition" />
         </a-form-item>
       </a-col>
     </a-row>
@@ -57,6 +62,7 @@ const formState = reactive<{
   cultureCode?: string;
   plantCode?: string;
   ecCode?: string;
+  lineNumber?: number;
   ecModelCode?: string;
   discontinuedStatus?: string;
   isImplemented: number;
@@ -65,7 +71,7 @@ const formState = reactive<{
   scheduledBatch?: string;
   poRemainder?: string;
   balance?: string;
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 }>({
   isImplemented: 0,
   execContent: '',
@@ -83,6 +89,7 @@ watch(() => props.formData, (val) => {
     cultureCode: val.cultureCode,
     plantCode: val.plantCode,
     ecCode: val.ecCode,
+    lineNumber: val.lineNumber,
     ecModelCode: val.ecModelCode,
     discontinuedStatus: val.discontinuedStatus ?? 'Z0',
     isImplemented: val.isImplemented ?? 0,
@@ -91,7 +98,7 @@ watch(() => props.formData, (val) => {
     scheduledBatch: val.scheduledBatch,
     poRemainder: val.poRemainder,
     balance: val.balance,
-    oldProductHandling: val.oldProductHandling,
+    ecOldPartDisposition: val.ecOldPartDisposition,
   });
 }, { immediate: true });
 
@@ -112,7 +119,7 @@ function getValues(): EcSeikanUpdate {
     scheduledBatch: formState.scheduledBatch,
     poRemainder: formState.poRemainder,
     balance: formState.balance,
-    oldProductHandling: formState.oldProductHandling,
+    ecOldPartDisposition: formState.ecOldPartDisposition,
   } as EcSeikanUpdate;
 }
 
@@ -124,6 +131,7 @@ function resetFields() {
     cultureCode: '',
     plantCode: '',
     ecCode: '',
+    lineNumber: undefined,
     ecModelCode: '',
     discontinuedStatus: 'Z0',
     isImplemented: 0,
@@ -132,7 +140,7 @@ function resetFields() {
     scheduledBatch: undefined,
     poRemainder: undefined,
     balance: undefined,
-    oldProductHandling: undefined,
+    ecOldPartDisposition: undefined,
   });
 }
 

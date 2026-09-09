@@ -128,12 +128,27 @@ export function updateProductionTeamStatus(dto: ProductionTeamStatus): Promise<P
 
 /**
  * 获取生产班组选项列表
+ * @param plantCode 工厂代码（可选，精确匹配 PlantCode）
+ * @param keyword 搜索关键字（班组编码/名称，可选）
+ * @param teamCategory 班组分类（字典 logistics_manufacturing_team_category；如 A=组立 P=PCBA；空则全部）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getProductionTeamOptions(): Promise<TaktSelectOption[]> {
+export function getProductionTeamOptions(
+  plantCode?: string,
+  keyword?: string,
+  teamCategory?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
+  const category = teamCategory?.trim()
   return request<TaktSelectOption[]>({
     url: `${PRODUCTION_TEAM_API_BASE}/options`,
     method: 'get',
+    params: {
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+      ...(category ? { teamCategory: category } : {}),
+    },
   });
 }
 

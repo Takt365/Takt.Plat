@@ -86,11 +86,11 @@ public class TaktEmployeeOnboardingsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:onboarding:query", "入职待办选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeOnboardingOptionsAsync()
+    public async Task<IActionResult> GetEmployeeOnboardingOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeOnboardingService.GetEmployeeOnboardingOptionsAsync();
+            var result = await _employeeOnboardingService.GetEmployeeOnboardingOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

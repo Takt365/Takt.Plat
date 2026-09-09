@@ -15,6 +15,9 @@
       v-model:model-code="modelCode"
       v-model:product-code="productCode"
       v-model:period-range="periodRange"
+      v-model:base-period="basePeriod"
+      v-model:compare-period="comparePeriod"
+      v-model:price-delta-option="priceDeltaOption"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
@@ -38,10 +41,10 @@
       @refresh="handleRefresh"
     />
     <div
-      v-if="comparePeriod"
+      v-if="hintBasePeriod && hintComparePeriod"
       class="mb-2 text-sm text-text-secondary"
     >
-      {{ t(`${localePrefix}.compareHint`, { base: basePeriod || '—', compare: comparePeriod }) }}
+      {{ t(`${localePrefix}.compareHint`, { base: hintBasePeriod, compare: hintComparePeriod, delta: hintPriceDeltaLabel }) }}
     </div>
     <div
       ref="tableWrapRef"
@@ -73,8 +76,10 @@
           <template
             v-else-if="
               column.key === 'zeroPriceGroup'
+                || column.key === 'replaceComponentGroup'
                 || column.key === 'priceDeltaTrend'
                 || column.key === 'componentDeltaGroup'
+                || column.key === 'reworkOrderGroup'
                 || column.key === 'productDescription'
             "
           >
@@ -129,11 +134,13 @@ import {
   getTaktDefaultPageSize,
 } from '@/utils/takt-paged'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
+import { measureFillHeightScrollYPx, TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {
   buildDefaultCostingPeriodRange,
+  buildDefaultPriceDeltaMonths,
+  isCostingMonthInRange,
   periodRangeToCostingDateQuery,
 } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import {
@@ -160,12 +167,28 @@ const modelCode = ref<string | undefined>()
 const productCode = ref<string | undefined>()
 /** 核算期间 */
 const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(3))
+const defaultDeltaMonths = buildDefaultPriceDeltaMonths()
+/** 基准月（关注月；默认前月） */
+const basePeriod = ref<string | undefined>(defaultDeltaMonths.basePeriod)
+/** 比较月（基期；默认基准月减一月） */
+const comparePeriod = ref<string | undefined>(defaultDeltaMonths.comparePeriod)
+/** 差异选项：all=全部（默认）；gt1/gt5/gt10/gt50/gt100 界面为 >=N，按 |差异| 过滤产品行 */
+const priceDeltaOption = ref('all')
 /** 行 */
 const rows = ref<BomPriceDeltaTrend[]>([])
 /** 期间列 */
 const periodOrder = ref<string[]>([])
-const basePeriod = ref('')
-const comparePeriod = ref('')
+/** 上次查询生效的基准月 */
+const hintBasePeriod = ref('')
+/** 上次查询生效的比较月 */
+const hintComparePeriod = ref('')
+/** 上次查询生效的差异选项码 all / gt1 / gt5 / gt10 / gt50 / gt100 */
+const hintPriceDeltaOption = ref('')
+/**
+ * 提示用差异选项展示：全部走 i18n；阈值四语同一符号 >=N
+ * @returns 展示文案
+ */
+const hintPriceDeltaLabel = computed(() => formatPriceDeltaOptionLabel(hintPriceDeltaOption.value))
 const loading = ref(false)
 const exportLoading = ref(false)
 const pageIndex = ref(getTaktDefaultPageIndex())
@@ -180,8 +203,32 @@ const hasQuery = computed(
     !!plantCode.value?.trim()
     && !!materialType.value?.trim()
     && !!periodRange.value?.[0]
-    && !!periodRange.value?.[1],
+    && !!periodRange.value?.[1]
+    && !!basePeriod.value?.trim()
+    && !!comparePeriod.value?.trim(),
 )
+
+/**
+ * 可空差异数值比较（null/undefined 靠后）
+ * @param a 左值
+ * @param b 右值
+ * @returns 比较结果
+ */
+function compareNullablePriceDelta(
+  a: number | null | undefined,
+  b: number | null | undefined,
+): number {
+  if (a == null && b == null) {
+    return 0
+  }
+  if (a == null) {
+    return 1
+  }
+  if (b == null) {
+    return -1
+  }
+  return Number(a) - Number(b)
+}
 
 const columns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
@@ -192,6 +239,11 @@ const columns = computed<TableColumnsType>(() => {
       width: 120,
       ellipsis: true,
       fixed: 'left',
+      sorter: (a: BomPriceDeltaTrend, b: BomPriceDeltaTrend) =>
+        String(a.modelCode ?? '').localeCompare(String(b.modelCode ?? ''), undefined, {
+          numeric: true,
+          sensitivity: 'base',
+        }),
     },
     {
       title: t('entity.bommaterialcost.productcode'),
@@ -200,6 +252,11 @@ const columns = computed<TableColumnsType>(() => {
       width: 140,
       ellipsis: true,
       fixed: 'left',
+      sorter: (a: BomPriceDeltaTrend, b: BomPriceDeltaTrend) =>
+        String(a.productCode ?? '').localeCompare(String(b.productCode ?? ''), undefined, {
+          numeric: true,
+          sensitivity: 'base',
+        }),
     },
     {
       title: t('entity.bommaterialcost.productdescription'),
@@ -225,11 +282,20 @@ const columns = computed<TableColumnsType>(() => {
       key: 'priceDelta',
       width: 100,
       align: 'right',
+      sorter: (a: BomPriceDeltaTrend, b: BomPriceDeltaTrend) =>
+        compareNullablePriceDelta(a.priceDelta, b.priceDelta),
     },
     {
       title: t(`${localePrefix}.zeroPriceGroup`),
       dataIndex: 'zeroPriceGroup',
       key: 'zeroPriceGroup',
+      width: 200,
+      ellipsis: true,
+    },
+    {
+      title: t(`${localePrefix}.replaceComponentGroup`),
+      dataIndex: 'replaceComponentGroup',
+      key: 'replaceComponentGroup',
       width: 200,
       ellipsis: true,
     },
@@ -245,6 +311,13 @@ const columns = computed<TableColumnsType>(() => {
       dataIndex: 'componentDeltaGroup',
       key: 'componentDeltaGroup',
       width: 220,
+      ellipsis: true,
+    },
+    {
+      title: t(`${localePrefix}.reworkOrderGroup`),
+      dataIndex: 'reworkOrderGroup',
+      key: 'reworkOrderGroup',
+      width: 200,
       ellipsis: true,
     },
   )
@@ -278,7 +351,7 @@ function formatPeriodCost(record: BomPriceDeltaTrend, columnKey: string): string
 }
 
 /**
- * 格式化差异（期间最大月 − 前一月）
+ * 格式化差异（基准月 − 比较月）
  * @param record 行
  * @returns 文本
  */
@@ -290,11 +363,38 @@ function formatPriceDelta(record: BomPriceDeltaTrend): string {
   return Number(value).toFixed(5)
 }
 
+/**
+ * 差异选项展示文案：全部翻译；阈值固定 >=N
+ * @param option 选项码
+ * @returns 提示用文案
+ */
+function formatPriceDeltaOptionLabel(option: string): string {
+  const key = option.trim()
+  if (!key || key === 'all') {
+    return t(`${localePrefix}.priceDeltaOptionAll`)
+  }
+  if (key === 'gt1') {
+    return '>=1'
+  }
+  if (key === 'gt5') {
+    return '>=5'
+  }
+  if (key === 'gt10') {
+    return '>=10'
+  }
+  if (key === 'gt50') {
+    return '>=50'
+  }
+  if (key === 'gt100') {
+    return '>=100'
+  }
+  return key
+}
+
 /** 构建查询 */
 function buildQuery(overrides?: Record<string, unknown>) {
   const plant = plantCode.value?.trim() ?? ''
   const dates = periodRangeToCostingDateQuery(periodRange.value)
-  const focus = periodRange.value?.[1]
   return {
     pageIndex: pageIndex.value,
     pageSize: pageSize.value,
@@ -304,7 +404,9 @@ function buildQuery(overrides?: Record<string, unknown>) {
     productCode: productCode.value?.trim() || undefined,
     costingDateStart: dates.costingDateStart,
     costingDateEnd: dates.costingDateEnd,
-    focusPeriod: focus,
+    basePeriod: basePeriod.value?.trim() || undefined,
+    comparePeriod: comparePeriod.value?.trim() || undefined,
+    priceDeltaOption: priceDeltaOption.value?.trim() || 'all',
     ...overrides,
   }
 }
@@ -323,14 +425,15 @@ async function loadData() {
     rows.value = res.paged?.data ?? []
     total.value = res.paged?.total ?? 0
     periodOrder.value = res.periodOrder ?? []
-    basePeriod.value = res.basePeriod ?? ''
-    comparePeriod.value = res.comparePeriod ?? ''
+    hintBasePeriod.value = res.basePeriod ?? ''
+    hintComparePeriod.value = res.comparePeriod ?? ''
+    hintPriceDeltaOption.value = priceDeltaOption.value?.trim() || 'all'
   } catch (error: unknown) {
     const err = error as { message?: string }
     message.error(err?.message || t(`${localePrefix}.queryFailed`))
     rows.value = []
     total.value = 0
-  }     finally {
+  } finally {
     loading.value = false
   }
 }
@@ -351,6 +454,21 @@ async function handleSearch() {
     message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
     return
   }
+  if (!basePeriod.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectBasePeriodRequired`))
+    return
+  }
+  if (!comparePeriod.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectComparePeriodRequired`))
+    return
+  }
+  if (
+    !isCostingMonthInRange(basePeriod.value, periodRange.value)
+    || !isCostingMonthInRange(comparePeriod.value, periodRange.value)
+  ) {
+    message.warning(t(`${localePrefix}.selectDeltaMonthInRange`))
+    return
+  }
   pageIndex.value = getTaktDefaultPageIndex()
   await loadData()
 }
@@ -361,12 +479,17 @@ async function handleReset() {
   modelCode.value = undefined
   productCode.value = undefined
   periodRange.value = buildDefaultCostingPeriodRange(3)
+  const deltaMonths = buildDefaultPriceDeltaMonths(periodRange.value)
+  basePeriod.value = deltaMonths.basePeriod
+  comparePeriod.value = deltaMonths.comparePeriod
+  priceDeltaOption.value = 'all'
   pageIndex.value = getTaktDefaultPageIndex()
   rows.value = []
   total.value = 0
   periodOrder.value = []
-  basePeriod.value = ''
-  comparePeriod.value = ''
+  hintBasePeriod.value = ''
+  hintComparePeriod.value = ''
+  hintPriceDeltaOption.value = ''
   await applyDefaultPlant()
 }
 
@@ -447,17 +570,30 @@ async function handleExport() {
   }
 }
 
-function bindTableScroll() {
+/**
+ * 重算表体 scroll.y：容器高度减去表头，避免 y 过大把底部横向滚动条裁掉
+ */
+function recalcTableScrollY(): void {
+  const wrap = tableWrapRef.value
+  if (!wrap || wrap.clientHeight <= 0) {
+    return
+  }
+  tableScrollY.value = measureFillHeightScrollYPx(wrap, { subtractTableHeader: true })
+}
+
+/**
+ * 监听表格容器尺寸，保持纵向/横向滚动条可见
+ */
+function bindTableScroll(): void {
   tableScrollResizeObserver?.disconnect()
   const el = tableWrapRef.value
   if (!el) {
     return
   }
-  const update = () => {
-    tableScrollY.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, el.clientHeight - 8)
-  }
-  update()
-  tableScrollResizeObserver = new ResizeObserver(update)
+  recalcTableScrollY()
+  tableScrollResizeObserver = new ResizeObserver(() => {
+    recalcTableScrollY()
+  })
   tableScrollResizeObserver.observe(el)
 }
 
@@ -465,11 +601,16 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   pageIndex.value = getTaktDefaultPageIndex()
   pageSize.value = getTaktDefaultPageSize()
+  await nextTick()
   bindTableScroll()
+  requestAnimationFrame(() => {
+    recalcTableScrollY()
+  })
   await applyDefaultPlant()
 })
 
 onBeforeUnmount(() => {
   tableScrollResizeObserver?.disconnect()
+  tableScrollResizeObserver = null
 })
 </script>

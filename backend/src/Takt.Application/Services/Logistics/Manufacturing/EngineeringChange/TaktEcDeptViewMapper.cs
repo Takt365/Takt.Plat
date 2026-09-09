@@ -38,7 +38,7 @@ public static class TaktEcDeptViewMapper
                 dto.ScheduledBatch = pmc.ScheduledBatch;
                 dto.PoRemainder = pmc.PoRemainder;
                 dto.Balance = pmc.Balance;
-                dto.OldProductHandling = pmc.OldProductHandling;
+                dto.OldProductHandling = pmc.EcOldPartDisposition;
                 break;
             case TaktEcKoubai mp:
                 dto.EcExecId = mp.Id;
@@ -48,6 +48,7 @@ public static class TaktEcDeptViewMapper
                 dto.PurchaseOrderIssueDate = mp.PurchaseOrderIssueDate;
                 dto.Supplier = mp.Supplier;
                 dto.PurchaseOrderCode = mp.PurchaseOrderCode;
+                dto.OldProductHandling = mp.EcOldPartDisposition;
                 break;
             case TaktEcUkeken iqc:
                 dto.EcExecId = iqc.Id;
@@ -65,15 +66,22 @@ public static class TaktEcDeptViewMapper
                 dto.OutboundBatch = mc.OutboundBatch;
                 dto.OutboundDate = mc.OutboundDate;
                 break;
+            case TaktEcSmt electronic:
+                dto.EcExecId = electronic.Id;
+                dto.IsImplemented = electronic.IsImplemented;
+                dto.Content = electronic.ExecContent;
+                dto.Remark = electronic.Remark;
+                dto.OutboundBatch = electronic.OutboundBatch;
+                dto.OutboundDate = electronic.OutboundDate;
+                break;
             case TaktEcSeizounika pcba:
                 dto.EcExecId = pcba.Id;
                 dto.IsImplemented = pcba.IsImplemented;
                 dto.Content = pcba.ExecContent;
                 dto.Remark = pcba.Remark;
-                dto.ProductionDate = pcba.ProductionDate;
-                dto.ProductionBatch = pcba.ProductionBatch;
                 dto.ProductionTeam = pcba.ProductionTeam;
-                dto.OutboundOrderCode = pcba.OutboundOrderCode;
+                dto.ProductionDate = pcba.ProductionDate;
+                dto.ImplementationBatch = pcba.ImplementationBatch;
                 break;
             case TaktEcSeizouikka assy:
                 dto.EcExecId = assy.Id;
@@ -162,7 +170,7 @@ public static class TaktEcDeptViewMapper
         switch (exec)
         {
             case TaktEcSeikan pmc:
-                dto.EcDetailId = pmc.EcnDetailId;
+                dto.EcDetailId = pmc.EcDetailId;
                 dto.IsImplemented = pmc.IsImplemented;
                 dto.Content = pmc.ExecContent;
                 dto.Remark = pmc.Remark;
@@ -170,19 +178,20 @@ public static class TaktEcDeptViewMapper
                 dto.ScheduledBatch = pmc.ScheduledBatch;
                 dto.PoRemainder = pmc.PoRemainder;
                 dto.Balance = pmc.Balance;
-                dto.OldProductHandling = pmc.OldProductHandling;
+                dto.OldProductHandling = pmc.EcOldPartDisposition;
                 break;
             case TaktEcKoubai mp:
-                dto.EcDetailId = mp.EcnDetailId;
+                dto.EcDetailId = mp.EcDetailId;
                 dto.IsImplemented = mp.IsImplemented;
                 dto.Content = mp.ExecContent;
                 dto.Remark = mp.Remark;
                 dto.PurchaseOrderIssueDate = mp.PurchaseOrderIssueDate;
                 dto.Supplier = mp.Supplier;
                 dto.PurchaseOrderCode = mp.PurchaseOrderCode;
+                dto.OldProductHandling = mp.EcOldPartDisposition;
                 break;
             case TaktEcUkeken iqc:
-                dto.EcDetailId = iqc.EcnDetailId;
+                dto.EcDetailId = iqc.EcDetailId;
                 dto.IsImplemented = iqc.IsImplemented;
                 dto.Content = iqc.ExecContent;
                 dto.Remark = iqc.Remark;
@@ -190,25 +199,32 @@ public static class TaktEcDeptViewMapper
                 dto.InspectionDate = iqc.InspectionDate;
                 break;
             case TaktEcBukan mc:
-                dto.EcDetailId = mc.EcnDetailId;
+                dto.EcDetailId = mc.EcDetailId;
                 dto.IsImplemented = mc.IsImplemented;
                 dto.Content = mc.ExecContent;
                 dto.Remark = mc.Remark;
                 dto.OutboundBatch = mc.OutboundBatch;
                 dto.OutboundDate = mc.OutboundDate;
                 break;
+            case TaktEcSmt electronic:
+                dto.EcDetailId = electronic.EcDetailId;
+                dto.IsImplemented = electronic.IsImplemented;
+                dto.Content = electronic.ExecContent;
+                dto.Remark = electronic.Remark;
+                dto.OutboundBatch = electronic.OutboundBatch;
+                dto.OutboundDate = electronic.OutboundDate;
+                break;
             case TaktEcSeizounika pcba:
-                dto.EcDetailId = pcba.EcnDetailId;
+                dto.EcDetailId = pcba.EcDetailId;
                 dto.IsImplemented = pcba.IsImplemented;
                 dto.Content = pcba.ExecContent;
                 dto.Remark = pcba.Remark;
-                dto.ProductionDate = pcba.ProductionDate;
-                dto.ProductionBatch = pcba.ProductionBatch;
                 dto.ProductionTeam = pcba.ProductionTeam;
-                dto.OutboundOrderCode = pcba.OutboundOrderCode;
+                dto.ProductionDate = pcba.ProductionDate;
+                dto.ImplementationBatch = pcba.ImplementationBatch;
                 break;
             case TaktEcSeizouikka assy:
-                dto.EcDetailId = assy.EcnDetailId;
+                dto.EcDetailId = assy.EcDetailId;
                 dto.IsImplemented = assy.IsImplemented;
                 dto.Content = assy.ExecContent;
                 dto.Remark = assy.Remark;
@@ -217,7 +233,7 @@ public static class TaktEcDeptViewMapper
                 dto.ImplementationBatch = assy.ImplementationBatch;
                 break;
             case TaktEcHinkan qa:
-                dto.EcDetailId = qa.EcnDetailId;
+                dto.EcDetailId = qa.EcDetailId;
                 dto.IsImplemented = qa.IsImplemented;
                 dto.Content = qa.ExecContent;
                 dto.Remark = qa.Remark;
@@ -227,7 +243,7 @@ public static class TaktEcDeptViewMapper
                 dto.SamplingCode = qa.SamplingCode;
                 break;
             case TaktEcSeizougijutsu te:
-                dto.EcDetailId = te.EcnDetailId;
+                dto.EcDetailId = te.EcDetailId;
                 dto.IsImplemented = te.IsImplemented;
                 dto.Content = te.ExecContent;
                 dto.Remark = te.Remark;

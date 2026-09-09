@@ -116,10 +116,20 @@ export function deleteSellerMaterialBatch(ids: string[]): Promise<void> {
  * 获取销售商物料选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSellerMaterialOptions(): Promise<TaktSelectOption[]> {
+export function getSellerMaterialOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SELLER_MATERIAL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

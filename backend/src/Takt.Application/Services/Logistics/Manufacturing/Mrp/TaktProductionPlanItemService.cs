@@ -99,8 +99,10 @@ public class TaktProductionPlanItemService : TaktServiceBase, ITaktProductionPla
     /// <summary>
     /// 获取生产计划明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetProductionPlanItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetProductionPlanItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _productionPlanItemRepository.GetListAsync(

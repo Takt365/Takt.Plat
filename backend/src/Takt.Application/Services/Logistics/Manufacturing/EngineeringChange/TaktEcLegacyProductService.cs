@@ -111,25 +111,25 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         detail.Remark = dto.Remark;
         await _ecDetailRepository.UpdateAsync(detail);
         var pmcRepo = _ecExecDeptAccess.PmcRepository;
-        var pmc = await pmcRepo.FirstAsync(x => x.EcnDetailId == detail.Id);
+        var pmc = await pmcRepo.FirstAsync(x => x.EcDetailId == detail.Id);
         if (pmc == null)
         {
             pmc = new TaktEcSeikan
             {
-                EcnDetailId = detail.Id,
+                EcDetailId = detail.Id,
                 EcCode = detail.EcCode,
                 DeptCode = TaktEcDeptCodes.Pmc,
             };
             var maxLine = await pmcRepo.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == detail.Id,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == detail.Id,
                 x => x.LineNumber);
             pmc.LineNumber = _lineNumberGenerator.GenerateNext(detail.Id.ToString(), maxLine);
-            pmc.OldProductHandling = dto.OldProductHandling;
+            pmc.EcOldPartDisposition = dto.OldProductHandling;
             await pmcRepo.CreateAsync(pmc);
         }
         else
         {
-            pmc.OldProductHandling = dto.OldProductHandling;
+            pmc.EcOldPartDisposition = dto.OldProductHandling;
             await pmcRepo.UpdateAsync(pmc);
         }
         return await MapLegacyProductRowAsync(detail);
@@ -173,8 +173,8 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         dto.EcSecondDistinction = detail.EcSecondDistinction;
         dto.EcInstruction = detail.EcInstruction;
         dto.EcOldPartDisposition = detail.EcOldPartDisposition;
-        var pmc = await _ecExecDeptAccess.PmcRepository.FirstAsync(x => x.EcnDetailId == detail.Id);
-        dto.OldProductHandling = pmc?.OldProductHandling;
+        var pmc = await _ecExecDeptAccess.PmcRepository.FirstAsync(x => x.EcDetailId == detail.Id);
+        dto.OldProductHandling = pmc?.EcOldPartDisposition;
         return dto;
     }
 

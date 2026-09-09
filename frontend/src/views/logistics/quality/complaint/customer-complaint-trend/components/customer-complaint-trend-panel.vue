@@ -163,7 +163,7 @@ const summaryText = computed(() => {
 const columns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
     {
-      title: t('entity.customercomplaint.relatedplant'),
+      title: t('common.page.entity.plantcode'),
       dataIndex: 'plantCode',
       key: 'plantCode',
       width: 90,
@@ -179,7 +179,7 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.customercomplaint.customername'),
+      title: t('entity.customercomplaint.customername1'),
       dataIndex: 'customerName',
       key: 'customerName',
       width: 160,

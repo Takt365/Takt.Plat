@@ -104,8 +104,10 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
     /// <summary>
     /// 获取PCBA检查日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPcbaInspectionOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPcbaInspectionOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _pcbaInspectionRepository.GetListAsync(
@@ -635,5 +637,73 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（数据看板）
+    // ========================================
+
+    /// <summary>
+    /// 获取 PCBA 检查不良统计（数据看板 defect-stat；主表无 ProdDate，按明细实装日期区间）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 检查统计</returns>
+    public async Task<TaktPcbaInspectionStatDto> GetPcbaInspectionStatAsync(TaktDefectStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        // 主表无 ProdDate；用明细 B/T 面实装日期落入区间，并校验主表未删除
+        Expression<Func<TaktPcbaInspectionDetail, bool>> detailPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsObsolete == 0
+            && (
+                (x.TSideAssemblyDate != null && x.TSideAssemblyDate >= start && x.TSideAssemblyDate <= end)
+                || (x.BSideAssemblyDate != null && x.BSideAssemblyDate >= start && x.BSideAssemblyDate <= end))
+            && SqlFunc.Subqueryable<TaktPcbaInspection>()
+                .Where(h =>
+                    h.Id == x.PcbaInspectionId
+                    && h.TenantCode == tenantCode
+                    && h.CompanyCode == companyCode
+                    && h.IsDeleted == 0)
+                .Any();
+        var details = await _pcbaInspectionDetailRepository.GetListAsync(detailPredicate);
+        var teams = details
+            .GroupBy(d => d.TeamCode ?? string.Empty, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var baseQty = g.Sum(d => d.InspectionQty);
+                var defectQty = g.Sum(d => d.DefectQty);
+                var goodQty = Math.Max(0m, baseQty - defectQty);
+                return new TaktDefectStatTeamItemDto
+                {
+                    TeamCode = g.Key,
+                    BaseQty = baseQty,
+                    GoodQty = goodQty,
+                    DefectQty = defectQty,
+                    DefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(defectQty, baseQty),
+                    YieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(goodQty, baseQty),
+                };
+            })
+            .ToList();
+        var monthBaseQty = teams.Sum(t => t.BaseQty);
+        var monthDefectQty = teams.Sum(t => t.DefectQty);
+        var monthGoodQty = Math.Max(0m, monthBaseQty - monthDefectQty);
+        return new TaktPcbaInspectionStatDto
+        {
+            StatMonth = statMonth,
+            MonthBaseQty = monthBaseQty,
+            MonthGoodQty = monthGoodQty,
+            MonthDefectQty = monthDefectQty,
+            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
+            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
+            Teams = teams,
+        };
     }
 }

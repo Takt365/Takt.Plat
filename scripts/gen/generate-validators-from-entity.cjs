@@ -562,6 +562,10 @@ function buildValidationRules(prop, options) {
  * @returns {string|null}
  */
 function emitRuleFor(prop, options) {
+  /** SortOrder 由后端 ITaktSortOrderGenerator 自动回填，不入 Create/Import 校验 */
+  if (prop.name === 'SortOrder') {
+    return null;
+  }
   const rules = buildValidationRules(prop, options);
   if (rules.length === 0) {
     return null;

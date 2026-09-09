@@ -113,17 +113,7 @@
                 :show-search="true"
               />
             </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item :label="t('entity.flowform.sortorder')">
-              <a-input-number
-                v-model:value="form.sortOrder"
-                :min="0"
-                :step="1"
-                style="width: 100%"
-              />
-            </a-form-item>
-          </a-col>
+          </a-col>
         </a-row>
       </div>
       <!-- 第二步（新增/编辑一致）：数据源 + 数据表 + 字段网格 -->

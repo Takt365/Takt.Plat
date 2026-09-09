@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购询价应用服务实现
 // 
@@ -102,21 +102,31 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
         return dto;    }
 
     /// <summary>
-    /// 获取采购询价选项列表（DictValue=Id，ExtValue=PurchaseInquiryCode）
+    /// 获取采购询价选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchaseInquiryOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseInquiryOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
+        var normalizedPlantCode = plantCode?.Trim();
+        var normalizedKeyword = keyword?.Trim();
+        var predicate = Expressionable.Create<TaktPurchaseInquiry>()
+            .And(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.InquiryStatus == 1)
+            .AndIF(!string.IsNullOrEmpty(normalizedPlantCode), x => x.PlantCode == normalizedPlantCode)
+            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>
+                (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(normalizedKeyword!))
+                || (x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(normalizedKeyword!)))
+            .ToExpression();
         var list = await _purchaseInquiryRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.InquiryStatus == 1,
-            x => x.PurchaseInquiryCode ?? string.Empty,
+            predicate,
+            x => x.InquiryEmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PurchaseInquiryCode ?? e.Id.ToString(),
-            ExtValue = e.PurchaseInquiryCode,
+            DictValue = e.PurchaseInquiryCode,
+            DictLabel = e.InquiryEmployeeName ?? e.PurchaseInquiryCode,
         }).ToList();
     }
 
@@ -409,6 +419,7 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.PurchaseInquiryCode = entity.PurchaseInquiryCode;
+                childDto.TaxCode = entity.TaxCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -509,6 +520,9 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
                 || (x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
+                || (x.PurchaseInquiryType != null && x.PurchaseInquiryType.Contains(keywords))
+                || (x.PricingProcedure != null && x.PricingProcedure.Contains(keywords))
+                || (x.PricingConditionCode != null && x.PricingConditionCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.PaymentMode != null && x.PaymentMode.Contains(keywords))
@@ -538,14 +552,14 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
 
         if (queryDto?.InquiryEmployeeId.HasValue == true)
         {
-            var inquiryId = queryDto.InquiryEmployeeId.Value;
-            exp = exp.And(x => x.InquiryEmployeeId == inquiryId);
+            var inquiryEmployeeId = queryDto.InquiryEmployeeId.Value;
+            exp = exp.And(x => x.InquiryEmployeeId == inquiryEmployeeId);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.InquiryEmployeeName))
         {
-            var inquiryBy = queryDto.InquiryEmployeeName;
-            exp = exp.And(x => x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(inquiryBy));
+            var inquiryEmployeeName = queryDto.InquiryEmployeeName;
+            exp = exp.And(x => x.InquiryEmployeeName != null && x.InquiryEmployeeName.Contains(inquiryEmployeeName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
@@ -558,6 +572,24 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
         {
             var supplierName1 = queryDto.SupplierName1;
             exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(supplierName1));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInquiryType))
+        {
+            var purchaseInquiryType = queryDto.PurchaseInquiryType;
+            exp = exp.And(x => x.PurchaseInquiryType != null && x.PurchaseInquiryType.Contains(purchaseInquiryType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingProcedure))
+        {
+            var pricingProcedure = queryDto.PricingProcedure;
+            exp = exp.And(x => x.PricingProcedure != null && x.PricingProcedure.Contains(pricingProcedure));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingConditionCode))
+        {
+            var pricingConditionCode = queryDto.PricingConditionCode;
+            exp = exp.And(x => x.PricingConditionCode != null && x.PricingConditionCode.Contains(pricingConditionCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
@@ -729,6 +761,18 @@ public class TaktPurchaseInquiryService : TaktServiceBase, ITaktPurchaseInquiryS
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.SupplierName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInquiryType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingProcedure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingConditionCode))
         {
             return true;
         }

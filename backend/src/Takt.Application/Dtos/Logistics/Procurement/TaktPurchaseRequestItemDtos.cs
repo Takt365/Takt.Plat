@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemDtos.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequestItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequestItem 生成，请按需审阅）
 // 
@@ -113,6 +113,11 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     public decimal PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal TaxIncludedAmount { get; set; }
@@ -131,6 +136,41 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     /// 请购金额
     /// </summary>
     public decimal RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -237,6 +277,11 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     public decimal? PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal? TaxIncludedAmount { get; set; }
@@ -255,6 +300,46 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     /// 请购金额
     /// </summary>
     public decimal? RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期（范围查询-开始）
+    /// </summary>
+    public DateTime? PricingDateStart { get; set; }
+
+    /// <summary>
+    /// 价格日期（范围查询-结束）
+    /// </summary>
+    public DateTime? PricingDateEnd { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -382,6 +467,11 @@ public class TaktPurchaseRequestItemCreateDto
     public decimal PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal TaxIncludedAmount { get; set; }
@@ -400,6 +490,41 @@ public class TaktPurchaseRequestItemCreateDto
     /// 请购金额
     /// </summary>
     public decimal RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -558,6 +683,11 @@ public class TaktPurchaseRequestItemTemplateDto
     public decimal? PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal? TaxIncludedAmount { get; set; }
@@ -576,6 +706,41 @@ public class TaktPurchaseRequestItemTemplateDto
     /// 请购金额
     /// </summary>
     public decimal? RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -687,6 +852,11 @@ public class TaktPurchaseRequestItemImportDto
     public decimal? PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal? TaxIncludedAmount { get; set; }
@@ -705,6 +875,41 @@ public class TaktPurchaseRequestItemImportDto
     /// 请购金额
     /// </summary>
     public decimal? RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -822,6 +1027,11 @@ public class TaktPurchaseRequestItemExportDto
     public decimal PurchaseRequestUnitPrice { get; set; }
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseRequestId 取 TaktPurchaseRequest.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     public decimal TaxIncludedAmount { get; set; }
@@ -840,6 +1050,41 @@ public class TaktPurchaseRequestItemExportDto
     /// 请购金额
     /// </summary>
     public decimal RequestAmount { get; set; }
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

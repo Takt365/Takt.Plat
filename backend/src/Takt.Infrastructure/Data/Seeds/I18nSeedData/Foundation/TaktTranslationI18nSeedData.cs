@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktTranslationI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTranslation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -98,6 +98,15 @@ public class TaktTranslationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.translation.cultureid", "zh-CN", "文化ID", "区域文化（选项 TaktCultures/options；DictValue=Id）"),
             // entity.translation.cultureid
             new TranslationSeedItem("entity.translation.cultureid", "zh-HK", "文化ID_hk", "区域文化（选项 TaktCultures/options；DictValue=Id）"),
+
+            // entity.translation.culturecode
+            new TranslationSeedItem("entity.translation.culturecode", "en-US", "区域文化_us", "区域文化编码（选项 TaktCultures/options，DictValue=CultureCode）"),
+            // entity.translation.culturecode
+            new TranslationSeedItem("entity.translation.culturecode", "ja-JP", "区域文化_jp", "区域文化编码（选项 TaktCultures/options，DictValue=CultureCode）"),
+            // entity.translation.culturecode
+            new TranslationSeedItem("entity.translation.culturecode", "zh-CN", "区域文化", "区域文化编码（选项 TaktCultures/options，DictValue=CultureCode）"),
+            // entity.translation.culturecode
+            new TranslationSeedItem("entity.translation.culturecode", "zh-HK", "区域文化_hk", "区域文化编码（选项 TaktCultures/options，DictValue=CultureCode）"),
 
             // entity.translation.i18nkey
             new TranslationSeedItem("entity.translation.i18nkey", "en-US", "翻译键_us", "翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；varchar Length=140；如 common.confirm）"),

@@ -110,11 +110,11 @@ public class TaktEcAttachmentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:gijutsu:query", "设变附件选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcAttachmentOptionsAsync()
+    public async Task<IActionResult> GetEcAttachmentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecAttachmentService.GetEcAttachmentOptionsAsync();
+            var result = await _ecAttachmentService.GetEcAttachmentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

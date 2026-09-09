@@ -34,4 +34,40 @@ public static class TaktStatMonthRangeHelper
         var end = dateEnd ?? monthEnd;
         return (start, end, start.ToString("yyyy-MM"));
     }
+
+    /// <summary>
+    /// 解析统计月份区间（优先 DateStart/DateEnd；其次 StatMonth yyyy-MM；默认上月）
+    /// </summary>
+    /// <param name="dateStart">开始日期</param>
+    /// <param name="dateEnd">结束日期</param>
+    /// <param name="statMonth">统计月 yyyy-MM</param>
+    /// <param name="defaultMonthsAgo">无参时距今月数（1=上月）</param>
+    /// <returns>区间与统计月份 yyyy-MM</returns>
+    public static (DateTime Start, DateTime End, string StatMonth) ResolveStatMonthRange(
+        DateTime? dateStart,
+        DateTime? dateEnd,
+        string? statMonth = null,
+        int defaultMonthsAgo = 1)
+    {
+        if (dateStart.HasValue || dateEnd.HasValue)
+        {
+            return ResolveMonthRange(dateStart, dateEnd);
+        }
+        var month = (statMonth ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(month))
+        {
+            month = DateTime.Today.AddMonths(-Math.Abs(defaultMonthsAgo)).ToString("yyyy-MM");
+        }
+        if (DateTime.TryParseExact(
+                month + "-01",
+                "yyyy-MM-dd",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out var start))
+        {
+            var end = start.AddMonths(1).AddTicks(-1);
+            return (start, end, month);
+        }
+        return ResolveMonthRange(null, null);
+    }
 }

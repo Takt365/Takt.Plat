@@ -86,11 +86,11 @@ public class TaktEmployeeDelegationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:delegation:query", "员工代理关系选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeDelegationOptionsAsync()
+    public async Task<IActionResult> GetEmployeeDelegationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeDelegationService.GetEmployeeDelegationOptionsAsync();
+            var result = await _employeeDelegationService.GetEmployeeDelegationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -130,10 +130,20 @@ export function updateSocialInsuranceStatus(dto: SocialInsuranceStatus): Promise
  * 获取社保公积金选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSocialInsuranceOptions(): Promise<TaktSelectOption[]> {
+export function getSocialInsuranceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOCIAL_INSURANCE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

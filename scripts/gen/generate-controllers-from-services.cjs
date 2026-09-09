@@ -486,7 +486,7 @@ function generateGetByIdEndpoint(ctx) {
     /// <param name="id">${ctx.displayName}ID</param>
     /// <returns>${ctx.displayName}DTO</returns>
     [TaktPermission("${perm}", "${ctx.displayName}详情")]
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> ${ctx.methodName}(long id)
     {
         try
@@ -512,17 +512,31 @@ function generateOptionsEndpoint(ctx) {
   const permissionAttr = isAnonymousOptionsMethod(ctx.methodName)
     ? '    [AllowAnonymous]'
     : `    [TaktPermission("${perm}", "${ctx.displayName}选项")]`;
+  const paramDecl = formatControllerParameters(ctx.params, 'query');
+  const callArgs = ctx.params.map((p) => p.name).join(', ');
+  const plantParam = ctx.params.find((p) => p.name === 'plantCode');
+  const keywordParam = ctx.params.find((p) => p.name === 'keyword');
+  const plantDoc = plantParam
+    ? `\n    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>`
+    : '';
+  const keywordDoc = keywordParam
+    ? `\n    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>`
+    : '';
+  const extraParamDocs = ctx.params
+    .filter((p) => p.name !== 'plantCode' && p.name !== 'keyword')
+    .map((p) => `\n    /// <param name="${p.name}">${p.name}</param>`)
+    .join('');
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}选项列表`}
-    /// </summary>
+    /// </summary>${plantDoc}${keywordDoc}${extraParamDocs}
     /// <returns>下拉选项</returns>
 ${permissionAttr}
     [HttpGet("options")]
-    public async Task<IActionResult> ${ctx.methodName}()
+    public async Task<IActionResult> ${ctx.methodName}(${paramDecl})
     {
         try
         {
-            var result = await ${ctx.serviceField}.${ctx.methodName}();
+            var result = await ${ctx.serviceField}.${ctx.methodName}(${callArgs});
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -539,12 +553,20 @@ function generateTreeOptionsEndpoint(ctx) {
   const callArgs = ctx.params.map((p) => p.name).join(', ');
   const perm = permissionCode(ctx, 'query');
   const parentIdParam = ctx.params.find((p) => p.name === 'parentId');
+  const plantParam = ctx.params.find((p) => p.name === 'plantCode');
+  const keywordParam = ctx.params.find((p) => p.name === 'keyword');
   const parentIdDoc = parentIdParam
     ? `\n    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>`
     : '';
+  const plantDoc = plantParam
+    ? `\n    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>`
+    : '';
+  const keywordDoc = keywordParam
+    ? `\n    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>`
+    : '';
   const code = `    /// <summary>
     /// ${ctx.summary || `获取${ctx.displayName}树形选项列表（懒加载一层）`}
-    /// </summary>${parentIdDoc}
+    /// </summary>${parentIdDoc}${plantDoc}${keywordDoc}
     /// <returns>树形选项</returns>
     [TaktPermission("${perm}", "${ctx.displayName}树形选项")]
     [HttpGet("tree-options")]

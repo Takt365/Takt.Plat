@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单应用服务实现
 // 
@@ -104,8 +104,10 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
     /// <summary>
     /// 获取采购订单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchaseOrderOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseOrderOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchaseOrderRepository.GetListAsync(
@@ -324,6 +326,72 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
     }
 
     // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取采购订单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>采购订单统计</returns>
+    public async Task<TaktPurchaseOrderStatDto> GetPurchaseOrderStatAsync(TaktProcurementStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.OrderDateStart,
+            queryDto.OrderDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPurchaseOrder, bool>> orderPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.OrderDate >= start
+            && x.OrderDate <= end;
+        var monthOrderCount = await _purchaseOrderRepository.CountAsync(orderPredicate);
+        // 采购金额取明细 purchase_amount（未作废行）；主表 total_amount 同步源常为 0
+        Expression<Func<TaktPurchaseOrderItem, bool>> itemPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsObsolete == 0
+            && SqlFunc.Subqueryable<TaktPurchaseOrder>()
+                .Where(o =>
+                    o.Id == x.PurchaseOrderId
+                    && o.TenantCode == tenantCode
+                    && o.CompanyCode == companyCode
+                    && o.OrderDate >= start
+                    && o.OrderDate <= end
+                    && o.IsDeleted == 0)
+                .Any();
+        var monthTotalAmount = await _purchaseOrderItemRepository.SumAsync(x => x.PurchaseAmount, itemPredicate);
+        if (monthTotalAmount == 0 && monthOrderCount > 0)
+        {
+            // 回退：明细无金额时用主表 total_amount（元）
+            monthTotalAmount = await _purchaseOrderRepository.SumAsync(x => x.TotalAmount, orderPredicate);
+        }
+        var compareOrderCount = 0;
+        if (queryDto.CompareOrderDateStart.HasValue && queryDto.CompareOrderDateEnd.HasValue)
+        {
+            var compareStart = queryDto.CompareOrderDateStart.Value;
+            var compareEnd = queryDto.CompareOrderDateEnd.Value;
+            Expression<Func<TaktPurchaseOrder, bool>> comparePredicate = x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.OrderDate >= compareStart
+                && x.OrderDate <= compareEnd;
+            compareOrderCount = await _purchaseOrderRepository.CountAsync(comparePredicate);
+        }
+        return new TaktPurchaseOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthTotalAmount = monthTotalAmount,
+            CompareOrderCount = compareOrderCount,
+            OrderCountYoYPercent = TaktYoYStatHelper.CalculateYoYPercent(monthOrderCount, compareOrderCount),
+        };
+    }
+
+    // ========================================
     // 主子表级联（OneToMany）
     // ========================================
 
@@ -411,6 +479,7 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.PurchaseOrderCode = entity.PurchaseOrderCode;
+                childDto.TaxCode = entity.TaxCode ?? string.Empty;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
@@ -512,6 +581,10 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
+                || (x.PurchaseOrderType != null && x.PurchaseOrderType.Contains(keywords))
+                || (x.PaymentTerms != null && x.PaymentTerms.Contains(keywords))
+                || (x.PricingProcedure != null && x.PricingProcedure.Contains(keywords))
+                || (x.PricingConditionCode != null && x.PricingConditionCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.DeliveryAddress != null && x.DeliveryAddress.Contains(keywords))
@@ -566,6 +639,30 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
         {
             var purchaseGroup = queryDto.PurchaseGroup;
             exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(purchaseGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseOrderType))
+        {
+            var purchaseOrderType = queryDto.PurchaseOrderType;
+            exp = exp.And(x => x.PurchaseOrderType != null && x.PurchaseOrderType.Contains(purchaseOrderType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PaymentTerms))
+        {
+            var paymentTerms = queryDto.PaymentTerms;
+            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(paymentTerms));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingProcedure))
+        {
+            var pricingProcedure = queryDto.PricingProcedure;
+            exp = exp.And(x => x.PricingProcedure != null && x.PricingProcedure.Contains(pricingProcedure));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingConditionCode))
+        {
+            var pricingConditionCode = queryDto.PricingConditionCode;
+            exp = exp.And(x => x.PricingConditionCode != null && x.PricingConditionCode.Contains(pricingConditionCode));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -777,6 +874,22 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseOrderType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PaymentTerms))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingProcedure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingConditionCode))
         {
             return true;
         }

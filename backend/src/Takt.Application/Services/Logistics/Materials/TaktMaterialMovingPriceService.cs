@@ -95,8 +95,10 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
     /// <summary>
     /// 获取移动价格选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetMaterialMovingPriceOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetMaterialMovingPriceOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _materialMovingPriceRepository.GetListAsync(
@@ -480,5 +482,69 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取在库金额统计（数据看板；按评估期间汇总 StockAmount，并按评估类别分项）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>在库金额统计</returns>
+    public async Task<TaktMaterialMovingPriceStatDto> GetMaterialMovingPriceStatAsync(TaktMaterialMovingPriceStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var period = (queryDto.ValuationPeriod ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(period))
+        {
+            period = DateTime.Today.AddMonths(-1).ToString("yyyy-MM");
+        }
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktMaterialMovingPrice, bool>> periodPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ValuationPeriod == period;
+        var monthRowCount = await _materialMovingPriceRepository.CountAsync(periodPredicate);
+        var monthStockAmount = await _materialMovingPriceRepository.SumAsync(x => x.StockAmount, periodPredicate);
+        // 看板常用三类：Z792 成品 / Z790 半成品 / Z300 原材料（字典 logistics_materials_valuation_class）
+        var valuationCodes = new[] { "Z792", "Z790", "Z300" };
+        var byValuation = new List<TaktMaterialMovingPriceValuationAmountDto>(valuationCodes.Length);
+        decimal classifiedSum = 0;
+        foreach (var code in valuationCodes)
+        {
+            var codeLocal = code;
+            Expression<Func<TaktMaterialMovingPrice, bool>> codePredicate = x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.ValuationPeriod == period
+                && x.Valuation == codeLocal;
+            var amount = await _materialMovingPriceRepository.SumAsync(x => x.StockAmount, codePredicate);
+            classifiedSum += amount;
+            byValuation.Add(new TaktMaterialMovingPriceValuationAmountDto
+            {
+                Valuation = codeLocal,
+                StockAmount = amount,
+            });
+        }
+        var otherAmount = monthStockAmount - classifiedSum;
+        if (otherAmount != 0)
+        {
+            byValuation.Add(new TaktMaterialMovingPriceValuationAmountDto
+            {
+                Valuation = "OTHER",
+                StockAmount = otherAmount,
+            });
+        }
+        return new TaktMaterialMovingPriceStatDto
+        {
+            StatMonth = period,
+            MonthStockAmount = monthStockAmount,
+            MonthRowCount = monthRowCount,
+            ByValuation = byValuation,
+        };
     }
 }

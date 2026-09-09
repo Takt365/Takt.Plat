@@ -144,10 +144,20 @@ export function updateSopWorkstationSort(dto: SopWorkstationSort): Promise<SopWo
  * 获取SOP工位主数据选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSopWorkstationOptions(): Promise<TaktSelectOption[]> {
+export function getSopWorkstationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SOP_WORKSTATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

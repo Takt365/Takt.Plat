@@ -38,8 +38,10 @@ public interface ITaktAssyDefectDetailService
     /// <summary>
     /// 获取组立不良明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAssyDefectDetailOptionsAsync();
+    Task<List<TaktSelectOption>> GetAssyDefectDetailOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建组立不良明细

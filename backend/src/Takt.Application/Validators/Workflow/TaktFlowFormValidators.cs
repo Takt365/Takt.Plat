@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Workflow
 // 文件名称：TaktFlowFormValidators.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowForm 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktFlowForm 生成，请按需审阅）
 // 
@@ -50,8 +50,6 @@ public class TaktFlowFormCreateValidator : AbstractValidator<TaktFlowFormCreateD
         RuleFor(x => x.FormVersion)
             .NotEmpty().WithMessage("表单版本标签不能为空")
             .MaximumLength(32).WithMessage("表单版本标签长度不能超过32个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -96,8 +94,6 @@ public class TaktFlowFormUpdateValidator : AbstractValidator<TaktFlowFormUpdateD
         RuleFor(x => x.FormVersion)
             .NotEmpty().WithMessage("表单版本标签不能为空")
             .MaximumLength(32).WithMessage("表单版本标签长度不能超过32个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -136,8 +132,6 @@ public class TaktFlowFormImportValidator : AbstractValidator<TaktFlowFormImportD
         RuleFor(x => x.FormVersion)
             .NotEmpty().WithMessage("表单版本标签不能为空")
             .MaximumLength(32).WithMessage("表单版本标签长度不能超过32个字符");
-        RuleFor(x => x.SortOrder)
-            .GreaterThanOrEqualTo(0).WithMessage("排序号不能为负数");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

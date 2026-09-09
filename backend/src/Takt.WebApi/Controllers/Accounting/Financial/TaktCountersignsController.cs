@@ -86,11 +86,11 @@ public class TaktCountersignsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:countersign:query", "会签单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCountersignOptionsAsync()
+    public async Task<IActionResult> GetCountersignOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _countersignService.GetCountersignOptionsAsync();
+            var result = await _countersignService.GetCountersignOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

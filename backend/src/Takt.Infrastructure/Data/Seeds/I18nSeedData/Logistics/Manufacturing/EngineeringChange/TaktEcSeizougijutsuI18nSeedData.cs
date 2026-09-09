@@ -90,14 +90,14 @@ public class TaktEcSeizougijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseizougijutsu._self
             new TranslationSeedItem("entity.ecseizougijutsu._self", "zh-HK", "设变制造技术课信息_hk", "实体名称"),
 
-            // entity.ecseizougijutsu.ecndetailid
-            new TranslationSeedItem("entity.ecseizougijutsu.ecndetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizougijutsu 导航）"),
-            // entity.ecseizougijutsu.ecndetailid
-            new TranslationSeedItem("entity.ecseizougijutsu.ecndetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizougijutsu 导航）"),
-            // entity.ecseizougijutsu.ecndetailid
-            new TranslationSeedItem("entity.ecseizougijutsu.ecndetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizougijutsu 导航）"),
-            // entity.ecseizougijutsu.ecndetailid
-            new TranslationSeedItem("entity.ecseizougijutsu.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizougijutsu 导航）"),
+            // entity.ecseizougijutsu.ecdetailid
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseizougijutsu.ecdetailid
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseizougijutsu.ecdetailid
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
+            // entity.ecseizougijutsu.ecdetailid
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；主表多对一导航 EcDetail）"),
 
             // entity.ecseizougijutsu.eccode
             new TranslationSeedItem("entity.ecseizougijutsu.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
@@ -144,34 +144,25 @@ public class TaktEcSeizougijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseizougijutsu.ecfinishedgoodsdescription
             new TranslationSeedItem("entity.ecseizougijutsu.ecfinishedgoodsdescription", "zh-HK", "完成品描述_hk", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
 
-            // entity.ecseizougijutsu.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialcode", "en-US", "上阶物料编码_us", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseizougijutsu.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialcode", "ja-JP", "上阶物料编码_jp", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseizougijutsu.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialcode", "zh-CN", "上阶物料编码", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
-            // entity.ecseizougijutsu.ecparentmaterialcode
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialcode", "zh-HK", "上阶物料编码_hk", "上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）"),
+            // entity.ecseizougijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "en-US", "完成品EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseizougijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "ja-JP", "完成品EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseizougijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "zh-CN", "完成品EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            // entity.ecseizougijutsu.discontinuedstatus
+            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "zh-HK", "完成品EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
 
-            // entity.ecseizougijutsu.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialdescription", "en-US", "上阶物料描述_us", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseizougijutsu.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialdescription", "ja-JP", "上阶物料描述_jp", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseizougijutsu.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialdescription", "zh-CN", "上阶物料描述", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-            // entity.ecseizougijutsu.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecseizougijutsu.ecparentmaterialdescription", "zh-HK", "上阶物料描述_hk", "上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）"),
-
-            // entity.ecseizougijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "en-US", "完成品EOL_us", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseizougijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "ja-JP", "完成品EOL_jp", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseizougijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "zh-CN", "完成品EOL", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-            // entity.ecseizougijutsu.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizougijutsu.discontinuedstatus", "zh-HK", "完成品EOL_hk", "完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
-
-            // entity.ecseizougijutsu.deptcode
+            
+            // entity.ecseizougijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseizougijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseizougijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseizougijutsu.ecdistinction
+            new TranslationSeedItem("entity.ecseizougijutsu.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+// entity.ecseizougijutsu.deptcode
             new TranslationSeedItem("entity.ecseizougijutsu.deptcode", "en-US", "部门编码_us", "部门编码（TaktDept.DeptCode，5 位，如 D0630）"),
             // entity.ecseizougijutsu.deptcode
             new TranslationSeedItem("entity.ecseizougijutsu.deptcode", "ja-JP", "部门编码_jp", "部门编码（TaktDept.DeptCode，5 位，如 D0630）"),
@@ -179,6 +170,24 @@ public class TaktEcSeizougijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecseizougijutsu.deptcode", "zh-CN", "部门编码", "部门编码（TaktDept.DeptCode，5 位，如 D0630）"),
             // entity.ecseizougijutsu.deptcode
             new TranslationSeedItem("entity.ecseizougijutsu.deptcode", "zh-HK", "部门编码_hk", "部门编码（TaktDept.DeptCode，5 位，如 D0630）"),
+
+            // entity.ecseizougijutsu.deptname
+            new TranslationSeedItem("entity.ecseizougijutsu.deptname", "en-US", "部门名称_us", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecseizougijutsu.deptname
+            new TranslationSeedItem("entity.ecseizougijutsu.deptname", "ja-JP", "部门名称_jp", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecseizougijutsu.deptname
+            new TranslationSeedItem("entity.ecseizougijutsu.deptname", "zh-CN", "部门名称", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecseizougijutsu.deptname
+            new TranslationSeedItem("entity.ecseizougijutsu.deptname", "zh-HK", "部门名称_hk", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+
+            // entity.ecseizougijutsu.issopupdated
+            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "en-US", "是否更新SOP_us", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
+            // entity.ecseizougijutsu.issopupdated
+            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "ja-JP", "是否更新SOP_jp", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
+            // entity.ecseizougijutsu.issopupdated
+            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "zh-CN", "是否更新SOP", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
+            // entity.ecseizougijutsu.issopupdated
+            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "zh-HK", "是否更新SOP_hk", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
 
             // entity.ecseizougijutsu.isimplemented
             new TranslationSeedItem("entity.ecseizougijutsu.isimplemented", "en-US", "实施_us", "是否实施（0=否 1=是，字典 sys_yes_no）"),
@@ -206,15 +215,6 @@ public class TaktEcSeizougijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecseizougijutsu.confirmationdate", "zh-CN", "确认日期", "确认日期"),
             // entity.ecseizougijutsu.confirmationdate
             new TranslationSeedItem("entity.ecseizougijutsu.confirmationdate", "zh-HK", "确认日期_hk", "确认日期"),
-
-            // entity.ecseizougijutsu.issopupdated
-            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "en-US", "是否更新SOP_us", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
-            // entity.ecseizougijutsu.issopupdated
-            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "ja-JP", "是否更新SOP_jp", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
-            // entity.ecseizougijutsu.issopupdated
-            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "zh-CN", "是否更新SOP", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
-            // entity.ecseizougijutsu.issopupdated
-            new TranslationSeedItem("entity.ecseizougijutsu.issopupdated", "zh-HK", "是否更新SOP_hk", "是否更新 SOP（0=否 1=是，字典 sys_yes_no）"),
 
             // entity.ecseizougijutsu.isobsolete
             new TranslationSeedItem("entity.ecseizougijutsu.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),

@@ -20,7 +20,21 @@ import { syncAntDesignCssVariables } from '@/utils/theme';
 
 const { token } = theme.useToken();
 
-watchEffect(() => {
-  syncAntDesignCssVariables(token.value);
-});
+/**
+ * 监听会随明暗/主色变化的关键 token；不全量 deep 订阅 Object.keys(token)
+ * 实际写入仍走 sync（内含同值跳过）
+ */
+watch(
+  () =>
+    [
+      token.value.colorPrimary,
+      token.value.colorBgContainer,
+      token.value.colorText,
+      token.value.colorBorder,
+    ] as const,
+  () => {
+    syncAntDesignCssVariables(token.value);
+  },
+  { immediate: true, flush: 'post' },
+);
 </script>

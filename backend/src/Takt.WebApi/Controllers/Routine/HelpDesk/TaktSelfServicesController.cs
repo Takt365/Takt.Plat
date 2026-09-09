@@ -86,11 +86,11 @@ public class TaktSelfServicesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:self:service:query", "自助服务选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSelfServiceOptionsAsync()
+    public async Task<IActionResult> GetSelfServiceOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _selfServiceService.GetSelfServiceOptionsAsync();
+            var result = await _selfServiceService.GetSelfServiceOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

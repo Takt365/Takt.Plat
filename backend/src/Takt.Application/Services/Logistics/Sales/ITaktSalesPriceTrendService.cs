@@ -23,23 +23,27 @@ public interface ITaktSalesPriceTrendService
     /// <summary>
     /// 推移查询栏：销售价格本表工厂去重选项
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync();
+    Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂去重条件类型（级联第 2 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string plantCode);
+    Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂+条件类型去重客户（级联第 3 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(string plantCode, string? priceType = null);
+    Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null);
 
     /// <summary>
     /// 推移查询栏：按工厂+条件类型+客户去重物料（级联第 4 级，查询时可空）
@@ -47,11 +51,9 @@ public interface ITaktSalesPriceTrendService
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
     /// <param name="customerCode">客户编码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(
-        string plantCode,
-        string? priceType = null,
-        string? customerCode = null);
+    Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null, string? customerCode = null);
 
     /// <summary>
     /// 销售价格月推移转置分析（工厂×物料×客户×月份）

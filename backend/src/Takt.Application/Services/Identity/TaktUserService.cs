@@ -135,8 +135,10 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     /// <summary>
     /// 获取用户选项列表（用于下拉框等）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>用户选项列表</returns>
-    public async Task<List<TaktSelectOption>> GetUserOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetUserOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var users = await _userRepository.GetListAsync(u => u.TenantCode == CurrentTenantCode);

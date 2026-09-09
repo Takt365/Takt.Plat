@@ -86,11 +86,11 @@ public class TaktQualityGroupsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:group:query", "质量组主数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityGroupOptionsAsync()
+    public async Task<IActionResult> GetQualityGroupOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _qualityGroupService.GetQualityGroupOptionsAsync();
+            var result = await _qualityGroupService.GetQualityGroupOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

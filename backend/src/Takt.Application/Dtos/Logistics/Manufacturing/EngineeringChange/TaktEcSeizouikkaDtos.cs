@@ -36,15 +36,15 @@ public class TaktEcSeizouikkaDto : TaktCompanyDtoBase
     public long EcSeizouikkaId { get; set; }
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变明细 名称（填充字段）
     /// </summary>
-    public string? EcnDetailName { get; set; }
+    public string? EcDetailName { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -56,35 +56,15 @@ public class TaktEcSeizouikkaDto : TaktCompanyDtoBase
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
+    public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -117,9 +97,26 @@ public class TaktEcSeizouikkaDto : TaktCompanyDtoBase
     public string? ImplementationBatch { get; set; } = string.Empty;
 
     /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    public string EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
+    /// 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcFinishedGoods）
+    /// </summary>
+    public List<TaktEcDetailDto>? EcDetails { get; set; }
 
 }
 
@@ -154,10 +151,10 @@ public class TaktEcSeizouikkaQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -169,35 +166,15 @@ public class TaktEcSeizouikkaQueryDto : TaktPagedQuery
     /// </summary>
     public int? LineNumber { get; set; }
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
-    /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
-    /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -234,6 +211,18 @@ public class TaktEcSeizouikkaQueryDto : TaktPagedQuery
     /// </summary>
     public string? ImplementationBatch { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    public string? EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
@@ -290,10 +279,10 @@ public class TaktEcSeizouikkaCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -306,36 +295,15 @@ public class TaktEcSeizouikkaCreateDto
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    [Required(ErrorMessage = "机种（冗余：来自 TaktEcDetail.EcModelCode）不能为空")]
-    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
+    public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -368,6 +336,19 @@ public class TaktEcSeizouikkaCreateDto
     /// </summary>
     public string? ImplementationBatch { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    [Required(ErrorMessage = "机种（冗余：来自 TaktEcDetail.EcModelCode）不能为空")]
+    public string EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
@@ -408,6 +389,30 @@ public class TaktEcSeizouikkaUpdateDto : TaktEcSeizouikkaCreateDto
 // ========================================
 // EcSeizouikka 作废 DTO
 // ========================================
+
+/// <summary>
+/// EcSeizouikka 停产状态 DTO
+/// </summary>
+public class TaktEcSeizouikkaDiscontinuedStatusDto
+{
+    /// <summary>
+    /// EcSeizouikkaID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcSeizouikkaId { get; set; }
+
+    /// <summary>
+    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+    /// </summary>
+    [Required(ErrorMessage = "停产状态不能为空")]
+    public string DiscontinuedStatus { get; set; } = "Z0";
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// </summary>
+    public int EcDistinction { get; set; }
+}
 
 /// <summary>
 /// EcSeizouikka 作废/撤销作废 DTO
@@ -458,10 +463,10 @@ public class TaktEcSeizouikkaTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -473,35 +478,15 @@ public class TaktEcSeizouikkaTemplateDto
     /// </summary>
     public int? LineNumber { get; set; }
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
-    /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
-    /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -533,6 +518,18 @@ public class TaktEcSeizouikkaTemplateDto
     /// </summary>
     public string? ImplementationBatch { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    public string? EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
@@ -576,10 +573,10 @@ public class TaktEcSeizouikkaImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -591,35 +588,15 @@ public class TaktEcSeizouikkaImportDto
     /// </summary>
     public int? LineNumber { get; set; }
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
-    /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
-    /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
+    /// <summary>
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// </summary>
+    public int? EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -651,6 +628,18 @@ public class TaktEcSeizouikkaImportDto
     /// </summary>
     public string? ImplementationBatch { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    public string? EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
@@ -700,10 +689,10 @@ public class TaktEcSeizouikkaExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）
+    /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余，便于查询）
@@ -715,35 +704,15 @@ public class TaktEcSeizouikkaExportDto
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
-    /// <summary>
-    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
-    /// </summary>
-    public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
-
+    public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-    /// </summary>
-    public string? EcParentMaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-    /// </summary>
-    public string? EcParentMaterialDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public int EcDistinction { get; set; }
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -775,6 +744,18 @@ public class TaktEcSeizouikkaExportDto
     /// </summary>
     public string? ImplementationBatch { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 机种（冗余：来自 TaktEcDetail.EcModelCode）
+    /// </summary>
+    public string EcModelCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// </summary>
+    public string? EcFinishedGoods { get; set; } = string.Empty;
+    /// <summary>
+    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// </summary>
+    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>

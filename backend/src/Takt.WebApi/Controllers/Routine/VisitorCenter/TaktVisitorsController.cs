@@ -86,11 +86,11 @@ public class TaktVisitorsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:visitor:center:query", "来访接待选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetVisitorOptionsAsync()
+    public async Task<IActionResult> GetVisitorOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _visitorService.GetVisitorOptionsAsync();
+            var result = await _visitorService.GetVisitorOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

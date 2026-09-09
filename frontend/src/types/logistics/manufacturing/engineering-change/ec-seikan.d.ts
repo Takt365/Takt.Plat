@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-seikan.d.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,14 @@ export interface EcSeikan extends CompanyDtoBase {
   ecSeikanId: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变明细 名称（填充字段）
    */
-  ecnDetailName?: string;
+  ecDetailName?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -64,19 +64,13 @@ export interface EcSeikan extends CompanyDtoBase {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -114,14 +108,19 @@ export interface EcSeikan extends CompanyDtoBase {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
+
+  /**
+   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcFinishedGoods）
+   */
+  ecDetails?: EcDetail[];
 
 }
 
@@ -154,9 +153,9 @@ export interface EcSeikanQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -184,19 +183,13 @@ export interface EcSeikanQuery extends TaktPagedQuery {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -239,9 +232,9 @@ export interface EcSeikanQuery extends TaktPagedQuery {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -298,9 +291,9 @@ export interface EcSeikanCreate {
   plantCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -328,19 +321,13 @@ export interface EcSeikanCreate {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -378,9 +365,9 @@ export interface EcSeikanCreate {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -414,6 +401,25 @@ export interface EcSeikanUpdate extends EcSeikanCreate {
 
 }
 
+
+/**
+ * 对应前端 EcSeikanDiscontinuedStatus
+ * @description 对应后端 TaktEcSeikanDiscontinuedStatusDto
+ */
+export interface EcSeikanDiscontinuedStatus {
+  /**
+   * EcSeikanID
+   */
+  ecSeikanId: string;
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   */
+  discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
+}
 
 /**
  * EcSeikan 作废/撤销作废 DTO
@@ -461,9 +467,9 @@ export interface EcSeikanTemplate {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -491,19 +497,13 @@ export interface EcSeikanTemplate {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -541,9 +541,9 @@ export interface EcSeikanTemplate {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -590,9 +590,9 @@ export interface EcSeikanImport {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -620,19 +620,13 @@ export interface EcSeikanImport {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -670,9 +664,9 @@ export interface EcSeikanImport {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -719,9 +713,9 @@ export interface EcSeikanExport {
   cultureCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -749,19 +743,13 @@ export interface EcSeikanExport {
   ecFinishedGoodsDescription?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
-   */
-  ecParentMaterialCode?: string;
-
-  /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
@@ -799,9 +787,9 @@ export interface EcSeikanExport {
   balance?: string;
 
   /**
-   * 旧品处理
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
    */
-  oldProductHandling?: string;
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

@@ -59,16 +59,50 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "actual_delivery_date", ColumnDescription = "实际交货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ActualDeliveryDate { get; set; }
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=Id）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_employee_id", ColumnDescription = "销售员ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? SalesEmployeeId { get; set; }
+    [SugarColumn(ColumnName = "sales_group", ColumnDescription = "销售组", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? SalesGroup { get; set; }
     /// <summary>
-    /// 销售员名称（冗余：按 SalesEmployeeId 取 TaktEmployee.EmployeeName 联动）
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_employee_name", ColumnDescription = "销售员名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? SalesEmployeeName { get; set; }
+    [SugarColumn(ColumnName = "sales_order_type", ColumnDescription = "销售订单类型", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? SalesOrderType { get; set; }
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    [SugarColumn(ColumnName = "order_reason", ColumnDescription = "订单原因", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? OrderReason { get; set; }
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_organization", ColumnDescription = "销售组织", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? SalesOrganization { get; set; }
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_procedure", ColumnDescription = "定价过程", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingProcedure { get; set; }
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_condition_code", ColumnDescription = "定价条件编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingConditionCode { get; set; }
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "invoice_type", ColumnDescription = "发票类型", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? InvoiceType { get; set; }
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "采购订单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PurchaseOrderCode { get; set; }
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_order_date", ColumnDescription = "采购订单日期", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? PurchaseOrderDate { get; set; }
     /// <summary>
     /// 订单总数量（基本单位数量）
     /// </summary>

@@ -86,11 +86,11 @@ public class TaktCustomerSatisfactionSurveysController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:complaint:customer:satisfaction:survey:query", "客户满意度调查选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCustomerSatisfactionSurveyOptionsAsync()
+    public async Task<IActionResult> GetCustomerSatisfactionSurveyOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _customerSatisfactionSurveyService.GetCustomerSatisfactionSurveyOptionsAsync();
+            var result = await _customerSatisfactionSurveyService.GetCustomerSatisfactionSurveyOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

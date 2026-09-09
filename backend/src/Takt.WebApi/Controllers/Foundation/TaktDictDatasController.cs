@@ -86,11 +86,11 @@ public class TaktDictDatasController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:dict:query", "字典数据选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDictDataOptionsAsync()
+    public async Task<IActionResult> GetDictDataOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _dictDataService.GetDictDataOptionsAsync();
+            var result = await _dictDataService.GetDictDataOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

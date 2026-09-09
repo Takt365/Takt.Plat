@@ -130,10 +130,20 @@ export function updatePurchasePriceScaleValueObsolete(dto: PurchasePriceScaleVal
  * 获取采购价格价值等级选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPurchasePriceScaleValueOptions(): Promise<TaktSelectOption[]> {
+export function getPurchasePriceScaleValueOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PURCHASE_PRICE_SCALE_VALUE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

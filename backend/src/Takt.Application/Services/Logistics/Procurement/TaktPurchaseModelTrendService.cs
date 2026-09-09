@@ -62,7 +62,7 @@ public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModel
         _modelDestinationRepository = modelDestinationRepository;
     }
 
-    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendPlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchasePriceRepository.GetListAsync(
@@ -77,7 +77,7 @@ public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModel
             .ToList();
     }
 
-    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendPriceTypeOptionsAsync(string plantCode)
+    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendPriceTypeOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -90,7 +90,7 @@ public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModel
             .Select(g => new TaktSelectOption { DictValue = g.Key, DictLabel = g.Key }).ToList();
     }
 
-    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendSupplierOptionsAsync(string plantCode, string? priceType = null)
+    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendSupplierOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -105,8 +105,7 @@ public class TaktPurchaseModelTrendService : TaktServiceBase, ITaktPurchaseModel
             .Select(g => new TaktSelectOption { DictValue = g.Key, DictLabel = g.Key }).ToList();
     }
 
-    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendMaterialOptionsAsync(
-        string plantCode, string? priceType = null, string? supplierCode = null)
+    public async Task<List<TaktSelectOption>> GetPurchaseModelTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null, string? supplierCode = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;

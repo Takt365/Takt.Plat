@@ -23,12 +23,16 @@ export const PURCHASEINQUIRY_LIST_FIELDS = [
   'purchaseInquiryCode',
   'inquiryDate',
   'quoteDeadlineDate',
-  'inquiryId',
-  'inquiryBy',
+  'inquiryEmployeeId',
+  'inquiryEmployeeName',
   'supplierCode',
   'supplierName1',
+  'purchaseInquiryType',
+  'pricingProcedure',
+  'pricingConditionCode',
   'currencyCode',
   'taxCode',
+  'taxRate',
   'taxAmount',
   'paymentMode',
   'chainScheme',
@@ -39,12 +43,39 @@ export const PURCHASEINQUIRY_LIST_FIELDS = [
   'inquiryReason',
   'inquiryStatus',
   'convertedStatus',
-  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const PURCHASEINQUIRY_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  purchaseInquiryCode: 'required',
+  inquiryDate: 'select',
+  quoteDeadlineDate: 'optional',
+  inquiryEmployeeId: 'optional',
+  inquiryEmployeeName: 'optional',
+  supplierCode: 'select',
+  supplierName1: 'optional',
+  purchaseInquiryType: 'optional',
+  pricingProcedure: 'optional',
+  pricingConditionCode: 'optional',
+  currencyCode: 'select',
+  taxCode: 'optional',
+  taxRate: 'select',
+  taxAmount: 'select',
+  paymentMode: 'select',
+  chainScheme: 'select',
+  totalQuantity: 'select',
+  totalAmount: 'select',
+  convertedQuantity: 'select',
+  convertedAmount: 'select',
+  inquiryReason: 'optional',
+  inquiryStatus: 'select',
+  convertedStatus: 'select',
+  extField: 'optional',
+  remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -52,13 +83,47 @@ export type PurchaseInquiryField = keyof typeof PURCHASEINQUIRY_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEINQUIRY_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'purchaseInquiryCode',
+  'inquiryDateStart',
+  'inquiryDateEnd',
+  'quoteDeadlineDateStart',
+  'quoteDeadlineDateEnd',
+  'inquiryEmployeeId',
+  'inquiryEmployeeName',
+  'supplierCode',
+  'supplierName1',
+  'purchaseInquiryType',
+  'pricingProcedure',
+  'pricingConditionCode',
+  'currencyCode',
+  'taxCode',
+  'paymentMode',
+  'inquiryReason',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof PurchaseInquiryQuery)[]
 
-export type PurchaseInquiryQueryField = (typeof PURCHASEINQUIRY_QUERY_STRING_FIELDS)[number]
+export type PurchaseInquiryQueryField =
+  | (typeof PURCHASEINQUIRY_QUERY_STRING_FIELDS)[number]
+  | 'taxRate' | 'taxAmount' | 'chainScheme' | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'inquiryStatus' | 'convertedStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEINQUIRY_QUERY_FIELDS: readonly PurchaseInquiryQueryField[] = [...PURCHASEINQUIRY_QUERY_STRING_FIELDS]
+export const PURCHASEINQUIRY_QUERY_FIELDS: readonly PurchaseInquiryQueryField[] = [
+  ...PURCHASEINQUIRY_QUERY_STRING_FIELDS,
+  'taxRate',
+  'taxAmount',
+  'chainScheme',
+  'totalQuantity',
+  'totalAmount',
+  'convertedQuantity',
+  'convertedAmount',
+  'inquiryStatus',
+  'convertedStatus',
+]
 
 /**
  * 采购询价实体字段 i18n：index / purchase-inquiry-form 统一入口

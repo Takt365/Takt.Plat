@@ -254,11 +254,6 @@ export interface Customer extends CompanyDtoBase {
   discountRate: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel: number;
@@ -532,11 +527,6 @@ export interface CustomerQuery extends TaktPagedQuery {
    * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate?: number;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
 
   /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
@@ -831,11 +821,6 @@ export interface CustomerCreate {
    * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate: number;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
 
   /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
@@ -1170,11 +1155,6 @@ export interface CustomerTemplate {
   discountRate?: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
@@ -1454,11 +1434,6 @@ export interface CustomerImport {
   discountRate?: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
    */
   customerLevel?: number;
@@ -1736,11 +1711,6 @@ export interface CustomerExport {
    * 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
    */
   discountRate: number;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
 
   /**
    * 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）

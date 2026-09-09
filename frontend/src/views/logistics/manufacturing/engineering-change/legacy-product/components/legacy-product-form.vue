@@ -146,13 +146,11 @@
             </a-col>
             <a-col :span="24">
               <a-form-item :label="pi.label('oldProductHandling')" name="oldProductHandling">
-                <a-textarea
+                <TaktSelect
                   v-model:value="formState.oldProductHandling"
+                  dict-type="logistics_manufacturing_ec_old_part_disposition"
                   :placeholder="pi.ph('oldProductHandling')"
                   :disabled="loading"
-                  :rows="4"
-                  show-count
-                  :maxlength="500"
                   allow-clear
                 />
               </a-form-item>
@@ -267,6 +265,7 @@ const LEGACY_PRODUCT_DICT_FIELDS = [
   { field: 'ecSecondDistinction', dictType: 'logistics_manufacturing_ec_source_distinction' },
   { field: 'ecInstruction', dictType: 'logistics_manufacturing_ec_source_instruction' },
   { field: 'ecOldPartDisposition', dictType: 'logistics_manufacturing_ec_old_part_disposition' },
+  { field: 'oldProductHandling', dictType: 'logistics_manufacturing_ec_old_part_disposition' },
   { field: 'discontinuedStatus', dictType: 'logistics_materials_material_discontinued_status' },
 ] as const
 

@@ -47,8 +47,10 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
     /// <summary>
     /// 推移查询栏：销售订单本表工厂去重选项
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendPlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesOrderRepository.GetListAsync(
@@ -71,8 +73,9 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
     /// 推移查询栏：按工厂去重客户（级联第 2 级，查询时可空）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendCustomerOptionsAsync(string plantCode)
+    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendCustomerOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;

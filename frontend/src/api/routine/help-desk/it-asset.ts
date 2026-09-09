@@ -116,10 +116,20 @@ export function deleteItAssetBatch(ids: string[]): Promise<void> {
  * 获取IT设备保修扩展选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getItAssetOptions(): Promise<TaktSelectOption[]> {
+export function getItAssetOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${IT_ASSET_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

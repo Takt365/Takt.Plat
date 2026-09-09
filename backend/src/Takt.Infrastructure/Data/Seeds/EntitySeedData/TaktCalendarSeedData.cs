@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Accounting.Financial;
@@ -137,9 +138,10 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
             {
                 var date = day.Date;
                 var (isWorkingDay, holidayId) = ResolveDay(date, holidayByDate);
+                var derived = ResolveDateDerived(date);
                 if (!existingByDate.TryGetValue(date, out var row))
                 {
-                    toInsert.Add(new TaktCalendar
+                    var entity = new TaktCalendar
                     {
                         TenantCode = tenantCode,
                         CompanyCode = company.CompanyCode,
@@ -149,12 +151,20 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
                         ShiftId = null,
                         PlantCode = plantCode,
                         CultureCode = company.CultureCode
-                    });
+                    };
+                    ApplyDateDerived(entity, derived);
+                    toInsert.Add(entity);
                     continue;
                 }
                 var needUpdate = row.IsWorkingDay != isWorkingDay
                     || row.HolidayId != holidayId
-                    || row.CultureCode != company.CultureCode;
+                    || row.CultureCode != company.CultureCode
+                    || row.DayOfMonth != derived.DayOfMonth
+                    || row.Weekday != derived.Weekday
+                    || row.WeekOfYear != derived.WeekOfYear
+                    || row.Quarter != derived.Quarter
+                    || row.DayOfQuarter != derived.DayOfQuarter
+                    || row.DayOfYear != derived.DayOfYear;
                 if (!needUpdate)
                 {
                     continue;
@@ -162,6 +172,7 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
                 row.IsWorkingDay = isWorkingDay;
                 row.HolidayId = holidayId;
                 row.CultureCode = company.CultureCode;
+                ApplyDateDerived(row, derived);
                 toUpdate.Add(row);
             }
             if (toInsert.Count > 0)
@@ -188,7 +199,7 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 将假日区间展开为「日期 → 工作日标记 + 假日 Id」；同日多条时后写覆盖（调休优先于法定：先法定再调休）
+    /// 将假日区间标为休息、将 CompensatoryWorkDates 标为上班；同日后写覆盖（调休上班优先于假日区间）
     /// </summary>
     /// <param name="holidays">公司假日列表</param>
     /// <returns>日期覆盖字典</returns>
@@ -200,20 +211,53 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
         {
             var start = holiday.StartDate.Date;
             var end = holiday.EndDate.Date;
-            if (end < start)
+            if (end >= start)
             {
-                continue;
+                for (var d = start; d <= end; d = d.AddDays(1))
+                {
+                    if (d.Year != CalendarYear)
+                    {
+                        continue;
+                    }
+                    map[d] = (Off, holiday.Id);
+                }
             }
-            for (var d = start; d <= end; d = d.AddDays(1))
+            foreach (var workDate in ParseCompensatoryWorkDates(holiday.CompensatoryWorkDates))
             {
-                if (d.Year != CalendarYear)
+                if (workDate.Year != CalendarYear)
                 {
                     continue;
                 }
-                map[d] = (holiday.IsWorkingDay, holiday.Id);
+                map[workDate] = (Work, holiday.Id);
             }
         }
         return map;
+    }
+
+    /// <summary>
+    /// 解析调休上班日（取「上班日=&gt;放假日」左侧；兼容仅上班日）
+    /// </summary>
+    /// <param name="raw">CompensatoryWorkDates 原文</param>
+    /// <returns>调休上班日序列</returns>
+    private static IEnumerable<DateTime> ParseCompensatoryWorkDates(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            yield break;
+        }
+        foreach (var part in raw.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var workRaw = part;
+            var arrow = part.IndexOf("=>", StringComparison.Ordinal);
+            if (arrow >= 0)
+            {
+                workRaw = part[..arrow].Trim();
+            }
+            if (DateTime.TryParseExact(workRaw, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d))
+            {
+                yield return d.Date;
+            }
+        }
     }
 
     /// <summary>
@@ -232,5 +276,56 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
         }
         var isWeekend = date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
         return (isWeekend ? Off : Work, null);
+    }
+
+    /// <summary>
+    /// 由日历日期派生：月内日、星期（周一=1…周日=7）、ISO 周次、自然年季度、季内日、年内日
+    /// </summary>
+    /// <param name="date">自然日</param>
+    /// <returns>日期派生值</returns>
+    private static (
+        int DayOfMonth,
+        int Weekday,
+        int WeekOfYear,
+        int Quarter,
+        int DayOfQuarter,
+        int DayOfYear) ResolveDateDerived(DateTime date)
+    {
+        date = date.Date;
+        var dow = (int)date.DayOfWeek;
+        var weekday = dow == 0 ? 7 : dow;
+        var quarter = (date.Month - 1) / 3 + 1;
+        var quarterStart = new DateTime(date.Year, (quarter - 1) * 3 + 1, 1);
+        var dayOfQuarter = (date - quarterStart).Days + 1;
+        return (
+            date.Day,
+            weekday,
+            ISOWeek.GetWeekOfYear(date),
+            quarter,
+            dayOfQuarter,
+            date.DayOfYear);
+    }
+
+    /// <summary>
+    /// 将日期派生字段写入日历实体
+    /// </summary>
+    /// <param name="entity">日历实体</param>
+    /// <param name="derived">派生值</param>
+    private static void ApplyDateDerived(
+        TaktCalendar entity,
+        (
+            int DayOfMonth,
+            int Weekday,
+            int WeekOfYear,
+            int Quarter,
+            int DayOfQuarter,
+            int DayOfYear) derived)
+    {
+        entity.DayOfMonth = derived.DayOfMonth;
+        entity.Weekday = derived.Weekday;
+        entity.WeekOfYear = derived.WeekOfYear;
+        entity.Quarter = derived.Quarter;
+        entity.DayOfQuarter = derived.DayOfQuarter;
+        entity.DayOfYear = derived.DayOfYear;
     }
 }

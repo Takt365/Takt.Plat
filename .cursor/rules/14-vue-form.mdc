@@ -53,7 +53,8 @@ loading?: boolean
 
 ### 1.4 表单 UI
 
-- 根：`a-form` + `layout="horizontal"` + `label-align="right"`
+- 根：`a-form` + `class="takt-generated-form"` + `layout="horizontal"` + `label-align="right"`（标签列宽/右对齐由 `global.css` 统一）
+- ❌ **禁止**表单维护 `sortOrder`（后端自动生成；树拖拽改序除外，不在 form 内）
 - 栅格：`a-row` / `a-col`（`:gutter="24"`）
 - 文案：`t('entity.*')` 标签；`common.page.form.placeholder.*` 占位
 - 字典：`TaktSelect` + `api-url` 或 `dict-type`（与后端 `DictTypeCode` 一致）
@@ -133,8 +134,9 @@ await mainFormRef.value?.validate()
 | 字段 | 组件 |
 |------|------|
 | `parentId` | `TaktTreeSelect`，`api-url="/api/TaktXxxs/tree-options"` |
-| `sortOrder` | `a-input-number`，`:min="0"` |
 | 业务编码 | 新增可编辑；编辑 `:disabled="!!formData?.xxxId"` |
+
+❌ **`sortOrder` 不入维护表单**：由后端 `ITaktSortOrderGenerator` 在 Create/Import（值 ≤0）自动回填；树拖拽改序走 `UpdateXxxSort` / 拖拽 API，不在 `*-form.vue` 展示。
 
 ### 4.2 父级默认值
 
@@ -151,8 +153,8 @@ await mainFormRef.value?.validate()
 ## 五、父级 index.vue 集成
 
 ```vue
-<TaktModal v-model:open="formVisible" :confirm-loading="formLoading" @ok="handleFormSubmit">
-  <XxxForm ref="formRef" :form-data="formData" :loading="formLoading" />
+<TaktModal v-model:open="formVisible" :width="formModalWidthPx" :confirm-loading="formLoading" @ok="handleFormSubmit">
+ <XxxForm ref="formRef" :form-data="formData" :loading="formLoading" />
 </TaktModal>
 ```
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-center.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-31
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -60,9 +60,9 @@ export function getCostCenterById(id: string): Promise<CostCenter> {
 }
 
 /**
- * 获取成本中心树形列表
- * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * 获取成本中心树形列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 字段）
  * @returns {Promise<CostCenterTree[]>} 树形数据
  */
 export function getCostCenterTree(parentId: string, includeDisabled: boolean): Promise<CostCenterTree[]> {
@@ -159,13 +159,25 @@ export function updateCostCenterSort(dto: CostCenterSort): Promise<CostCenter> {
 // ========================================
 
 /**
- * 获取成本中心树形选项列表（DictValue 为 CostCenterCode，DictLabel 为成本中心名称）
+ * 获取成本中心树形选项列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {string} plantCode 工厂代码（可选，用于按工厂过滤）
+ * @param {string} keyword 搜索关键字（可选，模糊匹配）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
-export function getCostCenterTreeOptions(): Promise<TaktTreeSelectOption[]> {
+export function getCostCenterTreeOptions(
+  parentId: string,
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${COST_CENTER_API_BASE}/tree-options`,
     method: 'get',
+    params: {
+      parentId,
+      plantCode,
+      keyword
+    },
   });
 }
 

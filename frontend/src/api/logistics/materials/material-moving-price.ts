@@ -116,10 +116,20 @@ export function deleteMaterialMovingPriceBatch(ids: string[]): Promise<void> {
  * 获取物料移动价格选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMaterialMovingPriceOptions(): Promise<TaktSelectOption[]> {
+export function getMaterialMovingPriceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MATERIAL_MOVING_PRICE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

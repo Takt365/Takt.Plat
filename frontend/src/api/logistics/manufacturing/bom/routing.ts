@@ -130,10 +130,20 @@ export function updateRoutingStatus(dto: RoutingStatus): Promise<Routing> {
  * 获取工艺路线主选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getRoutingOptions(): Promise<TaktSelectOption[]> {
+export function getRoutingOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ROUTING_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

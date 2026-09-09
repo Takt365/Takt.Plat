@@ -130,10 +130,20 @@ export function updatePackagingMaterialSort(dto: PackagingMaterialSort): Promise
  * 获取包装物料选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPackagingMaterialOptions(): Promise<TaktSelectOption[]> {
+export function getPackagingMaterialOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PACKAGING_MATERIAL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

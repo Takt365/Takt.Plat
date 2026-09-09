@@ -94,12 +94,12 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     /// <summary>
     /// 根据设变主表 ID 获取看板行
     /// </summary>
-    /// <param name="ecId">设变主表 ID</param>
+    /// <param name="ecGijutsuId">设变主表 ID</param>
     /// <returns>看板 DTO</returns>
-    public async Task<TaktEcKanbanDto?> GetEcKanbanByEcIdAsync(long ecId)
+    public async Task<TaktEcKanbanDto?> GetEcKanbanByEcIdAsync(long ecGijutsuId)
     {
         EnsureThreeLayerContext();
-        var ec = await _ecEngRepository.GetByIdAsync(ecId);
+        var ec = await _ecEngRepository.GetByIdAsync(ecGijutsuId);
         if (ec == null || ec.TenantCode != CurrentTenantCode || ec.CompanyCode != CurrentCompanyCode)
         {
             return null;
@@ -142,12 +142,12 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
     private async Task<TaktEcKanbanDto> BuildKanbanRowAsync(TaktEcGijutsu ecEng)
     {
         var dto = ecEng.Adapt<TaktEcKanbanDto>();
-        var details = await _ecDetailRepository.GetListAsync(x => x.EcId == ecEng.Id);
+        var details = await _ecDetailRepository.GetListAsync(x => x.EcGijutsuId == ecEng.Id);
         dto.DetailCount = details.Count;
         var detailIds = details.Select(x => x.Id).ToList();
         var depts = detailIds.Count == 0
             ? []
-            : await _ecExecDeptAccess.ListBaseByEcnDetailIdsAsync(detailIds);
+            : await _ecExecDeptAccess.ListBaseByEcDetailIdsAsync(detailIds);
         dto.DeptStages = TaktEcDeptCodes.KanbanOrder.Select(code =>
         {
             var matched = depts.Where(d => d.DeptCode == code).ToList();

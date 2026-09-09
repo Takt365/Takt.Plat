@@ -42,11 +42,11 @@ public class TaktSalesModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:model:trend:list", "机种销售推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetSalesModelTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetSalesModelTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _salesModelTrendService.GetSalesModelTrendPlantOptionsAsync();
+            var result = await _salesModelTrendService.GetSalesModelTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -62,7 +62,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:model:trend:list", "机种销售推移条件类型选项")]
     [HttpGet("price-type-options")]
-    public async Task<IActionResult> GetSalesModelTrendPriceTypeOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetSalesModelTrendPriceTypeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
@@ -70,7 +70,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _salesModelTrendService.GetSalesModelTrendPriceTypeOptionsAsync(plantCode);
+            var result = await _salesModelTrendService.GetSalesModelTrendPriceTypeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -87,9 +87,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:model:trend:list", "机种销售推移客户选项")]
     [HttpGet("customer-options")]
-    public async Task<IActionResult> GetSalesModelTrendCustomerOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? priceType = null)
+    public async Task<IActionResult> GetSalesModelTrendCustomerOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? priceType = null)
     {
         try
         {
@@ -97,7 +95,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _salesModelTrendService.GetSalesModelTrendCustomerOptionsAsync(plantCode, priceType);
+            var result = await _salesModelTrendService.GetSalesModelTrendCustomerOptionsAsync(plantCode, keyword, priceType);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -115,10 +113,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:sales:model:trend:list", "机种销售推移物料选项")]
     [HttpGet("material-options")]
-    public async Task<IActionResult> GetSalesModelTrendMaterialOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? priceType = null,
-        [FromQuery] string? customerCode = null)
+    public async Task<IActionResult> GetSalesModelTrendMaterialOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? priceType = null, [FromQuery] string? customerCode = null)
     {
         try
         {
@@ -128,8 +123,7 @@ public class TaktSalesModelTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _salesModelTrendService.GetSalesModelTrendMaterialOptionsAsync(
-                plantCode, priceType, customerCode);
+            var result = await _salesModelTrendService.GetSalesModelTrendMaterialOptionsAsync(plantCode, keyword, priceType, customerCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

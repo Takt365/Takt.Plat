@@ -90,14 +90,14 @@ public class TaktEcExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecexec._self
             new TranslationSeedItem("entity.ecexec._self", "zh-HK", "设变部门执行公共字段信息_hk", "实体名称"),
 
-            // entity.ecexec.ecndetailid
-            new TranslationSeedItem("entity.ecexec.ecndetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键）"),
-            // entity.ecexec.ecndetailid
-            new TranslationSeedItem("entity.ecexec.ecndetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键）"),
-            // entity.ecexec.ecndetailid
-            new TranslationSeedItem("entity.ecexec.ecndetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键）"),
-            // entity.ecexec.ecndetailid
-            new TranslationSeedItem("entity.ecexec.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键）"),
+            // entity.ecexec.ecdetailid
+            new TranslationSeedItem("entity.ecexec.ecdetailid", "en-US", "设变明细ID_us", "设变明细 ID（TaktEcDetail 主键）"),
+            // entity.ecexec.ecdetailid
+            new TranslationSeedItem("entity.ecexec.ecdetailid", "ja-JP", "设变明细ID_jp", "设变明细 ID（TaktEcDetail 主键）"),
+            // entity.ecexec.ecdetailid
+            new TranslationSeedItem("entity.ecexec.ecdetailid", "zh-CN", "设变明细ID", "设变明细 ID（TaktEcDetail 主键）"),
+            // entity.ecexec.ecdetailid
+            new TranslationSeedItem("entity.ecexec.ecdetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键）"),
 
             // entity.ecexec.eccode
             new TranslationSeedItem("entity.ecexec.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
@@ -144,14 +144,14 @@ public class TaktEcExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecexec.execcontent
             new TranslationSeedItem("entity.ecexec.execcontent", "zh-HK", "执行内容_hk", "执行内容（各部门通用）"),
 
-            // entity.ecexec.ecndetail
-            new TranslationSeedItem("entity.ecexec.ecndetail", "en-US", "设变明细_us", "设变明细（多对一）"),
-            // entity.ecexec.ecndetail
-            new TranslationSeedItem("entity.ecexec.ecndetail", "ja-JP", "设变明细_jp", "设变明细（多对一）"),
-            // entity.ecexec.ecndetail
-            new TranslationSeedItem("entity.ecexec.ecndetail", "zh-CN", "设变明细", "设变明细（多对一）"),
-            // entity.ecexec.ecndetail
-            new TranslationSeedItem("entity.ecexec.ecndetail", "zh-HK", "设变明细_hk", "设变明细（多对一）"),
+            // entity.ecexec.ecdetail
+            new TranslationSeedItem("entity.ecexec.ecdetail", "en-US", "设变明细_us", "设变明细（多对一）"),
+            // entity.ecexec.ecdetail
+            new TranslationSeedItem("entity.ecexec.ecdetail", "ja-JP", "设变明细_jp", "设变明细（多对一）"),
+            // entity.ecexec.ecdetail
+            new TranslationSeedItem("entity.ecexec.ecdetail", "zh-CN", "设变明细", "设变明细（多对一）"),
+            // entity.ecexec.ecdetail
+            new TranslationSeedItem("entity.ecexec.ecdetail", "zh-HK", "设变明细_hk", "设变明细（多对一）"),
         };
     }
 

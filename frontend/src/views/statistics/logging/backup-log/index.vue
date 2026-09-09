@@ -75,7 +75,7 @@
     <TaktModal
       v-model:open="detailVisible"
       :title="t('common.dialog.title.detail', { entity: pi.self() })"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -352,6 +352,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import BackupLogDetail from './components/backup-log-detail.vue'
 import { getBackupLogList, getBackupLogById, deleteBackupLogById, deleteBackupLogBatch, exportBackupLog } from '@/api/statistics/logging/backup-log'
@@ -374,6 +375,8 @@ const pi = useBackupLogI18n()
 type BackupLogRowRecord = BackupLog | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktBackupLog')
 /** 列表快捷查询占位文案 */

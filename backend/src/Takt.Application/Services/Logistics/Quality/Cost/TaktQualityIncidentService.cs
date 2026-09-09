@@ -104,8 +104,10 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
     /// <summary>
     /// 获取品质事故主选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityIncidentOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityIncidentOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _qualityIncidentRepository.GetListAsync(
@@ -657,5 +659,39 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取品质事故金额统计（数据看板；按 IncidentDate 汇总 TotalScrapCost）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>品质事故金额统计</returns>
+    public async Task<TaktQualityCostStatDto> GetQualityIncidentCostStatAsync(TaktQualityCostStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.DateStart,
+            queryDto.DateEnd,
+            queryDto.StatMonth);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktQualityIncident, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IncidentDate >= start
+            && x.IncidentDate <= end;
+        var monthRowCount = await _qualityIncidentRepository.CountAsync(predicate);
+        var monthTotalAmount = await _qualityIncidentRepository.SumAsync(x => x.TotalScrapCost, predicate);
+        return new TaktQualityCostStatDto
+        {
+            StatMonth = statMonth,
+            MonthTotalAmount = monthTotalAmount,
+            MonthRowCount = monthRowCount,
+        };
     }
 }

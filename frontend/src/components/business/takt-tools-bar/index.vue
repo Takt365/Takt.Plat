@@ -369,6 +369,7 @@
 import type { Component } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePermissionStore } from '@/stores/identity/permission'
+import { isDemoBlockedAction, isDemoReadonly } from '@/utils/takt-demo-mode'
 import {
   RiAddLine,
   RiEditLine,
@@ -626,6 +627,8 @@ const emit = defineEmits<{
 }>()
 
 const permissionStore = usePermissionStore()
+/** Demo 只读时隐藏写操作按钮 */
+const demoReadonly = computed(() => isDemoReadonly())
 /** 模块日志器（createLogger 由 auto-import 全局注入） */
 const toolsBarLogger = createLogger('takt-tools-bar')
 const isFullscreen = ref(false)
@@ -639,6 +642,7 @@ const expandedState = computed(() =>
 
 // 权限检查（严格检查：必须同时满足 show-* 和权限）
 const canCreate = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showCreate) return false
   if (!props.createPermission) return false
   const hasPerm = permissionStore.hasPermission(props.createPermission)
@@ -653,12 +657,14 @@ const canCreate = computed(() => {
 })
 
 const canStartFlow = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showStartFlow) return false
   if (!props.startFlowPermission) return false
   return permissionStore.hasPermission(props.startFlowPermission)
 })
 
 const canSendMessage = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showSendMessage) return false
   if (!props.sendMessagePermission) return false
   return permissionStore.hasPermission(props.sendMessagePermission)
@@ -666,36 +672,42 @@ const canSendMessage = computed(() => {
 
 // 与 canImport/canExport 一致：仅当显式传入对应 permission 时才校验并显示
 const canCreateRow = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showCreateRow) return false
   if (!props.createRowPermission) return false
   return permissionStore.hasPermission(props.createRowPermission)
 })
 
 const canUpdate = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showUpdate) return false
   if (!props.updatePermission) return false
   return permissionStore.hasPermission(props.updatePermission)
 })
 
 const canDelete = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showDelete) return false
   if (!props.deletePermission) return false
   return permissionStore.hasPermission(props.deletePermission)
 })
 
 const canDeleteRow = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showDeleteRow) return false
   if (!props.deleteRowPermission) return false
   return permissionStore.hasPermission(props.deleteRowPermission)
 })
 
 const canImport = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showImport) return false
   if (!props.importPermission) return false
   return permissionStore.hasPermission(props.importPermission)
 })
 
 const canSource = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showSource) return false
   if (!props.sourcePermission) return false
   return permissionStore.hasPermission(props.sourcePermission)
@@ -708,14 +720,18 @@ const canExport = computed(() => {
 })
 
 const canEmpty = computed(() => {
+  if (demoReadonly.value) return false
   if (!props.showEmpty) return false
   if (!props.emptyPermission) return false
   return permissionStore.hasPermission(props.emptyPermission)
 })
 
-// 过滤自定义按钮（根据权限）
+// 过滤自定义按钮（根据权限；Demo 下隐藏写操作）
 const filteredLeftActions = computed(() => {
   return props.leftActions.filter(action => {
+    if (isDemoBlockedAction(undefined, action.permission)) {
+      return false
+    }
     if (action.permission) {
       return permissionStore.hasPermission(action.permission)
     }
@@ -725,6 +741,9 @@ const filteredLeftActions = computed(() => {
 
 const filteredRightActions = computed(() => {
   return props.rightActions.filter(action => {
+    if (isDemoBlockedAction(undefined, action.permission)) {
+      return false
+    }
     if (action.permission) {
       return permissionStore.hasPermission(action.permission)
     }

@@ -130,10 +130,20 @@ export function updateMasterDemandScheduleStatus(dto: MasterDemandScheduleStatus
  * 获取主需求计划MDS头选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMasterDemandScheduleOptions(): Promise<TaktSelectOption[]> {
+export function getMasterDemandScheduleOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MASTER_DEMAND_SCHEDULE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

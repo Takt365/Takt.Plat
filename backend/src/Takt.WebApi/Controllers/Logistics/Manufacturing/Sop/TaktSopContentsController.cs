@@ -86,11 +86,11 @@ public class TaktSopContentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:sop:doc:query", "SOP多语言正文选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSopContentOptionsAsync()
+    public async Task<IActionResult> GetSopContentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _sopContentService.GetSopContentOptionsAsync();
+            var result = await _sopContentService.GetSopContentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

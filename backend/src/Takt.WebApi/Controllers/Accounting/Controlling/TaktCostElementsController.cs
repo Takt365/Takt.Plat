@@ -87,11 +87,11 @@ public class TaktCostElementsController : TaktControllerBase
     /// <returns>树形选项</returns>
     [TaktPermission("accounting:controlling:cost:element:query", "成本要素树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> GetCostElementTreeOptionsAsync([FromQuery] long parentId = 0)
+    public async Task<IActionResult> GetCostElementTreeOptionsAsync([FromQuery] long parentId = 0, [FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _costElementService.GetCostElementTreeOptionsAsync(parentId);
+            var result = await _costElementService.GetCostElementTreeOptionsAsync(parentId, plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

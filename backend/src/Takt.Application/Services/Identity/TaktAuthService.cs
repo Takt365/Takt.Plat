@@ -104,8 +104,10 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// <summary>
     /// 获取登录页租户下拉选项（登录前；来源 Database:TenantCodes，登录后不可切换租户）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>租户选项列表</returns>
-    public Task<List<TaktSelectOption>> GetSessionTenantOptionsAsync()
+    public Task<List<TaktSelectOption>> GetSessionTenantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         return _loginSessionService.GetLoginTenantOptionsAsync();
     }
@@ -124,8 +126,10 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// 获取登录页语言切换选项（匿名）
     /// </summary>
     /// <param name="tenantCode">租户编码（可选）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>语言下拉选项</returns>
-    public Task<List<TaktSelectOption>> GetSessionCultureOptionsAsync(string? tenantCode = null)
+    public Task<List<TaktSelectOption>> GetSessionCultureOptionsAsync(string? plantCode = null, string? keyword = null, string? tenantCode = null)
     {
         return _loginSessionService.GetLoginCultureOptionsAsync(tenantCode);
     }
@@ -584,8 +588,10 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// <summary>
     /// 获取当前登录用户可切换的公司下拉选项（按数据权限过滤；ExtLabel 标记当前公司，ExtValue 为关联工厂 RelatedPlant）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>公司选项列表；未登录返回空列表</returns>
-    public async Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         if (!IsAuthenticated || CurrentUserId == null || string.IsNullOrWhiteSpace(CurrentTenantCode))
         {

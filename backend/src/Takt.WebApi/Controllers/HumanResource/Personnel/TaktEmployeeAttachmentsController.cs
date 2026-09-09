@@ -86,11 +86,11 @@ public class TaktEmployeeAttachmentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:attachment:query", "员工附件选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeAttachmentOptionsAsync()
+    public async Task<IActionResult> GetEmployeeAttachmentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeAttachmentService.GetEmployeeAttachmentOptionsAsync();
+            var result = await _employeeAttachmentService.GetEmployeeAttachmentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

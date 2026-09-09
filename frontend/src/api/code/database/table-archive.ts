@@ -151,10 +151,20 @@ export function updateTableArchiveSort(dto: TableArchiveSort): Promise<TableArch
  * 获取数据表归档选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTableArchiveOptions(): Promise<TaktSelectOption[]> {
+export function getTableArchiveOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TABLE_ARCHIVE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

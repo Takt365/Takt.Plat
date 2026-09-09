@@ -43,11 +43,11 @@ public class TaktProductionMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移工厂选项")]
   [HttpGet("plant-options")]
-  public async Task<IActionResult> GetProductionMonthlyTrendPlantOptionsAsync()
-  {
+  public async Task<IActionResult> GetProductionMonthlyTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
+    {
     try
     {
-      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendPlantOptionsAsync();
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendPlantOptionsAsync(plantCode, keyword);
       return Success(result, "查询成功");
     }
     catch (Exception ex)
@@ -63,15 +63,15 @@ public class TaktProductionMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移产出类别选项")]
   [HttpGet("output-category-options")]
-  public async Task<IActionResult> GetProductionMonthlyTrendOutputCategoryOptionsAsync([FromQuery] string plantCode)
-  {
+  public async Task<IActionResult> GetProductionMonthlyTrendOutputCategoryOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
+    {
     try
     {
       if (string.IsNullOrWhiteSpace(plantCode))
       {
         return Success(new List<TaktSelectOption>(), "查询成功");
       }
-      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendOutputCategoryOptionsAsync(plantCode);
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendOutputCategoryOptionsAsync(plantCode, keyword);
       return Success(result, "查询成功");
     }
     catch (Exception ex)
@@ -88,18 +88,15 @@ public class TaktProductionMonthlyTrendsController : TaktControllerBase
   /// <returns>下拉选项</returns>
   [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移机种选项")]
   [HttpGet("model-options")]
-  public async Task<IActionResult> GetProductionMonthlyTrendModelOptionsAsync(
-      [FromQuery] string plantCode,
-      [FromQuery] string? outputCategory = null)
-  {
+  public async Task<IActionResult> GetProductionMonthlyTrendModelOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? outputCategory = null)
+    {
     try
     {
       if (string.IsNullOrWhiteSpace(plantCode))
       {
         return Success(new List<TaktSelectOption>(), "查询成功");
       }
-      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendModelOptionsAsync(
-          plantCode, outputCategory);
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendModelOptionsAsync(plantCode, keyword, outputCategory);
       return Success(result, "查询成功");
     }
     catch (Exception ex)

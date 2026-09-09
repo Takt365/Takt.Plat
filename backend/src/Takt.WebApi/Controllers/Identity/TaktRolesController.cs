@@ -86,11 +86,11 @@ public class TaktRolesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("identity:role:query", "角色选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetRoleOptionsAsync()
+    public async Task<IActionResult> GetRoleOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _roleService.GetRoleOptionsAsync();
+            var result = await _roleService.GetRoleOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

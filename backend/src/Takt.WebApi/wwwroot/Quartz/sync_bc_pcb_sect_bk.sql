@@ -1,11 +1,47 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 DECLARE @now DATETIME = GETDATE();
-DECLARE @costing_period NVARCHAR(7) = NULLIF(LTRIM(RTRIM(N'{{CostingPeriod}}')), N'');
-IF @costing_period IS NULL
-  SET @costing_period = CONVERT(CHAR(7), GETDATE(), 126);
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
+DECLARE @costing_period_raw NVARCHAR(40) = LTRIM(RTRIM(N'{{CostingPeriod}}'));
+DECLARE @costing_y INT = TRY_CONVERT(INT, LEFT(@costing_period_raw, 4));
+DECLARE @costing_m INT = TRY_CONVERT(INT, SUBSTRING(@costing_period_raw, 6, 2));
+IF @costing_period_raw IS NULL
+  OR @costing_period_raw = N''
+  OR SUBSTRING(@costing_period_raw, 5, 1) <> N'-'
+  OR @costing_y IS NULL
+  OR @costing_m IS NULL
+  OR @costing_m < 1
+  OR @costing_m > 12
+BEGIN
+  SET @costing_y = YEAR(GETDATE());
+  SET @costing_m = MONTH(GETDATE());
+END
+DECLARE @period_start DATE = DATEFROMPARTS(@costing_y, @costing_m, 1);
+DECLARE @period_end_exclusive DATE = DATEADD(MONTH, 1, @period_start);
+DECLARE @costing_period NVARCHAR(7) = CONVERT(CHAR(7), @period_start, 23);
 
 -- =============================================================================
 -- QT_SYNC_BC_PCB_SECT_BK：BOM 明细 PCB SECT 整树回填 pcb_sect_indicator
@@ -123,7 +159,8 @@ FROM (
     AND t.[company_code] = @company_code
     AND t.[is_deleted] = 0
     AND t.[costing_date] IS NOT NULL
-    AND CONVERT(CHAR(7), t.[costing_date], 126) = @costing_period
+    AND t.[costing_date] >= @period_start
+    AND t.[costing_date] < @period_end_exclusive
     AND LTRIM(RTRIM(ISNULL(t.[plant_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(t.[product_code], N''))) <> N''
 ) AS x;
@@ -172,6 +209,22 @@ INNER JOIN [pcb_ranges] AS r
  AND s.[rn] < r.[end_rn_exclusive];
 
 DECLARE @pcb_sect_count INT = (SELECT COUNT(*) FROM #bc_pcb_mark);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @pcb_sect_count AS [to_rn],
+  @pcb_sect_count AS [max_rn],
+  @pcb_sect_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@pcb_sect_count) AS NVARCHAR(20)), N'|',
+  CAST((@pcb_sect_count) AS NVARCHAR(20)), N'|',
+  CAST((@pcb_sect_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @unchanged INT = (
   SELECT COUNT(*)
   FROM #bc_pcb_mark AS m
@@ -179,7 +232,11 @@ DECLARE @unchanged INT = (
   WHERE s.[already_marked] = 1
 );
 
-UPDATE t
+DECLARE @updated INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) t
 SET
   t.[pcb_sect_indicator] = N'X',
   t.[ext_field] = LEFT(x.[new_ext], 4000),
@@ -232,8 +289,25 @@ CROSS APPLY (
     AS [new_ext]
 ) AS x
 WHERE UPPER(LTRIM(RTRIM(ISNULL(t.[pcb_sect_indicator], N'')))) <> N'X';
-
-DECLARE @updated INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @updated = @updated + @dml_n;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    CASE WHEN @updated - @dml_n + 1 < 1 THEN 0 ELSE @updated - @dml_n + 1 END AS [from_rn],
+    @updated AS [to_rn],
+    @pcb_sect_count AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((CASE WHEN @updated - @dml_n + 1 < 1 THEN 0 ELSE @updated - @dml_n + 1 END) AS NVARCHAR(20)), N'|',
+    CAST((@updated) AS NVARCHAR(20)), N'|',
+    CAST((@pcb_sect_count) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+END
 
 DROP TABLE #bc_pcb_src;
 DROP TABLE #bc_pcb_mark;

@@ -87,11 +87,11 @@ public class TaktCulturesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [AllowAnonymous]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCultureOptionsAsync()
+    public async Task<IActionResult> GetCultureOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _cultureService.GetCultureOptionsAsync();
+            var result = await _cultureService.GetCultureOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

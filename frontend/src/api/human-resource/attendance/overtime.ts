@@ -130,10 +130,20 @@ export function updateOvertimeStatus(dto: OvertimeStatus): Promise<Overtime> {
  * 获取加班信息选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getOvertimeOptions(): Promise<TaktSelectOption[]> {
+export function getOvertimeOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${OVERTIME_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

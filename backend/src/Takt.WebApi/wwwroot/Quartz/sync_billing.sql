@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,8 +23,14 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
+DECLARE @ddl NVARCHAR(500);
 
 -- 源表 / 目标表：同名 + 列与实体 TaktSalesInvoice / TaktSalesInvoiceItem 一致
 -- {{SourceDatabase}}.dbo.takt_logistics_sales_invoice[_item] → 当前租户库同名表
@@ -15,6 +38,14 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- 明细唯一键：sales_invoice_id+line_number
 -- 源明细 FK：先按 billing_document_code 回填 sales_invoice_id=主表雪花 id，再 SH.id=R.sales_invoice_id 装入
 -- tenant/company/plant/culture 取自各源表本列；空值丢弃，不回退任务参数
+
+IF COL_LENGTH(N'dbo.takt_logistics_sales_invoice', N'posted_by') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_invoice] ADD [posted_by] NVARCHAR(6) NULL;
+IF COL_LENGTH(N'{{SourceDatabase}}.dbo.takt_logistics_sales_invoice', N'posted_by') IS NULL
+BEGIN
+  SET @ddl = N'ALTER TABLE [{{SourceDatabase}}].[dbo].[takt_logistics_sales_invoice] ADD [posted_by] NVARCHAR(6) NULL';
+  EXEC sys.sp_executesql @ddl;
+END
 
 IF OBJECT_ID('tempdb..#hdr') IS NOT NULL DROP TABLE #hdr;
 IF OBJECT_ID('tempdb..#item') IS NOT NULL DROP TABLE #item;
@@ -64,7 +95,7 @@ CREATE TABLE #hdr (
   [exchange_rate_date] DATETIME,
   [payment_reference] NVARCHAR(30),
   [reversal_reason] NVARCHAR(2),
-  [posted_by] NVARCHAR(12),
+  [posted_by] NVARCHAR(6),
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
   [culture_code] NVARCHAR(5),
@@ -131,7 +162,6 @@ CREATE TABLE #item (
   [tax_amount] DECIMAL(18,2),
   [gross_amount] DECIMAL(18,2),
   [exchange_rate_date] DATETIME,
-  [posted_by] NVARCHAR(12),
   [is_obsolete] INT,
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
@@ -253,7 +283,8 @@ FROM (
       TRY_CAST(R.[exchange_rate_date] AS DATETIME) AS [exchange_rate_date],
       NULLIF(LEFT(LTRIM(RTRIM(R.[payment_reference])), 30), N'') AS [payment_reference],
       NULLIF(LEFT(LTRIM(RTRIM(R.[reversal_reason])), 2), N'') AS [reversal_reason],
-      NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
+      -- 源主表旧暂存可能无 posted_by；同批 ALTER 不可见，装入恒 NULL（MERGE 不回写覆盖）
+      CAST(NULL AS NVARCHAR(6)) AS [posted_by],
       ISNULL(R.[ext_field], N'{}') AS [ext_field],
       ISNULL(R.[remark], N'') AS [remark],
       COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
@@ -278,6 +309,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @hdr_source INT = (SELECT COUNT(*) FROM #hdr);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @hdr_source AS [to_rn],
+  @hdr_source AS [max_rn],
+  @hdr_source AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @hdr_sap_keys INT = (
   SELECT COUNT(*)
   FROM (
@@ -300,8 +347,13 @@ DECLARE @hdr_before INT = (
     AND EXISTS (SELECT 1 FROM #hdr S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #hdr), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE [takt_logistics_sales_invoice] AS T
-USING #hdr AS S
+USING (SELECT * FROM #hdr WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code]=S.[tenant_code]
  AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[billing_document_code])) = S.[billing_document_code]
@@ -342,7 +394,6 @@ WHEN MATCHED AND (
   OR ISNULL(T.[exchange_rate_date], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[exchange_rate_date], CAST('1900-01-01' AS DATETIME))
   OR ISNULL(T.[payment_reference], N'') <> ISNULL(S.[payment_reference], N'')
   OR ISNULL(T.[reversal_reason], N'') <> ISNULL(S.[reversal_reason], N'')
-  OR ISNULL(T.[posted_by], N'') <> ISNULL(S.[posted_by], N'')
   OR ISNULL(T.[plant_code], N'') <> ISNULL(S.[plant_code], N'')
   OR ISNULL(T.[culture_code], N'') <> ISNULL(S.[culture_code], N'')
   OR T.[is_deleted] <> S.[is_deleted]
@@ -393,7 +444,6 @@ WHEN MATCHED AND (
   T.[exchange_rate_date]=S.[exchange_rate_date],
   T.[payment_reference]=S.[payment_reference],
   T.[reversal_reason]=S.[reversal_reason],
-  T.[posted_by]=S.[posted_by],
   T.[plant_code]=S.[plant_code],
   T.[culture_code]=S.[culture_code],
   T.[ext_field]=S.[ext_field],
@@ -406,11 +456,30 @@ WHEN MATCHED AND (
   T.[deleted_by]=S.[deleted_by],
   T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
-  INSERT ([id],[plant_code],[billing_document_code],[billing_type],[billing_category],[document_category],[currency_code],[sales_organization],[distribution_channel],[pricing_procedure],[condition_code],[shipping_conditions],[billing_date],[customer_group],[incoterms1],[incoterms2],[posting_status],[accounting_exchange_rate],[payment_terms],[account_assignment_group],[country_code],[net_amount],[payer_code],[customer_code],[statistics_currency_code],[foreign_trade_code],[cancelled_billing_document],[invoice_list_type],[division],[hierarchy_type_pricing],[trading_partner],[tax_departure_country],[organization_sales_tax_number],[country_sales_tax_number],[reference_code],[cancelled_flag],[exchange_rate_date],[payment_reference],[reversal_reason],[posted_by],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[plant_code],S.[billing_document_code],S.[billing_type],S.[billing_category],S.[document_category],S.[currency_code],S.[sales_organization],S.[distribution_channel],S.[pricing_procedure],S.[condition_code],S.[shipping_conditions],S.[billing_date],S.[customer_group],S.[incoterms1],S.[incoterms2],S.[posting_status],S.[accounting_exchange_rate],S.[payment_terms],S.[account_assignment_group],S.[country_code],S.[net_amount],S.[payer_code],S.[customer_code],S.[statistics_currency_code],S.[foreign_trade_code],S.[cancelled_billing_document],S.[invoice_list_type],S.[division],S.[hierarchy_type_pricing],S.[trading_partner],S.[tax_departure_country],S.[organization_sales_tax_number],S.[country_sales_tax_number],S.[reference_code],S.[cancelled_flag],S.[exchange_rate_date],S.[payment_reference],S.[reversal_reason],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
+  INSERT ([id],[plant_code],[billing_document_code],[billing_type],[billing_category],[document_category],[currency_code],[sales_organization],[distribution_channel],[pricing_procedure],[condition_code],[shipping_conditions],[billing_date],[customer_group],[incoterms1],[incoterms2],[posting_status],[accounting_exchange_rate],[payment_terms],[account_assignment_group],[country_code],[net_amount],[payer_code],[customer_code],[statistics_currency_code],[foreign_trade_code],[cancelled_billing_document],[invoice_list_type],[division],[hierarchy_type_pricing],[trading_partner],[tax_departure_country],[organization_sales_tax_number],[country_sales_tax_number],[reference_code],[cancelled_flag],[exchange_rate_date],[payment_reference],[reversal_reason],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
+  VALUES (S.[id],S.[plant_code],S.[billing_document_code],S.[billing_type],S.[billing_category],S.[document_category],S.[currency_code],S.[sales_organization],S.[distribution_channel],S.[pricing_procedure],S.[condition_code],S.[shipping_conditions],S.[billing_date],S.[customer_group],S.[incoterms1],S.[incoterms2],S.[posting_status],S.[accounting_exchange_rate],S.[payment_terms],S.[account_assignment_group],S.[country_code],S.[net_amount],S.[payer_code],S.[customer_code],S.[statistics_currency_code],S.[foreign_trade_code],S.[cancelled_billing_document],S.[invoice_list_type],S.[division],S.[hierarchy_type_pricing],S.[trading_partner],S.[tax_departure_country],S.[organization_sales_tax_number],S.[country_sales_tax_number],S.[reference_code],S.[cancelled_flag],S.[exchange_rate_date],S.[payment_reference],S.[reversal_reason],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[billing_document_code]
 INTO #hdr_delta (rn, oper_type, id, [billing_document_code]);
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 UPDATE S SET S.[id] = T.[id]
 FROM #hdr S
@@ -419,7 +488,12 @@ INNER JOIN [takt_logistics_sales_invoice] T
  AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[billing_document_code])) = S.[billing_document_code];
 
-UPDATE T
+
+DECLARE @hdr_delete INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -432,8 +506,9 @@ FROM [takt_logistics_sales_invoice] T
 WHERE T.[is_deleted] = 0
   AND EXISTS (SELECT 1 FROM #hdr S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
   AND NOT EXISTS (SELECT 1 FROM #hdr S WHERE S.[id] = T.[id]);
-
-DECLARE @hdr_delete INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @hdr_delete = @hdr_delete + @dml_n;
+END
 
 -- 源库回填：明细 sales_invoice_id → 主表雪花 id（业务键 billing_document_code）
 UPDATE I
@@ -503,7 +578,6 @@ SELECT
   S.[tax_amount],
   S.[gross_amount],
   S.[exchange_rate_date],
-  S.[posted_by],
   S.[is_obsolete],
   S.[tenant_code],
   S.[company_code],
@@ -584,7 +658,6 @@ FROM (
       ROUND(TRY_CAST(R.[tax_amount] AS DECIMAL(18,2)), 2) AS [tax_amount],
       ROUND(TRY_CAST(R.[gross_amount] AS DECIMAL(18,2)), 2) AS [gross_amount],
       TRY_CAST(R.[exchange_rate_date] AS DATETIME) AS [exchange_rate_date],
-      NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
       ISNULL(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
       ISNULL(R.[ext_field], N'{}') AS [ext_field],
       ISNULL(R.[remark], N'') AS [remark],
@@ -626,6 +699,22 @@ LEFT JOIN [takt_logistics_sales_invoice_item] T
  AND T.[line_number] = I.[line_number];
 
 DECLARE @item_source INT = (SELECT COUNT(*) FROM #item WHERE [sales_invoice_id] <> 0);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @item_source AS [to_rn],
+  @item_source AS [max_rn],
+  @item_source AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @item_sap_keys INT = (
   SELECT COUNT(*)
   FROM (
@@ -657,8 +746,13 @@ DECLARE @item_before INT = (
     AND EXISTS (SELECT 1 FROM #item S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #item), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE [takt_logistics_sales_invoice_item] AS T
-USING #item AS S
+USING (SELECT * FROM #item WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code]=S.[tenant_code]
  AND T.[company_code]=S.[company_code]
  AND T.[sales_invoice_id] = S.[sales_invoice_id]
@@ -718,7 +812,6 @@ WHEN MATCHED AND (
   OR ISNULL(T.[tax_amount], -1) <> ISNULL(S.[tax_amount], -1)
   OR ISNULL(T.[gross_amount], -1) <> ISNULL(S.[gross_amount], -1)
   OR ISNULL(T.[exchange_rate_date], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[exchange_rate_date], CAST('1900-01-01' AS DATETIME))
-  OR ISNULL(T.[posted_by], N'') <> ISNULL(S.[posted_by], N'')
   OR ISNULL(T.[is_obsolete], -1) <> ISNULL(S.[is_obsolete], -1)
   OR ISNULL(T.[culture_code], N'') <> ISNULL(S.[culture_code], N'')
   OR T.[is_deleted] <> S.[is_deleted]
@@ -787,7 +880,6 @@ WHEN MATCHED AND (
   T.[tax_amount]=S.[tax_amount],
   T.[gross_amount]=S.[gross_amount],
   T.[exchange_rate_date]=S.[exchange_rate_date],
-  T.[posted_by]=S.[posted_by],
   T.[is_obsolete]=S.[is_obsolete],
   T.[culture_code]=S.[culture_code],
   T.[ext_field]=S.[ext_field],
@@ -800,11 +892,30 @@ WHEN MATCHED AND (
   T.[deleted_by]=S.[deleted_by],
   T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
-  INSERT ([id],[sales_invoice_id],[plant_code],[billing_document_code],[line_number],[billing_quantity],[sales_unit],[base_unit],[scale_quantity],[billing_quantity_sku],[net_weight],[gross_weight],[weight_unit],[business_area_code],[pricing_date],[service_rendered_date],[pricing_exchange_rate],[net_amount],[reference_document_code],[reference_document_item],[reference_document_category],[sales_document_code],[sales_document_item],[sales_document_reference_flag],[material_code],[material_description],[pricing_reference_material_code],[batch_code],[material_group],[sales_item_category],[product_hierarchy],[shipping_point],[division],[partner_item],[departure_country],[plant_region],[pricing_flag],[warehouse_code],[cost_amount],[subtotal1],[subtotal2],[subtotal3],[subtotal4],[subtotal5],[subtotal6],[statistics_exchange_rate],[profit_center_code],[credit_price],[customer_group_sales_order],[destination_country_order],[region_order],[sales_organization_order],[distribution_channel_order],[document_category],[tax_amount],[gross_amount],[exchange_rate_date],[posted_by],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[sales_invoice_id],S.[plant_code],S.[billing_document_code],S.[line_number],S.[billing_quantity],S.[sales_unit],S.[base_unit],S.[scale_quantity],S.[billing_quantity_sku],S.[net_weight],S.[gross_weight],S.[weight_unit],S.[business_area_code],S.[pricing_date],S.[service_rendered_date],S.[pricing_exchange_rate],S.[net_amount],S.[reference_document_code],S.[reference_document_item],S.[reference_document_category],S.[sales_document_code],S.[sales_document_item],S.[sales_document_reference_flag],S.[material_code],S.[material_description],S.[pricing_reference_material_code],S.[batch_code],S.[material_group],S.[sales_item_category],S.[product_hierarchy],S.[shipping_point],S.[division],S.[partner_item],S.[departure_country],S.[plant_region],S.[pricing_flag],S.[warehouse_code],S.[cost_amount],S.[subtotal1],S.[subtotal2],S.[subtotal3],S.[subtotal4],S.[subtotal5],S.[subtotal6],S.[statistics_exchange_rate],S.[profit_center_code],S.[credit_price],S.[customer_group_sales_order],S.[destination_country_order],S.[region_order],S.[sales_organization_order],S.[distribution_channel_order],S.[document_category],S.[tax_amount],S.[gross_amount],S.[exchange_rate_date],S.[posted_by],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
+  INSERT ([id],[sales_invoice_id],[plant_code],[billing_document_code],[line_number],[billing_quantity],[sales_unit],[base_unit],[scale_quantity],[billing_quantity_sku],[net_weight],[gross_weight],[weight_unit],[business_area_code],[pricing_date],[service_rendered_date],[pricing_exchange_rate],[net_amount],[reference_document_code],[reference_document_item],[reference_document_category],[sales_document_code],[sales_document_item],[sales_document_reference_flag],[material_code],[material_description],[pricing_reference_material_code],[batch_code],[material_group],[sales_item_category],[product_hierarchy],[shipping_point],[division],[partner_item],[departure_country],[plant_region],[pricing_flag],[warehouse_code],[cost_amount],[subtotal1],[subtotal2],[subtotal3],[subtotal4],[subtotal5],[subtotal6],[statistics_exchange_rate],[profit_center_code],[credit_price],[customer_group_sales_order],[destination_country_order],[region_order],[sales_organization_order],[distribution_channel_order],[document_category],[tax_amount],[gross_amount],[exchange_rate_date],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
+  VALUES (S.[id],S.[sales_invoice_id],S.[plant_code],S.[billing_document_code],S.[line_number],S.[billing_quantity],S.[sales_unit],S.[base_unit],S.[scale_quantity],S.[billing_quantity_sku],S.[net_weight],S.[gross_weight],S.[weight_unit],S.[business_area_code],S.[pricing_date],S.[service_rendered_date],S.[pricing_exchange_rate],S.[net_amount],S.[reference_document_code],S.[reference_document_item],S.[reference_document_category],S.[sales_document_code],S.[sales_document_item],S.[sales_document_reference_flag],S.[material_code],S.[material_description],S.[pricing_reference_material_code],S.[batch_code],S.[material_group],S.[sales_item_category],S.[product_hierarchy],S.[shipping_point],S.[division],S.[partner_item],S.[departure_country],S.[plant_region],S.[pricing_flag],S.[warehouse_code],S.[cost_amount],S.[subtotal1],S.[subtotal2],S.[subtotal3],S.[subtotal4],S.[subtotal5],S.[subtotal6],S.[statistics_exchange_rate],S.[profit_center_code],S.[credit_price],S.[customer_group_sales_order],S.[destination_country_order],S.[region_order],S.[sales_organization_order],S.[distribution_channel_order],S.[document_category],S.[tax_amount],S.[gross_amount],S.[exchange_rate_date],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[billing_document_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [billing_document_code], [line_number]);
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 UPDATE I SET I.[id] = T.[id]
 FROM #item I
@@ -814,7 +925,12 @@ INNER JOIN [takt_logistics_sales_invoice_item] T
  AND T.[sales_invoice_id] = I.[sales_invoice_id]
  AND T.[line_number] = I.[line_number];
 
-UPDATE T
+
+DECLARE @item_delete INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -827,8 +943,9 @@ FROM [takt_logistics_sales_invoice_item] T
 WHERE T.[is_deleted] = 0
   AND EXISTS (SELECT 1 FROM #item S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
   AND NOT EXISTS (SELECT 1 FROM #item S WHERE S.[id] = T.[id]);
-
-DECLARE @item_delete INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @item_delete = @item_delete + @dml_n;
+END
 
 DECLARE @hdr_source_active INT = (SELECT COUNT(*) FROM #hdr WHERE [is_deleted]=0);
 DECLARE @item_source_active INT = (SELECT COUNT(*) FROM #item WHERE [is_deleted]=0);

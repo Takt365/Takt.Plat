@@ -100,7 +100,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -263,6 +263,16 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_financial_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxIncludedAmount')">
       <a-form-item :label="pi.queryLabel('taxIncludedAmount')">
         <a-input-number
@@ -296,6 +306,83 @@
           v-model:value="advancedQueryForm.requestAmount"
           :placeholder="pi.queryPh('requestAmount', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingDateStart')">
+      <a-form-item :label="pi.queryLabel('pricingDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.pricingDateStart"
+          :placeholder="pi.queryPh('pricingDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingDateEnd')">
+      <a-form-item :label="pi.queryLabel('pricingDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.pricingDateEnd"
+          :placeholder="pi.queryPh('pricingDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('grossWeight')">
+      <a-form-item :label="pi.queryLabel('grossWeight')">
+        <a-input-number
+          v-model:value="advancedQueryForm.grossWeight"
+          :placeholder="pi.queryPh('grossWeight', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('netWeight')">
+      <a-form-item :label="pi.queryLabel('netWeight')">
+        <a-input-number
+          v-model:value="advancedQueryForm.netWeight"
+          :placeholder="pi.queryPh('netWeight', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('weightUnit')">
+      <a-form-item :label="pi.queryLabel('weightUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.weightUnit"
+          dict-type="logistics_materials_unit_of_measure_code"
+          :placeholder="pi.queryPh('weightUnit', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('volume')">
+      <a-form-item :label="pi.queryLabel('volume')">
+        <a-input-number
+          v-model:value="advancedQueryForm.volume"
+          :placeholder="pi.queryPh('volume', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('volumeUnit')">
+      <a-form-item :label="pi.queryLabel('volumeUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.volumeUnit"
+          dict-type="logistics_materials_unit_of_measure_code"
+          :placeholder="pi.queryPh('volumeUnit', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('profitCenterCode')">
+      <a-form-item :label="pi.queryLabel('profitCenterCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.profitCenterCode"
+          api-url="TaktProfitCenters/options"
+          :placeholder="pi.queryPh('profitCenterCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -419,6 +506,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -519,6 +607,9 @@ const formTitle = ref('')
 const formData = ref<Partial<PurchaseRequestItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
+
 
 const advancedQueryVisible = ref(false)
 /**
@@ -563,6 +654,15 @@ function hasAnyListQueryFilter(): boolean {
   if (form.requestAmount !== undefined && form.requestAmount !== null) {
     return true
   }
+  if (form.grossWeight !== undefined && form.grossWeight !== null) {
+    return true
+  }
+  if (form.netWeight !== undefined && form.netWeight !== null) {
+    return true
+  }
+  if (form.volume !== undefined && form.volume !== null) {
+    return true
+  }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     return true
   }
@@ -589,6 +689,9 @@ function createEmptyAdvancedQueryForm() {
     untaxedAmount: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
     requestAmount: undefined as number | undefined,
+    grossWeight: undefined as number | undefined,
+    netWeight: undefined as number | undefined,
+    volume: undefined as number | undefined,
     isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -789,6 +892,16 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchaseRequestItemField(record, 'purchaseRequestUnitPrice') ?? ''),
   },
   {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'taxCode') ?? ''),
+  },
+  {
     title: pi.label('taxIncludedAmount'),
     dataIndex: 'taxIncludedAmount',
     key: 'taxIncludedAmount',
@@ -827,6 +940,76 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: PurchaseRequestItem }) =>
       String(getPurchaseRequestItemField(record, 'requestAmount') ?? ''),
+  },
+  {
+    title: pi.label('pricingDate'),
+    dataIndex: 'pricingDate',
+    key: 'pricingDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'pricingDate') ?? ''),
+  },
+  {
+    title: pi.label('grossWeight'),
+    dataIndex: 'grossWeight',
+    key: 'grossWeight',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'grossWeight') ?? ''),
+  },
+  {
+    title: pi.label('netWeight'),
+    dataIndex: 'netWeight',
+    key: 'netWeight',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'netWeight') ?? ''),
+  },
+  {
+    title: pi.label('weightUnit'),
+    dataIndex: 'weightUnit',
+    key: 'weightUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'weightUnit') ?? ''),
+  },
+  {
+    title: pi.label('volume'),
+    dataIndex: 'volume',
+    key: 'volume',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'volume') ?? ''),
+  },
+  {
+    title: pi.label('volumeUnit'),
+    dataIndex: 'volumeUnit',
+    key: 'volumeUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'volumeUnit') ?? ''),
+  },
+  {
+    title: pi.label('profitCenterCode'),
+    dataIndex: 'profitCenterCode',
+    key: 'profitCenterCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseRequestItem }) =>
+      String(getPurchaseRequestItemField(record, 'profitCenterCode') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -1018,6 +1201,15 @@ function buildListQuery(overrides?: Partial<PurchaseRequestItemQuery>): Purchase
   }
   if (form.requestAmount !== undefined && form.requestAmount !== null) {
     query.requestAmount = form.requestAmount
+  }
+  if (form.grossWeight !== undefined && form.grossWeight !== null) {
+    query.grossWeight = form.grossWeight
+  }
+  if (form.netWeight !== undefined && form.netWeight !== null) {
+    query.netWeight = form.netWeight
+  }
+  if (form.volume !== undefined && form.volume !== null) {
+    query.volume = form.volume
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation-item.d.ts
-// 创建时间：2026-08-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   salesQuotationName?: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode: string;
 
@@ -94,6 +94,11 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount: number;
@@ -112,6 +117,41 @@ export interface SalesQuotationItem extends CompanyDtoBase {
    * 报价金额
    */
   quotationAmount: number;
+
+  /**
+   * 价格日期
+   */
+  pricingDate?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -159,7 +199,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   salesQuotationId?: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode?: string;
 
@@ -214,6 +254,11 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount?: number;
@@ -232,6 +277,46 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
    * 报价金额
    */
   quotationAmount?: number;
+
+  /**
+   * 价格日期（范围查询-开始）
+   */
+  pricingDateStart?: string;
+
+  /**
+   * 价格日期（范围查询-结束）
+   */
+  pricingDateEnd?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -293,7 +378,7 @@ export interface SalesQuotationItemCreate {
   salesQuotationId: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode: string;
 
@@ -348,6 +433,11 @@ export interface SalesQuotationItemCreate {
   discountAmount: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount: number;
@@ -366,6 +456,41 @@ export interface SalesQuotationItemCreate {
    * 报价金额
    */
   quotationAmount: number;
+
+  /**
+   * 价格日期
+   */
+  pricingDate?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -451,7 +576,7 @@ export interface SalesQuotationItemTemplate {
   salesQuotationId?: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode?: string;
 
@@ -506,6 +631,11 @@ export interface SalesQuotationItemTemplate {
   discountAmount?: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount?: number;
@@ -524,6 +654,41 @@ export interface SalesQuotationItemTemplate {
    * 报价金额
    */
   quotationAmount?: number;
+
+  /**
+   * 价格日期
+   */
+  pricingDate?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -575,7 +740,7 @@ export interface SalesQuotationItemImport {
   salesQuotationId?: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode?: string;
 
@@ -630,6 +795,11 @@ export interface SalesQuotationItemImport {
   discountAmount?: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount?: number;
@@ -648,6 +818,41 @@ export interface SalesQuotationItemImport {
    * 报价金额
    */
   quotationAmount?: number;
+
+  /**
+   * 价格日期
+   */
+  pricingDate?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -699,7 +904,7 @@ export interface SalesQuotationItemExport {
   salesQuotationId: string;
 
   /**
-   * 销售报价编码（冗余字段，便于查询）
+   * 销售报价编码（冗余：按对应 Id 取主数据名称联动）
    */
   salesQuotationCode: string;
 
@@ -754,6 +959,11 @@ export interface SalesQuotationItemExport {
   discountAmount: number;
 
   /**
+   * 税码（冗余：按 SalesQuotationId 取 TaktSalesQuotation.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+   */
+  taxCode?: string;
+
+  /**
    * 含税金额
    */
   taxIncludedAmount: number;
@@ -772,6 +982,41 @@ export interface SalesQuotationItemExport {
    * 报价金额
    */
   quotationAmount: number;
+
+  /**
+   * 价格日期
+   */
+  pricingDate?: string;
+
+  /**
+   * 毛重
+   */
+  grossWeight?: number;
+
+  /**
+   * 净重
+   */
+  netWeight?: number;
+
+  /**
+   * 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+   */
+  weightUnit?: string;
+
+  /**
+   * 体积
+   */
+  volume?: number;
+
+  /**
+   * 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+   */
+  volumeUnit?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

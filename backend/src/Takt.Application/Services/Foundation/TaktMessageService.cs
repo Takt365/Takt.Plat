@@ -145,8 +145,10 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
     /// <summary>
     /// 获取在线消息选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetMessageOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetMessageOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _messageRepository.GetListAsync(
@@ -522,10 +524,16 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         EnsureThreeLayerContext();
         ArgumentException.ThrowIfNullOrWhiteSpace(messageContent);
         var userId = CurrentUserId ?? 0L;
-        var UserName = CurrentUserName?.Trim() ?? string.Empty;
-        if (userId <= 0 || string.IsNullOrWhiteSpace(UserName))
+        var userName = CurrentUserName?.Trim() ?? string.Empty;
+        var tenantCode = CurrentTenantCode?.Trim() ?? string.Empty;
+        var companyCode = CurrentCompanyCode?.Trim() ?? string.Empty;
+        if (userId <= 0 || string.IsNullOrWhiteSpace(userName))
         {
             throw new TaktBusinessException("操作消息缺少当前用户信息");
+        }
+        if (string.IsNullOrWhiteSpace(companyCode))
+        {
+            throw new TaktBusinessException("操作消息缺少公司编码");
         }
 
         var content = messageContent.Trim();
@@ -535,12 +543,12 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         var messageType = TaktBomOperationMessageConstants.MessageType;
         var entity = new TaktMessage
         {
-            TenantCode = CurrentTenantCode,
-            CompanyCode = CurrentCompanyCode,
+            TenantCode = tenantCode,
+            CompanyCode = companyCode,
             FromUserId = userId,
-            FromUserName = UserName,
+            FromUserName = userName,
             ToUserId = userId,
-            ToUserName = UserName,
+            ToUserName = userName,
             MessageTitle = BuildAutoMessageTitle(messageType, group, content),
             MessageContent = content,
             MessageType = messageType,
@@ -551,15 +559,18 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
             CreatedBy = userId,
         };
         entity = await _messageRepository.CreateAsync(entity);
+        // 推送一律用落库后的实体字段（避免 await 期间 HttpContext/AsyncLocal 被后台任务污染）
+        var pushCompany = string.IsNullOrWhiteSpace(entity.CompanyCode) ? companyCode : entity.CompanyCode.Trim();
+        var pushToUser = string.IsNullOrWhiteSpace(entity.ToUserName) ? userName : entity.ToUserName.Trim();
         var push = new TaktSignalRPrivateMessagePush
         {
-            TenantCode = CurrentTenantCode,
-            CompanyCode = CurrentCompanyCode,
+            TenantCode = string.IsNullOrWhiteSpace(entity.TenantCode) ? tenantCode : entity.TenantCode.Trim(),
+            CompanyCode = pushCompany,
             MessageId = entity.Id,
-            FromUserName = entity.FromUserName,
-            FromUserId = entity.FromUserId,
-            ToUserName = entity.ToUserName,
-            ToUserId = entity.ToUserId,
+            FromUserName = string.IsNullOrWhiteSpace(entity.FromUserName) ? userName : entity.FromUserName,
+            FromUserId = entity.FromUserId > 0 ? entity.FromUserId : userId,
+            ToUserName = pushToUser,
+            ToUserId = entity.ToUserId > 0 ? entity.ToUserId : userId,
             MessageTitle = entity.MessageTitle,
             MessageContent = entity.MessageContent,
             FileName = entity.FileName,

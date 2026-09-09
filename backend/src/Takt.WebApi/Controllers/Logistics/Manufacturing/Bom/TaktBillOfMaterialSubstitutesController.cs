@@ -86,11 +86,11 @@ public class TaktBillOfMaterialSubstitutesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:bom:bill:of:material:query", "BOM替代料选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBillOfMaterialSubstituteOptionsAsync()
+    public async Task<IActionResult> GetBillOfMaterialSubstituteOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _billOfMaterialSubstituteService.GetBillOfMaterialSubstituteOptionsAsync();
+            var result = await _billOfMaterialSubstituteService.GetBillOfMaterialSubstituteOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -83,14 +83,16 @@ public class TaktProductionOrdersController : TaktControllerBase
     /// <summary>
     /// 获取生产工单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（工单号/物料号模糊匹配，可选）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:aps:production:order:query", "生产工单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionOrderOptionsAsync()
+    public async Task<IActionResult> GetProductionOrderOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _productionOrderService.GetProductionOrderOptionsAsync();
+            var result = await _productionOrderService.GetProductionOrderOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

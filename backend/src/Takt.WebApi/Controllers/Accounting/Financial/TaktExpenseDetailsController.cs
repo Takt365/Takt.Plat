@@ -86,11 +86,11 @@ public class TaktExpenseDetailsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:expense:query", "费用单明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetExpenseDetailOptionsAsync()
+    public async Task<IActionResult> GetExpenseDetailOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _expenseDetailService.GetExpenseDetailOptionsAsync();
+            var result = await _expenseDetailService.GetExpenseDetailOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

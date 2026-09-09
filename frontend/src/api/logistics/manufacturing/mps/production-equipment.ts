@@ -144,10 +144,20 @@ export function updateProductionEquipmentSort(dto: ProductionEquipmentSort): Pro
  * 获取生产设备选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getProductionEquipmentOptions(): Promise<TaktSelectOption[]> {
+export function getProductionEquipmentOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PRODUCTION_EQUIPMENT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

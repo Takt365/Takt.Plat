@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetail.cs
@@ -16,35 +16,35 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// 组立日报明细（产出子表）实体
+/// 组立日报明细（产出子表）实体（按组立日报ID + 生产时段 + 行号唯一）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_assy_detail", "组立日报明细表")]
 [SugarIndex("ix_assy_output_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_assy_output_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_assy_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AssyOutputId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_assy_detail_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AssyOutputId), OrderByType.Asc, nameof(TimePeriod), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 public class TaktAssyOutputDetail : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 组立日报ID（主表主键,序列化为string以避免Javascript精度问题）
+    /// 组立日报ID（主表主键；与 TimePeriod、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [SugarColumn(ColumnName = "assy_output_id", ColumnDescription = "组立日报ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyOutputId { get; set; }
-    
+
     /// <summary>
     /// 工单号（冗余字段,便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
-    
+
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（项号/序号，固定步长=10；与 AssyOutputId、TimePeriod 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段（固定值）
+    /// 生产时段（固定值；与 AssyOutputId、LineNumber 组成唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "time_period", ColumnDescription = "生产时段", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string TimePeriod { get; set; } = string.Empty;
@@ -68,25 +68,25 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
+    /// 停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeReason { get; set; }
 
     /// <summary>
-    /// 停线说明
+    /// 停线说明（停线原因选定后的补充详细说明）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_description", ColumnDescription = "停线说明", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeDescription { get; set; }
 
     /// <summary>
-    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
+    /// 未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）
     /// </summary>
     [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
 
     /// <summary>
-    /// 未达成说明
+    /// 未达成说明（未达成原因选定后的补充详细说明）
     /// </summary>
     [SugarColumn(ColumnName = "unachieved_description", ColumnDescription = "未达成说明", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedDescription { get; set; }

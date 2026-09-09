@@ -86,11 +86,11 @@ public class TaktSamplingSchemesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:sampling:scheme:query", "抽样方案选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSamplingSchemeOptionsAsync()
+    public async Task<IActionResult> GetSamplingSchemeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _samplingSchemeService.GetSamplingSchemeOptionsAsync();
+            var result = await _samplingSchemeService.GetSamplingSchemeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

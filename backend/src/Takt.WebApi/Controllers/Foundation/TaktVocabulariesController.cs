@@ -86,11 +86,11 @@ public class TaktVocabulariesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:vocabulary:query", "敏感词选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetVocabularyOptionsAsync()
+    public async Task<IActionResult> GetVocabularyOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _vocabularyService.GetVocabularyOptionsAsync();
+            var result = await _vocabularyService.GetVocabularyOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -142,18 +142,20 @@ export function calculateAssyIndirectMinutes(
 }
 
 /**
- * 组立日报明细标准产能：默认继承主表小时标准产能；有报工工时（混合生产等）时按报工工时÷标准工时×稼动率重算该行
+ * 组立日报明细标准产能：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行
  * @param stdMinutes 主表标准工时(分钟)
  * @param masterHourlyStdCapacity 主表小时标准产能（表头 StdCapacity）
  * @param confirmMinutes 报工工时(分钟)
  * @param operationRate 标准生产稼动率（比例或历史百分数）
+ * @param _prodActualQty 实际生产数量（保留参数，与后端签名对齐；本公式不参与分支）
  * @returns 明细标准产能（保留 2 位小数，四舍五入）
  */
 export function calculateAssyDetailStdCapacity(
   stdMinutes: number,
   masterHourlyStdCapacity: number,
   confirmMinutes: number,
-  operationRate: number
+  operationRate: number,
+  _prodActualQty = 0
 ): number {
   const confirm = Number.isFinite(confirmMinutes) ? confirmMinutes : 0
   if (confirm > 0) {
@@ -299,7 +301,7 @@ export function applyAssyCleaningPeriodDefaults(
   const prodQty = Number(row.prodActualQty) || 0
   if (prodQty <= 0) {
     row.downtimeMinutes = 0
-    delete row.downtimeReason
+    row.downtimeReason = ''
     return
   }
   row.downtimeReason = ASSY_CLEANING_STOP_REASON_LABEL

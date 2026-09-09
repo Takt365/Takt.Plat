@@ -86,11 +86,11 @@ public class TaktBomMaterialCostItemsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:bom:material:cost:item:query", "BOM物料成本明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBomMaterialCostItemOptionsAsync()
+    public async Task<IActionResult> GetBomMaterialCostItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _bomMaterialCostItemService.GetBomMaterialCostItemOptionsAsync();
+            var result = await _bomMaterialCostItemService.GetBomMaterialCostItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

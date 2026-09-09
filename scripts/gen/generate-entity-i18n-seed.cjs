@@ -79,12 +79,12 @@ function createEmptyCultureFieldMap() {
   return Object.fromEntries(CONFIG.cultures.map((culture) => [culture, {}]));
 }
 
-/** 实体基类字段（不生成 entity.{slug}.{field} 键） */
+/** 实体基类隔离/审计字段（不生成 entity.{slug}.{field} 键；业务自声明的 CultureCode 除外） */
 const ENTITY_BASE_FIELDS = new Set([
   'Id',
   'TenantCode',
   'CompanyCode',
-  'CultureCode',
+  // CultureCode：仅基类隔离列不在实体 classBody 中；Culture/Translation 等业务 CultureCode 须生成 entity.*.culturecode
   'PlantCode',
   'RelatedPlant',
   'ExtField',

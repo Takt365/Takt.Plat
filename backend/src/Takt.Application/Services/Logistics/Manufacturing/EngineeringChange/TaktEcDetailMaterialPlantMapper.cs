@@ -4,7 +4,7 @@
 // 文件名称：TaktEcDetailMaterialPlantMapper.cs
 // 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：按工厂物料 TaktMaterialPlant、型号目的地 TaktModelDestination 补全设变明细机种/描述/库存/仓库/采购/检验及停产状态
+// 功能描述：按工厂物料 TaktMaterialPlant、型号目的地 TaktModelDestination 补全设变明细机种/完成品与上阶描述/库存/仓库/采购/检验及停产状态（新旧物料描述取自源，不回填）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -69,7 +69,6 @@ public static class TaktEcDetailMaterialPlantMapper
         }
         if (TryGetMaterial(materialsByCode, dto.EcOldMaterialCode, out var oldMaterial))
         {
-            dto.EcOldMaterialDescription = ResolveMaterialText(oldMaterial);
             dto.EcOldStock = oldMaterial.CurrentStock;
             dto.EcOldWarehouse = ResolveWarehouse(oldMaterial);
             dto.EcOldRequiresInspection = oldMaterial.RequiresInspection;
@@ -77,7 +76,6 @@ public static class TaktEcDetailMaterialPlantMapper
         }
         if (TryGetMaterial(materialsByCode, dto.EcNewMaterialCode, out var newMaterial))
         {
-            dto.EcNewMaterialDescription = ResolveMaterialText(newMaterial);
             dto.EcNewStock = newMaterial.CurrentStock;
             dto.EcNewWarehouse = ResolveWarehouse(newMaterial);
             dto.EcNewRequiresInspection = newMaterial.RequiresInspection;
@@ -116,7 +114,7 @@ public static class TaktEcDetailMaterialPlantMapper
     }
 
     /// <summary>
-    /// 完成品物料状态：直接取工厂物料 DiscontinuedStatus，空则 Z0
+    /// 停产状态：直接取工厂物料 DiscontinuedStatus，空则 Z0
     /// </summary>
     /// <param name="material">完成品工厂物料</param>
     /// <returns>字典 DictValue（如 Z0/01）</returns>

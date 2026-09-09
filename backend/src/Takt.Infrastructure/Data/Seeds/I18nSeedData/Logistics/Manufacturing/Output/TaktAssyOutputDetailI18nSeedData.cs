@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail._self", "zh-HK", "组立日报明细信息_hk", "实体名称"),
 
             // entity.assyoutputdetail.assyoutputid
-            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "en-US", "组立日报ID_us", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "en-US", "组立日报ID_us", "组立日报ID（主表主键；与 TimePeriod、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assyoutputdetail.assyoutputid
-            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "ja-JP", "组立日报ID_jp", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "ja-JP", "组立日报ID_jp", "组立日报ID（主表主键；与 TimePeriod、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assyoutputdetail.assyoutputid
-            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-CN", "组立日报ID", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-CN", "组立日报ID", "组立日报ID（主表主键；与 TimePeriod、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）"),
             // entity.assyoutputdetail.assyoutputid
-            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-HK", "组立日报ID_hk", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
+            new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-HK", "组立日报ID_hk", "组立日报ID（主表主键；与 TimePeriod、LineNumber 组成唯一键；序列化为 string 以避免 Javascript 精度问题）"),
 
             // entity.assyoutputdetail.prodordercode
             new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "en-US", "工单号_us", "工单号（冗余字段,便于查询）"),
@@ -109,22 +109,22 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-HK", "工单号_hk", "工单号（冗余字段,便于查询）"),
 
             // entity.assyoutputdetail.linenumber
-            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10；与 AssyOutputId、TimePeriod 组成唯一键）"),
             // entity.assyoutputdetail.linenumber
-            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10；与 AssyOutputId、TimePeriod 组成唯一键）"),
             // entity.assyoutputdetail.linenumber
-            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10；与 AssyOutputId、TimePeriod 组成唯一键）"),
             // entity.assyoutputdetail.linenumber
-            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10；与 AssyOutputId、TimePeriod 组成唯一键）"),
 
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段（固定值）"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段（固定值；与 AssyOutputId、LineNumber 组成唯一键）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段（固定值）"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段（固定值；与 AssyOutputId、LineNumber 组成唯一键）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段（固定值）"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段（固定值；与 AssyOutputId、LineNumber 组成唯一键）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段（固定值）"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段（固定值；与 AssyOutputId、LineNumber 组成唯一键）"),
 
             // entity.assyoutputdetail.stdcapacity
             new TranslationSeedItem("entity.assyoutputdetail.stdcapacity", "en-US", "标准产能_us", "标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）"),
@@ -154,40 +154,40 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "zh-HK", "停线时间_hk", "停线时间(分钟)"),
 
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（字典 logistics_manufacturing_stop_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填停线说明）"),
 
             // entity.assyoutputdetail.downtimedescription
-            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "en-US", "停线说明_us", "停线说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "en-US", "停线说明_us", "停线说明（停线原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.downtimedescription
-            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "ja-JP", "停线说明_jp", "停线说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "ja-JP", "停线说明_jp", "停线说明（停线原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.downtimedescription
-            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-CN", "停线说明", "停线说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-CN", "停线说明", "停线说明（停线原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.downtimedescription
-            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-HK", "停线说明_hk", "停线说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-HK", "停线说明_hk", "停线说明（停线原因选定后的补充详细说明）"),
 
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_manufacturing_nonachievement_reason；多选存 DictLabel 逗号分隔；先选字典原因，再填未达成说明）"),
 
             // entity.assyoutputdetail.unachieveddescription
-            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "en-US", "未达成说明_us", "未达成说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "en-US", "未达成说明_us", "未达成说明（未达成原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.unachieveddescription
-            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "ja-JP", "未达成说明_jp", "未达成说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "ja-JP", "未达成说明_jp", "未达成说明（未达成原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.unachieveddescription
-            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明（未达成原因选定后的补充详细说明）"),
             // entity.assyoutputdetail.unachieveddescription
-            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-HK", "未达成说明_hk", "未达成说明"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-HK", "未达成说明_hk", "未达成说明（未达成原因选定后的补充详细说明）"),
 
             // entity.assyoutputdetail.inputminutes
             new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "en-US", "投入工时_us", "投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）"),

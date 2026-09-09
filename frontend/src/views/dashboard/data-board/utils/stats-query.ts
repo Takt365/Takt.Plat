@@ -28,7 +28,26 @@ export const DASHBOARD_STATS_API = {
   messageStatistics: 'TaktMessages/statistics',
   messageUnreadList: 'TaktMessages/unread-list',
   onlineDashboard: 'TaktOnlines/statistics/dashboard',
+  /** 在线用户 list（TaktOnlines） */
+  onlineList: 'TaktOnlines/list',
+  /** 会议通知 list（TaktMeetingNotifications） */
+  meetingNotificationList: 'TaktMeetingNotifications/list',
+  /** 公告通知 list（TaktAnnouncements） */
+  announcementList: 'TaktAnnouncements/list',
+  /** 公告通知件数统计（TaktAnnouncements/announcement-stat） */
+  announcementStat: 'TaktAnnouncements/announcement-stat',
+  /** 会议中心 list（TaktMeetings） */
+  meetingList: 'TaktMeetings/list',
+  /** 会议件数统计（TaktMeetings/meeting-stat） */
+  meetingStat: 'TaktMeetings/meeting-stat',
+  /** 服务台工单 list（TaktTickets） */
+  helpDeskTicketList: 'TaktTickets/list',
+  /** 服务台工单件数统计（TaktTickets/ticket-stat） */
+  helpDeskTicketStat: 'TaktTickets/ticket-stat',
+  /** 销售订单列表 */
   salesOrderList: 'TaktSalesOrders/list',
+  /** 销售订单统计（TaktSalesOrders/order-stat） */
+  salesOrderStat: 'TaktSalesOrders/order-stat',
   /** 销售发票统计（本月销售；TaktSalesInvoices/invoice-stat） */
   salesInvoiceStat: 'TaktSalesInvoices/invoice-stat',
   /** 设变部门执行行数统计（8 张部门表；TaktEcKanbans/dept-execution-count） */
@@ -39,8 +58,44 @@ export const DASHBOARD_STATS_API = {
   ecStat: 'TaktEcGijutsus/stat',
   productionOrderList: 'TaktProductionOrders/list',
   personnelOperationRateList: 'TaktPersonnelOperationRates/list',
-  assyOutputProductionStat: 'TaktAssyOutputs/production-stat',
-  pcbaOutputProductionStat: 'TaktPcbaOutputs/production-stat',
+  assyOutputProductionStat: 'TaktAssyOutputStats/production-stat',
+  pcbaOutputProductionStat: 'TaktPcbaOutputStats/production-stat',
+  /** 组立不良统计（TaktAssyDefects/defect-stat） */
+  assyDefectStat: 'TaktAssyDefects/defect-stat',
+  /** PCBA 不良看板统计（检查数 + 修理数；TaktPcbaDefectBoardStats/board-stat） */
+  pcbaDefectBoardStat: 'TaktPcbaDefectBoardStats/board-stat',
+  /** 月生产不良推移（TaktDefectMonthlyTrends/monthly-trend-analysis） */
+  defectMonthlyTrend: 'TaktDefectMonthlyTrends/monthly-trend-analysis',
+  /** IQC 检验统计（TaktIqcOrders/inspection-stat） */
+  iqcOrderStat: 'TaktIqcOrders/inspection-stat',
+  /** IPQC 检验统计（TaktIpqcOrders/inspection-stat） */
+  ipqcOrderStat: 'TaktIpqcOrders/inspection-stat',
+  /** FQC 检验统计（TaktFqcOrders/inspection-stat） */
+  fqcOrderStat: 'TaktFqcOrders/inspection-stat',
+  /** 品质业务金额统计（TaktQualityAssurances/cost-stat） */
+  qualityAssuranceCostStat: 'TaktQualityAssurances/cost-stat',
+  /** 品质事故金额统计（TaktQualityIncidents/cost-stat） */
+  qualityIncidentCostStat: 'TaktQualityIncidents/cost-stat',
+  /** 品质应对金额统计（TaktQualityIssues/cost-stat） */
+  qualityIssueCostStat: 'TaktQualityIssues/cost-stat',
+  /** 客诉件数统计（TaktCustomerComplaints/complaint-stat） */
+  customerComplaintStat: 'TaktCustomerComplaints/complaint-stat',
+  /** 客户服务请求统计 */
+  serviceRequestStat: 'TaktCustomerServiceStats/request-stat',
+  /** 客户服务订单统计 */
+  serviceOrderStat: 'TaktCustomerServiceStats/order-stat',
+  /** 客户服务工单统计 */
+  serviceTicketStat: 'TaktCustomerServiceStats/ticket-stat',
+  /** 客户服务合同统计 */
+  serviceContractStat: 'TaktCustomerServiceStats/contract-stat',
+  /** 采购订单统计（TaktPurchaseOrders/order-stat） */
+  purchaseOrderStat: 'TaktPurchaseOrders/order-stat',
+  /** 采购发票统计（TaktPurchaseInvoices/invoice-stat） */
+  purchaseInvoiceStat: 'TaktPurchaseInvoices/invoice-stat',
+  /** 采购申请统计（TaktPurchaseRequests/request-stat） */
+  purchaseRequestStat: 'TaktPurchaseRequests/request-stat',
+  /** 在库金额统计（TaktMaterialMovingPrices/stock-stat） */
+  materialMovingPriceStockStat: 'TaktMaterialMovingPrices/stock-stat',
 } as const;
 
 /** 看板指标对应 list 权限（无权限时不发请求） */
@@ -49,7 +104,13 @@ export const DASHBOARD_STATS_PERMISSION = {
   messageStatistics: 'foundation:message:query',
   messageUnreadList: 'foundation:message:unread',
   onlineDashboard: 'foundation:online:list',
+  meetingList: 'routine:meeting:center:list',
+  meetingNotificationList: 'routine:meeting:center:notification:list',
+  announcementList: 'routine:announcement:list',
+  helpDeskTicketList: 'routine:help:desk:ticket:list',
+  helpDeskMyTicketList: 'routine:help:desk:my:ticket:list',
   salesOrderList: 'logistics:sales:order:list',
+  salesOrderStat: 'logistics:sales:order:list',
   salesInvoiceStat: 'logistics:sales:invoice:list',
   ecDeptExecutionCount: 'logistics:manufacturing:engineering:change:kanban:list',
   ecKanbanList: 'logistics:manufacturing:engineering:change:kanban:list',
@@ -58,6 +119,59 @@ export const DASHBOARD_STATS_PERMISSION = {
   personnelOperationRateList: 'logistics:manufacturing:output:personnel:operation:rate:list',
   assyOutputList: 'logistics:manufacturing:output:assy:list',
   pcbaOutputList: 'logistics:manufacturing:output:pcba:list',
+  assyDefectList: 'logistics:manufacturing:defect:assy:list',
+  pcbaInspectionList: 'logistics:manufacturing:defect:pcba:inspection:list',
+  pcbaRepairList: 'logistics:manufacturing:defect:pcba:repair:list',
+  defectMonthlyTrendList: 'logistics:manufacturing:defect:monthly:list',
+  iqcOrderList: 'logistics:quality:operation:iqc:order:list',
+  ipqcOrderList: 'logistics:quality:operation:ipqc:order:list',
+  fqcOrderList: 'logistics:quality:operation:fqc:order:list',
+  qualityAssuranceList: 'logistics:quality:cost:assurance:list',
+  qualityIncidentList: 'logistics:quality:cost:incident:list',
+  qualityIssueList: 'logistics:quality:cost:issue:list',
+  customerComplaintList: 'logistics:quality:complaint:customer:list',
+  serviceRequestStat: 'logistics:customer:service:request:query',
+  serviceOrderStat: 'logistics:customer:service:order:query',
+  serviceTicketStat: 'logistics:customer:service:ticket:query',
+  serviceContractStat: 'logistics:customer:service:contract:query',
+  purchaseOrderStat: 'logistics:procurement:purchase:order:list',
+  purchaseInvoiceStat: 'logistics:procurement:purchase:invoice:list',
+  purchaseRequestStat: 'logistics:procurement:purchase:request:list',
+  materialMovingPriceList: 'logistics:materials:material:moving:price:list',
+} as const;
+
+/** 看板质量/不良/客服用指标跳转路由 */
+export const DASHBOARD_STATS_ROUTE = {
+  flowTodo: '/workflow/todo',
+  message: '/foundation/message',
+  meeting: '/routine/meeting-center/meeting',
+  announcement: '/routine/announcement',
+  helpDeskTicket: '/routine/help-desk/ticket',
+  helpDeskMyTicket: '/routine/help-desk/my-ticket',
+  online: '/foundation/online',
+  assyOutput: '/logistics/manufacturing/output/assy-output',
+  pcbaOutput: '/logistics/manufacturing/output/pcba-output',
+  assyDefect: '/logistics/manufacturing/defect/assy-defect',
+  pcbaInspection: '/logistics/manufacturing/defect/pcba-inspection',
+  pcbaRepair: '/logistics/manufacturing/defect/pcba-repair',
+  defectMonthlyTrend: '/logistics/manufacturing/defect/defect-monthly',
+  iqcOrder: '/logistics/quality/operation/iqc-order',
+  ipqcOrder: '/logistics/quality/operation/ipqc-order',
+  fqcOrder: '/logistics/quality/operation/fqc-order',
+  qualityAssurance: '/logistics/quality/cost/assurance',
+  qualityIncident: '/logistics/quality/cost/incident',
+  qualityIssue: '/logistics/quality/cost/issue',
+  customerComplaint: '/logistics/quality/complaint/customer-complaint',
+  serviceRequest: '/logistics/customer-service/request',
+  serviceOrder: '/logistics/customer-service/order',
+  serviceTicket: '/logistics/customer-service/ticket',
+  serviceContract: '/logistics/customer-service/contract',
+  purchaseOrder: '/logistics/procurement/purchase-order',
+  purchaseInvoice: '/logistics/procurement/purchase-invoice',
+  purchaseRequest: '/logistics/procurement/purchase-request',
+  salesOrder: '/logistics/sales/order',
+  salesInvoice: '/logistics/sales/sales-invoice',
+  materialMovingPrice: '/logistics/materials/material-moving-price',
 } as const;
 
 /** 日期区间 */
@@ -74,6 +188,18 @@ export function getCurrentMonthRange(): TaktDateRange {
   const start = dayjs().startOf('month').format('YYYY-MM-DD 00:00:00');
   const end = dayjs().endOf('month').format('YYYY-MM-DD 23:59:59');
   return { start, end };
+}
+
+/**
+ * 获取上月自然月区间
+ * @returns {TaktDateRange} YYYY-MM-DD HH:mm:ss
+ */
+export function getLastMonthRange(): TaktDateRange {
+  const anchor = dayjs().subtract(1, 'month');
+  return {
+    start: anchor.startOf('month').format('YYYY-MM-DD 00:00:00'),
+    end: anchor.endOf('month').format('YYYY-MM-DD 23:59:59'),
+  };
 }
 
 /**
@@ -125,6 +251,31 @@ export async function fetchDashboardDeptExecutionCount(isImplemented?: number): 
   const params = isImplemented === undefined ? undefined : { isImplemented };
   const data = await fetchDashboardGet<{ count: number }>(DASHBOARD_STATS_API.ecDeptExecutionCount, params);
   return data?.count ?? 0;
+}
+
+/** 看板 Popover 预览列表条数上限 */
+export const DASHBOARD_POPOVER_LIST_SIZE = 6;
+
+/**
+ * 看板专用：分页 list 预览（静默、有界条数）
+ * @param path list API 路径
+ * @param query 额外查询条件
+ * @returns {Promise<{ rows: T[]; total: number }>} 预览行与总数
+ */
+export async function fetchDashboardListPreview<T>(
+  path: string,
+  query: Record<string, unknown> = {},
+): Promise<{ rows: T[]; total: number }> {
+  await ensureTaktPaginationConfigAsync();
+  const res = await fetchDashboardGet<TaktPagedResult<T>>(path, {
+    ...query,
+    pageIndex: getTaktDefaultPageIndex(),
+    pageSize: DASHBOARD_POPOVER_LIST_SIZE,
+  });
+  return {
+    rows: res?.data ?? [],
+    total: res?.total ?? 0,
+  };
 }
 
 /**

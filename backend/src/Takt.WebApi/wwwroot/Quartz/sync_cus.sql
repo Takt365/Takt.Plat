@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,6 +23,11 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
@@ -64,7 +86,6 @@ CREATE TABLE #st_source (
   [credit_level] INT,
   [credit_amount] DECIMAL(18,2),
   [discount_rate] DECIMAL(5,2),
-  [sales_by] NVARCHAR(50),
   [customer_level] INT,
   [evaluation_score] DECIMAL(5,2),
   [sort_order] INT,
@@ -127,7 +148,6 @@ SELECT
   S.[credit_level],
   S.[credit_amount],
   S.[discount_rate],
-  S.[sales_by],
   S.[customer_level],
   S.[evaluation_score],
   S.[sort_order],
@@ -193,7 +213,6 @@ FROM (
       COALESCE(TRY_CAST(R.[credit_level] AS INT), 0) AS [credit_level],
       ROUND(COALESCE(TRY_CAST(R.[credit_amount] AS DECIMAL(18,8)), 0), 2) AS [credit_amount],
       ROUND(COALESCE(TRY_CAST(R.[discount_rate] AS DECIMAL(18,8)), 0), 2) AS [discount_rate],
-      NULLIF(LTRIM(RTRIM(R.[sales_by])), N'') AS [sales_by],
       COALESCE(TRY_CAST(R.[customer_level] AS INT), 0) AS [customer_level],
       ROUND(COALESCE(TRY_CAST(R.[evaluation_score] AS DECIMAL(18,8)), 0), 2) AS [evaluation_score],
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
@@ -226,6 +245,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #st_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @sap_raw_count INT = (
   SELECT COUNT(*)
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_sales_customer] R
@@ -308,8 +343,13 @@ DECLARE @target_before INT = (
     )
 );
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #st_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_sales_customer] AS T
-USING #st_source AS S
+USING (SELECT * FROM #st_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[customer_code])) = S.[customer_code]
@@ -361,7 +401,6 @@ WHEN MATCHED AND (
   OR T.[credit_level] <> S.[credit_level]
   OR ROUND(T.[credit_amount], 2) <> ROUND(S.[credit_amount], 2)
   OR ROUND(T.[discount_rate], 2) <> ROUND(S.[discount_rate], 2)
-  OR LTRIM(RTRIM(ISNULL(T.[sales_by], N''))) <> LTRIM(RTRIM(ISNULL(S.[sales_by], N'')))
   OR T.[customer_level] <> S.[customer_level]
   OR ROUND(T.[evaluation_score], 2) <> ROUND(S.[evaluation_score], 2)
   OR T.[sort_order] <> S.[sort_order]
@@ -423,7 +462,6 @@ WHEN MATCHED AND (
   T.[credit_level]=S.[credit_level],
   T.[credit_amount]=S.[credit_amount],
   T.[discount_rate]=S.[discount_rate],
-  T.[sales_by]=S.[sales_by],
   T.[customer_level]=S.[customer_level],
   T.[evaluation_score]=S.[evaluation_score],
   T.[sort_order]=S.[sort_order],
@@ -448,7 +486,7 @@ WHEN NOT MATCHED THEN
     [account_assignment_group],[supplier_code],[nielsen_indicator],[central_posting_block],
     [reconciliation_account],[headquarters],[clearing_with_vendor],[payment_terms],[payment_method],
     [delivering_plant],[incoterms1],[incoterms2],[shipping_conditions],[customer_pricing_procedure],
-    [credit_level],[credit_amount],[discount_rate],[sales_by],[customer_level],[evaluation_score],
+    [credit_level],[credit_amount],[discount_rate],[customer_level],[evaluation_score],
     [sort_order],[customer_status],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],
     [is_deleted],[deleted_by],[deleted_at]
@@ -463,7 +501,7 @@ WHEN NOT MATCHED THEN
     S.[account_assignment_group],S.[supplier_code],S.[nielsen_indicator],S.[central_posting_block],
     S.[reconciliation_account],S.[headquarters],S.[clearing_with_vendor],S.[payment_terms],S.[payment_method],
     S.[delivering_plant],S.[incoterms1],S.[incoterms2],S.[shipping_conditions],S.[customer_pricing_procedure],
-    S.[credit_level],S.[credit_amount],S.[discount_rate],S.[sales_by],S.[customer_level],S.[evaluation_score],
+    S.[credit_level],S.[credit_amount],S.[discount_rate],S.[customer_level],S.[evaluation_score],
     S.[sort_order],S.[customer_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
     COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
@@ -486,6 +524,25 @@ INTO #delta(
   customer_name1_old, customer_name1_new,
   customer_status_old, customer_status_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
 CREATE TABLE #soft_deleted_rows (
@@ -494,7 +551,12 @@ CREATE TABLE #soft_deleted_rows (
   [customer_code] NVARCHAR(10)
 );
 
-UPDATE T
+
+DECLARE @delete_count INT = 0;
+SET @dml_n = 1;
+WHILE @dml_n > 0
+BEGIN
+UPDATE TOP (@apply_chunk) T
 SET
   T.[is_deleted] = 1,
   T.[deleted_by] = @sync_user_id,
@@ -518,8 +580,25 @@ WHERE T.[tenant_code] = @tenant_code
     WHERE S.[company_code] = T.[company_code]
       AND S.[customer_code] = LTRIM(RTRIM(T.[customer_code]))
   );
-
-DECLARE @delete_count INT = @@ROWCOUNT;
+  SET @dml_n = @@ROWCOUNT;
+  SET @delete_count = @delete_count + @dml_n;
+END
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
   CAST(

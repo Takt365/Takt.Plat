@@ -86,11 +86,11 @@ public class TaktPcbaOutputDetailsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaOutputDetailOptionsAsync()
+    public async Task<IActionResult> GetPcbaOutputDetailOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaOutputDetailService.GetPcbaOutputDetailOptionsAsync();
+            var result = await _pcbaOutputDetailService.GetPcbaOutputDetailOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

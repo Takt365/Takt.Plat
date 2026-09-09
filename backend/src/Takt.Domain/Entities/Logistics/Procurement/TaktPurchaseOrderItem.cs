@@ -75,6 +75,18 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
+    /// 采购信息记录编码
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_info_record_code", ColumnDescription = "采购信息记录编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PurchaseInfoRecordCode { get; set; }
+
+    /// <summary>
+    /// 供应商物料编码
+    /// </summary>
+    [SugarColumn(ColumnName = "supplier_material_code", ColumnDescription = "供应商物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? SupplierMaterialCode { get; set; }
+
+    /// <summary>
     /// 采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
@@ -117,6 +129,12 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     public decimal DiscountAmount { get; set; } = 0;
 
     /// <summary>
+    /// 税码（冗余：按 PurchaseOrderId 取 TaktPurchaseOrder.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? TaxCode { get; set; }
+
+    /// <summary>
     /// 含税金额
     /// </summary>
     [SugarColumn(ColumnName = "tax_included_amount", ColumnDescription = "含税金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
@@ -137,6 +155,48 @@ public class TaktPurchaseOrderItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "purchase_amount", ColumnDescription = "采购金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal PurchaseAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 价格日期
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_date", ColumnDescription = "价格日期", ColumnDataType = "datetime", IsNullable = true)]
+    public DateTime? PricingDate { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    [SugarColumn(ColumnName = "gross_weight", ColumnDescription = "毛重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    [SugarColumn(ColumnName = "net_weight", ColumnDescription = "净重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? WeightUnit { get; set; }
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    [SugarColumn(ColumnName = "volume", ColumnDescription = "体积", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? VolumeUnit { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? ProfitCenterCode { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）

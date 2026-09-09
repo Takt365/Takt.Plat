@@ -95,8 +95,10 @@ public class TaktPurchasePriceScaleValueService : TaktServiceBase, ITaktPurchase
     /// <summary>
     /// 获取采购价格价值等级选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchasePriceScaleValueOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchasePriceScaleValueOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchasePriceScaleValueRepository.GetListAsync(

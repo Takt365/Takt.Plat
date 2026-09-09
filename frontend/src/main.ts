@@ -19,6 +19,7 @@ import '@umoteam/editor/style';
 import App from './App.vue';
 import router from './router';
 import i18n from './locales';
+import { initTaktGsap } from '@/bootstrap/takt-gsap';
 import { registerTaktEventHandlers } from '@/bootstrap/takt-event-handlers';
 import { initTaktIdleSession } from '@/bootstrap/takt-idle-session';
 import { initTaktTokenSession } from '@/bootstrap/takt-token-session';
@@ -40,6 +41,7 @@ import './styles/global.css';
 
 setRuntimeRouter(router);
 initTaktThemeDom();
+initTaktGsap();
 
 /**
  * 注册 PWA Service Worker（仅当 VITE_PWA_ENABLED 且构建已启用 vite-plugin-pwa）
@@ -86,6 +88,17 @@ app.use(Antd);
 app.use(FcDesigner);
 app.use(FcDesigner.formCreate);
 app.use(useUmoEditor, {});
+
+/**
+ * ant-design-vue Table 内部 MeasureCell 会 emit columnResize，组件未声明 emits，路由切换时刷屏。
+ * 过滤该已知误报，其它 Vue warn 仍输出。
+ */
+app.config.warnHandler = (msg, _instance, trace) => {
+  if (typeof msg === 'string' && msg.includes('emitted event "columnResize"')) {
+    return;
+  }
+  console.warn(`[Vue warn]: ${msg}${trace ? `\n${trace}` : ''}`);
+};
 
 registerTaktEventHandlers();
 initTaktIdleSession();

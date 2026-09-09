@@ -103,8 +103,10 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     /// <summary>
     /// 获取PCBA日报明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPcbaOutputDetailOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPcbaOutputDetailOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _pcbaOutputDetailRepository.GetListAsync(
@@ -128,14 +130,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         var entity = dto.Adapt<TaktPcbaOutputDetail>();
         entity.IsObsolete = 0;
         await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _pcbaOutputDetailRepository,
-            x => x.PcbaOutputId == entity.PcbaOutputId
-                && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
-        {
-            throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
-        }
+        NormalizePcbaOutputDetailUniqueFields(entity);
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _pcbaOutputDetailRepository.GetMaxIntAsync(
@@ -144,6 +139,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             var businessCode = entity.PcbaOutputId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
+        await EnsurePcbaOutputDetailUniqueAsync(entity, excludeId: null);
         entity = await _pcbaOutputDetailRepository.CreateAsync(entity);
         return await GetPcbaOutputDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktPcbaOutputDetailDto>();
     }
@@ -163,15 +159,8 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         }
         dto.Adapt(entity);
         await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _pcbaOutputDetailRepository,
-            x => x.PcbaOutputId == entity.PcbaOutputId
-                && x.LineNumber == entity.LineNumber,
-            id);
-        if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
-        {
-            throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
-        }
+        NormalizePcbaOutputDetailUniqueFields(entity);
+        await EnsurePcbaOutputDetailUniqueAsync(entity, excludeId: id);
         await _pcbaOutputDetailRepository.UpdateAsync(entity);
         return await GetPcbaOutputDetailByIdAsync(id) ?? throw new TaktBusinessException("PCBA日报明细不存在");
     }
@@ -294,19 +283,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                 var entity = rows[i].Adapt<TaktPcbaOutputDetail>();
                 var importDto = rows[i].Adapt<TaktPcbaOutputDetailCreateDto>();
                 await StampPcbaOutputDetailPcbaOutputAsync(entity, importDto);
-                var importKey = $"{entity.PcbaOutputId}|{entity.LineNumber}";
-                if (!importSeenKeys.Add(importKey))
-                {
-                    throw new TaktBusinessException("与Excel中其他行重复（PcbaOutputId、LineNumber）");
-                }
-                var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _pcbaOutputDetailRepository,
-                    x => x.PcbaOutputId == entity.PcbaOutputId
-                        && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
-                {
-                    throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
-                }
+                NormalizePcbaOutputDetailUniqueFields(entity);
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _pcbaOutputDetailRepository.GetMaxIntAsync(
@@ -315,6 +292,18 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                     var businessCode = entity.PcbaOutputId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
+                var importKey = BuildPcbaOutputDetailUniqueKey(
+                    entity.PcbaOutputId,
+                    entity.TeamCode,
+                    entity.ShiftNo,
+                    entity.PcbBoardType,
+                    entity.PanelSide,
+                    entity.LineNumber);
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber）");
+                }
+                await EnsurePcbaOutputDetailUniqueAsync(entity, excludeId: null);
                 await _pcbaOutputDetailRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -363,6 +352,57 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     // ========================================
     // 主表外键同步（ManyToOne）
     // ========================================
+
+    // ========================================
+    // 唯一键（PcbaOutputId + TeamCode + ShiftNo + PcbBoardType + PanelSide + LineNumber）
+    // ========================================
+
+    /// <summary>
+    /// 规范化参与唯一键的字符串字段
+    /// </summary>
+    /// <param name="entity">明细实体</param>
+    private static void NormalizePcbaOutputDetailUniqueFields(TaktPcbaOutputDetail entity)
+    {
+        entity.TeamCode = (entity.TeamCode ?? string.Empty).Trim();
+        entity.PcbBoardType = (entity.PcbBoardType ?? string.Empty).Trim();
+        entity.PanelSide = (entity.PanelSide ?? string.Empty).Trim();
+    }
+
+    /// <summary>
+    /// 构建 PCBA 明细唯一键字符串（导入/批次去重）
+    /// </summary>
+    private static string BuildPcbaOutputDetailUniqueKey(
+        long pcbaOutputId,
+        string? teamCode,
+        int shiftNo,
+        string? pcbBoardType,
+        string? panelSide,
+        int lineNumber)
+    {
+        return $"{pcbaOutputId}|{(teamCode ?? string.Empty).Trim()}|{shiftNo}|{(pcbBoardType ?? string.Empty).Trim()}|{(panelSide ?? string.Empty).Trim()}|{lineNumber}";
+    }
+
+    /// <summary>
+    /// 校验 PCBA 明细唯一键（对齐 ix_takt_logistics_manufacturing_output_pcba_detail_unique）
+    /// </summary>
+    /// <param name="entity">明细实体</param>
+    /// <param name="excludeId">更新时排除的主键</param>
+    private async Task EnsurePcbaOutputDetailUniqueAsync(TaktPcbaOutputDetail entity, long? excludeId)
+    {
+        var isUnique = await _uniqueValidator.IsUniqueAsync(
+            _pcbaOutputDetailRepository,
+            x => x.PcbaOutputId == entity.PcbaOutputId
+                && x.TeamCode == entity.TeamCode
+                && x.ShiftNo == entity.ShiftNo
+                && x.PcbBoardType == entity.PcbBoardType
+                && x.PanelSide == entity.PanelSide
+                && x.LineNumber == entity.LineNumber,
+            excludeId);
+        if (!isUnique)
+        {
+            throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、TeamCode、ShiftNo、PcbBoardType、PanelSide、LineNumber已存在");
+        }
+    }
 
     /// <summary>
     /// 同步PCBA日报明细主表外键（ManyToOne → PCBA日报）

@@ -104,8 +104,10 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
     /// <summary>
     /// 获取PCBA改修日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPcbaRepairOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPcbaRepairOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _pcbaRepairRepository.GetListAsync(
@@ -676,5 +678,77 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（数据看板）
+    // ========================================
+
+    /// <summary>
+    /// 获取 PCBA 改修不良统计（数据看板 defect-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 改修统计</returns>
+    public async Task<TaktPcbaRepairStatDto> GetPcbaRepairStatAsync(TaktDefectStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktPcbaRepair, bool>> headerPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var headers = await _pcbaRepairRepository.GetListAsync(headerPredicate);
+        var repairIds = headers.Select(h => h.Id).ToList();
+        var details = repairIds.Count == 0
+            ? new List<TaktPcbaRepairDetail>()
+            : await _pcbaRepairDetailRepository.GetListAsync(x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.IsObsolete == 0
+                && repairIds.Contains(x.PcbaRepairId));
+        var detailsByHeaderId = details
+            .GroupBy(d => d.PcbaRepairId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+        var teams = headers
+            .GroupBy(h => h.TeamCode ?? string.Empty, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var teamDetails = g
+                    .SelectMany(h => detailsByHeaderId.TryGetValue(h.Id, out var rows) ? rows : Enumerable.Empty<TaktPcbaRepairDetail>())
+                    .ToList();
+                var baseQty = teamDetails.Sum(d => d.ProdActualQty);
+                var defectQty = teamDetails.Sum(d => d.DefectQty);
+                var goodQty = Math.Max(0m, baseQty - defectQty);
+                return new TaktDefectStatTeamItemDto
+                {
+                    TeamCode = g.Key,
+                    BaseQty = baseQty,
+                    GoodQty = goodQty,
+                    DefectQty = defectQty,
+                    DefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(defectQty, baseQty),
+                    YieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(goodQty, baseQty),
+                };
+            })
+            .ToList();
+        var monthBaseQty = teams.Sum(t => t.BaseQty);
+        var monthDefectQty = teams.Sum(t => t.DefectQty);
+        var monthGoodQty = Math.Max(0m, monthBaseQty - monthDefectQty);
+        return new TaktPcbaRepairStatDto
+        {
+            StatMonth = statMonth,
+            MonthBaseQty = monthBaseQty,
+            MonthGoodQty = monthGoodQty,
+            MonthDefectQty = monthDefectQty,
+            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
+            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
+            Teams = teams,
+        };
     }
 }

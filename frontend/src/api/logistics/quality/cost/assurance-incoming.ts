@@ -130,10 +130,20 @@ export function updateQualityAssuranceIncomingObsolete(dto: QualityAssuranceInco
  * 获取品质业务来料检验费用明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getQualityAssuranceIncomingOptions(): Promise<TaktSelectOption[]> {
+export function getQualityAssuranceIncomingOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${QUALITY_ASSURANCE_INCOMING_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -15,7 +15,6 @@ const REPLACEMENTS = [
   ['AcceptedByEmployeeNameEmployeeName', 'AcceptedByEmployeeName'],
   ['AccountManagerEmployeeNameEmployeeName', 'AccountManagerEmployeeName'],
   ['ReportedByEmployeeNameEmployeeName', 'ReportedByEmployeeName'],
-  ['EnteredByEmployeeNameEmployeeName', 'EnteredByEmployeeName'],
   ['ServiceEmployeeNameEmployeeName', 'ServiceEmployeeName'],
   ['CompanyManagerUserNameUserName', 'CompanyManagerUserName'],
   ['PlantManagerUserNameUserName', 'PlantManagerUserName'],
@@ -35,14 +34,12 @@ const REPLACEMENTS = [
   ['ServiceEmployeeName', 'ServiceEmployeeName'],
   ['AcceptedByEmployeeName', 'AcceptedByEmployeeName'],
   ['ReportedByEmployeeName', 'ReportedByEmployeeName'],
-  ['EnteredByEmployeeName', 'EnteredByEmployeeName'],
   ['CompanyManager', 'CompanyManagerUserName'],
   ['PlantManager', 'PlantManagerUserName'],
   ['AccountManager', 'AccountManagerEmployeeName'],
   ['ServiceBy', 'ServiceEmployeeName'],
   ['AcceptedBy', 'AcceptedByEmployeeName'],
   ['ReportedBy', 'ReportedByEmployeeName'],
-  ['EnteredBy', 'EnteredByEmployeeName'],
   ['ManagerUserCode', 'ManagerUserName'],
   ['SalesBy', 'SalesEmployeeName'],
   ['InquiryBy', 'InquiryEmployeeName'],
@@ -68,7 +65,6 @@ const REPLACEMENTS = [
 const REGEX_REPLACEMENTS = [
   [/\bInquiryId\b/g, 'InquiryEmployeeId'],
   [/\bRequestId\b/g, 'RequestEmployeeId'],
-  [/\bPostedBy\b(?!Employee)/g, 'PostedByEmployeeName'],
 ];
 
 /** @param {string} dir */

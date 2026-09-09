@@ -86,11 +86,11 @@ public class TaktNewsFavoritesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:news:center:favorite:query", "新闻中心收藏记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetNewsFavoriteOptionsAsync()
+    public async Task<IActionResult> GetNewsFavoriteOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _newsFavoriteService.GetNewsFavoriteOptionsAsync();
+            var result = await _newsFavoriteService.GetNewsFavoriteOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

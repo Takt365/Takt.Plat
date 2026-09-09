@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-form.vue -->
-<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecEntryDate/ecContent/ecStatus/remark 可编辑；明细 Tab 客户端分页且表高为当前窗体视口 × 5/4；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
+<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecContent/ecStatus/remark 可编辑；来源导入时 ecEntryDate 只读且固定当天；明细 Tab 客户端分页，表高按弹出窗体 × 5/4 且不超过 Tab 剩余区（仅表格滚动、弹出窗体无滚动条）；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form ec-form flex flex-col min-h-0"
+    class="takt-generated-form ec-form flex h-full min-h-0 min-w-0 flex-col overflow-hidden"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -18,7 +18,7 @@
   >
     <a-tabs
       v-model:active-key="activeTab"
-      class="ec-form-tabs"
+      class="ec-form-tabs flex-1 min-h-0 min-w-0"
     >
       <a-tab-pane
         key="tab-0"
@@ -180,7 +180,8 @@
                   :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecEntryDate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
-                  :disabled="loading"
+                  :disabled="loading || sourceImportMode"
+                  :allow-clear="!sourceImportMode"
                 />
               </a-form-item>
             </a-col>
@@ -238,32 +239,6 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ gi.label('extField') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="gi.label('remark')"
                 name="remark"
               >
@@ -288,8 +263,7 @@
       >
         <div
           ref="ecDetailTableHostEl"
-          class="ec-form-sub-table-wrap ec-form-detail-table-wrap min-h-0 flex-1"
-          :style="{ minHeight: `${ecDetailTableScrollYPx}px` }"
+          class="ec-form-sub-table-wrap ec-form-detail-table-wrap min-h-0 min-w-0 flex-1 overflow-hidden"
         >
           <TaktSingleTable
             class="h-full min-h-0"
@@ -341,7 +315,7 @@
           @update="handleAttachmentUpdate"
           @delete="handleAttachmentDelete"
         />
-        <div class="ec-form-sub-table-wrap min-h-0 flex-1">
+        <div class="ec-form-sub-table-wrap min-h-0 min-w-0 flex-1 overflow-hidden">
           <TaktSingleTable
             class="h-full min-h-0"
             entity-scope="company"
@@ -362,7 +336,7 @@
         <TaktModal
           v-model:open="attachmentFormVisible"
           :title="attachmentFormTitle"
-          width="720px"
+          :width="ecGijutsuModalWidthPx"
           :confirm-loading="attachmentFormLoading"
           @ok="handleAttachmentFormSubmit"
           @cancel="handleAttachmentFormCancel"
@@ -396,13 +370,14 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { EcGijutsuFormData } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
-import { RiQuestionLine, RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import EcAttachmentForm from './ec-attachment-form.vue'
 import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import {
   computeFormHostRatioScrollYPx,
   TAKT_TABLE_SCROLL_Y_MIN,
@@ -420,12 +395,15 @@ import {
 import { useEcAttachmentPreview } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-preview'
 import { useEcGijutsuI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-gijutsu-i18n'
 import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 const gi = useEcGijutsuI18n()
 const ai = useEcAttachmentI18n()
 const pi = useEcDetailI18n()
+/** 附件弹窗宽度：与来源设变导入弹窗相同，（视口 − 左侧菜单）× 80% */
+const ecGijutsuModalWidthPx = useTaktContentModalWidth()
 const {
   canPreviewAttachment,
   hasPreviewableAccessUrl,
@@ -463,7 +441,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","remark"]
 
 const childEcDetailRows = ref<Record<string, unknown>[]>([])
 /** 明细子表当前页 */
@@ -483,17 +461,27 @@ const paginatedEcDetailRows = computed(() => {
   return rows.slice(start, start + size)
 })
 
-/** 明细表宿主（用于定位当前弹窗窗体） */
+/** 明细表宿主（定位弹出窗体并实测 Tab 剩余高度） */
 const ecDetailTableHostEl = ref<HTMLElement | null>(null)
-/** 窗体 ResizeObserver */
+/** 弹出窗体 ResizeObserver */
 let ecDetailFormHostResizeObserver: ResizeObserver | null = null
 
-/** 明细表 scroll.y = 当前窗体视口高度 × 5/4 */
+/**
+ * 明细表 scroll.y：目标为弹出窗体高度 × 5/4，且不得超过 Tab 剩余高度
+ * （超出则弹出窗体出现第二套滚动条；❌ 禁止用浏览器视口）
+ */
 function computeEcDetailTableScrollYPx(): number {
-  return Math.max(
-    TAKT_TABLE_SCROLL_Y_MIN,
-    computeFormHostRatioScrollYPx(ecDetailTableHostEl.value, 5, 4),
-  )
+  const host = ecDetailTableHostEl.value
+  const ratioY = computeFormHostRatioScrollYPx(host, 5, 4)
+  if (host == null || host.clientHeight <= 0) {
+    return ratioY
+  }
+  const tableBody = host.querySelector('.takt-single-table__body') as HTMLElement | null
+  if (tableBody == null || tableBody.clientHeight <= 0) {
+    return ratioY
+  }
+  const fittedY = measureMasterDetailLrTableScrollY(host, { reserveSummaryRow: false })
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.min(ratioY, fittedY))
 }
 
 /** 明细表纵向滚动高度（px） */
@@ -502,12 +490,12 @@ const ecDetailTableScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
 /** 明细表 scroll 配置 */
 const ecDetailTableScroll = computed(() => ({ y: ecDetailTableScrollYPx.value }))
 
-/** 按当前窗体视口重算明细表高度 */
+/** 按弹出窗体与 Tab 剩余区重算明细表高度 */
 function recalcEcDetailTableScrollY(): void {
   ecDetailTableScrollYPx.value = computeEcDetailTableScrollYPx()
 }
 
-/** 绑定窗体 ResizeObserver */
+/** 绑定弹出窗体 ResizeObserver（全屏/拖拽改高时重算） */
 function bindEcDetailFormHostResizeObserver(): void {
   ecDetailFormHostResizeObserver?.disconnect()
   ecDetailFormHostResizeObserver = null
@@ -515,14 +503,17 @@ function bindEcDetailFormHostResizeObserver(): void {
   if (host == null || typeof ResizeObserver === 'undefined') {
     return
   }
-  const target =
+  const modalTarget =
     (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal') as HTMLElement | null)
     ?? (host.closest('.ant-modal-body') as HTMLElement | null)
-    ?? host
   ecDetailFormHostResizeObserver = new ResizeObserver(() => {
     recalcEcDetailTableScrollY()
   })
-  ecDetailFormHostResizeObserver.observe(target)
+  if (modalTarget != null) {
+    ecDetailFormHostResizeObserver.observe(modalTarget)
+  }
+  ecDetailFormHostResizeObserver.observe(host)
 }
 
 onMounted(() => {
@@ -530,12 +521,9 @@ onMounted(() => {
     recalcEcDetailTableScrollY()
     bindEcDetailFormHostResizeObserver()
   })
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', recalcEcDetailTableScrollY)
-  }
 })
 
-/** 切到明细 Tab 时再测一次窗体高度（弹窗动画/全屏切换后） */
+/** 切到明细 Tab 时再测一次（弹窗动画/全屏切换后） */
 watch(activeTab, (key) => {
   if (key === 'tab-2') {
     void nextTick(() => {
@@ -548,9 +536,6 @@ watch(activeTab, (key) => {
 onBeforeUnmount(() => {
   ecDetailFormHostResizeObserver?.disconnect()
   ecDetailFormHostResizeObserver = null
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', recalcEcDetailTableScrollY)
-  }
 })
 
 const childEcAttachmentRows = ref<Record<string, unknown>[]>([])
@@ -1057,7 +1042,7 @@ function buildSubmitPayload() {
         cultureCode: row.cultureCode ?? masterCulture,
         plantCode: row.plantCode ?? masterPlant,
         ecCode: row.ecCode ?? ecNo ?? masterEcCode,
-        ecId: ecIdForChild,
+        ecGijutsuId: ecIdForChild,
       }
     }),
     attachments: childEcAttachmentRows.value.map((rest) => {
@@ -1069,12 +1054,24 @@ function buildSubmitPayload() {
         companyCode: row.companyCode ?? tenantStore.companyCode,
         cultureCode: row.cultureCode ?? masterCulture,
         plantCode: row.plantCode ?? masterPlant,
-        ecId: ecIdForChild,
+        ecGijutsuId: ecIdForChild,
         ecCode: row.ecCode ?? ecNo ?? masterEcCode,
         docCode,
         fileName: buildEcAttachmentFileName(docCode, String(row.fileName ?? ''), String(row.accessUrl ?? '')) || row.fileName,
       }
     }),
+  }
+  if (props.sourceImportMode) {
+    payload.ecEntryDate = formatLocalTodayYmd()
+  }
+  // 大明细：不回传 EcDetails，仅带 SourceEcId，由服务端从来源表物化
+  const detailsDeferred = Boolean(formState.detailsDeferred ?? props.formData?.detailsDeferred)
+  const sourceEcId = String(formState.sourceEcId ?? props.formData?.sourceEcId ?? '').trim()
+  if (detailsDeferred && sourceEcId) {
+    payload.sourceEcId = sourceEcId
+    payload.detailsDeferred = true
+    payload.deferredDetailCount = Number(formState.deferredDetailCount ?? props.formData?.deferredDetailCount ?? 0)
+    payload.ecDetails = []
   }
   return payload
 }
@@ -1083,11 +1080,32 @@ function buildSubmitPayload() {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/**
+ * 本地当天日期（YYYY-MM-DD）；来源导入录入日期固定为此值
+ * @returns 当天日期字符串
+ */
+function formatLocalTodayYmd(): string {
+  const now = new Date()
+  const y = String(now.getFullYear())
+  const m = String(now.getMonth() + 1).padStart(2, '0')
+  const d = String(now.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
+/**
+ * 来源导入时将录入日期锁定为当天
+ * @param target 表单数据
+ */
+function applySourceImportEntryDate(target: Record<string, unknown>) {
+  if (props.sourceImportMode) {
+    target.ecEntryDate = formatLocalTodayYmd()
+  }
+}
+
+/** 表单字段默认值（来源导入时录入日期固定当天） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  applySourceImportEntryDate(target)
+}
 
 /** 将 API ecCode 映射到表单 ecNo（历史表单字段名） */
 function normalizeMasterFormFields(target: Record<string, unknown>): void {
@@ -1098,9 +1116,13 @@ function normalizeMasterFormFields(target: Record<string, unknown>): void {
   if (!target.ecCode && target.ecNo) {
     target.ecCode = target.ecNo
   }
+  if (target.ExtField != null && target.extField == null) {
+    target.extField = target.ExtField
+    delete target.ExtField
+  }
 }
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 ecId 才视为编辑） */
+/** 编辑态灌入 formData；新增态恢复默认值（须含 ecGijutsuId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
@@ -1372,16 +1394,54 @@ defineExpose({ validate, getValues, resetFields })
 </script>
 
 <style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
+.ec-form-tabs.ant-tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
 }
 
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
+.ec-form-tabs :deep(.ant-tabs-nav) {
+  flex-shrink: 0;
+  margin-bottom: 8px;
 }
 
-/* 设变明细表：min-height 由 JS 按窗体视口 × 5/4 绑定 */
+.ec-form-tabs :deep(.ant-tabs-content-holder) {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ec-form-tabs :deep(.ant-tabs-content),
+.ec-form-tabs :deep(.ant-tabs-tabpane) {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+
+.ec-form-tabs :deep(.ant-tabs-tabpane) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ec-form-tabs :deep(.takt-form-content-rows-10),
+.ec-form-tabs :deep(.takt-form-content-rows-5) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.ec-form-tabs :deep(.ant-tabs-tabpane-active) {
+  height: 100%;
+}
+
 .ec-form-detail-table-wrap {
   min-height: 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
 }
 </style>

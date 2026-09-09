@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderItemDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrderItem 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public string? SalesOrderName { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string SalesOrderCode { get; set; } = string.Empty;
 
@@ -80,6 +80,11 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -125,6 +130,36 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     /// 销售金额
     /// </summary>
     public decimal SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -181,7 +216,7 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     public long? SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
 
@@ -214,6 +249,11 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal? OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal? TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -259,6 +299,36 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     /// 销售金额
     /// </summary>
     public decimal? SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -327,7 +397,7 @@ public class TaktSalesOrderItemCreateDto
     public long SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string SalesOrderCode { get; set; } = string.Empty;
 
@@ -363,6 +433,11 @@ public class TaktSalesOrderItemCreateDto
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -408,6 +483,36 @@ public class TaktSalesOrderItemCreateDto
     /// 销售金额
     /// </summary>
     public decimal SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -534,7 +639,7 @@ public class TaktSalesOrderItemTemplateDto
     public long? SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
 
@@ -567,6 +672,11 @@ public class TaktSalesOrderItemTemplateDto
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal? OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal? TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -612,6 +722,36 @@ public class TaktSalesOrderItemTemplateDto
     /// 销售金额
     /// </summary>
     public decimal? SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -667,7 +807,7 @@ public class TaktSalesOrderItemImportDto
     public long? SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string? SalesOrderCode { get; set; } = string.Empty;
 
@@ -700,6 +840,11 @@ public class TaktSalesOrderItemImportDto
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal? OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal? TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -745,6 +890,36 @@ public class TaktSalesOrderItemImportDto
     /// 销售金额
     /// </summary>
     public decimal? SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -806,7 +981,7 @@ public class TaktSalesOrderItemExportDto
     public long SalesOrderId { get; set; }
 
     /// <summary>
-    /// 销售订单编码（冗余字段，便于查询）
+    /// 销售订单编码（冗余：按对应 Id 取主数据名称联动）
     /// </summary>
     public string SalesOrderCode { get; set; } = string.Empty;
 
@@ -839,6 +1014,11 @@ public class TaktSalesOrderItemExportDto
     /// 订购数量（基本单位数量）
     /// </summary>
     public decimal OrderQuantity { get; set; }
+
+    /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    public decimal TargetQuantity { get; set; }
 
     /// <summary>
     /// 已发货数量（基本单位数量）
@@ -884,6 +1064,36 @@ public class TaktSalesOrderItemExportDto
     /// 销售金额
     /// </summary>
     public decimal SalesAmount { get; set; }
+
+    /// <summary>
+    /// 毛重
+    /// </summary>
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    public string? WeightUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    public string? VolumeUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）

@@ -2,21 +2,20 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：source-ec-input.vue -->
-<!-- 功能描述：来源设变录入：查询尚未导入设变主的来源设变，加载草稿至 ec-form（不落库）；列表表高为当前窗体视口 × 5/4；defineExpose 提供 resetFields -->
+<!-- 功能描述：来源设变录入：查询尚未导入设变主的来源设变，加载草稿至 ec-form（不落库）；列表铺满弹窗剩余区，表高按弹出窗体 × 5/4 且不超过剩余区（分页在表内，仅表格滚动、弹出窗体无滚动条）；defineExpose 提供 resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div
-    ref="rootEl"
-    class="flex flex-col gap-3 min-h-0"
+    class="source-ec-input flex h-full min-h-0 min-w-0 flex-col overflow-hidden"
   >
     <!-- 工厂与查询 -->
     <a-form
       layout="inline"
       label-align="right"
-      class="flex flex-wrap gap-y-2"
+      class="source-ec-input-query flex flex-wrap gap-y-2"
     >
       <a-form-item
         :label="pi.label('plantCode')"
@@ -41,13 +40,13 @@
         />
       </a-form-item>
     </a-form>
-    <!-- 未导入来源设变列表 -->
+    <!-- 未导入来源设变列表（分页在表内，与来源设变导入明细 Tab 同一套铺满） -->
     <div
-      class="source-ec-input-table-wrap min-h-0"
-      :style="{ minHeight: `${sourceEcTableScrollYPx}px` }"
+      ref="tableWrapEl"
+      class="source-ec-input-table-wrap min-h-0 min-w-0 flex-1 overflow-hidden"
     >
       <TaktSingleTable
-        class="min-h-0"
+        class="h-full min-h-0"
         entity-scope="company"
         :columns="columns"
         :visible-column-keys="visibleColumnKeys"
@@ -61,17 +60,15 @@
         :include-audit-fields="false"
         scroll-layout="editable"
         :scroll="sourceEcTableScroll"
-        :show-pagination="false"
+        :show-pagination="true"
+        v-model:current="currentPage"
+        v-model:page-size="pageSize"
+        :total="total"
         @change="handleTableChange"
+        @pagination-change="handlePaginationChange"
       />
     </div>
-    <TaktPagination
-      v-model:current="currentPage"
-      v-model:page-size="pageSize"
-      :total="total"
-      @change="handlePaginationChange"
-    />
-    <div class="flex justify-end gap-2 pt-1">
+    <div class="source-ec-input-actions flex justify-end gap-2">
       <a-button @click="handleReset">
         {{ t('common.page.button.reset') }}
       </a-button>
@@ -97,6 +94,7 @@ import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import {
   computeFormHostRatioScrollYPx,
   TAKT_TABLE_SCROLL_Y_MIN,
@@ -125,6 +123,18 @@ const pi = useSourceEcInputI18n()
 const userStore = useUserStore()
 const tenantStore = useTenantStore()
 
+/**
+ * 本地当天日期（YYYY-MM-DD）；来源导入录入日期固定为此值
+ * @returns 当天日期字符串
+ */
+function formatLocalTodayYmd(): string {
+  const now = new Date()
+  const y = String(now.getFullYear())
+  const m = String(now.getMonth() + 1).padStart(2, '0')
+  const d = String(now.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
 /** 映射后的目标工厂代码（Database:CompanyCodes/PlantCodes 同序） */
 const mappedPlantCode = ref('')
 /** 映射来源公司代码 */
@@ -151,17 +161,27 @@ const visibleColumnKeys = ref<string[]>([
   ...SOURCE_EC_INPUT_EXTRA_FIELDS,
 ])
 
-/** 根节点（用于定位最近弹窗窗体） */
-const rootEl = ref<HTMLElement | null>(null)
-/** 窗体 ResizeObserver */
+/** 表格宿主（定位弹出窗体并实测剩余高度） */
+const tableWrapEl = ref<HTMLElement | null>(null)
+/** 弹出窗体 ResizeObserver */
 let formHostResizeObserver: ResizeObserver | null = null
 
-/** 来源设变列表 scroll.y = 当前窗体视口高度 × 5/4 */
+/**
+ * 列表 scroll.y：与来源设变导入明细表相同——目标为弹出窗体高度 × 5/4，且不得超过表格区剩余高度
+ * （超出则弹出窗体出现第二套滚动条；❌ 禁止用浏览器视口）
+ */
 function computeSourceEcTableScrollYPx(): number {
-  return Math.max(
-    TAKT_TABLE_SCROLL_Y_MIN,
-    computeFormHostRatioScrollYPx(rootEl.value, 5, 4),
-  )
+  const host = tableWrapEl.value
+  const ratioY = computeFormHostRatioScrollYPx(host, 5, 4)
+  if (host == null || host.clientHeight <= 0) {
+    return ratioY
+  }
+  const tableBody = host.querySelector('.takt-single-table__body') as HTMLElement | null
+  if (tableBody == null || tableBody.clientHeight <= 0) {
+    return ratioY
+  }
+  const fittedY = measureMasterDetailLrTableScrollY(host, { reserveSummaryRow: false })
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.min(ratioY, fittedY))
 }
 
 /** 来源设变列表纵向滚动高度（px） */
@@ -170,47 +190,47 @@ const sourceEcTableScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
 /** 来源设变列表 scroll 配置 */
 const sourceEcTableScroll = computed(() => ({ y: sourceEcTableScrollYPx.value }))
 
-/** 按当前窗体视口重算列表高度 */
+/** 按弹出窗体与表格剩余区重算列表高度 */
 function recalcSourceEcTableScrollY(): void {
   sourceEcTableScrollYPx.value = computeSourceEcTableScrollYPx()
 }
 
 /**
- * 绑定窗体 ResizeObserver（优先 .ant-modal-content）
+ * 绑定弹出窗体 ResizeObserver（全屏/拖拽改高时重算）
  */
 function bindFormHostResizeObserver(): void {
   formHostResizeObserver?.disconnect()
   formHostResizeObserver = null
-  const host = rootEl.value
+  const host = tableWrapEl.value
   if (host == null || typeof ResizeObserver === 'undefined') {
     return
   }
-  const target =
+  const modalTarget =
     (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal') as HTMLElement | null)
     ?? (host.closest('.ant-modal-body') as HTMLElement | null)
-    ?? host
   formHostResizeObserver = new ResizeObserver(() => {
     recalcSourceEcTableScrollY()
   })
-  formHostResizeObserver.observe(target)
+  if (modalTarget != null) {
+    formHostResizeObserver.observe(modalTarget)
+  }
+  formHostResizeObserver.observe(host)
 }
 
 onMounted(() => {
   void nextTick(() => {
     recalcSourceEcTableScrollY()
     bindFormHostResizeObserver()
+    void nextTick(() => {
+      recalcSourceEcTableScrollY()
+    })
   })
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', recalcSourceEcTableScrollY)
-  }
 })
 
 onBeforeUnmount(() => {
   formHostResizeObserver?.disconnect()
   formHostResizeObserver = null
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', recalcSourceEcTableScrollY)
-  }
 })
 
 /** 来源设变列表列宽 */
@@ -360,7 +380,7 @@ function handlePaginationChange(page: number, size: number): void {
   void loadData()
 }
 
-/** 表格 change（仅处理排序，分页由 TaktPagination 处理） */
+/** 表格 change（仅处理排序，分页由 TaktSingleTable 内置分页处理） */
 function handleTableChange(): void {}
 
 /** 重置表单与选择 */
@@ -401,10 +421,21 @@ async function handleLoadToForm(): Promise<void> {
       plantCode: draft.plantCode ?? mappedPlantCode.value,
       ecLeader: draft.ecLeader ?? '',
       ecDistinction: draft.ecDistinction === 0 ? undefined : draft.ecDistinction,
+      ecEntryDate: formatLocalTodayYmd(),
       ecDetails: draft.ecDetails ?? [],
       attachments: [],
+      sourceEcId: draft.sourceEcId ?? selectedSourceEcId.value,
+      detailsDeferred: draft.detailsDeferred,
+      deferredDetailCount: draft.deferredDetailCount,
     }
     delete (formDraft as Record<string, unknown>).notifications
+    if (draft.detailsDeferred) {
+      message.info(
+        t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.detailsDeferred', {
+          count: draft.deferredDetailCount ?? 0,
+        }),
+      )
+    }
     emit('draft-ready', formDraft)
   } catch (error: unknown) {
     const err = error as { message?: string }
@@ -437,8 +468,27 @@ defineExpose({
 </script>
 
 <style scoped lang="css">
-/* 来源设变录入列表：min-height 由 JS 按窗体视口 × 5/4 绑定 */
-.source-ec-input-table-wrap {
+.source-ec-input {
+  height: 100%;
   min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.source-ec-input-query {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.source-ec-input-actions {
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.source-ec-input-table-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 </style>

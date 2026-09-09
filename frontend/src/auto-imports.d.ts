@@ -101,6 +101,7 @@ declare global {
   const useEcChangeSignalRRefresh: typeof import('./composables/use-ec-change-signalr-refresh').useEcChangeSignalRRefresh
   const useEcExecSignalRGroup: typeof import('./composables/use-ec-dept-signalr-group').useEcExecSignalRGroup
   const useEntityFieldI18n: typeof import('./composables/use-entity-field-i18n').useEntityFieldI18n
+  const useGsap: typeof import('./composables/use-gsap').useGsap
   const useId: typeof import('vue').useId
   const useLink: typeof import('vue-router').useLink
   const useLoginFieldSync: typeof import('./composables/use-login-field-sync').useLoginFieldSync
@@ -114,6 +115,7 @@ declare global {
   const useTaktCaptchaBehavior: typeof import('./composables/use-takt-captcha-behavior').useTaktCaptchaBehavior
   const useTaktCaptchaSlider: typeof import('./composables/use-takt-captcha-slider').useTaktCaptchaSlider
   const useTaktComponentLocale: typeof import('./composables/use-takt-component-locale').useTaktComponentLocale
+  const useTaktContentModalWidth: typeof import('./composables/use-takt-content-modal-width').useTaktContentModalWidth
   const useTaktFillHeightScrollY: typeof import('./composables/use-takt-fill-height-scroll-y').useTaktFillHeightScrollY
   const useTaktFlowSubmit: typeof import('./composables/use-takt-flow-submit').useTaktFlowSubmit
   const useTaktFormNumbering: typeof import('./composables/use-takt-form-numbering').useTaktFormNumbering
@@ -137,6 +139,9 @@ declare global {
   // @ts-ignore
   export type { EntityFieldPlaceholderKind } from './composables/use-entity-field-i18n'
   import('./composables/use-entity-field-i18n')
+  // @ts-ignore
+  export type { UseGsapOptions, UseGsapReturn } from './composables/use-gsap'
+  import('./composables/use-gsap')
   // @ts-ignore
   export type { TaktLazyTreeNode, MapLazyTreeNodesOptions, MergeLazyTreeOptions } from './composables/use-lazy-tree'
   import('./composables/use-lazy-tree')
@@ -255,6 +260,7 @@ declare module 'vue' {
     readonly useEcChangeSignalRRefresh: UnwrapRef<typeof import('./composables/use-ec-change-signalr-refresh')['useEcChangeSignalRRefresh']>
     readonly useEcExecSignalRGroup: UnwrapRef<typeof import('./composables/use-ec-dept-signalr-group')['useEcExecSignalRGroup']>
     readonly useEntityFieldI18n: UnwrapRef<typeof import('./composables/use-entity-field-i18n')['useEntityFieldI18n']>
+    readonly useGsap: UnwrapRef<typeof import('./composables/use-gsap')['useGsap']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useLink: UnwrapRef<typeof import('vue-router')['useLink']>
     readonly useLoginFieldSync: UnwrapRef<typeof import('./composables/use-login-field-sync')['useLoginFieldSync']>
@@ -268,6 +274,7 @@ declare module 'vue' {
     readonly useTaktCaptchaBehavior: UnwrapRef<typeof import('./composables/use-takt-captcha-behavior')['useTaktCaptchaBehavior']>
     readonly useTaktCaptchaSlider: UnwrapRef<typeof import('./composables/use-takt-captcha-slider')['useTaktCaptchaSlider']>
     readonly useTaktComponentLocale: UnwrapRef<typeof import('./composables/use-takt-component-locale')['useTaktComponentLocale']>
+    readonly useTaktContentModalWidth: UnwrapRef<typeof import('./composables/use-takt-content-modal-width')['useTaktContentModalWidth']>
     readonly useTaktFillHeightScrollY: UnwrapRef<typeof import('./composables/use-takt-fill-height-scroll-y')['useTaktFillHeightScrollY']>
     readonly useTaktFlowSubmit: UnwrapRef<typeof import('./composables/use-takt-flow-submit')['useTaktFlowSubmit']>
     readonly useTaktFormNumbering: UnwrapRef<typeof import('./composables/use-takt-form-numbering')['useTaktFormNumbering']>

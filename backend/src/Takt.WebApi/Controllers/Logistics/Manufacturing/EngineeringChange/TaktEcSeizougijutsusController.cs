@@ -111,11 +111,11 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:query", "设变制技执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcSeizougijutsuOptionsAsync()
+    public async Task<IActionResult> GetEcSeizougijutsuOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecSeizougijutsuService.GetEcSeizougijutsuOptionsAsync();
+            var result = await _ecSeizougijutsuService.GetEcSeizougijutsuOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcSeizougijutsusController : TaktControllerBase
         {
             await _ecSeizougijutsuService.DeleteEcSeizougijutsuBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变制技执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变制技执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seizougijutsu:update", "更新设变制技执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcSeizougijutsuDiscontinuedStatusAsync([FromBody] TaktEcSeizougijutsuDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecSeizougijutsuService.UpdateEcSeizougijutsuDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

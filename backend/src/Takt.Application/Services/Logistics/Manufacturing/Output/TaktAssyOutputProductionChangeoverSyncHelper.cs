@@ -104,14 +104,11 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             var changeoverMaster = candidate.Master;
             var currentMaster = ResolveCurrentMaster(changeoverMaster, bucketLines, earlierProducer);
             var groupKey = BuildNaturalKey(
-                changeoverMaster.PlantCode,
                 changeoverMaster.ProdCategory,
                 prodDateOnly,
                 TeamCode,
                 currentMaster.ProdOrderCode,
-                currentMaster.ModelCode,
-                changeoverMaster.ProdOrderCode,
-                changeoverMaster.ModelCode);
+                changeoverMaster.ProdOrderCode);
             if (!groups.TryGetValue(groupKey, out var group))
             {
                 group = new ChangeoverAggregateGroup(
@@ -311,14 +308,12 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         var existing = await productionChangeoverRepository.FirstAsync(x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.PlantCode == group.PlantCode
             && x.ProdCategory == group.ProdCategory
+            && x.ChangeoverCategory == AssyChangeoverCategory
             && x.ProdDate == group.ProdDate
             && x.TeamCode == group.TeamCode
             && x.CurrentProdOrderCode == group.CurrentProdOrderCode
-            && x.CurrentModelCode == group.CurrentModelCode
-            && x.ChangeoverProdOrderCode == group.ChangeoverProdOrderCode
-            && x.ChangeoverModelCode == group.ChangeoverModelCode);
+            && x.ChangeoverProdOrderCode == group.ChangeoverProdOrderCode);
         if (existing != null && !IsAutoSyncRecord(existing))
         {
             return;
@@ -397,27 +392,22 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
     }
 
     /// <summary>
-    /// 构建切换记录自然键（用于桶内聚合）
+    /// 构建切换记录自然键（与库唯一键对齐：ProdCategory+ChangeoverCategory+ProdDate+TeamCode+CurrentProdOrderCode+ChangeoverProdOrderCode）
     /// </summary>
     private static string BuildNaturalKey(
-        string plantCode,
         string prodCategory,
         DateTime prodDate,
-        string TeamCode,
+        string teamCode,
         string currentProdOrderCode,
-        string currentModelCode,
-        string changeoverProdOrderCode,
-        string changeoverModelCode)
+        string changeoverProdOrderCode)
     {
         return string.Join('|',
-            plantCode,
             prodCategory,
+            AssyChangeoverCategory,
             prodDate.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
-            TeamCode,
+            teamCode,
             currentProdOrderCode,
-            currentModelCode,
-            changeoverProdOrderCode,
-            changeoverModelCode);
+            changeoverProdOrderCode);
     }
 
     private sealed class AssyDayContext

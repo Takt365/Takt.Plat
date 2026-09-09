@@ -61,11 +61,11 @@ public class TaktBomCalculatesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:bom:material:zeroprice:query", "查询BOM零价格工厂")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetBomCalculatePlantOptionsAsync()
+    public async Task<IActionResult> GetBomCalculatePlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _bomCalculateService.GetBomCalculatePlantOptionsAsync();
+            var result = await _bomCalculateService.GetBomCalculatePlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

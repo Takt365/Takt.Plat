@@ -20,22 +20,23 @@
       <a-col :span="12"><a-form-item :label="pi.label('companyCode')"><a-input v-model:value="formState.companyCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('cultureCode')"><a-input v-model:value="formState.cultureCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('plantCode')"><a-input v-model:value="formState.plantCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('lineNumber')"><a-input-number v-model:value="formState.lineNumber" class="w-full" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
       <a-col :span="12">
         <a-form-item :label="pi.label('discontinuedStatus')">
           <TaktSelect v-model:value="formState.discontinuedStatus" dict-type="logistics_materials_material_discontinued_status" disabled />
         </a-form-item>
       </a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('productionTeam')"><a-input v-model:value="formState.productionTeam" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('productionDate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('implementationBatch')"><a-input v-model:value="formState.implementationBatch" /></a-form-item></a-col>
       <a-col :span="24">
         <a-form-item :label="pi.label('execContent')">
           <a-textarea v-model:value="formState.execContent" :rows="3" />
         </a-form-item>
       </a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('productionTeam')"><a-input v-model:value="formState.productionTeam" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('productionDate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('implementationBatch')"><a-input v-model:value="formState.implementationBatch" /></a-form-item></a-col>
     </a-row>
   </a-form>
 </template>
@@ -53,6 +54,7 @@ const formState = reactive<{
   cultureCode?: string;
   plantCode?: string;
   ecCode?: string;
+  lineNumber?: number;
   ecModelCode?: string;
   discontinuedStatus?: string;
   isImplemented: number;
@@ -70,6 +72,7 @@ watch(() => props.formData, (val) => {
     cultureCode: val.cultureCode,
     plantCode: val.plantCode,
     ecCode: val.ecCode,
+    lineNumber: val.lineNumber,
     ecModelCode: val.ecModelCode,
     discontinuedStatus: val.discontinuedStatus ?? 'Z0',
     isImplemented: val.isImplemented ?? 0,
@@ -93,7 +96,7 @@ function getValues(): EcSeizouikkaUpdate {
 function resetFields() {
   Object.assign(formState, {
     tenantCode: '', companyCode: '', cultureCode: '', plantCode: '',
-    ecCode: '', ecModelCode: '', discontinuedStatus: 'Z0', isImplemented: 0, execContent: '',
+    ecCode: '', lineNumber: undefined, ecModelCode: '', discontinuedStatus: 'Z0', isImplemented: 0, execContent: '',
     productionTeam: undefined, productionDate: undefined, implementationBatch: undefined,
   });
 }

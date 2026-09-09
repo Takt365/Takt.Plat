@@ -1,0 +1,405 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：dashboard-base.css
+ * 功能描述：工作台 / 数据看板模块卡片与 KPI 指标卡统一样式
+ *
+ * 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/** 工作台 / 数据看板 draggable 模块卡片 */
+.takt-dashboard-module-card.ant-card {
+  --takt-card-head-height: 16px;
+  --takt-card-head-icon-size: 12px;
+  --takt-card-head-control-size: 12px;
+  --takt-card-head-control-gap: 4px;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  min-height: 160px;
+  overflow: hidden;
+  border: 1px solid var(--ant-color-border-secondary);
+  border-radius: 8px;
+  background: var(--ant-color-bg-container);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ant-color-text) 4%, transparent);
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.takt-dashboard-module-card.ant-card:hover {
+  border-color: color-mix(in srgb, var(--ant-color-primary) 32%, var(--ant-color-border-secondary));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--ant-color-text) 8%, transparent);
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-head {
+  flex: 0 0 var(--takt-card-head-height);
+  height: var(--takt-card-head-height) !important;
+  min-height: var(--takt-card-head-height) !important;
+  max-height: var(--takt-card-head-height) !important;
+  padding: 0 12px !important;
+  border-bottom: 1px solid var(--ant-color-border-secondary);
+  background: color-mix(in srgb, var(--ant-color-fill-quaternary) 55%, var(--ant-color-bg-container));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-head .ant-card-head-wrapper {
+  height: var(--takt-card-head-height) !important;
+  min-height: 0 !important;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-head-title,
+.takt-dashboard-module-card.ant-card .ant-card-extra {
+  padding: 0;
+  height: var(--takt-card-head-height);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-head-title {
+  justify-content: flex-start;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-extra {
+  justify-content: flex-end;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-extra .ant-space {
+  height: var(--takt-card-head-height);
+  align-items: center;
+  gap: var(--takt-card-head-control-gap) !important;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-extra .ant-space-item {
+  display: flex;
+  align-items: center;
+  height: var(--takt-card-head-height);
+}
+
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card-head-btn.ant-btn {
+  width: var(--takt-card-head-control-size);
+  height: var(--takt-card-head-control-size);
+  min-width: var(--takt-card-head-control-size);
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card-head-btn .ant-btn-icon {
+  margin: 0;
+  width: var(--takt-card-head-icon-size);
+  height: var(--takt-card-head-icon-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card-head-btn .ant-btn-icon > span,
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card-head-btn .ant-btn-icon svg {
+  display: block;
+  width: var(--takt-card-head-icon-size);
+  height: var(--takt-card-head-icon-size);
+}
+
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card__head-icon,
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card__head-icon > svg,
+.takt-dashboard-module-card.ant-card .takt-dashboard-module-card__head-icon svg {
+  display: block;
+  width: var(--takt-card-head-icon-size);
+  height: var(--takt-card-head-icon-size);
+  font-size: var(--takt-card-head-icon-size);
+  flex-shrink: 0;
+}
+
+.takt-dashboard-module-card.ant-card .ant-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.takt-dashboard-module-card.ant-card .ant-statistic-title {
+  margin-bottom: 2px;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--ant-color-text-secondary);
+}
+
+.takt-dashboard-module-card.ant-card .ant-statistic-content {
+  line-height: 1.2;
+}
+
+.takt-dashboard-module-card.ant-card .ant-statistic-content-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.takt-dashboard-module-card-head-actions {
+  display: flex;
+  align-items: center;
+  height: var(--takt-card-head-height);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.takt-dashboard-module-card-head-actions--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.takt-dashboard-module-card-drag-handle {
+  cursor: move;
+  color: var(--ant-color-text-tertiary);
+  width: var(--takt-card-head-control-size);
+  height: var(--takt-card-head-control-size);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.takt-dashboard-module-card-drag-handle:hover {
+  color: var(--ant-color-text-secondary);
+}
+
+.takt-dashboard-module-card-title-trigger {
+  color: var(--ant-color-text-tertiary);
+}
+
+/** 数据看板 KPI 指标卡 */
+.takt-stats-metric-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 76px;
+  padding: 12px 14px 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--ant-color-border-secondary);
+  background: var(--ant-color-bg-container);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ant-color-text) 3%, transparent);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/** 概览六项：顶色条 + 左图标 + 右文案（截图风格） */
+.takt-stats-metric-card--dashboard {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  min-height: 88px;
+  padding: 18px 16px 16px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.takt-stats-metric-card--dashboard .takt-stats-metric-card__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.takt-stats-metric-card__top-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--stats-metric-accent, var(--ant-color-primary));
+}
+
+.takt-stats-metric-card__icon-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--stats-metric-accent, var(--ant-color-primary)) 16%, var(--ant-color-bg-container));
+  color: var(--stats-metric-accent, var(--ant-color-primary));
+}
+
+.takt-stats-metric-card__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.takt-stats-metric-card--dashboard .ant-statistic-title {
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.25;
+  color: var(--ant-color-text-secondary);
+}
+
+.takt-stats-metric-card--dashboard .ant-statistic-content-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ant-color-text);
+  letter-spacing: -0.02em;
+}
+
+/** 业务模块紧凑卡：左图标 + 右侧标题/数值左对齐 */
+.takt-stats-metric-card--dashboard-compact {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 68px;
+  padding: 10px 10px 9px;
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: takt-stats-metric-card;
+}
+
+.takt-stats-metric-card--dashboard-compact .takt-stats-metric-card__icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.takt-stats-metric-card--dashboard-compact .takt-stats-metric-card__icon {
+  width: 14px;
+  height: 14px;
+}
+
+.takt-stats-metric-card--dashboard-compact .takt-stats-metric-card__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.takt-stats-metric-card--dashboard-compact .ant-statistic {
+  min-width: 0;
+  width: 100%;
+}
+
+.takt-stats-metric-card--dashboard-compact .ant-statistic-title {
+  display: block;
+  margin-bottom: 2px;
+  font-size: clamp(10px, 3.6cqi, 12px);
+  line-height: 1.2;
+  color: var(--ant-color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.takt-stats-metric-card--dashboard-compact .ant-statistic-content {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.takt-stats-metric-card--dashboard-compact .ant-statistic-content-value {
+  font-size: clamp(13px, 5cqi, 17px);
+  font-weight: 700;
+  color: var(--ant-color-text);
+  letter-spacing: -0.02em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.takt-stats-metric-card--dashboard-compact .ant-statistic-content-prefix,
+.takt-stats-metric-card--dashboard-compact .ant-statistic-content-suffix {
+  font-size: clamp(10px, 3.6cqi, 13px);
+  line-height: 1.15;
+  flex-shrink: 0;
+}
+
+/** 紧凑卡优先于概览 dashboard 字号 */
+.takt-stats-metric-card--dashboard.takt-stats-metric-card--dashboard-compact .ant-statistic-content-value {
+  font-size: clamp(13px, 5cqi, 17px);
+}
+
+.takt-stats-metric-card--dashboard.takt-stats-metric-card--dashboard-compact .ant-statistic-title {
+  font-size: clamp(10px, 3.6cqi, 12px);
+  margin-bottom: 2px;
+}
+
+.takt-stats-metric-card--accent {
+  padding-left: 18px;
+}
+
+.takt-stats-metric-card--accent:not(.takt-stats-metric-card--dashboard)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--stats-metric-accent, var(--ant-color-primary));
+}
+
+.takt-stats-metric-card__accent-bar {
+  display: none;
+}
+
+.takt-stats-metric-card--clickable {
+  cursor: pointer;
+}
+
+.takt-stats-metric-card--clickable:hover,
+.takt-stats-metric-card--clickable:focus-visible {
+  outline: none;
+  border-color: color-mix(
+    in srgb,
+    var(--stats-metric-accent, var(--ant-color-primary)) 42%,
+    var(--ant-color-border-secondary)
+  );
+  box-shadow: 0 6px 16px color-mix(
+    in srgb,
+    var(--stats-metric-accent, var(--ant-color-primary)) 14%,
+    transparent
+  );
+  transform: translateY(-1px);
+}
+
+.takt-stats-metric-card .ant-statistic-title {
+  margin-bottom: 4px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ant-color-text-secondary);
+}
+
+.takt-stats-metric-card .ant-statistic-content-value {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/** 概览 Popover 面板 */
+.stats-metric-grid-popover .ant-popover-inner {
+  border-radius: 8px;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ant-color-text) 12%, transparent);
+  padding: 0;
+  overflow: hidden;
+}
+
+.stats-metric-grid-popover .ant-popover-inner-content {
+  padding: 8px 12px 10px;
+}

@@ -38,8 +38,10 @@ public interface ITaktPackagingMaterialService
     /// <summary>
     /// 获取包装物料选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetPackagingMaterialOptionsAsync();
+    Task<List<TaktSelectOption>> GetPackagingMaterialOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建包装物料

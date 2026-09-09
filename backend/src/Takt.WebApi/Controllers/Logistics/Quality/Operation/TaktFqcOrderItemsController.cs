@@ -86,11 +86,11 @@ public class TaktFqcOrderItemsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:operation:fqc:order:query", "出货检验单明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFqcOrderItemOptionsAsync()
+    public async Task<IActionResult> GetFqcOrderItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _fqcOrderItemService.GetFqcOrderItemOptionsAsync();
+            var result = await _fqcOrderItemService.GetFqcOrderItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

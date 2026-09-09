@@ -86,11 +86,11 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:model:destination:query", "型号目的地选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetModelDestinationOptionsAsync()
+    public async Task<IActionResult> GetModelDestinationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _modelDestinationService.GetModelDestinationOptionsAsync();
+            var result = await _modelDestinationService.GetModelDestinationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -105,11 +105,11 @@ public class TaktModelDestinationsController : TaktControllerBase
     /// <returns>机种下拉选项</returns>
     [TaktPermission("logistics:materials:model:destination:query", "机种选项")]
     [HttpGet("model-options")]
-    public async Task<IActionResult> GetModelOptionsAsync()
+    public async Task<IActionResult> GetModelOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _modelDestinationService.GetModelOptionsAsync();
+            var result = await _modelDestinationService.GetModelOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

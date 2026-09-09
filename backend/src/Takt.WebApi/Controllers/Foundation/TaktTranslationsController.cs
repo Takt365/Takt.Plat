@@ -107,11 +107,11 @@ public class TaktTranslationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:i18n:query", "翻译选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTranslationOptionsAsync()
+    public async Task<IActionResult> GetTranslationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _translationService.GetTranslationOptionsAsync();
+            var result = await _translationService.GetTranslationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

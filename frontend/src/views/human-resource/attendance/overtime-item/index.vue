@@ -85,7 +85,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -297,6 +297,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import OvertimeItemForm from './components/overtime-item-form.vue'
 import { getOvertimeItemList, getOvertimeItemById, createOvertimeItem, updateOvertimeItem, deleteOvertimeItemById, deleteOvertimeItemBatch, getOvertimeItemTemplate, importOvertimeItem, exportOvertimeItem } from '@/api/human-resource/attendance/overtime-item'
 import type { OvertimeItem, OvertimeItemQuery, OvertimeItemCreate, OvertimeItemUpdate } from '@/types/human-resource/attendance/overtime-item'
@@ -325,6 +326,8 @@ const formTitle = ref('')
 const formData = ref<Partial<OvertimeItem>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   overtimeId: '',

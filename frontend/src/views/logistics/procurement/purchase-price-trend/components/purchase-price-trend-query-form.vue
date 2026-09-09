@@ -9,69 +9,87 @@
 
 <template>
   <div class="takt-query-bar purchase-price-trend-query-bar">
-    <div class="purchase-price-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        :api-url="plantOptionsUrl"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--plant"
-        allow-clear
-        show-search
-        :placeholder="t('common.page.entity.plantcode')"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        :disabled-date="isCostingPeriodMonthDisabled"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-      />
-      <TaktSelect
-        v-model:value="materialType"
-        :options="materialTypeOptions"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--type"
-        :allow-clear="false"
-        show-search
-        :disabled="!plantCode?.trim() || materialTypeOptionsLoading"
-        :placeholder="t('entity.bommaterialcost.materialtype')"
-        @change="handleMaterialTypeChange"
-      />
-      <TaktSelect
-        :key="priceTypeSelectKey"
-        v-model:value="priceType"
-        :api-url="priceTypeOptionsUrl"
-        :api-params="priceTypeApiParams"
-        :disabled="!plantCode?.trim()"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--price-type"
-        allow-clear
-        show-search
-        :placeholder="t('entity.purchaseprice.pricetype')"
-      />
-      <TaktSelect
-        :key="supplierSelectKey"
-        v-model:value="supplierCode"
-        :api-url="supplierOptionsUrl"
-        :api-params="supplierApiParams"
-        :disabled="!plantCode?.trim() || !priceType?.trim()"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--supplier"
-        allow-clear
-        show-search
-        :placeholder="t('entity.purchaseprice.suppliercode')"
-      />
-      <TaktSelect
-        :key="materialSelectKey"
-        v-model:value="materialCode"
-        :api-url="materialOptionsUrl"
-        :api-params="materialApiParams"
-        :disabled="!plantCode?.trim() || !priceType?.trim() || !supplierCode?.trim()"
-        class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--material"
-        allow-clear
-        show-search
-        :placeholder="t('entity.purchaseprice.materialcode')"
-      />
+    <div class="purchase-price-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          :api-url="plantOptionsUrl"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--plant"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          :disabled-date="isCostingPeriodMonthDisabled"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.materialtype') }}</span>
+        <TaktSelect
+          v-model:value="materialType"
+          :options="materialTypeOptions"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--type"
+          :allow-clear="false"
+          show-search
+          :disabled="!plantCode?.trim() || materialTypeOptionsLoading"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handleMaterialTypeChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.purchaseprice.pricetype') }}</span>
+        <TaktSelect
+          :key="priceTypeSelectKey"
+          v-model:value="priceType"
+          :api-url="priceTypeOptionsUrl"
+          :api-params="priceTypeApiParams"
+          :disabled="!plantCode?.trim()"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--price-type"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.purchaseprice.suppliercode') }}</span>
+        <TaktSelect
+          :key="supplierSelectKey"
+          v-model:value="supplierCode"
+          :api-url="supplierOptionsUrl"
+          :api-params="supplierApiParams"
+          :disabled="!plantCode?.trim() || !priceType?.trim()"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--supplier"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.purchaseprice.materialcode') }}</span>
+        <TaktSelect
+          :key="materialSelectKey"
+          v-model:value="materialCode"
+          :api-url="materialOptionsUrl"
+          :api-params="materialApiParams"
+          :disabled="!plantCode?.trim() || !priceType?.trim() || !supplierCode?.trim()"
+          class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--material"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

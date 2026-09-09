@@ -86,11 +86,11 @@ public class TaktEmpBenefitPlansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:benefits:emp:benefit:plan:query", "员工福利方案选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmpBenefitPlanOptionsAsync()
+    public async Task<IActionResult> GetEmpBenefitPlanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _empBenefitPlanService.GetEmpBenefitPlanOptionsAsync();
+            var result = await _empBenefitPlanService.GetEmpBenefitPlanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

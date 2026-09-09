@@ -25,13 +25,15 @@ const DETAIL_OR_COMMON_FIELDS = new Set([
   'ecNewMaterialCode',
   'ecOldPurchaseType',
   'ecOldRequiresInspection',
+  'ecNewMaterialDescription',
+  'ecNewWarehouse',
   'ecNewPurchaseType',
   'ecNewRequiresInspection',
   ...Object.keys(COMMON_ENTITY_FIELD_I18N_KEYS),
 ])
 
 /** 与 TaktEcExecI18nSeedData 对齐的各部门公共执行字段 */
-const EXEC_SHARED_FIELDS = new Set(['isImplemented', 'execContent', 'ecnDetailId'])
+const EXEC_SHARED_FIELDS = new Set(['isImplemented', 'execContent', 'ecDetailId'])
 
 /**
  * 执行部门表单字段 i18n

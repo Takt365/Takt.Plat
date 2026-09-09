@@ -85,7 +85,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="900px"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -165,6 +165,7 @@ import { ref, reactive, onMounted, computed } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { validateProcessContentForSave } from '@/utils/workflow/validate-process-content'
 import { DEFAULT_PROCESS_CONTENT } from '@/utils/workflow/default-process-content'
@@ -205,6 +206,8 @@ const selectedRow = ref<FlowScheme | null>(null)
 const selectedRows = ref<FlowScheme[]>([])
 const selectedRowKeys = ref<(string | number)[]>([])
 const formVisible = ref(false)
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const formTitle = ref('')
 const formLoading = ref(false)
 const schemeFormRef = ref<InstanceType<typeof SchemeForm> | null>(null)

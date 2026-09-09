@@ -86,11 +86,11 @@ public class TaktDurationLogsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:logging:duration:log:query", "在线时长日志选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDurationLogOptionsAsync()
+    public async Task<IActionResult> GetDurationLogOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _durationLogService.GetDurationLogOptionsAsync();
+            var result = await _durationLogService.GetDurationLogOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

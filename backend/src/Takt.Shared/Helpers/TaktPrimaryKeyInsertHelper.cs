@@ -191,11 +191,21 @@ public static class TaktPrimaryKeyInsertHelper
     }
 
     /// <summary>
-    /// 批量插入实体；Guid 实体逐条 AssignGuidIfEmpty；雪花返回生成 Id 数量；自增不逐条回填 Id
+    /// BulkCopy 单页上限（SqlSugar 推荐十万级 PageSize）
+    /// </summary>
+    public const int DefaultInsertBatchSize = 100_000;
+
+    /// <summary>
+    /// 达到该行数起优先 SqlBulkCopy（预分配雪花 Id）
+    /// </summary>
+    public const int BulkCopyThreshold = 100;
+
+    /// <summary>
+    /// 批量插入实体并按主键策略回填（≥BulkCopyThreshold 的雪花实体走 SqlBulkCopy）
     /// </summary>
     /// <typeparam name="T">实体类型</typeparam>
     /// <param name="db">SqlSugar 客户端</param>
-    /// <param name="entities">实体列表；Guid 主键项在插入前可能被赋 Id</param>
+    /// <param name="entities">待插入列表</param>
     /// <param name="options">主键类型配置</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>插入行数；空列表返回 0</returns>
@@ -214,6 +224,88 @@ public static class TaktPrimaryKeyInsertHelper
             return 0;
         }
 
+        var entityType = typeof(T);
+        var idProperty = ResolveIdProperty(entityType);
+        var idType = idProperty?.PropertyType;
+        if (idType == typeof(long)
+            && options.Snowflake.Enabled
+            && IsSnowflakeEntity(typeof(T))
+            && entities.Count >= BulkCopyThreshold
+            && idProperty != null)
+        {
+            return await BulkCopySnowflakeEntitiesAsync(db, entities, idProperty, cancellationToken);
+        }
+
+        if (entities.Count <= 1000)
+        {
+            return await InsertEntitiesCoreAsync(db, entities, options, cancellationToken);
+        }
+
+        var total = 0;
+        const int insertablePage = 1000;
+        for (var offset = 0; offset < entities.Count; offset = checked(offset + insertablePage))
+        {
+            var take = Math.Min(insertablePage, entities.Count - offset);
+            var batch = entities.GetRange(offset, take);
+            total = checked(total + await InsertEntitiesCoreAsync(db, batch, options, cancellationToken));
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    /// 预分配雪花 Id 后 SqlBulkCopy（PageSize=10万；18 万行应秒～数十秒级，禁止再用 Insertable）
+    /// </summary>
+    private static async Task<int> BulkCopySnowflakeEntitiesAsync<T>(
+        ISqlSugarClient db,
+        List<T> entities,
+        PropertyInfo idProperty,
+        CancellationToken cancellationToken) where T : class, new()
+    {
+        AssignSnowflakeIdsIfEmpty(entities, idProperty);
+        cancellationToken.ThrowIfCancellationRequested();
+        // SqlSugar 文档：PageSize(100000).BulkCopy — 大数据比 Insertable 快一个数量级以上
+        TaktLogger.Information(
+            "[BulkCopy] 开始 Type={Type} Count={Count} PageSize={PageSize}",
+            typeof(T).Name,
+            entities.Count,
+            DefaultInsertBatchSize);
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var copied = await db.Fastest<T>().PageSize(DefaultInsertBatchSize).BulkCopyAsync(entities);
+        sw.Stop();
+        var result = copied > 0 ? copied : entities.Count;
+        TaktLogger.Information(
+            "[BulkCopy] 完成 Type={Type} Copied={Copied} ElapsedMs={ElapsedMs}",
+            typeof(T).Name,
+            result,
+            sw.ElapsedMilliseconds);
+        return result;
+    }
+
+    /// <summary>
+    /// Id 为 0 时写入 SnowFlakeSingle.NextId（供 BulkCopy）
+    /// </summary>
+    private static void AssignSnowflakeIdsIfEmpty<T>(List<T> entities, PropertyInfo idProperty)
+    {
+        foreach (var entity in entities)
+        {
+            var current = (long)(idProperty.GetValue(entity) ?? 0L);
+            if (current == 0L)
+            {
+                idProperty.SetValue(entity, SnowFlakeSingle.Instance.NextId());
+            }
+        }
+    }
+
+    /// <summary>
+    /// 单批插入（不超过 DefaultInsertBatchSize 时由 InsertEntitiesAsync 直接调用）
+    /// </summary>
+    private static async Task<int> InsertEntitiesCoreAsync<T>(
+        ISqlSugarClient db,
+        List<T> entities,
+        PrimaryKeyTypeOptions options,
+        CancellationToken cancellationToken) where T : class, new()
+    {
         var entityType = typeof(T);
         var idProperty = ResolveIdProperty(entityType);
         var idType = idProperty?.PropertyType;

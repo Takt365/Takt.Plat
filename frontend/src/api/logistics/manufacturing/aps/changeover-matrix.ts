@@ -130,10 +130,20 @@ export function updateChangeoverMatrixStatus(dto: ChangeoverMatrixStatus): Promi
  * 获取换型矩阵选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getChangeoverMatrixOptions(): Promise<TaktSelectOption[]> {
+export function getChangeoverMatrixOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CHANGEOVER_MATRIX_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -92,11 +92,11 @@ public class TaktConfigurablesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:quickquery:configurable:query", "定制报表主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetConfigurableOptionsAsync()
+    public async Task<IActionResult> GetConfigurableOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _configurableService.GetConfigurableOptionsAsync();
+            var result = await _configurableService.GetConfigurableOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemsController.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请明细控制器
 // 
@@ -62,7 +62,7 @@ public class TaktPurchaseRequestItemsController : TaktControllerBase
     /// <param name="id">采购申请明细ID</param>
     /// <returns>采购申请明细DTO</returns>
     [TaktPermission("logistics:procurement:purchase:request:query", "采购申请明细详情")]
-    [HttpGet("{id}")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetPurchaseRequestItemByIdAsync(long id)
     {
         try
@@ -83,14 +83,16 @@ public class TaktPurchaseRequestItemsController : TaktControllerBase
     /// <summary>
     /// 获取采购申请明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:procurement:purchase:request:query", "采购申请明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPurchaseRequestItemOptionsAsync()
+    public async Task<IActionResult> GetPurchaseRequestItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _purchaseRequestItemService.GetPurchaseRequestItemOptionsAsync();
+            var result = await _purchaseRequestItemService.GetPurchaseRequestItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

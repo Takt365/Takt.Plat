@@ -130,10 +130,20 @@ export function updatePerfAnalysisStatus(dto: PerfAnalysisStatus): Promise<PerfA
  * 获取分析改进选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPerfAnalysisOptions(): Promise<TaktSelectOption[]> {
+export function getPerfAnalysisOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PERF_ANALYSIS_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

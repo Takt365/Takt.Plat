@@ -261,11 +261,6 @@ public class TaktCustomerDto : TaktCompanyDtoBase
     public decimal DiscountRate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int CustomerLevel { get; set; } = 0;
@@ -541,11 +536,6 @@ public class TaktCustomerQueryDto : TaktPagedQuery
     /// 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
     /// </summary>
     public decimal? DiscountRate { get; set; }
-
-    /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
@@ -862,11 +852,6 @@ public class TaktCustomerCreateDto
     /// 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
     /// </summary>
     public decimal DiscountRate { get; set; }
-
-    /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
@@ -1218,11 +1203,6 @@ public class TaktCustomerTemplateDto
     public decimal? DiscountRate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
     /// </summary>
     public int? CustomerLevel { get; set; }
@@ -1498,11 +1478,6 @@ public class TaktCustomerImportDto
     /// 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
     /// </summary>
     public decimal? DiscountRate { get; set; }
-
-    /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）
@@ -1786,11 +1761,6 @@ public class TaktCustomerExportDto
     /// 折扣率（百分比；可选字典 logistics_sales_discount_rate_param 预设）
     /// </summary>
     public decimal DiscountRate { get; set; }
-
-    /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-    /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户等级（字典 logistics_sales_customer_level；0=普通 1=重要 2=VIP 3=战略）

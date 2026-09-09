@@ -130,10 +130,20 @@ export function updateQualityIssuePcbaReworkObsolete(dto: QualityIssuePcbaRework
  * 获取质量问题PCBA不良改修费用明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getQualityIssuePcbaReworkOptions(): Promise<TaktSelectOption[]> {
+export function getQualityIssuePcbaReworkOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${QUALITY_ISSUE_PCBA_REWORK_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

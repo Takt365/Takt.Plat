@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-attachment-panel.vue -->
-<!-- 功能描述：设变主表实体右侧明细 ecAttachment 独立 CRUD（按主表选中 ecId 分页） -->
+<!-- 功能描述：设变主表实体右侧明细 ecAttachment 独立 CRUD（按主表选中 ecGijutsuId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -76,7 +76,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="ecGijutsuModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -280,9 +280,12 @@ import {
 } from '@/api/logistics/manufacturing/engineering-change/ec-attachment'
 import type { EcAttachment, EcAttachmentQuery } from '@/types/logistics/manufacturing/engineering-change/ec-attachment'
 import { useEcAttachmentI18n } from '@/views/logistics/manufacturing/engineering-change/ec-gijutsu/composables/use-ec-attachment-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 
 const { t } = useI18n()
 const ai = useEcAttachmentI18n()
+/** 附件弹窗宽度：与来源设变导入弹窗相同，（视口 − 左侧菜单）× 80% */
+const ecGijutsuModalWidthPx = useTaktContentModalWidth()
 const { selectedMasterRow } = useEcMasterContext()
 const {
   canPreviewAttachment,
@@ -637,7 +640,7 @@ function buildListQuery(overrides?: Partial<EcAttachmentQuery>): EcAttachmentQue
   const query: EcAttachmentQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    ecId: masterEcId.value,
+    ecGijutsuId: masterEcId.value,
     ...overrides,
   }
   if (kw.length > 0) {

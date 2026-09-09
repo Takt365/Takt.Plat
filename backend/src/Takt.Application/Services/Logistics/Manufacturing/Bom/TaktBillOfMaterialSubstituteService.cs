@@ -108,8 +108,10 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     /// <summary>
     /// 获取BOM替代料选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBillOfMaterialSubstituteOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetBillOfMaterialSubstituteOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _billOfMaterialSubstituteRepository.GetListAsync(

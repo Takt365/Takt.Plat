@@ -1,4 +1,4 @@
-﻿<!-- ========================================
+<!-- ========================================
 项目名称：节拍工厂·Takt Plat
 命名空间：@/layouts/mix
 文件名称：index.vue
@@ -31,10 +31,12 @@
           >
           <span class="title-text">{{ settingSafe.logoText }}</span>
         </div>
+        <TaktBreadcrumb />
       </template>
     </TaktHeader>
     
     <div 
+      v-if="settingSafe.showTabs"
       :style="settingSafe.fixedHeader ? {
         position: 'fixed',
         top: `${headerHeight}px`,
@@ -48,7 +50,7 @@
       <TaktTabs />
     </div>
     
-    <a-layout :style="{ marginTop: settingSafe.fixedHeader ? `${headerHeight + 40}px` : '40px' }">
+    <a-layout :style="{ marginTop: settingSafe.fixedHeader ? `${headerHeight + tabsBarHeight}px` : `${tabsBarHeight}px` }">
       <a-layout-sider
         v-model:collapsed="collapsed"
         :width="settingSafe.siderWidth"
@@ -101,6 +103,8 @@ onMounted(async () => {
   }
 })
 const settingSafe = computed(() => setting.value ?? defaultSetting)
+/** 标签栏占位高度（关闭「显示标签页」时为 0） */
+const tabsBarHeight = computed(() => (settingSafe.value.showTabs ? 40 : 0))
 const logoError = ref(false)
 const collapsed = ref(false)
 
@@ -131,7 +135,10 @@ const headerHeight = computed(() => {
   return 40 as HeaderHeight
 })
 
-const contentMaxHeight = computed(() => 'calc(100vh - 44px)')
+const contentMaxHeight = computed(() => {
+  const footerAndGap = 44
+  return `calc(100vh - ${tabsBarHeight.value}px - ${footerAndGap}px)`
+})
 </script>
 
 <style scoped lang="css">

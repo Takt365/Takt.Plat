@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -170,6 +170,42 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-CN", "采购组代码", "采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
             // entity.purchaseorder.purchasegroup
             new TranslationSeedItem("entity.purchaseorder.purchasegroup", "zh-HK", "采购组代码_hk", "采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
+
+            // entity.purchaseorder.type
+            new TranslationSeedItem("entity.purchaseorder.type", "en-US", "采购订单类型_us", "采购订单类型（字典 logistics_procurement_purchase_order_type；与采购申请/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议）"),
+            // entity.purchaseorder.type
+            new TranslationSeedItem("entity.purchaseorder.type", "ja-JP", "采购订单类型_jp", "采购订单类型（字典 logistics_procurement_purchase_order_type；与采购申请/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议）"),
+            // entity.purchaseorder.type
+            new TranslationSeedItem("entity.purchaseorder.type", "zh-CN", "采购订单类型", "采购订单类型（字典 logistics_procurement_purchase_order_type；与采购申请/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议）"),
+            // entity.purchaseorder.type
+            new TranslationSeedItem("entity.purchaseorder.type", "zh-HK", "采购订单类型_hk", "采购订单类型（字典 logistics_procurement_purchase_order_type；与采购申请/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议）"),
+
+            // entity.purchaseorder.paymentterms
+            new TranslationSeedItem("entity.purchaseorder.paymentterms", "en-US", "付款条件_us", "付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
+            // entity.purchaseorder.paymentterms
+            new TranslationSeedItem("entity.purchaseorder.paymentterms", "ja-JP", "付款条件_jp", "付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
+            // entity.purchaseorder.paymentterms
+            new TranslationSeedItem("entity.purchaseorder.paymentterms", "zh-CN", "付款条件", "付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
+            // entity.purchaseorder.paymentterms
+            new TranslationSeedItem("entity.purchaseorder.paymentterms", "zh-HK", "付款条件_hk", "付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）"),
+
+            // entity.purchaseorder.pricingprocedure
+            new TranslationSeedItem("entity.purchaseorder.pricingprocedure", "en-US", "定价过程_us", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaseorder.pricingprocedure
+            new TranslationSeedItem("entity.purchaseorder.pricingprocedure", "ja-JP", "定价过程_jp", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaseorder.pricingprocedure
+            new TranslationSeedItem("entity.purchaseorder.pricingprocedure", "zh-CN", "定价过程", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+            // entity.purchaseorder.pricingprocedure
+            new TranslationSeedItem("entity.purchaseorder.pricingprocedure", "zh-HK", "定价过程_hk", "定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）"),
+
+            // entity.purchaseorder.pricingconditioncode
+            new TranslationSeedItem("entity.purchaseorder.pricingconditioncode", "en-US", "定价条件编码_us", "定价条件编码"),
+            // entity.purchaseorder.pricingconditioncode
+            new TranslationSeedItem("entity.purchaseorder.pricingconditioncode", "ja-JP", "定价条件编码_jp", "定价条件编码"),
+            // entity.purchaseorder.pricingconditioncode
+            new TranslationSeedItem("entity.purchaseorder.pricingconditioncode", "zh-CN", "定价条件编码", "定价条件编码"),
+            // entity.purchaseorder.pricingconditioncode
+            new TranslationSeedItem("entity.purchaseorder.pricingconditioncode", "zh-HK", "定价条件编码_hk", "定价条件编码"),
 
             // entity.purchaseorder.totalquantity
             new TranslationSeedItem("entity.purchaseorder.totalquantity", "en-US", "订单总数量_us", "订单总数量（基本单位数量）"),

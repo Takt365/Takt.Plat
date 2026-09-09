@@ -130,10 +130,20 @@ export function updateAssyDefectDetailObsolete(dto: AssyDefectDetailObsolete): P
  * 获取组立不良明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getAssyDefectDetailOptions(): Promise<TaktSelectOption[]> {
+export function getAssyDefectDetailOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ASSY_DEFECT_DETAIL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

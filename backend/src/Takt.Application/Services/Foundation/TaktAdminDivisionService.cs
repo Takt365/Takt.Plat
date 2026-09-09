@@ -97,12 +97,47 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     }
 
     /// <summary>
+    /// 获取行政区划平铺选项（DictValue=DivisionCode；供省/市等业务字段下拉，非 parentId）。
+    /// </summary>
+    /// <param name="plantCode">工厂代码（可选；本实体无工厂列，忽略）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配编码/名称）</param>
+    /// <param name="level">层级（可选；1～6）</param>
+    /// <returns>下拉选项（有上限，禁止全表）</returns>
+    public async Task<List<TaktSelectOption>> GetAdminDivisionOptionsAsync(string? plantCode = null, string? keyword = null, int? level = null)
+    {
+        _ = plantCode;
+        var normalizedKeyword = keyword?.Trim();
+        var predicate = Expressionable.Create<TaktAdminDivision>()
+            .And(x => x.TenantCode == CurrentTenantCode && x.DivisionStatus == 1)
+            .AndIF(level is >= 1 and <= 6, x => x.Level == level)
+            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>
+                (x.DivisionCode != null && x.DivisionCode.Contains(normalizedKeyword!))
+                || (x.DivisionName != null && x.DivisionName.Contains(normalizedKeyword!)))
+            .ToExpression();
+        var list = await _adminDivisionRepository.GetListForExportAsync(predicate, 500);
+        return list
+            .OrderBy(x => x.Level)
+            .ThenBy(x => x.SortOrder)
+            .ThenBy(x => x.DivisionCode)
+            .Select(e => new TaktSelectOption
+            {
+                DictValue = e.DivisionCode,
+                DictLabel = string.IsNullOrWhiteSpace(e.DivisionName) ? e.DivisionCode : e.DivisionName,
+                ExtLabel = e.DivisionCode,
+                SortOrder = e.SortOrder,
+            })
+            .ToList();
+    }
+
+    /// <summary>
     /// 获取行政区划树形选项（懒加载：仅 parentId 直接子级一层；DictValue=Id 字符串，供表单 parentId）。
     /// 根层 DictLabel=CountryCode，子级 DictLabel=DivisionName；不整表、不递归。
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    public async Task<List<TaktTreeSelectOption>> GetAdminDivisionTreeOptionsAsync(long parentId = 0)
+    public async Task<List<TaktTreeSelectOption>> GetAdminDivisionTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)
     {
         var list = await _adminDivisionRepository.GetListAsync(x =>
             x.TenantCode == CurrentTenantCode

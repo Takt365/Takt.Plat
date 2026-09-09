@@ -85,7 +85,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -449,6 +449,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import StandardOperationTimeForm from './components/standard-operation-time-form.vue'
 import { getStandardOperationTimeList, getStandardOperationTimeById, createStandardOperationTime, updateStandardOperationTime, deleteStandardOperationTimeById, deleteStandardOperationTimeBatch, getStandardOperationTimeTemplate, importStandardOperationTime, exportStandardOperationTime } from '@/api/logistics/manufacturing/bom/standard-operation-time'
@@ -495,6 +496,8 @@ const formData = ref<Partial<StandardOperationTime> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)

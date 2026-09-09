@@ -130,10 +130,20 @@ export function updateMaintenanceHistoryStatus(dto: MaintenanceHistoryStatus): P
  * 获取设备维护履历选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMaintenanceHistoryOptions(): Promise<TaktSelectOption[]> {
+export function getMaintenanceHistoryOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MAINTENANCE_HISTORY_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

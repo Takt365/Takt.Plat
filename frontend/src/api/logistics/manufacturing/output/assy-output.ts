@@ -116,9 +116,30 @@ export function deleteAssyOutputBatch(ids: string[]): Promise<void> {
  * 获取组立日报选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getAssyOutputOptions(): Promise<TaktSelectOption[]> {
+export function getAssyOutputOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ASSY_OUTPUT_API_BASE}/options`,
+    method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
+  });
+}
+
+/**
+ * 获取组立日报新增时固定的生产时段列表（13 条）
+ * @returns {Promise<string[]>} 生产时段列表
+ */
+export function getAssyOutputDefaultTimePeriods(): Promise<string[]> {
+  return request<string[]>({
+    url: `${ASSY_OUTPUT_API_BASE}/default-time-periods`,
     method: 'get',
   });
 }

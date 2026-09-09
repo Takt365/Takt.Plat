@@ -144,10 +144,20 @@ export function updateFqcOrderItemObsolete(dto: FqcOrderItemObsolete): Promise<F
  * 获取出货检验单明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getFqcOrderItemOptions(): Promise<TaktSelectOption[]> {
+export function getFqcOrderItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${FQC_ORDER_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

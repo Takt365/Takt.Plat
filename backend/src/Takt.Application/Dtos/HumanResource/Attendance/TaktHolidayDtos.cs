@@ -56,9 +56,19 @@ public class TaktHolidayDto : TaktCompanyDtoBase
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int IsWorkingDay { get; set; } = 0;
+    public int DaysCount { get; set; } = 1;
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int IsPaid { get; set; } = 1;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -138,9 +148,19 @@ public class TaktHolidayQueryDto : TaktPagedQuery
     public DateTime? EndDateEnd { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日）
     /// </summary>
-    public int? IsWorkingDay { get; set; }
+    public int? DaysCount { get; set; }
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；模糊查询）
+    /// </summary>
+    public string? CompensatoryWorkDates { get; set; }
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int? IsPaid { get; set; }
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -230,9 +250,19 @@ public class TaktHolidayCreateDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int IsWorkingDay { get; set; } = 0;
+    public int DaysCount { get; set; } = 1;
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int IsPaid { get; set; } = 1;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -334,9 +364,19 @@ public class TaktHolidayTemplateDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int? IsWorkingDay { get; set; }
+    public int? DaysCount { get; set; }
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int? IsPaid { get; set; }
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -412,9 +452,19 @@ public class TaktHolidayImportDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int? IsWorkingDay { get; set; }
+    public int? DaysCount { get; set; }
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int? IsPaid { get; set; }
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -485,9 +535,19 @@ public class TaktHolidayExportDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int IsWorkingDay { get; set; } = 0;
+    public int DaysCount { get; set; } = 1;
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int IsPaid { get; set; } = 1;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）
@@ -557,9 +617,19 @@ public class TaktHolidayThemeDto
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// 假期天数（含起止日；由 StartDate～EndDate 派生）
     /// </summary>
-    public int IsWorkingDay { get; set; } = 0;
+    public int DaysCount { get; set; } = 1;
+
+    /// <summary>
+    /// 调休对应（上班日=&gt;所补放假日；多对分号分隔，如 2026-09-20=&gt;2026-10-06;2026-10-10=&gt;2026-10-07；无可空串）
+    /// </summary>
+    public string CompensatoryWorkDates { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否带薪假（字典 sys_yes_no；0=否 1=是）
+    /// </summary>
+    public int IsPaid { get; set; } = 1;
 
     /// <summary>
     /// 假日问候语（简短，用于界面问候展示）

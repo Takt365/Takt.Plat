@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-inquiry.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -52,8 +52,11 @@ export function getPurchaseInquiryList(queryDto: any): Promise<TaktPagedResult<P
  */
 export function getPurchaseInquiryById(id: string): Promise<PurchaseInquiry> {
   return request<PurchaseInquiry>({
-    url: `${PURCHASE_INQUIRY_API_BASE}/${id}`,
+    url: `${PURCHASE_INQUIRY_API_BASE}/{id:long}`,
     method: 'get',
+    params: {
+      id
+    },
   });
 }
 
@@ -127,13 +130,19 @@ export function updatePurchaseInquiryStatus(dto: PurchaseInquiryStatus): Promise
 // ========================================
 
 /**
- * 获取采购询价选项列表
+ * 获取采购询价选项列表（DictValue=Id，ExtValue=PurchaseInquiryCode）
+ * @param {string} plantCode 工厂代码（可选，用于按工厂过滤）
+ * @param {string} keyword 搜索关键字（可选，模糊匹配）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPurchaseInquiryOptions(): Promise<TaktSelectOption[]> {
+export function getPurchaseInquiryOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${PURCHASE_INQUIRY_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 

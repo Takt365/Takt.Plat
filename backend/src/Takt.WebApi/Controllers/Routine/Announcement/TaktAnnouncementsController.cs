@@ -57,6 +57,26 @@ public class TaktAnnouncementsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取公告通知件数统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>公告通知件数统计</returns>
+    [TaktPermission("routine:announcement:list", "公告通知件数统计")]
+    [HttpGet("announcement-stat")]
+    public async Task<IActionResult> GetAnnouncementStatAsync([FromQuery] TaktAnnouncementStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _announcementService.GetAnnouncementStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取公告通知
     /// </summary>
     /// <param name="id">公告通知ID</param>
@@ -86,11 +106,11 @@ public class TaktAnnouncementsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:announcement:query", "公告通知选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetAnnouncementOptionsAsync()
+    public async Task<IActionResult> GetAnnouncementOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _announcementService.GetAnnouncementOptionsAsync();
+            var result = await _announcementService.GetAnnouncementOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

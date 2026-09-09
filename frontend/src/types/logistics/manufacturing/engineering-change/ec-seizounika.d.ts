@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-seizounika.d.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变制造2课-间接（D0626）部门执行表
+ * 设变制造2课（D0626）部门执行表
  * 对应前端 TaktEcSeizounikaDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EcSeizounika
@@ -29,14 +29,14 @@ export interface EcSeizounika extends CompanyDtoBase {
   ecSeizounikaId: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变明细 名称（填充字段）
    */
-  ecnDetailName?: string;
+  ecDetailName?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -66,7 +66,7 @@ export interface EcSeizounika extends CompanyDtoBase {
   /**
    * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
    */
-  ecParentMaterialCode?: string;
+  ecParentMaterialCode: string;
 
   /**
    * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
@@ -74,9 +74,13 @@ export interface EcSeizounika extends CompanyDtoBase {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -94,29 +98,29 @@ export interface EcSeizounika extends CompanyDtoBase {
   execContent?: string;
 
   /**
-   * 生产日期
-   */
-  productionDate?: string;
-
-  /**
-   * 生产批次
-   */
-  productionBatch?: string;
-
-  /**
    * 生产班组
    */
   productionTeam?: string;
 
   /**
-   * 出库单号
+   * 生产日期
    */
-  outboundOrderCode?: string;
+  productionDate?: string;
+
+  /**
+   * 实施批次
+   */
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
+
+  /**
+   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcFinishedGoods）
+   */
+  ecDetails?: EcDetail[];
 
 }
 
@@ -149,9 +153,9 @@ export interface EcSeizounikaQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -189,9 +193,13 @@ export interface EcSeizounikaQuery extends TaktPagedQuery {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -209,6 +217,11 @@ export interface EcSeizounikaQuery extends TaktPagedQuery {
   execContent?: string;
 
   /**
+   * 生产班组
+   */
+  productionTeam?: string;
+
+  /**
    * 生产日期（范围查询-开始）
    */
   productionDateStart?: string;
@@ -219,19 +232,9 @@ export interface EcSeizounikaQuery extends TaktPagedQuery {
   productionDateEnd?: string;
 
   /**
-   * 生产批次
+   * 实施批次
    */
-  productionBatch?: string;
-
-  /**
-   * 生产班组
-   */
-  productionTeam?: string;
-
-  /**
-   * 出库单号
-   */
-  outboundOrderCode?: string;
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -257,11 +260,6 @@ export interface EcSeizounikaQuery extends TaktPagedQuery {
    * 备注（模糊查询）
    */
   remark?: string;
-
-  /**
-   * 制二课页签（1=采购 F 且仓库 C003 2=其它；有值时按页签过滤明细）
-   */
-  pcbaTab?: number;
 
 }
 
@@ -293,9 +291,9 @@ export interface EcSeizounikaCreate {
   plantCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -325,7 +323,7 @@ export interface EcSeizounikaCreate {
   /**
    * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
    */
-  ecParentMaterialCode?: string;
+  ecParentMaterialCode: string;
 
   /**
    * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
@@ -333,9 +331,13 @@ export interface EcSeizounikaCreate {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -353,24 +355,19 @@ export interface EcSeizounikaCreate {
   execContent?: string;
 
   /**
-   * 生产日期
-   */
-  productionDate?: string;
-
-  /**
-   * 生产批次
-   */
-  productionBatch?: string;
-
-  /**
    * 生产班组
    */
   productionTeam?: string;
 
   /**
-   * 出库单号
+   * 生产日期
    */
-  outboundOrderCode?: string;
+  productionDate?: string;
+
+  /**
+   * 实施批次
+   */
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -404,6 +401,25 @@ export interface EcSeizounikaUpdate extends EcSeizounikaCreate {
 
 }
 
+
+/**
+ * 对应前端 EcSeizounikaDiscontinuedStatus
+ * @description 对应后端 TaktEcSeizounikaDiscontinuedStatusDto
+ */
+export interface EcSeizounikaDiscontinuedStatus {
+  /**
+   * EcSeizounikaID
+   */
+  ecSeizounikaId: string;
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   */
+  discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
+}
 
 /**
  * EcSeizounika 作废/撤销作废 DTO
@@ -451,9 +467,9 @@ export interface EcSeizounikaTemplate {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -491,9 +507,13 @@ export interface EcSeizounikaTemplate {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -511,24 +531,19 @@ export interface EcSeizounikaTemplate {
   execContent?: string;
 
   /**
-   * 生产日期
-   */
-  productionDate?: string;
-
-  /**
-   * 生产批次
-   */
-  productionBatch?: string;
-
-  /**
    * 生产班组
    */
   productionTeam?: string;
 
   /**
-   * 出库单号
+   * 生产日期
    */
-  outboundOrderCode?: string;
+  productionDate?: string;
+
+  /**
+   * 实施批次
+   */
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -575,9 +590,9 @@ export interface EcSeizounikaImport {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -615,9 +630,13 @@ export interface EcSeizounikaImport {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -635,24 +654,19 @@ export interface EcSeizounikaImport {
   execContent?: string;
 
   /**
-   * 生产日期
-   */
-  productionDate?: string;
-
-  /**
-   * 生产批次
-   */
-  productionBatch?: string;
-
-  /**
    * 生产班组
    */
   productionTeam?: string;
 
   /**
-   * 出库单号
+   * 生产日期
    */
-  outboundOrderCode?: string;
+  productionDate?: string;
+
+  /**
+   * 实施批次
+   */
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -699,9 +713,9 @@ export interface EcSeizounikaExport {
   cultureCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizounika 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -731,7 +745,7 @@ export interface EcSeizounikaExport {
   /**
    * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
    */
-  ecParentMaterialCode?: string;
+  ecParentMaterialCode: string;
 
   /**
    * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
@@ -739,9 +753,13 @@ export interface EcSeizounikaExport {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0626）
@@ -759,24 +777,19 @@ export interface EcSeizounikaExport {
   execContent?: string;
 
   /**
-   * 生产日期
-   */
-  productionDate?: string;
-
-  /**
-   * 生产批次
-   */
-  productionBatch?: string;
-
-  /**
    * 生产班组
    */
   productionTeam?: string;
 
   /**
-   * 出库单号
+   * 生产日期
    */
-  outboundOrderCode?: string;
+  productionDate?: string;
+
+  /**
+   * 实施批次
+   */
+  implementationBatch?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

@@ -86,11 +86,11 @@ public class TaktMaterialDocumentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:document:query", "物料凭证选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialDocumentOptionsAsync()
+    public async Task<IActionResult> GetMaterialDocumentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialDocumentService.GetMaterialDocumentOptionsAsync();
+            var result = await _materialDocumentService.GetMaterialDocumentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

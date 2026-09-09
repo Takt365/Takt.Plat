@@ -144,10 +144,20 @@ export function updatePerfSchemeSort(dto: PerfSchemeSort): Promise<PerfScheme> {
  * 获取绩效方案指标选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPerfSchemeOptions(): Promise<TaktSelectOption[]> {
+export function getPerfSchemeOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PERF_SCHEME_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

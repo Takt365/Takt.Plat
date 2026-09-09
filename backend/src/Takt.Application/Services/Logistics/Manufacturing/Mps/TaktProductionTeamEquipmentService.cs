@@ -99,19 +99,21 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
     /// <summary>
     /// 获取生产班组设备组选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetProductionTeamEquipmentOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetProductionTeamEquipmentOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _productionTeamEquipmentRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TeamEquipStatus == 1 && x.IsObsolete == 0,
-            x => x.TeamCode ?? string.Empty,
-            false);
-        return list.Select(e => new TaktSelectOption
-        {
-            DictValue = e.TeamCode,
-            DictLabel = e.TeamCode,
-        }).ToList();
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TeamEquipStatus == 1 && x.IsObsolete == 0);
+        return list
+            .OrderBy(e => e.TeamCode ?? string.Empty, Comparer<string>.Create(TaktStringHelper.CompareNatural))
+            .Select(e => new TaktSelectOption
+            {
+                DictValue = e.TeamCode,
+                DictLabel = e.TeamCode,
+            }).ToList();
     }
 
     /// <summary>

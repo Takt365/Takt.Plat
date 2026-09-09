@@ -57,6 +57,26 @@ public class TaktPcbaInspectionsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取 PCBA 检查不良统计（数据看板 defect-stat）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>PCBA 检查统计</returns>
+    [TaktPermission("logistics:manufacturing:defect:pcba:inspection:list", "PCBA检查不良统计")]
+    [HttpGet("defect-stat")]
+    public async Task<IActionResult> GetPcbaInspectionStatAsync([FromQuery] TaktDefectStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _pcbaInspectionService.GetPcbaInspectionStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取PCBA检查日报
     /// </summary>
     /// <param name="id">PCBA检查日报ID</param>
@@ -86,11 +106,11 @@ public class TaktPcbaInspectionsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:defect:pcba:inspection:query", "PCBA检查日报选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaInspectionOptionsAsync()
+    public async Task<IActionResult> GetPcbaInspectionOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaInspectionService.GetPcbaInspectionOptionsAsync();
+            var result = await _pcbaInspectionService.GetPcbaInspectionOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

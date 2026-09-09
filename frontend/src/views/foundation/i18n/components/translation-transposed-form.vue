@@ -14,11 +14,11 @@
   <div class="translation-transposed-form">
     <a-form
       ref="formRef"
+      class="takt-generated-form"
       :model="formState"
       :rules="formRules"
-      :label-col="{ span: 6 }"
-      :wrapper-col="{ span: 18 }"
       layout="horizontal"
+      label-align="right"
     >
       <a-form-item
         :label="t('entity.translation.i18nkey')"

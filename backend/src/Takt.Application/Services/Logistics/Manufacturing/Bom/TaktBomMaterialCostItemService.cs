@@ -125,8 +125,9 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// 获取BOM物料成本选项列表（产品编码去重，DictValue=ProductCode）
     /// </summary>
     /// <param name="plantCode">工厂代码（可选，用于缩小候选产品）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetBomMaterialCostItemOptionsAsync(string? plantCode = null)
+    public async Task<List<TaktSelectOption>> GetBomMaterialCostItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var yearTable = await ResolveBomItemPhysicalTableAsync(DateTime.Now.Year);

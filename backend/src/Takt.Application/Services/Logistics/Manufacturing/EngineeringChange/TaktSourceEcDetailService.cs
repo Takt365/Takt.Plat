@@ -103,8 +103,10 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
     /// <summary>
     /// 获取设变来源子选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSourceEcDetailOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSourceEcDetailOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _sourceEcDetailRepository.GetListAsync(
@@ -131,15 +133,19 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcDetailRepository,
             x => x.SourceEcId == entity.SourceEcId
+                && x.SourceFinishedGoods == entity.SourceFinishedGoods
                 && x.LineNumber == entity.LineNumber);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
         {
-            throw new TaktBusinessException("设变来源子的SourceEcId、LineNumber已存在");
+            throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _sourceEcDetailRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SourceEcId == entity.SourceEcId,
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.SourceEcId == entity.SourceEcId
+                    && x.SourceFinishedGoods == entity.SourceFinishedGoods,
                 x => x.LineNumber);
             var businessCode = !string.IsNullOrWhiteSpace(entity.SourceEcCode) ? entity.SourceEcCode : entity.SourceEcId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
@@ -166,11 +172,12 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcDetailRepository,
             x => x.SourceEcId == entity.SourceEcId
+                && x.SourceFinishedGoods == entity.SourceFinishedGoods
                 && x.LineNumber == entity.LineNumber,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
         {
-            throw new TaktBusinessException("设变来源子的SourceEcId、LineNumber已存在");
+            throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
         }
         await _sourceEcDetailRepository.UpdateAsync(entity);
         return await GetSourceEcDetailByIdAsync(id) ?? throw new TaktBusinessException("设变来源子不存在");
@@ -277,23 +284,27 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 var entity = rows[i].Adapt<TaktSourceEcDetail>();
                 var importDto = rows[i].Adapt<TaktSourceEcDetailCreateDto>();
                 await StampSourceEcDetailSourceEcAsync(entity, importDto);
-                var importKey = $"{entity.SourceEcId}|{entity.LineNumber}";
+                var importKey = $"{entity.SourceEcId}|{entity.SourceFinishedGoods}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcId、SourceFinishedGoods、LineNumber）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _sourceEcDetailRepository,
                     x => x.SourceEcId == entity.SourceEcId
+                        && x.SourceFinishedGoods == entity.SourceFinishedGoods
                         && x.LineNumber == entity.LineNumber);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
                 {
-                    throw new TaktBusinessException("设变来源子的SourceEcId、LineNumber已存在");
+                    throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _sourceEcDetailRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SourceEcId == entity.SourceEcId,
+                        x => x.TenantCode == CurrentTenantCode
+                            && x.CompanyCode == CurrentCompanyCode
+                            && x.SourceEcId == entity.SourceEcId
+                            && x.SourceFinishedGoods == entity.SourceFinishedGoods,
                         x => x.LineNumber);
                     var businessCode = !string.IsNullOrWhiteSpace(entity.SourceEcCode) ? entity.SourceEcCode : entity.SourceEcId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);

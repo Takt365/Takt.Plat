@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiry 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInquiry 生成，请按需审阅）
 // 
@@ -51,20 +51,15 @@ public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人员工 名称（填充字段）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string? InquiryName { get; set; }
-
-    /// <summary>
-    /// 询价人（人员代码）
-    /// </summary>
-    public string InquiryEmployeeName { get; set; } = string.Empty;
+    public string? InquiryEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
@@ -75,6 +70,21 @@ public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
     /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
     public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -205,13 +215,13 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public DateTime? QuoteDeadlineDateEnd { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人（人员代码）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? InquiryEmployeeName { get; set; } = string.Empty;
 
@@ -224,6 +234,21 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
     public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -357,16 +382,15 @@ public class TaktPurchaseInquiryCreateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人（人员代码）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    [Required(ErrorMessage = "询价人（人员代码）不能为空")]
-    public string InquiryEmployeeName { get; set; } = string.Empty;
+    public string? InquiryEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
@@ -379,6 +403,21 @@ public class TaktPurchaseInquiryCreateDto
     /// </summary>
     [Required(ErrorMessage = "询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）不能为空")]
     public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -558,13 +597,13 @@ public class TaktPurchaseInquiryTemplateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人（人员代码）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? InquiryEmployeeName { get; set; } = string.Empty;
 
@@ -577,6 +616,21 @@ public class TaktPurchaseInquiryTemplateDto
     /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
     public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -701,13 +755,13 @@ public class TaktPurchaseInquiryImportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人（人员代码）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
     public string? InquiryEmployeeName { get; set; } = string.Empty;
 
@@ -720,6 +774,21 @@ public class TaktPurchaseInquiryImportDto
     /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
     public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
@@ -850,15 +919,15 @@ public class TaktPurchaseInquiryExportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
+    /// 询价人员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryEmployeeId { get; set; }
 
     /// <summary>
-    /// 询价人（人员代码）
+    /// 询价人名称（冗余：按 InquiryEmployeeId 取 TaktEmployee.EmployeeName 联动）
     /// </summary>
-    public string InquiryEmployeeName { get; set; } = string.Empty;
+    public string? InquiryEmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
@@ -869,6 +938,21 @@ public class TaktPurchaseInquiryExportDto
     /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
     public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购询价类型（字典 logistics_procurement_purchase_order_type；与采购订单/申请共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；询价默认 A-AN）
+    /// </summary>
+    public string? PurchaseInquiryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-koubai.d.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,14 @@ export interface EcKoubai extends CompanyDtoBase {
   ecKoubaiId: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变明细 名称（填充字段）
    */
-  ecnDetailName?: string;
+  ecDetailName?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -49,39 +49,34 @@ export interface EcKoubai extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -109,9 +104,19 @@ export interface EcKoubai extends CompanyDtoBase {
   purchaseOrderCode?: string;
 
   /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
+
+  /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
+
+  /**
+   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcNewMaterialCode）
+   */
+  ecDetails?: EcDetail[];
 
 }
 
@@ -144,9 +149,9 @@ export interface EcKoubaiQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -159,39 +164,34 @@ export interface EcKoubaiQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode?: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus?: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode?: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -222,6 +222,11 @@ export interface EcKoubaiQuery extends TaktPagedQuery {
    * 采购订单号码
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -278,9 +283,9 @@ export interface EcKoubaiCreate {
   plantCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -293,39 +298,34 @@ export interface EcKoubaiCreate {
   lineNumber: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -351,6 +351,11 @@ export interface EcKoubaiCreate {
    * 采购订单号码
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -384,6 +389,25 @@ export interface EcKoubaiUpdate extends EcKoubaiCreate {
 
 }
 
+
+/**
+ * 对应前端 EcKoubaiDiscontinuedStatus
+ * @description 对应后端 TaktEcKoubaiDiscontinuedStatusDto
+ */
+export interface EcKoubaiDiscontinuedStatus {
+  /**
+   * EcKoubaiID
+   */
+  ecKoubaiId: string;
+  /**
+   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   */
+  discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   */
+  ecDistinction: number;
+}
 
 /**
  * EcKoubai 作废/撤销作废 DTO
@@ -431,9 +455,9 @@ export interface EcKoubaiTemplate {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -446,39 +470,34 @@ export interface EcKoubaiTemplate {
   lineNumber?: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode?: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus?: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode?: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -504,6 +523,11 @@ export interface EcKoubaiTemplate {
    * 采购订单号码
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -550,9 +574,9 @@ export interface EcKoubaiImport {
   plantCode?: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId?: string;
+  ecDetailId?: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -565,39 +589,34 @@ export interface EcKoubaiImport {
   lineNumber?: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode?: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus?: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode?: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -623,6 +642,11 @@ export interface EcKoubaiImport {
    * 采购订单号码
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -669,9 +693,9 @@ export interface EcKoubaiExport {
   cultureCode: string;
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
    */
-  ecnDetailId: string;
+  ecDetailId: string;
 
   /**
    * 设变单号（冗余，便于查询）
@@ -684,39 +708,34 @@ export interface EcKoubaiExport {
   lineNumber: number;
 
   /**
-   * 机种（冗余：来自 TaktEcDetail.EcModelCode）
+   * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
-  ecModelCode: string;
+  ecNewMaterialCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 新物料描述（冗余：来自 TaktEcDetail.EcNewMaterialDescription）
    */
-  ecFinishedGoods?: string;
+  ecNewMaterialDescription?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode；冗余：来自 TaktEcDetail.EcNewWarehouse）
    */
-  ecFinishedGoodsDescription?: string;
+  ecNewWarehouse?: string;
 
   /**
-   * 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
+   * 新采购类型（F=外部采购，E=自制生产；冗余：来自 TaktEcDetail.EcNewPurchaseType）
    */
-  ecParentMaterialCode?: string;
+  ecNewPurchaseType?: string;
 
   /**
-   * 上阶物料描述（冗余：来自 TaktEcDetail.EcParentMaterialDescription）
-   */
-  ecParentMaterialDescription?: string;
-
-  /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
-   */
-  discontinuedStatus: string;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
+   * 部门编码（TaktDept.DeptCode；本表固定课别）
    */
   deptCode: string;
+
+  /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -742,6 +761,11 @@ export interface EcKoubaiExport {
    * 采购订单号码
    */
   purchaseOrderCode?: string;
+
+  /**
+   * 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecOldPartDisposition?: string;
 
   /**
    * 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

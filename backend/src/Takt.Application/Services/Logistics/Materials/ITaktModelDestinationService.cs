@@ -38,14 +38,18 @@ public interface ITaktModelDestinationService
     /// <summary>
     /// 获取型号目的地选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync();
+    Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 获取机种下拉选项（ModelCode 去重，DictValue=机种编码）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>机种下拉选项</returns>
-    Task<List<TaktSelectOption>> GetModelOptionsAsync();
+    Task<List<TaktSelectOption>> GetModelOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 根据机种编码获取级联物料选项（DictValue=物料编码，供产品/BOM 查询级联）

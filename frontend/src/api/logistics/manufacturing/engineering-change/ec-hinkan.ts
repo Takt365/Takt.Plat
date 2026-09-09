@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-hinkan.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -19,9 +19,12 @@ import type {
   EcHinkan,
   EcHinkanCreate,
   EcHinkanObsolete,
+  EcHinkanDiscontinuedStatus,
   EcHinkanUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-hinkan';
-import type { EcDetail } from '@/types/logistics/manufacturing/engineering-change/ec-detail';
+import type {
+  EcHinkanMaster
+} from '@/types/logistics/manufacturing/engineering-change/ec-hinkan-master';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -47,16 +50,15 @@ export function getEcHinkanList(queryDto: any): Promise<TaktPagedResult<EcHinkan
 }
 
 /**
- * 获取设变明细主表列表（左栏 TaktEcDetail，权限与本部门 list 一致）
+ * 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
  * @param {any} queryDto 查询DTO
- * @returns {Promise<TaktPagedResult<EcDetail>>} 分页结果
+ * @returns {Promise<TaktPagedResult<EcHinkanMaster>>} 分页结果
  */
-export function getEcHinkanMasterList(queryDto: any): Promise<TaktPagedResult<EcDetail>> {
-  return request<TaktPagedResult<EcDetail>>({
+export function getEcHinkanMasterList(queryDto: any): Promise<TaktPagedResult<EcHinkanMaster>> {
+  return request<TaktPagedResult<EcHinkanMaster>>({
     url: `${EC_HINKAN_API_BASE}/masters`,
     method: 'get',
     params: queryDto,
-    skipErrorNotification: true,
   });
 }
 
@@ -125,6 +127,19 @@ export function deleteEcHinkanBatch(ids: string[]): Promise<void> {
 }
 
 /**
+ * 更新设变hinkan执行停产状态
+ * @param {EcHinkanDiscontinuedStatus} dto 停产状态 DTO
+ * @returns {Promise<EcHinkan>} 设变hinkan执行DTO
+ */
+export function updateEcHinkanDiscontinuedStatus(dto: EcHinkanDiscontinuedStatus): Promise<EcHinkan> {
+  return request<EcHinkan>({
+    url: `${EC_HINKAN_API_BASE}/discontinued-status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
  * 更新设变品管执行作废状态
  * @param {EcHinkanObsolete} dto 作废 DTO
  * @returns {Promise<EcHinkan>} 设变品管执行DTO
@@ -143,12 +158,18 @@ export function updateEcHinkanObsolete(dto: EcHinkanObsolete): Promise<EcHinkan>
 
 /**
  * 获取设变品管执行选项列表
+ * @param {string} plantCode plantCode
+ * @param {string} keyword keyword
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEcHinkanOptions(): Promise<TaktSelectOption[]> {
+export function getEcHinkanOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${EC_HINKAN_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 

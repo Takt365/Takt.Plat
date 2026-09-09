@@ -86,11 +86,11 @@ public class TaktBalanceSheetsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:balance:sheet:query", "资产负债选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBalanceSheetOptionsAsync()
+    public async Task<IActionResult> GetBalanceSheetOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _balanceSheetService.GetBalanceSheetOptionsAsync();
+            var result = await _balanceSheetService.GetBalanceSheetOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

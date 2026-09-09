@@ -55,8 +55,10 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
   /// <summary>
   /// 推移查询栏：组立不良 ∪ PCBA 检查工厂去重选项
   /// </summary>
+  /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync()
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
   {
     EnsureThreeLayerContext();
     var assyList = await _assyDefectRepository.GetListAsync(
@@ -86,8 +88,9 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
   /// 推移查询栏：按工厂可用不良类别（assy / pcba；级联第 2 级）
   /// </summary>
   /// <param name="plantCode">工厂代码</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string plantCode)
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string? plantCode = null, string? keyword = null)
   {
     EnsureThreeLayerContext();
     var plant = plantCode?.Trim() ?? string.Empty;
@@ -128,10 +131,9 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
   /// </summary>
   /// <param name="plantCode">工厂代码</param>
   /// <param name="defectCategory">不良类别（assy / pcba；空则两表并集）</param>
+  /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
   /// <returns>下拉选项</returns>
-  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(
-      string plantCode,
-      string? defectCategory = null)
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(string? plantCode = null, string? keyword = null, string? defectCategory = null)
   {
     EnsureThreeLayerContext();
     var plant = plantCode?.Trim() ?? string.Empty;

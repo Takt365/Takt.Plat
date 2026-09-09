@@ -86,11 +86,11 @@ public class TaktPcbaRepairLaborHoursController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:labor:hour:pcba:repair:query", "PCBA改修工数统计选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaRepairLaborHourOptionsAsync()
+    public async Task<IActionResult> GetPcbaRepairLaborHourOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaRepairLaborHourService.GetPcbaRepairLaborHourOptionsAsync();
+            var result = await _pcbaRepairLaborHourService.GetPcbaRepairLaborHourOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

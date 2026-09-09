@@ -153,25 +153,31 @@ export function resolveTableViewportHeight(viewportHeight?: number): number {
 }
 
 /**
- * 解析弹窗/窗体视口高度（优先 .ant-modal-content，其次 .ant-modal-body / host）
+ * 解析弹出窗体高度（仅 .ant-modal / .ant-modal-content / .ant-modal-body / host）
+ * ❌ 禁止回落 window.innerHeight（浏览器视口 ≠ 弹出窗体）
  * @param hostEl 弹窗内任意宿主元素（如表格外包 div）
- * @returns 窗体视口像素高度；无法实测时回退 window
+ * @returns 弹出窗体像素高度；尚未布局完成时为 0
  */
 export function resolveFormHostViewportHeight(hostEl?: HTMLElement | null): number {
-  if (hostEl != null) {
-    const modalContent = hostEl.closest('.ant-modal-content') as HTMLElement | null
-    if (modalContent != null && modalContent.clientHeight > 0) {
-      return modalContent.clientHeight
-    }
-    const modalBody = hostEl.closest('.ant-modal-body') as HTMLElement | null
-    if (modalBody != null && modalBody.clientHeight > 0) {
-      return modalBody.clientHeight
-    }
-    if (hostEl.clientHeight > 0) {
-      return hostEl.clientHeight
-    }
+  if (hostEl == null) {
+    return 0
   }
-  return resolveTableViewportHeight()
+  const modalContent = hostEl.closest('.ant-modal-content') as HTMLElement | null
+  if (modalContent != null && modalContent.clientHeight > 0) {
+    return modalContent.clientHeight
+  }
+  const modal = hostEl.closest('.ant-modal') as HTMLElement | null
+  if (modal != null && modal.clientHeight > 0) {
+    return modal.clientHeight
+  }
+  const modalBody = hostEl.closest('.ant-modal-body') as HTMLElement | null
+  if (modalBody != null && modalBody.clientHeight > 0) {
+    return modalBody.clientHeight
+  }
+  if (hostEl.clientHeight > 0) {
+    return hostEl.clientHeight
+  }
+  return 0
 }
 
 /**
@@ -193,7 +199,8 @@ export function computeRatioScrollYPx(
 }
 
 /**
- * 从窗体内宿主元素计算 scroll.y = 窗体视口 × 分子/分母
+ * 从弹出窗体实测高度计算 scroll.y = 窗体高度 × 分子/分母（如 5/4）
+ * 窗体尚未布局时返回下限，❌ 不改用浏览器视口
  * @param hostEl 弹窗内宿主
  * @param numerator 分子
  * @param denominator 分母
@@ -204,7 +211,13 @@ export function computeFormHostRatioScrollYPx(
   numerator: number,
   denominator: number,
 ): number {
-  return computeRatioScrollYPx(numerator, denominator, resolveFormHostViewportHeight(hostEl))
+  const hostHeight = resolveFormHostViewportHeight(hostEl)
+  if (hostHeight <= 0) {
+    return TAKT_TABLE_SCROLL_Y_MIN
+  }
+  const den = denominator > 0 ? denominator : 1
+  const num = Number.isFinite(numerator) ? numerator : 1
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor((hostHeight * num) / den))
 }
 
 /** 左右主子表明细侧标题/工具栏/外置分页等占用（px，视口 fallback；组件内优先实测 chrome） */

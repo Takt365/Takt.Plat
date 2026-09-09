@@ -62,6 +62,13 @@ public sealed class TaktValidationFilter : IAsyncActionFilter
             {
                 message = "请求参数校验失败";
             }
+            var path = context.HttpContext.Request.Path.Value ?? string.Empty;
+            var method = context.HttpContext.Request.Method;
+            Serilog.Log.Warning(
+                "FluentValidation 参数校验失败: {Method} {Path}, Message={Message}",
+                method,
+                path,
+                message);
             context.Result = new ObjectResult(TaktApiResult.Fail(message, TaktResultCode.BadRequest))
             {
                 StatusCode = StatusCodes.Status400BadRequest,

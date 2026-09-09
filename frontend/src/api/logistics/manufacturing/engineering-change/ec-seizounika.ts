@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-seizounika.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -19,9 +19,12 @@ import type {
   EcSeizounika,
   EcSeizounikaCreate,
   EcSeizounikaObsolete,
+  EcSeizounikaDiscontinuedStatus,
   EcSeizounikaUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-seizounika';
-import type { EcDetail } from '@/types/logistics/manufacturing/engineering-change/ec-detail';
+import type {
+  EcSeizounikaMaster
+} from '@/types/logistics/manufacturing/engineering-change/ec-seizounika-master';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -47,16 +50,15 @@ export function getEcSeizounikaList(queryDto: any): Promise<TaktPagedResult<EcSe
 }
 
 /**
- * 获取设变明细主表列表（左栏 TaktEcDetail，权限与本部门 list 一致）
+ * 获取设变明细主表列表（左栏；TaktEcDetail；权限与本部门 list 一致）
  * @param {any} queryDto 查询DTO
- * @returns {Promise<TaktPagedResult<EcDetail>>} 分页结果
+ * @returns {Promise<TaktPagedResult<EcSeizounikaMaster>>} 分页结果
  */
-export function getEcSeizounikaMasterList(queryDto: any): Promise<TaktPagedResult<EcDetail>> {
-  return request<TaktPagedResult<EcDetail>>({
+export function getEcSeizounikaMasterList(queryDto: any): Promise<TaktPagedResult<EcSeizounikaMaster>> {
+  return request<TaktPagedResult<EcSeizounikaMaster>>({
     url: `${EC_SEIZOUNIKA_API_BASE}/masters`,
     method: 'get',
     params: queryDto,
-    skipErrorNotification: true,
   });
 }
 
@@ -125,6 +127,19 @@ export function deleteEcSeizounikaBatch(ids: string[]): Promise<void> {
 }
 
 /**
+ * 更新设变seizounika执行停产状态
+ * @param {EcSeizounikaDiscontinuedStatus} dto 停产状态 DTO
+ * @returns {Promise<EcSeizounika>} 设变seizounika执行DTO
+ */
+export function updateEcSeizounikaDiscontinuedStatus(dto: EcSeizounikaDiscontinuedStatus): Promise<EcSeizounika> {
+  return request<EcSeizounika>({
+    url: `${EC_SEIZOUNIKA_API_BASE}/discontinued-status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
  * 更新设变制二执行作废状态
  * @param {EcSeizounikaObsolete} dto 作废 DTO
  * @returns {Promise<EcSeizounika>} 设变制二执行DTO
@@ -143,12 +158,18 @@ export function updateEcSeizounikaObsolete(dto: EcSeizounikaObsolete): Promise<E
 
 /**
  * 获取设变制二执行选项列表
+ * @param {string} plantCode plantCode
+ * @param {string} keyword keyword
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEcSeizounikaOptions(): Promise<TaktSelectOption[]> {
+export function getEcSeizounikaOptions(plantCode?: string, keyword?: string): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${EC_SEIZOUNIKA_API_BASE}/options`,
     method: 'get',
+    params: {
+      plantCode,
+      keyword
+    },
   });
 }
 

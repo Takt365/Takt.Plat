@@ -175,6 +175,14 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     Task<int> UpdateRangeAsync(List<TEntity> entities, string? asTableName = null);
 
     /// <summary>
+    /// 批量更新指定列（大数据回写外键等；禁止全列 UpdateRange）
+    /// </summary>
+    /// <param name="entities">实体列表</param>
+    /// <param name="columnNames">属性名（PascalCase，与实体属性一致）</param>
+    /// <returns>更新行数</returns>
+    Task<int> UpdateRangeColumnsAsync(List<TEntity> entities, params string[] columnNames);
+
+    /// <summary>
     /// 根据条件更新
     /// </summary>
     /// <param name="predicate">更新条件</param>

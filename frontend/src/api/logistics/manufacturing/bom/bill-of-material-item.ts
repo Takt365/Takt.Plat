@@ -130,10 +130,20 @@ export function updateBillOfMaterialItemObsolete(dto: BillOfMaterialItemObsolete
  * 获取物料清单明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getBillOfMaterialItemOptions(): Promise<TaktSelectOption[]> {
+export function getBillOfMaterialItemOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${BILL_OF_MATERIAL_ITEM_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

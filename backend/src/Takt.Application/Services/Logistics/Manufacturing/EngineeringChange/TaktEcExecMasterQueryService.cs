@@ -22,7 +22,7 @@ using Takt.Shared.Models;
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 执行部门左栏主表查询（TaktEcDetail；各部门执行行经 OneToOne 挂 EcnDetailId）。
+/// 执行部门左栏主表查询（TaktEcDetail；各部门执行行经 EcDetailId 派生，视图侧经 EcXxxId 回挂）。
 /// </summary>
 public class TaktEcExecMasterQueryService : TaktServiceBase, ITaktEcExecMasterQueryService
 {
@@ -74,7 +74,11 @@ public class TaktEcExecMasterQueryService : TaktServiceBase, ITaktEcExecMasterQu
         }
         else if (string.Equals(execDeptCode, TaktEcDeptCodes.Pcba, StringComparison.Ordinal))
         {
-            exp = exp.And(TaktEcSeizounikaQueryHelper.TabDetailExpression(queryDto.PcbaTab));
+            exp = exp.And(TaktEcSmtQueryHelper.VisibleDetailExpression());
+        }
+        else if (string.Equals(execDeptCode, TaktEcDeptCodes.SeizounikaMaster, StringComparison.Ordinal))
+        {
+            exp = exp.And(TaktEcSeizounikaQueryHelper.VisibleDetailExpression());
         }
         else if (string.Equals(execDeptCode, TaktEcDeptCodes.Assy, StringComparison.Ordinal))
         {
@@ -94,10 +98,6 @@ public class TaktEcExecMasterQueryService : TaktServiceBase, ITaktEcExecMasterQu
             queryDto.PageSize,
             predicate);
         var items = data.Adapt<List<TaktEcDetailDto>>();
-        foreach (var item in items)
-        {
-            item.EcGijutsu = null;
-        }
         return TaktPagedResult<TaktEcDetailDto>.Create(
             items,
             total,

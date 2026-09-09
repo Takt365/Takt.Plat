@@ -111,11 +111,11 @@ public class TaktEcBukansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:bukan:query", "设变部管执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcBukanOptionsAsync()
+    public async Task<IActionResult> GetEcBukanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecBukanService.GetEcBukanOptionsAsync();
+            var result = await _ecBukanService.GetEcBukanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcBukansController : TaktControllerBase
         {
             await _ecBukanService.DeleteEcBukanBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变部管执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变部管执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:bukan:update", "更新设变部管执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcBukanDiscontinuedStatusAsync([FromBody] TaktEcBukanDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecBukanService.UpdateEcBukanDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

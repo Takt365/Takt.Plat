@@ -95,8 +95,10 @@ public class TaktSellerMaterialService : TaktServiceBase, ITaktSellerMaterialSer
     /// <summary>
     /// 获取销售商物料选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSellerMaterialOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSellerMaterialOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _sellerMaterialRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,

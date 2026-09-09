@@ -476,9 +476,9 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
 
     /// <summary>
     /// 统一核心（三步，顺序固定）：
-    /// 1）明细移动价：工厂 + 核算月(日期) + 组件 → 范围内全部明细写价；
- /// 2）主表产品月计算：按明细行字段全量重算（生产相关/PCB SECT/采购类型/数量/价/单位）；不改 产品月成本
-    /// 3）机种月平均成本：工厂 + 核算月(日期) + 物料类型 + 机种 → 按组内产品月计算算术平均。
+    /// 1）明细移动价：工厂 + 核算月 + 组件写价；PcbSectIndicator 已标记（=X）则永不回填；
+    /// 2）主表产品月计算：按明细全量重算；
+    /// 3）机种月平均成本：同工厂+月+物料类型+机种算术平均。
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="costingStart">核算月初</param>
@@ -512,7 +512,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         SuggestedMovingSource? firstSource = null;
 
         // ----------------------------------------
-        // 步骤1：工厂 + 日期 + 组件 → 更新明细移动价格
+        // 步骤1：工厂 + 日期 + 组件 → 更新明细移动价格（PcbSectIndicator 已标记则永不回填）
         // ----------------------------------------
         foreach (var (componentCodeRaw, source) in componentSources)
         {
@@ -537,6 +537,16 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             var rowsToUpdate = new List<TaktBomMaterialCostItem>();
             foreach (var row in items)
             {
+                // 标记存在：永不回填价格（Mark 由人工控制）
+                if (TaktBomMaterialCostItemLineCostHelper.HasPcbSectIndicatorMark(row.PcbSectIndicator))
+                {
+                    continue;
+                }
+                // 用量为 0：永不回填
+                if (row.ComponentQuantity <= 0m)
+                {
+                    continue;
+                }
                 var oldPrice = row.MovingAveragePrice;
                 var oldUnit = row.MovingPriceUnit <= 0 ? 1 : row.MovingPriceUnit;
                 if (!TaktBomMaterialZeroPriceMovingBackfillHelper.ApplyMovingAveragePriceFields(
@@ -584,7 +594,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             }
             componentProcessed = checked(componentProcessed + 1);
             RegisterAffectedProductsFromComponentItems(
-                items,
+                rowsToUpdate,
                 componentCode,
                 source,
                 affectedProductSources);
@@ -1543,7 +1553,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             throw new TaktBusinessException(ex.Message);
         }
         var part = await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
-        // 手工更新：同组件全量写入，不再按 X+F / 零价清单收窄
+        // 调用方跳过 PcbSectIndicator 已标记行
         return part.ToList();
     }
 

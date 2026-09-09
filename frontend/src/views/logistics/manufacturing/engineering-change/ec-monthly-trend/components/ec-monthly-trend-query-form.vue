@@ -9,67 +9,88 @@
 
 <template>
   <div class="takt-query-bar ec-monthly-trend-query-bar">
-    <div class="ec-monthly-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        :api-url="plantOptionsUrl"
-        class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--plant"
-        allow-clear
-        show-search
-        :placeholder="gi.label('plantCode')"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--period"
-        :placeholder="[
-          t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`)]"
-      />
-      <TaktSelect
-        v-model:value="deptCode"
-        :api-url="deptOptionsUrl"
-        :api-params="deptApiParams"
-        :disabled="!plantCode?.trim()"
-        class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
-        allow-clear
-        show-search
-        :placeholder="t(`${localePrefix}.deptCode`)"
-      />
-      <template v-if="props.activeTab === 'issue'">
+    <div class="ec-monthly-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('plantCode') }}</span>
         <TaktSelect
-          v-model:value="ecCode"
-          :api-url="ecCodeOptionsUrl"
-          :api-params="ecCodeApiParams"
-          :disabled="!plantCode?.trim()"
-          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-no"
+          v-model:value="plantCode"
+          :api-url="plantOptionsUrl"
+          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--plant"
           allow-clear
           show-search
-          :placeholder="t(`${localePrefix}.ecCode`)"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
         />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--period"
+          :placeholder="[
+            t(`${localePrefix}.periodRange`),
+            t(`${localePrefix}.periodRange`)]"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.deptCode`) }}</span>
         <TaktSelect
-          v-model:value="ecDistinction"
-          dict-type="logistics_manufacturing_ec_distinction_category"
-          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--distinction"
+          v-model:value="deptCode"
+          :api-url="deptOptionsUrl"
+          :api-params="deptApiParams"
+          :disabled="!plantCode?.trim()"
+          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
           allow-clear
-          :placeholder="gi.label('ecDistinction')"
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
         />
-        <TaktSelect
-          v-model:value="changeStatus"
-          dict-type="logistics_manufacturing_ec_status"
-          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--status"
-          allow-clear
-          :placeholder="gi.label('changeStatus')"
-        />
-        <TaktSelect
-          v-model:value="ecStatus"
-          dict-type="logistics_manufacturing_ec_gijutsu_status"
-          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-status"
-          allow-clear
-          :placeholder="gi.label('ecStatus')"
-        />
+      </div>
+      <template v-if="props.activeTab === 'issue'">
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.ecCode`) }}</span>
+          <TaktSelect
+            v-model:value="ecCode"
+            :api-url="ecCodeOptionsUrl"
+            :api-params="ecCodeApiParams"
+            :disabled="!plantCode?.trim()"
+            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-no"
+            allow-clear
+            show-search
+            :placeholder="t('common.page.form.placeholder.selectonly')"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('ecDistinction') }}</span>
+          <TaktSelect
+            v-model:value="ecDistinction"
+            dict-type="logistics_manufacturing_ec_distinction_category"
+            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--distinction"
+            allow-clear
+            :placeholder="t('common.page.form.placeholder.selectonly')"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('changeStatus') }}</span>
+          <TaktSelect
+            v-model:value="changeStatus"
+            dict-type="logistics_manufacturing_ec_status"
+            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--status"
+            allow-clear
+            :placeholder="t('common.page.form.placeholder.selectonly')"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('ecStatus') }}</span>
+          <TaktSelect
+            v-model:value="ecStatus"
+            dict-type="logistics_manufacturing_ec_gijutsu_status"
+            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-status"
+            allow-clear
+            :placeholder="t('common.page.form.placeholder.selectonly')"
+          />
+        </div>
       </template>
     </div>
     <a-space class="query-actions">

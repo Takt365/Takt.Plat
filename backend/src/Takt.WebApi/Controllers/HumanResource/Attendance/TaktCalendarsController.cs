@@ -86,11 +86,11 @@ public class TaktCalendarsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:attendance:calendar:query", "工厂日历选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCalendarOptionsAsync()
+    public async Task<IActionResult> GetCalendarOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _calendarService.GetCalendarOptionsAsync();
+            var result = await _calendarService.GetCalendarOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

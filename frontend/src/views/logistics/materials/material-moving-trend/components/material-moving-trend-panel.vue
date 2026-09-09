@@ -379,13 +379,12 @@ function periodRangeToQuery(range: [string, string] | null | undefined) {
  */
 function buildQuery() {
   const plant = props.plantCode?.trim()
-  const val = props.valuation?.trim()
-  if (!plant || !val) {
+  if (!plant) {
     return null
   }
   return {
     plantCode: plant,
-    valuation: val,
+    valuation: props.valuation?.trim() || undefined,
     materialCode: props.materialCode?.trim() || undefined,
     trendFilter: props.trendFilter || undefined,
     pageIndex: pageIndex.value,

@@ -4,8 +4,10 @@ DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
 DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
+DECLARE @progress_msg NVARCHAR(400);
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 100000;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
@@ -17,6 +19,9 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- 价格/描述/用量等非键字段变化：WHEN MATCHED UPDATE；禁止因 id 不一致误判新增
 -- 业务唯一键（更新/新增判定）：Tenant+Company+Plant
 --   +BomLevel+BomItemCode+Product+LineNumber+Component+CostingDate(日)
+-- 分批进度：SELECT + RAISERROR WITH NOWAIT（QUARTZ_SYNC_PROGRESS|…，执行中即时刷日志，禁止仅靠 SELECT 缓冲到结束）
+-- 性能：#st_source 聚簇 rn（MERGE 按 rn 取批）；MATCHED 只比业务列（不比 ext_field/审计时间）；
+--       禁止目标表 LTRIM WHILE；软删一次 HASH 反连，禁止 UPDATE TOP 循环扫 2M
 -- =============================================================================
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -62,7 +67,27 @@ CREATE TABLE #st_source (
   [deleted_at] DATETIME NULL
 );
 
+-- 先输出进度结果集 + NOWAIT，让执行器立刻落日志（否则整段 MERGE 结束才有日志）
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = N'QUARTZ_SYNC_PROGRESS|start|0|0|0|0|';
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+
 -- ② 源库 → #st_source（规范化 + 业务键去重；只做一次）
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'loadstart' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = N'QUARTZ_SYNC_PROGRESS|loadstart|0|0|0|0|';
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 INSERT INTO #st_source (
   [rn],[id],[plant_code],[bom_level],[bom_item_code],[product_code],[line_number],[product_description],
   [component_code],[component_description],[component_quantity],
@@ -209,94 +234,42 @@ WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = @@ROWCOUNT;
 
-CREATE UNIQUE CLUSTERED INDEX [ix_st_source_bc_uk] ON #st_source (
+CREATE UNIQUE CLUSTERED INDEX [ix_st_source_bc_rn] ON #st_source ([rn]);
+CREATE UNIQUE NONCLUSTERED INDEX [ix_st_source_bc_uk] ON #st_source (
   [tenant_code], [company_code], [plant_code], [bom_level], [bom_item_code], [product_code], [line_number],
   [component_code], [costing_date]
 );
 
--- ① 目标键列与源装入规则对齐（含软删行，便于 MERGE 命中后恢复）
-UPDATE T
-SET
-  T.[plant_code] = LEFT(LTRIM(RTRIM(ISNULL(T.[plant_code], N''))), 4),
-  T.[bom_level] = ISNULL(NULLIF(LTRIM(RTRIM(T.[bom_level])), N''), N''),
-  T.[bom_item_code] = LEFT(LTRIM(RTRIM(ISNULL(T.[bom_item_code], N''))), 4),
-  T.[product_code] = CASE
-    WHEN LEN(LTRIM(RTRIM(ISNULL(T.[product_code], N'')))) = 18
-      AND LTRIM(RTRIM(T.[product_code])) NOT LIKE '%[^0-9]%'
-    THEN RIGHT(LTRIM(RTRIM(T.[product_code])), 10)
-    ELSE LTRIM(RTRIM(ISNULL(T.[product_code], N'')))
-  END,
-  T.[component_code] = CASE
-    WHEN LEN(LTRIM(RTRIM(ISNULL(T.[component_code], N'')))) = 18
-      AND LTRIM(RTRIM(T.[component_code])) NOT LIKE '%[^0-9]%'
-    THEN RIGHT(LTRIM(RTRIM(T.[component_code])), 10)
-    ELSE LTRIM(RTRIM(ISNULL(T.[component_code], N'')))
-  END,
-  T.[batch_indicator] = ISNULL(NULLIF(LTRIM(RTRIM(T.[batch_indicator])), N''), N''),
-  T.[production_related] = ISNULL(NULLIF(LTRIM(RTRIM(T.[production_related])), N''), N''),
-  T.[purchase_type] = ISNULL(NULLIF(LTRIM(RTRIM(T.[purchase_type])), N''), N'F'),
-  T.[special_procurement_type] = ISNULL(NULLIF(LTRIM(RTRIM(T.[special_procurement_type])), N''), N''),
-  T.[component_quantity] = ROUND(T.[component_quantity], 5),
-  T.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
-FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
-WHERE T.[is_deleted] = 0
-  AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
-  AND (
-    T.[plant_code] <> LEFT(LTRIM(RTRIM(ISNULL(T.[plant_code], N''))), 4)
-    OR ISNULL(T.[bom_level], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[bom_level])), N''), N'')
-    OR ISNULL(T.[bom_item_code], N'') <> LEFT(LTRIM(RTRIM(ISNULL(T.[bom_item_code], N''))), 4)
-    OR ISNULL(T.[product_code], N'') <> CASE
-      WHEN LEN(LTRIM(RTRIM(ISNULL(T.[product_code], N'')))) = 18
-        AND LTRIM(RTRIM(T.[product_code])) NOT LIKE '%[^0-9]%'
-      THEN RIGHT(LTRIM(RTRIM(T.[product_code])), 10)
-      ELSE LTRIM(RTRIM(ISNULL(T.[product_code], N'')))
-    END
-    OR ISNULL(T.[component_code], N'') <> CASE
-      WHEN LEN(LTRIM(RTRIM(ISNULL(T.[component_code], N'')))) = 18
-        AND LTRIM(RTRIM(T.[component_code])) NOT LIKE '%[^0-9]%'
-      THEN RIGHT(LTRIM(RTRIM(T.[component_code])), 10)
-      ELSE LTRIM(RTRIM(ISNULL(T.[component_code], N'')))
-    END
-    OR ISNULL(T.[batch_indicator], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[batch_indicator])), N''), N'')
-    OR ISNULL(T.[production_related], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[production_related])), N''), N'')
-    OR ISNULL(T.[purchase_type], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[purchase_type])), N''), N'F')
-    OR ISNULL(T.[special_procurement_type], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[special_procurement_type])), N''), N'')
-    OR T.[component_quantity] <> ROUND(T.[component_quantity], 5)
-    OR T.[costing_date] <> CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
-  );
+IF OBJECT_ID('tempdb..#bc_tc') IS NOT NULL DROP TABLE #bc_tc;
+SELECT DISTINCT [tenant_code], [company_code]
+INTO #bc_tc
+FROM #st_source;
 
--- ② 业务键已存在于目标：沿用目标 id（目标 id 本地唯一，与源 id 无关）
-UPDATE S
-SET S.[id] = COALESCE(T.[id], S.[id])
-FROM #st_source S
-LEFT JOIN [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
-  ON T.[tenant_code] = S.[tenant_code]
- AND T.[company_code] = S.[company_code]
- AND T.[plant_code] = S.[plant_code]
- AND T.[bom_level] = S.[bom_level]
- AND T.[bom_item_code] = S.[bom_item_code]
- AND T.[product_code] = S.[product_code]
- AND T.[line_number] = S.[line_number]
- AND T.[component_code] = S.[component_code]
- AND T.[costing_date] = S.[costing_date];
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|load|1|',
+  CAST(@source_count AS NVARCHAR(20)), N'|',
+  CAST(@source_count AS NVARCHAR(20)), N'|',
+  CAST(@source_count AS NVARCHAR(20)), N'|');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 
--- 源原始行数：同过滤条件简单 COUNT（无 GROUP BY / 去重变换）
-DECLARE @sap_raw_count INT = (
-  SELECT COUNT(*)
-  FROM [{{SourceDatabase}}].[dbo].[takt_logistics_manufacturing_bom_material_cost_item] R
-  WHERE R.[costing_date] IS NOT NULL
-    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
-    AND LTRIM(RTRIM(ISNULL(R.[product_code], N''))) <> N''
-    AND LTRIM(RTRIM(ISNULL(R.[component_code], N''))) <> N''
-);
+-- 源已在装入时规范化；MERGE 按业务键匹配，无需再扫目标 2M 做 LTRIM，也无需 id 对齐
+DECLARE @sap_raw_count INT = @source_count;
 DECLARE @sap_key_count INT = @source_count;
-DECLARE @dedupe_dropped INT = @sap_raw_count - @sap_key_count;
-
+DECLARE @dedupe_dropped INT = 0;
 DECLARE @target_before INT = (
   SELECT COUNT(*)
   FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
+  INNER JOIN #bc_tc C
+    ON C.[tenant_code] = T.[tenant_code]
+   AND C.[company_code] = T.[company_code]
   WHERE T.[is_deleted] = 0
-    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
 IF OBJECT_ID('tempdb..#merge_action') IS NOT NULL DROP TABLE #merge_action;
@@ -304,9 +277,16 @@ CREATE TABLE #merge_action (
   [oper_type] NVARCHAR(10) NOT NULL
 );
 
--- ③ MERGE：按业务键匹配（bom_level+bom_item_code+product+line+component+costing_date；含隔离字段）
+-- ③ MERGE 分批（@apply_chunk=10万；USING 走 rn 聚簇；MATCHED 只比业务列）
+DECLARE @merge_from_rn INT = 1;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT = ISNULL((SELECT MAX([rn]) FROM #st_source), 0);
+DECLARE @dml_n INT;
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [dbo].[takt_logistics_manufacturing_bom_material_cost_item] AS T
-USING #st_source AS S
+USING (SELECT * FROM #st_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND T.[plant_code] = S.[plant_code]
@@ -337,13 +317,6 @@ WHEN MATCHED AND (
   OR T.[net_purchase_price] <> S.[net_purchase_price]
   OR T.[purchase_price_unit] <> S.[purchase_price_unit]
   OR ISNULL(T.[purchase_currency_code], N'') <> S.[purchase_currency_code]
-  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
-  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
-  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
-  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
-  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
-  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
-  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[product_description]=S.[product_description],
@@ -365,15 +338,9 @@ WHEN MATCHED AND (
   T.[purchase_price_unit]=S.[purchase_price_unit],
   T.[purchase_currency_code]=S.[purchase_currency_code],
   T.[culture_code]=S.[culture_code],
-  T.[remark]=S.[remark],
-  T.[created_by]=S.[created_by],
-  T.[created_at]=S.[created_at],
-  T.[updated_by]=S.[updated_by],
-  T.[updated_at]=S.[updated_at],
-  T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=S.[deleted_by],
-  T.[deleted_at]=S.[deleted_at],
-  T.[ext_field]=S.[ext_field]
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted]
 WHEN NOT MATCHED BY TARGET THEN
   INSERT (
     [id],[plant_code],[bom_level],[bom_item_code],[product_code],[line_number],[product_description],
@@ -399,12 +366,31 @@ WHEN NOT MATCHED BY TARGET THEN
     S.[deleted_by],S.[deleted_at]
   )
 OUTPUT $action INTO #merge_action ([oper_type]);
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #merge_action WHERE [oper_type] = N'INSERT');
 DECLARE @update_count INT = (SELECT COUNT(*) FROM #merge_action WHERE [oper_type] = N'UPDATE');
 DECLARE @unchanged_count INT = @source_count - @insert_count - @update_count;
 
--- ④ 软删：目标有效且源无同业务键（与 MERGE ON 一致，不比 id）
+-- ④ 软删：目标有效且源无同业务键（一次 HASH 反连；禁止 UPDATE TOP 循环）
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
 CREATE TABLE #soft_deleted_rows (
   [id] BIGINT NOT NULL,
@@ -427,23 +413,34 @@ OUTPUT
   INSERTED.[component_code]
 INTO #soft_deleted_rows ([id], [plant_code], [product_code], [component_code])
 FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
+INNER JOIN #bc_tc C
+  ON C.[tenant_code] = T.[tenant_code]
+ AND C.[company_code] = T.[company_code]
+LEFT JOIN #st_source S
+  ON S.[tenant_code] = T.[tenant_code]
+ AND S.[company_code] = T.[company_code]
+ AND S.[plant_code] = T.[plant_code]
+ AND S.[bom_level] = T.[bom_level]
+ AND S.[bom_item_code] = T.[bom_item_code]
+ AND S.[product_code] = T.[product_code]
+ AND S.[line_number] = T.[line_number]
+ AND S.[component_code] = T.[component_code]
+ AND S.[costing_date] = T.[costing_date]
 WHERE T.[is_deleted] = 0
-  AND EXISTS (SELECT 1 FROM #st_source S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
-  AND NOT EXISTS (
-    SELECT 1
-    FROM #st_source S
-    WHERE S.[tenant_code] = T.[tenant_code]
-      AND S.[company_code] = T.[company_code]
-      AND S.[plant_code] = T.[plant_code]
-      AND S.[bom_level] = T.[bom_level]
-      AND S.[bom_item_code] = T.[bom_item_code]
-      AND S.[product_code] = T.[product_code]
-      AND S.[line_number] = T.[line_number]
-      AND S.[component_code] = T.[component_code]
-      AND S.[costing_date] = T.[costing_date]
-  );
-
+  AND S.[rn] IS NULL;
 DECLARE @delete_count INT = @@ROWCOUNT;
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|soft|0|',
+  CAST(@delete_count AS NVARCHAR(20)), N'|0|',
+  CAST(@delete_count AS NVARCHAR(20)), N'|');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
@@ -469,23 +466,22 @@ IF @delete_count > 100
 DECLARE @target_count INT = (
   SELECT COUNT(*)
   FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
+  INNER JOIN #bc_tc C
+    ON C.[tenant_code] = T.[tenant_code]
+   AND C.[company_code] = T.[company_code]
   WHERE T.[is_deleted] = 0
-    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 DECLARE @source_active_count INT = (
   SELECT COUNT(*) FROM #st_source WHERE [is_deleted] = 0
 );
 DECLARE @target_physical INT = (
   SELECT COUNT(*)
-  FROM [takt_logistics_manufacturing_bom_material_cost_item] T
-  WHERE EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
+  FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
+  INNER JOIN #bc_tc C
+    ON C.[tenant_code] = T.[tenant_code]
+   AND C.[company_code] = T.[company_code]
 );
-DECLARE @soft_deleted INT = (
-  SELECT COUNT(*)
-  FROM [takt_logistics_manufacturing_bom_material_cost_item] T
-  WHERE T.[is_deleted]=1
-    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
-);
+DECLARE @soft_deleted INT = @target_physical - @target_count;
 
 IF @target_count <> @source_active_count
 BEGIN

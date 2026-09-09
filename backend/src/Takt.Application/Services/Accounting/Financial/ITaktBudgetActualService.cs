@@ -38,8 +38,10 @@ public interface ITaktBudgetActualService
     /// <summary>
     /// 获取预算实绩选项列表（DictValue=Id，DictLabel=预算项名称，ExtValue=本期预算金额）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetBudgetActualOptionsAsync();
+    Task<List<TaktSelectOption>> GetBudgetActualOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建预算实绩

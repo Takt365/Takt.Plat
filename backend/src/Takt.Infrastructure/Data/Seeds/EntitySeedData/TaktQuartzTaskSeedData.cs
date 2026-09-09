@@ -491,7 +491,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 35 3 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 03:35：回填 BOM 明细空采购价（ValidFrom≤核算日；不用未来价；不写 0；写入 ext_field._bk.bc；对齐 Helper；建议在 QT_SYNC_BC/PUP 之后；默认暂停）"),
+                Description: "每月 3 日 03:35：回填 BOM 明细空采购价（按核算月、每批 20000；ValidFrom≤核算日；不用未来价；不写 0；写入 ext_field._bk.bc；立即执行须选业务库+核算月，勿选暂存库；建议在 QT_SYNC_BC/PUP 之后；默认暂停）"),
             new(
                 TaskCode: "QT_SYNC_BC_PCB_SECT_BK",
                 TaskName: "回填：BOM明细PCB SECT整树标识",
@@ -516,7 +516,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomMaterialZeroPriceMovingBackfillJobHandler),
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 03:42：零价组件回填移动平均价（条件同零价格视图：X+PcbSectIndicator空+F+移动价=0；建议价同视图末字母逆推；写入 ext_field._bk.mp；立即执行须选目标库+核算月；建议在 QT_SYNC_BC/MAP/PCB_SECT 之后、成本合计之前；默认暂停）"),
+                Description: "每月 3 日 03:42：零价组件回填移动平均价（PcbSectIndicator=X 或用量≤0 永不回填；其余建议价末字母逆推；写入 ext_field._bk.mp；立即执行须选目标库+核算月；建议在 QT_SYNC_BC/MAP/PCB_SECT 之后、成本合计之前；默认暂停）"),
             new(
                 TaskCode: "QT_SYNC_BV",
                 TaskName: "源数据同步：BOM物料成本汇总",
@@ -540,7 +540,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 50 3 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 03:50：回填 BOM 成本主表空机种/空物料类型（已有值不覆盖；写入 ext_field._bk.bv；model_destination；general_material→material_plant）；建议在 QT_SYNC_MAT/MATPLT/MDL/BV 之后；默认暂停"),
+                Description: "每月 3 日 03:50：先查出 BOM 成本主表/明细 product_code、明细 component_code 前导 00000000 的行并去掉这 8 位（撞唯一键跳过），再回填主表空机种/空物料类型（已有值不覆盖；写入 ext_field._bk.bv；model_destination；general_material→material_plant）；建议在 QT_SYNC_MAT/MATPLT/MDL/BV 之后；默认暂停"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_SUM",
                 TaskName: "BOM物料成本合计",
@@ -553,7 +553,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomMaterialCostSumJobHandler),
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 04:00 合计 CostingDate 当月（立即执行须选目标库+核算月；月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 04:00 合计 CostingDate 当月（不回填机种/物料类型，须先 QT_SYNC_BV_BK；立即执行须选目标库+核算月；月度；以手动为主；默认暂停）"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_RECALC",
                 TaskName: "BOM物料成本重算",
@@ -579,7 +579,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomModelAvgCostJobHandler),
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 05:00：先回填机种+物料类型，再按工厂+物料类型+机种+月份重算机种月均（立即执行须选目标库+核算月；须先 QT_SYNC_MDL/MATPLT 与主表有当月数据；月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 05:00：按工厂+物料类型+机种+月份重算机种月均（不回填机种/物料类型，须先 QT_SYNC_BV_BK；立即执行须选目标库+核算月；月度；以手动为主；默认暂停）"),
         };
     }
 

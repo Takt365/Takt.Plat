@@ -38,8 +38,10 @@ public interface ITaktAssyLaborHourService
     /// <summary>
     /// 获取组立工数统计选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAssyLaborHourOptionsAsync();
+    Task<List<TaktSelectOption>> GetAssyLaborHourOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建组立工数统计

@@ -130,10 +130,20 @@ export function updateTrainingPlanStatus(dto: TrainingPlanStatus): Promise<Train
  * 获取培训计划选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTrainingPlanOptions(): Promise<TaktSelectOption[]> {
+export function getTrainingPlanOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TRAINING_PLAN_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -18,6 +18,7 @@
 @import './table-ellipsis-base.css';
 @import './table-loading-base.css';
 @import './select-base.css';
+@import './dashboard-base.css';
 @import './utilities.css';
 @import 'tailwindcss';
 
@@ -165,7 +166,99 @@ a:active {
 }
 
 /**
- * @remixicon/vue 统一尺寸（Small 12 / Default 16 / Large 24 / XL 32）
+ * 登录展示区：根容器 / aside 不得铺底色（会盖住登录页渐变）
+ */
+.takt-login-showcase {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/**
+ * 登录展示插画区（背景透明，透出登录渐变）
+ */
+.takt-login-showcase-demo {
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/**
+ * takt-split-text（对齐 https://codepen.io/GreenSock/pen/jEEbzJb）
+ * 字号/盒高随父级 font-size 用 em 缩放（如外层 text-[32px]）
+ */
+.takt-split-text-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.takt-split-text {
+  margin: 0;
+  opacity: 0;
+  max-width: 100%;
+  font-size: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  text-align: center;
+}
+
+.takt-split-text-word {
+  display: inline-block;
+  margin: 0.2em;
+  min-height: 1.35em;
+  padding: 0.25em 0.45em;
+  border: 0.06em dashed rgb(255 255 255 / 0.9);
+  border-radius: 0.35em;
+  background-image: linear-gradient(105deg, #f3e8ff 0%, #c4b5fd 45%, #a78bfa 100%);
+  background-size: 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  vertical-align: middle;
+}
+
+/**
+ * takt-draw-svg：左右面板插画（浮动 / 均衡器 / 音量条）
+ */
+.takt-draw-svg-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: min(820px, 96vw);
+}
+
+.takt-draw-svg-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 800 / 600;
+  max-height: 56vh;
+  overflow: hidden;
+}
+
+.takt-draw-svg-panels {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.takt-draw-svg-panels svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/**
+ * @remixicon/vue 统一尺寸（Small 12 / Default 16 / Large 24 / XL 32；看板头 4 / 6 / 8 / 12）
  * 用法：<RiHomeLine class="takt-remix-icon" /> · <RiHomeLine class="takt-remix-icon-lg" />
  */
 .takt-remix-icon,
@@ -219,12 +312,50 @@ a:active {
   font-size: 32px;
 }
 
+/**
+ * 看板模块卡片头图标（4 / 6 / 8 px；切换 --takt-card-head-icon-size 即可）
+ */
+.takt-remix-icon-4,
+.takt-remix-icon-4 > svg,
+.takt-remix-icon-4 svg {
+  width: 4px;
+  height: 4px;
+  font-size: 4px;
+}
+
+.takt-remix-icon-6,
+.takt-remix-icon-6 > svg,
+.takt-remix-icon-6 svg {
+  width: 6px;
+  height: 6px;
+  font-size: 6px;
+}
+
+.takt-remix-icon-8,
+.takt-remix-icon-8 > svg,
+.takt-remix-icon-8 svg {
+  width: 8px;
+  height: 8px;
+  font-size: 8px;
+}
+
+.takt-remix-icon-12,
+.takt-remix-icon-12 > svg,
+.takt-remix-icon-12 svg {
+  width: 12px;
+  height: 12px;
+  font-size: 12px;
+}
+
 /** 生成表单统一 label 列宽（容纳图标 + 扩展字段JSON） */
 :root {
   --takt-form-label-col-width: 10.75rem;
 }
 
-/** 脚本生成表单：标签右对齐、输入控件左对齐、统一 label 列宽 */
+/**
+ * 水平表单统一风格（生成页 + 手工 CRUD）：
+ * 标签列固定宽 + 右对齐；控件左对齐。根节点须 class="takt-generated-form" 且 layout="horizontal" + label-align="right"
+ */
 .takt-generated-form.ant-form-horizontal .ant-form-item .ant-form-item-label {
   flex: 0 0 var(--takt-form-label-col-width) !important;
   width: var(--takt-form-label-col-width) !important;

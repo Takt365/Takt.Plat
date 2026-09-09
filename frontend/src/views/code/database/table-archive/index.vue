@@ -191,7 +191,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -481,6 +481,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import {
   RiAddLine,
   RiInboxArchiveLine,
@@ -506,7 +507,6 @@ import {
   runTableArchiveNow,
   scheduleTableArchive,
   updateTableArchive,
-  updateTableArchiveSort,
   updateTableArchiveStatus,
 } from '@/api/code/database/table-archive'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -551,6 +551,8 @@ const formTitle = ref('')
 const formData = ref<Partial<TableArchive> | null>(null)
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const advancedQueryVisible = ref(false)
 const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
@@ -572,7 +574,6 @@ const ensureYearEnd = ref(new Date().getFullYear() + 1)
 const ensureYearsLoading = ref(false)
 const ensureYearsResult = ref('')
 const runLoadingId = ref<string | null>(null)
-const initialSortOrder = ref(0)
 
 function createEmptyAdvancedQueryForm() {
   const form = Object.fromEntries(
@@ -807,7 +808,6 @@ function handleReset() {
 function handleCreate() {
   formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
-  initialSortOrder.value = 0
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
@@ -822,7 +822,6 @@ async function handleEdit(record: TableArchiveRowRecord) {
   try {
     const detail = await getTableArchiveById(id)
     formData.value = detail ?? ({ ...record } as Partial<TableArchive>)
-    initialSortOrder.value = Number(formData.value?.sortOrder ?? 0)
     formVisible.value = true
   } catch {
     message.error(t('common.feedback.load.data.failed'))
@@ -854,20 +853,12 @@ async function handleFormSubmit() {
   formLoading.value = true
   try {
     const payload = refInst.getValues?.()
-    const sortOrder = refInst.getSortOrderValue?.() ?? 0
     const id = formData.value?.tableArchiveId
     if (id) {
       await updateTableArchive(id, payload)
-      if (sortOrder !== initialSortOrder.value) {
-        await updateTableArchiveSort({ tableArchiveId: id, sortOrder })
-      }
       message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      const created = await createTableArchive(payload)
-      const createdId = created?.tableArchiveId
-      if (createdId && sortOrder > 0) {
-        await updateTableArchiveSort({ tableArchiveId: createdId, sortOrder })
-      }
+      await createTableArchive(payload)
       message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false

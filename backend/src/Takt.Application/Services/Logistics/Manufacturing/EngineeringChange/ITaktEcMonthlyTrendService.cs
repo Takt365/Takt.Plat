@@ -23,25 +23,27 @@ public interface ITaktEcMonthlyTrendService
     /// <summary>
     /// 推移查询栏：工厂去重选项（设变主表 PlantCode；执行任务无工厂列）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync();
+    Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂去重部门（级联第 2 级；来自执行任务）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string plantCode);
+    Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂+部门去重设变单号（级联第 3 级；部门可空；来自执行任务）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="deptCode">部门编码（可空）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(
-        string plantCode,
-        string? deptCode = null);
+    Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(string? plantCode = null, string? keyword = null, string? deptCode = null);
 
     /// <summary>
     /// 获取月设变推移转置分析（分页）

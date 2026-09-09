@@ -18,7 +18,7 @@
     :items="menuItems"
     :inline-collapsed="collapsed"
     :inline-indent="menuInlineIndent"
-    :class="['takt-side-menu', `menu-style-${setting.menuStyle}`]"
+    :class="['takt-side-menu', menuStyleClass]"
     @click="handleMenuClick"
     @openChange="handleOpenChange"
   />
@@ -55,6 +55,11 @@ const router = useRouter()
 const themeStore = useThemeStore()
 const menuStore = useMenuStore()
 const { setting } = storeToRefs(useSettingStore())
+/** 菜单风格 class（plain / rounded） */
+const menuStyleClass = computed(() => {
+  const style = setting.value.menuStyle === 'rounded' ? 'rounded' : 'plain'
+  return `menu-style-${style}`
+})
 
 const selectedKeys = ref<string[]>([])
 const openKeys = ref<string[]>([])
@@ -99,29 +104,6 @@ watch(
 <style scoped>
 .takt-side-menu {
   border-right: 0;
-
-  /* 图标与文本间距见 menu-base.css；层级缩进由 :inline-indent 控制 */
-
-  &.menu-style-rounded {
-    :deep(.ant-menu-item) {
-      border-radius: 4px;
-      margin: 4px 4px;
-    }
-    :deep(.ant-menu-submenu-title) {
-      border-radius: 4px;
-      margin: 4px 4px;
-    }
-  }
-
-  &.menu-style-plain {
-    :deep(.ant-menu-item) {
-      border-radius: 0;
-      margin: 0;
-    }
-    :deep(.ant-menu-submenu-title) {
-      border-radius: 0;
-      margin: 0;
-    }
-  }
+  /* 图标间距见 menu-base.css；朴素/圆润风格见 menu-base.css html[data-menu-style] */
 }
 </style>

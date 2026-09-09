@@ -72,7 +72,7 @@ public class TaktEcSeizounikasController : TaktControllerBase
     {
         try
         {
-            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.Pcba);
+            var result = await _ecExecMasterQueryService.GetEcDetailMasterListAsync(queryDto, TaktEcDeptCodes.SeizounikaMaster);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
         }
         catch (Exception ex)
@@ -111,11 +111,11 @@ public class TaktEcSeizounikasController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:seizounika:query", "设变制二执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcSeizounikaOptionsAsync()
+    public async Task<IActionResult> GetEcSeizounikaOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecSeizounikaService.GetEcSeizounikaOptionsAsync();
+            var result = await _ecSeizounikaService.GetEcSeizounikaOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcSeizounikasController : TaktControllerBase
         {
             await _ecSeizounikaService.DeleteEcSeizounikaBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变制造二课执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变制造二课执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seizounika:update", "更新设变制造二课执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcSeizounikaDiscontinuedStatusAsync([FromBody] TaktEcSeizounikaDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecSeizounikaService.UpdateEcSeizounikaDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

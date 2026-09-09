@@ -226,26 +226,6 @@
               {{ record.extValue || '-' }}
             </span>
           </template>
-          <!-- 排序号 - 可编辑 -->
-          <template v-else-if="column.key === 'sortOrder'">
-            <a-input-number
-              v-if="editingKey === `${record.dictDataId}-sortOrder`"
-              v-model:value="editingRecord.sortOrder"
-              :min="0"
-              size="small"
-              style="width: 100%"
-              @blur="handleSaveCell(record, 'sortOrder')"
-              @press-enter="handleSaveCell(record, 'sortOrder')"
-              @keydown.esc="handleCancelEdit"
-            />
-            <span
-              v-else
-              style="cursor: pointer; padding: 4px 8px; display: inline-block; min-height: 24px; width: 100%"
-              @click="handleStartEdit(record, 'sortOrder')"
-            >
-              {{ record.sortOrder ?? 0 }}
-            </span>
-          </template>
         </template>
       </TaktSingleTable>
 
@@ -341,7 +321,6 @@ type DictDataEditableField =
   | 'listClass'
   | 'extLabel'
   | 'extValue'
-  | 'sortOrder'
 
 /** 行内编辑缓冲区：绑定 a-input / a-input-number 须为必填类型，不能用 `Partial<DictData>`（可选字段为 `T | undefined`） */
 type DictDataInlineEditState = {
@@ -352,7 +331,6 @@ type DictDataInlineEditState = {
   listClass: number
   extLabel: string
   extValue: string
-  sortOrder: number
 }
 
 function dictDataToInlineEditState(r: DictData): DictDataInlineEditState {
@@ -363,8 +341,7 @@ function dictDataToInlineEditState(r: DictData): DictDataInlineEditState {
     cssClass: r.cssClass ?? 0,
     listClass: r.listClass ?? 0,
     extLabel: r.extLabel ?? '',
-    extValue: r.extValue ?? '',
-    sortOrder: r.sortOrder ?? 0
+    extValue: r.extValue ?? ''
   }
 }
 
@@ -376,8 +353,7 @@ function emptyInlineEditState(): DictDataInlineEditState {
     cssClass: 0,
     listClass: 0,
     extLabel: '',
-    extValue: '',
-    sortOrder: 0
+    extValue: ''
   }
 }
 
@@ -531,12 +507,6 @@ const columns = computed<TableColumnsType<DictData>>(() => [
     key: 'extValue',
     width: 150,
     ellipsis: true
-  },
-  {
-    title: t('entity.dictdata.sortorder'),
-    dataIndex: 'sortOrder',
-    key: 'sortOrder',
-    width: 100
   },
   CreateActionColumn<DictData>({
     actions: [
@@ -1015,7 +985,7 @@ const handleSaveCell = async (record: DictData, field: DictDataEditableField) =>
       listClass: field === 'listClass' ? (newValue as number) : record.listClass,
       extLabel: field === 'extLabel' ? strOrUndef(newValue as string) : record.extLabel,
       extValue: field === 'extValue' ? strOrUndef(newValue as string) : record.extValue,
-      sortOrder: field === 'sortOrder' ? (newValue as number) : record.sortOrder
+      sortOrder: record.sortOrder
     } as DictDataUpdate
     
     await dictDataApi.updateDictData(record.dictDataId, updateData)

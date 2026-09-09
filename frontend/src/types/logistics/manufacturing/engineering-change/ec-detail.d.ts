@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.d.ts
-// 创建时间：2026-08-26
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,9 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变明细实体（技术阶段一 ③，隶属 TaktEcGijutsu）。技术维护 BOM/料号变更行；存在明细时保存主表后系统自动生成 TaktEcNotification， 阶段二各部门在 TaktEcSeikan/Mp 等表按明细行（EcnDetailId）填报执行，本实体通过 OneToOne 导航直接关联各课部门执行表。
- * 对应前端 TaktEcDetailDto
- * 继承 TaktCompanyDtoBase
+ * 设变明细（技术阶段一 ③，外键 EcGijutsuId 隶属 TaktEcGijutsu；含各部门执行视图外键 EcXxxId）。对应前端 TaktEcDetailDto。
  * 对应前端 EcDetail
  * @description 对应后端 TaktEcDetailDto
  */
@@ -31,7 +29,7 @@ export interface EcDetail extends CompanyDtoBase {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId: string;
+  ecGijutsuId: string;
 
   /**
    * 设变主表名称（填充字段）
@@ -79,9 +77,13 @@ export interface EcDetail extends CompanyDtoBase {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 旧物料编码
@@ -193,11 +195,6 @@ export interface EcDetail extends CompanyDtoBase {
    */
   isObsolete: number;
 
-  /**
-   * 设变技术课主表（多对一） （主表：TaktEcGijutsu）
-   */
-  ecGijutsu?: EcGijutsu;
-
 }
 
 
@@ -231,7 +228,7 @@ export interface EcDetailQuery extends TaktPagedQuery {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId?: string;
+  ecGijutsuId?: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -274,9 +271,13 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 旧物料编码
@@ -413,11 +414,6 @@ export interface EcDetailQuery extends TaktPagedQuery {
    */
   remark?: string;
 
-  /**
-   * 制二课主表页签（1=采购 F 且仓库 C003 2=其它；仅 TaktEcSeizounikas/masters 使用）
-   */
-  pcbaTab?: number;
-
 }
 
 
@@ -450,7 +446,7 @@ export interface EcDetailCreate {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId: string;
+  ecGijutsuId: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -493,9 +489,13 @@ export interface EcDetailCreate {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 旧物料编码
@@ -683,7 +683,7 @@ export interface EcDetailTemplate {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId?: string;
+  ecGijutsuId?: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -726,9 +726,13 @@ export interface EcDetailTemplate {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 旧物料编码
@@ -882,7 +886,7 @@ export interface EcDetailImport {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId?: string;
+  ecGijutsuId?: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -925,9 +929,13 @@ export interface EcDetailImport {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus?: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction?: number;
 
   /**
    * 旧物料编码
@@ -1081,7 +1089,7 @@ export interface EcDetailExport {
   /**
    * 设变主表ID（主表主键,序列化为string以避免Javascript精度问题）
    */
-  ecId: string;
+  ecGijutsuId: string;
 
   /**
    * 设变单号（冗余字段,便于查询）
@@ -1124,9 +1132,13 @@ export interface EcDetailExport {
   ecParentMaterialDescription?: string;
 
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
+   * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
    */
   discontinuedStatus: string;
+  /**
+   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   */
+  ecDistinction: number;
 
   /**
    * 旧物料编码

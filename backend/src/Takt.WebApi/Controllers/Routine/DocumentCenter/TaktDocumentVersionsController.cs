@@ -86,11 +86,11 @@ public class TaktDocumentVersionsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:document:center:version:query", "文管文档版本选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDocumentVersionOptionsAsync()
+    public async Task<IActionResult> GetDocumentVersionOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _documentVersionService.GetDocumentVersionOptionsAsync();
+            var result = await _documentVersionService.GetDocumentVersionOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

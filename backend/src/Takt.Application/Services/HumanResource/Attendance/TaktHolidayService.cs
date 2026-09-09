@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
@@ -91,8 +92,10 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
     /// <summary>
     /// 获取假日信息选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetHolidayOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetHolidayOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _holidayRepository.GetListAsync(
@@ -114,6 +117,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
     public async Task<TaktHolidayDto> CreateHolidayAsync(TaktHolidayCreateDto dto)
     {
         var entity = dto.Adapt<TaktHoliday>();
+        FillHolidayDaysCount(entity);
         var isUnique_ix_holiday_start_end_type_unique = await _uniqueValidator.IsUniqueAsync(
             _holidayRepository,
             x => x.StartDate == entity.StartDate
@@ -141,6 +145,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             throw new TaktBusinessException("假日信息不存在");
         }
         dto.Adapt(entity);
+        FillHolidayDaysCount(entity);
         var isUnique_ix_holiday_start_end_type_unique = await _uniqueValidator.IsUniqueAsync(
             _holidayRepository,
             x => x.StartDate == entity.StartDate
@@ -223,6 +228,7 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             try
             {
                 var entity = rows[i].Adapt<TaktHoliday>();
+                FillHolidayDaysCount(entity);
                 var importKey = $"{entity.StartDate}|{entity.EndDate}|{entity.HolidayType}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -315,7 +321,8 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             return empty;
         }
         var dto = holiday.Adapt<TaktHolidayThemeDto>();
-        dto.IsHolidayToday = holiday.IsWorkingDay == 0;
+        // 命中 StartDate～EndDate 即为放假日；调休上班日在 CompensatoryWorkDates，不在本区间
+        dto.IsHolidayToday = !ContainsCompensatoryWorkDate(holiday.CompensatoryWorkDates, today);
         return dto;
     }
 
@@ -338,7 +345,9 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             exp = exp.And(x =>
                 (x.HolidayName != null && x.HolidayName.Contains(keywords))
                 || SqlFunc.ToString(x.HolidayType).Contains(keywords)
-                || SqlFunc.ToString(x.IsWorkingDay).Contains(keywords)
+                || (x.CompensatoryWorkDates != null && x.CompensatoryWorkDates.Contains(keywords))
+                || SqlFunc.ToString(x.IsPaid).Contains(keywords)
+                || SqlFunc.ToString(x.DaysCount).Contains(keywords)
                 || (x.HolidayGreeting != null && x.HolidayGreeting.Contains(keywords))
                 || (x.HolidayQuote != null && x.HolidayQuote.Contains(keywords))
                 || (x.HolidayTheme != null && x.HolidayTheme.Contains(keywords))
@@ -361,9 +370,19 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
             exp = exp.And(x => x.HolidayType == queryDto.HolidayType);
         }
 
-        if (queryDto?.IsWorkingDay.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.CompensatoryWorkDates))
         {
-            exp = exp.And(x => x.IsWorkingDay == queryDto.IsWorkingDay);
+            exp = exp.And(x => x.CompensatoryWorkDates != null && x.CompensatoryWorkDates.Contains(queryDto.CompensatoryWorkDates));
+        }
+
+        if (queryDto?.DaysCount.HasValue == true)
+        {
+            exp = exp.And(x => x.DaysCount == queryDto.DaysCount);
+        }
+
+        if (queryDto?.IsPaid.HasValue == true)
+        {
+            exp = exp.And(x => x.IsPaid == queryDto.IsPaid);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.HolidayGreeting))
@@ -433,5 +452,52 @@ public class TaktHolidayService : TaktServiceBase, ITaktHolidayService
 
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 由起止日期回填假期天数（含起止日）
+    /// </summary>
+    /// <param name="entity">假日实体</param>
+    private static void FillHolidayDaysCount(TaktHoliday entity)
+    {
+        var start = entity.StartDate.Date;
+        var end = entity.EndDate.Date;
+        entity.StartDate = start;
+        entity.EndDate = end;
+        if (end < start)
+        {
+            entity.DaysCount = 0;
+            return;
+        }
+        entity.DaysCount = checked(end.Subtract(start).Days + 1);
+    }
+
+    /// <summary>
+    /// 判断指定日是否为调休上班日（取「上班日=&gt;放假日」左侧；兼容仅上班日）
+    /// </summary>
+    /// <param name="raw">CompensatoryWorkDates</param>
+    /// <param name="date">待判日期</param>
+    /// <returns>是否命中</returns>
+    private static bool ContainsCompensatoryWorkDate(string? raw, DateTime date)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return false;
+        }
+        var key = date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        foreach (var part in raw.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var workRaw = part;
+            var arrow = part.IndexOf("=>", StringComparison.Ordinal);
+            if (arrow >= 0)
+            {
+                workRaw = part[..arrow].Trim();
+            }
+            if (string.Equals(workRaw, key, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

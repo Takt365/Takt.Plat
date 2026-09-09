@@ -144,10 +144,20 @@ export function updatePostSort(dto: PostSort): Promise<Post> {
  * 获取岗位选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPostOptions(): Promise<TaktSelectOption[]> {
+export function getPostOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${POST_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

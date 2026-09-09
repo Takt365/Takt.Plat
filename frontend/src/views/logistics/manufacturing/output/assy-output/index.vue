@@ -99,7 +99,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="1100px"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -178,6 +178,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.teamCode"
           api-url="TaktProductionTeams/options"
+          :api-params="assyTeamQueryOptionsParams"
           :placeholder="pi.queryPh('teamCode', 'select')"
           allow-clear
         />
@@ -227,6 +228,7 @@
         <TaktSelect
           v-model:value="advancedQueryForm.prodOrderCode"
           api-url="TaktProductionOrders/options"
+          :api-params="prodOrderQueryOptionsParams"
           :placeholder="pi.queryPh('prodOrderCode', 'select')"
           allow-clear
         />
@@ -415,9 +417,11 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import AssyOutputForm from './components/assy-output-form.vue'
 import AssyOutputDetailPanel from './components/assy-output-detail-panel.vue'
+import { buildAssyProductionTeamOptionsParams } from '../composables/production-team-category'
 import { provideAssyOutputMasterContext, type AssyOutputRowRecord } from './composables/use-assy-output-master-context'
 import { getAssyOutputList, getAssyOutputById, createAssyOutput, updateAssyOutput, deleteAssyOutputById, deleteAssyOutputBatch, getAssyOutputTemplate, importAssyOutput, exportAssyOutput } from '@/api/logistics/manufacturing/output/assy-output'
 import type { AssyOutput, AssyOutputQuery } from '@/types/logistics/manufacturing/output/assy-output'
@@ -476,6 +480,8 @@ const formData = ref<Partial<AssyOutput> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -535,6 +541,17 @@ function createEmptyAdvancedQueryForm() {
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
+
+/** 高级查询班组下拉（按工厂 + 组立分类） */
+const assyTeamQueryOptionsParams = computed(() =>
+  buildAssyProductionTeamOptionsParams(advancedQueryForm.value.plantCode),
+)
+
+/** 高级查询工单下拉（按工厂） */
+const prodOrderQueryOptionsParams = computed(() => {
+  const plant = String(advancedQueryForm.value.plantCode ?? '').trim()
+  return plant ? { plantCode: plant } : {}
+})
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() =>
   ASSYOUTPUT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
@@ -998,11 +1015,13 @@ async function handleFormSubmit() {
     }
     formVisible.value = false
     formData.value = null
-  nextTick(() => formRef.value?.resetFields())
+    nextTick(() => formRef.value?.resetFields())
     if (selectedMasterKey.value) {
-  assyOutputDetailPanelRef.value?.reload?.()
+      assyOutputDetailPanelRef.value?.reload?.()
     }
     loadData()
+  } catch {
+    // 400/业务错误已由 request 拦截器 toast；此处吞掉避免 Vue 再报 component event handler
   } finally {
     formLoading.value = false
   }

@@ -103,8 +103,10 @@ public class TaktQualityAssuranceCalibrationService : TaktServiceBase, ITaktQual
     /// <summary>
     /// 获取品质业务设备校正费用明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityAssuranceCalibrationOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityAssuranceCalibrationOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _qualityAssuranceCalibrationRepository.GetListAsync(

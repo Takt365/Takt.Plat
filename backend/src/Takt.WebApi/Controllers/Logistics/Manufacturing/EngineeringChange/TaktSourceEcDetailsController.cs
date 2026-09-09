@@ -86,11 +86,11 @@ public class TaktSourceEcDetailsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:source:ec:query", "设变来源子选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSourceEcDetailOptionsAsync()
+    public async Task<IActionResult> GetSourceEcDetailOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _sourceEcDetailService.GetSourceEcDetailOptionsAsync();
+            var result = await _sourceEcDetailService.GetSourceEcDetailOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

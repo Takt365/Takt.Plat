@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecattachment._self
             new TranslationSeedItem("entity.ecattachment._self", "zh-HK", "设变附件信息_hk", "实体名称"),
 
-            // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "en-US", "设变ID_us", "设变主表ID"),
-            // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "ja-JP", "设变ID_jp", "设变主表ID"),
-            // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "zh-CN", "设变ID", "设变主表ID"),
-            // entity.ecattachment.ecid
-            new TranslationSeedItem("entity.ecattachment.ecid", "zh-HK", "设变ID_hk", "设变主表ID"),
+            // entity.ecattachment.ecgijutsuid
+            new TranslationSeedItem("entity.ecattachment.ecgijutsuid", "en-US", "技术课主表ID_us", "技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）"),
+            // entity.ecattachment.ecgijutsuid
+            new TranslationSeedItem("entity.ecattachment.ecgijutsuid", "ja-JP", "技术课主表ID_jp", "技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）"),
+            // entity.ecattachment.ecgijutsuid
+            new TranslationSeedItem("entity.ecattachment.ecgijutsuid", "zh-CN", "技术课主表ID", "技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）"),
+            // entity.ecattachment.ecgijutsuid
+            new TranslationSeedItem("entity.ecattachment.ecgijutsuid", "zh-HK", "技术课主表ID_hk", "技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）"),
 
             // entity.ecattachment.eccode
             new TranslationSeedItem("entity.ecattachment.eccode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
@@ -109,13 +109,13 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecattachment.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
 
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10；与 EcGijutsuId、DocCode 组成唯一键）"),
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10；与 EcGijutsuId、DocCode 组成唯一键）"),
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10；与 EcGijutsuId、DocCode 组成唯一键）"),
             // entity.ecattachment.linenumber
-            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
+            new TranslationSeedItem("entity.ecattachment.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10；与 EcGijutsuId、DocCode 组成唯一键）"),
 
             // entity.ecattachment.attachmenttype
             new TranslationSeedItem("entity.ecattachment.attachmenttype", "en-US", "文件类别_us", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
@@ -127,13 +127,13 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别（字典 logistics_manufacturing_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
 
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "en-US", "文件编码_us", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "en-US", "文件编码_us", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；与 EcGijutsuId、LineNumber 组成唯一键）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "ja-JP", "文件编码_jp", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "ja-JP", "文件编码_jp", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；与 EcGijutsuId、LineNumber 组成唯一键）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "zh-CN", "文件编码", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-CN", "文件编码", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；与 EcGijutsuId、LineNumber 组成唯一键）"),
             // entity.ecattachment.doccode
-            new TranslationSeedItem("entity.ecattachment.doccode", "zh-HK", "文件编码_hk", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；租户公司内不可重复）"),
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-HK", "文件编码_hk", "文件编码（按 AttachmentType：EC=与设变单号一致；EPP/FPP=P-四位数字；TL=DTS-四位数字；TCJ/EL=四位-四位数字；与 EcGijutsuId、LineNumber 组成唯一键）"),
 
             // entity.ecattachment.filename
             new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称（上传后强制等于文件编码 DocCode + 原扩展名，与源文件名无关；含扩展名故 Length=200）"),

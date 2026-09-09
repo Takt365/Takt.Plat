@@ -86,11 +86,11 @@ public class TaktKnowledgesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:knowledge:query", "知识库选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetKnowledgeOptionsAsync()
+    public async Task<IActionResult> GetKnowledgeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _knowledgeService.GetKnowledgeOptionsAsync();
+            var result = await _knowledgeService.GetKnowledgeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

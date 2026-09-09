@@ -39,8 +39,10 @@ public interface ITaktQualityGroupService
     /// 获取质量组主数据选项列表
     /// </summary>
     /// <param name="inspectionCategory">检查类别（字典 logistics_quality_group_inspection_category；为空则返回全部启用组）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetQualityGroupOptionsAsync(int? inspectionCategory = null);
+    Task<List<TaktSelectOption>> GetQualityGroupOptionsAsync(string? plantCode = null, string? keyword = null, int? inspectionCategory = null);
 
     /// <summary>
     /// 创建质量组主数据

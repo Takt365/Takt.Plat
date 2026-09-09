@@ -130,10 +130,20 @@ export function updateAssyBatchDefectStatus(dto: AssyBatchDefectStatus): Promise
  * 获取组立批量不良统计选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getAssyBatchDefectOptions(): Promise<TaktSelectOption[]> {
+export function getAssyBatchDefectOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ASSY_BATCH_DEFECT_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

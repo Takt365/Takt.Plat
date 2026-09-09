@@ -32,7 +32,7 @@ export interface EcNotification extends ApprovalDtoBase {
   /**
    * 关联的设变主表ID（序列化为string以避免Javascript精度问题）
    */
-  ecId?: string;
+  ecGijutsuId?: string;
 
   /**
    * 设变单号（冗余字段，便于查询）
@@ -115,7 +115,7 @@ export interface EcNotificationExport {
   /**
    * 关联的设变主表ID（序列化为string以避免Javascript精度问题）
    */
-  ecId: string;
+  ecGijutsuId: string;
 
   /**
    * 设变单号（冗余字段，便于查询）

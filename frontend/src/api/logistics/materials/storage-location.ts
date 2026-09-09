@@ -144,10 +144,20 @@ export function updateStorageLocationSort(dto: StorageLocationSort): Promise<Sto
  * 获取库位主数据选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getStorageLocationOptions(): Promise<TaktSelectOption[]> {
+export function getStorageLocationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${STORAGE_LOCATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

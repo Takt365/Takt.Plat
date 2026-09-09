@@ -11,10 +11,5 @@
 // ========================================
 
 export default {
-  page: {
-    tabs: {
-      c003: 'Purchase F · warehouse C003',
-      other: 'Other',
-    },
-  },
+  page: {},
 };

@@ -38,8 +38,10 @@ public interface ITaktGenTableService
     /// <summary>
     /// 获取代码生成表配置选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetGenTableOptionsAsync();
+    Task<List<TaktSelectOption>> GetGenTableOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建代码生成数据表配置

@@ -43,11 +43,11 @@ public class TaktMaterialMovingTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:moving:trend:list", "物料移动价格推移工厂选项")]
     [HttpGet("plant-options")]
-    public async Task<IActionResult> GetMaterialMovingTrendPlantOptionsAsync()
+    public async Task<IActionResult> GetMaterialMovingTrendPlantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialMovingTrendService.GetMaterialMovingTrendPlantOptionsAsync();
+            var result = await _materialMovingTrendService.GetMaterialMovingTrendPlantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ public class TaktMaterialMovingTrendsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:moving:trend:list", "物料移动价格推移评估类别选项")]
     [HttpGet("valuation-options")]
-    public async Task<IActionResult> GetMaterialMovingTrendValuationOptionsAsync([FromQuery] string plantCode)
+    public async Task<IActionResult> GetMaterialMovingTrendValuationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
@@ -71,7 +71,7 @@ public class TaktMaterialMovingTrendsController : TaktControllerBase
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _materialMovingTrendService.GetMaterialMovingTrendValuationOptionsAsync(plantCode);
+            var result = await _materialMovingTrendService.GetMaterialMovingTrendValuationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -81,25 +81,22 @@ public class TaktMaterialMovingTrendsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 推移查询栏：按工厂+评估类别去重物料
+    /// 推移查询栏：按工厂去重物料；评估类别可空，有值时再收窄
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
-    /// <param name="valuation">评估类别</param>
+    /// <param name="valuation">评估类别（可空）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:moving:trend:list", "物料移动价格推移物料选项")]
     [HttpGet("material-options")]
-    public async Task<IActionResult> GetMaterialMovingTrendMaterialOptionsAsync(
-        [FromQuery] string plantCode,
-        [FromQuery] string? valuation = null)
+    public async Task<IActionResult> GetMaterialMovingTrendMaterialOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? valuation = null)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(valuation))
+            if (string.IsNullOrWhiteSpace(plantCode))
             {
                 return Success(new List<TaktSelectOption>(), "查询成功");
             }
-            var result = await _materialMovingTrendService.GetMaterialMovingTrendMaterialOptionsAsync(
-                plantCode, valuation);
+            var result = await _materialMovingTrendService.GetMaterialMovingTrendMaterialOptionsAsync(plantCode, keyword, valuation);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -38,8 +38,10 @@ public interface ITaktTenantService
     /// <summary>
     /// 获取当前登录会话的租户选项（仅一项，DictValue 为 TenantCode；登录后不可跨租户切换）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>当前租户下拉项</returns>
-    Task<List<TaktSelectOption>> GetTenantOptionsAsync();
+    Task<List<TaktSelectOption>> GetTenantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建租户

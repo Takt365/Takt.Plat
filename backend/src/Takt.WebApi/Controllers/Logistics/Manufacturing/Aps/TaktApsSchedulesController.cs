@@ -86,11 +86,11 @@ public class TaktApsSchedulesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:aps:schedule:query", "APS排程主选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetApsScheduleOptionsAsync()
+    public async Task<IActionResult> GetApsScheduleOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _apsScheduleService.GetApsScheduleOptionsAsync();
+            var result = await _apsScheduleService.GetApsScheduleOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

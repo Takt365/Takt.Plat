@@ -116,10 +116,20 @@ export function deleteSalesPriceBatch(ids: string[]): Promise<void> {
  * 获取销售价格选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getSalesPriceOptions(): Promise<TaktSelectOption[]> {
+export function getSalesPriceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${SALES_PRICE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

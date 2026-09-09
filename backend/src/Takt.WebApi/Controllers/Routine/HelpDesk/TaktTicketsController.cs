@@ -57,6 +57,26 @@ public class TaktTicketsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取服务台工单件数统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>工单件数统计</returns>
+    [TaktPermission("routine:help:desk:ticket:list", "服务台工单件数统计")]
+    [HttpGet("ticket-stat")]
+    public async Task<IActionResult> GetTicketStatAsync([FromQuery] TaktTicketStatQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _ticketService.GetTicketStatAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据ID获取工单
     /// </summary>
     /// <param name="id">工单ID</param>
@@ -86,11 +106,11 @@ public class TaktTicketsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:ticket:query", "工单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTicketOptionsAsync()
+    public async Task<IActionResult> GetTicketOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ticketService.GetTicketOptionsAsync();
+            var result = await _ticketService.GetTicketOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

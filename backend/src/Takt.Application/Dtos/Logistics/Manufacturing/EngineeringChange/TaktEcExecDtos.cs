@@ -46,12 +46,12 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变明细名称（填充字段）
     /// </summary>
-    public string? EcnDetailName { get; set; }
+    public string? EcDetailName { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -109,9 +109,9 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期
@@ -202,7 +202,7 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     /// 设变明细（多对一）
     /// （主表：TaktEcDetail）
     /// </summary>
-    public TaktEcDetailDto? EcnDetail { get; set; }
+    public TaktEcDetailDto? EcDetail { get; set; }
 
 }
 
@@ -235,7 +235,7 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -303,9 +303,9 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期（范围查询-开始）
@@ -472,7 +472,7 @@ public class TaktEcExecCreateDto
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -532,9 +532,9 @@ public class TaktEcExecCreateDto
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期
@@ -682,7 +682,7 @@ public class TaktEcSeizougijutsumplateDto
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -740,9 +740,9 @@ public class TaktEcSeizougijutsumplateDto
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期
@@ -871,7 +871,7 @@ public class TaktEcExecImportDto
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -929,9 +929,9 @@ public class TaktEcExecImportDto
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期
@@ -1066,7 +1066,7 @@ public class TaktEcExecExportDto
     /// 设变明细ID（TaktEcDetail 主键）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcnDetailId { get; set; }
+    public long EcDetailId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -1124,9 +1124,9 @@ public class TaktEcExecExportDto
     public string? Balance { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
-    public string? OldProductHandling { get; set; } = string.Empty;
+    public string? EcOldPartDisposition { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购订单发行日期
@@ -1270,7 +1270,7 @@ public class TaktEcExecTransposedDto
     /// 设变主表 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 明细行号
     /// </summary>
@@ -1416,7 +1416,7 @@ public class TaktEcExecBatchTransposedDto
     /// 设变主表 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 明细行号
     /// </summary>

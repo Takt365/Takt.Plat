@@ -130,10 +130,20 @@ export function updateOperLogStatus(dto: OperLogStatus): Promise<OperLog> {
  * 获取操作日志选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getOperLogOptions(): Promise<TaktSelectOption[]> {
+export function getOperLogOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${OPER_LOG_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

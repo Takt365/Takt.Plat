@@ -111,11 +111,11 @@ public class TaktEcHinkansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:hinkan:query", "设变品管执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcHinkanOptionsAsync()
+    public async Task<IActionResult> GetEcHinkanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecHinkanService.GetEcHinkanOptionsAsync();
+            var result = await _ecHinkanService.GetEcHinkanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcHinkansController : TaktControllerBase
         {
             await _ecHinkanService.DeleteEcHinkanBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变品管执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变品管执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:hinkan:update", "更新设变品管执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcHinkanDiscontinuedStatusAsync([FromBody] TaktEcHinkanDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecHinkanService.UpdateEcHinkanDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

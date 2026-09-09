@@ -35,7 +35,57 @@ public class TaktCalendarDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CalendarId { get; set; }
 
+    /// <summary>
+    /// 日历日期
+    /// </summary>
+    public DateTime CalendarDate { get; set; }
 
+    /// <summary>
+    /// 月内第几天（1～31；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）
+    /// </summary>
+    public int Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53；由 CalendarDate 派生）
+    /// </summary>
+    public int WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）
+    /// </summary>
+    public int Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92；自然年季度；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfYear { get; set; }
+
+    /// <summary>
+    /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
+    /// </summary>
+    public int IsWorkingDay { get; set; } = 0;
+
+    /// <summary>
+    /// 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? HolidayId { get; set; }
+
+    /// <summary>
+    /// 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ShiftId { get; set; }
 }
 
 // ========================================
@@ -72,6 +122,36 @@ public class TaktCalendarQueryDto : TaktPagedQuery
     /// 日历日期（范围查询-结束）
     /// </summary>
     public DateTime? CalendarDateEnd { get; set; }
+
+    /// <summary>
+    /// 月内第几天（1～31）
+    /// </summary>
+    public int? DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 … 7=周日）
+    /// </summary>
+    public int? Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53）
+    /// </summary>
+    public int? WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4）
+    /// </summary>
+    public int? Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92）
+    /// </summary>
+    public int? DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366）
+    /// </summary>
+    public int? DayOfYear { get; set; }
 
     /// <summary>
     /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
@@ -145,6 +225,36 @@ public class TaktCalendarCreateDto
     /// 日历日期
     /// </summary>
     public DateTime CalendarDate { get; set; }
+
+    /// <summary>
+    /// 月内第几天（1～31；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）
+    /// </summary>
+    public int Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53；由 CalendarDate 派生）
+    /// </summary>
+    public int WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）
+    /// </summary>
+    public int Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92；自然年季度；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfYear { get; set; }
 
     /// <summary>
     /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
@@ -231,6 +341,36 @@ public class TaktCalendarTemplateDto
     public DateTime? CalendarDate { get; set; }
 
     /// <summary>
+    /// 月内第几天（1～31；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）
+    /// </summary>
+    public int? Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53；由 CalendarDate 派生）
+    /// </summary>
+    public int? WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）
+    /// </summary>
+    public int? Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92；自然年季度；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfYear { get; set; }
+
+    /// <summary>
     /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
@@ -291,6 +431,36 @@ public class TaktCalendarImportDto
     public DateTime? CalendarDate { get; set; }
 
     /// <summary>
+    /// 月内第几天（1～31；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）
+    /// </summary>
+    public int? Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53；由 CalendarDate 派生）
+    /// </summary>
+    public int? WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）
+    /// </summary>
+    public int? Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92；自然年季度；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366；由 CalendarDate 派生）
+    /// </summary>
+    public int? DayOfYear { get; set; }
+
+    /// <summary>
     /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
     /// </summary>
     public int? IsWorkingDay { get; set; }
@@ -349,6 +519,36 @@ public class TaktCalendarExportDto
     /// 日历日期
     /// </summary>
     public DateTime CalendarDate { get; set; }
+
+    /// <summary>
+    /// 月内第几天（1～31；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfMonth { get; set; }
+
+    /// <summary>
+    /// 星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）
+    /// </summary>
+    public int Weekday { get; set; }
+
+    /// <summary>
+    /// 年内第几周（ISO 8601；1～53；由 CalendarDate 派生）
+    /// </summary>
+    public int WeekOfYear { get; set; }
+
+    /// <summary>
+    /// 季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）
+    /// </summary>
+    public int Quarter { get; set; }
+
+    /// <summary>
+    /// 季内第几天（1～92；自然年季度；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfQuarter { get; set; }
+
+    /// <summary>
+    /// 年内第几天（1～366；由 CalendarDate 派生）
+    /// </summary>
+    public int DayOfYear { get; set; }
 
     /// <summary>
     /// 是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）

@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,6 +23,11 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
@@ -155,6 +177,22 @@ FROM (
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @hdr_source INT = (SELECT COUNT(*) FROM #hdr);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @hdr_source AS [to_rn],
+  @hdr_source AS [max_rn],
+  @hdr_source AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  CAST((@hdr_source) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @hdr_sap_keys INT = (
   SELECT COUNT(*) FROM (
     SELECT
@@ -190,8 +228,13 @@ DECLARE @hdr_before INT = (
     AND EXISTS (SELECT 1 FROM #hdr S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #hdr), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE [takt_logistics_procurement_purchase_order] AS T
-USING #hdr AS S
+USING (SELECT * FROM #hdr WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[plant_code]))=S.[plant_code]
  AND LTRIM(RTRIM(T.[purchase_order_code]))=S.[purchase_order_code]
@@ -261,6 +304,25 @@ WHEN NOT MATCHED THEN
   VALUES (S.[id],S.[plant_code],S.[purchase_order_code],S.[purchase_request_id],S.[purchase_request_code],S.[supplier_code],S.[supplier_name1],S.[order_date],S.[required_arrival_date],S.[actual_arrival_date],S.[purchase_group],S.[total_quantity],S.[total_amount],S.[discount_amount],S.[currency_code],S.[exchange_rate],S.[tax_code],S.[tax_rate],S.[tax_amount],S.[actual_amount],S.[received_quantity],S.[received_amount],S.[paid_amount],S.[payment_method],S.[delivery_method],S.[delivery_address],S.[order_status],S.[delivery_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[plant_code], INSERTED.[purchase_order_code], INSERTED.[supplier_code]
 INTO #hdr_delta (rn, oper_type, id, [plant_code], [purchase_order_code], [supplier_code]);
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 UPDATE S SET S.[id]=T.[id]
 FROM #hdr S
@@ -380,6 +442,22 @@ LEFT JOIN [takt_logistics_procurement_purchase_order_item] T
  AND ISNULL(T.[material_code],N'')=ISNULL(I.[material_code],N'');
 
 DECLARE @item_source INT = (SELECT COUNT(*) FROM #item WHERE [purchase_order_id]<>0);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @item_source AS [to_rn],
+  @item_source AS [max_rn],
+  @item_source AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  CAST((@item_source) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @item_sap_keys INT = (
   SELECT COUNT(*) FROM (
     SELECT LTRIM(RTRIM(R.[purchase_order_code])) AS [purchase_order_code],
@@ -410,8 +488,13 @@ DECLARE @item_before INT = (
     AND EXISTS (SELECT 1 FROM #item S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #item), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE [takt_logistics_procurement_purchase_order_item] AS T
-USING #item AS S
+USING (SELECT * FROM #item WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND T.[purchase_order_id]=S.[purchase_order_id] AND T.[line_number]=S.[line_number]
  AND ISNULL(T.[material_code],N'')=ISNULL(S.[material_code],N'')
@@ -474,6 +557,25 @@ WHEN NOT MATCHED THEN
   VALUES (S.[id],S.[purchase_order_id],S.[plant_code],S.[purchase_order_code],S.[line_number],S.[request_code],S.[request_line_number],S.[material_code],S.[material_description],S.[material_specification],S.[purchase_unit],S.[order_quantity],S.[received_quantity],S.[purchase_per_unit],S.[purchase_unit_price],S.[discount_rate],S.[discount_amount],S.[tax_included_amount],S.[untaxed_amount],S.[tax_amount],S.[purchase_amount],S.[delivery_status],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_order_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [purchase_order_code], [line_number]);
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 UPDATE I SET I.[id]=T.[id]
 FROM #item I

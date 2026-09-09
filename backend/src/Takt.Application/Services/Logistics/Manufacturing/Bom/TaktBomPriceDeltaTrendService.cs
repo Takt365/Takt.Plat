@@ -12,9 +12,10 @@
 
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Text;
+using System.Text.Json.Nodes;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
@@ -42,12 +43,45 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     /// 列表页组文字段截断长度（导出保留全文）
     /// </summary>
     private const int MaxGroupTextLength = 2000;
+    /// <summary>
+    /// 差异选项：全部（四组文完整）
+    /// </summary>
+    private const string PriceDeltaOptionAll = "all";
+    /// <summary>
+    /// 差异选项：差异绝对值≥1 才保留产品行（界面 >=1）
+    /// </summary>
+    private const string PriceDeltaOptionGt1 = "gt1";
+    /// <summary>
+    /// 差异选项：差异绝对值≥5 才保留产品行（界面 >=5）
+    /// </summary>
+    private const string PriceDeltaOptionGt5 = "gt5";
+    /// <summary>
+    /// 差异选项：差异绝对值≥10 才保留产品行（界面 >=10）
+    /// </summary>
+    private const string PriceDeltaOptionGt10 = "gt10";
+    /// <summary>
+    /// 差异选项：差异绝对值≥50 才保留产品行（界面 >=50）
+    /// </summary>
+    private const string PriceDeltaOptionGt50 = "gt50";
+    /// <summary>
+    /// 差异选项：差异绝对值≥100 才保留产品行（界面 >=100）
+    /// </summary>
+    private const string PriceDeltaOptionGt100 = "gt100";
+    /// <summary>
+    /// 改修列工单类别（TaktProductionOrder.ProdOrderType = ZDTB）
+    /// </summary>
+    private const string ReworkProdOrderType = "ZDTB";
+    /// <summary>
+    /// 改修工单查询行数上限（当前页/导出产品集合内）
+    /// </summary>
+    private const int ReworkOrderLookupMaxRows = 20000;
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
     private const string MovingPriceYearShardBaseTable = "takt_logistics_materials_material_moving_price";
 
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
     private readonly ITaktCompanyRepository<TaktBomMaterialCost> _bomMaterialCostRepository;
     private readonly ITaktCompanyRepository<TaktMaterialMovingPrice> _materialMovingPriceRepository;
+    private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
 
     /// <summary>
     /// 构造函数
@@ -55,12 +89,14 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     /// <param name="bomMaterialCostItemRepository">BOM 成本明细仓储</param>
     /// <param name="bomMaterialCostRepository">BOM 成本汇总仓储</param>
     /// <param name="materialMovingPriceRepository">移动价格仓储（0价格组可替代价）</param>
+    /// <param name="productionOrderRepository">生产工单仓储（改修列 ZDTB）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBomPriceDeltaTrendService(
         ITaktCompanyRepository<TaktBomMaterialCostItem> bomMaterialCostItemRepository,
         ITaktCompanyRepository<TaktBomMaterialCost> bomMaterialCostRepository,
         ITaktCompanyRepository<TaktMaterialMovingPrice> materialMovingPriceRepository,
+        ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -68,6 +104,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         _bomMaterialCostItemRepository = bomMaterialCostItemRepository;
         _bomMaterialCostRepository = bomMaterialCostRepository;
         _materialMovingPriceRepository = materialMovingPriceRepository;
+        _productionOrderRepository = productionOrderRepository;
     }
 
     /// <summary>
@@ -112,10 +149,14 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         columnLabels.Add("差异");
         columnKeys.Add("zeroPriceGroup");
         columnLabels.Add("0价格组");
+        columnKeys.Add("replaceComponentGroup");
+        columnLabels.Add("建议替代价格");
         columnKeys.Add("priceDeltaTrend");
         columnLabels.Add("价格差异组");
         columnKeys.Add("componentDeltaGroup");
         columnLabels.Add("组件差异");
+        columnKeys.Add("reworkOrderGroup");
+        columnLabels.Add("改修");
         var exportRows = result.Paged.Data.Select(row =>
         {
             var dict = new Dictionary<string, object?>(StringComparer.Ordinal)
@@ -125,8 +166,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 ["productDescription"] = row.ProductDescription,
                 ["priceDelta"] = row.PriceDelta,
                 ["zeroPriceGroup"] = row.ZeroPriceGroup,
+                ["replaceComponentGroup"] = row.ReplaceComponentGroup,
                 ["priceDeltaTrend"] = row.PriceDeltaTrend,
                 ["componentDeltaGroup"] = row.ComponentDeltaGroup,
+                ["reworkOrderGroup"] = row.ReworkOrderGroup,
             };
             foreach (var period in result.PeriodOrder)
             {
@@ -189,10 +232,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 $"核算期间最多 {MaxPeriodMonths} 个月（当前 {periodOrder.Count} 个月），请缩小期间以免列表溢出");
         }
 
-        // 差异/组对比：期间最大月 vs 前一月（前一月可能不在展示期间内，仍须加载）
-        var (basePeriod, comparePeriod) = ResolveComparePeriods(periodOrder);
+        // 差异/组对比：基准月 vs 比较月；必须都在核算期间列内，可不相邻
+        var (againstPeriod, focusPeriod) = ResolveComparePeriods(queryDto, periodOrder);
         var headers = await LoadCostHeadersAsync(
-            queryDto, plantCode, materialType, periodOrder, basePeriod, rangeStart, rangeEnd);
+            queryDto, plantCode, materialType, rangeStart, rangeEnd);
         var productGroups = headers
             .Where(r => !string.IsNullOrWhiteSpace(r.ProductCode))
             .GroupBy(r => NormalizeProductKey(r.ProductCode!), StringComparer.OrdinalIgnoreCase)
@@ -220,6 +263,29 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 .ToList();
         }
 
+        // 期间合集口径：主表核算日落在期间内且未软删。
+        // 列表再要求比较月+基准月各自有核算日当月、未删、月计算>0；6 无 + 7/8 删 → 不应出现。
+        if (!string.IsNullOrWhiteSpace(againstPeriod) && !string.IsNullOrWhiteSpace(focusPeriod))
+        {
+            catalog = catalog
+                .Where(p =>
+                    HasValidCostingDateHeader(p.Rows, againstPeriod!)
+                    && HasValidCostingDateHeader(p.Rows, focusPeriod!))
+                .ToList();
+        }
+
+        // 差异选项：按主表月成本差 |基准月−比较月| ≥ 阈值过滤产品行（分页总数随之变化）；全部不过滤
+        var priceDeltaInclusiveMin = ResolvePriceDeltaInclusiveMin(queryDto.PriceDeltaOption);
+        if (priceDeltaInclusiveMin != null
+            && !string.IsNullOrWhiteSpace(againstPeriod)
+            && !string.IsNullOrWhiteSpace(focusPeriod))
+        {
+            catalog = catalog
+                .Where(p => MeetsPriceDeltaInclusiveMin(
+                    p.Rows, againstPeriod!, focusPeriod!, priceDeltaInclusiveMin.Value))
+                .ToList();
+        }
+
         var total = catalog.Count;
         List<(string ProductKey, string ProductCode, string ProductDescription, List<TaktBomMaterialCost> Rows)> pageCatalog;
         if (forExport)
@@ -240,12 +306,14 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 item.ProductDescription,
                 item.Rows,
                 periodOrder,
-                basePeriod,
-                comparePeriod))
+                againstPeriod,
+                focusPeriod))
             .ToList();
 
-        // 仅当前页（或导出全量页）填充组文，避免未展示行做 BOM 明细全量计算
-        await FillComponentGroupTextsAsync(plantCode, pageRows, basePeriod, comparePeriod);
+        // 仅当前页（或导出全量页）按明细填组文与差异列，避免未展示行做 BOM 明细全量计算
+        await FillComponentGroupTextsAsync(plantCode, pageRows, againstPeriod, focusPeriod);
+        // 改修列：与差异阈值无关；按产品编码 + 基准月实际开始日期填 ZDTB 工单号
+        await FillReworkOrderGroupAsync(plantCode, pageRows, focusPeriod);
 
         if (truncateGroupTexts)
         {
@@ -260,9 +328,70 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             Paged = TaktPagedResult<TaktBomPriceDeltaTrendDto>.Create(
                 pageRows, total, pageIndex, forExport ? Math.Max(pageSize, 1) : pageSize),
             PeriodOrder = periodOrder,
-            BasePeriod = basePeriod,
-            ComparePeriod = comparePeriod,
+            BasePeriod = focusPeriod,
+            ComparePeriod = againstPeriod,
         };
+    }
+
+    /// <summary>
+    /// 解析差异选项为「差异」绝对值含等下限。null=全部（不过滤）；仅允许 all / gt1 / gt5 / gt10 / gt50 / gt100。
+    /// 界面选项为 >=1 / >=5 / >=10 / >=50 / >=100，业务比较为 |差异| ≥ 下限。
+    /// </summary>
+    /// <param name="option">查询选项</param>
+    /// <returns>含等下限；全部为 null</returns>
+    private static decimal? ResolvePriceDeltaInclusiveMin(string? option)
+    {
+        if (string.IsNullOrWhiteSpace(option)
+            || string.Equals(option.Trim(), PriceDeltaOptionAll, StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+        var key = option.Trim();
+        if (string.Equals(key, PriceDeltaOptionGt1, StringComparison.OrdinalIgnoreCase))
+        {
+            return 1m;
+        }
+        if (string.Equals(key, PriceDeltaOptionGt5, StringComparison.OrdinalIgnoreCase))
+        {
+            return 5m;
+        }
+        if (string.Equals(key, PriceDeltaOptionGt10, StringComparison.OrdinalIgnoreCase))
+        {
+            return 10m;
+        }
+        if (string.Equals(key, PriceDeltaOptionGt50, StringComparison.OrdinalIgnoreCase))
+        {
+            return 50m;
+        }
+        if (string.Equals(key, PriceDeltaOptionGt100, StringComparison.OrdinalIgnoreCase))
+        {
+            return 100m;
+        }
+        throw new TaktBusinessException("差异选项仅支持全部、>=1、>=5、>=10、>=50、>=100");
+    }
+
+    /// <summary>
+    /// 主表月成本差是否达到差异选项阈值：|基准月−比较月| ≥ inclusiveMin；任一侧成本≤0 则不达标
+    /// </summary>
+    /// <param name="productRows">该产品主表行</param>
+    /// <param name="againstPeriod">比较月</param>
+    /// <param name="focusPeriod">基准月</param>
+    /// <param name="inclusiveMin">绝对值下限</param>
+    /// <returns>达标则为 true</returns>
+    private static bool MeetsPriceDeltaInclusiveMin(
+        List<TaktBomMaterialCost> productRows,
+        string againstPeriod,
+        string focusPeriod,
+        decimal inclusiveMin)
+    {
+        var againstCost = ResolveProductMonthlyCostColumn(productRows, againstPeriod);
+        var focusCost = ResolveProductMonthlyCostColumn(productRows, focusPeriod);
+        if (againstCost <= 0m || focusCost <= 0m)
+        {
+            return false;
+        }
+        var delta = TaktBomMaterialCostItemLineCostHelper.RoundCost(focusCost - againstCost);
+        return Math.Abs(delta) >= inclusiveMin;
     }
 
     /// <summary>
@@ -271,8 +400,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     private static void TruncateRowGroupTextsForDisplay(TaktBomPriceDeltaTrendDto row)
     {
         row.ZeroPriceGroup = TruncateDisplayText(row.ZeroPriceGroup);
+        row.ReplaceComponentGroup = TruncateDisplayText(row.ReplaceComponentGroup);
         row.PriceDeltaTrend = TruncateDisplayText(row.PriceDeltaTrend);
         row.ComponentDeltaGroup = TruncateDisplayText(row.ComponentDeltaGroup);
+        row.ReworkOrderGroup = TruncateDisplayText(row.ReworkOrderGroup);
     }
 
     /// <summary>
@@ -285,6 +416,108 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             return value ?? string.Empty;
         }
         return value[..MaxGroupTextLength] + "…";
+    }
+
+    /// <summary>
+    /// 填充改修列：当前工厂下，物料编码匹配产品编码、工单类别 ZDTB、实际开始日期落在基准月的工单号清单（去重、按工单号排序，逗号分隔）。
+    /// 仅查当前页/导出产品，避免全表。与差异选项无关。
+    /// </summary>
+    /// <param name="plantCode">工厂</param>
+    /// <param name="rows">当前页或导出行</param>
+    /// <param name="basePeriod">基准月 yyyy-MM</param>
+    private async Task FillReworkOrderGroupAsync(
+        string plantCode,
+        List<TaktBomPriceDeltaTrendDto> rows,
+        string? basePeriod)
+    {
+        foreach (var row in rows)
+        {
+            row.ReworkOrderGroup = string.Empty;
+        }
+        if (rows.Count == 0
+            || string.IsNullOrWhiteSpace(plantCode)
+            || string.IsNullOrWhiteSpace(basePeriod)
+            || !TryParsePeriodMonth(basePeriod, out var monthStart))
+        {
+            return;
+        }
+        var monthEndExclusive = monthStart.AddMonths(1);
+        var lookupCodes = rows
+            .Select(r => r.ProductCode)
+            .SelectMany(TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        if (lookupCodes.Count == 0)
+        {
+            return;
+        }
+        var orders = new List<TaktProductionOrder>();
+        const int chunkSize = 200;
+        for (var i = 0; i < lookupCodes.Count; i += chunkSize)
+        {
+            var chunk = lookupCodes.Skip(i).Take(chunkSize).ToList();
+            var exp = Expressionable.Create<TaktProductionOrder>()
+                .And(x =>
+                    x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plantCode
+                    && x.IsDeleted == 0
+                    && x.ProdOrderType == ReworkProdOrderType
+                    && chunk.Contains(x.MaterialCode)
+                    && x.ActualStartDate != null
+                    && x.ActualStartDate >= monthStart
+                    && x.ActualStartDate < monthEndExclusive);
+            var part = await _productionOrderRepository.GetListAsync(exp.ToExpression());
+            if (part.Count > 0)
+            {
+                var remain = ReworkOrderLookupMaxRows - orders.Count;
+                if (remain <= 0)
+                {
+                    break;
+                }
+                orders.AddRange(remain >= part.Count ? part : part.Take(remain));
+            }
+            if (orders.Count >= ReworkOrderLookupMaxRows)
+            {
+                break;
+            }
+        }
+        var codesByProduct = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+        foreach (var order in orders)
+        {
+            if (string.IsNullOrWhiteSpace(order.ProdOrderCode) || string.IsNullOrWhiteSpace(order.MaterialCode))
+            {
+                continue;
+            }
+            var orderCode = order.ProdOrderCode.Trim();
+            foreach (var row in rows)
+            {
+                if (!TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(order.MaterialCode, row.ProductCode))
+                {
+                    continue;
+                }
+                var key = NormalizeProductKey(row.ProductCode);
+                if (!codesByProduct.TryGetValue(key, out var list))
+                {
+                    list = new List<string>();
+                    codesByProduct[key] = list;
+                }
+                if (!list.Exists(c => string.Equals(c, orderCode, StringComparison.OrdinalIgnoreCase)))
+                {
+                    list.Add(orderCode);
+                }
+                break;
+            }
+        }
+        foreach (var row in rows)
+        {
+            var key = NormalizeProductKey(row.ProductCode);
+            if (!codesByProduct.TryGetValue(key, out var list) || list.Count == 0)
+            {
+                continue;
+            }
+            row.ReworkOrderGroup = string.Join(", ", list.OrderBy(c => c, StringComparer.Ordinal));
+        }
     }
 
     /// <summary>
@@ -312,38 +545,22 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         TaktBomPriceDeltaTrendQueryDto queryDto,
         string plantCode,
         string materialType,
-        IReadOnlyList<string> periodOrder,
-        string? basePeriod,
         DateTime rangeStart,
         DateTime rangeEnd)
     {
         var start = rangeStart;
         var end = rangeEnd;
-        var loadPeriods = periodOrder.ToList();
-        // 前一月不在查询期间内时，仍纳入主表加载，供「差异=最大月−前一月」取数
-        if (!string.IsNullOrWhiteSpace(basePeriod)
-            && TryParsePeriodMonth(basePeriod, out var baseMonth))
-        {
-            var baseMonthStart = new DateTime(baseMonth.Year, baseMonth.Month, 1);
-            if (baseMonthStart < start)
-            {
-                start = baseMonthStart;
-            }
-            if (!loadPeriods.Contains(basePeriod, StringComparer.Ordinal))
-            {
-                loadPeriods.Insert(0, basePeriod);
-            }
-        }
         var fert = TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode;
         var exp = Expressionable.Create<TaktBomMaterialCost>();
-        // 按 CostingDate 整月窗口，或 CostingPeriod∈期间（防止核算日落在窗口外但期间列有值）
+        // 仅按核算日落在期间窗口内加载；禁止再用 CostingPeriod∈期间 OR，
+        // 否则会出现「7/8 真行已软删，却被其它日期行的 CostingPeriod=7/8 顶进来」而误显示产品。
         exp = exp.And(x =>
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plantCode
             && x.IsDeleted == 0
-            && ((x.CostingDate >= start && x.CostingDate <= end)
-                || loadPeriods.Contains(x.CostingPeriod)));
+            && x.CostingDate >= start
+            && x.CostingDate <= end);
         // FERT：空物料类型与 FERT 同等（避免七月行 MaterialType 空串被过滤掉）
         if (string.Equals(materialType, fert, StringComparison.OrdinalIgnoreCase))
         {
@@ -367,7 +584,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             exp = exp.And(x => x.ProductCode != null && x.ProductCode.Contains(product));
         }
         var rows = await _bomMaterialCostRepository.GetListAsync(exp.ToExpression());
-        // 月份列只允许用 ProductMonthlyCalculation；加载后清零机种月成本，杜绝任何误读 ModelMonthlyAverageCost
+        // 防御：仅未删；月份列只允许用 ProductMonthlyCalculation
+        rows = rows.Where(r => r.IsDeleted == 0).ToList();
         foreach (var row in rows)
         {
             row.ModelMonthlyAverageCost = 0m;
@@ -389,22 +607,69 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 对比月 = 查询期间最大月；基准月 = 前一月（供差异与组文）
+    /// 对比：关注月（基准月）成本 − 基期（比较月）成本。
+    /// 查询 BasePeriod=基准月，ComparePeriod=比较月；必须都在核算期间列内，默认同列止月 vs 止减一月。
     /// </summary>
-    private static (string? BasePeriod, string? ComparePeriod) ResolveComparePeriods(
+    /// <param name="queryDto">查询</param>
+    /// <param name="periodOrder">展示期间列</param>
+    /// <returns>against=比较月（基期），focus=基准月（关注）</returns>
+    private static (string? AgainstPeriod, string? FocusPeriod) ResolveComparePeriods(
+        TaktBomPriceDeltaTrendQueryDto queryDto,
         IReadOnlyList<string> periodOrder)
     {
         if (periodOrder.Count == 0)
         {
             return (null, null);
         }
-        var compare = periodOrder[^1];
-        if (!TryParsePeriodMonth(compare, out var compareMonth))
+        var periodSet = periodOrder.ToHashSet(StringComparer.Ordinal);
+        var focusRaw = FirstNonEmptyPeriod(queryDto.BasePeriod, queryDto.FocusPeriod);
+        if (string.IsNullOrWhiteSpace(focusRaw))
         {
-            return (null, null);
+            focusRaw = periodOrder[^1];
         }
-        var basePeriod = compareMonth.AddMonths(-1).ToString("yyyy-MM");
-        return (basePeriod, compare);
+        if (!TryParsePeriodMonth(focusRaw, out var focusMonth))
+        {
+            throw new TaktBusinessException("请选择基准月");
+        }
+        var focus = focusMonth.ToString("yyyy-MM");
+        if (!periodSet.Contains(focus))
+        {
+            throw new TaktBusinessException("基准月必须在核算期间内");
+        }
+        var againstRaw = queryDto.ComparePeriod?.Trim();
+        if (string.IsNullOrWhiteSpace(againstRaw))
+        {
+            var previous = focusMonth.AddMonths(-1).ToString("yyyy-MM");
+            var against = periodSet.Contains(previous)
+                ? previous
+                : (periodOrder.Count >= 2 ? periodOrder[^2] : periodOrder[0]);
+            return (against, focus);
+        }
+        if (!TryParsePeriodMonth(againstRaw, out var againstMonth))
+        {
+            throw new TaktBusinessException("请选择比较月");
+        }
+        var againstPeriod = againstMonth.ToString("yyyy-MM");
+        if (!periodSet.Contains(againstPeriod))
+        {
+            throw new TaktBusinessException("比较月必须在核算期间内");
+        }
+        return (againstPeriod, focus);
+    }
+
+    /// <summary>
+    /// 取首个非空期间
+    /// </summary>
+    private static string? FirstNonEmptyPeriod(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value.Trim();
+            }
+        }
+        return null;
     }
 
     private static TaktBomPriceDeltaTrendDto BuildProductRow(
@@ -413,8 +678,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         string productDescription,
         List<TaktBomMaterialCost> productRows,
         IReadOnlyList<string> periodOrder,
-        string? basePeriod,
-        string? comparePeriod)
+        string? againstPeriod,
+        string? focusPeriod)
     {
         var periodCosts = new Dictionary<string, decimal>(StringComparer.Ordinal);
         foreach (var period in periodOrder)
@@ -426,6 +691,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 periodCosts[period] = productMonthlyCost;
             }
         }
+        EnsurePeriodCostKey(periodCosts, productRows, againstPeriod);
+        EnsurePeriodCostKey(periodCosts, productRows, focusPeriod);
         // 展示用机种/描述取期间内最新核算日行（HeaderMatchesPeriod：CostingPeriod 或 CostingDate 月）
         var latestInDisplay = productRows
             .Where(r => periodOrder.Any(p => HeaderMatchesPeriod(r, p)))
@@ -433,14 +700,14 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             .FirstOrDefault()
             ?? productRows.OrderByDescending(r => r.CostingDate).FirstOrDefault();
         decimal? priceDelta = null;
-        if (!string.IsNullOrWhiteSpace(basePeriod) && !string.IsNullOrWhiteSpace(comparePeriod))
+        if (!string.IsNullOrWhiteSpace(againstPeriod) && !string.IsNullOrWhiteSpace(focusPeriod))
         {
-            var baseCost = ResolveProductMonthlyCostColumn(productRows, basePeriod);
-            var compareCost = ResolveProductMonthlyCostColumn(productRows, comparePeriod);
+            var againstCost = ResolveProductMonthlyCostColumn(productRows, againstPeriod);
+            var focusCost = ResolveProductMonthlyCostColumn(productRows, focusPeriod);
             // 比较月或基准月产品成本为 0：标记跳过（PriceDelta=null）；有价时先写主表差，Fill 再按明细覆盖
-            if (baseCost > 0m && compareCost > 0m)
+            if (againstCost > 0m && focusCost > 0m)
             {
-                priceDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(compareCost - baseCost);
+                priceDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(focusCost - againstCost);
             }
         }
         return new TaktBomPriceDeltaTrendDto
@@ -453,14 +720,53 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 : productDescription,
             PeriodCosts = periodCosts,
             PriceDelta = priceDelta,
-            BasePeriod = basePeriod,
-            ComparePeriod = comparePeriod,
+            // 建议替代价格仅由本产品明细 ExtField 填充（Fill），禁止主表机种月均履历串产品
+            ReplaceComponentGroup = string.Empty,
+            BasePeriod = focusPeriod,
+            ComparePeriod = againstPeriod,
         };
+    }
+
+    /// <summary>
+    /// 将基准月/比较月成本写入 PeriodCosts（即使不在展示列），供跳过差异判定
+    /// </summary>
+    private static void EnsurePeriodCostKey(
+        Dictionary<string, decimal> periodCosts,
+        List<TaktBomMaterialCost> productRows,
+        string? period)
+    {
+        if (string.IsNullOrWhiteSpace(period) || periodCosts.ContainsKey(period))
+        {
+            return;
+        }
+        var cost = ResolveProductMonthlyCostColumn(productRows, period);
+        if (cost > 0m)
+        {
+            periodCosts[period] = cost;
+        }
+    }
+
+    /// <summary>
+    /// 指定核算月是否有有效主表：核算日落在该月、未软删、产品月计算&gt;0（不以 CostingPeriod 字符串单独认定）
+    /// </summary>
+    private static bool HasValidCostingDateHeader(
+        IReadOnlyList<TaktBomMaterialCost> productRows,
+        string period)
+    {
+        if (productRows == null || string.IsNullOrWhiteSpace(period))
+        {
+            return false;
+        }
+        return productRows.Any(r =>
+            r.IsDeleted == 0
+            && r.ProductMonthlyCalculation > 0m
+            && ToPeriodKey(r.CostingDate) == period);
     }
 
     /// <summary>
     /// 取指定核算月的 product_monthly_calculation（实体属性 ProductMonthlyCalculation）。
     /// ❌ 绝不读取 ModelMonthlyAverageCost / model_monthly_average_cost。
+    /// 优先核算日落在该月的行；无则再回退 CostingPeriod 规范化匹配（展示列兼容）。
     /// </summary>
     /// <param name="productRows">该产品主表行</param>
     /// <param name="period">yyyy-MM</param>
@@ -469,36 +775,27 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         List<TaktBomMaterialCost> productRows,
         string period)
     {
-        var header = productRows
-            .Where(r => HeaderMatchesPeriod(r, period))
+        var byDate = productRows
+            .Where(r => r.IsDeleted == 0 && ToPeriodKey(r.CostingDate) == period)
             .OrderByDescending(r => r.ProductMonthlyCalculation)
             .ThenByDescending(r => r.CostingDate)
             .ThenByDescending(r => r.Id)
             .FirstOrDefault();
-        if (header == null)
+        if (byDate != null && byDate.ProductMonthlyCalculation > 0m)
         {
-            return 0m;
+            return byDate.ProductMonthlyCalculation;
         }
-        // 唯一取价字段：product_monthly_calculation
-        var productMonthlyCost = header.ProductMonthlyCalculation;
-        return productMonthlyCost > 0m ? productMonthlyCost : 0m;
+        return 0m;
     }
 
     /// <summary>
-    /// 主表行是否属于核算月（规范化后的 CostingPeriod 或 CostingDate 月份）
+    /// 主表行是否属于核算月（仅核算日月份；与列表准入口径一致）
     /// </summary>
     /// <param name="header">主表行</param>
     /// <param name="period">yyyy-MM</param>
     /// <returns>属于该月则为 true</returns>
     private static bool HeaderMatchesPeriod(TaktBomMaterialCost header, string period)
-    {
-        var normalized = NormalizeCostingPeriodKey(header.CostingPeriod);
-        if (string.Equals(normalized, period, StringComparison.Ordinal))
-        {
-            return true;
-        }
-        return ToPeriodKey(header.CostingDate) == period;
-    }
+        => ToPeriodKey(header.CostingDate) == period;
 
     /// <summary>
     /// 核算期间键规范化为 yyyy-MM（兼容 2026/07、202607）
@@ -556,19 +853,29 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         {
             var skipVariance = !string.IsNullOrWhiteSpace(basePeriod)
                 && ShouldSkipVarianceForProduct(row, basePeriod!, comparePeriod!);
-            if (skipVariance)
-            {
-                ClearProductVarianceAndGroupFields(row);
-                continue;
-            }
 
             if (!byProduct.TryGetValue(NormalizeProductKey(row.ProductCode), out var productItems))
             {
-                // 无明细时若环比差异为 0/空，组文全空
-                if (IsZeroOrEmptyVariance(row.PriceDelta))
+                // 无本产品明细：四列组文全空（禁止保留主表 ExtField 串产品脏文）
+                row.ReplaceComponentGroup = string.Empty;
+                if (skipVariance || IsZeroOrEmptyVariance(row.PriceDelta))
                 {
                     ClearProductVarianceAndGroupFields(row);
                 }
+                continue;
+            }
+
+            // 防御：再按 ProductCode 收紧一次，杜绝串产品明细
+            productItems = FilterItemsBelongingToProduct(productItems, row.ProductCode);
+
+            // 建议替代价格：仅本产品明细行 ExtField（无 scope）且 component=本行组件
+            row.ReplaceComponentGroup = BuildSuggestedSubstitutePriceGroup(
+                productItems,
+                comparePeriod!);
+
+            if (skipVariance)
+            {
+                ClearProductVarianceAndGroupFields(row);
                 continue;
             }
 
@@ -582,7 +889,6 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                     comparePeriod!);
                 row.PriceDeltaTrend = priceText;
                 row.ComponentDeltaGroup = componentText;
-                // 差异列 = 价格差异组 Summary Var + 组件差异 Summary Var（完全一致）
                 row.PriceDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(
                     checked(priceSummary + componentSummary));
             }
@@ -683,7 +989,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         => priceDelta == null || priceDelta.Value == 0m;
 
     /// <summary>
-    /// 差异列置 0，三组文全空（比较/基准月成本为 0，或环比差异为 0）
+    /// 差异列置 0，三组文全空（比较/基准月成本为 0，或环比差异为 0）；建议替代价格保留（本产品明细）
     /// </summary>
     private static void ClearProductVarianceAndGroupFields(TaktBomPriceDeltaTrendDto row)
     {
@@ -694,37 +1000,398 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 关注月零价组件清单（与零价格视图同口径：QualifiesAsZeroPriceListLine = X + PcbSectIndicator 空 + F + 移动价=0；与用量无关；
-    /// 同一 ComponentCode 不同位置各自判定，任一笔满足即入组；用量取合格行中最大用量仅供展示）
+    /// 仅保留属于指定产品的明细行（ProductCodeMatches），防止串产品
     /// </summary>
-    /// <param name="productItems">该产品已 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）的明细</param>
+    private static List<TaktBomMaterialCostItem> FilterItemsBelongingToProduct(
+        IReadOnlyList<TaktBomMaterialCostItem> items,
+        string productCode)
+    {
+        if (items == null || items.Count == 0 || string.IsNullOrWhiteSpace(productCode))
+        {
+            return new List<TaktBomMaterialCostItem>();
+        }
+        return items
+            .Where(r => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(r.ProductCode, productCode))
+            .ToList();
+    }
+
+    /// <summary>
+    /// 建议替代价格：仅本产品明细 ExtField._bk.mp（无 scope 的明细回填履历），且 component_code=该行 ComponentCode；
+    /// 禁止主表 product/model 履历（会串同机种其他产品组件）。
+    /// </summary>
+    /// <param name="productItems">本产品 Filter 明细</param>
+    /// <param name="focusPeriod">基准月 yyyy-MM</param>
+    /// <returns>组文</returns>
+    private static string BuildSuggestedSubstitutePriceGroup(
+        IReadOnlyList<TaktBomMaterialCostItem> productItems,
+        string focusPeriod)
+    {
+        var map = new Dictionary<string, (string SourceCode, decimal UnitPrice)>(StringComparer.OrdinalIgnoreCase);
+        var preferredPeriodByComponent = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var item in productItems)
+        {
+            var rowComponent = item.ComponentCode?.Trim() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(rowComponent) || item.ComponentQuantity <= 0m)
+            {
+                continue;
+            }
+            foreach (var (component, source, unitPrice, valuationPeriod) in EnumerateMpReplacePairsDetailed(item.ExtField))
+            {
+                // 只认本行组件的替换对，禁止同 ExtField 内串其它组件码
+                if (!string.Equals(component, rowComponent, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+                map[component] = (source, unitPrice);
+                if (!string.IsNullOrWhiteSpace(valuationPeriod))
+                {
+                    preferredPeriodByComponent[component] = valuationPeriod;
+                }
+            }
+        }
+
+        if (map.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        var qtyByComponent = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
+        foreach (var component in map.Keys.ToList())
+        {
+            preferredPeriodByComponent.TryGetValue(component, out var preferred);
+            var qty = ResolveComponentQuantityForSubstitute(
+                productItems,
+                component,
+                preferred,
+                focusPeriod);
+            // 用量为 0：不进入建议替代价格
+            if (qty <= 0m)
+            {
+                map.Remove(component);
+                continue;
+            }
+            qtyByComponent[component] = qty;
+        }
+
+        if (map.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        return FormatReplaceComponentGroup(map, qtyByComponent);
+    }
+
+    /// <summary>
+    /// 解析建议替代价格用的组件用量：优先 valuation_period 月 → 基准月 → 任意月最大合计
+    /// </summary>
+    private static decimal ResolveComponentQuantityForSubstitute(
+        IReadOnlyList<TaktBomMaterialCostItem> productItems,
+        string componentCode,
+        string? preferredPeriod,
+        string focusPeriod)
+    {
+        if (!string.IsNullOrWhiteSpace(preferredPeriod))
+        {
+            var q = SumComponentQuantityInPeriod(productItems, componentCode, preferredPeriod!);
+            if (q > 0m)
+            {
+                return q;
+            }
+        }
+        if (!string.IsNullOrWhiteSpace(focusPeriod))
+        {
+            var q = SumComponentQuantityInPeriod(productItems, componentCode, focusPeriod);
+            if (q > 0m)
+            {
+                return q;
+            }
+        }
+        return productItems
+            .Where(r => string.Equals(
+                r.ComponentCode?.Trim(),
+                componentCode,
+                StringComparison.OrdinalIgnoreCase))
+            .GroupBy(r => ToPeriodKey(r.CostingDate), StringComparer.Ordinal)
+            .Select(g => SumComponentQuantityInPeriod(productItems, componentCode, g.Key))
+            .Where(q => q > 0m)
+            .DefaultIfEmpty(0m)
+            .Max();
+    }
+
+    /// <summary>
+    /// 指定月组件用量：末日快照 BuildComponentKey 去重合计；仍为 0 则该月同编码简单合计
+    /// </summary>
+    private static decimal SumComponentQuantityInPeriod(
+        IReadOnlyList<TaktBomMaterialCostItem> productItems,
+        string componentCode,
+        string period)
+    {
+        var snap = ResolvePeriodSnapshotForProductItems(productItems, period);
+        var fromSnap = snap
+            .Where(r => string.Equals(
+                r.ComponentCode?.Trim(),
+                componentCode,
+                StringComparison.OrdinalIgnoreCase))
+            .Sum(r => r.ComponentQuantity);
+        if (fromSnap > 0m)
+        {
+            return fromSnap;
+        }
+        return productItems
+            .Where(r => ToPeriodKey(r.CostingDate) == period
+                && string.Equals(
+                    r.ComponentCode?.Trim(),
+                    componentCode,
+                    StringComparison.OrdinalIgnoreCase))
+            .Sum(r => r.ComponentQuantity);
+    }
+
+    /// <summary>
+    /// 已按产品分组的明细：取期间最后核算日，再按 BuildComponentKey 去重（同键最大 Id）。
+    /// 不再二次 ProductCodeMatches，避免 10/18 位或归一化写法不一致导致空快照、用量变 0。
+    /// </summary>
+    private static List<TaktBomMaterialCostItem> ResolvePeriodSnapshotForProductItems(
+        IReadOnlyList<TaktBomMaterialCostItem> productItems,
+        string period)
+    {
+        if (productItems == null || productItems.Count == 0 || string.IsNullOrWhiteSpace(period))
+        {
+            return new List<TaktBomMaterialCostItem>();
+        }
+        var periodKey = period.Trim();
+        var periodRows = productItems
+            .Where(r => ToPeriodKey(r.CostingDate) == periodKey)
+            .ToList();
+        if (periodRows.Count == 0)
+        {
+            return new List<TaktBomMaterialCostItem>();
+        }
+        var latestDay = periodRows.Max(r => TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(r.CostingDate));
+        return periodRows
+            .Where(r => TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(r.CostingDate) == latestDay)
+            .GroupBy(TaktBomMaterialCostItemLineCostHelper.BuildComponentKey, StringComparer.Ordinal)
+            .Select(g => g.OrderByDescending(r => r.Id).First())
+            .ToList();
+    }
+
+    /// <summary>
+    /// 枚举单条 ExtField 中可用于「建议替代价格」的 _bk.mp 替换对（含单价与 valuation_period）
+    /// </summary>
+    private static IEnumerable<(string ComponentCode, string SourceCode, decimal UnitPrice, string ValuationPeriod)> EnumerateMpReplacePairsDetailed(
+        string? extField)
+    {
+        if (string.IsNullOrWhiteSpace(extField))
+        {
+            yield break;
+        }
+        var root = TaktBomExtFieldBackfillHistoryHelper.ParseExtFieldObject(extField);
+        if (root[TaktBomExtFieldBackfillHistoryHelper.ExtFieldBackfillRootKey] is not JsonObject bk)
+        {
+            yield break;
+        }
+        var mpNode = bk[TaktBomExtFieldBackfillHistoryHelper.ScopeMp];
+        if (mpNode is JsonArray arr)
+        {
+            foreach (var node in arr)
+            {
+                if (TryReadMpReplacePair(node as JsonObject, out var pair))
+                {
+                    yield return pair;
+                }
+            }
+            yield break;
+        }
+        if (TryReadMpReplacePair(mpNode as JsonObject, out var single))
+        {
+            yield return single;
+        }
+    }
+
+    /// <summary>
+    /// 读取 mp 履历中的建议替代对。
+    /// 仅收录明细回填履历（无 scope）；主表 product_monthly_cost / model_monthly_average_cost 一律排除（防串产品）。
+    /// </summary>
+    private static bool TryReadMpReplacePair(
+        JsonObject? entry,
+        out (string ComponentCode, string SourceCode, decimal UnitPrice, string ValuationPeriod) pair)
+    {
+        pair = default;
+        if (entry == null)
+        {
+            return false;
+        }
+        // 有 scope = 主表履历，禁止进入建议替代价格
+        var scope = ReadJsonString(entry["scope"]);
+        if (!string.IsNullOrWhiteSpace(scope))
+        {
+            return false;
+        }
+        var component = ReadJsonString(entry["component_code"]);
+        var source = ReadJsonString(entry["source_component_code"]);
+        if (string.IsNullOrWhiteSpace(component)
+            || string.IsNullOrWhiteSpace(source)
+            || string.Equals(component, source, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        var movingPrice = TryReadJsonDecimal(entry["moving_average_price"], out var mp) ? mp : 0m;
+        var unit = 1;
+        if (TryReadJsonInt(entry["moving_price_unit"], out var u) && u > 0)
+        {
+            unit = u;
+        }
+        var unitPrice = TaktBomMaterialCostItemLineCostHelper.RoundCost(movingPrice / unit);
+        var valuationPeriod = ReadJsonString(entry["valuation_period"]);
+        if (!string.IsNullOrWhiteSpace(valuationPeriod))
+        {
+            valuationPeriod = NormalizeCostingPeriodKey(valuationPeriod);
+        }
+        pair = (component, source, unitPrice, valuationPeriod);
+        return true;
+    }
+
+    /// <summary>
+    /// 读取 JSON 字符串（兼容 JsonValue string / 非字符串 ToString）
+    /// </summary>
+    private static string ReadJsonString(JsonNode? node)
+    {
+        if (node == null)
+        {
+            return string.Empty;
+        }
+        if (node is JsonValue jv)
+        {
+            if (jv.TryGetValue<string>(out var s))
+            {
+                return s?.Trim() ?? string.Empty;
+            }
+            return jv.ToString().Trim().Trim('"');
+        }
+        return node.ToString()?.Trim() ?? string.Empty;
+    }
+
+    /// <summary>
+    /// 读取 JSON 数值为 decimal（兼容 number/string；JsonValue 常为 double）
+    /// </summary>
+    private static bool TryReadJsonDecimal(JsonNode? node, out decimal value)
+    {
+        value = 0m;
+        if (node is not JsonValue jv)
+        {
+            return false;
+        }
+        if (jv.TryGetValue<decimal>(out value))
+        {
+            return true;
+        }
+        if (jv.TryGetValue<double>(out var d))
+        {
+            value = (decimal)d;
+            return true;
+        }
+        if (jv.TryGetValue<long>(out var l))
+        {
+            value = l;
+            return true;
+        }
+        if (jv.TryGetValue<int>(out var i))
+        {
+            value = i;
+            return true;
+        }
+        return decimal.TryParse(
+            jv.ToString(),
+            NumberStyles.Number,
+            CultureInfo.InvariantCulture,
+            out value);
+    }
+
+    /// <summary>
+    /// 读取 JSON 整型（兼容 number/string）
+    /// </summary>
+    private static bool TryReadJsonInt(JsonNode? node, out int value)
+    {
+        value = 0;
+        if (node is not JsonValue jv)
+        {
+            return false;
+        }
+        if (jv.TryGetValue<int>(out value))
+        {
+            return true;
+        }
+        if (jv.TryGetValue<long>(out var l) && l is >= int.MinValue and <= int.MaxValue)
+        {
+            value = (int)l;
+            return true;
+        }
+        if (jv.TryGetValue<decimal>(out var dec))
+        {
+            value = (int)dec;
+            return true;
+        }
+        return int.TryParse(
+            jv.ToString(),
+            NumberStyles.Integer,
+            CultureInfo.InvariantCulture,
+            out value);
+    }
+
+    /// <summary>
+    /// 格式化建议替代价格组文：仅用量&gt;0；格式 组件:用量→源:单价×用量
+    /// </summary>
+    private static string FormatReplaceComponentGroup(
+        IReadOnlyDictionary<string, (string SourceCode, decimal UnitPrice)> map,
+        IReadOnlyDictionary<string, decimal>? qtyByComponent)
+    {
+        if (map == null || map.Count == 0 || qtyByComponent == null)
+        {
+            return string.Empty;
+        }
+        var parts = map
+            .OrderBy(kv => kv.Key, StringComparer.Ordinal)
+            .Select(kv =>
+            {
+                if (!qtyByComponent.TryGetValue(kv.Key, out var qty) || qty <= 0m)
+                {
+                    return null;
+                }
+                var lineAmount = TaktBomMaterialCostItemLineCostHelper.RoundCost(
+                    checked(kv.Value.UnitPrice * qty));
+                return $"{kv.Key}:{FormatQuantity(qty)}→{kv.Value.SourceCode}:{FormatMoney(lineAmount)}";
+            })
+            .Where(p => !string.IsNullOrEmpty(p))
+            .Cast<string>()
+            .ToList();
+        return FormatGroup(parts);
+    }
+
+    /// <summary>
+    /// 关注月零价组件清单（QualifiesAsZeroPriceListLine；同一 ComponentCode 任一位置合格即入组）。
+    /// 用量：期间最后核算日 + BuildComponentKey 去重后合计；用量≤0 不入组。
+    /// </summary>
+    /// <param name="productItems">该产品已 Filter 的明细</param>
     /// <param name="comparePeriod">关注月 yyyy-MM</param>
-    /// <returns>组件编码与用量</returns>
+    /// <returns>组件编码与合并合计用量</returns>
     private static List<(string Code, decimal Qty)> CollectZeroPriceEntries(
         IReadOnlyList<TaktBomMaterialCostItem> productItems,
         string comparePeriod)
     {
-        return productItems
-            .Where(r => ToPeriodKey(r.CostingDate) == comparePeriod
-                && !string.IsNullOrWhiteSpace(r.ComponentCode)
+        var snap = ResolvePeriodSnapshotForProductItems(productItems, comparePeriod);
+        return snap
+            .Where(r => !string.IsNullOrWhiteSpace(r.ComponentCode)
+                && r.ComponentQuantity > 0m
                 && TaktBomMaterialCostItemLineCostHelper.QualifiesAsZeroPriceListLine(r))
             .GroupBy(r => r.ComponentCode.Trim(), StringComparer.OrdinalIgnoreCase)
-            .Select(g =>
-            {
-                // 多位置：取合格行中用量最大者（避免 0.001 残行若误入时压过用量=1 的真实行）
-                var best = g
-                    .OrderByDescending(x => x.ComponentQuantity)
-                    .ThenByDescending(x => x.CostingDate)
-                    .ThenByDescending(x => x.Id)
-                    .First();
-                return (Code: g.Key, Qty: best.ComponentQuantity);
-            })
+            .Select(g => (Code: g.Key, Qty: SumRowsQty(g.ToList())))
+            .Where(x => x.Qty > 0m)
             .OrderBy(x => x.Code, StringComparer.Ordinal)
             .ToList();
     }
 
     /// <summary>
-    /// 0价格组：物料:用量:可替代物料:替代价格（末字母 Z→A 逆推；无可替代则仅物料:用量）
+    /// 0价格组：物料:用量:可替代物料:替代价格（末字母 Z→A 逆推；无可替代则仅物料:用量；用量≤0 跳过）
     /// </summary>
     private static string BuildZeroPriceGroupText(
         IReadOnlyList<(string Code, decimal Qty)> zeroEntries,
@@ -733,6 +1400,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         var parts = new List<string>();
         foreach (var entry in zeroEntries)
         {
+            if (entry.Qty <= 0m)
+            {
+                continue;
+            }
             if (substituteByComponent.TryGetValue(entry.Code, out var sub))
             {
                 parts.Add($"{entry.Code}:{FormatQuantity(entry.Qty)}:{sub.SubstituteCode}:{FormatMoney(sub.Price)}");
@@ -749,7 +1420,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     /// 为零价组件按末字母逆推（C→B→A）：仅查移动价格表；优先关注月同 ValuationPeriod，否则取以前最近有价期间；展示价=MovingPrice÷PriceUnit；不查 cost_item
     /// </summary>
     /// <param name="plantCode">工厂</param>
-    /// <param name="costingPeriod">关注月 / 期间最大月 yyyy-MM</param>
+    /// <param name="costingPeriod">关注月 / 基准月 yyyy-MM</param>
     /// <param name="componentCodes">零价组件编码</param>
     /// <returns>原组件 → (可替代编码, 替代价)</returns>
     private async Task<Dictionary<string, (string SubstituteCode, decimal Price)>> ResolveSubstitutePricesAsync(
@@ -1010,8 +1681,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 构建价格差异组 + 组件差异组；Summary Var 均为行成本差（CalculateLineCost），二者之和写入差异列。
-    /// 组内条目：价格差异组按单价 Diff 降序；组件差异按行成本 Diff 降序（同值再按文案）。
+    /// 构建价格差异组 + 组件差异组。
+    /// 价格组 Summary Var=各条 Diff（差价×用量）合计；组件组 Summary Var=N-{新增}-R-{删除}={净值}；二者之和写入差异列。
     /// </summary>
     /// <returns>价格组文、价格汇总、组件组文、组件汇总</returns>
     private static (string PriceText, decimal PriceSummary, string ComponentText, decimal ComponentSummary) BuildDeltaGroupTexts(
@@ -1021,8 +1692,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         string basePeriod,
         string comparePeriod)
     {
-        var baseMap = BuildPeriodComponentRowMap(productItems, plantCode, productCode, basePeriod);
-        var compareMap = BuildPeriodComponentRowMap(productItems, plantCode, productCode, comparePeriod);
+        // 价格/组件差异仅本产品明细，禁止串产品
+        var scopedItems = FilterItemsBelongingToProduct(productItems, productCode);
+        var baseMap = BuildPeriodComponentRowMap(scopedItems, basePeriod);
+        var compareMap = BuildPeriodComponentRowMap(scopedItems, comparePeriod);
 
         var matchedBase = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var matchedCompare = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -1042,7 +1715,9 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
 
         // 组件差异条目：(展示文案, Diff 金额=行成本差)；最终按 Diff 降序
         var componentEntries = new List<(string Text, decimal Diff)>();
-        var componentSummary = 0m;
+        var newSum = 0m;
+        var removeSum = 0m;
+        var versionSum = 0m;
         // ② 末位版本字母 stem 相同、字母不同 → version
         foreach (var compareCode in compareMap.Keys.Where(c => !matchedCompare.Contains(c)).OrderBy(c => c, StringComparer.Ordinal))
         {
@@ -1070,36 +1745,54 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             matchedCompare.Add(compareCode);
             var baseRows = baseMap[baseCandidate.Code];
             var compareRows = compareMap[compareCode];
+            var baseQty = SumRowsQty(baseRows);
+            var compareQty = SumRowsQty(compareRows);
+            // 两侧用量均为 0：不进组件差异
+            if (baseQty <= 0m && compareQty <= 0m)
+            {
+                continue;
+            }
             var baseRep = PickRepresentativeRow(baseRows);
             var compareRep = PickRepresentativeRow(compareRows);
             var basePrice = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(baseRep);
             var comparePrice = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(compareRep);
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(
                 SumRowsLineCost(compareRows) - SumRowsLineCost(baseRows));
-            componentSummary = checked(componentSummary + lineDelta);
+            versionSum = checked(versionSum + lineDelta);
             componentEntries.Add((
-                $"{baseCandidate.Code}:{FormatQuantity(SumRowsQty(baseRows))}:{FormatMoney(basePrice)}→{compareCode}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(comparePrice)}→version",
+                $"{baseCandidate.Code}:{FormatQuantity(baseQty)}:{FormatMoney(basePrice)}→{compareCode}:{FormatQuantity(compareQty)}:{FormatMoney(comparePrice)}→version",
                 lineDelta));
         }
 
         foreach (var c in baseMap.Keys.Where(x => !matchedBase.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
         {
             var rows = baseMap[c];
+            var qty = SumRowsQty(rows);
+            if (qty <= 0m)
+            {
+                continue;
+            }
             var price = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(PickRepresentativeRow(rows));
-            var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(-SumRowsLineCost(rows));
-            componentSummary = checked(componentSummary + lineDelta);
+            var removedCost = TaktBomMaterialCostItemLineCostHelper.RoundCost(SumRowsLineCost(rows));
+            var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(-removedCost);
+            removeSum = checked(removeSum + removedCost);
             componentEntries.Add((
-                $"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→remove",
+                $"{c}:{FormatQuantity(qty)}:{FormatMoney(price)}→remove",
                 lineDelta));
         }
         foreach (var c in compareMap.Keys.Where(x => !matchedCompare.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
         {
             var rows = compareMap[c];
+            var qty = SumRowsQty(rows);
+            if (qty <= 0m)
+            {
+                continue;
+            }
             var price = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(PickRepresentativeRow(rows));
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(SumRowsLineCost(rows));
-            componentSummary = checked(componentSummary + lineDelta);
+            newSum = checked(newSum + lineDelta);
             componentEntries.Add((
-                $"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→new",
+                $"{c}:{FormatQuantity(qty)}:{FormatMoney(price)}→new",
                 lineDelta));
         }
 
@@ -1108,9 +1801,14 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             .ThenBy(e => e.Text, StringComparer.Ordinal)
             .Select(e => e.Text)
             .ToList();
-        componentSummary = TaktBomMaterialCostItemLineCostHelper.RoundCost(componentSummary);
+        newSum = TaktBomMaterialCostItemLineCostHelper.RoundCost(newSum);
+        removeSum = TaktBomMaterialCostItemLineCostHelper.RoundCost(removeSum);
+        versionSum = TaktBomMaterialCostItemLineCostHelper.RoundCost(versionSum);
+        // 净值 = 新增 − 删除 + version 行差（与各条 Diff 之和一致）
+        var componentSummary = TaktBomMaterialCostItemLineCostHelper.RoundCost(
+            checked(newSum - removeSum + versionSum));
 
-        // ③ 仅「编码完全相同」配对进价格差异组（不含 version 配对）；按 Diff（单价差）降序
+        // ③ 仅「编码完全相同」配对进价格差异组（不含 version 配对）；Diff=差价×用量，按 Diff 降序
         var priceEntries = new List<(string Text, decimal Diff)>();
         var priceSummary = 0m;
         foreach (var code in sameCodeMatched)
@@ -1123,16 +1821,25 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             var compareRep = PickRepresentativeRow(compareRows);
             var basePrice = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(baseRep);
             var comparePrice = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(compareRep);
-            var deltaDisplay = TaktBomMaterialCostItemLineCostHelper.RoundCost(comparePrice - basePrice);
+            var unitDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(comparePrice - basePrice);
+            if (unitDelta == 0m)
+            {
+                continue;
+            }
+            // 用量：比较侧（基准月）合并合计；用量≤0 不进价格差异组；Diff = 差价 × 用量
+            var qty = SumRowsQty(compareRows);
+            if (qty <= 0m)
+            {
+                continue;
+            }
+            var deltaDisplay = TaktBomMaterialCostItemLineCostHelper.RoundCost(unitDelta * qty);
             if (deltaDisplay == 0m)
             {
                 continue;
             }
-            var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(
-                SumRowsLineCost(compareRows) - SumRowsLineCost(baseRows));
-            priceSummary = checked(priceSummary + lineDelta);
+            priceSummary = checked(priceSummary + deltaDisplay);
             priceEntries.Add((
-                $"{code}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(basePrice)}→{FormatMoney(comparePrice)},Diff:{FormatMoney(deltaDisplay)}",
+                $"{code}:{FormatQuantity(qty)}:{FormatMoney(basePrice)}→{FormatMoney(comparePrice)},Diff:{FormatMoney(deltaDisplay)}",
                 deltaDisplay));
         }
         priceSummary = TaktBomMaterialCostItemLineCostHelper.RoundCost(priceSummary);
@@ -1145,28 +1852,24 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         return (
             FormatGroup(priceParts, priceSummary),
             priceSummary,
-            FormatGroup(componentParts, componentSummary),
+            FormatComponentGroup(componentParts, newSum, removeSum, componentSummary),
             componentSummary);
     }
 
     /// <summary>
-    /// 期间最后核算日快照，按组件编码分组（多 BOM 位置保留多行，行成本合计）
+    /// 期间最后核算日快照（BuildComponentKey 去重），按组件编码分组（多 BOM 位置保留多行）
     /// </summary>
     private static Dictionary<string, List<TaktBomMaterialCostItem>> BuildPeriodComponentRowMap(
         IReadOnlyList<TaktBomMaterialCostItem> productItems,
-        string plantCode,
-        string productCode,
         string periodKey)
     {
-        var snap = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(
-            productItems,
-            plantCode,
-            productCode,
-            periodKey);
+        var snap = ResolvePeriodSnapshotForProductItems(productItems, periodKey);
         return snap
-            .Where(r => !string.IsNullOrWhiteSpace(r.ComponentCode))
+            .Where(r => !string.IsNullOrWhiteSpace(r.ComponentCode) && r.ComponentQuantity > 0m)
             .GroupBy(r => r.ComponentCode.Trim(), StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(g => g.Key, g => g.ToList(), StringComparer.OrdinalIgnoreCase);
+            .Select(g => (Code: g.Key, Rows: g.ToList()))
+            .Where(x => SumRowsQty(x.Rows) > 0m)
+            .ToDictionary(x => x.Code, x => x.Rows, StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -1177,6 +1880,9 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         return TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(rows);
     }
 
+    /// <summary>
+    /// 成本明细合并后用量合计（调用方须已 ResolvePeriodSnapshot / BuildComponentKey 去重）
+    /// </summary>
     private static decimal SumRowsQty(IReadOnlyList<TaktBomMaterialCostItem> rows)
         => rows.Sum(r => r.ComponentQuantity);
 
@@ -1211,11 +1917,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         {
             return string.Empty;
         }
-        var sb = new StringBuilder();
-        sb.Append('(');
-        sb.Append(string.Join(", ", parts));
-        sb.Append(')');
-        return sb.ToString();
+        return string.Join(", ", parts);
     }
 
     /// <summary>
@@ -1231,6 +1933,28 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
         return $"{body},Summary Var:{FormatSummaryCost(summaryVar)}";
     }
 
+    /// <summary>
+    /// 组件差异组文 + Summary Var:N-{新增}-R-{删除}={净值}
+    /// </summary>
+    /// <param name="parts">条目文案</param>
+    /// <param name="newSum">→new 行成本合计</param>
+    /// <param name="removeSum">→remove 行成本绝对值合计</param>
+    /// <param name="netSummary">净值（新增−删除+version）</param>
+    /// <returns>组展示串；无条目时空串</returns>
+    private static string FormatComponentGroup(
+        IReadOnlyList<string> parts,
+        decimal newSum,
+        decimal removeSum,
+        decimal netSummary)
+    {
+        var body = FormatGroup(parts);
+        if (string.IsNullOrEmpty(body))
+        {
+            return string.Empty;
+        }
+        return $"{body},Summary Var:N-{FormatSummaryCost(newSum)}-R-{FormatSummaryCost(removeSum)}={FormatSummaryCost(netSummary)}";
+    }
+
     private static string FormatQuantity(decimal qty)
     {
         if (qty == decimal.Truncate(qty))
@@ -1241,7 +1965,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 单价 / Diff / 行成本：一律 RoundCost 5 位（禁止改成 2 位）
+    /// 单价 / Diff（差价×用量）/ 行成本：一律 RoundCost 5 位（禁止改成 2 位）
     /// </summary>
     private static string FormatMoney(decimal value)
         => FormatSummaryCost(value);

@@ -86,11 +86,11 @@ public class TaktQualityIssueAssyReworksController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:cost:issue:query", "质量问题组装不良改修费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityIssueAssyReworkOptionsAsync()
+    public async Task<IActionResult> GetQualityIssueAssyReworkOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkOptionsAsync();
+            var result = await _qualityIssueAssyReworkService.GetQualityIssueAssyReworkOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

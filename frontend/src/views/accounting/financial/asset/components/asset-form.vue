@@ -22,31 +22,45 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.code')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('assetCode')"
                 name="assetCode"
               >
                 <a-input
                   v-model:value="formState.assetCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.code') })"
+                  :placeholder="pi.ph('assetCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -56,12 +70,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.name')"
+                :label="pi.label('assetName')"
                 name="assetName"
               >
                 <a-input
                   v-model:value="formState.assetName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.name') })"
+                  :placeholder="pi.ph('assetName')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -70,51 +84,73 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.category')"
+                :label="pi.label('assetCategory')"
                 name="assetCategory"
               >
                 <TaktSelect
                   v-model:value="formState.assetCategory"
                   dict-type="accounting_financial_asset_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.category') })"
-                  allow-clear
+                  :placeholder="pi.ph('assetCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.type')"
+                :label="pi.label('assetType')"
                 name="assetType"
               >
                 <TaktSelect
                   v-model:value="formState.assetType"
                   dict-type="accounting_financial_asset_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.type') })"
-                  allow-clear
+                  :placeholder="pi.ph('assetType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.originalvalue')"
+                :label="pi.label('assetOriginalValue')"
                 name="assetOriginalValue"
               >
                 <a-input-number
                   v-model:value="formState.assetOriginalValue"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.originalvalue') })"
+                  :placeholder="pi.ph('assetOriginalValue')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.netvalue')"
+                :label="pi.label('assetNetValue')"
                 name="assetNetValue"
               >
                 <a-input-number
                   v-model:value="formState.assetNetValue"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.netvalue') })"
+                  :placeholder="pi.ph('assetNetValue')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accumulatedDepreciation')"
+                name="accumulatedDepreciation"
+              >
+                <a-input-number
+                  v-model:value="formState.accumulatedDepreciation"
+                  :placeholder="pi.ph('accumulatedDepreciation')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costCenterId')"
+                name="costCenterId"
+              >
+                <TaktSelect
+                  v-model:value="formState.costCenterId"
+                  api-url="TaktCostCenters/tree-options"
+                  :placeholder="pi.ph('costCenterId')"
                 />
               </a-form-item>
             </a-col>
@@ -123,47 +159,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.accumulateddepreciation')"
-                name="accumulatedDepreciation"
-              >
-                <a-input-number
-                  v-model:value="formState.accumulatedDepreciation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.accumulateddepreciation') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.asset.costcenterid')"
-                name="costCenterId"
-              >
-                <TaktTreeSelect
-                  v-model:value="formState.costCenterId"
-                  api-url="TaktCostCenters/tree-options"
-                  :lazy="true"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.costcenterid') })"
-                  allow-clear
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  @change="handleCostCenterChange"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.asset.costcentername')"
+                :label="pi.label('costCenterName')"
                 name="costCenterName"
               >
                 <a-input
                   v-model:value="formState.costCenterName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.costcentername') })"
+                  :placeholder="pi.ph('costCenterName')"
                   show-count
                   :maxlength="100"
                   disabled
@@ -172,28 +180,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.deptid')"
+                :label="pi.label('deptId')"
                 name="deptId"
               >
-                <TaktTreeSelect
+                <TaktSelect
                   v-model:value="formState.deptId"
                   api-url="TaktDepts/tree-options"
-                  :lazy="true"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.deptid') })"
-                  allow-clear
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  @change="handleDeptChange"
+                  :placeholder="pi.ph('deptId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.deptname')"
+                :label="pi.label('deptName')"
                 name="deptName"
               >
                 <a-input
                   v-model:value="formState.deptName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.deptname') })"
+                  :placeholder="pi.ph('deptName')"
                   show-count
                   :maxlength="100"
                   disabled
@@ -202,26 +206,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.userid')"
+                :label="pi.label('userId')"
                 name="userId"
               >
                 <TaktSelect
                   v-model:value="formState.userId"
                   api-url="TaktUsers/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.userid') })"
-                  allow-clear
-                  @change="handleUserChange"
+                  :placeholder="pi.ph('userId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.username')"
+                :label="pi.label('userName')"
                 name="userName"
               >
                 <a-input
                   v-model:value="formState.userName"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.asset.username') })"
+                  :placeholder="pi.ph('userName')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -230,12 +232,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.location')"
+                :label="pi.label('assetLocation')"
                 name="assetLocation"
               >
                 <a-input
                   v-model:value="formState.assetLocation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.location') })"
+                  :placeholder="pi.ph('assetLocation')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -244,12 +246,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.purchasedate')"
+                :label="pi.label('purchaseDate')"
                 name="purchaseDate"
               >
                 <a-date-picker
                   v-model:value="formState.purchaseDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.purchasedate') })"
+                  :placeholder="pi.ph('purchaseDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -257,12 +259,38 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.asset.startdate')"
+                :label="pi.label('startDate')"
                 name="startDate"
               >
                 <a-date-picker
                   v-model:value="formState.startDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.startdate') })"
+                  :placeholder="pi.ph('startDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scrapDate')"
+                name="scrapDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.scrapDate"
+                  :placeholder="pi.ph('scrapDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('disposalDate')"
+                name="disposalDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.disposalDate"
+                  :placeholder="pi.ph('disposalDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -273,98 +301,93 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.scrapdate')"
-                name="scrapDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.scrapDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.scrapdate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.asset.disposaldate')"
-                name="disposalDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.disposalDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.disposaldate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.asset.expectedlifemonths')"
+                :label="pi.label('expectedLifeMonths')"
                 name="expectedLifeMonths"
               >
                 <a-input-number
                   v-model:value="formState.expectedLifeMonths"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.expectedlifemonths') })"
+                  :placeholder="pi.ph('expectedLifeMonths')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.depreciationmethod')"
+                :label="pi.label('depreciationMethod')"
                 name="depreciationMethod"
               >
                 <TaktSelect
                   v-model:value="formState.depreciationMethod"
                   dict-type="accounting_financial_depreciation_method"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') })"
-                  allow-clear
+                  :placeholder="pi.ph('depreciationMethod')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.monthlydepreciation')"
+                :label="pi.label('monthlyDepreciation')"
                 name="monthlyDepreciation"
               >
                 <a-input-number
                   v-model:value="formState.monthlyDepreciation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.monthlydepreciation') })"
+                  :placeholder="pi.ph('monthlyDepreciation')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.relatedplant')"
-                name="plantCode"
+                :label="pi.label('assetStatus')"
+                name="assetStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.assetStatus"
+                  dict-type="accounting_financial_asset_status"
+                  :placeholder="pi.ph('assetStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.asset.relatedplant') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="4"
+                  :maxlength="20"
                   disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.asset.status')"
-                name="assetStatus"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
                 <TaktSelect
-                  v-model:value="formState.assetStatus"
-                  dict-type="accounting_financial_asset_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.asset.status') })"
-                  allow-clear
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -381,7 +404,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -396,12 +419,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -424,55 +447,52 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useAssetI18n } from '../composables/use-asset-i18n'
+
+/** 实体字段 i18n */
+const pi = useAssetI18n()
 import type { AssetCreate } from '@/types/accounting/financial/asset'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import TaktSelect from '@/components/business/takt-select/index.vue'
-import TaktTreeSelect from '@/components/business/takt-tree-select/index.vue'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
-/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热） */
-const dictDataStore = useDictDataStore()
-
-/** 表单挂载时预加载字典 */
-onMounted(() => {
-  void dictDataStore.loadAllDictDataAsync()
-})
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","assetCode","assetName","assetCategory","assetType","assetOriginalValue","assetNetValue","accumulatedDepreciation","costCenterId","costCenterName","deptId","deptName","userId","userName","assetLocation","purchaseDate","startDate","scrapDate","disposalDate","expectedLifeMonths","depreciationMethod","monthlyDepreciation","plantCode","assetStatus","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -490,10 +510,26 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  assetType: "NORM",
+  assetStatus: 1
 }
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
+
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 assetId 才视为编辑） */
 watch(
@@ -523,106 +559,50 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.assetId
-    if (isCreate) {
+    if (!props.formData?.assetId) {
       applyScopeDefaults(formState, true)
     }
   },
 )
-
-/** 选项变更时回填冗余名称 */
-type SelectOptionLike = { label?: string; dictLabel?: string; extValue?: string } | null
-
-/**
- * 从选项解析展示文案
- * @param value 选中值
- * @param option 选项或选项数组
- * @param preferExtValue 为 true 时优先 ExtValue（使用者登录名）
- * @returns {string} 冗余名称
- */
-function resolveOptionName(
-  value: string | number | (string | number)[] | undefined,
-  option: SelectOptionLike | SelectOptionLike[] | unknown,
-  preferExtValue = false,
-): string {
-  if (value === undefined || value === null || value === '') {
-    return ''
-  }
-  const opt = Array.isArray(option) ? option[0] : option
-  const rec = opt && typeof opt === 'object' ? (opt as { label?: string; dictLabel?: string; extValue?: string }) : undefined
-  if (preferExtValue && rec?.extValue) {
-    return String(rec.extValue).trim()
-  }
-  return String(rec?.label ?? rec?.dictLabel ?? '').trim()
-}
-
-/**
- * 成本中心变更：回填成本中心名称
- * @param value 成本中心 Id
- * @param option 选项（含 dictLabel）
- */
-function handleCostCenterChange(
-  value: string | number | (string | number)[] | undefined,
-  option: SelectOptionLike | SelectOptionLike[] | unknown,
-) {
-  formState.costCenterName = resolveOptionName(value, option)
-}
-
-/**
- * 部门变更：回填部门名称
- * @param value 部门 Id
- * @param option 选项（含 dictLabel）
- */
-function handleDeptChange(
-  value: string | number | (string | number)[] | undefined,
-  option: SelectOptionLike | SelectOptionLike[] | unknown,
-) {
-  formState.deptName = resolveOptionName(value, option)
-}
-
-/**
- * 使用者变更：回填用户名（TaktUsers/options ExtValue=UserName）
- * @param value 用户 Id
- * @param option 选项
- */
-function handleUserChange(
-  value: string | number | (string | number)[] | undefined,
-  option: SelectOptionLike | SelectOptionLike[] | unknown,
-) {
-  formState.userName = resolveOptionName(value, option, true)
-}
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
   assetCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.asset.code') }),
+      message: pi.ph('assetCode'),
       trigger: 'blur'
     }
   ],
   assetName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.asset.name') }),
+      message: pi.ph('assetName'),
       trigger: 'blur'
     }
   ],
   assetCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.asset.category') }),
+      message: pi.ph('assetCategory'),
+      trigger: 'change'
+    }
+  ],
+  assetType: [
+    {
+      required: true,
+      message: pi.ph('assetType'),
       trigger: 'change'
     }
   ],
   assetOriginalValue: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.originalvalue') }))
+        return Promise.reject(pi.ph('assetOriginalValue'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.originalvalue') }))
+        return Promise.reject(pi.ph('assetOriginalValue'))
       }
       return Promise.resolve()
     },
@@ -631,11 +611,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   assetNetValue: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.netvalue') }))
+        return Promise.reject(pi.ph('assetNetValue'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.netvalue') }))
+        return Promise.reject(pi.ph('assetNetValue'))
       }
       return Promise.resolve()
     },
@@ -644,11 +624,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   accumulatedDepreciation: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.accumulateddepreciation') }))
+        return Promise.reject(pi.ph('accumulatedDepreciation'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.accumulateddepreciation') }))
+        return Promise.reject(pi.ph('accumulatedDepreciation'))
       }
       return Promise.resolve()
     },
@@ -657,11 +637,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   expectedLifeMonths: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.expectedlifemonths') }))
+        return Promise.reject(pi.ph('expectedLifeMonths'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.expectedlifemonths') }))
+        return Promise.reject(pi.ph('expectedLifeMonths'))
       }
       return Promise.resolve()
     },
@@ -670,11 +650,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   depreciationMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') }))
+        return Promise.reject(pi.ph('depreciationMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.depreciationmethod') }))
+        return Promise.reject(pi.ph('depreciationMethod'))
       }
       return Promise.resolve()
     },
@@ -683,11 +663,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   monthlyDepreciation: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.monthlydepreciation') }))
+        return Promise.reject(pi.ph('monthlyDepreciation'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.monthlydepreciation') }))
+        return Promise.reject(pi.ph('monthlyDepreciation'))
       }
       return Promise.resolve()
     },
@@ -696,11 +676,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   assetStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.status') }))
+        return Promise.reject(pi.ph('assetStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.asset.status') }))
+        return Promise.reject(pi.ph('assetStatus'))
       }
       return Promise.resolve()
     },
@@ -717,39 +697,87 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('assetType' in payload) {
-    const trimmed = payload.assetType == null ? '' : String(payload.assetType).trim()
-    payload.assetType = trimmed || 'NORM'
-  }
   if ('assetOriginalValue' in payload) {
     const rawassetOriginalValue = payload.assetOriginalValue
-    payload.assetOriginalValue = typeof rawassetOriginalValue === 'number' ? rawassetOriginalValue : Number(rawassetOriginalValue)
+    if (rawassetOriginalValue === undefined || rawassetOriginalValue === null || rawassetOriginalValue === '') {
+      delete payload.assetOriginalValue
+    } else {
+      const numassetOriginalValue = typeof rawassetOriginalValue === 'number' ? rawassetOriginalValue : Number(rawassetOriginalValue)
+      if (Number.isFinite(numassetOriginalValue)) payload.assetOriginalValue = numassetOriginalValue
+      else delete payload.assetOriginalValue
+    }
   }
   if ('assetNetValue' in payload) {
     const rawassetNetValue = payload.assetNetValue
-    payload.assetNetValue = typeof rawassetNetValue === 'number' ? rawassetNetValue : Number(rawassetNetValue)
+    if (rawassetNetValue === undefined || rawassetNetValue === null || rawassetNetValue === '') {
+      delete payload.assetNetValue
+    } else {
+      const numassetNetValue = typeof rawassetNetValue === 'number' ? rawassetNetValue : Number(rawassetNetValue)
+      if (Number.isFinite(numassetNetValue)) payload.assetNetValue = numassetNetValue
+      else delete payload.assetNetValue
+    }
   }
   if ('accumulatedDepreciation' in payload) {
     const rawaccumulatedDepreciation = payload.accumulatedDepreciation
-    payload.accumulatedDepreciation = typeof rawaccumulatedDepreciation === 'number' ? rawaccumulatedDepreciation : Number(rawaccumulatedDepreciation)
+    if (rawaccumulatedDepreciation === undefined || rawaccumulatedDepreciation === null || rawaccumulatedDepreciation === '') {
+      delete payload.accumulatedDepreciation
+    } else {
+      const numaccumulatedDepreciation = typeof rawaccumulatedDepreciation === 'number' ? rawaccumulatedDepreciation : Number(rawaccumulatedDepreciation)
+      if (Number.isFinite(numaccumulatedDepreciation)) payload.accumulatedDepreciation = numaccumulatedDepreciation
+      else delete payload.accumulatedDepreciation
+    }
   }
   if ('expectedLifeMonths' in payload) {
     const rawexpectedLifeMonths = payload.expectedLifeMonths
-    payload.expectedLifeMonths = typeof rawexpectedLifeMonths === 'number' ? rawexpectedLifeMonths : Number(rawexpectedLifeMonths)
+    if (rawexpectedLifeMonths === undefined || rawexpectedLifeMonths === null || rawexpectedLifeMonths === '') {
+      delete payload.expectedLifeMonths
+    } else {
+      const numexpectedLifeMonths = typeof rawexpectedLifeMonths === 'number' ? rawexpectedLifeMonths : Number(rawexpectedLifeMonths)
+      if (Number.isFinite(numexpectedLifeMonths)) payload.expectedLifeMonths = numexpectedLifeMonths
+      else delete payload.expectedLifeMonths
+    }
   }
   if ('depreciationMethod' in payload) {
     const rawdepreciationMethod = payload.depreciationMethod
-    payload.depreciationMethod = typeof rawdepreciationMethod === 'number' ? rawdepreciationMethod : Number(rawdepreciationMethod)
+    if (rawdepreciationMethod === undefined || rawdepreciationMethod === null || rawdepreciationMethod === '') {
+      delete payload.depreciationMethod
+    } else {
+      const numdepreciationMethod = typeof rawdepreciationMethod === 'number' ? rawdepreciationMethod : Number(rawdepreciationMethod)
+      if (Number.isFinite(numdepreciationMethod)) payload.depreciationMethod = numdepreciationMethod
+      else delete payload.depreciationMethod
+    }
   }
   if ('monthlyDepreciation' in payload) {
     const rawmonthlyDepreciation = payload.monthlyDepreciation
-    payload.monthlyDepreciation = typeof rawmonthlyDepreciation === 'number' ? rawmonthlyDepreciation : Number(rawmonthlyDepreciation)
+    if (rawmonthlyDepreciation === undefined || rawmonthlyDepreciation === null || rawmonthlyDepreciation === '') {
+      delete payload.monthlyDepreciation
+    } else {
+      const nummonthlyDepreciation = typeof rawmonthlyDepreciation === 'number' ? rawmonthlyDepreciation : Number(rawmonthlyDepreciation)
+      if (Number.isFinite(nummonthlyDepreciation)) payload.monthlyDepreciation = nummonthlyDepreciation
+      else delete payload.monthlyDepreciation
+    }
   }
   if ('assetStatus' in payload) {
     const rawassetStatus = payload.assetStatus
-    payload.assetStatus = typeof rawassetStatus === 'number' ? rawassetStatus : Number(rawassetStatus)
+    if (rawassetStatus === undefined || rawassetStatus === null || rawassetStatus === '') {
+      delete payload.assetStatus
+    } else {
+      const numassetStatus = typeof rawassetStatus === 'number' ? rawassetStatus : Number(rawassetStatus)
+      if (Number.isFinite(numassetStatus)) payload.assetStatus = numassetStatus
+      else delete payload.assetStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+
+  if (props.formData?.assetId) {
+    payload.assetId = props.formData.assetId
+    delete payload.numberingRuleCode
+  }
   return payload
 }
 

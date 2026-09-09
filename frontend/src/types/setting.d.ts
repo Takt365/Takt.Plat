@@ -197,7 +197,7 @@ export interface AppSetting {
   watermarkContent: string;
 
   /**
-   * 演示模式开关
+   * 演示模式（true=全站只读，禁止增删改/导入等写操作；false=正常）
    */
   demo: boolean;
 

@@ -17,6 +17,7 @@ using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -93,14 +94,18 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
         {
             return null;
         }
-        return entity.Adapt<TaktEcUkekenDto>();
+        var dto = entity.Adapt<TaktEcUkekenDto>();
+        await _ecExecPersistence.FillExecViewDetailsAsync(entity, dto);
+        return dto;
     }
 
     /// <summary>
     /// 获取设变受检执行选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcUkekenOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcUkekenOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ecUkekenRepository.GetListAsync(
@@ -125,17 +130,19 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
         entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique = await _uniqueValidator.IsUniqueAsync(
             _ecUkekenRepository,
-            x => x.EcnDetailId == entity.EcnDetailId);
+            x => x.EcDetailId == entity.EcDetailId
+                && x.EcNewMaterialCode == entity.EcNewMaterialCode
+                && x.EcNewRequiresInspection == entity.EcNewRequiresInspection);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique)
         {
-            throw new TaktBusinessException("设变受检执行的EcnDetailId已存在");
+            throw new TaktBusinessException("设变受检执行的EcDetailId、EcNewMaterialCode、EcNewRequiresInspection已存在");
         }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _ecUkekenRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == entity.EcDetailId,
                 x => x.LineNumber);
-            var businessCode = entity.EcnDetailId.ToString();
+            var businessCode = entity.EcDetailId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _ecUkekenRepository.CreateAsync(entity);
@@ -159,11 +166,13 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique = await _uniqueValidator.IsUniqueAsync(
             _ecUkekenRepository,
-            x => x.EcnDetailId == entity.EcnDetailId,
+            x => x.EcDetailId == entity.EcDetailId
+                && x.EcNewMaterialCode == entity.EcNewMaterialCode
+                && x.EcNewRequiresInspection == entity.EcNewRequiresInspection,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique)
         {
-            throw new TaktBusinessException("设变受检执行的EcnDetailId已存在");
+            throw new TaktBusinessException("设变受检执行的EcDetailId、EcNewMaterialCode、EcNewRequiresInspection已存在");
         }
         await _ecUkekenRepository.UpdateAsync(entity);
         await _ecExecPersistence.FanOutUkekenFillableByEcAndNewMaterialAsync(entity);
@@ -212,6 +221,29 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
         {
             await DeleteEcUkekenByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新设变受检执行停产状态（同步明细并自动填充/清除执行内容）
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcUkekenDto> UpdateEcUkekenDiscontinuedStatusAsync(TaktEcUkekenDiscontinuedStatusDto dto)
+    {
+        var entity = await _ecUkekenRepository.GetByIdAsync(dto.EcUkekenId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变受检执行不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变受检执行不存在");
+        }
+        var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
+            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            : dto.DiscontinuedStatus.Trim();
+        await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
+        return await GetEcUkekenByIdAsync(dto.EcUkekenId) ?? throw new TaktBusinessException("设变受检执行不存在");
     }
 
     /// <summary>
@@ -272,24 +304,26 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
             try
             {
                 var entity = rows[i].Adapt<TaktEcUkeken>();
-                var importKey = $"{entity.EcnDetailId}";
+                var importKey = $"{entity.EcDetailId}|{entity.EcNewMaterialCode}|{entity.EcNewRequiresInspection}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcnDetailId）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcNewMaterialCode、EcNewRequiresInspection）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecUkekenRepository,
-                    x => x.EcnDetailId == entity.EcnDetailId);
+                    x => x.EcDetailId == entity.EcDetailId
+                        && x.EcNewMaterialCode == entity.EcNewMaterialCode
+                        && x.EcNewRequiresInspection == entity.EcNewRequiresInspection);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_ukeken_unique)
                 {
-                    throw new TaktBusinessException("设变受检执行的EcnDetailId已存在");
+                    throw new TaktBusinessException("设变受检执行的EcDetailId、EcNewMaterialCode、EcNewRequiresInspection已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _ecUkekenRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == entity.EcDetailId,
                         x => x.LineNumber);
-                    var businessCode = entity.EcnDetailId.ToString();
+                    var businessCode = entity.EcDetailId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _ecUkekenRepository.CreateAsync(entity);
@@ -357,7 +391,7 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.EcnDetailId).Contains(keywords)
+                SqlFunc.ToString(x.EcDetailId).Contains(keywords)
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
@@ -372,9 +406,9 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
             );
         }
 
-        if (queryDto?.EcnDetailId.HasValue == true)
+        if (queryDto?.EcDetailId.HasValue == true)
         {
-            exp = exp.And(x => x.EcnDetailId == queryDto.EcnDetailId);
+            exp = exp.And(x => x.EcDetailId == queryDto.EcDetailId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EcCode))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchaseOrderService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单应用服务接口
 // 
@@ -38,8 +38,10 @@ public interface ITaktPurchaseOrderService
     /// <summary>
     /// 获取采购订单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetPurchaseOrderOptionsAsync();
+    Task<List<TaktSelectOption>> GetPurchaseOrderOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建采购订单
@@ -101,5 +103,16 @@ public interface ITaktPurchaseOrderService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPurchaseOrderAsync(TaktPurchaseOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取采购订单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>采购订单统计</returns>
+    Task<TaktPurchaseOrderStatDto> GetPurchaseOrderStatAsync(TaktProcurementStatQueryDto queryDto);
 
 }

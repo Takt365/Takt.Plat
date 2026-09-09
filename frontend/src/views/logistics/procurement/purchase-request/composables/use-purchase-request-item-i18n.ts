@@ -33,10 +33,18 @@ export const PURCHASEREQUESTITEM_LIST_FIELDS = [
   'convertedQuantity',
   'purchasePerUnit',
   'purchaseRequestUnitPrice',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
   'requestAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
 ] as const
 
@@ -55,10 +63,18 @@ export const PURCHASEREQUESTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'convertedQuantity',
   'purchasePerUnit',
   'purchaseRequestUnitPrice',
+  'taxCode',
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
   'requestAmount',
+  'pricingDate',
+  'grossWeight',
+  'netWeight',
+  'weightUnit',
+  'volume',
+  'volumeUnit',
+  'profitCenterCode',
   'isObsolete',
   'action',
 ] as const
@@ -73,6 +89,9 @@ export const PURCHASEREQUESTITEM_SUMMARY_SUM_FIELDS = [
   'untaxedAmount',
   'taxAmount',
   'requestAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'isObsolete',
 ] as const
 
@@ -93,10 +112,18 @@ export const PURCHASEREQUESTITEM_PLACEHOLDER = {
   convertedQuantity: 'select',
   purchasePerUnit: 'select',
   purchaseRequestUnitPrice: 'select',
+  taxCode: 'optional',
   taxIncludedAmount: 'select',
   untaxedAmount: 'select',
   taxAmount: 'select',
   requestAmount: 'select',
+  pricingDate: 'optional',
+  grossWeight: 'optional',
+  netWeight: 'optional',
+  weightUnit: 'optional',
+  volume: 'optional',
+  volumeUnit: 'optional',
+  profitCenterCode: 'optional',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -114,6 +141,12 @@ export const PURCHASEREQUESTITEM_QUERY_STRING_FIELDS = [
   'materialDescription',
   'materialSpecification',
   'requestUnit',
+  'taxCode',
+  'pricingDateStart',
+  'pricingDateEnd',
+  'weightUnit',
+  'volumeUnit',
+  'profitCenterCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -122,7 +155,7 @@ export const PURCHASEREQUESTITEM_QUERY_STRING_FIELDS = [
 
 export type PurchaseRequestItemQueryField =
   | (typeof PURCHASEREQUESTITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'requestQuantity' | 'convertedQuantity' | 'purchasePerUnit' | 'purchaseRequestUnitPrice' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'requestAmount' | 'isObsolete'
+  | 'lineNumber' | 'requestQuantity' | 'convertedQuantity' | 'purchasePerUnit' | 'purchaseRequestUnitPrice' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'requestAmount' | 'grossWeight' | 'netWeight' | 'volume' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEREQUESTITEM_QUERY_FIELDS: readonly PurchaseRequestItemQueryField[] = [
@@ -136,6 +169,9 @@ export const PURCHASEREQUESTITEM_QUERY_FIELDS: readonly PurchaseRequestItemQuery
   'untaxedAmount',
   'taxAmount',
   'requestAmount',
+  'grossWeight',
+  'netWeight',
+  'volume',
   'isObsolete',
 ]
 

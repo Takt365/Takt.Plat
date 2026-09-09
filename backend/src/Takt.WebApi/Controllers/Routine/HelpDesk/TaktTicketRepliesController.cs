@@ -86,11 +86,11 @@ public class TaktTicketRepliesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:ticket:reply:query", "工单回复选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTicketReplyOptionsAsync()
+    public async Task<IActionResult> GetTicketReplyOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ticketReplyService.GetTicketReplyOptionsAsync();
+            var result = await _ticketReplyService.GetTicketReplyOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -116,10 +116,20 @@ export function deleteFlowTransitionBatch(ids: string[]): Promise<void> {
  * 获取流程流转历史选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getFlowTransitionOptions(): Promise<TaktSelectOption[]> {
+export function getFlowTransitionOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${FLOW_TRANSITION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

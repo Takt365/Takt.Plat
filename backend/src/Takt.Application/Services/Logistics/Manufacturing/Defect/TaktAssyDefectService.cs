@@ -104,8 +104,10 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
     /// <summary>
     /// 获取组立不良日报选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAssyDefectOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAssyDefectOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _assyDefectRepository.GetListAsync(
@@ -695,5 +697,74 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（数据看板）
+    // ========================================
+
+    /// <summary>
+    /// 获取组立不良统计（数据看板 defect-stat；按生产日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>组立不良统计</returns>
+    public async Task<TaktAssyDefectStatDto> GetAssyDefectStatAsync(TaktDefectStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.ProdDateStart,
+            queryDto.ProdDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktAssyDefect, bool>> headerPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ProdDate >= start
+            && x.ProdDate <= end;
+        var headers = await _assyDefectRepository.GetListAsync(headerPredicate);
+        var defectIds = headers.Select(h => h.Id).ToList();
+        var details = defectIds.Count == 0
+            ? new List<TaktAssyDefectDetail>()
+            : await _assyDefectDetailRepository.GetListAsync(x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.IsObsolete == 0
+                && defectIds.Contains(x.AssyDefectId));
+        var defectQtyByHeaderId = details
+            .GroupBy(d => d.AssyDefectId)
+            .ToDictionary(g => g.Key, g => g.Sum(d => d.DefectQty));
+        var teams = headers
+            .GroupBy(h => h.TeamCode ?? string.Empty, StringComparer.Ordinal)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var baseQty = g.Sum(h => h.ProdActualQty);
+                var goodQty = g.Sum(h => h.GoodQuantity);
+                var defectQty = g.Sum(h => defectQtyByHeaderId.TryGetValue(h.Id, out var qty) ? qty : 0m);
+                return new TaktDefectStatTeamItemDto
+                {
+                    TeamCode = g.Key,
+                    BaseQty = baseQty,
+                    GoodQty = goodQty,
+                    DefectQty = defectQty,
+                    DefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(defectQty, baseQty),
+                    YieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(goodQty, baseQty),
+                };
+            })
+            .ToList();
+        var monthBaseQty = teams.Sum(t => t.BaseQty);
+        var monthGoodQty = teams.Sum(t => t.GoodQty);
+        var monthDefectQty = teams.Sum(t => t.DefectQty);
+        return new TaktAssyDefectStatDto
+        {
+            StatMonth = statMonth,
+            MonthBaseQty = monthBaseQty,
+            MonthGoodQty = monthGoodQty,
+            MonthDefectQty = monthDefectQty,
+            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
+            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
+            Teams = teams,
+        };
     }
 }

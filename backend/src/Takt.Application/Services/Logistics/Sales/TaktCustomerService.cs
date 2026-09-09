@@ -99,8 +99,10 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
     /// <summary>
     /// 获取客户信息选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetCustomerOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetCustomerOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _customerRepository.GetListAsync(
@@ -389,7 +391,6 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
                 || (x.Incoterms2 != null && x.Incoterms2.Contains(keywords))
                 || (x.ShippingConditions != null && x.ShippingConditions.Contains(keywords))
                 || (x.CustomerPricingProcedure != null && x.CustomerPricingProcedure.Contains(keywords))
-                || (x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -677,12 +678,6 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             exp = exp.And(x => x.DiscountRate == discountRate);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SalesEmployeeName))
-        {
-            var salesBy = queryDto.SalesEmployeeName;
-            exp = exp.And(x => x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(salesBy));
-        }
-
         if (queryDto?.CustomerLevel.HasValue == true)
         {
             var customerLevel = queryDto.CustomerLevel.Value;
@@ -934,10 +929,6 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             return true;
         }
         if (queryDto.DiscountRate.HasValue)
-        {
-            return true;
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto.SalesEmployeeName))
         {
             return true;
         }

@@ -86,11 +86,11 @@ public class TaktQuartzTasksController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:quartz:task:query", "定时任务选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQuartzTaskOptionsAsync()
+    public async Task<IActionResult> GetQuartzTaskOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _quartzTaskService.GetQuartzTaskOptionsAsync();
+            var result = await _quartzTaskService.GetQuartzTaskOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

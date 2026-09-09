@@ -127,8 +127,7 @@
   outline: none !important;
 }
 
-[data-theme='dark'] .ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled),
-[data-doc-theme='dark'] .ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled) {
+[data-theme='dark'] .ant-btn[class*='takt-button-']:is(:disabled, .ant-btn-disabled) {
   border-color: var(--takt-btn-disabled-border-dark) !important;
   color: var(--takt-btn-disabled-color-dark) !important;
   background-color: var(--takt-btn-disabled-bg-dark) !important;

@@ -23,25 +23,27 @@ public interface ITaktSalesModelTrendService
     /// <summary>
     /// 推移查询栏：销售价格本表工厂去重选项
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesModelTrendPlantOptionsAsync();
+    Task<List<TaktSelectOption>> GetSalesModelTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂去重条件类型（级联第 2 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesModelTrendPriceTypeOptionsAsync(string plantCode);
+    Task<List<TaktSelectOption>> GetSalesModelTrendPriceTypeOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 推移查询栏：按工厂+条件类型去重客户（级联第 3 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesModelTrendCustomerOptionsAsync(
-        string plantCode,
-        string? priceType = null);
+    Task<List<TaktSelectOption>> GetSalesModelTrendCustomerOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null);
 
     /// <summary>
     /// 推移查询栏：按工厂+条件类型+客户去重物料（级联第 4 级，查询时可空）
@@ -49,11 +51,9 @@ public interface ITaktSalesModelTrendService
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
     /// <param name="customerCode">客户编码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesModelTrendMaterialOptionsAsync(
-        string plantCode,
-        string? priceType = null,
-        string? customerCode = null);
+    Task<List<TaktSelectOption>> GetSalesModelTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null, string? customerCode = null);
 
     /// <summary>
     /// 销售机种销售推移转置分析（月推移 + BOM 机种/产品组）

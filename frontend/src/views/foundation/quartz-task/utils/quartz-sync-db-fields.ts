@@ -33,16 +33,14 @@ const TARGET_ONLY_BACKFILL_JOB_NAMES = new Set([
   'sync_pup_bk',
   'sync_sp_bk',
   'sync_bv_bk',
-  'sync_bc_bk',
 ])
 
-/** 仅目标库（无跨库源占位：日链 + 回填 *_bk；不含需核算月的 pcb_sect） */
+/** 仅目标库（无跨库源占位：日链 + 回填 *_bk；不含需核算月的 pcb_sect / bc_bk） */
 const TARGET_ONLY_SYNC_SCRIPTS = new Set([
   ...SAP_DATA_SYNC_SCRIPTS,
   'quartz/sync_pup_bk.sql',
   'quartz/sync_sp_bk.sql',
   'quartz/sync_bv_bk.sql',
-  'quartz/sync_bc_bk.sql',
 ])
 
 /** BOM 立即执行须选目标库+核算月的 JobName（小写） */
@@ -53,6 +51,7 @@ const BOM_DB_AND_MONTH_JOB_NAMES = new Set([
   'bom_zero_price_mp_bk',
   'bom_pcb_sect',
   'sync_bc_pcb_sect_bk',
+  'sync_bc_bk',
 ])
 
 /** 默认暂存源库名（三部分标识；列表中可能无 Tenant_900） */
@@ -84,7 +83,7 @@ export function isQuartzSyncSqlScript(sqlScript: string | null | undefined): boo
 }
 
 /**
- * 是否仅需目标库（源库日链 + sync_pup/sp/bv/bc_bk 回填；不含 pcb_sect）
+ * 是否仅需目标库（源库日链 + sync_pup/sp/bv_bk 回填；不含 pcb_sect / bc_bk）
  * @param sqlScript 任务 SqlScript
  * @returns {boolean} 仅目标
  */
@@ -117,7 +116,6 @@ export function needsSyncTargetOnlyFromTask(record: {
     taskCode === 'QT_SYNC_PUP_BK'
     || taskCode === 'QT_SYNC_SP_BK'
     || taskCode === 'QT_SYNC_BV_BK'
-    || taskCode === 'QT_SYNC_BC_BK'
   ) {
     return true
   }
@@ -131,8 +129,8 @@ export function needsSyncTargetOnlyFromTask(record: {
  */
 export function needsSyncSourceTargetPicker(sqlScript: string | null | undefined): boolean {
   const path = normalizeQuartzSqlScriptPath(sqlScript)
-  // pcb_sect 由 BOM 合并窗处理，勿当源+目标
-  if (path === 'quartz/sync_bc_pcb_sect_bk.sql') {
+  // pcb_sect / bc_bk 由 BOM 合并窗处理，勿当源+目标
+  if (path === 'quartz/sync_bc_pcb_sect_bk.sql' || path === 'quartz/sync_bc_bk.sql') {
     return false
   }
   return isQuartzSyncSqlScript(sqlScript) && !needsSyncTargetOnlyPicker(sqlScript)
@@ -213,16 +211,19 @@ export function needsBomDbAndMonthPicker(record: {
     return true
   }
   const taskCode = String(record.taskCode ?? '').toUpperCase()
-  if (taskCode.startsWith('QT_BOM') || taskCode === 'QT_SYNC_BC_PCB_SECT_BK') {
+  if (
+    taskCode.startsWith('QT_BOM')
+    || taskCode === 'QT_SYNC_BC_PCB_SECT_BK'
+    || taskCode === 'QT_SYNC_BC_BK'
+  ) {
     return true
   }
   const className = String(record.className ?? '')
   if (/Bom.*(Cost|Avg|PcbSect|ZeroPrice)/i.test(className)) {
     return true
   }
-  return (
-    normalizeQuartzSqlScriptPath(record.sqlScript) === 'quartz/sync_bc_pcb_sect_bk.sql'
-  )
+  const path = normalizeQuartzSqlScriptPath(record.sqlScript)
+  return path === 'quartz/sync_bc_pcb_sect_bk.sql' || path === 'quartz/sync_bc_bk.sql'
 }
 
 /**

@@ -30,7 +30,7 @@ public sealed class TaktEcExecBaseRow
     /// <summary>
     /// 设变明细 ID
     /// </summary>
-    public long EcnDetailId { get; init; }
+    public long EcDetailId { get; init; }
     /// <summary>
     /// 设变单号
     /// </summary>
@@ -74,7 +74,8 @@ public class TaktEcExecDeptAccess
     private readonly ITaktCompanyRepository<TaktEcKoubai> _mpRepository;
     private readonly ITaktCompanyRepository<TaktEcUkeken> _iqcRepository;
     private readonly ITaktCompanyRepository<TaktEcBukan> _mcRepository;
-    private readonly ITaktCompanyRepository<TaktEcSeizounika> _pcbaRepository;
+    private readonly ITaktCompanyRepository<TaktEcSeizounika> _seizounikaRepository;
+    private readonly ITaktCompanyRepository<TaktEcSmt> _smtRepository;
     private readonly ITaktCompanyRepository<TaktEcSeizouikka> _assyRepository;
     private readonly ITaktCompanyRepository<TaktEcHinkan> _qaRepository;
     private readonly ITaktCompanyRepository<TaktEcSeizougijutsu> _teRepository;
@@ -87,7 +88,8 @@ public class TaktEcExecDeptAccess
         ITaktCompanyRepository<TaktEcKoubai> mpRepository,
         ITaktCompanyRepository<TaktEcUkeken> iqcRepository,
         ITaktCompanyRepository<TaktEcBukan> mcRepository,
-        ITaktCompanyRepository<TaktEcSeizounika> pcbaRepository,
+        ITaktCompanyRepository<TaktEcSeizounika> seizounikaRepository,
+        ITaktCompanyRepository<TaktEcSmt> smtRepository,
         ITaktCompanyRepository<TaktEcSeizouikka> assyRepository,
         ITaktCompanyRepository<TaktEcHinkan> qaRepository,
         ITaktCompanyRepository<TaktEcSeizougijutsu> teRepository)
@@ -96,7 +98,8 @@ public class TaktEcExecDeptAccess
         _mpRepository = mpRepository;
         _iqcRepository = iqcRepository;
         _mcRepository = mcRepository;
-        _pcbaRepository = pcbaRepository;
+        _seizounikaRepository = seizounikaRepository;
+        _smtRepository = smtRepository;
         _assyRepository = assyRepository;
         _qaRepository = qaRepository;
         _teRepository = teRepository;
@@ -108,9 +111,14 @@ public class TaktEcExecDeptAccess
     public ITaktCompanyRepository<TaktEcSeikan> PmcRepository => _pmcRepository;
 
     /// <summary>
-    /// 制二课仓储
+    /// 制二课（非 F）仓储
     /// </summary>
-    public ITaktCompanyRepository<TaktEcSeizounika> PcbaRepository => _pcbaRepository;
+    public ITaktCompanyRepository<TaktEcSeizounika> SeizounikaRepository => _seizounikaRepository;
+
+    /// <summary>
+    /// PCBA（F+C003）仓储
+    /// </summary>
+    public ITaktCompanyRepository<TaktEcSmt> SmtRepository => _smtRepository;
 
     /// <summary>
     /// 按设变单号与部门取首条执行记录（公共字段）
@@ -128,7 +136,7 @@ public class TaktEcExecDeptAccess
             TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Pcba => ToBaseRow(await _pcbaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Pcba => await FirstSmtBaseByEcCodeAsync(ecCode),
             TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Te => ToBaseRow(await _teRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
@@ -139,22 +147,22 @@ public class TaktEcExecDeptAccess
     /// <summary>
     /// 按明细 ID 与部门取执行记录（公共字段）
     /// </summary>
-    /// <param name="ecnDetailId">设变明细 ID</param>
+    /// <param name="ecDetailId">设变明细 ID</param>
     /// <param name="deptCode">部门编码</param>
     /// <returns>公共字段快照；不存在时 null</returns>
-    public async Task<TaktEcExecBaseRow?> FirstBaseByDetailAndDeptAsync(long ecnDetailId, string deptCode)
+    public async Task<TaktEcExecBaseRow?> FirstBaseByDetailAndDeptAsync(long ecDetailId, string deptCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
         return deptCode switch
         {
-            TaktEcDeptCodes.Pmc => ToBaseRow(await _pmcRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Pcba => ToBaseRow(await _pcbaRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Te => ToBaseRow(await _teRepository.FirstAsync(x => x.EcnDetailId == ecnDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Pmc => ToBaseRow(await _pmcRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Pcba => await FirstSmtBaseByDetailIdAsync(ecDetailId),
+            TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Te => ToBaseRow(await _teRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
             _ => null
         };
     }
@@ -164,70 +172,72 @@ public class TaktEcExecDeptAccess
     /// </summary>
     /// <param name="detailIds">明细 ID 列表</param>
     /// <returns>执行行列表</returns>
-    public async Task<List<TaktEcExecBaseRow>> ListBaseByEcnDetailIdsAsync(IReadOnlyList<long> detailIds)
+    public async Task<List<TaktEcExecBaseRow>> ListBaseByEcDetailIdsAsync(IReadOnlyList<long> detailIds)
     {
         if (detailIds.Count == 0)
         {
             return [];
         }
         var rows = new List<TaktEcExecBaseRow>();
-        rows.AddRange((await _pmcRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _mpRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _iqcRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _mcRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _pcbaRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _assyRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _qaRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
-        rows.AddRange((await _teRepository.GetListAsync(x => detailIds.Contains(x.EcnDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _pmcRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _mpRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _iqcRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _mcRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _smtRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _seizounikaRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _assyRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _qaRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _teRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
         return rows;
     }
 
     /// <summary>
     /// 按明细 ID 聚合全部部门执行行（公共字段）
     /// </summary>
-    /// <param name="ecnDetailId">明细 ID</param>
+    /// <param name="ecDetailId">明细 ID</param>
     /// <returns>执行行列表</returns>
-    public Task<List<TaktEcExecBaseRow>> ListBaseByEcnDetailIdAsync(long ecnDetailId) =>
-        ListBaseByEcnDetailIdsAsync([ecnDetailId]);
+    public Task<List<TaktEcExecBaseRow>> ListBaseByEcDetailIdAsync(long ecDetailId) =>
+        ListBaseByEcDetailIdsAsync([ecDetailId]);
 
     /// <summary>
     /// 取明细下全部部门执行行的最大行号
     /// </summary>
-    /// <param name="ecnDetailId">明细 ID</param>
+    /// <param name="ecDetailId">明细 ID</param>
     /// <returns>最大行号；无记录时为 0</returns>
-    public async Task<int> GetMaxLineNumberForDetailAsync(long ecnDetailId)
+    public async Task<int> GetMaxLineNumberForDetailAsync(long ecDetailId)
     {
-        var rows = await ListBaseByEcnDetailIdAsync(ecnDetailId);
+        var rows = await ListBaseByEcDetailIdAsync(ecDetailId);
         return rows.Count == 0 ? 0 : rows.Max(x => x.LineNumber);
     }
 
     /// <summary>
     /// 按明细 ID 删除全部部门执行行
     /// </summary>
-    /// <param name="ecnDetailId">明细 ID</param>
+    /// <param name="ecDetailId">明细 ID</param>
     /// <returns>任务</returns>
-    public async Task DeleteAllByEcnDetailIdAsync(long ecnDetailId)
+    public async Task DeleteAllByEcDetailIdAsync(long ecDetailId)
     {
-        await _pmcRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _mpRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _iqcRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _mcRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _pcbaRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _assyRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _qaRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
-        await _teRepository.DeleteAsync(x => x.EcnDetailId == ecnDetailId);
+        await _pmcRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _mpRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _iqcRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _mcRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _smtRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _seizounikaRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _assyRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _qaRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
+        await _teRepository.DeleteAsync(x => x.EcDetailId == ecDetailId);
     }
 
     /// <summary>
     /// 按 ID 与部门编码取最大行号（单表）
     /// </summary>
-    /// <param name="ecnDetailId">明细 ID</param>
+    /// <param name="ecDetailId">明细 ID</param>
     /// <param name="deptCode">部门编码</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司代码</param>
     /// <returns>最大行号</returns>
     public Task<int> GetMaxLineNumberForDetailDeptAsync(
-        long ecnDetailId,
+        long ecDetailId,
         string deptCode,
         string tenantCode,
         string companyCode)
@@ -236,31 +246,85 @@ public class TaktEcExecDeptAccess
         return deptCode switch
         {
             TaktEcDeptCodes.Pmc => _pmcRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Mp => _mpRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Iqc => _iqcRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Mc => _mcRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
-            TaktEcDeptCodes.Pcba => _pcbaRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
-                x => x.LineNumber),
+            TaktEcDeptCodes.Pcba => GetMaxLineNumberForPcbaAsync(ecDetailId, tenantCode, companyCode),
             TaktEcDeptCodes.Assy => _assyRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Qa => _qaRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Te => _teRepository.GetMaxIntAsync(
-                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcnDetailId == ecnDetailId,
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             _ => Task.FromResult(0)
         };
+    }
+
+    /// <summary>
+    /// 按设变单号取制造二课公共字段（优先未作废电子料件，再制二非 F）
+    /// </summary>
+    private async Task<TaktEcExecBaseRow?> FirstSmtBaseByEcCodeAsync(string ecCode)
+    {
+        var electronic = await _smtRepository.FirstAsync(x =>
+            x.EcCode == ecCode && x.IsDeleted == 0 && x.IsObsolete == 0);
+        if (electronic != null)
+        {
+            return ToBaseRow(electronic);
+        }
+        var seizounika = await _seizounikaRepository.FirstAsync(x =>
+            x.EcCode == ecCode && x.IsDeleted == 0 && x.IsObsolete == 0);
+        if (seizounika != null)
+        {
+            return ToBaseRow(seizounika);
+        }
+        return ToBaseRow(await _smtRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0))
+            ?? ToBaseRow(await _seizounikaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0));
+    }
+
+    /// <summary>
+    /// 按明细 ID 取制造二课公共字段（优先未作废电子料件，再制二非 F）
+    /// </summary>
+    private async Task<TaktEcExecBaseRow?> FirstSmtBaseByDetailIdAsync(long ecDetailId)
+    {
+        var electronic = await _smtRepository.FirstAsync(x =>
+            x.EcDetailId == ecDetailId && x.IsDeleted == 0 && x.IsObsolete == 0);
+        if (electronic != null)
+        {
+            return ToBaseRow(electronic);
+        }
+        var seizounika = await _seizounikaRepository.FirstAsync(x =>
+            x.EcDetailId == ecDetailId && x.IsDeleted == 0 && x.IsObsolete == 0);
+        if (seizounika != null)
+        {
+            return ToBaseRow(seizounika);
+        }
+        return ToBaseRow(await _smtRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0))
+            ?? ToBaseRow(await _seizounikaRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0));
+    }
+
+    /// <summary>
+    /// 制造二课双表最大行号
+    /// </summary>
+    private async Task<int> GetMaxLineNumberForPcbaAsync(long ecDetailId, string tenantCode, string companyCode)
+    {
+        var electronicMax = await _smtRepository.GetMaxIntAsync(
+            x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
+            x => x.LineNumber);
+        var seizounikaMax = await _seizounikaRepository.GetMaxIntAsync(
+            x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
+            x => x.LineNumber);
+        return Math.Max(electronicMax, seizounikaMax);
     }
 
     /// <summary>
@@ -273,7 +337,7 @@ public class TaktEcExecDeptAccess
         TaktEcSeikan e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -286,7 +350,7 @@ public class TaktEcExecDeptAccess
         TaktEcKoubai e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -299,7 +363,7 @@ public class TaktEcExecDeptAccess
         TaktEcUkeken e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -312,7 +376,20 @@ public class TaktEcExecDeptAccess
         TaktEcBukan e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
+            EcCode = e.EcCode,
+            DeptCode = e.DeptCode,
+            LineNumber = e.LineNumber,
+            IsImplemented = e.IsImplemented,
+            ExecContent = e.ExecContent,
+            IsObsolete = e.IsObsolete,
+            TenantCode = e.TenantCode,
+            CompanyCode = e.CompanyCode,
+        },
+        TaktEcSmt e => new TaktEcExecBaseRow
+        {
+            Id = e.Id,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -325,7 +402,7 @@ public class TaktEcExecDeptAccess
         TaktEcSeizounika e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -338,7 +415,7 @@ public class TaktEcExecDeptAccess
         TaktEcSeizouikka e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -351,7 +428,7 @@ public class TaktEcExecDeptAccess
         TaktEcHinkan e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
@@ -364,7 +441,7 @@ public class TaktEcExecDeptAccess
         TaktEcSeizougijutsu e => new TaktEcExecBaseRow
         {
             Id = e.Id,
-            EcnDetailId = e.EcnDetailId,
+            EcDetailId = e.EcDetailId,
             EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,

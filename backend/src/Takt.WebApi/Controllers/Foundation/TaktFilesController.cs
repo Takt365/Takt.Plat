@@ -63,11 +63,11 @@ public class TaktFilesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("foundation:file:query", "文件选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFileOptionsAsync()
+    public async Task<IActionResult> GetFileOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _fileService.GetFileOptionsAsync();
+            var result = await _fileService.GetFileOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

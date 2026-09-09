@@ -1,3 +1,11 @@
+<!-- ========================================
+项目名称:Takt.Plat
+命名空间:@/components/navigation/takt-header-setting/tabs
+文件名称:OtherSettings.vue
+功能描述:其它偏好（页脚/版权/水印/Demo只读/登录入口）；直接写 Pinia
+版权信息:Copyright (c) 2025 Takt  All rights reserved.
+免责声明:此软件使用 MIT License,作者不承担任何使用风险。
+======================================== -->
 <template>
   <div class="other-settings">
     <a-space
@@ -7,23 +15,23 @@
     >
       <a-form-item :label="$t('components.navigation.page.systemsetting.showfooter')">
         <a-switch
-          v-model:checked="setting.showFooter"
-          @change="handleChange"
+          :checked="setting.showFooter"
+          @update:checked="onShowFooter"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.copyright')">
         <a-input
-          v-model:value="setting.copyright"
+          :value="setting.copyright"
           :placeholder="$t('common.page.form.placeholder.copyright')"
-          @change="handleChange"
+          @update:value="onCopyright"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.watermark')">
         <a-switch
-          v-model:checked="setting.watermark"
-          @change="handleChange"
+          :checked="setting.watermark"
+          @update:checked="onWatermark"
         />
       </a-form-item>
 
@@ -32,30 +40,33 @@
         :label="$t('components.navigation.page.systemsetting.watermarkcontent')"
       >
         <a-input
-          v-model:value="setting.watermarkContent"
+          :value="setting.watermarkContent"
           :placeholder="$t('common.page.form.placeholder.watermark')"
-          @change="handleChange"
+          @update:value="onWatermarkContent"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.demoswitch')">
         <a-switch
-          v-model:checked="setting.demo"
-          @change="handleChange"
+          :checked="setting.demo"
+          @update:checked="onDemo"
         />
+        <div class="setting-hint">
+          {{ $t('components.navigation.page.systemsetting.demohint') }}
+        </div>
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.showforgotpassword')">
         <a-switch
-          v-model:checked="setting.showForgotPassword"
-          @change="handleChange"
+          :checked="setting.showForgotPassword"
+          @update:checked="onShowForgotPassword"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.showregister')">
         <a-switch
-          v-model:checked="setting.showRegister"
-          @change="handleChange"
+          :checked="setting.showRegister"
+          @update:checked="onShowRegister"
         />
       </a-form-item>
     </a-space>
@@ -63,24 +74,90 @@
 </template>
 
 <script setup lang="ts">
-import type { AppSetting } from '@/types/setting'
+import type { AppSetting } from '@/stores/common/setting'
+import { useSettingStore } from '@/stores/common/setting'
+import { applySettings, notifySettingsChanged } from '@/utils/apply-settings'
 
-const setting = inject<AppSetting>('setting')!
+const settingStore = useSettingStore()
+const { setting } = storeToRefs(settingStore)
+/** 抽屉快照（若存在则同步，防止其它 tab 提交覆盖） */
+const draftSetting = inject<AppSetting | null>('setting', null)
 
-const emit = defineEmits<{
-  'change': []
-}>()
+/**
+ * 写入偏好并应用到布局 / DOM
+ * @param partial 局部字段
+ */
+function commit(partial: Partial<AppSetting>): void {
+  settingStore.patchSetting(partial)
+  if (draftSetting) {
+    Object.assign(draftSetting, partial)
+  }
+  applySettings()
+  notifySettingsChanged()
+}
 
-const handleChange = () => {
-  emit('change')
+/**
+ * 显示页脚
+ * @param checked 是否显示
+ */
+function onShowFooter(checked: boolean): void {
+  commit({ showFooter: !!checked })
+}
+
+/**
+ * 版权文案
+ * @param value 文案
+ */
+function onCopyright(value: string): void {
+  commit({ copyright: value ?? '' })
+}
+
+/**
+ * 启用水印
+ * @param checked 是否启用
+ */
+function onWatermark(checked: boolean): void {
+  commit({ watermark: !!checked })
+}
+
+/**
+ * 水印内容
+ * @param value 文案
+ */
+function onWatermarkContent(value: string): void {
+  commit({ watermarkContent: value ?? '' })
+}
+
+/**
+ * Demo 只读（开=禁止写操作，关=正常）
+ * @param checked 是否 Demo
+ */
+function onDemo(checked: boolean): void {
+  commit({ demo: !!checked })
+}
+
+/**
+ * 登录页显示忘记密码
+ * @param checked 是否显示
+ */
+function onShowForgotPassword(checked: boolean): void {
+  commit({ showForgotPassword: !!checked })
+}
+
+/**
+ * 登录页显示注册
+ * @param checked 是否显示
+ */
+function onShowRegister(checked: boolean): void {
+  commit({ showRegister: !!checked })
 }
 </script>
 
 <style scoped>
-.setting-label-tip {
-  margin-left: 4px;
+.setting-hint {
+  margin-top: 4px;
   color: var(--ant-color-text-tertiary);
-  cursor: help;
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 </style>

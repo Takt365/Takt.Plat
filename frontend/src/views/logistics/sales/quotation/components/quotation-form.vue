@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/quotation/components -->
 <!-- 文件名称：quotation-form.vue -->
-<!-- 功能描述：Takt销售报价实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt销售报价实体维护弹窗内嵌表单（上主下从各占约 1/2 级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,19 +10,21 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form quotation-form flex flex-col min-h-0 overflow-visible"
+    class="takt-generated-form quotation-form flex h-full min-h-0 flex-col overflow-hidden"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
+    <!-- 上：主表（弹窗视口约 1/2） -->
+    <div class="quotation-form__master min-h-0 flex-1 overflow-hidden">
     <a-tabs
       v-model:active-key="activeTab"
       class="quotation-form-tabs"
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -123,13 +125,62 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('salesBy')"
-                name="salesBy"
+                :label="pi.label('salesGroup')"
+                name="salesGroup"
               >
                 <TaktSelect
-                  v-model:value="formState.salesBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('salesBy')"
+                  v-model:value="formState.salesGroup"
+                  api-url="TaktSalesGroups/options"
+                  :placeholder="pi.ph('salesGroup')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesQuotationType')"
+                name="salesQuotationType"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesQuotationType"
+                  dict-type="logistics_sales_order_type"
+                  :placeholder="pi.ph('salesQuotationType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pricingProcedure')"
+                name="pricingProcedure"
+              >
+                <TaktSelect
+                  v-model:value="formState.pricingProcedure"
+                  dict-type="logistics_sales_pricing_procedure"
+                  :placeholder="pi.ph('pricingProcedure')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pricingConditionCode')"
+                name="pricingConditionCode"
+              >
+                <a-input
+                  v-model:value="formState.pricingConditionCode"
+                  :placeholder="pi.ph('pricingConditionCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.salesQuotationId"
                 />
               </a-form-item>
             </a-col>
@@ -157,17 +208,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('discountAmount')"
                 name="discountAmount"
@@ -179,7 +220,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('currencyCode')"
                 name="currencyCode"
@@ -192,7 +233,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('taxCode')"
                 name="taxCode"
@@ -205,7 +246,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('taxRate')"
                 name="taxRate"
@@ -217,7 +258,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('taxAmount')"
                 name="taxAmount"
@@ -229,7 +270,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('actualAmount')"
                 name="actualAmount"
@@ -241,7 +282,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('salesOrderCode')"
                 name="salesOrderCode"
@@ -254,6 +295,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('quotationStatus')"
@@ -270,8 +321,8 @@
         </div>
       </a-tab-pane>
       <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -348,7 +399,12 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 items -->
+    </div>
+    <!-- 下：子表（弹窗视口约 1/2） -->
+    <div
+      ref="detailHostRef"
+      class="quotation-form__detail flex min-h-0 flex-1 flex-col overflow-hidden"
+    >
     <TaktEditableTable
       ref="salesQuotationItemTableRef"
       v-model="childSalesQuotationItemRows"
@@ -358,9 +414,11 @@
       id-field="salesQuotationItemId"
       :default-row="createDefaultSalesQuotationItemRow"
       :disabled="loading"
-      :enable-vertical-scroll="false"
+      :enable-vertical-scroll="true"
+      :virtual="false"
+      :scroll="{ y: detailScrollYPx }"
       section-border
-      class="w-full min-w-0"
+      class="w-full min-h-0 min-w-0 flex-1"
     >
       <template #cell-materialCode="{ record }">
         <TaktSelect
@@ -406,6 +464,39 @@
           allow-clear
         />
       </template>
+      <template #cell-weightUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.weightUnit"
+          dict-type="logistics_materials_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('weightUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-volumeUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.volumeUnit"
+          dict-type="logistics_materials_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('volumeUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-profitCenterCode="{ record }">
+        <TaktSelect
+          v-model:value="record.profitCenterCode"
+          api-url="TaktProfitCenters/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.queryPh('profitCenterCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-isObsolete="{ record }">
         <TaktSelect
           v-model:value="record.isObsolete"
@@ -418,6 +509,7 @@
         />
       </template>
     </TaktEditableTable>
+    </div>
   </a-form>
 </template>
 
@@ -426,7 +518,7 @@
  * Takt销售报价实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/quotation/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useSalesQuotationI18n } from '../composables/use-quotation-i18n'
@@ -476,7 +568,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","salesQuotationCode","customerCode","customerName1","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","taxCode","taxRate","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","salesQuotationCode","customerCode","customerName1","quotationDate","validUntilDate","salesGroup","salesQuotationType","pricingProcedure","pricingConditionCode","totalQuantity","totalAmount","discountAmount","currencyCode","taxCode","taxRate","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -575,6 +667,43 @@ const salesQuotationItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     width: 140,
   },
   {
+    key: 'pricingDate',
+    title: salesQuotationItemPi.label('pricingDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'grossWeight',
+    title: salesQuotationItemPi.label('grossWeight'),
+    width: 140,
+  },
+  {
+    key: 'netWeight',
+    title: salesQuotationItemPi.label('netWeight'),
+    width: 140,
+  },
+  {
+    key: 'weightUnit',
+    title: salesQuotationItemPi.label('weightUnit'),
+    width: 140,
+  },
+  {
+    key: 'volume',
+    title: salesQuotationItemPi.label('volume'),
+    width: 140,
+  },
+  {
+    key: 'volumeUnit',
+    title: salesQuotationItemPi.label('volumeUnit'),
+    width: 140,
+  },
+  {
+    key: 'profitCenterCode',
+    title: salesQuotationItemPi.label('profitCenterCode'),
+    width: 140,
+  },
+  {
     key: 'isObsolete',
     title: salesQuotationItemPi.label('isObsolete'),
     width: 140,
@@ -601,6 +730,13 @@ function createDefaultSalesQuotationItemRow(): Record<string, unknown> {
     untaxedAmount: 0,
     taxAmount: 0,
     quotationAmount: 0,
+    pricingDate: '',
+    grossWeight: 0,
+    netWeight: 0,
+    weightUnit: '',
+    volume: 0,
+    volumeUnit: '',
+    profitCenterCode: '',
     isObsolete: 0,
   }
 }
@@ -617,7 +753,9 @@ function buildSubmitPayload() {
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
         cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        salesQuotationId: masterId,
+        plantCode: String(formState.plantCode ?? '').trim() || tenantStore.currentCompanyRelatedPlant || userStore.userInfo?.relatedPlant || '',
+        // 新增态外键须为 0；空串会导致 long 绑定 ModelState 400
+        salesQuotationId: isUpdate ? masterId : 0,
       }
       if (isUpdate && isPersistedSalesQuotationItemRow(row)) {
         normalized.salesQuotationItemId = row.salesQuotationItemId
@@ -645,8 +783,82 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
+
+import {
+  TAKT_TABLE_HEADER_FALLBACK_PX,
+  TAKT_TABLE_SCROLL_Y_MIN,
+  TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+} from '@/utils/table-scroll'
+
+/** 子表半区宿主（弹窗视口约 1/2） */
+const detailHostRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（半区内扣除标题/表头/汇总） */
+const detailScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailHostResizeObserver: ResizeObserver | null = null
+
+/**
+ * 按子表半区实测 scroll.y
+ */
+function recalcDetailScrollYPx(): void {
+  const host = detailHostRef.value
+  if (host == null || host.clientHeight <= 0) {
+    return
+  }
+  const tableRoot = host.querySelector('.takt-editable-table') as HTMLElement | null
+  const toolbar = tableRoot?.querySelector(':scope > .mb-2') as HTMLElement | null
+  const toolbarH = toolbar?.offsetHeight ?? 0
+  const sectionPad = 12
+  const next = Math.floor(
+    host.clientHeight
+      - toolbarH
+      - sectionPad
+      - TAKT_TABLE_HEADER_FALLBACK_PX
+      - TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+  )
+  detailScrollYPx.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, next)
+}
+
+/** 监听弹窗/半区尺寸变化 */
+function bindDetailHostResizeObserver(): void {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  const host = detailHostRef.value
+  if (host == null || typeof ResizeObserver === 'undefined') {
+    return
+  }
+  const target =
+    (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal-body') as HTMLElement | null)
+    ?? host
+  detailHostResizeObserver = new ResizeObserver(() => {
+    recalcDetailScrollYPx()
+  })
+  detailHostResizeObserver.observe(target)
+  detailHostResizeObserver.observe(host)
+}
+
+onMounted(() => {
+  void nextTick(() => {
+    recalcDetailScrollYPx()
+    bindDetailHostResizeObserver()
+  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', recalcDetailScrollYPx)
+  }
+})
+
+onBeforeUnmount(() => {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', recalcDetailScrollYPx)
+  }
+})
+
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  salesQuotationType: "ZOR",
+  pricingProcedure: "ZVAA99",
   currencyCode: "CNY",
   taxCode: "J2",
   quotationStatus: 0
@@ -664,6 +876,8 @@ const dictDataStore = useDictDataStore()
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
+
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesQuotationId 才视为编辑） */
 watch(
@@ -689,6 +903,17 @@ watch(
   },
   { immediate: true }
 )
+
+watch(
+  () => props.formData,
+  () => {
+    void nextTick(() => {
+      recalcDetailScrollYPx()
+      bindDetailHostResizeObserver()
+    })
+  },
+)
+
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
@@ -909,8 +1134,10 @@ function getValues(): Record<string, any> {
     const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
     if (scopedPlant) payload.plantCode = scopedPlant
   }
+
   if (props.formData?.salesQuotationId) {
     payload.salesQuotationId = props.formData.salesQuotationId
+    delete payload.numberingRuleCode
   }
   return payload
 }
@@ -933,11 +1160,41 @@ defineExpose({ validate, getValues, resetFields })
 </script>
 
 <style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
+/* 上主下从各占弹窗 body 约 1/2；主表区内部滚动，子表用 scroll.y */
+.quotation-form__master {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
+/* 无 Tabs 时主表半区直接滚动 */
+.quotation-form__master > div {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.quotation-form__master :deep(.quotation-form-tabs.ant-tabs) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.quotation-form__master :deep(.ant-tabs-nav) {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.quotation-form__master :deep(.ant-tabs-content-holder) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.quotation-form__master :deep(.ant-tabs-content),
+.quotation-form__master :deep(.ant-tabs-tabpane) {
+  height: 100%;
 }
 </style>

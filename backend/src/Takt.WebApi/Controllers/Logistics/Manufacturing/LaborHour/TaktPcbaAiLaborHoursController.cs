@@ -86,11 +86,11 @@ public class TaktPcbaAiLaborHoursController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:labor:hour:pcba:ai:query", "PCBA自插工数统计选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPcbaAiLaborHourOptionsAsync()
+    public async Task<IActionResult> GetPcbaAiLaborHourOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _pcbaAiLaborHourService.GetPcbaAiLaborHourOptionsAsync();
+            var result = await _pcbaAiLaborHourService.GetPcbaAiLaborHourOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

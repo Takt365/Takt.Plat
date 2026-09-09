@@ -8,45 +8,57 @@
 
 <template>
   <div class="takt-query-bar material-cost-query-bar">
-    <div class="material-cost-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        api-url="TaktPlants/options"
-        class="material-cost-query-bar__control material-cost-query-bar__control--plant"
-        allow-clear
-        :placeholder="t('common.page.entity.plantcode')"
-        @change="handlePlantChange"
-      />
-      <a-date-picker
-        v-model:value="costingMonth"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        class="material-cost-query-bar__control material-cost-query-bar__control--period"
-        :placeholder="t('logistics.manufacturing.bom.material-cost.page.costingMonth')"
-        @change="handlePeriodChange"
-      />
-      <TaktSelect
-        v-model:value="materialType"
-        :options="materialTypeOptions"
-        class="material-cost-query-bar__control material-cost-query-bar__control--type"
-        allow-clear
-        show-search
-        :disabled="!plantCode || !costingMonth || materialTypeOptionsLoading"
-        :placeholder="t('entity.bommaterialcost.materialtype')"
-        @change="handleMaterialTypeChange"
-      />
-      <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}-${costingMonth || ''}`"
-        v-model:value="modelCode"
-        :api-url="modelOptionsUrl"
-        :api-params="modelApiParams"
-        class="material-cost-query-bar__control material-cost-query-bar__control--model"
-        allow-clear
-        show-search
-        :disabled="!plantCode || !costingMonth"
-        :placeholder="t('entity.bommaterialcost.modelcode')"
-      />
+    <div class="material-cost-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          api-url="TaktPlants/options"
+          class="material-cost-query-bar__control material-cost-query-bar__control--plant"
+          allow-clear
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handlePlantChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('logistics.manufacturing.bom.material-cost.page.costingMonth') }}</span>
+        <a-date-picker
+          v-model:value="costingMonth"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          class="material-cost-query-bar__control material-cost-query-bar__control--period"
+          :placeholder="t('logistics.manufacturing.bom.material-cost.page.costingMonth')"
+          @change="handlePeriodChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.materialtype') }}</span>
+        <TaktSelect
+          v-model:value="materialType"
+          :options="materialTypeOptions"
+          class="material-cost-query-bar__control material-cost-query-bar__control--type"
+          allow-clear
+          show-search
+          :disabled="!plantCode || !costingMonth || materialTypeOptionsLoading"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handleMaterialTypeChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.modelcode') }}</span>
+        <TaktSelect
+          :key="`model-${modelSelectKey}-${materialType || ''}-${costingMonth || ''}`"
+          v-model:value="modelCode"
+          :api-url="modelOptionsUrl"
+          :api-params="modelApiParams"
+          class="material-cost-query-bar__control material-cost-query-bar__control--model"
+          allow-clear
+          show-search
+          :disabled="!plantCode || !costingMonth"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button

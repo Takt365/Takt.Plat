@@ -86,11 +86,11 @@ public class TaktNewsLikesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:news:center:like:query", "新闻中心点赞记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetNewsLikeOptionsAsync()
+    public async Task<IActionResult> GetNewsLikeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _newsLikeService.GetNewsLikeOptionsAsync();
+            var result = await _newsLikeService.GetNewsLikeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

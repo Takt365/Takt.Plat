@@ -39,7 +39,7 @@ public class TaktEcAttachmentDto : TaktCompanyDtoBase
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变主表名称（填充字段）
@@ -123,7 +123,7 @@ public class TaktEcAttachmentQueryDto : TaktPagedQuery
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -214,7 +214,7 @@ public class TaktEcAttachmentCreateDto
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -343,7 +343,7 @@ public class TaktEcAttachmentTemplateDto
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -421,7 +421,7 @@ public class TaktEcAttachmentImportDto
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcId { get; set; }
+    public long? EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
@@ -505,7 +505,7 @@ public class TaktEcAttachmentExportDto
     /// 设变主表ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余字段,便于查询）

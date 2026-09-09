@@ -1,4 +1,21 @@
 SET NOCOUNT ON;
+DECLARE @progress_msg NVARCHAR(400);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'start' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  CAST(0 AS INT) AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  CAST(0 AS INT) AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'start', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
@@ -6,8 +23,14 @@ DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
+DECLARE @apply_chunk INT = 20000;
+DECLARE @merge_from_rn INT;
+DECLARE @merge_to_rn INT;
+DECLARE @merge_max_rn INT;
+DECLARE @dml_n INT;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
+-- 更新履历：ext_field._sync.mo[] 追加 { at, 变更列:{o,n} }；仅差异；超 nvarchar(4000) 保留原 JSON
 
 IF OBJECT_ID('tempdb..#order_source') IS NOT NULL DROP TABLE #order_source;
 CREATE TABLE #order_source (
@@ -66,6 +89,22 @@ OUTER APPLY (
 ) MP;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #order_source);
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'load' AS [phase],
+  CAST(1 AS INT) AS [from_rn],
+  @source_count AS [to_rn],
+  @source_count AS [max_rn],
+  @source_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'load', N'|',
+  CAST((CAST(1 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  CAST((@source_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @sap_raw_count INT = (SELECT COUNT(*) FROM [Sap_Data].[dbo].[PP_SapOrders]);
 
 -- 全量同步：临时表行数必须等于源表行数
@@ -126,8 +165,13 @@ DECLARE @target_before INT = (
 );
 
 -- ON 与唯一索引一致：Tenant+Company+Plant+ProdOrderType+ProdOrderCode+Material
+SET @merge_from_rn = 1;
+SET @merge_max_rn = ISNULL((SELECT MAX([rn]) FROM #order_source), 0);
+WHILE @merge_from_rn <= @merge_max_rn
+BEGIN
+  SET @merge_to_rn = @merge_from_rn + @apply_chunk - 1;
 MERGE INTO [takt_logistics_manufacturing_aps_production_order] AS T
-USING #order_source AS S
+USING (SELECT * FROM #order_source WHERE [rn] >= @merge_from_rn AND [rn] <= @merge_to_rn) AS S
 ON T.[tenant_code] = @tenant_code
 AND T.[company_code] = @company_code
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
@@ -157,7 +201,29 @@ WHEN MATCHED AND (
   T.[updated_by]=@sync_user_id,
   T.[updated_at]=@now,
   T.[culture_code]=@culture_code,
-  T.[is_deleted]=0
+  T.[is_deleted]=0,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.mo') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.mo', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_description], N''))) THEN CONCAT(N',"material_description":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[prod_batch], N''))) <> LTRIM(RTRIM(ISNULL(S.[prod_batch], N''))) THEN CONCAT(N',"prod_batch":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[prod_batch], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[prod_batch], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ROUND(T.[prod_order_qty], 4) <> ROUND(S.[prod_order_qty], 4) THEN CONCAT(N',"prod_order_qty":{"o":', CONVERT(VARCHAR(40), ROUND(T.[prod_order_qty], 4)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[prod_order_qty], 4)), N'}') ELSE N'' END,
+      CASE WHEN ROUND(T.[produced_qty], 4) <> ROUND(S.[produced_qty], 4) THEN CONCAT(N',"produced_qty":{"o":', CONVERT(VARCHAR(40), ROUND(T.[produced_qty], 4)), N',"n":', CONVERT(VARCHAR(40), ROUND(S.[produced_qty], 4)), N'}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[unit_of_measure], N''))) <> LTRIM(RTRIM(ISNULL(S.[unit_of_measure], N''))) THEN CONCAT(N',"unit_of_measure":{"o":"', REPLACE(ISNULL(T.[unit_of_measure], N''), N'"', N'\"'), N'","n":"', REPLACE(ISNULL(S.[unit_of_measure], N''), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN ISNULL(T.[actual_start_date], '1900-01-01') <> ISNULL(S.[actual_start_date], '1900-01-01') THEN CONCAT(N',"actual_start_date":{"o":"', ISNULL(CONVERT(VARCHAR(10), T.[actual_start_date], 23), N''), N'","n":"', ISNULL(CONVERT(VARCHAR(10), S.[actual_start_date], 23), N''), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[routing_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[routing_code], N''))) THEN CONCAT(N',"routing_code":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[routing_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[routing_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN T.[priority] <> S.[priority] THEN CONCAT(N',"priority":{"o":', CONVERT(VARCHAR(20), T.[priority]), N',"n":', CONVERT(VARCHAR(20), S.[priority]), N'}') ELSE N'' END,
+      CASE WHEN ISNULL(T.[is_deleted], 0) <> 0 THEN N',"is_deleted":{"o":1,"n":0}' ELSE N'' END,
+      N'}'))) AS [new_ext]) x
+  )
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[prod_order_code],[material_code],[material_description],[prod_batch],
@@ -201,6 +267,25 @@ INTO #order_delta(
   routing_code_old, routing_code_new,
   prod_order_type_old, prod_order_type_new
 );
+  SET @dml_n = @@ROWCOUNT;
+  SELECT
+    N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+    N'merge' AS [phase],
+    @merge_from_rn AS [from_rn],
+    CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END AS [to_rn],
+    @merge_max_rn AS [max_rn],
+    @dml_n AS [batch_rows];
+  SET @progress_msg = CONCAT(
+    N'QUARTZ_SYNC_PROGRESS|',
+    N'merge', N'|',
+    CAST((@merge_from_rn) AS NVARCHAR(20)), N'|',
+    CAST((CASE WHEN @merge_to_rn > @merge_max_rn THEN @merge_max_rn ELSE @merge_to_rn END) AS NVARCHAR(20)), N'|',
+    CAST((@merge_max_rn) AS NVARCHAR(20)), N'|',
+    CAST((@dml_n) AS NVARCHAR(20)), N'|',
+    N'');
+  RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
+  SET @merge_from_rn = @merge_to_rn + 1;
+END
 
 -- update work_center
 ;WITH wc_src AS (
@@ -226,7 +311,22 @@ wc_agg AS (
 UPDATE T
 SET
   T.[work_center] = W.work_center,
-  T.[updated_at] = @now
+  T.[updated_at] = @now,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.mo') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.mo', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      N',"work_center":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[work_center], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'),
+      N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(W.[work_center], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}',
+      N'}'))) AS [new_ext]) x
+  )
 FROM [takt_logistics_manufacturing_aps_production_order] T
 JOIN wc_agg W
   ON LTRIM(RTRIM(T.[material_code])) = W.material_code
@@ -249,7 +349,22 @@ DECLARE @wc_upd INT = @@ROWCOUNT;
 UPDATE T
 SET
   T.[serial_code] = S.serial_code,
-  T.[updated_at] = @now
+  T.[updated_at] = @now,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.mo') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.mo', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      N',"serial_code":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[serial_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'),
+      N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[serial_code], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}',
+      N'}'))) AS [new_ext]) x
+  )
 FROM [takt_logistics_manufacturing_aps_production_order] T
 JOIN ser_agg S
   ON LTRIM(RTRIM(T.[prod_order_code])) = S.prod_order_code
@@ -265,7 +380,26 @@ DECLARE @ser_upd INT = @@ROWCOUNT;
 -- 序号：YY + 月码(1-9/X/Y/Z) + 0001~ + YY + 月码 + 件数4位
 UPDATE T
 SET
-  T.[serial_code] = CONCAT(
+  T.[serial_code] = g.[new_serial],
+  T.[updated_by] = @sync_user_id,
+  T.[updated_at] = @now,
+  T.[ext_field]=(
+    SELECT CASE WHEN LEN(x.[new_ext]) <= 4000 THEN x.[new_ext] ELSE e0.[base_ext] END
+    FROM (SELECT CASE WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(T.[ext_field], N''))), N'')) = 1 THEN LTRIM(RTRIM(T.[ext_field])) ELSE N'{}' END AS [base_ext]) e0
+    CROSS APPLY (SELECT CASE WHEN JSON_QUERY(e0.[base_ext], N'$._sync') IS NULL THEN JSON_MODIFY(e0.[base_ext], N'lax $._sync', JSON_QUERY(N'{}')) ELSE e0.[base_ext] END AS [with_root]) e1
+    CROSS APPLY (SELECT CASE
+      WHEN JSON_QUERY(e1.[with_root], N'$._sync.mo') IS NULL THEN JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'')), 1) = N'[' THEN e1.[with_root]
+      ELSE JSON_MODIFY(e1.[with_root], N'lax $._sync.mo', JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_root], N'$._sync.mo'), N'{}') + N']'))
+    END AS [with_arr]) e2
+    CROSS APPLY (SELECT JSON_MODIFY(e2.[with_arr], N'append $._sync.mo', JSON_QUERY(CONCAT(
+      N'{"at":"', CONVERT(VARCHAR(19), @now, 126), N'"',
+      N',"serial_code":{"o":"","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(g.[new_serial], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}',
+      N'}'))) AS [new_ext]) x
+  )
+FROM [takt_logistics_manufacturing_aps_production_order] T
+CROSS APPLY (
+  SELECT CONCAT(
     RIGHT(YEAR(T.[actual_start_date]), 2),
     CASE MONTH(T.[actual_start_date])
       WHEN 10 THEN N'X'
@@ -294,10 +428,8 @@ SET
       AS VARCHAR(10)),
       4
     )
-  ),
-  T.[updated_by] = @sync_user_id,
-  T.[updated_at] = @now
-FROM [takt_logistics_manufacturing_aps_production_order] T
+  ) AS [new_serial]
+) g
 WHERE T.[tenant_code] = @tenant_code
   AND T.[company_code] = @company_code
   AND T.[is_deleted] = 0
@@ -346,6 +478,22 @@ WHERE T.[tenant_code] = @tenant_code
   );
 
 DECLARE @delete_count INT = @@ROWCOUNT;
+SELECT
+  N'QUARTZ_SYNC_PROGRESS' AS [summary_tag],
+  N'soft' AS [phase],
+  CAST(0 AS INT) AS [from_rn],
+  @delete_count AS [to_rn],
+  CAST(0 AS INT) AS [max_rn],
+  @delete_count AS [batch_rows];
+SET @progress_msg = CONCAT(
+  N'QUARTZ_SYNC_PROGRESS|',
+  N'soft', N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  CAST((CAST(0 AS INT)) AS NVARCHAR(20)), N'|',
+  CAST((@delete_count) AS NVARCHAR(20)), N'|',
+  N'');
+RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 DECLARE @soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @soft_deleted_keys = STRING_AGG(
   CAST(

@@ -86,11 +86,11 @@ public class TaktEmployeeResignationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:resignation:query", "员工离职选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeResignationOptionsAsync()
+    public async Task<IActionResult> GetEmployeeResignationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeResignationService.GetEmployeeResignationOptionsAsync();
+            var result = await _employeeResignationService.GetEmployeeResignationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

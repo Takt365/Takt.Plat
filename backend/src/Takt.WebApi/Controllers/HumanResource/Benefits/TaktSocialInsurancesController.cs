@@ -86,11 +86,11 @@ public class TaktSocialInsurancesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:benefits:social:insurance:query", "社保公积金选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSocialInsuranceOptionsAsync()
+    public async Task<IActionResult> GetSocialInsuranceOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _socialInsuranceService.GetSocialInsuranceOptionsAsync();
+            var result = await _socialInsuranceService.GetSocialInsuranceOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

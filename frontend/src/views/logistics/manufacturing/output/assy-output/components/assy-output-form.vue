@@ -10,12 +10,14 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form assy-output-form flex flex-col min-h-0 overflow-visible"
+    class="takt-generated-form assy-output-form flex h-full min-h-0 flex-col overflow-hidden"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
+    <!-- 上：主表（弹窗视口约 1/2） -->
+    <div class="assy-output-form__master min-h-0 flex-1 overflow-hidden">
     <a-tabs
       v-model:active-key="activeTab"
       class="assy-output-form-tabs"
@@ -86,6 +88,7 @@
                 <TaktSelect
                   v-model:value="formState.teamCode"
                   api-url="TaktProductionTeams/options"
+                  :api-params="assyTeamOptionsParams"
                   :placeholder="pi.ph('teamCode')"
                   :disabled="!!formData?.assyOutputId"
                 />
@@ -129,14 +132,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodOrderType')"
-                name="prodOrderType"
+                :label="pi.label('stdCapacity')"
+                name="stdCapacity"
               >
-                <a-input
-                  v-model:value="formState.prodOrderType"
-                  :placeholder="pi.ph('prodOrderType')"
-                  show-count
-                  :maxlength="4"
+                <a-input-number
+                  v-model:value="formState.stdCapacity"
+                  :placeholder="pi.ph('stdCapacity')"
+                  style="width: 100%"
                   disabled
                 />
               </a-form-item>
@@ -149,6 +151,7 @@
                 <TaktSelect
                   v-model:value="formState.prodOrderCode"
                   api-url="TaktProductionOrders/options"
+                  :api-params="prodOrderOptionsParams"
                   :placeholder="pi.ph('prodOrderCode')"
                   :disabled="!!formData?.assyOutputId"
                 />
@@ -164,7 +167,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('modelCode')"
                 name="modelCode"
@@ -178,7 +181,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('materialCode')"
                 name="materialCode"
@@ -192,7 +195,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('batchCode')"
                 name="batchCode"
@@ -206,7 +209,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('prodOrderQty')"
                 name="prodOrderQty"
@@ -219,7 +222,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('serialCode')"
                 name="serialCode"
@@ -233,7 +236,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('stdMinutes')"
                 name="stdMinutes"
@@ -246,15 +249,16 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('stdCapacity')"
-                name="stdCapacity"
+                :label="pi.label('prodOrderType')"
+                name="prodOrderType"
               >
-                <a-input-number
-                  v-model:value="formState.stdCapacity"
-                  :placeholder="pi.ph('stdCapacity')"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.prodOrderType"
+                  :placeholder="pi.ph('prodOrderType')"
+                  show-count
+                  :maxlength="4"
                   disabled
                 />
               </a-form-item>
@@ -269,7 +273,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('tenantCode')"
                 name="tenantCode"
@@ -283,7 +287,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyCode')"
                 name="companyCode"
@@ -341,7 +345,12 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 assyOutputDetails -->
+    </div>
+    <!-- 下：子表（弹窗视口约 1/2；表体内横+纵滚动） -->
+    <div
+      ref="detailHostRef"
+      class="assy-output-form__detail flex min-h-0 flex-1 flex-col overflow-hidden"
+    >
     <TaktEditableTable
       ref="assyOutputDetailTableRef"
       v-model="childAssyOutputDetailRows"
@@ -350,23 +359,43 @@
       :add-button-entity="assyOutputDetailPi.self()"
       id-field="assyOutputDetailId"
       :default-row="createDefaultAssyOutputDetailRow"
+      :show-add="false"
+      :show-delete="false"
       :disabled="loading"
-      :enable-vertical-scroll="false"
+      :enable-vertical-scroll="true"
+      :virtual="false"
+      :scroll="{ y: detailScrollYPx }"
       section-border
-      class="w-full min-w-0"
+      class="w-full min-h-0 min-w-0 flex-1"
     >
-      <template #cell-isObsolete="{ record }">
+      <template #cell-downtimeReason="{ record }">
         <TaktSelect
-          v-model:value="record.isObsolete"
-          dict-type="sys_yes_no"
+          :model-value="getDetailDictMultiSelectModelValue(record, 'downtimeReason')"
+          mode="multiple"
+          :dict-type="ASSY_DETAIL_DOWNTIME_REASON_DICT"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="assyOutputDetailPi.ph('isObsolete')"
+          :placeholder="assyOutputDetailPi.ph('downtimeReason')"
           :disabled="loading"
           allow-clear
+          @update:model-value="(v) => onDetailDictMultiSelectChange(record, 'downtimeReason', v)"
+        />
+      </template>
+      <template #cell-unachievedReason="{ record }">
+        <TaktSelect
+          :model-value="getDetailDictMultiSelectModelValue(record, 'unachievedReason')"
+          mode="multiple"
+          :dict-type="ASSY_DETAIL_UNACHIEVED_REASON_DICT"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="assyOutputDetailPi.ph('unachievedReason')"
+          :disabled="loading"
+          allow-clear
+          @update:model-value="(v) => onDetailDictMultiSelectChange(record, 'unachievedReason', v)"
         />
       </template>
     </TaktEditableTable>
+    </div>
   </a-form>
 </template>
 
@@ -375,10 +404,15 @@
  * 组立日报维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/assy-output/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useAssyOutputI18n } from '../composables/use-assy-output-i18n'
+import {
+  TAKT_TABLE_HEADER_FALLBACK_PX,
+  TAKT_TABLE_SCROLL_Y_MIN,
+  TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+} from '@/utils/table-scroll'
 
 /** 实体字段 i18n */
 const pi = useAssyOutputI18n()
@@ -389,6 +423,14 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import {
+  applyProductionOrderFormFillToMaster,
+  fetchProductionOrderFormFill,
+} from '../../composables/use-production-order-form-fill'
+import { resolveDefaultOutputProdDateYmd } from '../../composables/takt-output-prod-date-edit-lock'
+import {
+  buildAssyProductionTeamOptionsParams,
+} from '../../composables/production-team-category'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -397,6 +439,32 @@ const { t } = useI18n()
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
+
+/**
+ * 解析当前用户/公司默认区域文化（与 /me 字段对齐）
+ * @returns {string} CultureCode
+ */
+function resolveScopeCultureCode(): string {
+  const info = userStore.userInfo
+  return String(
+    info?.companyDefaultCulture
+      ?? info?.defaultCulture
+      ?? info?.cultureCode
+      ?? '',
+  ).trim()
+}
+
+/**
+ * 解析当前公司关联工厂（选项 ExtValue → /me.relatedPlant）
+ * @returns {string} PlantCode
+ */
+function resolveScopePlantCode(): string {
+  return String(
+    tenantStore.currentCompanyRelatedPlant
+      || userStore.userInfo?.relatedPlant
+      || '',
+  ).trim()
+}
 
 /**
  * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
@@ -411,13 +479,10 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyCode = tenantStore.companyCode
   }
   if (force || !target.cultureCode) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+    target.cultureCode = resolveScopeCultureCode()
   }
   if (force || !target.plantCode) {
-    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
-    if (nextPlant) {
-      target.plantCode = nextPlant
-    }
+    target.plantCode = resolveScopePlantCode()
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -425,26 +490,118 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","prodCategory","prodDate","teamCode","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchCode","prodOrderQty","serialCode","stdMinutes","stdCapacity","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","prodCategory","prodDate","teamCode","directLabor","indirectLabor","shiftNo","stdCapacity","prodOrderCode","modelCode","materialCode","batchCode","prodOrderQty","serialCode","stdMinutes","prodOrderType","extField","remark"]
 
 
-import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useAssyOutputDetailI18n } from '../composables/use-assy-output-detail-i18n'
+import { useAssyOutputDetailFormColumns } from '../composables/use-assy-output-detail-form-columns'
+import {
+  ASSY_OUTPUT_DEFAULT_TIME_PERIODS,
+  buildDefaultAssyOutputDetailRows,
+} from '../composables/assy-output-default-time-periods'
+import { calculateAssyStdCapacity } from '@/utils/takt-production-stat'
+import {
+  ASSY_DETAIL_DOWNTIME_REASON_DICT,
+  ASSY_DETAIL_UNACHIEVED_REASON_DICT,
+} from '../composables/assy-output-detail-dict-multi'
+import { useAssyOutputDetailEditableDict } from '../composables/use-assy-output-detail-editable-dict'
+import {
+  calculateAssyOutputDetailDerived,
+  resolvePersonnelOperationRatePercent,
+  type AssyOutputMasterCalcSnapshot,
+} from '../composables/use-assy-output-derived-calc'
+import { applyAssyCleaningPeriodDefaults } from '@/utils/takt-production-stat'
 
 const assyOutputDetailPi = useAssyOutputDetailI18n()
+/** 内嵌子表列（含只读生产时段） */
+const assyOutputDetailFormColumns = useAssyOutputDetailFormColumns()
+const {
+  getDetailDictMultiSelectModelValue,
+  applyDetailDictMultiChange,
+  normalizeAssyOutputDetailRowForSubmit,
+} = useAssyOutputDetailEditableDict()
+
+/** 人员标准生产稼动率（%），供明细标准产能实时计算 */
+const operationRatePercent = ref(0)
+/** 防止派生字段回写触发深度 watch 死循环 */
+let isRefreshingDetailDerived = false
 
 /** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
 function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
   return triggerNode?.ownerDocument?.body ?? document.body
 }
 
+/**
+ * 子表多选字典变更写回
+ * @param record 行
+ * @param field 字段
+ * @param values Select 值
+ */
+function onDetailDictMultiSelectChange(
+  record: Record<string, unknown>,
+  field: 'downtimeReason' | 'unachievedReason',
+  values: string | number | readonly (string | number)[] | null | undefined,
+) {
+  applyDetailDictMultiChange(record, field, values)
+}
+
 const childAssyOutputDetailRows = ref<Record<string, unknown>[]>([])
+/** 子表可编辑表格实例 */
 const assyOutputDetailTableRef = ref<{
   getRows: () => Record<string, unknown>[]
   validate: () => Promise<unknown>
   resetRows: () => void
+  forEachRow: (callback: (row: Record<string, unknown>, index: number) => void) => void
+  syncModelValue: () => void
 } | null>(null)
+
+/** 子表半区宿主（弹窗视口约 1/2） */
+const detailHostRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（半区内扣除标题/表头/汇总） */
+const detailScrollYPx = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailHostResizeObserver: ResizeObserver | null = null
+
+/**
+ * 按子表半区实测 scroll.y
+ */
+function recalcDetailScrollYPx(): void {
+  const host = detailHostRef.value
+  if (host == null || host.clientHeight <= 0) {
+    return
+  }
+  const tableRoot = host.querySelector('.takt-editable-table') as HTMLElement | null
+  const toolbar = tableRoot?.querySelector(':scope > .mb-2') as HTMLElement | null
+  const toolbarH = toolbar?.offsetHeight ?? 0
+  const sectionPad = 12
+  const next = Math.floor(
+    host.clientHeight
+      - toolbarH
+      - sectionPad
+      - TAKT_TABLE_HEADER_FALLBACK_PX
+      - TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
+  )
+  detailScrollYPx.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, next)
+}
+
+/** 监听弹窗/半区尺寸变化 */
+function bindDetailHostResizeObserver(): void {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  const host = detailHostRef.value
+  if (host == null || typeof ResizeObserver === 'undefined') {
+    return
+  }
+  const target =
+    (host.closest('.ant-modal-content') as HTMLElement | null)
+    ?? (host.closest('.ant-modal-body') as HTMLElement | null)
+    ?? host
+  detailHostResizeObserver = new ResizeObserver(() => {
+    recalcDetailScrollYPx()
+  })
+  detailHostResizeObserver.observe(target)
+  detailHostResizeObserver.observe(host)
+}
 
 /** 是否已持久化的子表行 */
 function isPersistedAssyOutputDetailRow(row: Record<string, unknown>): boolean {
@@ -461,79 +618,162 @@ function allocateNextAssyOutputDetailLineNumber(): number {
   return resolveNextDetailLineNumber(0, rows)
 }
 
-/** 子表 assyOutputDetail 可编辑列 */
-const assyOutputDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
-  {
-    key: 'lineNumber',
-    title: assyOutputDetailPi.label('lineNumber'),
-    width: 140,
-  },
-  {
-    key: 'prodActualQty',
-    title: assyOutputDetailPi.label('prodActualQty'),
-    width: 140,
-  },
-  {
-    key: 'downtimeMinutes',
-    title: assyOutputDetailPi.label('downtimeMinutes'),
-    width: 140,
-  },
-  {
-    key: 'downtimeReason',
-    title: assyOutputDetailPi.label('downtimeReason'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: assyOutputDetailPi.ph('downtimeReason'),
-  },
-  {
-    key: 'downtimeDescription',
-    title: assyOutputDetailPi.label('downtimeDescription'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: assyOutputDetailPi.ph('downtimeDescription'),
-    width: 180,
-  },
-  {
-    key: 'unachievedReason',
-    title: assyOutputDetailPi.label('unachievedReason'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: assyOutputDetailPi.ph('unachievedReason'),
-  },
-  {
-    key: 'unachievedDescription',
-    title: assyOutputDetailPi.label('unachievedDescription'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: assyOutputDetailPi.ph('unachievedDescription'),
-    width: 180,
-  },
-  {
-    key: 'confirmMinutes',
-    title: assyOutputDetailPi.label('confirmMinutes'),
-    width: 140,
-  },
-  {
-    key: 'mixedProd',
-    title: assyOutputDetailPi.label('mixedProd'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD',
-    width: 140,
-  },
-  {
-    key: 'isObsolete',
-    title: assyOutputDetailPi.label('isObsolete'),
-    width: 140,
-  },
-])
+/**
+ * 主表派生计算快照
+ * @returns 主表快照
+ */
+function getMasterCalcSnapshot(): AssyOutputMasterCalcSnapshot {
+  return {
+    directLabor: Number(formState.directLabor) || 0,
+    indirectLabor: Number(formState.indirectLabor) || 0,
+    stdCapacity: Number(formState.stdCapacity) || 0,
+    stdMinutes: Number(formState.stdMinutes) || 0,
+    operationRatePercent: operationRatePercent.value,
+  }
+}
+
+/**
+ * 将派生字段写回单行明细（清洁时段停线随直接人数；标准产能默认快照主表；有报工时按公式重算）
+ * @param row 子表行（须为表格 innerRows，才能刷新只读列）
+ */
+function applyDerivedToDetailRow(row: Record<string, unknown>) {
+  const master = getMasterCalcSnapshot()
+  applyAssyCleaningPeriodDefaults(row, master.directLabor)
+  const derived = calculateAssyOutputDetailDerived(master, {
+    prodActualQty: Number(row.prodActualQty) || 0,
+    downtimeMinutes: Number(row.downtimeMinutes) || 0,
+    confirmMinutes: Number(row.confirmMinutes) || 0,
+    mixedProd: Number(row.mixedProd) || 0,
+  })
+  row.stdCapacity = derived.stdCapacity
+  row.inputMinutes = derived.inputMinutes
+  row.actualMinutes = derived.actualMinutes
+  row.indirectMinutes = derived.indirectMinutes
+  row.achievementRate = derived.achievementRate
+  if (String(formState.prodOrderCode ?? '').trim()) {
+    row.prodOrderCode = String(formState.prodOrderCode).trim()
+  }
+}
+
+/**
+ * 刷新已有子表行的派生字段（只改 child 数组引用，不走 syncModelValue，避免冲空）
+ */
+function refreshAllDetailDerivedFields() {
+  if (isRefreshingDetailDerived) {
+    return
+  }
+  if (childAssyOutputDetailRows.value.length === 0) {
+    return
+  }
+  isRefreshingDetailDerived = true
+  try {
+    childAssyOutputDetailRows.value = childAssyOutputDetailRows.value.map((row) => {
+      const next = { ...row }
+      applyDerivedToDetailRow(next)
+      return next
+    })
+  } finally {
+    isRefreshingDetailDerived = false
+  }
+}
+
+/**
+ * 按工厂+生产日期刷新稼动率，并重算子表派生字段
+ * @returns 异步任务
+ */
+async function refreshOperationRateAndDetailStdCapacity() {
+  const plantCode = String(formState.plantCode ?? '').trim()
+  const prodDate = String(formState.prodDate ?? '').trim().slice(0, 10)
+  if (!plantCode || !prodDate) {
+    operationRatePercent.value = 0
+    refreshAllDetailDerivedFields()
+    return
+  }
+  operationRatePercent.value = await resolvePersonnelOperationRatePercent(plantCode, prodDate)
+  refreshAllDetailDerivedFields()
+}
+
+/**
+ * 按直接人数 × 标准工时 × 稼动率重算主表小时标准产能
+ * @description 仅在算出 >0 时写入；绝不在此处清空（清空只走工单回填 / 用户清工单）
+ */
+function recomputeMasterStdCapacity() {
+  if (props.formData?.assyOutputId) {
+    return
+  }
+  const labor = Number(formState.directLabor)
+  const minutes = Number(formState.stdMinutes)
+  if (!(labor > 0) || !(minutes > 0)) {
+    return
+  }
+  const next = calculateAssyStdCapacity(labor, minutes, operationRatePercent.value)
+  if (next > 0) {
+    formState.stdCapacity = next
+  }
+}
+
+/**
+ * 当前子表是否已是完整的 13 条固定时段
+ * @param rows 子表行
+ * @returns 是否齐套
+ */
+function hasFullDefaultAssyOutputDetailPeriods(rows: readonly Record<string, unknown>[]): boolean {
+  if (rows.length !== ASSY_OUTPUT_DEFAULT_TIME_PERIODS.length) {
+    return false
+  }
+  return ASSY_OUTPUT_DEFAULT_TIME_PERIODS.every(
+    (period, index) => String(rows[index]?.timePeriod ?? '').trim() === period,
+  )
+}
+
+/**
+ * 按主表标准产能同步子表（唯一规则）
+ * - stdCapacity ≤ 0 / 空 → 子表清空
+ * - stdCapacity > 0 → 无 13 时段则新增；已有则更新派生字段
+ */
+function syncAssyDetailsByStdCapacity() {
+  if (props.formData?.assyOutputId) {
+    return
+  }
+  const capacity = Number(formState.stdCapacity)
+  if (!Number.isFinite(capacity) || capacity <= 0) {
+    if (childAssyOutputDetailRows.value.length > 0) {
+      childAssyOutputDetailRows.value = []
+    }
+    return
+  }
+  const code = String(formState.prodOrderCode ?? '').trim()
+  if (!hasFullDefaultAssyOutputDetailPeriods(childAssyOutputDetailRows.value)) {
+    const rows = buildDefaultAssyOutputDetailRows(code)
+    for (const row of rows) {
+      applyDerivedToDetailRow(row)
+    }
+    childAssyOutputDetailRows.value = rows
+    return
+  }
+  childAssyOutputDetailRows.value = childAssyOutputDetailRows.value.map((row) => {
+    const next = { ...row }
+    if (code) {
+      next.prodOrderCode = code
+    }
+    applyDerivedToDetailRow(next)
+    return next
+  })
+}
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<AssyOutputCreate & { assyOutputId?: string }> | null | undefined) {
   const rows_assyOutputDetail = ((val as any)?.assyOutputDetails ?? []) as Record<string, unknown>[]
   childAssyOutputDetailRows.value = rows_assyOutputDetail
+  void nextTick(() => {
+    void refreshOperationRateAndDetailStdCapacity()
+  })
 }
 
 function createDefaultAssyOutputDetailRow(): Record<string, unknown> {
-  return {
+  const row: Record<string, unknown> = {
     lineNumber: allocateNextAssyOutputDetailLineNumber(),
+    timePeriod: '',
     prodActualQty: 0,
     downtimeMinutes: 0,
     downtimeReason: '',
@@ -541,29 +781,71 @@ function createDefaultAssyOutputDetailRow(): Record<string, unknown> {
     unachievedReason: '',
     unachievedDescription: '',
     confirmMinutes: 0,
-    mixedProd: '',
+    mixedProd: 0,
     isObsolete: 0,
   }
+  applyDerivedToDetailRow(row)
+  return row
+}
+
+/**
+ * 清理子表提交行中的前端临时字段（避免 ModelState 绑定失败）
+ * @param row 规范化后的明细行
+ * @returns 可提交的明细行
+ */
+function sanitizeAssyOutputDetailSubmitRow(row: Record<string, unknown>): Record<string, unknown> {
+  const cleaned = { ...row }
+  const dropKeys = [
+    'key',
+    '_rowKey',
+    'rowKey',
+    'assyOutputName',
+    'assyOutputDetailId',
+    'id',
+    'createdAt',
+    'updatedAt',
+    'createdBy',
+    'updatedBy',
+    'isDeleted',
+  ]
+  for (const key of dropKeys) {
+    delete cleaned[key]
+  }
+  return cleaned
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
-  const masterId = props.formData?.assyOutputId ?? ''
+  refreshAllDetailDerivedFields()
+  applyScopeDefaults(formState as Record<string, unknown>, true)
+  const masterId = String(props.formData?.assyOutputId ?? '').trim()
   const isUpdate = Boolean(masterId)
+  const prodOrderCode = String(formState.prodOrderCode ?? '').trim()
+  const scopeTenant = String(tenantStore.tenantCode ?? '').trim()
+  const scopeCompany = String(tenantStore.companyCode ?? '').trim()
+  const scopeCulture = String(formState.cultureCode ?? '').trim() || resolveScopeCultureCode()
+  const scopePlant = String(formState.plantCode ?? '').trim() || resolveScopePlantCode()
   return {
     ...formState,
-    assyOutputDetails: assyOutputDetailTableRef.value?.getRows?.() ?? childAssyOutputDetailRows.value.map((row) => {
-      const normalized = {
-        ...row,
-        tenantCode: tenantStore.tenantCode,
-        companyCode: tenantStore.companyCode,
-        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
-        assyOutputId: masterId,
-      }
+    tenantCode: scopeTenant,
+    companyCode: scopeCompany,
+    cultureCode: scopeCulture,
+    plantCode: scopePlant,
+    assyOutputDetails: (assyOutputDetailTableRef.value?.getRows?.() ?? childAssyOutputDetailRows.value).map((row) => {
+      const normalized = sanitizeAssyOutputDetailSubmitRow({
+        ...normalizeAssyOutputDetailRowForSubmit(row),
+        tenantCode: scopeTenant,
+        companyCode: scopeCompany,
+        cultureCode: scopeCulture,
+        plantCode: scopePlant,
+        // 新增态必须传数字 0；空字符串会导致 long 绑定 ModelState 400（非 TaktApiResult）
+        assyOutputId: isUpdate ? masterId : 0,
+        prodOrderCode: String(row.prodOrderCode ?? '').trim() || prodOrderCode,
+        lineNumber: Number(row.lineNumber) || 0,
+        timePeriod: String(row.timePeriod ?? '').trim(),
+      })
       if (isUpdate && isPersistedAssyOutputDetailRow(row)) {
         normalized.assyOutputDetailId = row.assyOutputDetailId
-      } else {
-        delete normalized.assyOutputDetailId
       }
       return normalized
     }),
@@ -586,25 +868,73 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  prodCategory: "FPP"
+
+/** 班组下拉：按工厂 + 组立分类 */
+const assyTeamOptionsParams = computed(() =>
+  buildAssyProductionTeamOptionsParams(
+    String(formState.plantCode ?? '').trim() || resolveScopePlantCode(),
+  ),
+)
+
+/** 工单下拉：按工厂过滤 */
+const prodOrderOptionsParams = computed(() => {
+  const plant = String(formState.plantCode ?? '').trim() || resolveScopePlantCode()
+  return plant ? { plantCode: plant } : {}
+})
+/** 班次字典值：白班（logistics_manufacturing_shift_category） */
+const ASSY_OUTPUT_DEFAULT_SHIFT_DAY = 4
+
+/**
+ * 新增默认生产日期（昨天；不可选则回退今天）
+ * @returns 日期文本
+ */
+function getDefaultAssyOutputProdDateYmd(): string {
+  return resolveDefaultOutputProdDateYmd()
 }
 
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（新增 / resetFields） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  prodCategory: 'FPP',
+  shiftNo: ASSY_OUTPUT_DEFAULT_SHIFT_DAY,
+}
+
+/** 写入表单默认值（仅补空：新增 / resetFields；编辑已有值不覆盖） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  for (const [key, value] of Object.entries(FORM_FIELD_DEFAULTS)) {
+    const current = target[key]
+    if (current === undefined || current === null || current === '') {
+      target[key] = value
+    }
+  }
+  if (!target.prodDate) {
+    target.prodDate = getDefaultAssyOutputProdDateYmd()
+  }
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
 const dictDataStore = useDictDataStore()
 
-/** 表单挂载时预加载全量字典 */
+/** 表单挂载：预热字典 + 半区高度测量 */
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
+  void nextTick(() => {
+    recalcDetailScrollYPx()
+    bindDetailHostResizeObserver()
+  })
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', recalcDetailScrollYPx)
+  }
 })
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 assyOutputId 才视为编辑） */
+onBeforeUnmount(() => {
+  detailHostResizeObserver?.disconnect()
+  detailHostResizeObserver = null
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', recalcDetailScrollYPx)
+  }
+})
+
+/** 编辑态灌入 formData；新增态恢复默认值，子表待标准产能 > 0 后再生成 13 时段 */
 watch(
   () => props.formData,
   (val) => {
@@ -623,15 +953,28 @@ watch(
       }
       applyFormDefaults(formState)
       applyScopeDefaults(formState as Record<string, unknown>, true)
+      syncAssyDetailsByStdCapacity()
       formRef.value?.clearValidate()
     }
+    void nextTick(() => {
+      recalcDetailScrollYPx()
+      bindDetailHostResizeObserver()
+    })
   },
   { immediate: true }
 )
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
+  () =>
+    [
+      tenantStore.tenantCode,
+      tenantStore.companyCode,
+      tenantStore.currentCompanyRelatedPlant,
+      userStore.userInfo?.companyDefaultCulture,
+      userStore.userInfo?.defaultCulture,
+      userStore.userInfo?.relatedPlant,
+    ] as const,
   () => {
     if (!props.formData?.assyOutputId) {
       applyScopeDefaults(formState, true)
@@ -639,8 +982,99 @@ watch(
   },
 )
 
+/** 选工单 / 改生产日期或直接人数时回填主表只读字段与标准工时（仅新增态） */
+let assyProdOrderFillSeq = 0
+watch(
+  () => [formState.prodOrderCode, formState.prodDate, formState.directLabor] as const,
+  async ([prodOrderCode, prodDate, directLabor]) => {
+    if (props.formData?.assyOutputId) {
+      return
+    }
+    const code = String(prodOrderCode ?? '').trim()
+    if (!code) {
+      formState.prodOrderType = ''
+      formState.modelCode = ''
+      formState.materialCode = ''
+      formState.batchCode = ''
+      formState.prodOrderQty = undefined
+      formState.serialCode = ''
+      formState.stdMinutes = undefined
+      formState.stdCapacity = undefined
+      operationRatePercent.value = 0
+      syncAssyDetailsByStdCapacity()
+      return
+    }
+    const seq = ++assyProdOrderFillSeq
+    const fill = await fetchProductionOrderFormFill(code, {
+      plantCode: String(formState.plantCode ?? '').trim() || undefined,
+      prodDate: String(prodDate ?? '').trim().slice(0, 10) || undefined,
+      directLabor:
+        directLabor === undefined || directLabor === null || directLabor === ''
+          ? undefined
+          : Number(directLabor),
+      includeDefaultDetails: false,
+    })
+    if (seq !== assyProdOrderFillSeq) {
+      return
+    }
+    if (!fill) {
+      return
+    }
+    applyProductionOrderFormFillToMaster(formState, fill, true)
+    operationRatePercent.value = Number(fill.operationRatePercent) || 0
+    recomputeMasterStdCapacity()
+    syncAssyDetailsByStdCapacity()
+  }
+)
+
+/** 主表标准产能：≤0 清空；>0 新增或更新 13 时段 */
+watch(
+  () => Number(formState.stdCapacity) || 0,
+  () => {
+    syncAssyDetailsByStdCapacity()
+  },
+)
+
+/** 主表人数/工时变化：能算则写产能；再按产能同步子表 */
+watch(
+  () => [formState.stdMinutes, formState.directLabor, formState.indirectLabor] as const,
+  () => {
+    if (props.formData?.assyOutputId) {
+      refreshAllDetailDerivedFields()
+      return
+    }
+    recomputeMasterStdCapacity()
+    syncAssyDetailsByStdCapacity()
+  },
+)
+
+/** 子表产量/报工/停线变化时，实时重算派生字段 */
+watch(
+  () =>
+    childAssyOutputDetailRows.value
+      .map((row) => `${row.prodActualQty ?? ''}|${row.confirmMinutes ?? ''}|${row.downtimeMinutes ?? ''}`)
+      .join(';'),
+  () => {
+    refreshAllDetailDerivedFields()
+  },
+)
+
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
+  cultureCode: [
+    {
+      required: true,
+      message: pi.ph('cultureCode'),
+      trigger: 'change'
+    }
+  ],
   prodCategory: [
     {
       required: true,
@@ -708,6 +1142,20 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
+  modelCode: [
+    {
+      required: true,
+      message: pi.ph('modelCode'),
+      trigger: 'change'
+    }
+  ],
+  materialCode: [
+    {
+      required: true,
+      message: pi.ph('materialCode'),
+      trigger: 'change'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -751,10 +1199,13 @@ function getValues(): Record<string, any> {
     }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  payload.tenantCode = String(tenantStore.tenantCode ?? '').trim()
+  payload.companyCode = String(tenantStore.companyCode ?? '').trim()
   if (!payload.plantCode) {
-    // 只读工厂：未注入时勿提交空串触发 FluentValidation
-    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
-    if (scopedPlant) payload.plantCode = scopedPlant
+    payload.plantCode = resolveScopePlantCode()
+  }
+  if (!payload.cultureCode) {
+    payload.cultureCode = resolveScopeCultureCode()
   }
   if (props.formData?.assyOutputId) {
     payload.assyOutputId = props.formData.assyOutputId
@@ -770,8 +1221,12 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.assyOutputId)
-  childAssyOutputDetailRows.value = []
-  assyOutputDetailTableRef.value?.resetRows?.()
+  if (props.formData?.assyOutputId) {
+    syncChildRowsFromFormData(props.formData)
+  } else {
+    recomputeMasterStdCapacity()
+    syncAssyDetailsByStdCapacity()
+  }
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
@@ -780,11 +1235,33 @@ defineExpose({ validate, getValues, resetFields })
 </script>
 
 <style scoped lang="css">
-:deep(.ant-tabs-content-holder) {
-  min-height: 50vh;
+/* 上主下从各占弹窗 body 约 1/2；主表区内部滚动，子表用 scroll.y */
+.assy-output-form__master {
+  display: flex;
+  flex-direction: column;
 }
 
-:deep(.ant-tabs-tabpane) {
-  min-height: 50vh;
+.assy-output-form__master :deep(.assy-output-form-tabs.ant-tabs) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.assy-output-form__master :deep(.ant-tabs-nav) {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.assy-output-form__master :deep(.ant-tabs-content-holder) {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.assy-output-form__master :deep(.ant-tabs-content),
+.assy-output-form__master :deep(.ant-tabs-tabpane) {
+  height: 100%;
 }
 </style>

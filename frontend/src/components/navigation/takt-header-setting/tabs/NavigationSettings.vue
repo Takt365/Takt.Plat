@@ -1,3 +1,12 @@
+<!-- ========================================
+项目名称:Takt.Plat
+命名空间:@/components/navigation/takt-header-setting/tabs
+文件名称:NavigationSettings.vue
+功能描述:导航偏好（手风琴/菜单风格/面包屑）；@change 取新值直写 Pinia
+
+版权信息:Copyright (c) 2025 Takt  All rights reserved.
+免责声明:此软件使用 MIT License,作者不承担任何使用风险。
+======================================== -->
 <template>
   <div class="navigation-settings">
     <a-space
@@ -7,15 +16,15 @@
     >
       <a-form-item :label="$t('components.navigation.page.systemsetting.menuaccordion')">
         <a-switch
-          v-model:checked="setting.menuAccordion"
-          @change="handleChange"
+          :checked="setting.menuAccordion"
+          @change="onMenuAccordion"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.menustyle')">
         <a-radio-group
-          v-model:value="setting.menuStyle"
-          @change="handleChange"
+          :value="setting.menuStyle"
+          @change="onMenuStyleChange"
         >
           <a-radio-button value="plain">
             {{ $t('components.navigation.page.systemsetting.plain') }}
@@ -28,15 +37,15 @@
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.showbreadcrumb')">
         <a-switch
-          v-model:checked="setting.showBreadcrumb"
-          @change="handleChange"
+          :checked="setting.showBreadcrumb"
+          @change="onShowBreadcrumb"
         />
       </a-form-item>
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.showbreadcrumbicon')">
         <a-switch
-          v-model:checked="setting.breadcrumbIcon"
-          @change="handleChange"
+          :checked="setting.breadcrumbIcon"
+          @change="onBreadcrumbIcon"
         />
       </a-form-item>
     </a-space>
@@ -44,24 +53,60 @@
 </template>
 
 <script setup lang="ts">
-import type { AppSetting } from '@/stores/common/setting'
+import type { RadioChangeEvent } from 'ant-design-vue/es/radio'
+import type { AppSetting, MenuStyle } from '@/types/setting'
+import { useSettingStore } from '@/stores/common/setting'
+import { applySettings, notifySettingsChanged } from '@/utils/apply-settings'
 
-const setting = inject<AppSetting>('setting')!
+const settingStore = useSettingStore()
+const { setting } = storeToRefs(settingStore)
+/** 抽屉快照（若存在则同步，防止其它 tab 提交覆盖） */
+const draftSetting = inject<AppSetting | null>('setting', null)
 
-const emit = defineEmits<{
-  'change': []
-}>()
+/**
+ * 写入偏好并应用到布局 / DOM
+ * @param partial 局部字段
+ */
+function commit(partial: Partial<AppSetting>): void {
+  settingStore.patchSetting(partial)
+  if (draftSetting) {
+    Object.assign(draftSetting, partial)
+  }
+  applySettings()
+  notifySettingsChanged()
+}
 
-const handleChange = () => {
-  emit('change')
+/**
+ * 菜单手风琴（Switch change 首参即为新值）
+ * @param checked 是否开启
+ */
+function onMenuAccordion(checked: boolean | string | number): void {
+  commit({ menuAccordion: !!checked })
+}
+
+/**
+ * 菜单风格
+ * @param e Radio change 事件
+ */
+function onMenuStyleChange(e: RadioChangeEvent): void {
+  const raw = e?.target?.value
+  const menuStyle: MenuStyle = raw === 'rounded' ? 'rounded' : 'plain'
+  commit({ menuStyle })
+}
+
+/**
+ * 显示面包屑
+ * @param checked 是否显示
+ */
+function onShowBreadcrumb(checked: boolean | string | number): void {
+  commit({ showBreadcrumb: !!checked })
+}
+
+/**
+ * 面包屑显示图标
+ * @param checked 是否显示图标
+ */
+function onBreadcrumbIcon(checked: boolean | string | number): void {
+  commit({ breadcrumbIcon: !!checked })
 }
 </script>
-
-<style scoped>
-.setting-label-tip {
-  margin-left: 4px;
-  color: var(--ant-color-text-tertiary);
-  cursor: help;
-  font-size: 14px;
-}
-</style>

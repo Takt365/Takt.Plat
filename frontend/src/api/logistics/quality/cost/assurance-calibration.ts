@@ -130,10 +130,20 @@ export function updateQualityAssuranceCalibrationObsolete(dto: QualityAssuranceC
  * 获取品质业务设备校正费用明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getQualityAssuranceCalibrationOptions(): Promise<TaktSelectOption[]> {
+export function getQualityAssuranceCalibrationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${QUALITY_ASSURANCE_CALIBRATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

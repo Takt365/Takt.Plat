@@ -20,20 +20,28 @@ export const SALESORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESORDER_ENTITY
 
 /** 列表业务列（不含主键） */
 export const SALESORDER_LIST_FIELDS = [
-  'plantCode',
   'salesOrderCode',
   'customerCode',
   'customerName1',
   'orderDate',
   'requiredDeliveryDate',
   'actualDeliveryDate',
-  'salesBy',
+  'salesGroup',
+  'salesOrderType',
+  'orderReason',
+  'salesOrganization',
+  'pricingProcedure',
+  'pricingConditionCode',
+  'invoiceType',
+  'purchaseOrderCode',
+  'purchaseOrderDate',
   'totalQuantity',
   'totalAmount',
   'discountAmount',
   'currencyCode',
   'exchangeRate',
   'taxCode',
+  'taxRate',
   'taxAmount',
   'actualAmount',
   'shippedQuantity',
@@ -44,12 +52,48 @@ export const SALESORDER_LIST_FIELDS = [
   'deliveryAddress',
   'orderStatus',
   'deliveryStatus',
-  'remark',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const SALESORDER_PLACEHOLDER = {
-
+  tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'optional',
+  salesOrderCode: 'required',
+  customerCode: 'select',
+  customerName1: 'optional',
+  orderDate: 'select',
+  requiredDeliveryDate: 'optional',
+  actualDeliveryDate: 'optional',
+  salesGroup: 'optional',
+  salesOrderType: 'optional',
+  orderReason: 'optional',
+  salesOrganization: 'optional',
+  pricingProcedure: 'optional',
+  pricingConditionCode: 'optional',
+  invoiceType: 'optional',
+  purchaseOrderCode: 'optional',
+  purchaseOrderDate: 'optional',
+  totalQuantity: 'select',
+  totalAmount: 'select',
+  discountAmount: 'select',
+  currencyCode: 'select',
+  exchangeRate: 'select',
+  taxCode: 'optional',
+  taxRate: 'select',
+  taxAmount: 'select',
+  actualAmount: 'select',
+  shippedQuantity: 'select',
+  shippedAmount: 'select',
+  receivedAmount: 'select',
+  deliveryMethod: 'select',
+  paymentMethod: 'select',
+  deliveryAddress: 'optional',
+  orderStatus: 'select',
+  deliveryStatus: 'select',
+  extField: 'optional',
+  remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -57,13 +101,58 @@ export type SalesOrderField = keyof typeof SALESORDER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESORDER_QUERY_STRING_FIELDS = [
-
+  'cultureCode',
+  'plantCode',
+  'salesOrderCode',
+  'customerCode',
+  'customerName1',
+  'orderDateStart',
+  'orderDateEnd',
+  'requiredDeliveryDateStart',
+  'requiredDeliveryDateEnd',
+  'actualDeliveryDateStart',
+  'actualDeliveryDateEnd',
+  'salesGroup',
+  'salesOrderType',
+  'orderReason',
+  'salesOrganization',
+  'pricingProcedure',
+  'pricingConditionCode',
+  'invoiceType',
+  'purchaseOrderCode',
+  'purchaseOrderDateStart',
+  'purchaseOrderDateEnd',
+  'currencyCode',
+  'taxCode',
+  'deliveryAddress',
+  'createdAtStart',
+  'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof SalesOrderQuery)[]
 
-export type SalesOrderQueryField = (typeof SALESORDER_QUERY_STRING_FIELDS)[number]
+export type SalesOrderQueryField =
+  | (typeof SALESORDER_QUERY_STRING_FIELDS)[number]
+  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'exchangeRate' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'shippedQuantity' | 'shippedAmount' | 'receivedAmount' | 'deliveryMethod' | 'paymentMethod' | 'orderStatus' | 'deliveryStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESORDER_QUERY_FIELDS: readonly SalesOrderQueryField[] = [...SALESORDER_QUERY_STRING_FIELDS]
+export const SALESORDER_QUERY_FIELDS: readonly SalesOrderQueryField[] = [
+  ...SALESORDER_QUERY_STRING_FIELDS,
+  'totalQuantity',
+  'totalAmount',
+  'discountAmount',
+  'exchangeRate',
+  'taxRate',
+  'taxAmount',
+  'actualAmount',
+  'shippedQuantity',
+  'shippedAmount',
+  'receivedAmount',
+  'deliveryMethod',
+  'paymentMethod',
+  'orderStatus',
+  'deliveryStatus',
+]
 
 /**
  * Takt销售订单实体字段 i18n：index / order-form 统一入口

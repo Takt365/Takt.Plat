@@ -130,10 +130,20 @@ export function updateMeetingAttendeeStatus(dto: MeetingAttendeeStatus): Promise
  * 获取参会人员选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMeetingAttendeeOptions(): Promise<TaktSelectOption[]> {
+export function getMeetingAttendeeOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MEETING_ATTENDEE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

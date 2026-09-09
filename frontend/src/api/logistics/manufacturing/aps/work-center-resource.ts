@@ -130,10 +130,20 @@ export function updateWorkCenterResourceStatus(dto: WorkCenterResourceStatus): P
  * 获取工作中心资源选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getWorkCenterResourceOptions(): Promise<TaktSelectOption[]> {
+export function getWorkCenterResourceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${WORK_CENTER_RESOURCE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

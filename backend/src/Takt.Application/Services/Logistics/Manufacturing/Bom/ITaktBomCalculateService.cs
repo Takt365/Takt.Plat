@@ -23,8 +23,10 @@ public interface ITaktBomCalculateService
     /// <summary>
     /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetBomCalculatePlantOptionsAsync();
+    Task<List<TaktSelectOption>> GetBomCalculatePlantOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 计算成本：明细按工厂+产品+核算月合计写入主表（有则更新；明细有而主表无则回填新建；按查询所选物料类型，空=全部类型），再刷新机种月均

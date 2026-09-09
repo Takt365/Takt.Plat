@@ -39,8 +39,9 @@ public interface ITaktBomMaterialCostItemService
     /// 获取BOM物料成本选项列表（按产品编码去重，可选按工厂过滤）
     /// </summary>
     /// <param name="plantCode">工厂代码（可选）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项（DictValue=产品编码）</returns>
-    Task<List<TaktSelectOption>> GetBomMaterialCostItemOptionsAsync(string? plantCode = null);
+    Task<List<TaktSelectOption>> GetBomMaterialCostItemOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建BOM物料成本明细

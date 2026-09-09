@@ -52,7 +52,7 @@ internal static class TaktEcUkekenQueryHelper
     {
         return x => SqlFunc.Subqueryable<TaktEcDetail>()
             .Where(d =>
-                d.Id == x.EcnDetailId
+                d.Id == x.EcDetailId
                 && d.IsDeleted == 0
                 && d.IsObsolete == 0
                 && d.EcNewRequiresInspection == 1

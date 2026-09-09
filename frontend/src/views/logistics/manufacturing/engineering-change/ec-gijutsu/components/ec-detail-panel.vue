@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-detail-panel.vue -->
-<!-- 功能描述：设变主表实体右侧明细 ecDetail 独立 CRUD（按主表选中 ecId 分页） -->
+<!-- 功能描述：设变主表实体右侧明细 ecDetail 独立 CRUD（按主表选中 ecGijutsuId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -68,7 +68,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="720px"
+      :width="formModalWidthPx"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
@@ -466,6 +466,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
@@ -547,6 +548,8 @@ const formTitle = ref('')
 const formData = ref<Partial<EcDetail>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
@@ -756,7 +759,7 @@ function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
   const query: EcDetailQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    ecId: masterEcId.value,
+    ecGijutsuId: masterEcId.value,
     ...overrides,
   }
   if (kw.length > 0) {

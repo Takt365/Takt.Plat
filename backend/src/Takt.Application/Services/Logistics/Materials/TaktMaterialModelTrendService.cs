@@ -32,14 +32,14 @@ public class TaktMaterialModelTrendService : TaktServiceBase, ITaktMaterialModel
         _analysisService = analysisService;
     }
 
-    public Task<List<TaktSelectOption>> GetMaterialModelTrendPlantOptionsAsync() =>
-        _analysisService.GetMaterialMovingTrendPlantOptionsAsync();
+    public Task<List<TaktSelectOption>> GetMaterialModelTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null) =>
+        _analysisService.GetMaterialMovingTrendPlantOptionsAsync(plantCode, keyword);
 
-    public Task<List<TaktSelectOption>> GetMaterialModelTrendValuationOptionsAsync(string plantCode) =>
-        _analysisService.GetMaterialMovingTrendValuationOptionsAsync(plantCode);
+    public Task<List<TaktSelectOption>> GetMaterialModelTrendValuationOptionsAsync(string? plantCode = null, string? keyword = null) =>
+        _analysisService.GetMaterialMovingTrendValuationOptionsAsync(plantCode, keyword);
 
-    public Task<List<TaktSelectOption>> GetMaterialModelTrendMaterialOptionsAsync(string plantCode, string? valuation = null) =>
-        _analysisService.GetMaterialMovingTrendMaterialOptionsAsync(plantCode, valuation);
+    public Task<List<TaktSelectOption>> GetMaterialModelTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? valuation = null) =>
+        _analysisService.GetMaterialMovingTrendMaterialOptionsAsync(plantCode, keyword, valuation);
 
     public Task<TaktMaterialModelTrendResultDto> GetMaterialModelTrendAnalysisAsync(TaktMaterialModelTrendQueryDto queryDto) =>
         _analysisService.GetMaterialModelTrendAnalysisAsync(queryDto);

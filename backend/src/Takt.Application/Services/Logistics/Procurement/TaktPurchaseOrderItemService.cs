@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单明细应用服务实现
 // 
@@ -99,8 +99,10 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
     /// <summary>
     /// 获取采购订单明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchaseOrderItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseOrderItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchaseOrderItemRepository.GetListAsync(
@@ -388,7 +390,13 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
+                || (x.PurchaseInfoRecordCode != null && x.PurchaseInfoRecordCode.Contains(keywords))
+                || (x.SupplierMaterialCode != null && x.SupplierMaterialCode.Contains(keywords))
                 || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
+                || (x.WeightUnit != null && x.WeightUnit.Contains(keywords))
+                || (x.VolumeUnit != null && x.VolumeUnit.Contains(keywords))
+                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -454,6 +462,18 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
             exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(materialSpecification));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInfoRecordCode))
+        {
+            var purchaseInfoRecordCode = queryDto.PurchaseInfoRecordCode;
+            exp = exp.And(x => x.PurchaseInfoRecordCode != null && x.PurchaseInfoRecordCode.Contains(purchaseInfoRecordCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierMaterialCode))
+        {
+            var supplierMaterialCode = queryDto.SupplierMaterialCode;
+            exp = exp.And(x => x.SupplierMaterialCode != null && x.SupplierMaterialCode.Contains(supplierMaterialCode));
+        }
+
         if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseUnit))
         {
             var purchaseUnit = queryDto.PurchaseUnit;
@@ -496,6 +516,12 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
             exp = exp.And(x => x.DiscountAmount == discountAmount);
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
+        {
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
+        }
+
         if (queryDto?.TaxIncludedAmount.HasValue == true)
         {
             var taxIncludedAmount = queryDto.TaxIncludedAmount.Value;
@@ -520,6 +546,42 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
             exp = exp.And(x => x.PurchaseAmount == purchaseAmount);
         }
 
+        if (queryDto?.GrossWeight.HasValue == true)
+        {
+            var grossWeight = queryDto.GrossWeight.Value;
+            exp = exp.And(x => x.GrossWeight == grossWeight);
+        }
+
+        if (queryDto?.NetWeight.HasValue == true)
+        {
+            var netWeight = queryDto.NetWeight.Value;
+            exp = exp.And(x => x.NetWeight == netWeight);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WeightUnit))
+        {
+            var weightUnit = queryDto.WeightUnit;
+            exp = exp.And(x => x.WeightUnit != null && x.WeightUnit.Contains(weightUnit));
+        }
+
+        if (queryDto?.Volume.HasValue == true)
+        {
+            var volume = queryDto.Volume.Value;
+            exp = exp.And(x => x.Volume == volume);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.VolumeUnit))
+        {
+            var volumeUnit = queryDto.VolumeUnit;
+            exp = exp.And(x => x.VolumeUnit != null && x.VolumeUnit.Contains(volumeUnit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProfitCenterCode))
+        {
+            var profitCenterCode = queryDto.ProfitCenterCode;
+            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(profitCenterCode));
+        }
+
         if (queryDto?.DeliveryStatus.HasValue == true)
         {
             var deliveryStatus = queryDto.DeliveryStatus.Value;
@@ -536,6 +598,18 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
         {
             var remark = queryDto.Remark;
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.PricingDateStart.HasValue == true)
+        {
+            var pricingDateStart = queryDto.PricingDateStart.Value;
+            exp = exp.And(x => x.PricingDate >= pricingDateStart);
+        }
+
+        if (queryDto?.PricingDateEnd.HasValue == true)
+        {
+            var pricingDateEnd = queryDto.PricingDateEnd.Value;
+            exp = exp.And(x => x.PricingDate <= pricingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
@@ -608,6 +682,14 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
         {
             return true;
         }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInfoRecordCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierMaterialCode))
+        {
+            return true;
+        }
         if (!string.IsNullOrWhiteSpace(queryDto.PurchaseUnit))
         {
             return true;
@@ -636,6 +718,10 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
         {
             return true;
         }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
+        {
+            return true;
+        }
         if (queryDto.TaxIncludedAmount.HasValue)
         {
             return true;
@@ -652,6 +738,30 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
         {
             return true;
         }
+        if (queryDto.GrossWeight.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NetWeight.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WeightUnit))
+        {
+            return true;
+        }
+        if (queryDto.Volume.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.VolumeUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProfitCenterCode))
+        {
+            return true;
+        }
         if (queryDto.DeliveryStatus.HasValue)
         {
             return true;
@@ -665,6 +775,10 @@ public class TaktPurchaseOrderItemService : TaktServiceBase, ITaktPurchaseOrderI
             return true;
         }
         if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PricingDateStart.HasValue || queryDto.PricingDateEnd.HasValue)
         {
             return true;
         }

@@ -215,6 +215,7 @@
                 <TaktSelect
                   v-model:value="formState.registrationProvince"
                   api-url="TaktAdminDivisions/options"
+                  :api-params="{ level: 2 }"
                   :placeholder="pi.ph('registrationProvince')"
                 />
               </a-form-item>
@@ -227,6 +228,7 @@
                 <TaktSelect
                   v-model:value="formState.registrationCity"
                   api-url="TaktAdminDivisions/options"
+                  :api-params="{ level: 3 }"
                   :placeholder="pi.ph('registrationCity')"
                 />
               </a-form-item>
@@ -509,6 +511,7 @@
                 <TaktSelect
                   v-model:value="formState.reconciliationAccount"
                   api-url="TaktAccountTitles/options"
+                  :api-params="{ reconciliationOnly: true, auxiliaryType: 'D' }"
                   :placeholder="pi.ph('reconciliationAccount')"
                 />
               </a-form-item>
@@ -666,18 +669,6 @@
                   v-model:value="formState.discountRate"
                   dict-type="logistics_sales_discount_rate_param"
                   :placeholder="pi.ph('discountRate')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesBy')"
-                name="salesBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.salesBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('salesBy')"
                 />
               </a-form-item>
             </a-col>

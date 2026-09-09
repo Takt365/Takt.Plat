@@ -34,11 +34,11 @@ public class TaktEcExecutionTask : TaktCompanyEntityBase
     public long EcNotificationId { get; set; }
 
     /// <summary>
-    /// 设变 ID
+    /// 技术课主表 ID（TaktEcGijutsu 主键）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_id", ColumnDescription = "设变ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 设变单号（冗余）
     /// </summary>
@@ -53,9 +53,9 @@ public class TaktEcExecutionTask : TaktCompanyEntityBase
     /// <summary>
     /// 设变明细 ID（可选）
     /// </summary>
-    [SugarColumn(ColumnName = "ecn_detail_id", ColumnDescription = "设变明细ID", ColumnDataType = "bigint", IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_detail_id", ColumnDescription = "设变明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EcnDetailId { get; set; }
+    public long? EcDetailId { get; set; }
     /// <summary>
     /// 责任部门编码（TaktDept.DeptCode，如 D0710）
     /// </summary>

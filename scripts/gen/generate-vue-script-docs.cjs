@@ -41,6 +41,8 @@ const formData = ref<Partial<${entityPascal}> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 ` : '';
   const importLine = hasImport ? `/** 导入对话框是否打开 */
 const importVisible = ref(false)
@@ -142,6 +144,8 @@ const formData = ref<Partial<${entityPascal}> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 ` : '';
   const importLine = hasImport ? `/** 导入对话框是否打开 */
 const importVisible = ref(false)

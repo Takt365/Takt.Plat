@@ -99,8 +99,10 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     /// <summary>
     /// 获取工程变更通知单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcNotificationOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcNotificationOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ecNotificationRepository.GetListAsync(
@@ -317,16 +319,16 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     /// <returns>任务</returns>
     private async Task StampEcNotificationEcGijutsuAsync(TaktEcNotification entity, TaktEcNotificationCreateDto dto)
     {
-        if (dto.EcId <= 0)
+        if (dto.EcGijutsuId <= 0)
         {
             return;
         }
-        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcGijutsuId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
         }
-        entity.EcId = master.Id;
+        entity.EcGijutsuId = master.Id;
         if (string.IsNullOrEmpty(entity.TenantCode))
         {
             entity.TenantCode = master.TenantCode;
@@ -400,10 +402,10 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             exp = exp.And(x => x.EcNotificationCode != null && x.EcNotificationCode.Contains(ecNotificationCode));
         }
 
-        if (queryDto?.EcId.HasValue == true)
+        if (queryDto?.EcGijutsuId.HasValue == true)
         {
-            var ecId = queryDto.EcId.Value;
-            exp = exp.And(x => x.EcId == ecId);
+            var ecGijutsuId = queryDto.EcGijutsuId.Value;
+            exp = exp.And(x => x.EcGijutsuId == ecGijutsuId);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EcCode))
@@ -520,7 +522,7 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
         {
             return true;
         }
-        if (queryDto.EcId.HasValue)
+        if (queryDto.EcGijutsuId.HasValue)
         {
             return true;
         }

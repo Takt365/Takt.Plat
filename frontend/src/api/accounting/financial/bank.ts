@@ -116,10 +116,20 @@ export function deleteBankBatch(ids: string[]): Promise<void> {
  * 获取银行信息选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getBankOptions(): Promise<TaktSelectOption[]> {
+export function getBankOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${BANK_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

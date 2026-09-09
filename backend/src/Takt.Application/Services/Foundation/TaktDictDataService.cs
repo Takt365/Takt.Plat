@@ -92,8 +92,10 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     /// <summary>
     /// 获取字典数据选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetDictDataOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetDictDataOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(

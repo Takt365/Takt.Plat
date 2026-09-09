@@ -21,6 +21,7 @@ import type {
   EcGijutsuStat,
   EcGijutsuStatQuery,
   EcGijutsuStatus,
+  EcGijutsuSubmitted,
   EcGijutsuUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu';
 import type {
@@ -68,12 +69,12 @@ export function getEcGijutsuById(id: string): Promise<EcGijutsu> {
 }
 
 /**
- * 创建设变技术课主表
+ * 创建设变技术课主表（后台落库 + 派生各部门执行行；立即返回已提交回执）
  * @param {EcGijutsuCreate} dto 创建DTO
- * @returns {Promise<EcGijutsu>} 设变技术课主表DTO
+ * @returns {Promise<EcGijutsuSubmitted>} 已提交回执
  */
-export function createEcGijutsu(dto: EcGijutsuCreate): Promise<EcGijutsu> {
-  return request<EcGijutsu>({
+export function createEcGijutsu(dto: EcGijutsuCreate): Promise<EcGijutsuSubmitted> {
+  return request<EcGijutsuSubmitted>({
     url: `${EC_GIJUTSU_API_BASE}`,
     method: 'post',
     data: dto,
@@ -81,13 +82,13 @@ export function createEcGijutsu(dto: EcGijutsuCreate): Promise<EcGijutsu> {
 }
 
 /**
- * 更新设变技术课主表
+ * 更新设变技术课主表（后台落库 + 同步各部门执行行；立即返回已提交回执）
  * @param {string} id 设变技术课主表ID
  * @param {EcGijutsuUpdate} dto 更新DTO
- * @returns {Promise<EcGijutsu>} 设变技术课主表DTO
+ * @returns {Promise<EcGijutsuSubmitted>} 已提交回执
  */
-export function updateEcGijutsu(id: string, dto: EcGijutsuUpdate): Promise<EcGijutsu> {
-  return request<EcGijutsu>({
+export function updateEcGijutsu(id: string, dto: EcGijutsuUpdate): Promise<EcGijutsuSubmitted> {
+  return request<EcGijutsuSubmitted>({
     url: `${EC_GIJUTSU_API_BASE}/${id}`,
     method: 'put',
     data: dto,
@@ -140,10 +141,20 @@ export function updateEcGijutsuStatus(dto: EcGijutsuStatus): Promise<EcGijutsu> 
  * 获取设变技术课主表选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getEcGijutsuOptions(): Promise<TaktSelectOption[]> {
+export function getEcGijutsuOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${EC_GIJUTSU_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 
@@ -270,7 +281,7 @@ export function getEcGijutsuDraftFromSourceEc(dto: EcGijutsuDraftFromSource): Pr
 }
 
 /**
- * 从来源设变导入设变技术课主表及明细
+ * 从来源设变导入设变技术课主表及明细（导入后同样派生各部门执行行，耗时可较长）
  * @param {EcGijutsuImportFromSource} dto 导入 DTO
  * @returns {Promise<EcGijutsuImportFromSourceResult>} 导入结果
  */
@@ -279,5 +290,6 @@ export function importEcGijutsuFromSource(dto: EcGijutsuImportFromSource): Promi
     url: `${EC_GIJUTSU_API_BASE}/import-from-source-ec`,
     method: 'post',
     data: dto,
+    timeout: 300000,
   });
 }

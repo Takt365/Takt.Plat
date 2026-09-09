@@ -111,11 +111,11 @@ public class TaktEcUkekensController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:ukeken:query", "设变受检执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcUkekenOptionsAsync()
+    public async Task<IActionResult> GetEcUkekenOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecUkekenService.GetEcUkekenOptionsAsync();
+            var result = await _ecUkekenService.GetEcUkekenOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcUkekensController : TaktControllerBase
         {
             await _ecUkekenService.DeleteEcUkekenBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变受检执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变受检执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:ukeken:update", "更新设变受检执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcUkekenDiscontinuedStatusAsync([FromBody] TaktEcUkekenDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecUkekenService.UpdateEcUkekenDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

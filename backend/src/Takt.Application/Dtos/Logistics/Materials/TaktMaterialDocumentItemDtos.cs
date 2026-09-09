@@ -387,9 +387,9 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -771,9 +771,9 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1169,9 +1169,9 @@ public class TaktMaterialDocumentItemCreateDto
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1599,9 +1599,9 @@ public class TaktMaterialDocumentItemTemplateDto
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -1982,9 +1982,9 @@ public class TaktMaterialDocumentItemImportDto
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
@@ -2371,9 +2371,9 @@ public class TaktMaterialDocumentItemExportDto
     public int? ImDeliveryItem { get; set; }
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

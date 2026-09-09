@@ -131,8 +131,10 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// <summary>
     /// 获取设变附件选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcAttachmentOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcAttachmentOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _ecAttachmentRepository.GetListAsync(
@@ -158,23 +160,15 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         entity.IsObsolete = 0;
         ApplyEcAttachmentFileNameFromDocCode(entity);
         await StampEcAttachmentEcGijutsuAsync(entity, dto);
-        await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: null);
-        var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _ecAttachmentRepository,
-            x => x.EcId == entity.EcId
-                && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique)
-        {
-            throw new TaktBusinessException("设变附件的EcId、LineNumber已存在");
-        }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _ecAttachmentRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcGijutsuId == entity.EcGijutsuId,
                 x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
+            var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
+        await EnsureEcAttachmentUniqueAsync(entity.EcGijutsuId, entity.DocCode, entity.LineNumber, excludeId: null);
         entity = await _ecAttachmentRepository.CreateAsync(entity);
         return await GetEcAttachmentByIdAsync(entity.Id) ?? entity.Adapt<TaktEcAttachmentDto>();
     }
@@ -196,16 +190,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         dto.Adapt(entity);
         ApplyEcAttachmentFileNameFromDocCode(entity);
         await StampEcAttachmentEcGijutsuAsync(entity, dto);
-        await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: id);
-        var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
-            _ecAttachmentRepository,
-            x => x.EcId == entity.EcId
-                && x.LineNumber == entity.LineNumber,
-            id);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique)
-        {
-            throw new TaktBusinessException("设变附件的EcId、LineNumber已存在");
-        }
+        await EnsureEcAttachmentUniqueAsync(entity.EcGijutsuId, entity.DocCode, entity.LineNumber, excludeId: id);
         await _ecAttachmentRepository.UpdateAsync(entity);
         return await GetEcAttachmentByIdAsync(id) ?? throw new TaktBusinessException("设变附件不存在");
     }
@@ -313,28 +298,20 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
                 EnsureEcAttachmentDocCodeFormat(entity.AttachmentType, entity.DocCode, entity.EcCode);
                 ApplyEcAttachmentFileNameFromDocCode(entity);
                 await StampEcAttachmentEcGijutsuAsync(entity, importDto);
-                await EnsureEcAttachmentDocCodeUniqueAsync(entity.DocCode, excludeId: null);
-                var importKey = $"{entity.EcId}|{entity.LineNumber}";
-                if (!importSeenKeys.Add(importKey))
-                {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcId、LineNumber）");
-                }
-                var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
-                    _ecAttachmentRepository,
-                    x => x.EcId == entity.EcId
-                        && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique)
-                {
-                    throw new TaktBusinessException("设变附件的EcId、LineNumber已存在");
-                }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _ecAttachmentRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcId == entity.EcId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcGijutsuId == entity.EcGijutsuId,
                         x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcId.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
+                var importKey = $"{entity.EcGijutsuId}|{(entity.DocCode ?? string.Empty).Trim()}|{entity.LineNumber}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（EcGijutsuId、DocCode、LineNumber）");
+                }
+                await EnsureEcAttachmentUniqueAsync(entity.EcGijutsuId, entity.DocCode, entity.LineNumber, excludeId: null);
                 await _ecAttachmentRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -416,27 +393,24 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     }
 
     /// <summary>
-    /// 租户+公司范围内文件编码唯一（排除已作废）
+    /// 设变附件唯一键：EcGijutsuId + DocCode + LineNumber（对齐 ix_takt_logistics_manufacturing_ec_attachment_unique）
     /// </summary>
+    /// <param name="ecGijutsuId">设变主表ID</param>
     /// <param name="docCode">文件编码</param>
+    /// <param name="lineNumber">行号</param>
     /// <param name="excludeId">更新时排除的主键</param>
-    private async Task EnsureEcAttachmentDocCodeUniqueAsync(string docCode, long? excludeId)
+    private async Task EnsureEcAttachmentUniqueAsync(long ecGijutsuId, string? docCode, int lineNumber, long? excludeId)
     {
         var trimmed = (docCode ?? string.Empty).Trim();
-        if (string.IsNullOrEmpty(trimmed))
-        {
-            return;
-        }
         var isUnique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.IsObsolete == 0
-                && x.DocCode == trimmed,
+            x => x.EcGijutsuId == ecGijutsuId
+                && x.DocCode == trimmed
+                && x.LineNumber == lineNumber,
             excludeId);
         if (!isUnique)
         {
-            throw new TaktBusinessException($"文件编码「{trimmed}」已存在，不可重复");
+            throw new TaktBusinessException("设变附件的EcGijutsuId、DocCode、LineNumber已存在");
         }
     }
 
@@ -448,16 +422,16 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// <returns>任务</returns>
     private async Task StampEcAttachmentEcGijutsuAsync(TaktEcAttachment entity, TaktEcAttachmentCreateDto dto)
     {
-        if (dto.EcId <= 0)
+        if (dto.EcGijutsuId <= 0)
         {
             return;
         }
-        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcGijutsuId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
         }
-        entity.EcId = master.Id;
+        entity.EcGijutsuId = master.Id;
         if (string.IsNullOrEmpty(entity.TenantCode))
         {
             entity.TenantCode = master.TenantCode;
@@ -529,10 +503,10 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (queryDto?.EcId.HasValue == true)
+        if (queryDto?.EcGijutsuId.HasValue == true)
         {
-            var ecId = queryDto.EcId.Value;
-            exp = exp.And(x => x.EcId == ecId);
+            var ecGijutsuId = queryDto.EcGijutsuId.Value;
+            exp = exp.And(x => x.EcGijutsuId == ecGijutsuId);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EcCode))
@@ -621,7 +595,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         {
             return true;
         }
-        if (queryDto.EcId.HasValue)
+        if (queryDto.EcGijutsuId.HasValue)
         {
             return true;
         }

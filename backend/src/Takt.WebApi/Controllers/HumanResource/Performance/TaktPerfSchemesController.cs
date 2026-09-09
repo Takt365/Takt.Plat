@@ -86,11 +86,11 @@ public class TaktPerfSchemesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:performance:perf:scheme:query", "绩效方案指标选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPerfSchemeOptionsAsync()
+    public async Task<IActionResult> GetPerfSchemeOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _perfSchemeService.GetPerfSchemeOptionsAsync();
+            var result = await _perfSchemeService.GetPerfSchemeOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

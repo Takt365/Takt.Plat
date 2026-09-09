@@ -113,8 +113,10 @@ public class TaktMeetingService : TaktServiceBase, ITaktMeetingService
     /// <summary>
     /// 获取会议中心选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetMeetingOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetMeetingOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _meetingRepository.GetListAsync(
@@ -830,5 +832,50 @@ public class TaktMeetingService : TaktServiceBase, ITaktMeetingService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取会议件数统计（数据看板；按 StartTime 与 MeetingStatus）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>会议件数统计</returns>
+    public async Task<TaktMeetingStatDto> GetMeetingStatAsync(TaktMeetingStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.StartTimeStart,
+            queryDto.StartTimeEnd,
+            queryDto.StatMonth,
+            defaultMonthsAgo: 0);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        // 字典 routine_meeting_center_status：0草稿 1已排期 2进行中 3已结束 4已取消
+        const int statusScheduled = 1;
+        const int statusEnded = 3;
+        Expression<Func<TaktMeeting, bool>> notStarted = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.StartTime >= start
+            && x.StartTime <= end
+            && x.MeetingStatus == statusScheduled;
+        Expression<Func<TaktMeeting, bool>> completed = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.StartTime >= start
+            && x.StartTime <= end
+            && x.MeetingStatus == statusEnded;
+        var monthNotStartedCount = await _meetingRepository.CountAsync(notStarted);
+        var monthCompletedCount = await _meetingRepository.CountAsync(completed);
+        return new TaktMeetingStatDto
+        {
+            StatMonth = statMonth,
+            MonthNotStartedCount = monthNotStartedCount,
+            MonthCompletedCount = monthCompletedCount,
+        };
     }
 }

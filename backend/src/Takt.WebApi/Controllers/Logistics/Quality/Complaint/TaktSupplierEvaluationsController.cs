@@ -86,11 +86,11 @@ public class TaktSupplierEvaluationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:complaint:supplier:evaluation:query", "供应商评价考核选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSupplierEvaluationOptionsAsync()
+    public async Task<IActionResult> GetSupplierEvaluationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _supplierEvaluationService.GetSupplierEvaluationOptionsAsync();
+            var result = await _supplierEvaluationService.GetSupplierEvaluationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -53,10 +53,26 @@ public static class TaktQuartzConstants
     public const string SqlSyncSummaryTag = "QUARTZ_SYNC_SUMMARY";
 
     /// <summary>
+    /// SQL 同步分批进度结果集标识（WHILE/MERGE 每批 SELECT；执行器即时写入 quartz 日志）
+    /// </summary>
+    public const string SqlSyncProgressTag = "QUARTZ_SYNC_PROGRESS";
+
+    /// <summary>
+    /// SQL 同步分批进度 InfoMessage 前缀（脚本 RAISERROR … WITH NOWAIT，避免 SET NOCOUNT 下 TDS 缓冲导致进度日志被整批积压）
+    /// 格式：QUARTZ_SYNC_PROGRESS|phase|from_rn|to_rn|max_rn|batch_rows|scope
+    /// </summary>
+    public const string SqlSyncProgressInfoPrefix = "QUARTZ_SYNC_PROGRESS|";
+
+    /// <summary>
     /// 非查询 SQL（含 sync_*.sql MERGE）默认命令超时秒数；0 表示无限制。
     /// 可由配置 Quartz:SqlCommandTimeoutSeconds 覆盖。
     /// </summary>
     public const int DefaultSqlCommandTimeoutSeconds = 7200;
+
+    /// <summary>
+    /// Quartz SQL 分批写入行数（MERGE/UPDATE TOP 循环；百万级表禁止单事务全量）
+    /// </summary>
+    public const int DefaultSqlApplyChunkRows = 20000;
 
     /// <summary>
     /// 任务执行完成落库消息类型（字典 sys_message_type DictValue）

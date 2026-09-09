@@ -36,11 +36,23 @@ public interface ITaktAccountTitleService
     Task<TaktAccountTitleDto?> GetAccountTitleByIdAsync(long id);
 
     /// <summary>
+    /// 获取会计科目平铺选项（DictValue=AccountTitleCode；供统驭科目等业务字段下拉）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配编码/名称）</param>
+    /// <param name="reconciliationOnly">为 true 时仅辅助核算科目（IsAuxiliary=1）</param>
+    /// <param name="auxiliaryType">辅助核算类型（可选；D=客户 K=供应商 等）</param>
+    /// <returns>下拉选项（有上限，禁止全表）</returns>
+    Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(string? plantCode = null, string? keyword = null, bool reconciliationOnly = false, string? auxiliaryType = null);
+
+    /// <summary>
     /// 获取会计科目树形选项列表（懒加载：仅 parentId 直接子级一层；DictValue 为 AccountTitleCode）
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>树形选项（一层）</returns>
-    Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0);
+    Task<List<TaktTreeSelectOption>> GetAccountTitleTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 获取会计科目树形列表（懒加载：仅 parentId 直接子级一层）

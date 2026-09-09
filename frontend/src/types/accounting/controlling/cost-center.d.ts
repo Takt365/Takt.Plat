@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-center.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-31
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -24,61 +24,75 @@ import type {
  */
 export interface CostCenter extends CompanyDtoBase {
   /**
-   * CostCenterID
+   * CostCenterID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   costCenterId: string;
+
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode: string;
+
   /**
    * 成本中心名称
    */
   costCenterName: string;
+
   /**
    * 父级 ID（0 表示根节点）
    */
   parentId: string;
+
   /**
    * 成本中心类型（字典 accounting_controlling_cost_center_type；DictValue=F/G/H/L/S）
    */
   costCenterType: string;
+
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
+
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
+
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
+
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
+
   /**
    * 成本中心层级
    */
   costCenterLevel: number;
+
   /**
    * 生效日期
    */
   validFrom: string;
+
   /**
    * 失效日期
    */
   validTo: string;
+
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
+
   /**
    * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   costCenterStatus: number;
+
 }
 
 
@@ -90,9 +104,9 @@ export interface CostCenter extends CompanyDtoBase {
  */
 export interface CostCenterTree extends CostCenter {
   /**
-   * 子节点
+   * 子节点（懒加载树接口返回 null，表示尚未加载；勿用空 List 冒充已加载）
    */
-  children: CostCenterTree[];
+  children?: CostCenterTree[];
 
 }
 
@@ -110,12 +124,22 @@ export interface CostCenterQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode?: string;
 
@@ -135,22 +159,22 @@ export interface CostCenterQuery extends TaktPagedQuery {
   costCenterType?: string;
 
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
 
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
 
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
 
@@ -180,12 +204,7 @@ export interface CostCenterQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  plantCode?: string;
-
-  /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder?: number;
 
@@ -234,15 +253,17 @@ export interface CostCenterCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode: string
+  cultureCode: string;
 
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode: string;
 
@@ -262,22 +283,22 @@ export interface CostCenterCreate {
   costCenterType: string;
 
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
 
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
 
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
 
@@ -295,11 +316,6 @@ export interface CostCenterCreate {
    * 失效日期
    */
   validTo: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  plantCode: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -365,7 +381,7 @@ export interface CostCenterSort {
   costCenterId: string;
 
   /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
 
@@ -389,7 +405,17 @@ export interface CostCenterTemplate {
   companyCode?: string;
 
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode?: string;
 
@@ -409,22 +435,22 @@ export interface CostCenterTemplate {
   costCenterType?: string;
 
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
 
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
 
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
 
@@ -442,11 +468,6 @@ export interface CostCenterTemplate {
    * 失效日期
    */
   validTo?: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  plantCode?: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -483,15 +504,17 @@ export interface CostCenterImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  /**
    * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  cultureCode?: string
+  cultureCode?: string;
 
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode?: string;
 
@@ -511,22 +534,22 @@ export interface CostCenterImport {
   costCenterType?: string;
 
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
 
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
 
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
 
@@ -544,11 +567,6 @@ export interface CostCenterImport {
    * 失效日期
    */
   validTo?: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  plantCode?: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -585,7 +603,17 @@ export interface CostCenterExport {
   companyCode: string;
 
   /**
-   * 成本中心编码（4位，租户+公司内唯一）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 成本中心编码（6 位，与部门编码同长；租户+公司内唯一）
    */
   costCenterCode: string;
 
@@ -605,22 +633,22 @@ export interface CostCenterExport {
   costCenterType: string;
 
   /**
-   * 负责人用户 ID
+   * 负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
    */
   managerId?: string;
 
   /**
-   * 负责人姓名
+   * 负责人姓名（冗余：按 ManagerId 取 TaktUser.NickName联动）
    */
   managerName?: string;
 
   /**
-   * 所属部门 ID
+   * 所属部门（选项 TaktDepts/tree-options,DictValue=Id）
    */
   deptId?: string;
 
   /**
-   * 所属部门名称
+   * 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
    */
   deptName?: string;
 
@@ -640,12 +668,7 @@ export interface CostCenterExport {
   validTo: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  plantCode: string;
-
-  /**
-   * 排序号
+   * 排序号（回填）
    */
   sortOrder: number;
 

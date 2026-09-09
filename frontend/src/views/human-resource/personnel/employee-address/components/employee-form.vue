@@ -396,6 +396,7 @@
         <TaktSelect
           v-model:value="record.province"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 2 }"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="employeeAddressPi.queryPh('province', 'select')"
@@ -407,6 +408,7 @@
         <TaktSelect
           v-model:value="record.city"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 3 }"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="employeeAddressPi.queryPh('city', 'select')"
@@ -418,6 +420,7 @@
         <TaktSelect
           v-model:value="record.district"
           api-url="TaktAdminDivisions/options"
+          :api-params="{ level: 4 }"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="employeeAddressPi.queryPh('district', 'select')"

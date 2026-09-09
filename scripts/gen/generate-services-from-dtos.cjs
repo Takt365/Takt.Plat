@@ -356,6 +356,35 @@ function hasGetOptionsAsyncMethod(content, methodName) {
  * @param {string|null} [dtoBase] TaktTenantDtoBase / TaktCompanyDtoBase / TaktApprovalDtoBase（隔离以三基类为准）
  * @returns {boolean}
  */
+/**
+ * Options 方法是否已含标准 plantCode + keyword 可选参数
+ * @param {string} block
+ * @returns {boolean}
+ */
+function optionsBlockHasStandardPlantKeywordSignature(block) {
+  if (!block || !block.trim()) {
+    return false;
+  }
+  return (
+    /string\?\s+plantCode\s*=\s*null/.test(block) && /string\?\s+keyword\s*=\s*null/.test(block)
+  );
+}
+
+/**
+ * Options XML 是否已含 plantCode / keyword 的 param 标记（避免 CS1573）
+ * @param {string} block
+ * @returns {boolean}
+ */
+function optionsBlockHasPlantKeywordXmlParams(block) {
+  if (!block || !block.trim()) {
+    return false;
+  }
+  return (
+    /\/\/\/\s*<param\s+name="plantCode"\s*>/.test(block)
+    && /\/\/\/\s*<param\s+name="keyword"\s*>/.test(block)
+  );
+}
+
 function isValidOptionsImplementationBlock(
   block,
   repoField,
@@ -375,6 +404,14 @@ function isValidOptionsImplementationBlock(
   }
   // 大数据树：拒绝内存递归 Build*Tree / Build*TreeOptions（须按 parentId 只查一层）
   if (/\bBuild\w+Tree(?:Options)?\s*\(/.test(block)) {
+    return false;
+  }
+  // 标准签名：必须含 plantCode + keyword（与工单 Options 对齐）
+  if (!optionsBlockHasStandardPlantKeywordSignature(block)) {
+    return false;
+  }
+  // XML：签名有 plantCode/keyword 时须有对应 <param>（避免 CS1573）
+  if (!optionsBlockHasPlantKeywordXmlParams(block)) {
     return false;
   }
   // 三基类隔离：Options 谓词必须与 Tenant / Company / Approval 一致
@@ -547,16 +584,40 @@ function resolveOptionsImplementationBlock({
  * 生成阶段：已有则原样拷贝，没有才输出模板（接口）
  * @returns {{ block: string, preserved: boolean, methodName: string }}
  */
+/**
+ * 从实体源码解析 Options 工厂过滤列（PlantCode 优先，否则 RelatedPlant）
+ * @param {string} entityContent
+ * @returns {string|null}
+ */
+function resolveOptionsPlantField(entityContent) {
+  if (!entityContent) {
+    return null;
+  }
+  if (/public\s+string\??\s+PlantCode\s*\{/.test(entityContent) || /nameof\(\s*PlantCode\s*\)/.test(entityContent)) {
+    return 'PlantCode';
+  }
+  if (
+    /public\s+string\??\s+RelatedPlant\s*\{/.test(entityContent)
+    || /nameof\(\s*RelatedPlant\s*\)/.test(entityContent)
+  ) {
+    return 'RelatedPlant';
+  }
+  return null;
+}
+
 function buildGetOptionsAsyncInterfaceSection(entityShort, hasTree, dtoInfo, desc, existingContent) {
   const methodName =
     hasTree && dtoInfo.tree ? `Get${entityShort}TreeOptionsAsync` : `Get${entityShort}OptionsAsync`;
   if (hasGetOptionsAsyncMethod(existingContent, methodName)) {
     const preserved = extractGetOptionsAsyncMethodBlock(existingContent, methodName, 'interface');
     // 树形 TreeOptions：旧签名无 parentId 时强制换成懒加载一层接口
+    // 平铺/树形：无 plantCode+keyword 时强制换成标准签名
     if (preserved) {
       const isLazyTreeOptions =
         !(hasTree && dtoInfo.tree) || /\blong\s+parentId\b/.test(preserved);
-      if (isLazyTreeOptions) {
+      const hasPlantKeyword = optionsBlockHasStandardPlantKeywordSignature(preserved);
+      const hasPlantKeywordXml = optionsBlockHasPlantKeywordXmlParams(preserved);
+      if (isLazyTreeOptions && hasPlantKeyword && hasPlantKeywordXml) {
         return { block: preserved, preserved: true, methodName };
       }
     }
@@ -565,22 +626,35 @@ function buildGetOptionsAsyncInterfaceSection(entityShort, hasTree, dtoInfo, des
   if (hasTree && dtoInfo.tree) {
     block += buildMethodXmlDoc({
       summary: `获取${desc}树形选项列表（懒加载：仅 parentId 直接子级一层）`,
-      params: [{ name: 'parentId', desc: '父级ID（0=根）' }],
+      params: [
+        { name: 'parentId', desc: '父级ID（0=根）' },
+        { name: 'plantCode', desc: '工厂代码（可选，用于按工厂过滤）' },
+        { name: 'keyword', desc: '搜索关键字（可选，模糊匹配）' },
+      ],
       returns: '树形选项（一层）',
     });
-    block += `    Task<List<TaktTreeSelectOption>> ${methodName}(long parentId = 0);\n\n`;
+    block += `    Task<List<TaktTreeSelectOption>> ${methodName}(long parentId = 0, string? plantCode = null, string? keyword = null);\n\n`;
   } else {
-    block += buildMethodXmlDoc({ summary: `获取${desc}选项列表`, returns: '下拉选项' });
-    block += `    Task<List<TaktSelectOption>> ${methodName}();\n\n`;
+    block += buildMethodXmlDoc({
+      summary: `获取${desc}选项列表`,
+      params: [
+        { name: 'plantCode', desc: '工厂代码（可选，用于按工厂过滤）' },
+        { name: 'keyword', desc: '搜索关键字（可选，模糊匹配）' },
+      ],
+      returns: '下拉选项',
+    });
+    block += `    Task<List<TaktSelectOption>> ${methodName}(string? plantCode = null, string? keyword = null);\n\n`;
   }
   return { block, preserved: false, methodName };
 }
 
 /**
  * 非树形实体：GetXxxOptionsAsync 默认实现模板（DictValue/DictLabel 均禁止雪花 Id）
+ * @param {string} entityName 实体类名（Expressionable&lt;T&gt;）
  * @param {string} nameField 展示字段（Name / Code / nvarchar / int）
  * @param {string} valueField 业务 Code，无则 Name，再无则首个业务 nvarchar/int
  * @param {boolean} [valueAsString] int 字段须 ToString 作为 DictValue/排序键
+ * @param {string|null} [plantField] PlantCode / RelatedPlant；无则不按工厂过滤
  */
 function buildFlatOptionsAsyncImplTemplate(
   entityShort,
@@ -591,12 +665,15 @@ function buildFlatOptionsAsyncImplTemplate(
   nameField,
   valueField,
   valueAsString = false,
+  entityName = null,
+  plantField = null,
 ) {
   if (!valueField || valueField === 'Id') {
     throw new Error(
       `Get${entityShort}OptionsAsync：valueField 须为 *Code / *Name / 业务 nvarchar/int，禁止雪花 Id`,
     );
   }
+  const entityType = entityName || `Takt${entityShort}`;
   const labelField = nameField && nameField !== 'Id' ? nameField : valueField;
   const orderExpr = valueAsString
     ? `x => x.${labelField}.ToString()`
@@ -608,13 +685,42 @@ function buildFlatOptionsAsyncImplTemplate(
       : valueAsString
         ? `e.${labelField}.ToString()`
         : `e.${labelField} ?? e.${valueField}`;
+  let keywordPred;
+  if (valueAsString) {
+    keywordPred = `x.${valueField}.ToString().Contains(normalizedKeyword!)`;
+    if (labelField !== valueField) {
+      keywordPred += `\n                || x.${labelField}.ToString().Contains(normalizedKeyword!)`;
+    }
+  } else {
+    keywordPred = `(x.${valueField} != null && x.${valueField}.Contains(normalizedKeyword!))`;
+    if (labelField !== valueField) {
+      keywordPred += `\n                || (x.${labelField} != null && x.${labelField}.Contains(normalizedKeyword!))`;
+    }
+  }
   let block = '';
-  block += buildMethodXmlDoc({ summary: `获取${desc}选项列表`, returns: '下拉选项' });
-  block += `    public async Task<List<TaktSelectOption>> Get${entityShort}OptionsAsync()\n`;
+  block += buildMethodXmlDoc({
+    summary: `获取${desc}选项列表`,
+    params: [
+      { name: 'plantCode', desc: '工厂代码（可选，用于按工厂过滤）' },
+      { name: 'keyword', desc: '搜索关键字（可选，模糊匹配）' },
+    ],
+    returns: '下拉选项',
+  });
+  block += `    public async Task<List<TaktSelectOption>> Get${entityShort}OptionsAsync(string? plantCode = null, string? keyword = null)\n`;
   block += '    {\n';
   block += ensureContextLine;
+  block += '        var normalizedPlantCode = plantCode?.Trim();\n';
+  block += '        var normalizedKeyword = keyword?.Trim();\n';
+  block += `        var predicate = Expressionable.Create<${entityType}>()\n`;
+  block += `            .And(${optionsListPredicate})\n`;
+  if (plantField) {
+    block += `            .AndIF(!string.IsNullOrEmpty(normalizedPlantCode), x => x.${plantField} == normalizedPlantCode)\n`;
+  }
+  block += `            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>\n`;
+  block += `                ${keywordPred})\n`;
+  block += '            .ToExpression();\n';
   block += `        var list = await ${repoField}.GetListAsync(\n`;
-  block += `            ${optionsListPredicate},\n`;
+  block += '            predicate,\n';
   block += `            ${orderExpr},\n`;
   block += '            false);\n';
   block += '        return list.Select(e => new TaktSelectOption\n';
@@ -2937,13 +3043,28 @@ function generateTreeServiceMethods(
   let treeOptionsBlock = '';
   treeOptionsBlock += buildMethodXmlDoc({
     summary: `获取${desc}树形选项列表（懒加载：仅 parentId 直接子级一层）`,
-    params: [{ name: 'parentId', desc: '父级ID（0=根）' }],
+    params: [
+      { name: 'parentId', desc: '父级ID（0=根）' },
+      { name: 'plantCode', desc: '工厂代码（可选，用于按工厂过滤）' },
+      { name: 'keyword', desc: '搜索关键字（可选，模糊匹配）' },
+    ],
     returns: '树形选项（一层）',
   });
-  treeOptionsBlock += `    public async Task<List<TaktTreeSelectOption>> Get${entityShort}TreeOptionsAsync(long parentId = 0)\n`;
+  treeOptionsBlock += `    public async Task<List<TaktTreeSelectOption>> Get${entityShort}TreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)\n`;
   treeOptionsBlock += '    {\n';
   treeOptionsBlock += ensureLine;
-  treeOptionsBlock += `        var list = await ${repoField}.GetListAsync(${pred.withStatus});\n`;
+  treeOptionsBlock += '        var normalizedPlantCode = plantCode?.Trim();\n';
+  treeOptionsBlock += '        var normalizedKeyword = keyword?.Trim();\n';
+  const plantField = resolveOptionsPlantField(entityContent);
+  treeOptionsBlock += `        var predicate = Expressionable.Create<${entityName}>()\n`;
+  treeOptionsBlock += `            .And(${pred.withStatus})\n`;
+  if (plantField) {
+    treeOptionsBlock += `            .AndIF(!string.IsNullOrEmpty(normalizedPlantCode), x => x.${plantField} == normalizedPlantCode)\n`;
+  }
+  treeOptionsBlock += `            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>\n`;
+  treeOptionsBlock += `                (x.${nameField} != null && x.${nameField}.Contains(normalizedKeyword!)))\n`;
+  treeOptionsBlock += '            .ToExpression();\n';
+  treeOptionsBlock += `        var list = await ${repoField}.GetListAsync(predicate);\n`;
   treeOptionsBlock += '        return list\n';
   treeOptionsBlock += hasSortOrder
     ? '            .OrderBy(x => x.SortOrder)\n'
@@ -3802,6 +3923,8 @@ function generateServiceImplementation(
     content += treeGen.treeRemainderBlock;
   } else {
     const flatOptionsMethodName = `Get${entityShort}OptionsAsync`;
+    const entityContentForOptions = fs.existsSync(entityFile) ? readUtf8(entityFile) : '';
+    const optionsPlantField = resolveOptionsPlantField(entityContentForOptions);
     const flatOptionsTemplate = buildFlatOptionsAsyncImplTemplate(
       entityShort,
       desc,
@@ -3811,6 +3934,8 @@ function generateServiceImplementation(
       nameField,
       optionsValueField,
       optionsValueAsString,
+      entityName,
+      optionsPlantField,
     );
     const flatOptionsResolved = resolveOptionsImplementationBlock({
       existingContent,

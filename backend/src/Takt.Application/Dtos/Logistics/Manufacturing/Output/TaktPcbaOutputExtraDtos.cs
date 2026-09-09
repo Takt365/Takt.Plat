@@ -40,4 +40,9 @@ public class TaktPcbaOutputDefaultDetailDto
     /// 标准工时（短）
     /// </summary>
     public int StandardShorts { get; set; }
+
+    /// <summary>
+    /// 标准工时（分钟；ConvertedMinutes 优先，否则 StandardMinutes）
+    /// </summary>
+    public decimal StandardMinutes { get; set; }
 }

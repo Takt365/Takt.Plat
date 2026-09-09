@@ -50,17 +50,17 @@ public static class TaktDefectStatHelper
     }
 
     /// <summary>
-    /// 生产状态：进行中（字典 logistics_manufacturing_prod_status=1）
+    /// 停产状态：进行中（字典 logistics_manufacturing_prod_status=1）
     /// </summary>
     public const int ProdStatusInProgress = 1;
 
     /// <summary>
-    /// 生产状态：已完成（字典 logistics_manufacturing_prod_status=2）
+    /// 停产状态：已完成（字典 logistics_manufacturing_prod_status=2）
     /// </summary>
     public const int ProdStatusCompleted = 2;
 
     /// <summary>
-    /// 解析批次生产状态：批次工单总数量与累计生实实绩完全相等且大于 0 时为已完成，否则为进行中
+    /// 解析批次停产状态：批次工单总数量与累计生实实绩完全相等且大于 0 时为已完成，否则为进行中
     /// </summary>
     /// <param name="batchOrderQty">批次工单总数量</param>
     /// <param name="prodActualQty">累计生实实绩</param>

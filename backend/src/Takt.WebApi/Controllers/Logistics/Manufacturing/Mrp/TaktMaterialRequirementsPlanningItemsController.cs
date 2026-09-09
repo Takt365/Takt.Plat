@@ -86,11 +86,11 @@ public class TaktMaterialRequirementsPlanningItemsController : TaktControllerBas
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mrp:material:requirements:planning:query", "物料需求计划MRP明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetMaterialRequirementsPlanningItemOptionsAsync()
+    public async Task<IActionResult> GetMaterialRequirementsPlanningItemOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _materialRequirementsPlanningItemService.GetMaterialRequirementsPlanningItemOptionsAsync();
+            var result = await _materialRequirementsPlanningItemService.GetMaterialRequirementsPlanningItemOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

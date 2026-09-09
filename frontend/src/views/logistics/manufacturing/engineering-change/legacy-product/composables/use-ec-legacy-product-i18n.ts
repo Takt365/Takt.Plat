@@ -62,7 +62,7 @@ export const ECLEGACYPRODUCT_PLACEHOLDER = {
   ecInstruction: 'select',
   ecOldPartDisposition: 'select',
   ecNewMaterialCode: 'optional',
-  oldProductHandling: 'optional',
+  oldProductHandling: 'select',
   discontinuedStatus: 'select',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>

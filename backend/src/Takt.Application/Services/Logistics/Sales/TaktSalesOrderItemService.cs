@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单明细应用服务实现
 // 
@@ -103,8 +103,10 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
     /// <summary>
     /// 获取销售订单明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesOrderItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesOrderItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesOrderItemRepository.GetListAsync(
@@ -436,6 +438,9 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.SalesUnit != null && x.SalesUnit.Contains(keywords))
+                || (x.WeightUnit != null && x.WeightUnit.Contains(keywords))
+                || (x.VolumeUnit != null && x.VolumeUnit.Contains(keywords))
+                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -501,6 +506,12 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
             exp = exp.And(x => x.OrderQuantity == orderQuantity);
         }
 
+        if (queryDto?.TargetQuantity.HasValue == true)
+        {
+            var targetQuantity = queryDto.TargetQuantity.Value;
+            exp = exp.And(x => x.TargetQuantity == targetQuantity);
+        }
+
         if (queryDto?.ShippedQuantity.HasValue == true)
         {
             var shippedQuantity = queryDto.ShippedQuantity.Value;
@@ -553,6 +564,42 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
         {
             var salesAmount = queryDto.SalesAmount.Value;
             exp = exp.And(x => x.SalesAmount == salesAmount);
+        }
+
+        if (queryDto?.GrossWeight.HasValue == true)
+        {
+            var grossWeight = queryDto.GrossWeight.Value;
+            exp = exp.And(x => x.GrossWeight == grossWeight);
+        }
+
+        if (queryDto?.NetWeight.HasValue == true)
+        {
+            var netWeight = queryDto.NetWeight.Value;
+            exp = exp.And(x => x.NetWeight == netWeight);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WeightUnit))
+        {
+            var weightUnit = queryDto.WeightUnit;
+            exp = exp.And(x => x.WeightUnit != null && x.WeightUnit.Contains(weightUnit));
+        }
+
+        if (queryDto?.Volume.HasValue == true)
+        {
+            var volume = queryDto.Volume.Value;
+            exp = exp.And(x => x.Volume == volume);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.VolumeUnit))
+        {
+            var volumeUnit = queryDto.VolumeUnit;
+            exp = exp.And(x => x.VolumeUnit != null && x.VolumeUnit.Contains(volumeUnit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProfitCenterCode))
+        {
+            var profitCenterCode = queryDto.ProfitCenterCode;
+            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(profitCenterCode));
         }
 
         if (queryDto?.DeliveryStatus.HasValue == true)
@@ -643,6 +690,10 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
         {
             return true;
         }
+        if (queryDto.TargetQuantity.HasValue)
+        {
+            return true;
+        }
         if (queryDto.ShippedQuantity.HasValue)
         {
             return true;
@@ -676,6 +727,30 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
             return true;
         }
         if (queryDto.SalesAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GrossWeight.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NetWeight.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WeightUnit))
+        {
+            return true;
+        }
+        if (queryDto.Volume.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.VolumeUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProfitCenterCode))
         {
             return true;
         }

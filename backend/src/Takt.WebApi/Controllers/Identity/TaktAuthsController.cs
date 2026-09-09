@@ -507,11 +507,11 @@ public class TaktAuthsController : TaktControllerBase
     /// <returns>租户下拉选项</returns>
     [AllowAnonymous]
     [HttpGet("session/tenant-options")]
-    public async Task<IActionResult> GetSessionTenantOptionsAsync()
+    public async Task<IActionResult> GetSessionTenantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _authService.GetSessionTenantOptionsAsync();
+            var result = await _authService.GetSessionTenantOptionsAsync(plantCode, keyword);
             return Success(result, GetLocalizedString("common.feedback.query.success"));
         }
         catch (Exception ex)
@@ -547,11 +547,11 @@ public class TaktAuthsController : TaktControllerBase
     /// <returns>语言下拉选项</returns>
     [AllowAnonymous]
     [HttpGet("session/culture-options")]
-    public async Task<IActionResult> GetSessionCultureOptionsAsync([FromQuery] string? tenantCode = null)
+    public async Task<IActionResult> GetSessionCultureOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? tenantCode = null)
     {
         try
         {
-            var result = await _authService.GetSessionCultureOptionsAsync(tenantCode);
+            var result = await _authService.GetSessionCultureOptionsAsync(plantCode, keyword, tenantCode);
             return Success(result, GetLocalizedString("common.feedback.query.success"));
         }
         catch (Exception ex)
@@ -603,11 +603,11 @@ public class TaktAuthsController : TaktControllerBase
     /// <returns>公司下拉选项</returns>
     [Authorize]
     [HttpGet("me/company-options")]
-    public async Task<IActionResult> GetUserCompanyOptionsAsync()
+    public async Task<IActionResult> GetUserCompanyOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _authService.GetUserCompanyOptionsAsync();
+            var result = await _authService.GetUserCompanyOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

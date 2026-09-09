@@ -109,6 +109,21 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "supplier_name1", ColumnDescription = "供应商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
     public string SupplierName1 { get; set; } = string.Empty;
     /// <summary>
+    /// 采购申请类型（字典 logistics_procurement_purchase_order_type；与采购订单/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议；申请默认 B-NB）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_request_type", ColumnDescription = "采购申请类型", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PurchaseRequestType { get; set; }
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_procedure", ColumnDescription = "定价过程", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingProcedure { get; set; }
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_condition_code", ColumnDescription = "定价条件编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingConditionCode { get; set; }
+    /// <summary>
     /// 结算币种（字典 accounting_financial_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]

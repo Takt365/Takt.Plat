@@ -112,8 +112,10 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     /// <summary>
     /// 获取品质问题应对主选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityIssueOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetQualityIssueOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _qualityIssueRepository.GetListAsync(
@@ -957,5 +959,39 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             return true;
         }
         return false;
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取品质应对金额统计（数据看板；按 IssueDate 汇总 TotalCost）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>品质应对金额统计</returns>
+    public async Task<TaktQualityCostStatDto> GetQualityIssueCostStatAsync(TaktQualityCostStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.DateStart,
+            queryDto.DateEnd,
+            queryDto.StatMonth);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktQualityIssue, bool>> predicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IssueDate >= start
+            && x.IssueDate <= end;
+        var monthRowCount = await _qualityIssueRepository.CountAsync(predicate);
+        var monthTotalAmount = await _qualityIssueRepository.SumAsync(x => x.TotalCost, predicate);
+        return new TaktQualityCostStatDto
+        {
+            StatMonth = statMonth,
+            MonthTotalAmount = monthTotalAmount,
+            MonthRowCount = monthRowCount,
+        };
     }
 }

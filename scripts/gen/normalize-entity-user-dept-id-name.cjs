@@ -99,12 +99,10 @@ ${EMPLOYEE_NAME_BLOCK('SalesEmployeeId', 'sales_employee_id', 'SalesEmployeeName
 const SALES_BY_OLD = /    \/\/\/ <summary>\r?\n    \/\/\/ 销售员[\s\S]*?\r?\n    public string\? SalesBy \{ get; set; \}/;
 
 const POSTED_BY_NEW = `    /// <summary>
-    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PostedByEmployeeId { get; set; }
-${EMPLOYEE_NAME_BLOCK('PostedByEmployeeId', 'posted_by_employee_id', 'PostedByEmployeeName', 'posted_by_employee_name', '过账人')}`;
+    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "过账人", ColumnDataType = "nvarchar", Length = 6, IsNullable = true)]
+    public string? PostedBy { get; set; }`;
 
 const POSTED_BY_OLD = /    \/\/\/ <summary>\r?\n    \/\/\/ (?:用户名|已创建的)[\s\S]*?DictValue=EmployeeCode[\s\S]*?\r?\n    public string\? PostedBy \{ get; set; \}/;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoice 生成，请按需审阅）
 // 
@@ -146,11 +146,6 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     public DateTime? ExchangeRateDate { get; set; }
@@ -161,9 +156,9 @@ public class TaktPurchaseInvoiceDto : TaktCompanyDtoBase
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）
@@ -329,11 +324,6 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     public DateTime? BaselineDateEnd { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期（范围查询-开始）
     /// </summary>
     public DateTime? ExchangeRateDateStart { get; set; }
@@ -349,9 +339,9 @@ public class TaktPurchaseInvoiceQueryDto : TaktPagedQuery
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -518,11 +508,6 @@ public class TaktPurchaseInvoiceCreateDto
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     public DateTime? ExchangeRateDate { get; set; }
@@ -533,9 +518,9 @@ public class TaktPurchaseInvoiceCreateDto
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -719,11 +704,6 @@ public class TaktPurchaseInvoiceTemplateDto
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     public DateTime? ExchangeRateDate { get; set; }
@@ -734,9 +714,9 @@ public class TaktPurchaseInvoiceTemplateDto
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -891,11 +871,6 @@ public class TaktPurchaseInvoiceImportDto
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     public DateTime? ExchangeRateDate { get; set; }
@@ -906,9 +881,9 @@ public class TaktPurchaseInvoiceImportDto
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购发票明细列表（主子表关系）（子表，级联保存）
@@ -1069,11 +1044,6 @@ public class TaktPurchaseInvoiceExportDto
     public DateTime? BaselineDate { get; set; }
 
     /// <summary>
-    /// 输入者
-    /// </summary>
-    public string? EnteredByEmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 换算日期
     /// </summary>
     public DateTime? ExchangeRateDate { get; set; }
@@ -1084,9 +1054,9 @@ public class TaktPurchaseInvoiceExportDto
     public string? TransactionCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

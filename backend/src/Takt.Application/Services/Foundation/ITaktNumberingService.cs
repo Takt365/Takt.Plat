@@ -39,8 +39,10 @@ public interface ITaktNumberingService
     /// 获取编码规则选项列表
     /// </summary>
     /// <param name="documentType">单据类型（TaktMenu.MenuName）；有值时仅返回该类型下启用规则</param>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetNumberingOptionsAsync(string? documentType = null);
+    Task<List<TaktSelectOption>> GetNumberingOptionsAsync(string? plantCode = null, string? keyword = null, string? documentType = null);
 
     /// <summary>
     /// 预览下一个业务编码（不占用流水号、不写库）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Controlling
 // 文件名称：TaktCostCenterValidators.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostCenter 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCostCenter 生成，请按需审阅）
 // 
@@ -49,6 +49,9 @@ public class TaktCostCenterCreateValidator : AbstractValidator<TaktCostCenterCre
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.CostCenterType)
+            .NotEmpty().WithMessage("成本中心类型不能为空")
+            .MaximumLength(1).WithMessage("成本中心类型长度不能超过1个字符");
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)
@@ -96,6 +99,9 @@ public class TaktCostCenterUpdateValidator : AbstractValidator<TaktCostCenterUpd
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.CostCenterType)
+            .NotEmpty().WithMessage("成本中心类型不能为空")
+            .MaximumLength(1).WithMessage("成本中心类型长度不能超过1个字符");
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)
@@ -137,6 +143,9 @@ public class TaktCostCenterImportValidator : AbstractValidator<TaktCostCenterImp
             .MaximumLength(100).WithMessage("成本中心名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
+        RuleFor(x => x.CostCenterType)
+            .NotEmpty().WithMessage("成本中心类型不能为空")
+            .MaximumLength(1).WithMessage("成本中心类型长度不能超过1个字符");
         RuleFor(x => x.ManagerId)
             .GreaterThanOrEqualTo(0).WithMessage("负责人用户 ID不能为负数");
         RuleFor(x => x.DeptId)

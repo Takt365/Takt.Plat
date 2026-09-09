@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉主应用服务实现
 // 
@@ -108,8 +108,10 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
     /// <summary>
     /// 获取客诉主选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetCustomerComplaintOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetCustomerComplaintOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _customerComplaintRepository.GetListAsync(
@@ -350,6 +352,65 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             exportData,
             sheetName ?? "客诉主数据",
             fileName ?? "客诉主导出.xlsx");
+    }
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取客诉件数统计（数据看板；按投诉日期与 ComplaintStatus）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>客诉件数统计</returns>
+    public async Task<TaktCustomerComplaintStatDto> GetCustomerComplaintStatAsync(TaktCustomerComplaintStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveStatMonthRange(
+            queryDto.ComplaintDateStart,
+            queryDto.ComplaintDateEnd,
+            queryDto.StatMonth);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        // 字典 logistics_quality_complaint_status：0=待处理 1=处理中 2=已回复 3=已关闭 4=已驳回
+        const int statusPending = 0;
+        const int statusInProgress = 1;
+        Expression<Func<TaktCustomerComplaint, bool>> inMonth = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ComplaintDate >= start
+            && x.ComplaintDate <= end;
+        Expression<Func<TaktCustomerComplaint, bool>> pending = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ComplaintDate >= start
+            && x.ComplaintDate <= end
+            && x.ComplaintStatus == statusPending;
+        Expression<Func<TaktCustomerComplaint, bool>> inProgress = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ComplaintDate >= start
+            && x.ComplaintDate <= end
+            && x.ComplaintStatus == statusInProgress;
+        Expression<Func<TaktCustomerComplaint, bool>> completed = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.ComplaintDate >= start
+            && x.ComplaintDate <= end
+            && x.ComplaintStatus >= 2;
+        var monthComplaintCount = await _customerComplaintRepository.CountAsync(inMonth);
+        var monthPendingCount = await _customerComplaintRepository.CountAsync(pending);
+        var monthInProgressCount = await _customerComplaintRepository.CountAsync(inProgress);
+        var monthCompletedCount = await _customerComplaintRepository.CountAsync(completed);
+        return new TaktCustomerComplaintStatDto
+        {
+            StatMonth = statMonth,
+            MonthComplaintCount = monthComplaintCount,
+            MonthPendingCount = monthPendingCount,
+            MonthInProgressCount = monthInProgressCount,
+            MonthCompletedCount = monthCompletedCount,
+        };
     }
 
     // ========================================

@@ -130,10 +130,20 @@ export function updateQualityIssueAssyReworkObsolete(dto: QualityIssueAssyRework
  * 获取质量问题组装不良改修费用明细选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getQualityIssueAssyReworkOptions(): Promise<TaktSelectOption[]> {
+export function getQualityIssueAssyReworkOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${QUALITY_ISSUE_ASSY_REWORK_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -130,10 +130,20 @@ export function updatePerfObjectiveStatus(dto: PerfObjectiveStatus): Promise<Per
  * 获取绩效目标选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPerfObjectiveOptions(): Promise<TaktSelectOption[]> {
+export function getPerfObjectiveOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PERF_OBJECTIVE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

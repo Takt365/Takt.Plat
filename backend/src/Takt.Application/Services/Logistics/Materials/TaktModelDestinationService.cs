@@ -93,8 +93,10 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     /// <summary>
     /// 获取型号目的地选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _modelDestinationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
@@ -110,8 +112,10 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     /// <summary>
     /// 获取机种下拉选项（ModelCode 去重）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>机种下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetModelOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetModelOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _modelDestinationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,

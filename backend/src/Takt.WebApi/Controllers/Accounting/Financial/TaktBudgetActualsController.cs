@@ -86,11 +86,11 @@ public class TaktBudgetActualsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("accounting:financial:budget:actual:query", "预算实绩选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBudgetActualOptionsAsync()
+    public async Task<IActionResult> GetBudgetActualOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _budgetActualService.GetBudgetActualOptionsAsync();
+            var result = await _budgetActualService.GetBudgetActualOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -86,11 +86,11 @@ public class TaktPostsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:organization:post:query", "岗位选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetPostOptionsAsync()
+    public async Task<IActionResult> GetPostOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _postService.GetPostOptionsAsync();
+            var result = await _postService.GetPostOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

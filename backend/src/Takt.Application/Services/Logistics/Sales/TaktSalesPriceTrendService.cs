@@ -50,8 +50,10 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     /// <summary>
     /// 推移查询栏：销售价格本表工厂去重选项
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesPriceRepository.GetListAsync(
@@ -74,8 +76,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     /// 推移查询栏：按工厂去重条件类型（级联第 2 级）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string plantCode)
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -105,10 +108,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(
-        string plantCode,
-        string? priceType = null)
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -141,11 +143,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     /// <param name="plantCode">工厂代码</param>
     /// <param name="priceType">条件类型</param>
     /// <param name="customerCode">客户编码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(
-        string plantCode,
-        string? priceType = null,
-        string? customerCode = null)
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(string? plantCode = null, string? keyword = null, string? priceType = null, string? customerCode = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;

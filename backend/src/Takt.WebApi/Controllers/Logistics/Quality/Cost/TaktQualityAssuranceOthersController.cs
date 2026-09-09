@@ -86,11 +86,11 @@ public class TaktQualityAssuranceOthersController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:quality:cost:assurance:query", "品质业务其他通常业务费用明细选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetQualityAssuranceOtherOptionsAsync()
+    public async Task<IActionResult> GetQualityAssuranceOtherOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _qualityAssuranceOtherService.GetQualityAssuranceOtherOptionsAsync();
+            var result = await _qualityAssuranceOtherService.GetQualityAssuranceOtherOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

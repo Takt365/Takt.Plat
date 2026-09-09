@@ -130,10 +130,20 @@ export function updateBonusPlanStatus(dto: BonusPlanStatus): Promise<BonusPlan> 
  * 获取奖金方案选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getBonusPlanOptions(): Promise<TaktSelectOption[]> {
+export function getBonusPlanOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${BONUS_PLAN_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

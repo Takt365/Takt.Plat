@@ -144,7 +144,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -208,6 +208,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import type { FilterValue } from 'ant-design-vue/es/table/interface'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import DictTypeForm from './components/dict-type-form.vue'
 import DictDataWindow from './components/dict-data-window.vue'
 import * as dictTypeApi from '@/api/foundation/dict-type'
@@ -284,6 +285,8 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 // 表单
 const formVisible = ref(false)
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const formTitle = ref('')
 const formLoading = ref(false)
 const formData = ref<DictType | null>(null)

@@ -86,11 +86,11 @@ public class TaktSopExecScansController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:sop:exec:query", "SOP物料扫码记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetSopExecScanOptionsAsync()
+    public async Task<IActionResult> GetSopExecScanOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _sopExecScanService.GetSopExecScanOptionsAsync();
+            var result = await _sopExecScanService.GetSopExecScanOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -86,11 +86,11 @@ public class TaktInventoryReservesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:inventory:reserve:query", "存货跌价准备选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetInventoryReserveOptionsAsync()
+    public async Task<IActionResult> GetInventoryReserveOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _inventoryReserveService.GetInventoryReserveOptionsAsync();
+            var result = await _inventoryReserveService.GetInventoryReserveOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

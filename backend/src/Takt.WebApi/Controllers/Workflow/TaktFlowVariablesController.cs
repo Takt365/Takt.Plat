@@ -86,11 +86,11 @@ public class TaktFlowVariablesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("workflow:instance:query", "流程变量选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFlowVariableOptionsAsync()
+    public async Task<IActionResult> GetFlowVariableOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _flowVariableService.GetFlowVariableOptionsAsync();
+            var result = await _flowVariableService.GetFlowVariableOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktCalendarI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCalendar 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -98,6 +98,60 @@ public class TaktCalendarI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.calendar.date", "zh-CN", "日历日期", "日历日期"),
             // entity.calendar.date
             new TranslationSeedItem("entity.calendar.date", "zh-HK", "日历日期_hk", "日历日期"),
+
+            // entity.calendar.dayofmonth
+            new TranslationSeedItem("entity.calendar.dayofmonth", "en-US", "月内第几天_us", "月内第几天（1～31；由 CalendarDate 派生）"),
+            // entity.calendar.dayofmonth
+            new TranslationSeedItem("entity.calendar.dayofmonth", "ja-JP", "月内第几天_jp", "月内第几天（1～31；由 CalendarDate 派生）"),
+            // entity.calendar.dayofmonth
+            new TranslationSeedItem("entity.calendar.dayofmonth", "zh-CN", "月内第几天", "月内第几天（1～31；由 CalendarDate 派生）"),
+            // entity.calendar.dayofmonth
+            new TranslationSeedItem("entity.calendar.dayofmonth", "zh-HK", "月内第几天_hk", "月内第几天（1～31；由 CalendarDate 派生）"),
+
+            // entity.calendar.weekday
+            new TranslationSeedItem("entity.calendar.weekday", "en-US", "星期_us", "星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）"),
+            // entity.calendar.weekday
+            new TranslationSeedItem("entity.calendar.weekday", "ja-JP", "星期_jp", "星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）"),
+            // entity.calendar.weekday
+            new TranslationSeedItem("entity.calendar.weekday", "zh-CN", "星期", "星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）"),
+            // entity.calendar.weekday
+            new TranslationSeedItem("entity.calendar.weekday", "zh-HK", "星期_hk", "星期（1=周一 2=周二 3=周三 4=周四 5=周五 6=周六 7=周日；由 CalendarDate 派生）"),
+
+            // entity.calendar.weekofyear
+            new TranslationSeedItem("entity.calendar.weekofyear", "en-US", "年内第几周_us", "年内第几周（ISO 8601；1～53；由 CalendarDate 派生）"),
+            // entity.calendar.weekofyear
+            new TranslationSeedItem("entity.calendar.weekofyear", "ja-JP", "年内第几周_jp", "年内第几周（ISO 8601；1～53；由 CalendarDate 派生）"),
+            // entity.calendar.weekofyear
+            new TranslationSeedItem("entity.calendar.weekofyear", "zh-CN", "年内第几周", "年内第几周（ISO 8601；1～53；由 CalendarDate 派生）"),
+            // entity.calendar.weekofyear
+            new TranslationSeedItem("entity.calendar.weekofyear", "zh-HK", "年内第几周_hk", "年内第几周（ISO 8601；1～53；由 CalendarDate 派生）"),
+
+            // entity.calendar.quarter
+            new TranslationSeedItem("entity.calendar.quarter", "en-US", "季度_us", "季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）"),
+            // entity.calendar.quarter
+            new TranslationSeedItem("entity.calendar.quarter", "ja-JP", "季度_jp", "季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）"),
+            // entity.calendar.quarter
+            new TranslationSeedItem("entity.calendar.quarter", "zh-CN", "季度", "季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）"),
+            // entity.calendar.quarter
+            new TranslationSeedItem("entity.calendar.quarter", "zh-HK", "季度_hk", "季度（1～4；自然年 Q1=1～3 月；由 CalendarDate 派生）"),
+
+            // entity.calendar.dayofquarter
+            new TranslationSeedItem("entity.calendar.dayofquarter", "en-US", "季内第几天_us", "季内第几天（1～92；自然年季度；由 CalendarDate 派生）"),
+            // entity.calendar.dayofquarter
+            new TranslationSeedItem("entity.calendar.dayofquarter", "ja-JP", "季内第几天_jp", "季内第几天（1～92；自然年季度；由 CalendarDate 派生）"),
+            // entity.calendar.dayofquarter
+            new TranslationSeedItem("entity.calendar.dayofquarter", "zh-CN", "季内第几天", "季内第几天（1～92；自然年季度；由 CalendarDate 派生）"),
+            // entity.calendar.dayofquarter
+            new TranslationSeedItem("entity.calendar.dayofquarter", "zh-HK", "季内第几天_hk", "季内第几天（1～92；自然年季度；由 CalendarDate 派生）"),
+
+            // entity.calendar.dayofyear
+            new TranslationSeedItem("entity.calendar.dayofyear", "en-US", "年内第几天_us", "年内第几天（1～366；由 CalendarDate 派生）"),
+            // entity.calendar.dayofyear
+            new TranslationSeedItem("entity.calendar.dayofyear", "ja-JP", "年内第几天_jp", "年内第几天（1～366；由 CalendarDate 派生）"),
+            // entity.calendar.dayofyear
+            new TranslationSeedItem("entity.calendar.dayofyear", "zh-CN", "年内第几天", "年内第几天（1～366；由 CalendarDate 派生）"),
+            // entity.calendar.dayofyear
+            new TranslationSeedItem("entity.calendar.dayofyear", "zh-HK", "年内第几天_hk", "年内第几天（1～366；由 CalendarDate 派生）"),
 
             // entity.calendar.isworkingday
             new TranslationSeedItem("entity.calendar.isworkingday", "en-US", "是否工作日_us", "是否工作日（字典 humanresource_attendance_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）"),

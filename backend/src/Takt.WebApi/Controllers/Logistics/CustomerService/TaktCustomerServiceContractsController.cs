@@ -86,11 +86,11 @@ public class TaktCustomerServiceContractsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:service:customer:contract:query", "服务合同选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetCustomerServiceContractOptionsAsync()
+    public async Task<IActionResult> GetCustomerServiceContractOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _customerServiceContractService.GetCustomerServiceContractOptionsAsync();
+            var result = await _customerServiceContractService.GetCustomerServiceContractOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -53,8 +53,10 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// <summary>
     /// 推移查询栏：工厂去重选项（设变主表 PlantCode；执行任务无工厂列）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         // 执行任务无 PlantCode，工厂取自设变主表（与分析 Join 同源）
@@ -78,8 +80,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// 推移查询栏：按工厂去重部门（级联第 2 级；来自执行任务）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string plantCode)
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -95,7 +98,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         var tasks = await _ecExecutionTaskRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && ecIdList.Contains(x.EcId)
+                && ecIdList.Contains(x.EcGijutsuId)
                 && x.DeptCode != null
                 && x.DeptCode != string.Empty);
         return tasks
@@ -115,10 +118,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="deptCode">部门编码（可空）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(
-        string plantCode,
-        string? deptCode = null)
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(string? plantCode = null, string? keyword = null, string? deptCode = null)
     {
         EnsureThreeLayerContext();
         var plant = plantCode?.Trim() ?? string.Empty;
@@ -135,7 +137,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         var tasks = await _ecExecutionTaskRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && ecIdList.Contains(x.EcId)
+                && ecIdList.Contains(x.EcGijutsuId)
                 && (string.IsNullOrWhiteSpace(trimmedDept) || x.DeptCode == trimmedDept)
                 && x.EcCode != null
                 && x.EcCode != string.Empty);
@@ -151,7 +153,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     }
 
     /// <summary>
-    /// 按工厂加载设变主表 Id 列表（执行任务无工厂列，经 EcId 关联）
+    /// 按工厂加载设变主表 Id 列表（执行任务无工厂列，经 EcGijutsuId 关联）
     /// </summary>
     /// <param name="plantCode">工厂代码（已 Trim）</param>
     /// <returns>设变 Id 列表</returns>
@@ -362,9 +364,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         }
         var periodSet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
         var snapshots = tasks
-            .Where(t => plantByEcId.ContainsKey(t.EcId))
+            .Where(t => plantByEcId.ContainsKey(t.EcGijutsuId))
             .Select(t => new EcCodeDeptTaskSnapshot(
-                plantByEcId[t.EcId],
+                plantByEcId[t.EcGijutsuId],
                 t.EcCode?.Trim() ?? string.Empty,
                 t.DeptCode.Trim(),
                 t.CompletedAt!.Value))
@@ -438,9 +440,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         }
         var periodSet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
         var joinedTasks = tasks
-            .Where(t => plantByEcId.ContainsKey(t.EcId))
+            .Where(t => plantByEcId.ContainsKey(t.EcGijutsuId))
             .Select(t => new EcImplementationTaskSnapshot(
-                plantByEcId[t.EcId],
+                plantByEcId[t.EcGijutsuId],
                 t.DeptCode.Trim(),
                 t.CompletedAt!.Value))
             .ToList();

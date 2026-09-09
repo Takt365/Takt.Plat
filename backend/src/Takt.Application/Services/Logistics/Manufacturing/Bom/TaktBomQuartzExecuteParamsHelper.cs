@@ -108,7 +108,7 @@ public static class TaktBomQuartzExecuteParamsHelper
     }
 
     /// <summary>
-    /// 是否 yyyy-MM 核算月份
+    /// 是否核算月份（yyyy-MM、yyyy-MM-dd 或 ISO 日期时间前缀）
     /// </summary>
     /// <param name="text">文本</param>
     /// <param name="periodKey">规范化 yyyy-MM</param>
@@ -121,7 +121,7 @@ public static class TaktBomQuartzExecuteParamsHelper
             return false;
         }
         var s = text.Trim();
-        if (s.Length != 7 || s[4] != '-')
+        if (s.Length < 7 || s[4] != '-')
         {
             return false;
         }

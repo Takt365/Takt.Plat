@@ -87,11 +87,11 @@ public class TaktTenantsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [AllowAnonymous]
     [HttpGet("options")]
-    public async Task<IActionResult> GetTenantOptionsAsync()
+    public async Task<IActionResult> GetTenantOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _tenantService.GetTenantOptionsAsync();
+            var result = await _tenantService.GetTenantOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

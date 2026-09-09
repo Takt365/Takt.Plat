@@ -144,10 +144,20 @@ export function updateDefectGroupSort(dto: DefectGroupSort): Promise<DefectGroup
  * 获取不良组主数据选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getDefectGroupOptions(): Promise<TaktSelectOption[]> {
+export function getDefectGroupOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${DEFECT_GROUP_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

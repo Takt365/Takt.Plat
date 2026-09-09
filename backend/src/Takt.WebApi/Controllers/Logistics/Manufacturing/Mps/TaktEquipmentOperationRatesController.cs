@@ -86,11 +86,11 @@ public class TaktEquipmentOperationRatesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mps:equipment:operation:rate:query", "机器稼动率选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEquipmentOperationRateOptionsAsync()
+    public async Task<IActionResult> GetEquipmentOperationRateOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _equipmentOperationRateService.GetEquipmentOperationRateOptionsAsync();
+            var result = await _equipmentOperationRateService.GetEquipmentOperationRateOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

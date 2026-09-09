@@ -130,10 +130,20 @@ export function updateMaterialRequirementsPlanningStatus(dto: MaterialRequiremen
  * 获取物料需求计划MRP头选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMaterialRequirementsPlanningOptions(): Promise<TaktSelectOption[]> {
+export function getMaterialRequirementsPlanningOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MATERIAL_REQUIREMENTS_PLANNING_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

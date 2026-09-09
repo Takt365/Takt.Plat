@@ -126,7 +126,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
     /// <summary>
     /// 获取定制报表下拉选项
     /// </summary>
-    public async Task<List<TaktSelectOption>> GetConfigurableOptionsAsync()
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
+    public async Task<List<TaktSelectOption>> GetConfigurableOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var currentUserId = CurrentUserId ?? 0;
         var list = await _configurableRepository.GetListAsync(

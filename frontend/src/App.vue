@@ -26,24 +26,52 @@ import type { ThemeConfig } from 'ant-design-vue/es/config-provider/context';
 import { useTaktComponentLocale } from '@/composables/use-takt-component-locale';
 import { useThemeStore } from '@/stores/common/theme';
 import { useThemeColorStore } from '@/stores/common/theme-color';
+import { useSettingStore } from '@/stores/common/setting';
 
 const { antDesignVueLocale } = useTaktComponentLocale();
 const themeStore = useThemeStore();
 const themeColorStore = useThemeColorStore();
+const { setting } = storeToRefs(useSettingStore());
 
 /** Ant Design Vue ConfigProvider 语言包（与 vue-i18n 同步） */
 const locale = antDesignVueLocale;
 
 /**
- * Ant Design Vue 主题配置（algorithm 驱动原生亮/暗色切换）
+ * ConfigProvider 主题（仅依赖明暗/主色/圆角等基元；避免 patchSetting 换新 setting 对象就整树重算）
  */
-const antdTheme = computed<ThemeConfig>(() => ({
-  algorithm:
-    themeStore.resolvedTheme === 'dark'
-      ? antdThemeApi.darkAlgorithm
-      : antdThemeApi.defaultAlgorithm,
-  token: {
-    colorPrimary: themeColorStore.colorPrimary,
+const antdTheme = shallowRef<ThemeConfig>({
+  algorithm: antdThemeApi.defaultAlgorithm,
+  token: {},
+});
+
+watch(
+  () =>
+    [
+      themeStore.resolvedTheme,
+      themeColorStore.colorPrimary,
+      setting.value.borderRadius,
+    ] as const,
+  ([resolved, colorPrimary, borderRadius]) => {
+    const algorithm =
+      resolved === 'dark'
+        ? antdThemeApi.darkAlgorithm
+        : antdThemeApi.defaultAlgorithm;
+    const prev = antdTheme.value;
+    if (
+      prev.algorithm === algorithm
+      && prev.token?.colorPrimary === colorPrimary
+      && prev.token?.borderRadius === borderRadius
+    ) {
+      return;
+    }
+    antdTheme.value = {
+      algorithm,
+      token: {
+        colorPrimary,
+        borderRadius,
+      },
+    };
   },
-}));
+  { immediate: true },
+);
 </script>

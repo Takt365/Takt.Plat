@@ -997,6 +997,7 @@ public class TaktMenuLevel3SeedData
         }
 
         // ========== 生产执行下的三级菜单 (LOGISTICS_MANUFACTURING) ==========
+        // 顺序：BOM管理 / 工程设变 / MDS计划 / MPS计划 / MRP计划 / APS排程 / OPH管理 / 生产不良 / OPH工数 / SOP管理
         if (manufacturingMenu != null)
         {
             var (insertMFG1, updateMFG1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM", menu =>
@@ -1018,6 +1019,25 @@ public class TaktMenuLevel3SeedData
             insertCount += insertMFG1;
             updateCount += updateMFG1;
 
+            var (insertMFG4, updateMFG4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE", menu =>
+            {
+                menu.MenuName = "工程设变";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change._self";
+                menu.Icon = "RiEditCircleLine";
+                menu.ParentId = manufacturingMenu.Id;
+                menu.MenuType = 0;
+                menu.RoutePath = "/logistics/manufacturing/engineering-change";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change";
+                menu.SortOrder = 2;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertMFG4;
+            updateCount += updateMFG4;
+
             var (insertMFG1b, updateMFG1b) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_MDS", menu =>
             {
                 menu.MenuName = "MDS计划";
@@ -1028,7 +1048,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing/mds";
                 menu.ComponentPath = "logistics/manufacturing/mds";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1047,7 +1067,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing/mps";
                 menu.ComponentPath = "logistics/manufacturing/mps";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1066,7 +1086,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing/mrp";
                 menu.ComponentPath = "logistics/manufacturing/mrp";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1085,7 +1105,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing/aps";
                 menu.ComponentPath = "logistics/manufacturing/aps";
-                menu.SortOrder = 5;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1093,25 +1113,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertMFG3;
             updateCount += updateMFG3;
-
-            var (insertMFG4, updateMFG4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE", menu =>
-            {
-                menu.MenuName = "设变";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE";
-                menu.I18nKey = "menu.logistics.manufacturing.engineering.change._self";
-                menu.Icon = "RiEditCircleLine";
-                menu.ParentId = manufacturingMenu.Id;
-                menu.MenuType = 0;
-                menu.RoutePath = "/logistics/manufacturing/engineering-change";
-                menu.ComponentPath = "logistics/manufacturing/engineering-change";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertMFG4;
-            updateCount += updateMFG4;
 
             var (insertMFG5, updateMFG5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT", menu =>
             {
@@ -1134,7 +1135,7 @@ public class TaktMenuLevel3SeedData
 
             var (insertMFG6, updateMFG6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_DEFECT", menu =>
             {
-                menu.MenuName = "不良";
+                menu.MenuName = "生产不良";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT";
                 menu.I18nKey = "menu.logistics.manufacturing.defect._self";
                 menu.Icon = "RiErrorWarningLine";
@@ -1151,6 +1152,25 @@ public class TaktMenuLevel3SeedData
             insertCount += insertMFG6;
             updateCount += updateMFG6;
 
+            var (insertMFG5b, updateMFG5b) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_LABOR_HOUR", menu =>
+            {
+                menu.MenuName = "OPH工数";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_LABOR_HOUR";
+                menu.I18nKey = "menu.logistics.manufacturing.labor.hour._self";
+                menu.Icon = "RiTimerLine";
+                menu.ParentId = manufacturingMenu.Id;
+                menu.MenuType = 0;
+                menu.RoutePath = "/logistics/manufacturing/labor-hour";
+                menu.ComponentPath = "logistics/manufacturing/labor-hour";
+                menu.SortOrder = 9;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertMFG5b;
+            updateCount += updateMFG5b;
+
             var (insertMFG7, updateMFG7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MANUFACTURING_SOP", menu =>
             {
                 menu.MenuName = "SOP管理";
@@ -1161,7 +1181,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/manufacturing/sop";
                 menu.ComponentPath = "logistics/manufacturing/sop";
-                menu.SortOrder = 9;
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1172,27 +1192,9 @@ public class TaktMenuLevel3SeedData
         }
 
         // ========== 质量管理下的三级菜单 (LOGISTICS_QUALITY) ==========
+        // 顺序：质量业务 / 客诉管理 / 品质成本
         if (logisticsQualityMenu != null)
         {
-            var (insertLQ1, updateLQ1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_QUALITY_COST", menu =>
-            {
-                menu.MenuName = "品质成本";
-                menu.MenuCode = "LOGISTICS_QUALITY_COST";
-                menu.I18nKey = "menu.logistics.quality.cost._self";
-                menu.Icon = "RiMoneyCnyCircleLine";
-                menu.ParentId = logisticsQualityMenu.Id;
-                menu.MenuType = 0;
-                menu.RoutePath = "/logistics/quality/cost";
-                menu.ComponentPath = "logistics/quality/cost";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLQ1;
-            updateCount += updateLQ1;
-
             var (insertLQ2, updateLQ2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_QUALITY_OPERATION", menu =>
             {
                 menu.MenuName = "质量业务";
@@ -1203,7 +1205,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/quality/operation";
                 menu.ComponentPath = "logistics/quality/operation";
-                menu.SortOrder = 2;
+                menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1222,7 +1224,7 @@ public class TaktMenuLevel3SeedData
                 menu.MenuType = 0;
                 menu.RoutePath = "/logistics/quality/complaint";
                 menu.ComponentPath = "logistics/quality/complaint";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1230,31 +1232,31 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLQ3;
             updateCount += updateLQ3;
-        }
 
-        // ========== 客户服务下的三级菜单 (LOGISTICS_CUSTOMER_SERVICE，不含客诉；客诉见 LOGISTICS_QUALITY_COMPLAINT) ==========
-        if (logisticsServiceMenu != null)
-        {
-            var (insertLS1, updateLS1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_REQUEST", menu =>
+            var (insertLQ1, updateLQ1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_QUALITY_COST", menu =>
             {
-                menu.MenuName = "服务请求";
-                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_REQUEST";
-                menu.I18nKey = "menu.logistics.customer.service.request";
-                menu.Icon = "RiQuestionAnswerLine";
-                menu.ParentId = logisticsServiceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:customer:service:request:list";
-                menu.RoutePath = "/logistics/customer-service/request";
-                menu.ComponentPath = "logistics/customer-service/request/index";
-                menu.SortOrder = 1;
+                menu.MenuName = "品质成本";
+                menu.MenuCode = "LOGISTICS_QUALITY_COST";
+                menu.I18nKey = "menu.logistics.quality.cost._self";
+                menu.Icon = "RiMoneyCnyCircleLine";
+                menu.ParentId = logisticsQualityMenu.Id;
+                menu.MenuType = 0;
+                menu.RoutePath = "/logistics/quality/cost";
+                menu.ComponentPath = "logistics/quality/cost";
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
             });
-            insertCount += insertLS1;
-            updateCount += updateLS1;
+            insertCount += insertLQ1;
+            updateCount += updateLQ1;
+        }
 
+        // ========== 客户服务下的三级菜单 (LOGISTICS_CUSTOMER_SERVICE，不含客诉；客诉见 LOGISTICS_QUALITY_COMPLAINT) ==========
+        // 顺序：服务合同 / 服务订单 / 服务请求 / 服务工单
+        if (logisticsServiceMenu != null)
+        {
             var (insertLS2, updateLS2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_CONTRACT", menu =>
             {
                 menu.MenuName = "服务合同";
@@ -1266,7 +1268,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:customer:service:contract:list";
                 menu.RoutePath = "/logistics/customer-service/contract";
                 menu.ComponentPath = "logistics/customer-service/contract/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1286,7 +1288,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:customer:service:order:list";
                 menu.RoutePath = "/logistics/customer-service/order";
                 menu.ComponentPath = "logistics/customer-service/order/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1294,6 +1296,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLS3;
             updateCount += updateLS3;
+
+            var (insertLS1, updateLS1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_REQUEST", menu =>
+            {
+                menu.MenuName = "服务请求";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_REQUEST";
+                menu.I18nKey = "menu.logistics.customer.service.request";
+                menu.Icon = "RiQuestionAnswerLine";
+                menu.ParentId = logisticsServiceMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:customer:service:request:list";
+                menu.RoutePath = "/logistics/customer-service/request";
+                menu.ComponentPath = "logistics/customer-service/request/index";
+                menu.SortOrder = 3;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLS1;
+            updateCount += updateLS1;
 
             var (insertLS4, updateLS4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_TICKET", menu =>
             {
@@ -1317,6 +1339,7 @@ public class TaktMenuLevel3SeedData
         }
 
         // ========== 工厂维护下的三级菜单 (LOGISTICS_MAINTENANCE) ==========
+        // 顺序：设备信息 / 维护工单 / 维护履历 / 维护通知
         if (logisticsMaintenanceMenu != null)
         {
             var (insertLM1, updateLM1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MAINTENANCE_EQUIPMENT", menu =>
@@ -1339,26 +1362,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM1;
             updateCount += updateLM1;
 
-            var (insertLM2, updateLM2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MAINTENANCE_NOTIFICATION", menu =>
-            {
-                menu.MenuName = "维护通知";
-                menu.MenuCode = "LOGISTICS_MAINTENANCE_NOTIFICATION";
-                menu.I18nKey = "menu.logistics.maintenance.notification";
-                menu.Icon = "RiNotificationLine";
-                menu.ParentId = logisticsMaintenanceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:maintenance:notification:list";
-                menu.RoutePath = "/logistics/maintenance/notification";
-                menu.ComponentPath = "logistics/maintenance/notification/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLM2;
-            updateCount += updateLM2;
-
             var (insertLM3, updateLM3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MAINTENANCE_WORKORDER", menu =>
             {
                 menu.MenuName = "维护工单";
@@ -1370,7 +1373,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:maintenance:workorder:list";
                 menu.RoutePath = "/logistics/maintenance/work-order";
                 menu.ComponentPath = "logistics/maintenance/work-order/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1390,7 +1393,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:maintenance:history:list";
                 menu.RoutePath = "/logistics/maintenance/history";
                 menu.ComponentPath = "logistics/maintenance/history/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1398,6 +1401,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLM4;
             updateCount += updateLM4;
+
+            var (insertLM2, updateLM2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MAINTENANCE_NOTIFICATION", menu =>
+            {
+                menu.MenuName = "维护通知";
+                menu.MenuCode = "LOGISTICS_MAINTENANCE_NOTIFICATION";
+                menu.I18nKey = "menu.logistics.maintenance.notification";
+                menu.Icon = "RiNotificationLine";
+                menu.ParentId = logisticsMaintenanceMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:maintenance:notification:list";
+                menu.RoutePath = "/logistics/maintenance/notification";
+                menu.ComponentPath = "logistics/maintenance/notification/index";
+                menu.SortOrder = 4;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLM2;
+            updateCount += updateLM2;
         }
 
         // ========== 销售管理下的三级菜单 (LOGISTICS_SALES) ==========

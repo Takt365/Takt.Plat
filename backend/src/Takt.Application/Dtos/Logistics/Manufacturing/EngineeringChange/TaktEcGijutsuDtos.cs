@@ -61,6 +61,12 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
+    /// 后台派生各部门执行行摘要（非持久化；仅 Create/Update 返回给后台任务拼完成消息）
+    /// </summary>
+    [JsonIgnore]
+    public string? PersistDeptExecSummary { get; set; }
+
+    /// <summary>
     /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
@@ -79,11 +85,6 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     /// 录入日期
     /// </summary>
     public DateTime EcEntryDate { get; set; }
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
 
     /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
@@ -196,11 +197,6 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public DateTime? EcEntryDateEnd { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string? DiscontinuedStatus { get; set; }
-
-    /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
     public int? EcStatus { get; set; }
@@ -305,11 +301,6 @@ public class TaktEcGijutsuCreateDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
-
-    /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
     /// </summary>
     public int EcStatus { get; set; } = 0;
@@ -318,6 +309,21 @@ public class TaktEcGijutsuCreateDto
     /// 设变明细列表（技术阶段一：③，BOM/料号变更行）（子表，级联保存）
     /// </summary>
     public List<TaktEcDetailCreateDto>? EcDetails { get; set; }
+
+    /// <summary>
+    /// 来源设变主表 ID（string）。大明细时草稿可不带 EcDetails，落库时由服务端按此 ID 从 TaktSourceEcDetail 物化。
+    /// </summary>
+    public string? SourceEcId { get; set; }
+
+    /// <summary>
+    /// 草稿是否省略明细（true 时 EcDetails 为空，须带 SourceEcId 提交）
+    /// </summary>
+    public bool DetailsDeferred { get; set; }
+
+    /// <summary>
+    /// 省略明细时的来源明细行数（仅提示；非持久化）
+    /// </summary>
+    public int DeferredDetailCount { get; set; }
 
     /// <summary>
     /// 设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）（子表，级联保存）
@@ -475,11 +481,6 @@ public class TaktEcGijutsuTemplateDto
     public DateTime? EcEntryDate { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string? DiscontinuedStatus { get; set; }
-
-    /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
     public int? EcStatus { get; set; }
@@ -580,11 +581,6 @@ public class TaktEcGijutsuImportDto
     /// 录入日期
     /// </summary>
     public DateTime? EcEntryDate { get; set; }
-
-    /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string? DiscontinuedStatus { get; set; }
 
     /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成）
@@ -695,11 +691,6 @@ public class TaktEcGijutsuExportDto
     public DateTime EcEntryDate { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
-    /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
-
-    /// <summary>
     /// 设变状态（字典 logistics_manufacturing_ec_gijutsu_status；1=发行，2=执行中，3=完成；自动回写，客户端勿改）
     /// </summary>
     public int EcStatus { get; set; } = 0;
@@ -718,4 +709,36 @@ public class TaktEcGijutsuExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
+}
+
+/// <summary>
+/// 设变技术课主表后台保存已提交回执（Create/Update 入队后立即返回）
+/// </summary>
+public class TaktEcGijutsuSubmittedDto
+{
+    /// <summary>
+    /// 工厂代码
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否为更新（false=新增）
+    /// </summary>
+    public bool IsUpdate { get; set; }
+
+    /// <summary>
+    /// 明细行数（提交时快照，供提示文案）
+    /// </summary>
+    public int DetailCount { get; set; }
+
+    /// <summary>
+    /// 更新时的主表主键（新增为 0）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcGijutsuId { get; set; }
 }

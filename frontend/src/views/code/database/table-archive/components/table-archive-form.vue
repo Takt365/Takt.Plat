@@ -152,20 +152,6 @@
       </a-col>
       <a-col :span="24">
         <a-form-item
-          :label="t('entity.tablearchive.sortorder')"
-          name="sortOrder"
-        >
-          <a-input-number
-            v-model:value="formState.sortOrder"
-            :min="0"
-            :precision="0"
-            class="w-full"
-            :placeholder="pi.ph('sortOrder')"
-          />
-        </a-form-item>
-      </a-col>
-      <a-col :span="24">
-        <a-form-item
           :label="t('entity.tablearchive.archivestatus')"
           name="archiveStatus"
         >
@@ -264,7 +250,6 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number | undefined> = {
   archiveKeyKind: 3,
   retainHotYears: 1,
   archiveName: '',
-  sortOrder: 0,
   archiveStatus: 1,
   extField: '',
   remark: '',
@@ -592,12 +577,6 @@ function resetFields() {
   formRef.value?.clearValidate()
 }
 
-/** 编辑态排序号（create/update DTO 不含 sortOrder，由父级单独提交） */
-function getSortOrderValue(): number {
-  const value = Number(formState.sortOrder)
-  return Number.isNaN(value) || value < 0 ? 0 : value
-}
-
 onMounted(async () => {
   await loadDatabaseInfoList()
   applyCurrentTargetTenant(formState)
@@ -607,5 +586,5 @@ onMounted(async () => {
   }
 })
 
-defineExpose({ validate, getValues, resetFields, getSortOrderValue })
+defineExpose({ validate, getValues, resetFields })
 </script>

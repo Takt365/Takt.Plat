@@ -86,11 +86,11 @@ public class TaktEmployeeFamiliesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:personnel:employee:family:query", "员工家庭成员选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEmployeeFamilyOptionsAsync()
+    public async Task<IActionResult> GetEmployeeFamilyOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _employeeFamilyService.GetEmployeeFamilyOptionsAsync();
+            var result = await _employeeFamilyService.GetEmployeeFamilyOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

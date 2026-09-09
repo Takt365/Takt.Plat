@@ -74,6 +74,12 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public decimal OrderQuantity { get; set; } = 0;
 
     /// <summary>
+    /// 目标数量（基本单位数量）
+    /// </summary>
+    [SugarColumn(ColumnName = "target_quantity", ColumnDescription = "目标数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TargetQuantity { get; set; } = 0;
+
+    /// <summary>
     /// 已发货数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "shipped_quantity", ColumnDescription = "已发货数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
@@ -126,6 +132,42 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public decimal SalesAmount { get; set; } = 0;
 
     /// <summary>
+    /// 毛重
+    /// </summary>
+    [SugarColumn(ColumnName = "gross_weight", ColumnDescription = "毛重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? GrossWeight { get; set; }
+
+    /// <summary>
+    /// 净重
+    /// </summary>
+    [SugarColumn(ColumnName = "net_weight", ColumnDescription = "净重", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? NetWeight { get; set; }
+
+    /// <summary>
+    /// 重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "weight_unit", ColumnDescription = "重量单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? WeightUnit { get; set; }
+
+    /// <summary>
+    /// 体积
+    /// </summary>
+    [SugarColumn(ColumnName = "volume", ColumnDescription = "体积", ColumnDataType = "decimal", Length = 18, DecimalDigits = 10, IsNullable = true)]
+    public decimal? Volume { get; set; }
+
+    /// <summary>
+    /// 体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "volume_unit", ColumnDescription = "体积单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? VolumeUnit { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? ProfitCenterCode { get; set; }
+
+    /// <summary>
     /// 行交货状态（字典 logistics_sales_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     [SugarColumn(ColumnName = "delivery_status", ColumnDescription = "行交货状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
@@ -137,8 +179,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;
 
-
-// ========================================
+    // ========================================
     // 导航属性区域
     // ========================================
 

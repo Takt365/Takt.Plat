@@ -27,6 +27,7 @@ export default {
       importSelected: '導入選中（{count}）',
       importSuccess: '已成功導入 {count} 條設變',
       importPartial: '導入完成：成功 {success} 條，失敗 {fail} 條',
+      detailsDeferred: '明細共 {count} 行，已改由服務端落庫（不經瀏覽器回傳），請填寫負責人與管理區分後提交',
     },
     attachment: {
       docCode: {
@@ -43,9 +44,20 @@ export default {
       fileName: {
         duplicate: '文件名稱「{name}」已存在，不可重複',
       },
+      upload: {
+        hint: '僅支持 PDF，每次 1 個文件，不超過 {max}MB',
+        pdfOnly: '僅允許上傳 PDF 文件',
+      },
     },
     tabs: {
       oldNewMaterial: '舊新物料',
+    },
+    persist: {
+      submitted: '已提交設變 {ecCode} 後台{action}（明細 {detailCount} 行，含各部門執行派生），完成後將通知您',
+      completed: '設變 {ecCode} 後台{action}完成（明細 {detailCount} 行，耗時 {duration}）',
+      failed: '設變 {ecCode} 後台{action}失敗（明細 {detailCount} 行）',
+      actionCreate: '新增',
+      actionUpdate: '更新',
     },
   },
 };

@@ -116,10 +116,20 @@ export function deleteMasterProductionScheduleLineBatch(ids: string[]): Promise<
  * 获取主生产计划MPS行选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMasterProductionScheduleLineOptions(): Promise<TaktSelectOption[]> {
+export function getMasterProductionScheduleLineOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MASTER_PRODUCTION_SCHEDULE_LINE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

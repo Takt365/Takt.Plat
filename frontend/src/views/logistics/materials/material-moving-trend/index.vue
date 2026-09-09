@@ -14,6 +14,7 @@
       v-model:period-range="periodRange"
       v-model:valuation="valuation"
       v-model:material-code="materialCode"
+      :plant-select-key="plantSelectKey"
       :loading="panelLoading"
       @search="handleSearch"
       @reset="handleReset"
@@ -64,6 +65,8 @@ import {
   RiArrowUpLine,
   RiListCheck,
 } from '@remixicon/vue'
+import { getMaterialMovingTrendPlantOptions } from '@/api/logistics/materials/material-moving-trend'
+import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
@@ -77,6 +80,8 @@ const tenantStore = useTenantStore()
 
 /** 工厂 */
 const plantCode = ref<string | undefined>()
+/** 工厂下拉重挂载键 */
+const plantSelectKey = ref(0)
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(3))
 /** 评估类别 */
@@ -128,14 +133,10 @@ const panelRef = ref<{
   clear?: () => void
 } | null>(null)
 
-/** 查询 */
+/** 查询（工厂/期间必选；评估类别、物料编码可空） */
 function handleSearch() {
   if (!plantCode.value?.trim()) {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
-    return
-  }
-  if (!valuation.value?.trim()) {
-    message.warning(t(`${localePrefix}.selectValuationRequired`))
     return
   }
   if (!periodRange.value?.[0]) {
@@ -158,9 +159,30 @@ function handleRefresh() {
   void panelRef.value?.reload?.()
 }
 
-/** 清空工厂级联与结果 */
-function clearPlantCascade() {
-  plantCode.value = undefined
+/**
+ * 默认工厂：当前公司 RelatedPlant 仅当出现在本页 plant-options（RelatedPlant∩本表）时选中；无则清空
+ * @returns {Promise<void>}
+ */
+async function applyDefaultPlant(): Promise<void> {
+  const related = (await resolveCurrentCompanyRelatedPlantCode()).trim()
+  let matched: string | undefined
+  if (related) {
+    try {
+      const plants = await getMaterialMovingTrendPlantOptions()
+      const hit = (plants ?? []).find(
+        (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
+      )
+      matched = hit ? String(hit.dictValue).trim() : undefined
+    } catch {
+      matched = undefined
+    }
+  }
+  plantCode.value = matched
+  plantSelectKey.value += 1
+}
+
+/** 清空评估/物料与结果（工厂由 applyDefaultPlant 再写入） */
+function clearDownstreamAndResult() {
   valuation.value = undefined
   materialCode.value = undefined
   hasRows.value = false
@@ -168,10 +190,11 @@ function clearPlantCascade() {
 }
 
 /** 重置 */
-function handleReset() {
-  clearPlantCascade()
+async function handleReset() {
+  clearDownstreamAndResult()
   periodRange.value = buildDefaultCostingPeriodRange(3)
   trendFilter.value = ''
+  await applyDefaultPlant()
 }
 
 /** 导出 */
@@ -195,13 +218,15 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    clearPlantCascade()
+    clearDownstreamAndResult()
+    void applyDefaultPlant()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   periodRange.value = buildDefaultCostingPeriodRange(3)
+  await applyDefaultPlant()
   void getTaktDefaultPageSize()
 })
 </script>

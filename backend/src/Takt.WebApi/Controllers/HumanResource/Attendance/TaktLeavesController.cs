@@ -86,11 +86,11 @@ public class TaktLeavesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("human:resource:attendance:leave:query", "请假信息选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetLeaveOptionsAsync()
+    public async Task<IActionResult> GetLeaveOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _leaveService.GetLeaveOptionsAsync();
+            var result = await _leaveService.GetLeaveOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

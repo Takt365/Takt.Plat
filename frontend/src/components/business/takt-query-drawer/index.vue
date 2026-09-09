@@ -59,8 +59,10 @@
     </div>
     <a-form
       ref="formRef"
+      :class="formLayout === 'horizontal' ? 'takt-generated-form' : undefined"
       :model="formModel"
       :layout="formLayout"
+      label-align="right"
       @finish="handleSubmit"
     >
       <slot :is-field-visible="isFieldVisible" />

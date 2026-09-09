@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉明细应用服务实现
 // 
@@ -103,8 +103,10 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
     /// <summary>
     /// 获取客诉明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetCustomerComplaintItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetCustomerComplaintItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _customerComplaintItemRepository.GetListAsync(
@@ -537,10 +539,16 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
             exp = exp.And(x => x.ImprovementAction != null && x.ImprovementAction.Contains(improvementAction));
         }
 
+        if (queryDto?.ImprovementResponsibleId.HasValue == true)
+        {
+            var improvementResponsibleId = queryDto.ImprovementResponsibleId.Value;
+            exp = exp.And(x => x.ImprovementResponsibleId == improvementResponsibleId);
+        }
+
         if (!string.IsNullOrWhiteSpace(queryDto?.ImprovementResponsibleName))
         {
-            var improvementResponsible = queryDto.ImprovementResponsibleName;
-            exp = exp.And(x => x.ImprovementResponsibleName != null && x.ImprovementResponsibleName.Contains(improvementResponsible));
+            var improvementResponsibleName = queryDto.ImprovementResponsibleName;
+            exp = exp.And(x => x.ImprovementResponsibleName != null && x.ImprovementResponsibleName.Contains(improvementResponsibleName));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.FileName))
@@ -684,6 +692,10 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.ImprovementAction))
+        {
+            return true;
+        }
+        if (queryDto.ImprovementResponsibleId.HasValue)
         {
             return true;
         }

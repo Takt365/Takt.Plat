@@ -86,11 +86,11 @@ public class TaktBackupLogsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:logging:backup:log:query", "备份日志选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetBackupLogOptionsAsync()
+    public async Task<IActionResult> GetBackupLogOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _backupLogService.GetBackupLogOptionsAsync();
+            var result = await _backupLogService.GetBackupLogOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

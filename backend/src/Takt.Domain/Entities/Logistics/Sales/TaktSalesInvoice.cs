@@ -249,16 +249,10 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     public string? ReversalReason { get; set; }
 
     /// <summary>
-    /// 过账人（选项 TaktEmployees/options；DictValue=Id）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    [SugarColumn(ColumnName = "posted_by_employee_id", ColumnDescription = "过账人ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PostedByEmployeeId { get; set; }
-    /// <summary>
-    /// 过账人名称（冗余：按 PostedByEmployeeId 取 TaktEmployee.EmployeeName 联动）
-    /// </summary>
-    [SugarColumn(ColumnName = "posted_by_employee_name", ColumnDescription = "过账人名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? PostedByEmployeeName { get; set; }
+    [SugarColumn(ColumnName = "posted_by", ColumnDescription = "过账人", ColumnDataType = "nvarchar", Length = 6, IsNullable = true)]
+    public string? PostedBy { get; set; }
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）

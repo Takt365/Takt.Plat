@@ -144,10 +144,20 @@ export function updateFlowSchemeSort(dto: FlowSchemeSort): Promise<FlowScheme> {
  * 获取流程定义选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getFlowSchemeOptions(): Promise<TaktSelectOption[]> {
+export function getFlowSchemeOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${FLOW_SCHEME_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

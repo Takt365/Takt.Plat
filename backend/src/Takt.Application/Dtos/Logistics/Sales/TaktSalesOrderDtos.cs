@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrder 生成，请按需审阅）
 // 
@@ -66,9 +66,49 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     public DateTime? ActualDeliveryDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    public DateTime? PurchaseOrderDate { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -239,9 +279,54 @@ public class TaktSalesOrderQueryDto : TaktPagedQuery
     public DateTime? ActualDeliveryDateEnd { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期（范围查询-开始）
+    /// </summary>
+    public DateTime? PurchaseOrderDateStart { get; set; }
+
+    /// <summary>
+    /// 采购订单日期（范围查询-结束）
+    /// </summary>
+    public DateTime? PurchaseOrderDateEnd { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -412,9 +497,49 @@ public class TaktSalesOrderCreateDto
     public DateTime? ActualDeliveryDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    public DateTime? PurchaseOrderDate { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -628,9 +753,49 @@ public class TaktSalesOrderTemplateDto
     public DateTime? ActualDeliveryDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    public DateTime? PurchaseOrderDate { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -790,9 +955,49 @@ public class TaktSalesOrderImportDto
     public DateTime? ActualDeliveryDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    public DateTime? PurchaseOrderDate { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）
@@ -958,9 +1163,49 @@ public class TaktSalesOrderExportDto
     public DateTime? ActualDeliveryDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
     /// </summary>
-    public string? SalesEmployeeName { get; set; } = string.Empty;
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售订单类型（字典 logistics_sales_order_type；与销售报价共用；DictValue=AG/QT/AEBQ/ZQT/Z800/Z801/Z850/Z851/ZCR/ZDR/ZOR/ZOR1；ExtLabel=凭证类别 A询价/B报价/C订单/H退货/K贷项/L借项）
+    /// </summary>
+    public string? SalesOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单原因（字典 logistics_sales_order_reason；DictValue=001～008/100～105/200）
+    /// </summary>
+    public string? OrderReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? SalesOrganization { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价过程（字典 logistics_sales_pricing_procedure；DictValue=Z10010～Z91001/ZCAA01/ZVAA97/ZVAA98/ZVAA99；ExtLabel=A；ExtValue=V；默认 ZVAA99）
+    /// </summary>
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    public string? PricingConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票类型（字典 logistics_sales_invoice_type；DictValue=B1/F2/G2/RE 等）
+    /// </summary>
+    public string? InvoiceType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单编码
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购订单日期
+    /// </summary>
+    public DateTime? PurchaseOrderDate { get; set; }
 
     /// <summary>
     /// 订单总数量（基本单位数量）

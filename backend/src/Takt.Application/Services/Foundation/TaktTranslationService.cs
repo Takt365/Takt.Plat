@@ -99,8 +99,10 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// <summary>
     /// 获取翻译选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetTranslationOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetTranslationOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         var list = await _translationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,

@@ -75,8 +75,8 @@
 
       <a-form-item :label="$t('components.navigation.page.systemsetting.borderradius')">
         <a-radio-group
-          v-model:value="setting.borderRadius"
-          @change="handleChange"
+          :value="setting.borderRadius"
+          @update:value="onBorderRadius"
         >
           <a-radio-button :value="0">
             0
@@ -127,16 +127,39 @@
 <script setup lang="ts">
 import { RiCheckLine } from '@remixicon/vue'
 import type { AppSetting, ThemeColor } from '@/stores/common/setting'
-import { themeColorMap, themeColorI18nKeyMap, validateFontSize } from '@/stores/common/setting'
+import { themeColorMap, themeColorI18nKeyMap, validateFontSize, useSettingStore } from '@/stores/common/setting'
+import { applySettings, notifySettingsChanged } from '@/utils/apply-settings'
 import { TAKT_THEME_STORAGE_KEY } from '@/utils/common'
 
-const setting = inject<AppSetting>('setting')!
+const settingStore = useSettingStore()
+const draftSetting = inject<AppSetting>('setting')!
+/** 主题色/明暗仍用抽屉快照；圆角等走 Store 以便 ConfigProvider 立即响应 */
+const setting = draftSetting
 
 const emit = defineEmits<{
   'change': []
 }>()
 
 const handleChange = () => {
+  emit('change')
+}
+
+/** 允许的圆角档位 */
+const BORDER_RADIUS_OPTIONS = [0, 5, 10, 15, 20] as const
+
+/**
+ * 写入圆角并同步 Store / ConfigProvider token
+ * @param value 圆角 px
+ */
+function onBorderRadius(value: number | string): void {
+  const n = typeof value === 'number' ? value : Number(value)
+  const borderRadius = (BORDER_RADIUS_OPTIONS as readonly number[]).includes(n)
+    ? n
+    : 5
+  setting.borderRadius = borderRadius
+  settingStore.patchSetting({ borderRadius })
+  applySettings()
+  notifySettingsChanged()
   emit('change')
 }
 

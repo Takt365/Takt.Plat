@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_ec_notification_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_notification_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_notification_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_notification_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcGijutsuId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
@@ -38,11 +38,11 @@ public class TaktEcNotification : TaktApprovalEntityBase
     public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
+    /// 技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_id", ColumnDescription = "设变ID", ColumnDataType = "bigint", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 设变单号（冗余：按对应 Id 取主数据名称联动）
@@ -102,6 +102,6 @@ public class TaktEcNotification : TaktApprovalEntityBase
     /// <summary>
     /// 关联的设变主表
     /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(EcId))]
+    [Navigate(NavigateType.ManyToOne, nameof(EcGijutsuId))]
     public TaktEcGijutsu? EcGijutsu { get; set; }
 }

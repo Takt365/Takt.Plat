@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-koubai/components -->
 <!-- 文件名称：ec-dept-view-form.vue -->
-<!-- 功能描述：设变采购部门表单；停产状态只读，执行内容可清空以消除 EOL -->
+<!-- 功能描述：设变采购部门表单；新物料/仓库/采购类型只读，执行内容可清空以消除 EOL -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -20,17 +20,29 @@
       <a-col :span="12"><a-form-item :label="pi.label('companyCode')"><a-input v-model:value="formState.companyCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('cultureCode')"><a-input v-model:value="formState.cultureCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('plantCode')"><a-input v-model:value="formState.plantCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('lineNumber')"><a-input-number v-model:value="formState.lineNumber" class="w-full" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('ecCode')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecNewMaterialCode')"><a-input v-model:value="formState.ecNewMaterialCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecNewMaterialDescription')"><a-input v-model:value="formState.ecNewMaterialDescription" disabled /></a-form-item></a-col>
       <a-col :span="12">
-        <a-form-item :label="pi.label('discontinuedStatus')">
-          <TaktSelect v-model:value="formState.discontinuedStatus" dict-type="logistics_materials_material_discontinued_status" disabled />
+        <a-form-item :label="pi.label('ecNewWarehouse')">
+          <TaktSelect v-model:value="formState.ecNewWarehouse" api-url="TaktWarehouses/options" disabled />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecNewPurchaseType')">
+          <TaktSelect v-model:value="formState.ecNewPurchaseType" dict-type="logistics_procurement_type" disabled />
         </a-form-item>
       </a-col>
       <a-col :span="12"><a-form-item :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('purchaseOrderIssueDate')"><a-date-picker v-model:value="formState.purchaseOrderIssueDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('supplier')"><a-input v-model:value="formState.supplier" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('purchaseOrderCode')"><a-input v-model:value="formState.purchaseOrderCode" /></a-form-item></a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecOldPartDisposition')">
+          <TaktSelect v-model:value="formState.ecOldPartDisposition" dict-type="logistics_manufacturing_ec_old_part_disposition" />
+        </a-form-item>
+      </a-col>
       <a-col :span="24">
         <a-form-item :label="pi.label('execContent')">
           <a-textarea v-model:value="formState.execContent" :rows="3" />
@@ -53,14 +65,18 @@ const formState = reactive<{
   cultureCode?: string;
   plantCode?: string;
   ecCode?: string;
-  ecModelCode?: string;
-  discontinuedStatus?: string;
+  lineNumber?: number;
+  ecNewMaterialCode?: string;
+  ecNewMaterialDescription?: string;
+  ecNewWarehouse?: string;
+  ecNewPurchaseType?: string;
   isImplemented: number;
   execContent?: string;
   purchaseOrderIssueDate?: string;
   supplier?: string;
   purchaseOrderCode?: string;
-}>({ isImplemented: 0, execContent: '', discontinuedStatus: 'Z0' });
+  ecOldPartDisposition?: string;
+}>({ isImplemented: 0, execContent: '' });
 
 watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
@@ -70,13 +86,17 @@ watch(() => props.formData, (val) => {
     cultureCode: val.cultureCode,
     plantCode: val.plantCode,
     ecCode: val.ecCode,
-    ecModelCode: val.ecModelCode,
-    discontinuedStatus: val.discontinuedStatus ?? 'Z0',
+    lineNumber: val.lineNumber,
+    ecNewMaterialCode: val.ecNewMaterialCode,
+    ecNewMaterialDescription: val.ecNewMaterialDescription,
+    ecNewWarehouse: val.ecNewWarehouse,
+    ecNewPurchaseType: val.ecNewPurchaseType,
     isImplemented: val.isImplemented ?? 0,
     execContent: val.execContent ?? '',
     purchaseOrderIssueDate: val.purchaseOrderIssueDate,
     supplier: val.supplier,
     purchaseOrderCode: val.purchaseOrderCode,
+    ecOldPartDisposition: val.ecOldPartDisposition,
   });
 }, { immediate: true });
 
@@ -88,13 +108,16 @@ function getValues(): EcKoubaiUpdate {
     purchaseOrderIssueDate: formState.purchaseOrderIssueDate,
     supplier: formState.supplier,
     purchaseOrderCode: formState.purchaseOrderCode,
+    ecOldPartDisposition: formState.ecOldPartDisposition,
   } as EcKoubaiUpdate;
 }
 function resetFields() {
   Object.assign(formState, {
     tenantCode: '', companyCode: '', cultureCode: '', plantCode: '',
-    ecCode: '', ecModelCode: '', discontinuedStatus: 'Z0', isImplemented: 0, execContent: '',
+    ecCode: '', lineNumber: undefined, ecNewMaterialCode: '', ecNewMaterialDescription: '',
+    ecNewWarehouse: undefined, ecNewPurchaseType: undefined, isImplemented: 0, execContent: '',
     purchaseOrderIssueDate: undefined, supplier: undefined, purchaseOrderCode: undefined,
+    ecOldPartDisposition: undefined,
   });
 }
 defineExpose({ validate, getValues, resetFields });

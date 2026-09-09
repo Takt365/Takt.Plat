@@ -86,11 +86,11 @@ public class TaktConfigurableOrderBiesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:quickquery:configurable:query", "定制报表排序选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetConfigurableOrderByOptionsAsync()
+    public async Task<IActionResult> GetConfigurableOrderByOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _configurableOrderByService.GetConfigurableOrderByOptionsAsync();
+            var result = await _configurableOrderByService.GetConfigurableOrderByOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单应用服务实现
 // 
@@ -104,8 +104,10 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     /// <summary>
     /// 获取销售订单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetSalesOrderOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetSalesOrderOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _salesOrderRepository.GetListAsync(
@@ -318,6 +320,70 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     }
 
     // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取销售订单统计（数据看板）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>销售订单统计</returns>
+    public async Task<TaktSalesOrderStatDto> GetSalesOrderStatAsync(TaktSalesStatQueryDto queryDto)
+    {
+        ArgumentNullException.ThrowIfNull(queryDto);
+        EnsureThreeLayerContext();
+        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
+            queryDto.OrderDateStart,
+            queryDto.OrderDateEnd);
+        var tenantCode = CurrentTenantCode;
+        var companyCode = CurrentCompanyCode;
+        Expression<Func<TaktSalesOrder, bool>> orderPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.OrderDate >= start
+            && x.OrderDate <= end;
+        var monthOrderCount = await _salesOrderRepository.CountAsync(orderPredicate);
+        Expression<Func<TaktSalesOrderItem, bool>> itemPredicate = x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsObsolete == 0
+            && SqlFunc.Subqueryable<TaktSalesOrder>()
+                .Where(o =>
+                    o.Id == x.SalesOrderId
+                    && o.TenantCode == tenantCode
+                    && o.CompanyCode == companyCode
+                    && o.OrderDate >= start
+                    && o.OrderDate <= end
+                    && o.IsDeleted == 0)
+                .Any();
+        var monthTotalAmount = await _salesOrderItemRepository.SumAsync(x => x.SalesAmount, itemPredicate);
+        if (monthTotalAmount == 0 && monthOrderCount > 0)
+        {
+            monthTotalAmount = await _salesOrderRepository.SumAsync(x => x.TotalAmount, orderPredicate);
+        }
+        var compareOrderCount = 0;
+        if (queryDto.CompareOrderDateStart.HasValue && queryDto.CompareOrderDateEnd.HasValue)
+        {
+            var compareStart = queryDto.CompareOrderDateStart.Value;
+            var compareEnd = queryDto.CompareOrderDateEnd.Value;
+            Expression<Func<TaktSalesOrder, bool>> comparePredicate = x =>
+                x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.OrderDate >= compareStart
+                && x.OrderDate <= compareEnd;
+            compareOrderCount = await _salesOrderRepository.CountAsync(comparePredicate);
+        }
+        return new TaktSalesOrderStatDto
+        {
+            StatMonth = statMonth,
+            MonthOrderCount = monthOrderCount,
+            MonthTotalAmount = monthTotalAmount,
+            CompareOrderCount = compareOrderCount,
+            OrderCountYoYPercent = TaktYoYStatHelper.CalculateYoYPercent(monthOrderCount, compareOrderCount),
+        };
+    }
+
+    // ========================================
     // 主子表级联（OneToMany）
     // ========================================
 
@@ -502,7 +568,14 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
-                || (x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(keywords))
+                || (x.SalesGroup != null && x.SalesGroup.Contains(keywords))
+                || (x.SalesOrderType != null && x.SalesOrderType.Contains(keywords))
+                || (x.OrderReason != null && x.OrderReason.Contains(keywords))
+                || (x.SalesOrganization != null && x.SalesOrganization.Contains(keywords))
+                || (x.PricingProcedure != null && x.PricingProcedure.Contains(keywords))
+                || (x.PricingConditionCode != null && x.PricingConditionCode.Contains(keywords))
+                || (x.InvoiceType != null && x.InvoiceType.Contains(keywords))
+                || (x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.DeliveryAddress != null && x.DeliveryAddress.Contains(keywords))
@@ -541,10 +614,52 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
             exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SalesEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesGroup))
         {
-            var salesBy = queryDto.SalesEmployeeName;
-            exp = exp.And(x => x.SalesEmployeeName != null && x.SalesEmployeeName.Contains(salesBy));
+            var salesGroup = queryDto.SalesGroup;
+            exp = exp.And(x => x.SalesGroup != null && x.SalesGroup.Contains(salesGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrderType))
+        {
+            var salesOrderType = queryDto.SalesOrderType;
+            exp = exp.And(x => x.SalesOrderType != null && x.SalesOrderType.Contains(salesOrderType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.OrderReason))
+        {
+            var orderReason = queryDto.OrderReason;
+            exp = exp.And(x => x.OrderReason != null && x.OrderReason.Contains(orderReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrganization))
+        {
+            var salesOrganization = queryDto.SalesOrganization;
+            exp = exp.And(x => x.SalesOrganization != null && x.SalesOrganization.Contains(salesOrganization));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingProcedure))
+        {
+            var pricingProcedure = queryDto.PricingProcedure;
+            exp = exp.And(x => x.PricingProcedure != null && x.PricingProcedure.Contains(pricingProcedure));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingConditionCode))
+        {
+            var pricingConditionCode = queryDto.PricingConditionCode;
+            exp = exp.And(x => x.PricingConditionCode != null && x.PricingConditionCode.Contains(pricingConditionCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.InvoiceType))
+        {
+            var invoiceType = queryDto.InvoiceType;
+            exp = exp.And(x => x.InvoiceType != null && x.InvoiceType.Contains(invoiceType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseOrderCode))
+        {
+            var purchaseOrderCode = queryDto.PurchaseOrderCode;
+            exp = exp.And(x => x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(purchaseOrderCode));
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)
@@ -697,6 +812,18 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
             exp = exp.And(x => x.ActualDeliveryDate <= actualDeliveryDateEnd);
         }
 
+        if (queryDto?.PurchaseOrderDateStart.HasValue == true)
+        {
+            var purchaseOrderDateStart = queryDto.PurchaseOrderDateStart.Value;
+            exp = exp.And(x => x.PurchaseOrderDate >= purchaseOrderDateStart);
+        }
+
+        if (queryDto?.PurchaseOrderDateEnd.HasValue == true)
+        {
+            var purchaseOrderDateEnd = queryDto.PurchaseOrderDateEnd.Value;
+            exp = exp.And(x => x.PurchaseOrderDate <= purchaseOrderDateEnd);
+        }
+
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
             var createdAtStart = queryDto.CreatedAtStart.Value;
@@ -747,7 +874,35 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SalesEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrderType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OrderReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrganization))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingProcedure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingConditionCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InvoiceType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseOrderCode))
         {
             return true;
         }
@@ -836,6 +991,10 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
             return true;
         }
         if (queryDto.ActualDeliveryDateStart.HasValue || queryDto.ActualDeliveryDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PurchaseOrderDateStart.HasValue || queryDto.PurchaseOrderDateEnd.HasValue)
         {
             return true;
         }

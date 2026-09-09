@@ -75,6 +75,26 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组代码", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
     /// <summary>
+    /// 采购订单类型（字典 logistics_procurement_purchase_order_type；与采购申请/询价共用；DictValue=A-AB/A-AN/B-FO/B-NB/B-RV/F-DB/F-EUB/F-FO/F-NB/F-UB/K-MK/K-WK/L-LP/L-LPA/L-LU；ExtLabel=凭证类别 A询价/B申请/F订单/K合同/L计划协议）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_order_type", ColumnDescription = "采购订单类型", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PurchaseOrderType { get; set; }
+    /// <summary>
+    /// 付款条件（字典 accounting_financial_payment_terms_param；DictValue=prepayship/cod/net30 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "payment_terms", ColumnDescription = "付款条件", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? PaymentTerms { get; set; }
+    /// <summary>
+    /// 定价过程（字典 logistics_procurement_pricing_procedure；DictValue=ZRM001/ZRM002/RM0000～RMREGU；ExtLabel=A；ExtValue=M；默认 ZRM001）
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_procedure", ColumnDescription = "定价过程", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingProcedure { get; set; }
+    /// <summary>
+    /// 定价条件编码
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_condition_code", ColumnDescription = "定价条件编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    public string? PricingConditionCode { get; set; }
+    /// <summary>
     /// 订单总数量（基本单位数量）
     /// </summary>
     [SugarColumn(ColumnName = "total_quantity", ColumnDescription = "订单总数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]

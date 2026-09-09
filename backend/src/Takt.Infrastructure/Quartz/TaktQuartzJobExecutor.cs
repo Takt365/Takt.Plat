@@ -364,6 +364,10 @@ public sealed class TaktQuartzJobExecutor
         {
             dbHint += $"，SourceDb={sourceDatabase}";
         }
+        if (!string.IsNullOrWhiteSpace(costingPeriod))
+        {
+            dbHint += $"，CostingPeriod={costingPeriod}";
+        }
         TaktQuartzJobExecutionLogger.LogProgress(
             $"SQL 已解析，路径={task.SqlScript}，SqlLength={sql.Length}{dbHint}",
             task.Id);
@@ -397,6 +401,7 @@ public sealed class TaktQuartzJobExecutor
                     executeDb,
                     sql,
                     task.SqlScript,
+                    progress => TaktQuartzJobExecutionLogger.LogProgress(progress, task.Id),
                     cancellationToken);
                 message = string.IsNullOrWhiteSpace(dbHint) ? message : $"{message}{dbHint}";
                 TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);

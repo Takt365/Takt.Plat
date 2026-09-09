@@ -99,11 +99,11 @@
       @show-size-change="handlePaginationSizeChange"
     />
 
-    <!-- 新增/编辑对话框：视口宽 50%、高 75vh，可拖拽调整宽高 -->
+    <!-- 新增/编辑对话框：宽度 =（视口 − 左侧菜单）× 80%，可拖拽调整宽高 -->
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -225,6 +225,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import UserForm from './components/user-form.vue'
 import AssignUserRoles from './components/assign-user-roles.vue'
 import AssignUserTenants from './components/assign-user-tenants.vue'
@@ -297,6 +298,8 @@ const formTitle = ref('')
 const formData = ref<Partial<UserAssignRecord>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 // 修改密码弹窗
 const changePasswordFormRef = ref()
 const changePasswordVisible = ref(false)

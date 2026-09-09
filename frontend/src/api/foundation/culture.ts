@@ -130,10 +130,20 @@ export function updateCultureSort(dto: CultureSort): Promise<Culture> {
  * 获取语言切换选项列表（仅启用，TaktSelectOption）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getCultureOptions(): Promise<TaktSelectOption[]> {
+export function getCultureOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CULTURE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

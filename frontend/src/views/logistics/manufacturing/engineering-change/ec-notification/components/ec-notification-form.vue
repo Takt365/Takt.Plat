@@ -93,12 +93,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('ecId')"
-                name="ecId"
+                :label="pi.label('ecGijutsuId')"
+                name="ecGijutsuId"
               >
                 <a-input
-                  v-model:value="formState.ecId"
-                  :placeholder="pi.ph('ecId')"
+                  v-model:value="formState.ecGijutsuId"
+                  :placeholder="pi.ph('ecGijutsuId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -333,7 +333,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNotificationCode","ecId","ecCode","ecTitle","ecNotificationDate","ecNotificationDeptCodes","ecNotificationDeptNames","ecNotificationNotifierId","ecNotificationNotifierName","ecNotificationMethod","ecNotificationStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNotificationCode","ecGijutsuId","ecCode","ecTitle","ecNotificationDate","ecNotificationDeptCodes","ecNotificationDeptNames","ecNotificationNotifierId","ecNotificationNotifierName","ecNotificationMethod","ecNotificationStatus","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -407,10 +407,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  ecId: [
+  ecGijutsuId: [
     {
       required: true,
-      message: pi.ph('ecId'),
+      message: pi.ph('ecGijutsuId'),
       trigger: 'blur'
     }
   ],

@@ -86,11 +86,11 @@ public class TaktProductionTeamEquipmentsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mps:production:team:query", "生产班组设备组选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionTeamEquipmentOptionsAsync()
+    public async Task<IActionResult> GetProductionTeamEquipmentOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _productionTeamEquipmentService.GetProductionTeamEquipmentOptionsAsync();
+            var result = await _productionTeamEquipmentService.GetProductionTeamEquipmentOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

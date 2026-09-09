@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票明细应用服务实现
 // 
@@ -103,8 +103,10 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
     /// <summary>
     /// 获取采购发票明细选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetPurchaseInvoiceItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetPurchaseInvoiceItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _purchaseInvoiceItemRepository.GetListAsync(
@@ -387,11 +389,11 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
         }
         if (string.IsNullOrEmpty(entity.TaxCode))
         {
-            entity.TaxCode = master.TaxCode;
+            entity.TaxCode = master.TaxCode ?? string.Empty;
         }
         if (string.IsNullOrEmpty(entity.ReferenceCode))
         {
-            entity.ReferenceCode = master.ReferenceCode;
+            entity.ReferenceCode = master.ReferenceCode ?? string.Empty;
         }
     }
     // ========================================

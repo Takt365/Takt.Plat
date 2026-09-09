@@ -48,6 +48,9 @@ internal static class TaktPcbaOutputDetailSeedHelper
                 WorkCenter = workCenter,
                 OperationDesc = operationTime.OperationDesc,
                 StandardShorts = operationTime.StandardShorts,
+                StandardMinutes = operationTime.ConvertedMinutes > 0
+                    ? operationTime.ConvertedMinutes
+                    : operationTime.StandardMinutes,
             });
             lineNumber += 10;
         }

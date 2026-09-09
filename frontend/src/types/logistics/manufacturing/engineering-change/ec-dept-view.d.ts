@@ -14,7 +14,7 @@ import type { CompanyDtoBase, TaktPagedQuery } from '@/types/common';
 export interface EcDeptView extends CompanyDtoBase {
   ecDeptId?: string;
   ecDetailId: string;
-  ecId: string;
+  ecGijutsuId: string;
   ecCode: string;
   lineNumber: number;
   ecModelCode: string;
@@ -27,7 +27,7 @@ export interface EcDeptView extends CompanyDtoBase {
   content?: string;
   /** 执行内容（与 content 同源；实体 API 字段） */
   execContent?: string;
-  /** 完成品物料状态（字典 logistics_materials_material_discontinued_status） */
+  /** 停产状态（字典 logistics_materials_material_discontinued_status） */
   discontinuedStatus?: string;
   /** 录入日期（技术） */
   entryDate?: string;

@@ -102,22 +102,39 @@ public class TaktProductionTeamService : TaktServiceBase, ITaktProductionTeamSer
         return dto;    }
 
     /// <summary>
-    /// 获取生产班组选项列表（DictValue=TeamName，DictLabel=TeamCode-TeamName，ExtValue=PlantCode 供前端按工厂过滤）
+    /// 获取生产班组选项列表（DictValue=TeamCode，DictLabel=TeamCode-TeamName，ExtValue=PlantCode；TeamCode 自然序）
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="teamCategory">班组分类（字典 logistics_manufacturing_team_category；有值时精确匹配，如 A=组立 P=PCBA）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetProductionTeamOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetProductionTeamOptionsAsync(string? plantCode = null, string? keyword = null, string? teamCategory = null)
     {
         EnsureThreeLayerContext();
-        var list = await _productionTeamRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TeamStatus == 1,
-            x => x.TeamCode,
-            false);
-        return list.Select(e => new TaktSelectOption
-        {
-            DictValue = e.TeamName,
-            DictLabel = $"{e.TeamCode}-{e.TeamName}",
-            ExtValue = e.PlantCode,
-        }).ToList();
+        var normalizedPlantCode = plantCode?.Trim();
+        var normalizedKeyword = keyword?.Trim();
+        var category = teamCategory?.Trim();
+        var predicate = Expressionable.Create<TaktProductionTeam>()
+            .And(x => x.TenantCode == CurrentTenantCode)
+            .And(x => x.CompanyCode == CurrentCompanyCode)
+            .And(x => x.TeamStatus == 1)
+            .AndIF(!string.IsNullOrEmpty(normalizedPlantCode), x => x.PlantCode == normalizedPlantCode)
+            .AndIF(!string.IsNullOrEmpty(category), x => x.TeamCategory == category)
+            .AndIF(!string.IsNullOrEmpty(normalizedKeyword), x =>
+                (x.TeamCode != null && x.TeamCode.Contains(normalizedKeyword!))
+                || (x.TeamName != null && x.TeamName.Contains(normalizedKeyword!)))
+            .ToExpression();
+        var list = await _productionTeamRepository.GetListAsync(predicate);
+        return list
+            .OrderBy(e => e.TeamCode, Comparer<string>.Create(TaktStringHelper.CompareNatural))
+            .ThenBy(e => e.TeamName, StringComparer.OrdinalIgnoreCase)
+            .Select(e => new TaktSelectOption
+            {
+                DictValue = e.TeamCode,
+                DictLabel = $"{e.TeamCode}-{e.TeamName}",
+                ExtValue = e.PlantCode,
+                ExtLabel = e.TeamCategory,
+            }).ToList();
     }
 
     /// <summary>

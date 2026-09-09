@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：ITaktSalesOrderService.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单应用服务接口
 // 
@@ -38,8 +38,10 @@ public interface ITaktSalesOrderService
     /// <summary>
     /// 获取销售订单选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetSalesOrderOptionsAsync();
+    Task<List<TaktSelectOption>> GetSalesOrderOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建销售订单
@@ -101,5 +103,16 @@ public interface ITaktSalesOrderService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportSalesOrderAsync(TaktSalesOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
+
+    // ========================================
+    // 扩展方法（保留）
+    // ========================================
+
+    /// <summary>
+    /// 获取销售订单统计（数据看板；按订单日期）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>销售订单统计</returns>
+    Task<TaktSalesOrderStatDto> GetSalesOrderStatAsync(TaktSalesStatQueryDto queryDto);
 
 }

@@ -38,8 +38,10 @@ public interface ITaktEcGijutsuService
     /// <summary>
     /// 获取设变技术课主表选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetEcGijutsuOptionsAsync();
+    Task<List<TaktSelectOption>> GetEcGijutsuOptionsAsync(string? plantCode = null, string? keyword = null);
 
     /// <summary>
     /// 创建设变技术课主
@@ -49,12 +51,27 @@ public interface ITaktEcGijutsuService
     Task<TaktEcGijutsuDto> CreateEcGijutsuAsync(TaktEcGijutsuCreateDto dto);
 
     /// <summary>
+    /// 入队前校验新增（唯一键等；不落库）
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>任务</returns>
+    Task EnsureEcGijutsuCreateReadyAsync(TaktEcGijutsuCreateDto dto);
+
+    /// <summary>
     /// 更新设变技术课主
     /// </summary>
     /// <param name="id">设变技术课主ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     Task<TaktEcGijutsuDto> UpdateEcGijutsuAsync(long id, TaktEcGijutsuUpdateDto dto);
+
+    /// <summary>
+    /// 入队前校验更新（存在性、唯一键等；不落库）
+    /// </summary>
+    /// <param name="id">设变技术课主ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>任务</returns>
+    Task EnsureEcGijutsuUpdateReadyAsync(long id, TaktEcGijutsuUpdateDto dto);
 
     /// <summary>
     /// 删除设变技术课主

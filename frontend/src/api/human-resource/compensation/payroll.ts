@@ -130,10 +130,20 @@ export function updatePayrollStatus(dto: PayrollStatus): Promise<Payroll> {
  * 获取薪酬体系选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPayrollOptions(): Promise<TaktSelectOption[]> {
+export function getPayrollOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PAYROLL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

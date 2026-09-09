@@ -629,7 +629,6 @@ BEGIN
     [credit_level] INT NULL,
     [credit_amount] DECIMAL(18,2) NULL,
     [discount_rate] DECIMAL(5,2) NULL,
-    [sales_by] NVARCHAR(50) NULL,
     [customer_level] INT NULL,
     [evaluation_score] DECIMAL(5,2) NULL,
     [sort_order] INT NULL,
@@ -738,7 +737,7 @@ BEGIN
     [order_date] DATETIME NOT NULL,
     [required_delivery_date] DATETIME NULL,
     [actual_delivery_date] DATETIME NULL,
-    [sales_by] NVARCHAR(50) NULL,
+    [sales_group] NVARCHAR(3) NULL,
     [total_quantity] DECIMAL(18,4) NULL,
     [total_amount] DECIMAL(18,2) NULL,
     [discount_amount] DECIMAL(18,2) NULL,
@@ -823,7 +822,7 @@ BEGIN
     [header_text] NVARCHAR(25) NULL,
     [transaction_code] NVARCHAR(4) NULL,
     [delivery_code] NVARCHAR(10) NULL,
-    [posted_by] NVARCHAR(12) NULL,
+    [posted_by] NVARCHAR(6) NULL,
     [is_deleted] INT NOT NULL CONSTRAINT [df_sap_material_document_is_deleted] DEFAULT (0),
     [created_at] DATETIME NULL
   );
@@ -969,7 +968,7 @@ BEGIN
     [document_type] NVARCHAR(2) NULL,
     [document_date] DATETIME NOT NULL,
     [posting_date] DATETIME NOT NULL,
-    [posted_by] NVARCHAR(12) NULL,
+    [posted_by] NVARCHAR(6) NULL,
     [transaction_code] NVARCHAR(20) NULL,
     [transaction_event_type] NVARCHAR(2) NULL,
     [reference_code] NVARCHAR(16) NULL,
@@ -993,7 +992,6 @@ BEGIN
     [tax_exchange_rate] DECIMAL(9,5) NULL,
     [payment_method] NVARCHAR(1) NULL,
     [baseline_date] DATETIME NULL,
-    [entered_by] NVARCHAR(12) NULL,
     [branch_account] NVARCHAR(10) NULL,
     [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_invoice_is_deleted] DEFAULT (0),
     [created_at] DATETIME NULL
@@ -1092,7 +1090,7 @@ BEGIN
     [customer_tax_class1] NVARCHAR(1) NULL,
     [net_amount] DECIMAL(15,2) NOT NULL,
     [combination_criteria] NVARCHAR(40) NULL,
-    [posted_by] NVARCHAR(12) NULL,
+    [posted_by] NVARCHAR(6) NULL,
     [payer_code] NVARCHAR(10) NULL,
     [customer_code] NVARCHAR(10) NOT NULL,
     [dunning_area] NVARCHAR(2) NULL,
@@ -1188,7 +1186,6 @@ BEGIN
     [sales_office] NVARCHAR(4) NULL,
     [division_for_order] NVARCHAR(2) NULL,
     [debit_credit_indicator] NVARCHAR(1) NULL,
-    [posted_by] NVARCHAR(12) NULL,
     [valuation_type] NVARCHAR(10) NULL,
     [warehouse_code] NVARCHAR(4) NULL,
     [cost_amount] DECIMAL(13,2) NULL,
@@ -1375,6 +1372,36 @@ IF COL_LENGTH(N'dbo.takt_logistics_procurement_supplier', N'tax_code') IS NULL
 GO
 IF COL_LENGTH(N'dbo.takt_logistics_sales_customer', N'tax_code') IS NULL
   ALTER TABLE [dbo].[takt_logistics_sales_customer] ADD [tax_code] NVARCHAR(4) NULL;
+GO
+
+-- posted_by：旧暂存表缺列时补齐（物料凭证主 / 采购发票主 / 销售发票主）
+IF COL_LENGTH(N'dbo.takt_logistics_materials_material_document', N'posted_by') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_materials_material_document] ADD [posted_by] NVARCHAR(6) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_invoice', N'posted_by') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_invoice] ADD [posted_by] NVARCHAR(6) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_sales_invoice', N'posted_by') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_invoice] ADD [posted_by] NVARCHAR(6) NULL;
+GO
+
+-- sales_by / sales_employee_* → sales_group（对齐 TaktSalesOrder.SalesGroup）
+IF COL_LENGTH(N'dbo.takt_logistics_sales_order', N'sales_group') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_order] ADD [sales_group] NVARCHAR(3) NULL;
+GO
+IF OBJECT_ID(N'dbo.takt_logistics_sales_order', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_order', N'sales_by') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_order', N'sales_group') IS NOT NULL
+  UPDATE [dbo].[takt_logistics_sales_order]
+  SET [sales_group] = LEFT(LTRIM(RTRIM([sales_by])), 3)
+  WHERE [sales_group] IS NULL AND NULLIF(LTRIM(RTRIM([sales_by])), N'') IS NOT NULL;
+GO
+IF OBJECT_ID(N'dbo.takt_logistics_sales_order', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_order', N'sales_employee_name') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_order', N'sales_group') IS NOT NULL
+  UPDATE [dbo].[takt_logistics_sales_order]
+  SET [sales_group] = LEFT(LTRIM(RTRIM([sales_employee_name])), 3)
+  WHERE [sales_group] IS NULL AND NULLIF(LTRIM(RTRIM([sales_employee_name])), N'') IS NOT NULL;
 GO
 
 -- default_culture 不是实体列；有值则迁到 culture_code 再删

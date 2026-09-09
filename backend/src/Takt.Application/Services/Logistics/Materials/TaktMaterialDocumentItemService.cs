@@ -103,8 +103,10 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
     /// <summary>
     /// 获取物料凭证行项目选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetMaterialDocumentItemOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetMaterialDocumentItemOptionsAsync(string? plantCode = null, string? keyword = null)
     {
         EnsureThreeLayerContext();
         var list = await _materialDocumentItemRepository.GetListAsync(
@@ -385,9 +387,9 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
         {
             entity.MaterialDocumentCode = master.MaterialDocumentCode;
         }
-        if (string.IsNullOrEmpty(entity.PostedByEmployeeName))
+        if (string.IsNullOrEmpty(entity.PostedBy))
         {
-            entity.PostedByEmployeeName = master.PostedByEmployeeName;
+            entity.PostedBy = master.PostedBy;
         }
     }
     // ========================================
@@ -469,7 +471,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
                 || (x.ManufacturerPartMaterialCode != null && x.ManufacturerPartMaterialCode.Contains(keywords))
                 || (x.MkpfReferenceCode != null && x.MkpfReferenceCode.Contains(keywords))
                 || (x.ImDeliveryCode != null && x.ImDeliveryCode.Contains(keywords))
-                || (x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(keywords))
+                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
             );
@@ -889,10 +891,10 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
             exp = exp.And(x => x.ImDeliveryItem == imDeliveryItem);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.PostedByEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
         {
-            var postedBy = queryDto.PostedByEmployeeName;
-            exp = exp.And(x => x.PostedByEmployeeName != null && x.PostedByEmployeeName.Contains(postedBy));
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
@@ -1213,7 +1215,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.PostedByEmployeeName))
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
         {
             return true;
         }

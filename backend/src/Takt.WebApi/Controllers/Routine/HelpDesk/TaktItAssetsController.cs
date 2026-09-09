@@ -86,11 +86,11 @@ public class TaktItAssetsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:help:desk:it:asset:query", "IT设备保修扩展选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetItAssetOptionsAsync()
+    public async Task<IActionResult> GetItAssetOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _itAssetService.GetItAssetOptionsAsync();
+            var result = await _itAssetService.GetItAssetOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

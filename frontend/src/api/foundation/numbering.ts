@@ -158,11 +158,20 @@ export function previewNumberingNext(ruleCode: string): Promise<NumberingPreview
  * @param documentType 单据类型（TaktMenu.MenuName）；有值时仅返回该类型规则
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getNumberingOptions(documentType?: string): Promise<TaktSelectOption[]> {
+export function getNumberingOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${NUMBERING_API_BASE}/options`,
     method: 'get',
-    params: documentType?.trim() ? { documentType: documentType.trim() } : undefined,
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

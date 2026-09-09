@@ -160,7 +160,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -251,6 +251,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import MenuForm from './components/menu-form.vue'
 import AssignMenuRoles from './components/assign-menu-roles.vue'
 import { getMenuTree, getMenuById, createMenu, updateMenu, updateMenuStatus, deleteMenuById, getMenuTemplate, importMenu, exportMenu } from '@/api/identity/menu'
@@ -294,6 +295,8 @@ const formTitle = ref('')
 const formData = ref<Partial<Menu>>({})
 const formLoading = ref(false)
 const formRef = ref()
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 const advancedQueryVisible = ref(false)
 /** 高级查询（字段与 MenuQuery 一致） */
 type MenuAdvancedQueryForm = Pick<MenuQuery, 'menuName' | 'menuCode' | 'menuType' | 'menuStatus'>

@@ -83,7 +83,7 @@
     <TaktModal
       v-model:open="formVisible"
       :title="formTitle"
-      width="50%"
+      :width="formModalWidthPx"
       wrap-class-name="takt-form-modal-resizable"
       :confirm-loading="formLoading"
       @ok="handleFormSubmit"
@@ -400,6 +400,7 @@ import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
+import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import TalentStaffingRequirementForm from './components/talent-staffing-requirement-form.vue'
 import { getTalentStaffingRequirementList, getTalentStaffingRequirementById, createTalentStaffingRequirement, updateTalentStaffingRequirement, deleteTalentStaffingRequirementById, deleteTalentStaffingRequirementBatch, getTalentStaffingRequirementTemplate, importTalentStaffingRequirement, exportTalentStaffingRequirement } from '@/api/human-resource/talent/talent-staffing-requirement'
 import type { TalentStaffingRequirement, TalentStaffingRequirementQuery, TalentStaffingRequirementCreate, TalentStaffingRequirementUpdate } from '@/types/human-resource/talent/talent-staffing-requirement'
@@ -437,6 +438,8 @@ const selectedRowKeys = ref<(string | number)[]>([])
 
 /** 新增/编辑弹窗是否打开 */
 const formVisible = ref(false)
+/** 表单弹窗宽度：（视口 − 左侧菜单）× 80% */
+const formModalWidthPx = useTaktContentModalWidth()
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */

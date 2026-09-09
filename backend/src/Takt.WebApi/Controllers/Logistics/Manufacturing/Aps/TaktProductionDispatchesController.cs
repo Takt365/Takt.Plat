@@ -86,11 +86,11 @@ public class TaktProductionDispatchesController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:aps:production:dispatch:query", "生产派工单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionDispatchOptionsAsync()
+    public async Task<IActionResult> GetProductionDispatchOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _productionDispatchService.GetProductionDispatchOptionsAsync();
+            var result = await _productionDispatchService.GetProductionDispatchOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

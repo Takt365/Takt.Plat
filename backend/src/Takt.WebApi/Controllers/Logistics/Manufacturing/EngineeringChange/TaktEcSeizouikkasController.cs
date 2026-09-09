@@ -111,11 +111,11 @@ public class TaktEcSeizouikkasController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:query", "设变制一执行选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcSeizouikkaOptionsAsync()
+    public async Task<IActionResult> GetEcSeizouikkaOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecSeizouikkaService.GetEcSeizouikkaOptionsAsync();
+            var result = await _ecSeizouikkaService.GetEcSeizouikkaOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -198,6 +198,26 @@ public class TaktEcSeizouikkasController : TaktControllerBase
         {
             await _ecSeizouikkaService.DeleteEcSeizouikkaBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变制造一课执行停产状态
+    /// </summary>
+    /// <param name="dto">停产状态 DTO</param>
+    /// <returns>设变制造一课执行DTO</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:seizouikka:update", "更新设变制造一课执行停产状态")]
+    [HttpPut("discontinued-status")]
+    public async Task<IActionResult> UpdateEcSeizouikkaDiscontinuedStatusAsync([FromBody] TaktEcSeizouikkaDiscontinuedStatusDto dto)
+    {
+        try
+        {
+            var result = await _ecSeizouikkaService.UpdateEcSeizouikkaDiscontinuedStatusAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

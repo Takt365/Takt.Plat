@@ -82,7 +82,7 @@ export interface EcLegacyProduct extends CompanyDtoBase {
   ecNewMaterialCode?: string;
 
   /**
-   * 生管旧品处理（TaktEcSeikan.OldProductHandling）
+   * 生管旧品处理（TaktEcSeikan.EcOldPartDisposition；字典 logistics_manufacturing_ec_old_part_disposition）
    */
   oldProductHandling?: string;
 
@@ -134,7 +134,7 @@ export interface EcLegacyProductUpdate {
   ecDetailId: string;
 
   /**
-   * 生管旧品处理（TaktEcSeikan.OldProductHandling）
+   * 生管旧品处理（TaktEcSeikan.EcOldPartDisposition；字典 logistics_manufacturing_ec_old_part_disposition）
    */
   oldProductHandling?: string;
 

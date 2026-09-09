@@ -130,10 +130,20 @@ export function updateConfigurableFieldSort(dto: ConfigurableFieldSort): Promise
  * 获取定制报表输出字段选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getConfigurableFieldOptions(): Promise<TaktSelectOption[]> {
+export function getConfigurableFieldOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${CONFIGURABLE_FIELD_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

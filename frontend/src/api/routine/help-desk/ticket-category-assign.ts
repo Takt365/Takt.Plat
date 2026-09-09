@@ -130,10 +130,20 @@ export function updateTicketCategoryAssignSort(dto: TicketCategoryAssignSort): P
  * 获取工单分类默认处理人选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTicketCategoryAssignOptions(): Promise<TaktSelectOption[]> {
+export function getTicketCategoryAssignOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TICKET_CATEGORY_ASSIGN_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemI18nSeedData.cs
-// 创建时间：2026-08-28
+// 创建时间：2026-09-08
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -162,6 +162,24 @@ public class TaktPurchaseOrderItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseorderitem.materialspecification
             new TranslationSeedItem("entity.purchaseorderitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
+            // entity.purchaseorderitem.purchaseinforecordcode
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseinforecordcode", "en-US", "采购信息记录编码_us", "采购信息记录编码"),
+            // entity.purchaseorderitem.purchaseinforecordcode
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseinforecordcode", "ja-JP", "采购信息记录编码_jp", "采购信息记录编码"),
+            // entity.purchaseorderitem.purchaseinforecordcode
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseinforecordcode", "zh-CN", "采购信息记录编码", "采购信息记录编码"),
+            // entity.purchaseorderitem.purchaseinforecordcode
+            new TranslationSeedItem("entity.purchaseorderitem.purchaseinforecordcode", "zh-HK", "采购信息记录编码_hk", "采购信息记录编码"),
+
+            // entity.purchaseorderitem.suppliermaterialcode
+            new TranslationSeedItem("entity.purchaseorderitem.suppliermaterialcode", "en-US", "供应商物料编码_us", "供应商物料编码"),
+            // entity.purchaseorderitem.suppliermaterialcode
+            new TranslationSeedItem("entity.purchaseorderitem.suppliermaterialcode", "ja-JP", "供应商物料编码_jp", "供应商物料编码"),
+            // entity.purchaseorderitem.suppliermaterialcode
+            new TranslationSeedItem("entity.purchaseorderitem.suppliermaterialcode", "zh-CN", "供应商物料编码", "供应商物料编码"),
+            // entity.purchaseorderitem.suppliermaterialcode
+            new TranslationSeedItem("entity.purchaseorderitem.suppliermaterialcode", "zh-HK", "供应商物料编码_hk", "供应商物料编码"),
+
             // entity.purchaseorderitem.purchaseunit
             new TranslationSeedItem("entity.purchaseorderitem.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_materials_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseorderitem.purchaseunit
@@ -225,6 +243,15 @@ public class TaktPurchaseOrderItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseorderitem.discountamount
             new TranslationSeedItem("entity.purchaseorderitem.discountamount", "zh-HK", "折扣金额_hk", "折扣金额（精确到分，存储为整数，单位为分）"),
 
+            // entity.purchaseorderitem.taxcode
+            new TranslationSeedItem("entity.purchaseorderitem.taxcode", "en-US", "税码_us", "税码（冗余：按 PurchaseOrderId 取 TaktPurchaseOrder.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.purchaseorderitem.taxcode
+            new TranslationSeedItem("entity.purchaseorderitem.taxcode", "ja-JP", "税码_jp", "税码（冗余：按 PurchaseOrderId 取 TaktPurchaseOrder.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.purchaseorderitem.taxcode
+            new TranslationSeedItem("entity.purchaseorderitem.taxcode", "zh-CN", "税码", "税码（冗余：按 PurchaseOrderId 取 TaktPurchaseOrder.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.purchaseorderitem.taxcode
+            new TranslationSeedItem("entity.purchaseorderitem.taxcode", "zh-HK", "税码_hk", "税码（冗余：按 PurchaseOrderId 取 TaktPurchaseOrder.TaxCode 联动；字典 accounting_financial_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+
             // entity.purchaseorderitem.taxincludedamount
             new TranslationSeedItem("entity.purchaseorderitem.taxincludedamount", "en-US", "含税金额_us", "含税金额"),
             // entity.purchaseorderitem.taxincludedamount
@@ -260,6 +287,69 @@ public class TaktPurchaseOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorderitem.purchaseamount", "zh-CN", "采购金额", "采购金额"),
             // entity.purchaseorderitem.purchaseamount
             new TranslationSeedItem("entity.purchaseorderitem.purchaseamount", "zh-HK", "采购金额_hk", "采购金额"),
+
+            // entity.purchaseorderitem.pricingdate
+            new TranslationSeedItem("entity.purchaseorderitem.pricingdate", "en-US", "价格日期_us", "价格日期"),
+            // entity.purchaseorderitem.pricingdate
+            new TranslationSeedItem("entity.purchaseorderitem.pricingdate", "ja-JP", "价格日期_jp", "价格日期"),
+            // entity.purchaseorderitem.pricingdate
+            new TranslationSeedItem("entity.purchaseorderitem.pricingdate", "zh-CN", "价格日期", "价格日期"),
+            // entity.purchaseorderitem.pricingdate
+            new TranslationSeedItem("entity.purchaseorderitem.pricingdate", "zh-HK", "价格日期_hk", "价格日期"),
+
+            // entity.purchaseorderitem.grossweight
+            new TranslationSeedItem("entity.purchaseorderitem.grossweight", "en-US", "毛重_us", "毛重"),
+            // entity.purchaseorderitem.grossweight
+            new TranslationSeedItem("entity.purchaseorderitem.grossweight", "ja-JP", "毛重_jp", "毛重"),
+            // entity.purchaseorderitem.grossweight
+            new TranslationSeedItem("entity.purchaseorderitem.grossweight", "zh-CN", "毛重", "毛重"),
+            // entity.purchaseorderitem.grossweight
+            new TranslationSeedItem("entity.purchaseorderitem.grossweight", "zh-HK", "毛重_hk", "毛重"),
+
+            // entity.purchaseorderitem.netweight
+            new TranslationSeedItem("entity.purchaseorderitem.netweight", "en-US", "净重_us", "净重"),
+            // entity.purchaseorderitem.netweight
+            new TranslationSeedItem("entity.purchaseorderitem.netweight", "ja-JP", "净重_jp", "净重"),
+            // entity.purchaseorderitem.netweight
+            new TranslationSeedItem("entity.purchaseorderitem.netweight", "zh-CN", "净重", "净重"),
+            // entity.purchaseorderitem.netweight
+            new TranslationSeedItem("entity.purchaseorderitem.netweight", "zh-HK", "净重_hk", "净重"),
+
+            // entity.purchaseorderitem.weightunit
+            new TranslationSeedItem("entity.purchaseorderitem.weightunit", "en-US", "重量单位_us", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）"),
+            // entity.purchaseorderitem.weightunit
+            new TranslationSeedItem("entity.purchaseorderitem.weightunit", "ja-JP", "重量单位_jp", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）"),
+            // entity.purchaseorderitem.weightunit
+            new TranslationSeedItem("entity.purchaseorderitem.weightunit", "zh-CN", "重量单位", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）"),
+            // entity.purchaseorderitem.weightunit
+            new TranslationSeedItem("entity.purchaseorderitem.weightunit", "zh-HK", "重量单位_hk", "重量单位（字典 logistics_materials_unit_of_measure_code；DictValue=KG/G/T 等）"),
+
+            // entity.purchaseorderitem.volume
+            new TranslationSeedItem("entity.purchaseorderitem.volume", "en-US", "体积_us", "体积"),
+            // entity.purchaseorderitem.volume
+            new TranslationSeedItem("entity.purchaseorderitem.volume", "ja-JP", "体积_jp", "体积"),
+            // entity.purchaseorderitem.volume
+            new TranslationSeedItem("entity.purchaseorderitem.volume", "zh-CN", "体积", "体积"),
+            // entity.purchaseorderitem.volume
+            new TranslationSeedItem("entity.purchaseorderitem.volume", "zh-HK", "体积_hk", "体积"),
+
+            // entity.purchaseorderitem.volumeunit
+            new TranslationSeedItem("entity.purchaseorderitem.volumeunit", "en-US", "体积单位_us", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）"),
+            // entity.purchaseorderitem.volumeunit
+            new TranslationSeedItem("entity.purchaseorderitem.volumeunit", "ja-JP", "体积单位_jp", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）"),
+            // entity.purchaseorderitem.volumeunit
+            new TranslationSeedItem("entity.purchaseorderitem.volumeunit", "zh-CN", "体积单位", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）"),
+            // entity.purchaseorderitem.volumeunit
+            new TranslationSeedItem("entity.purchaseorderitem.volumeunit", "zh-HK", "体积单位_hk", "体积单位（字典 logistics_materials_unit_of_measure_code；DictValue=M3/L/ML 等）"),
+
+            // entity.purchaseorderitem.profitcentercode
+            new TranslationSeedItem("entity.purchaseorderitem.profitcentercode", "en-US", "利润中心_us", "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）"),
+            // entity.purchaseorderitem.profitcentercode
+            new TranslationSeedItem("entity.purchaseorderitem.profitcentercode", "ja-JP", "利润中心_jp", "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）"),
+            // entity.purchaseorderitem.profitcentercode
+            new TranslationSeedItem("entity.purchaseorderitem.profitcentercode", "zh-CN", "利润中心", "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）"),
+            // entity.purchaseorderitem.profitcentercode
+            new TranslationSeedItem("entity.purchaseorderitem.profitcentercode", "zh-HK", "利润中心_hk", "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）"),
 
             // entity.purchaseorderitem.deliverystatus
             new TranslationSeedItem("entity.purchaseorderitem.deliverystatus", "en-US", "行交货状态_us", "行交货状态（字典 logistics_sales_delivery_status；0=未交货，1=部分交货，2=全部交货）"),

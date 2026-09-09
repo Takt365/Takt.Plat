@@ -116,10 +116,20 @@ export function deleteManufacturerMaterialBatch(ids: string[]): Promise<void> {
  * 获取制造商物料选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getManufacturerMaterialOptions(): Promise<TaktSelectOption[]> {
+export function getManufacturerMaterialOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MANUFACTURER_MATERIAL_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

@@ -47,7 +47,7 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     /// 设变主表 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 设变单号
     /// </summary>
@@ -89,9 +89,9 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     /// </summary>
     public string? Content { get; set; }
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；来自明细，用于判断 EOL）
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；来自明细，用于判断 EOL）
     /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
     /// 录入日期
     /// </summary>
@@ -117,7 +117,7 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     /// </summary>
     public string? Balance { get; set; }
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（生管/采购执行行存字典 logistics_manufacturing_ec_old_part_disposition；视图字段名兼容）
     /// </summary>
     public string? OldProductHandling { get; set; }
     /// <summary>
@@ -286,7 +286,7 @@ public class TaktEcDeptViewUpdateDto
     /// </summary>
     public string? Balance { get; set; }
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（生管/采购执行行存字典 logistics_manufacturing_ec_old_part_disposition；视图字段名兼容）
     /// </summary>
     public string? OldProductHandling { get; set; }
     /// <summary>
@@ -435,7 +435,7 @@ public class TaktEcDeptViewTemplateDto
     /// </summary>
     public string? Balance { get; set; }
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（生管/采购执行行存字典 logistics_manufacturing_ec_old_part_disposition；视图字段名兼容）
     /// </summary>
     public string? OldProductHandling { get; set; }
     /// <summary>
@@ -567,7 +567,7 @@ public class TaktEcKanbanDto : TaktCompanyDtoBase
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcId { get; set; }
+    public long EcGijutsuId { get; set; }
     /// <summary>
     /// 设变单号
     /// </summary>
@@ -984,13 +984,13 @@ public class TaktEcLegacyProductDto : TaktCompanyDtoBase
     /// </summary>
     public string? EcNewMaterialCode { get; set; }
     /// <summary>
-    /// 生管旧品处理（TaktEcSeikan.OldProductHandling；自由文本，≠ 明细字典 EcOldPartDisposition）
+    /// 生管旧品处理（TaktEcSeikan.EcOldPartDisposition；字典 logistics_manufacturing_ec_old_part_disposition；与明细 EcOldPartDisposition 同字典，存执行行）
     /// </summary>
     public string? OldProductHandling { get; set; }
     /// <summary>
     /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public string DiscontinuedStatus { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -1035,13 +1035,13 @@ public class TaktEcLegacyProductUpdateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
     /// <summary>
-    /// 生管旧品处理（TaktEcSeikan.OldProductHandling；自由文本，≠ 明细字典 EcOldPartDisposition）
+    /// 生管旧品处理（TaktEcSeikan.EcOldPartDisposition；字典 logistics_manufacturing_ec_old_part_disposition；与明细 EcOldPartDisposition 同字典，存执行行）
     /// </summary>
     public string? OldProductHandling { get; set; }
     /// <summary>
     /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    public string DiscontinuedStatus { get; set; } = "Z0";
+    public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
     /// 备注
     /// </summary>

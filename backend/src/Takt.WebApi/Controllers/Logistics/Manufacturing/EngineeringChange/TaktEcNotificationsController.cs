@@ -86,11 +86,11 @@ public class TaktEcNotificationsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:engineering:change:notification:query", "工程变更通知单选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetEcNotificationOptionsAsync()
+    public async Task<IActionResult> GetEcNotificationOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _ecNotificationService.GetEcNotificationOptionsAsync();
+            var result = await _ecNotificationService.GetEcNotificationOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

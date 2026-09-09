@@ -9,20 +9,22 @@
 
 <template>
   <div class="p-4">
-    <!-- 查询栏：工厂 + 核算月 + 可选机种 -->
-    <div class="mb-3 flex flex-wrap items-end gap-3">
-      <a-form layout="inline" class="flex flex-wrap items-end gap-2">
-        <a-form-item :label="t(`${localePrefix}.plantCode`)" required>
+    <!-- 查询栏：工厂 + 核算月 + 可选机种（左侧固定标签，与成本差异推移一致） -->
+    <div class="takt-query-bar">
+      <div class="min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.plantCode`) }}</span>
           <TaktSelect
             v-model:value="queryForm.plantCode"
             :api-url="plantOptionsUrl"
-            :placeholder="t(`${localePrefix}.selectPlantRequired`)"
+            :placeholder="t('common.page.form.placeholder.selectonly')"
             allow-clear
             show-search
             class="min-w-[160px]"
           />
-        </a-form-item>
-        <a-form-item :label="t(`${localePrefix}.costingMonth`)" required>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.costingMonth`) }}</span>
           <a-date-picker
             v-model:value="queryForm.costingMonth"
             picker="month"
@@ -31,8 +33,9 @@
             :disabled-date="isCostingPeriodMonthDisabled"
             :placeholder="t(`${localePrefix}.costingMonthPlaceholder`)"
           />
-        </a-form-item>
-        <a-form-item :label="t(`${localePrefix}.modelCode`)">
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.modelCode`) }}</span>
           <TaktSelect
             :key="`model-${modelSelectKey}-${queryForm.plantCode}-${queryForm.costingMonth}`"
             v-model="queryForm.modelCodes"
@@ -45,18 +48,22 @@
             class="min-w-[220px]"
             :placeholder="t(`${localePrefix}.modelCodesOptional`)"
           />
-        </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-button type="primary" :loading="loading" @click="handleSearch">
-              {{ t('common.page.button.query') }}
-            </a-button>
-            <a-button :disabled="loading" @click="handleReset">
-              {{ t('common.page.button.reset') }}
-            </a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
+        </div>
+      </div>
+      <a-space class="shrink-0">
+        <a-button class="takt-button-query" :loading="loading" @click="handleSearch">
+          <template #icon>
+            <RiSearchLine class="takt-remix-icon" />
+          </template>
+          {{ t('common.page.button.query') }}
+        </a-button>
+        <a-button class="takt-button-reset" :disabled="loading" @click="handleReset">
+          <template #icon>
+            <RiRefreshLine class="takt-remix-icon" />
+          </template>
+          {{ t('common.page.button.reset') }}
+        </a-button>
+      </a-space>
     </div>
 
     <!-- 工具栏：计算操作 + 导出/列设置/刷新 -->
@@ -284,7 +291,7 @@ import {
   formatBomMaterialCostItemRecalculateDuration,
   useBomMaterialCostItemRecalculateSignalR,
 } from '@/composables/use-bom-material-cost-item-recalculate-signalr'
-import { RiCalculatorLine, RiCoinLine, RiEditLine, RiFlagLine, RiFundsLine, RiPriceTag3Line, RiRefreshLine, RiShoppingCart2Line } from '@remixicon/vue'
+import { RiCalculatorLine, RiCoinLine, RiEditLine, RiFlagLine, RiFundsLine, RiPriceTag3Line, RiRefreshLine, RiSearchLine, RiShoppingCart2Line } from '@remixicon/vue'
 import {
   buildDefaultCostingMonth,
   costingMonthToDateQuery,
@@ -1256,3 +1263,15 @@ watch(total, async () => {
   syncHintFontSize()
 })
 </script>
+
+<style scoped>
+.takt-query-bar {
+  margin: 4px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+</style>

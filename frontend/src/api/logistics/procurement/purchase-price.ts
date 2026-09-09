@@ -116,10 +116,20 @@ export function deletePurchasePriceBatch(ids: string[]): Promise<void> {
  * 获取采购价格选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getPurchasePriceOptions(): Promise<TaktSelectOption[]> {
+export function getPurchasePriceOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PURCHASE_PRICE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

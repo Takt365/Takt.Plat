@@ -14,11 +14,11 @@
   <div class="dict-data-form">
     <a-form
       ref="formRef"
+      class="takt-generated-form"
       :model="formState"
       :rules="formRulesComputed"
-      :label-col="{ span: 4 }"
-      :wrapper-col="{ span: 20 }"
       layout="horizontal"
+      label-align="right"
     >
       <!-- 表单字段顺序与 DictData 接口字段顺序一致 -->
       <a-form-item
@@ -133,18 +133,6 @@
       </a-form-item>
 
       <a-form-item
-        :label="t('entity.dictdata.sortorder')"
-        name="sortOrder"
-      >
-        <a-input-number
-          v-model:value="formState.sortOrder"
-          :min="0"
-          :placeholder="t('common.page.form.placeholder.input', { field: t('entity.dictdata.sortorder') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-
-      <a-form-item
         :label="t('common.page.entity.remark')"
         name="remark"
       >
@@ -214,7 +202,6 @@ const formState = reactive<DictDataFormState>({
   cssClass: 0,
   listClass: 0,
   isDefault: 0,
-  sortOrder: 0,
   remark: ''
 })
 
@@ -253,7 +240,6 @@ watch(
         isDefault: newData.isDefault ?? 0,
         extLabel: newData.extLabel || '',
         extValue: newData.extValue || '',
-        sortOrder: newData.sortOrder ?? 0,
         remark: newData.remark || ''
       })
     } else {
@@ -271,7 +257,6 @@ watch(
         isDefault: 0,
         extLabel: '',
         extValue: '',
-        sortOrder: 0,
         remark: ''
       })
     }
@@ -314,7 +299,6 @@ const getFormData = (): DictDataCreate | DictDataUpdate => {
     isDefault: formState.isDefault,
     extLabel: formState.extLabel || undefined,
     extValue: formState.extValue || undefined,
-    sortOrder: formState.sortOrder,
     remark: formState.remark || undefined
   }
   if (formState.dictDataId) {

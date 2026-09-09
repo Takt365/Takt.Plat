@@ -83,14 +83,16 @@ public class TaktProductionTeamsController : TaktControllerBase
     /// <summary>
     /// 获取生产班组选项列表
     /// </summary>
+    /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
+    /// <param name="teamCategory">班组分类（字典 logistics_manufacturing_team_category；有值时精确匹配，如 A=组立 P=PCBA）</param>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:manufacturing:mps:production:team:query", "生产班组选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetProductionTeamOptionsAsync()
+    public async Task<IActionResult> GetProductionTeamOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null, [FromQuery] string? teamCategory = null)
     {
         try
         {
-            var result = await _productionTeamService.GetProductionTeamOptionsAsync();
+            var result = await _productionTeamService.GetProductionTeamOptionsAsync(plantCode, keyword, teamCategory);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

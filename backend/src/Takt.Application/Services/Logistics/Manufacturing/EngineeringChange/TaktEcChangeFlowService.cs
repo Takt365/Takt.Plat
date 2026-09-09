@@ -94,7 +94,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
                 DeliveryId = delivery.Id,
                 EcNotificationId = notification.Id,
                 EcNotificationCode = notification.EcNotificationCode,
-                EcId = notification.EcId,
+                EcGijutsuId = notification.EcGijutsuId,
                 EcCode = notification.EcCode,
                 EcTitle = notification.EcTitle,
                 DeptCode = deptCode,
@@ -318,7 +318,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         {
             EcNotificationId = notification.Id,
             EcNotificationCode = notification.EcNotificationCode,
-            EcId = notification.EcId,
+            EcGijutsuId = notification.EcGijutsuId,
             EcCode = notification.EcCode,
             DeptCode = deptCode,
             DeptName = deptName,
@@ -397,16 +397,16 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         {
             return;
         }
-        var ec = await _ecEngRepository.GetByIdAsync(notification.EcId);
+        var ec = await _ecEngRepository.GetByIdAsync(notification.EcGijutsuId);
         var ecExec = await _ecExecDeptAccess.FirstBaseByEcCodeAndDeptAsync(notification.EcCode, deptCode);
         var dueDate = ec?.EcEntryDate ?? ec?.EcIssueDate ?? DateTime.Now.AddDays(7);
         var task = new TaktEcExecutionTask
         {
             EcNotificationId = notification.Id,
-            EcId = notification.EcId,
+            EcGijutsuId = notification.EcGijutsuId,
             EcCode = notification.EcCode,
             EcExecId = ecExec?.Id,
-            EcnDetailId = ecExec?.EcnDetailId,
+            EcDetailId = ecExec?.EcDetailId,
             DeptCode = deptCode,
             TaskTitle = $"设变实施-{notification.EcCode}-{deptCode}",
             TaskStatus = TaktEcFlowConstants.TaskStatusPending,
@@ -436,7 +436,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             return;
         }
         var notification = await LoadNotificationAsync(ecNotificationId);
-        var ec = await _ecEngRepository.GetByIdAsync(notification.EcId);
+        var ec = await _ecEngRepository.GetByIdAsync(notification.EcGijutsuId);
         if (ec != null && ec.ChangeStatus != 5)
         {
             ec.ChangeStatus = 5;
@@ -445,7 +445,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         var closedPush = new TaktEcChangeClosedPush
         {
             CompanyCode = CurrentCompanyCode,
-            EcId = notification.EcId,
+            EcGijutsuId = notification.EcGijutsuId,
             EcCode = notification.EcCode,
             EcNotificationId = notification.Id,
             ClosedAt = DateTime.Now

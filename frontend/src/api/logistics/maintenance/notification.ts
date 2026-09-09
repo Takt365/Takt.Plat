@@ -130,10 +130,20 @@ export function updateMaintenanceNotificationStatus(dto: MaintenanceNotification
  * 获取维护通知单选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getMaintenanceNotificationOptions(): Promise<TaktSelectOption[]> {
+export function getMaintenanceNotificationOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${MAINTENANCE_NOTIFICATION_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

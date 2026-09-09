@@ -86,11 +86,11 @@ public class TaktDeltaLogsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("statistics:logging:delta:log:query", "差异日志选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetDeltaLogOptionsAsync()
+    public async Task<IActionResult> GetDeltaLogOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _deltaLogService.GetDeltaLogOptionsAsync();
+            var result = await _deltaLogService.GetDeltaLogOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

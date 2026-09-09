@@ -116,10 +116,20 @@ export function deleteStandardWageRateBatch(ids: string[]): Promise<void> {
  * 获取标准工资率选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getStandardWageRateOptions(): Promise<TaktSelectOption[]> {
+export function getStandardWageRateOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${STANDARD_WAGE_RATE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

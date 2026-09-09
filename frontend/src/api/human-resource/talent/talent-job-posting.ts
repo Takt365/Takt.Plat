@@ -130,10 +130,20 @@ export function updateTalentJobPostingStatus(dto: TalentJobPostingStatus): Promi
  * 获取职位发布选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getTalentJobPostingOptions(): Promise<TaktSelectOption[]> {
+export function getTalentJobPostingOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${TALENT_JOB_POSTING_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

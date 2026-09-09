@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceDtos.cs
-// 创建时间：2026-08-22
+// 创建时间：2026-09-04
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -221,9 +221,9 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）
@@ -459,9 +459,9 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -702,9 +702,9 @@ public class TaktSalesInvoiceCreateDto
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -987,9 +987,9 @@ public class TaktSalesInvoiceTemplateDto
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -1219,9 +1219,9 @@ public class TaktSalesInvoiceImportDto
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售发票明细列表（主子表关系）（子表，级联保存）
@@ -1457,9 +1457,9 @@ public class TaktSalesInvoiceExportDto
     public string? ReversalReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// 过账人（当前登录用户对应的 EmployeeCode）
     /// </summary>
-    public string? PostedByEmployeeName { get; set; } = string.Empty;
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

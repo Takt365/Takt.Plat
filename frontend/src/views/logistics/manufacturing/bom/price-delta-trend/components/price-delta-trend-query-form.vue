@@ -2,66 +2,119 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/price-delta-trend/components -->
 <!-- 文件名称：price-delta-trend-query-form.vue -->
-<!-- 功能描述：查询栏：工厂→期间→物料类型(默认FERT)→机种→产品（机种/产品联动） -->
+<!-- 功能描述：查询栏：工厂→期间→基准月/比较月→差异选项→物料类型(默认FERT)→机种→产品（机种/产品联动） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="takt-query-bar price-delta-trend-query-bar">
-    <div class="price-delta-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
-      <TaktSelect
-        v-model:value="plantCode"
-        :api-url="plantOptionsUrl"
-        class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--plant"
-        allow-clear
-        show-search
-        :placeholder="t('common.page.entity.plantcode')"
-        @change="handlePlantChange"
-      />
-      <a-range-picker
-        v-model:value="periodRange"
-        picker="month"
-        format="YYYY-MM"
-        value-format="YYYY-MM"
-        :disabled-date="isCostingPeriodMonthDisabled"
-        class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--period"
-        :placeholder="[t(`${localePrefix}.periodRange`), t(`${localePrefix}.periodRange`)]"
-        @change="handlePeriodChange"
-      />
-      <TaktSelect
-        v-model:value="materialType"
-        :options="materialTypeOptions"
-        class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--type"
-        :allow-clear="false"
-        show-search
-        :disabled="!canSelectType || materialTypeOptionsLoading"
-        :placeholder="t('entity.bommaterialcost.materialtype')"
-        @change="handleMaterialTypeChange"
-      />
-      <TaktSelect
-        :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
-        v-model:value="modelCode"
-        :api-url="modelOptionsUrl"
-        :api-params="modelApiParams"
-        class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--model"
-        allow-clear
-        show-search
-        :disabled="!canSelectModel"
-        :placeholder="t(`${localePrefix}.modelCodeOptional`)"
-        @change="handleModelChange"
-      />
-      <TaktSelect
-        :key="`product-${productSelectKey}-${materialType || ''}-${modelCode || ''}-${periodKey}`"
-        v-model:value="productCode"
-        :api-url="productOptionsUrl"
-        :api-params="productApiParams"
-        class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--product"
-        allow-clear
-        show-search
-        :disabled="!canSelectProduct"
-        :placeholder="t(`${localePrefix}.productCodeOptional`)"
-      />
+    <div class="price-delta-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-x-3 gap-y-2">
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('common.page.entity.plantcode') }}</span>
+        <TaktSelect
+          v-model:value="plantCode"
+          :api-url="plantOptionsUrl"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--plant"
+          allow-clear
+          show-search
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handlePlantChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.periodRange`) }}</span>
+        <a-range-picker
+          v-model:value="periodRange"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          :disabled-date="isCostingPeriodMonthDisabled"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--period"
+          :placeholder="[t(`${localePrefix}.periodRange`), t(`${localePrefix}.periodRange`)]"
+          @change="handlePeriodChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.basePeriod`) }}</span>
+        <a-date-picker
+          v-model:value="basePeriod"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          :allow-clear="false"
+          :disabled="!hasPeriod"
+          :disabled-date="isDeltaMonthDisabled"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--delta-month"
+          :placeholder="t(`${localePrefix}.basePeriod`)"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.comparePeriod`) }}</span>
+        <a-date-picker
+          v-model:value="comparePeriod"
+          picker="month"
+          format="YYYY-MM"
+          value-format="YYYY-MM"
+          :allow-clear="false"
+          :disabled="!hasPeriod"
+          :disabled-date="isDeltaMonthDisabled"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--delta-month"
+          :placeholder="t(`${localePrefix}.comparePeriod`)"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.priceDeltaOption`) }}</span>
+        <TaktSelect
+          v-model="priceDeltaOption"
+          :options="priceDeltaOptionItems"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--delta-option"
+          :allow-clear="false"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t('entity.bommaterialcost.materialtype') }}</span>
+        <TaktSelect
+          v-model:value="materialType"
+          :options="materialTypeOptions"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--type"
+          :allow-clear="false"
+          show-search
+          :disabled="!canSelectType || materialTypeOptionsLoading"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handleMaterialTypeChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.modelCodeOptional`) }}</span>
+        <TaktSelect
+          :key="`model-${modelSelectKey}-${materialType || ''}-${periodKey}`"
+          v-model:value="modelCode"
+          :api-url="modelOptionsUrl"
+          :api-params="modelApiParams"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--model"
+          allow-clear
+          show-search
+          :disabled="!canSelectModel"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+          @change="handleModelChange"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ t(`${localePrefix}.productCodeOptional`) }}</span>
+        <TaktSelect
+          :key="`product-${productSelectKey}-${materialType || ''}-${modelCode || ''}-${periodKey}`"
+          v-model:value="productCode"
+          :api-url="productOptionsUrl"
+          :api-params="productApiParams"
+          class="price-delta-trend-query-bar__control price-delta-trend-query-bar__control--product"
+          allow-clear
+          show-search
+          :disabled="!canSelectProduct"
+          :placeholder="t('common.page.form.placeholder.selectonly')"
+        />
+      </div>
     </div>
     <a-space class="query-actions">
       <a-button
@@ -91,8 +144,9 @@
 <script setup lang="ts">
 /**
  * 成本差异推移查询栏：
- * 工厂 + 期间 + 物料类型(默认 FERT) + 机种(可选) + 产品(可选且随机种联动)
- * → 后端按同一口径算 0价格组 / 价格差异组
+ * 工厂 + 期间 + 基准月 + 比较月 + 差异选项(默认全部) + 物料类型(默认 FERT) + 机种(可选) + 产品(可选且随机种联动)
+ * → 后端按基准月/比较月算差异与 0价格组 / 价格差异组（两月须在期间列内，可不相邻）
+ * → 差异选项：全部=不过滤；>=1/>=5/>=10/>=50/>=100=仅保留 |基准月−比较月|≥该值的产品行（分页总数变化）。阈值选项四语同一符号，不翻译
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
@@ -103,7 +157,7 @@ import {
 } from '@/api/logistics/manufacturing/bom/cost-option'
 import type { TaktSelectOption } from '@/types/common'
 import { buildBomCostOptionParams, hasBomCostOptionPeriod } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-cost-option-params'
-import { isCostingPeriodMonthDisabled } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
+import { isCostingPeriodMonthDisabled, isPriceDeltaMonthDisabled, buildDefaultPriceDeltaMonths, isCostingMonthInRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import {
   loadBomMaterialTypeOptionsWithDefault,
   pickDefaultBomMaterialType,
@@ -117,8 +171,14 @@ const materialType = defineModel<string | undefined>('materialType')
 const modelCode = defineModel<string | undefined>('modelCode')
 /** 产品（可选；随机种联动） */
 const productCode = defineModel<string | undefined>('productCode')
-/** 核算期间（必选） */
+/** 核算期间（必选，仅控制月份列） */
 const periodRange = defineModel<[string, string] | null>('periodRange')
+/** 基准月（关注月；默认前月） */
+const basePeriod = defineModel<string | undefined>('basePeriod')
+/** 比较月（基期；默认基准月减一月） */
+const comparePeriod = defineModel<string | undefined>('comparePeriod')
+/** 差异选项：all / gt1 / gt5 / gt10 / gt50 / gt100，默认全部；界面阈值为 >=N；按 |差异| 过滤产品行 */
+const priceDeltaOption = defineModel<string>('priceDeltaOption', { default: 'all' })
 
 const props = defineProps<{
   /** 查询 loading */
@@ -131,6 +191,15 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const localePrefix = 'logistics.manufacturing.bom.price-delta-trend.page'
+/** 差异选项：全部 + >=1 / >=5 / >=10 / >=50 / >=100（阈值文案四语同一符号，不翻译） */
+const priceDeltaOptionItems = computed<TaktSelectOption[]>(() => [
+  { dictLabel: t(`${localePrefix}.priceDeltaOptionAll`), dictValue: 'all' },
+  { dictLabel: '>=1', dictValue: 'gt1' },
+  { dictLabel: '>=5', dictValue: 'gt5' },
+  { dictLabel: '>=10', dictValue: 'gt10' },
+  { dictLabel: '>=50', dictValue: 'gt50' },
+  { dictLabel: '>=100', dictValue: 'gt100' },
+])
 /** 机种下拉刷新键 */
 const modelSelectKey = ref(0)
 /** 产品下拉刷新键 */
@@ -154,6 +223,29 @@ const periodKey = computed(
 
 /** 期间是否可解析 */
 const hasPeriod = computed(() => hasBomCostOptionPeriod(periodRange.value))
+
+/**
+ * 基准月/比较月只能选核算期间列内的月份
+ * @param current 月选择器当前格
+ * @returns {boolean} true=禁用
+ */
+function isDeltaMonthDisabled(
+  current: { year: () => number; month: () => number } | null | undefined,
+): boolean {
+  return isPriceDeltaMonthDisabled(current, periodRange.value)
+}
+
+/** 期间变更后把越界的基准月/比较月收回期间列 */
+function clampDeltaMonthsToPeriod() {
+  const next = buildDefaultPriceDeltaMonths(periodRange.value)
+  if (!isCostingMonthInRange(basePeriod.value, periodRange.value)) {
+    basePeriod.value = next.basePeriod
+  }
+  if (!isCostingMonthInRange(comparePeriod.value, periodRange.value)) {
+    comparePeriod.value = next.comparePeriod
+  }
+}
+
 /** 类型：工厂 + 期间 */
 const canSelectType = computed(() => !!plantCode.value?.trim() && hasPeriod.value)
 /** 机种：工厂 + 期间 + 类型；机种可空 */
@@ -234,6 +326,7 @@ function handlePlantChange() {
 
 /** 期间变更：重拉类型并清空机种/产品 */
 async function handlePeriodChange() {
+  clampDeltaMonthsToPeriod()
   modelCode.value = undefined
   productCode.value = undefined
   const p = plantCode.value?.trim()
@@ -323,6 +416,16 @@ watch(materialType, async (type) => {
 .price-delta-trend-query-bar__control--period {
   width: 16rem;
   min-width: 14rem;
+}
+
+.price-delta-trend-query-bar__control--delta-month {
+  width: 8.5rem;
+  min-width: 7.5rem;
+}
+
+.price-delta-trend-query-bar__control--delta-option {
+  width: 8.5rem;
+  min-width: 7.5rem;
 }
 
 .price-delta-trend-query-bar__control--type {

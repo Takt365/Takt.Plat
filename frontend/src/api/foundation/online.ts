@@ -108,10 +108,20 @@ export function updateOnlineStatus(dto: OnlineStatus): Promise<Online> {
  * 获取在线用户选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getOnlineOptions(): Promise<TaktSelectOption[]> {
+export function getOnlineOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${ONLINE_API_BASE}/options`,
     method: 'get',
+    params: {
+      
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

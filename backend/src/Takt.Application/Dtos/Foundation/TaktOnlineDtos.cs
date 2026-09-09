@@ -814,7 +814,7 @@ public class TaktOnlineStatisticsDto
 }
 
 /// <summary>
-/// 在线看板统计 DTO（公司维度：在线人数、当日总访问量、当前会话）
+/// 在线看板统计 DTO（公司维度：在线人数、当日总访问量）
 /// </summary>
 public class TaktOnlineDashboardStatisticsDto
 {
@@ -827,11 +827,6 @@ public class TaktOnlineDashboardStatisticsDto
     /// 当日总访问量（TaktVisitLog 当日 VisitCount 之和，与在线时长无关）
     /// </summary>
     public int TodayVisitCount { get; set; }
-
-    /// <summary>
-    /// 当前活跃会话数（与在线用户数一致：每用户一行在线记录）
-    /// </summary>
-    public int ActiveSessionCount { get; set; }
 }
 
 // ========================================

@@ -128,12 +128,23 @@ export function updateProductionOrderStatus(dto: ProductionOrderStatus): Promise
 
 /**
  * 获取生产工单选项列表
+ * @param plantCode 工厂代码（可选，精确匹配）
+ * @param keyword 搜索关键字（工单号/物料号，可选）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getProductionOrderOptions(): Promise<TaktSelectOption[]> {
+export function getProductionOrderOptions(
+  plantCode?: string,
+  keyword?: string
+): Promise<TaktSelectOption[]> {
+  const plant = plantCode?.trim()
+  const kw = keyword?.trim()
   return request<TaktSelectOption[]>({
     url: `${PRODUCTION_ORDER_API_BASE}/options`,
     method: 'get',
+    params: {
+      ...(plant ? { plantCode: plant } : {}),
+      ...(kw ? { keyword: kw } : {}),
+    },
   });
 }
 

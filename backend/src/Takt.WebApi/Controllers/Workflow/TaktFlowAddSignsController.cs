@@ -86,11 +86,11 @@ public class TaktFlowAddSignsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("workflow:todo:query", "流程加签记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetFlowAddSignOptionsAsync()
+    public async Task<IActionResult> GetFlowAddSignOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _flowAddSignService.GetFlowAddSignOptionsAsync();
+            var result = await _flowAddSignService.GetFlowAddSignOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

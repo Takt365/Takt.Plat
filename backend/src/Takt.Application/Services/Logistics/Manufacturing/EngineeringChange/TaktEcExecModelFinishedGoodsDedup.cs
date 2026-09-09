@@ -54,7 +54,7 @@ internal static class TaktEcExecModelFinishedGoodsDedup
     {
         return x => SqlFunc.Subqueryable<TaktEcDetail>()
             .Where(d =>
-                d.Id == x.EcnDetailId
+                d.Id == x.EcDetailId
                 && !SqlFunc.Subqueryable<TaktEcDetail>()
                     .Where(s =>
                         s.TenantCode == d.TenantCode

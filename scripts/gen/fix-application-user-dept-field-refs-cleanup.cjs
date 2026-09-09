@@ -15,7 +15,6 @@ const CLEANUPS = [
   ['AcceptedByEmployeeNameEmployeeName', 'AcceptedByEmployeeName'],
   ['AccountManagerEmployeeNameEmployeeName', 'AccountManagerEmployeeName'],
   ['ReportedByEmployeeNameEmployeeName', 'ReportedByEmployeeName'],
-  ['EnteredByEmployeeNameEmployeeName', 'EnteredByEmployeeName'],
   ['ServiceEmployeeNameEmployeeName', 'ServiceEmployeeName'],
   ['CompanyManagerUserNameUserName', 'CompanyManagerUserName'],
   ['PlantManagerUserNameUserName', 'PlantManagerUserName'],

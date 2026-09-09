@@ -86,11 +86,11 @@ public class TaktNewsReadsController : TaktControllerBase
     /// <returns>下拉选项</returns>
     [TaktPermission("routine:news:center:read:query", "新闻中心阅读记录选项")]
     [HttpGet("options")]
-    public async Task<IActionResult> GetNewsReadOptionsAsync()
+    public async Task<IActionResult> GetNewsReadOptionsAsync([FromQuery] string? plantCode = null, [FromQuery] string? keyword = null)
     {
         try
         {
-            var result = await _newsReadService.GetNewsReadOptionsAsync();
+            var result = await _newsReadService.GetNewsReadOptionsAsync(plantCode, keyword);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
