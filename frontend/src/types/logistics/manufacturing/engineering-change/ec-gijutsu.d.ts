@@ -18,7 +18,7 @@ import type { EcAttachment, EcAttachmentCreate } from './ec-attachment';
 import type { EcDetail, EcDetailCreate } from './ec-detail';
 
 /**
- * 设变技术课（ECN）主表实体，记录设变单号、工厂、发行/录入日期、标题、详情、负责人、设变状态等；联络等文档见附件表 Attachments。
+ * 设变技术课（ECN）主表实体，记录设变单号、工厂、发行/录入日期、标题、详情、设变担当、设变状态等；联络等文档见附件表 Attachments。
  * 对应前端 TaktEcGijutsuDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EcGijutsu
@@ -52,7 +52,7 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecContent: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -62,9 +62,9 @@ export interface EcGijutsu extends CompanyDtoBase {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 录入日期
@@ -154,7 +154,7 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecContent?: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -164,9 +164,9 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 录入日期（范围查询-开始）
@@ -261,7 +261,7 @@ export interface EcGijutsuCreate {
   ecContent: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -271,9 +271,9 @@ export interface EcGijutsuCreate {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 录入日期
@@ -404,7 +404,7 @@ export interface EcGijutsuTemplate {
   ecContent?: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -414,9 +414,9 @@ export interface EcGijutsuTemplate {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 录入日期
@@ -506,7 +506,7 @@ export interface EcGijutsuImport {
   ecContent?: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader?: string;
 
@@ -516,9 +516,9 @@ export interface EcGijutsuImport {
   ecLossAmount?: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 录入日期
@@ -600,7 +600,7 @@ export interface EcGijutsuExport {
   ecContent: string;
 
   /**
-   * 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+   * 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
    */
   ecLeader: string;
 
@@ -610,9 +610,9 @@ export interface EcGijutsuExport {
   ecLossAmount: number;
 
   /**
-   * 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+   * 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 录入日期

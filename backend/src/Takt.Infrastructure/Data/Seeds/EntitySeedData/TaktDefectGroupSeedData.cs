@@ -32,17 +32,17 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 不良类别：Assy
     /// </summary>
-    private const int DefectCategoryAssy = 0;
+    private const int DefectGroupCategoryAssy = 0;
 
     /// <summary>
     /// 不良类别：Inspection
     /// </summary>
-    private const int DefectCategoryInspection = 1;
+    private const int DefectGroupCategoryInspection = 1;
 
     /// <summary>
     /// 不良类别：Repair
     /// </summary>
-    private const int DefectCategoryRepair = 2;
+    private const int DefectGroupCategoryRepair = 2;
 
     /// <summary>
     /// 执行顺序（质量组种子之后）
@@ -128,7 +128,7 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 标准不良组目录（PlantCode + DefectCategory + DefectGroupCode 唯一；每类别各 01/02）
+    /// 标准不良组目录（PlantCode + DefectGroupCategory + DefectGroupCode 唯一；每类别各 01/02）
     /// </summary>
     /// <param name="plantCode">工厂编码</param>
     /// <returns>不良组种子项列表</returns>
@@ -138,14 +138,14 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
         return
         [
             // Assy
-            new DefectGroupSeedItem(plantCode, DefectCategoryAssy, $"{codePrefix}01", "张三", null, 1),
-            new DefectGroupSeedItem(plantCode, DefectCategoryAssy, $"{codePrefix}02", "李四", null, 2),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryAssy, $"{codePrefix}01", "张三", null, 1),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryAssy, $"{codePrefix}02", "李四", null, 2),
             // Inspection
-            new DefectGroupSeedItem(plantCode, DefectCategoryInspection, $"{codePrefix}01", "张三", null, 1),
-            new DefectGroupSeedItem(plantCode, DefectCategoryInspection, $"{codePrefix}02", "李四", null, 2),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryInspection, $"{codePrefix}01", "张三", null, 1),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryInspection, $"{codePrefix}02", "李四", null, 2),
             // Repair
-            new DefectGroupSeedItem(plantCode, DefectCategoryRepair, $"{codePrefix}01", "张三", null, 1),
-            new DefectGroupSeedItem(plantCode, DefectCategoryRepair, $"{codePrefix}02", "李四", null, 2),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryRepair, $"{codePrefix}01", "张三", null, 1),
+            new DefectGroupSeedItem(plantCode, DefectGroupCategoryRepair, $"{codePrefix}02", "李四", null, 2),
         ];
     }
 
@@ -168,7 +168,7 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
             g.TenantCode == tenantCode
             && g.CompanyCode == companyCode
             && g.PlantCode == seed.PlantCode
-            && g.DefectCategory == seed.DefectCategory
+            && g.DefectGroupCategory == seed.DefectGroupCategory
             && g.DefectGroupCode == seed.DefectGroupCode);
         if (group == null)
         {
@@ -177,7 +177,7 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 PlantCode = seed.PlantCode,
-                DefectCategory = seed.DefectCategory,
+                DefectGroupCategory = seed.DefectGroupCategory,
                 DefectGroupCode = seed.DefectGroupCode,
                 DefectGroupName = seed.DefectGroupName,
                 DefectGroupDescription = seed.DefectGroupDescription,
@@ -227,14 +227,14 @@ public class TaktDefectGroupSeedData : ITaktSeedDataCoordinator
     /// 不良组种子项
     /// </summary>
     /// <param name="PlantCode">工厂编码</param>
-    /// <param name="DefectCategory">不良类别</param>
+    /// <param name="DefectGroupCategory">不良组类别</param>
     /// <param name="DefectGroupCode">不良组编码</param>
     /// <param name="DefectGroupName">不良组名称</param>
     /// <param name="DefectGroupDescription">不良组描述</param>
     /// <param name="SortOrder">排序号</param>
     private sealed record DefectGroupSeedItem(
         string PlantCode,
-        int DefectCategory,
+        int DefectGroupCategory,
         string DefectGroupCode,
         string DefectGroupName,
         string? DefectGroupDescription,

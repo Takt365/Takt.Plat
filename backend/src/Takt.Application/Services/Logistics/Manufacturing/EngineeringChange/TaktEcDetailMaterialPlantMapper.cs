@@ -4,7 +4,7 @@
 // 文件名称：TaktEcDetailMaterialPlantMapper.cs
 // 创建时间：2026-07-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：按工厂物料 TaktMaterialPlant、型号目的地 TaktModelDestination 补全设变明细机种/完成品与上阶描述/库存/仓库/采购/检验及停产状态（新旧物料描述取自源，不回填）
+// 功能描述：按工厂物料 TaktMaterialPlant、型号目的地 TaktModelDestination 补全设变明细机种/根物料编码与上阶描述/库存/仓库/采购/检验及停产状态（新旧物料描述取自源，不回填）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,7 +21,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public static class TaktEcDetailMaterialPlantMapper
 {
     /// <summary>
-    /// 按完成品物料编码从型号目的地列表构建「物料编码 → 机种编码」查找表（同物料取 SortOrder 最小的一条）
+    /// 按根物料编码从型号目的地列表构建「物料编码 → 机种编码」查找表（同物料取 SortOrder 最小的一条）
     /// </summary>
     /// <param name="destinations">型号目的地列表</param>
     /// <returns>物料编码 → 机种编码（忽略大小写）</returns>
@@ -45,23 +45,23 @@ public static class TaktEcDetailMaterialPlantMapper
     /// </summary>
     /// <param name="dto">设变明细创建 DTO</param>
     /// <param name="materialsByCode">物料编码 → 工厂物料（当前工厂）</param>
-    /// <param name="modelCodeByFinishedGoods">完成品物料编码 → 机种编码（TaktModelDestination）；为空时不改 EcModelCode</param>
+    /// <param name="modelCodeByRootMaterial">根物料编码 → 机种编码（TaktModelDestination）；为空时不改 EcModelCode</param>
     public static void EnrichCreateDto(
         TaktEcDetailCreateDto dto,
         IReadOnlyDictionary<string, TaktMaterialPlant> materialsByCode,
-        IReadOnlyDictionary<string, string>? modelCodeByFinishedGoods = null)
+        IReadOnlyDictionary<string, string>? modelCodeByRootMaterial = null)
     {
         ArgumentNullException.ThrowIfNull(dto);
         ArgumentNullException.ThrowIfNull(materialsByCode);
-        if (modelCodeByFinishedGoods != null
-            && TryGetModelCode(modelCodeByFinishedGoods, dto.EcFinishedGoods, out var modelCode))
+        if (modelCodeByRootMaterial != null
+            && TryGetModelCode(modelCodeByRootMaterial, dto.EcRootMaterialCode, out var modelCode))
         {
             dto.EcModelCode = modelCode;
         }
-        if (TryGetMaterial(materialsByCode, dto.EcFinishedGoods, out var finishedGoods))
+        if (TryGetMaterial(materialsByCode, dto.EcRootMaterialCode, out var rootMaterial))
         {
-            dto.EcFinishedGoodsDescription = ResolveMaterialText(finishedGoods);
-            dto.DiscontinuedStatus = ResolveDiscontinuedStatus(finishedGoods);
+            dto.EcRootMaterialDescription = ResolveMaterialText(rootMaterial);
+            dto.DiscontinuedStatus = ResolveDiscontinuedStatus(rootMaterial);
         }
         if (TryGetMaterial(materialsByCode, dto.EcParentMaterialCode, out var parentMaterial))
         {
@@ -84,7 +84,7 @@ public static class TaktEcDetailMaterialPlantMapper
     }
 
     /// <summary>
-    /// 收集来源明细行涉及的物料编码（完成品、上阶、旧料、新料）
+    /// 收集来源明细行涉及的物料编码（根物料编码、上阶、旧料、新料）
     /// </summary>
     /// <param name="materialCode">单个物料编码</param>
     /// <param name="codes">收集目标</param>
@@ -116,7 +116,7 @@ public static class TaktEcDetailMaterialPlantMapper
     /// <summary>
     /// 停产状态：直接取工厂物料 DiscontinuedStatus，空则 Z0
     /// </summary>
-    /// <param name="material">完成品工厂物料</param>
+    /// <param name="material">根物料编码工厂物料</param>
     /// <returns>字典 DictValue（如 Z0/01）</returns>
     private static string ResolveDiscontinuedStatus(TaktMaterialPlant material)
     {
@@ -182,23 +182,23 @@ public static class TaktEcDetailMaterialPlantMapper
     }
 
     /// <summary>
-    /// 按完成品物料编码查找机种编码
+    /// 按根物料编码查找机种编码
     /// </summary>
-    /// <param name="modelCodeByFinishedGoods">完成品 → 机种</param>
-    /// <param name="finishedGoods">完成品物料编码</param>
+    /// <param name="modelCodeByRootMaterial">根物料编码 → 机种</param>
+    /// <param name="rootMaterial">根物料编码</param>
     /// <param name="modelCode">机种编码</param>
     /// <returns>是否找到</returns>
     private static bool TryGetModelCode(
-        IReadOnlyDictionary<string, string> modelCodeByFinishedGoods,
-        string? finishedGoods,
+        IReadOnlyDictionary<string, string> modelCodeByRootMaterial,
+        string? rootMaterial,
         out string modelCode)
     {
         modelCode = string.Empty;
-        if (string.IsNullOrWhiteSpace(finishedGoods))
+        if (string.IsNullOrWhiteSpace(rootMaterial))
         {
             return false;
         }
-        if (!modelCodeByFinishedGoods.TryGetValue(finishedGoods.Trim(), out var found)
+        if (!modelCodeByRootMaterial.TryGetValue(rootMaterial.Trim(), out var found)
             || string.IsNullOrWhiteSpace(found))
         {
             return false;

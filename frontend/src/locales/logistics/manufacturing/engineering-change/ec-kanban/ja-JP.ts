@@ -14,7 +14,6 @@ export default {
   page: {
     filter: {
       implementationStatus: '実施状態',
-      onlyNotOfficiallyCompleted: '正式未完了のみ',
     },
     column: {
       detailCount: '明細数',
@@ -27,9 +26,6 @@ export default {
       inProgress: '実施中',
       officiallyCompleted: '正式完了',
       fullyCompleted: '全完了',
-    },
-    hint: {
-      officialCompletion: '品質管理課が全明細を実施完了した時点で設変は正式完了',
     },
   },
 };

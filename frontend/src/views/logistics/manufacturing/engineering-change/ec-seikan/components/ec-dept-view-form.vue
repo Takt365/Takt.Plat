@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-seikan/components -->
 <!-- 文件名称：ec-dept-view-form.vue -->
-<!-- 功能描述：设变生管部门表单；defineExpose validate/getValues/resetFields；停产状态只读，执行内容可清空以消除 EOL 自动填充 -->
+<!-- 功能描述：设变生管部门表单；冗余字段 disabled；IsImplemented/ExecContent/课别填报可编辑；defineExpose validate/getValues/resetFields -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,10 +12,14 @@
     ref="formRef"
     class="takt-generated-form"
     :model="formState"
+    :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <a-row :gutter="24">
+    <a-tabs v-model:active-key="activeTab">
+      <a-tab-pane key="tab-0" :tab="pi.t('common.page.form.tabs.basicinfo') + ' (1/2)'" force-render>
+        <a-row :gutter="24">
+      <a-col :span="12"><a-form-item :label="pi.label('ecSeikanId')"><a-input v-model:value="formState.ecSeikanId" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('tenantCode')"><a-input v-model:value="formState.tenantCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('companyCode')"><a-input v-model:value="formState.companyCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="pi.label('cultureCode')"><a-input v-model:value="formState.cultureCode" disabled /></a-form-item></a-col>
@@ -28,35 +32,71 @@
         </a-form-item>
       </a-col>
       <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecRootMaterialCode')"><a-input v-model:value="formState.ecRootMaterialCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecRootMaterialDescription')"><a-input v-model:value="formState.ecRootMaterialDescription" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item name="isImplemented" :label="pi.label('isImplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item name="scheduledDate" :label="pi.label('scheduledDate')"><a-date-picker v-model:value="formState.scheduledDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item name="scheduledBatch" :label="pi.label('scheduledBatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
       <a-col :span="24">
-        <a-form-item :label="pi.label('execContent')">
+        <a-form-item name="execContent" :label="pi.label('execContent')">
           <a-textarea v-model:value="formState.execContent" :rows="3" :placeholder="pi.t('common.page.form.placeholder.input')" />
         </a-form-item>
       </a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('scheduledProductionDate')"><a-date-picker v-model:value="formState.scheduledProductionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('scheduledBatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('poRemainder')"><a-input v-model:value="formState.poRemainder" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="pi.label('balance')"><a-input v-model:value="formState.balance" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item name="poRemainder" :label="pi.label('poRemainder')"><a-input v-model:value="formState.poRemainder" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item name="balance" :label="pi.label('balance')"><a-input v-model:value="formState.balance" /></a-form-item></a-col>
       <a-col :span="12">
         <a-form-item :label="pi.label('ecOldPartDisposition')">
-          <TaktSelect v-model:value="formState.ecOldPartDisposition" dict-type="logistics_manufacturing_ec_old_part_disposition" />
+          <TaktDictTag
+            v-if="formState.ecOldPartDisposition != null && String(formState.ecOldPartDisposition).trim() !== ''"
+            dict-type="logistics_manufacturing_ec_old_part_disposition"
+            :value="formState.ecOldPartDisposition"
+          />
+          <span v-else class="text-text-secondary">—</span>
         </a-form-item>
       </a-col>
-    </a-row>
+      <a-col :span="24">
+        <a-form-item :label="pi.label('remark')">
+          <a-textarea v-model:value="formState.remark" :rows="2" />
+        </a-form-item>
+      </a-col>
+        </a-row>
+      </a-tab-pane>
+      <a-tab-pane key="tab-1" :tab="pi.t('common.page.form.tabs.basicinfo') + ' (2/2)'" force-render>
+        <a-row :gutter="24">
+      <a-col :span="12"><a-form-item :label="pi.label('deptCode')"><a-input v-model:value="formState.deptCode" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('deptName')"><a-input v-model:value="formState.deptName" disabled /></a-form-item></a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('ecScope')">
+          <TaktSelect v-model:value="formState.ecScope" dict-type="logistics_manufacturing_ec_scope_category" disabled />
+        </a-form-item>
+      </a-col>
+      <a-col :span="12"><a-form-item :label="pi.label('ecDetailId')"><a-input v-model:value="formState.ecDetailId" disabled /></a-form-item></a-col>
+      <a-col :span="12">
+        <a-form-item :label="pi.label('isObsolete')">
+          <TaktSelect v-model:value="formState.isObsolete" dict-type="sys_yes_no" disabled />
+        </a-form-item>
+      </a-col>
+        </a-row>
+      </a-tab-pane>
+    </a-tabs>
   </a-form>
 </template>
 
 <script setup lang="ts">
 import type { EcSeikan, EcSeikanUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-seikan'
 import { useEcDeptViewI18n } from '../../composables/use-ec-dept-view-i18n'
+import { useEcDeptViewFormRules } from '../../composables/use-ec-dept-view-form-rules'
 
 const props = defineProps<{ formData?: EcSeikan | null; loading?: boolean }>();
 const pi = useEcDeptViewI18n('ecseikan')
+const { rules } = useEcDeptViewFormRules('ecseikan', pi.label)
 /** 表单 ref */
 const formRef = ref();
+/** 当前 Tab */
+const activeTab = ref('tab-0');
 /** 表单状态 */
 const formState = reactive<{
+  ecSeikanId?: string;
   tenantCode?: string;
   companyCode?: string;
   cultureCode?: string;
@@ -64,18 +104,27 @@ const formState = reactive<{
   ecCode?: string;
   lineNumber?: number;
   ecModelCode?: string;
+  ecRootMaterialCode?: string;
+  ecRootMaterialDescription?: string;
   discontinuedStatus?: string;
   isImplemented: number;
   execContent?: string;
-  scheduledProductionDate?: string;
+  scheduledDate?: string;
   scheduledBatch?: string;
   poRemainder?: string;
   balance?: string;
   ecOldPartDisposition?: string;
+  ecDetailId?: string;
+  deptCode?: string;
+  deptName?: string;
+  ecScope?: number;
+  isObsolete: number;
+  remark?: string;
 }>({
-  isImplemented: 0,
+  isImplemented: 1,
   execContent: '',
   discontinuedStatus: 'Z0',
+  isObsolete: 0,
 });
 
 watch(() => props.formData, (val) => {
@@ -84,6 +133,7 @@ watch(() => props.formData, (val) => {
     return;
   }
   Object.assign(formState, {
+    ecSeikanId: val.ecSeikanId,
     tenantCode: val.tenantCode,
     companyCode: val.companyCode,
     cultureCode: val.cultureCode,
@@ -91,14 +141,24 @@ watch(() => props.formData, (val) => {
     ecCode: val.ecCode,
     lineNumber: val.lineNumber,
     ecModelCode: val.ecModelCode,
+    ecRootMaterialCode: val.ecRootMaterialCode,
+    ecRootMaterialDescription: val.ecRootMaterialDescription,
     discontinuedStatus: val.discontinuedStatus ?? 'Z0',
-    isImplemented: val.isImplemented ?? 0,
+    isImplemented: val.isImplemented ?? 1,
     execContent: val.execContent ?? '',
-    scheduledProductionDate: val.scheduledProductionDate,
+    scheduledDate: val.scheduledDate,
     scheduledBatch: val.scheduledBatch,
     poRemainder: val.poRemainder,
     balance: val.balance,
-    ecOldPartDisposition: val.ecOldPartDisposition,
+    ecOldPartDisposition: val.ecOldPartDisposition != null && String(val.ecOldPartDisposition).trim() !== ''
+      ? String(val.ecOldPartDisposition).trim()
+      : undefined,
+    ecDetailId: val.ecDetailId,
+    deptCode: val.deptCode,
+    deptName: val.deptName,
+    ecScope: val.ecScope,
+    isObsolete: val.isObsolete ?? 0,
+    remark: val.remark,
   });
 }, { immediate: true });
 
@@ -108,24 +168,18 @@ async function validate() {
 }
 
 /**
- * 获取提交 DTO（执行内容可清空以消除 EOL 自动填充）
+ * 获取提交 DTO（课别填报字段前端必填）
  * @returns {EcSeikanUpdate} 更新 DTO
  */
 function getValues(): EcSeikanUpdate {
-  return {
-    isImplemented: formState.isImplemented,
-    execContent: formState.execContent ?? '',
-    scheduledProductionDate: formState.scheduledProductionDate,
-    scheduledBatch: formState.scheduledBatch,
-    poRemainder: formState.poRemainder,
-    balance: formState.balance,
-    ecOldPartDisposition: formState.ecOldPartDisposition,
-  } as EcSeikanUpdate;
+  // 冗余字段（ecCode/deptCode/ecModelCode 等）界面只读但须随提交带回，否则后端 [Required]/Adapt 会当成空
+  return { ...formState } as EcSeikanUpdate;
 }
 
 /** 重置表单 */
 function resetFields() {
   Object.assign(formState, {
+    ecSeikanId: '',
     tenantCode: '',
     companyCode: '',
     cultureCode: '',
@@ -133,14 +187,22 @@ function resetFields() {
     ecCode: '',
     lineNumber: undefined,
     ecModelCode: '',
+    ecRootMaterialCode: '',
+    ecRootMaterialDescription: '',
     discontinuedStatus: 'Z0',
-    isImplemented: 0,
+    isImplemented: 1,
     execContent: '',
-    scheduledProductionDate: undefined,
+    scheduledDate: undefined,
     scheduledBatch: undefined,
     poRemainder: undefined,
     balance: undefined,
     ecOldPartDisposition: undefined,
+    ecDetailId: '',
+    deptCode: '',
+    deptName: '',
+    ecScope: undefined,
+    isObsolete: 0,
+    remark: undefined,
   });
 }
 

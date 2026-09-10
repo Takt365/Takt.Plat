@@ -116,7 +116,7 @@ internal sealed class TaktEcDeptExecPipeline<TEntity> : ITaktEcDeptExecPipeline
     public async Task<object> SaveAsync(object exec, bool isNew)
     {
         var entity = exec as TEntity ?? throw new ArgumentException("执行实体类型与部门链路不匹配", nameof(exec));
-        entity.ExecContent = TaktEcDistinctionConstants.NormalizeLegacyAutoExecContent(entity.ExecContent);
+        entity.ExecContent = TaktEcScopeConstants.NormalizeLegacyAutoExecContent(entity.ExecContent);
         if (isNew)
         {
             return await _repository.CreateAsync(entity);
@@ -211,7 +211,7 @@ internal static class TaktEcExecNotRelated
     /// </summary>
     public static void TryKoubai(TaktEcKoubai koubai, TaktEcDetail detail)
     {
-        if (TaktEcDistinctionConstants.IsExternalPurchaseType(detail.EcNewPurchaseType))
+        if (TaktEcScopeConstants.IsExternalPurchaseType(detail.EcNewPurchaseType))
         {
             return;
         }
@@ -242,7 +242,7 @@ internal static class TaktEcExecNotRelated
     /// </summary>
     public static void TryBukan(TaktEcBukan bukan, TaktEcDetail detail)
     {
-        if (TaktEcDistinctionConstants.IsBukanVisible(detail.EcNewPurchaseType, detail.EcNewWarehouse))
+        if (TaktEcScopeConstants.IsBukanVisible(detail.EcNewPurchaseType, detail.EcNewWarehouse))
         {
             return;
         }

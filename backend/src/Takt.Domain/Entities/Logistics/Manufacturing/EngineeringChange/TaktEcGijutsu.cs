@@ -61,9 +61,9 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_leader", ColumnDescription = "负责人", Length = 50, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_leader", ColumnDescription = "设变担当", Length = 80, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcLeader { get; set; } = string.Empty;
 
     /// <summary>
@@ -73,10 +73,10 @@ public class TaktEcGijutsu : TaktCompanyEntityBase
     public decimal EcLossAmount { get; set; } = 0;
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_distinction", ColumnDescription = "区分", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
-    public int EcDistinction { get; set; } = 4;
+    [SugarColumn(ColumnName = "ec_scope", ColumnDescription = "实施范围", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
+    public int EcScope { get; set; } = 4;
 
   /// <summary>
   /// 录入日期

@@ -410,7 +410,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             [TaktEcBatchStageCodes.Scheduled] = MapBatchStageCell(
                 TaktEcBatchStageCodes.Scheduled,
-                pmc?.ScheduledProductionDate,
+                pmc?.ScheduledDate,
                 pmc?.ScheduledBatch),
             [TaktEcBatchStageCodes.Outbound] = MapBatchStageCell(
                 TaktEcBatchStageCodes.Outbound,

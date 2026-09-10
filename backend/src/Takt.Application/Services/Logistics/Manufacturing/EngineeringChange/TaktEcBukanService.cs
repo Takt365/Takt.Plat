@@ -131,12 +131,12 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         var isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique = await _uniqueValidator.IsUniqueAsync(
             _ecBukanRepository,
             x => x.EcDetailId == entity.EcDetailId
-                && x.EcFinishedGoods == entity.EcFinishedGoods
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode
                 && x.EcNewMaterialCode == entity.EcNewMaterialCode
                 && x.EcNewWarehouse == entity.EcNewWarehouse);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique)
         {
-            throw new TaktBusinessException("设变部管执行的EcDetailId、EcFinishedGoods、EcNewMaterialCode、EcNewWarehouse已存在");
+            throw new TaktBusinessException("设变部管执行的EcDetailId、EcRootMaterialCode、EcNewMaterialCode、EcNewWarehouse已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -168,13 +168,13 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
         var isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique = await _uniqueValidator.IsUniqueAsync(
             _ecBukanRepository,
             x => x.EcDetailId == entity.EcDetailId
-                && x.EcFinishedGoods == entity.EcFinishedGoods
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode
                 && x.EcNewMaterialCode == entity.EcNewMaterialCode
                 && x.EcNewWarehouse == entity.EcNewWarehouse,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique)
         {
-            throw new TaktBusinessException("设变部管执行的EcDetailId、EcFinishedGoods、EcNewMaterialCode、EcNewWarehouse已存在");
+            throw new TaktBusinessException("设变部管执行的EcDetailId、EcRootMaterialCode、EcNewMaterialCode、EcNewWarehouse已存在");
         }
         await _ecBukanRepository.UpdateAsync(entity);
         await _ecExecPersistence.FanOutBukanFillableByEcModelAndNewMaterialAsync(entity);
@@ -246,7 +246,7 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
             throw new TaktBusinessException("设变部管执行不存在");
         }
         var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
-            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            ? TaktEcScopeConstants.PlannedMaterialStatus
             : dto.DiscontinuedStatus.Trim();
         await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
         return await GetEcBukanByIdAsync(dto.EcBukanId) ?? throw new TaktBusinessException("设变部管执行不存在");
@@ -310,20 +310,20 @@ public class TaktEcBukanService : TaktServiceBase, ITaktEcBukanService
             try
             {
                 var entity = rows[i].Adapt<TaktEcBukan>();
-                var importKey = $"{entity.EcDetailId}|{entity.EcFinishedGoods}|{entity.EcNewMaterialCode}|{entity.EcNewWarehouse}";
+                var importKey = $"{entity.EcDetailId}|{entity.EcRootMaterialCode}|{entity.EcNewMaterialCode}|{entity.EcNewWarehouse}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcFinishedGoods、EcNewMaterialCode、EcNewWarehouse）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcRootMaterialCode、EcNewMaterialCode、EcNewWarehouse）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecBukanRepository,
                     x => x.EcDetailId == entity.EcDetailId
-                        && x.EcFinishedGoods == entity.EcFinishedGoods
+                        && x.EcRootMaterialCode == entity.EcRootMaterialCode
                         && x.EcNewMaterialCode == entity.EcNewMaterialCode
                         && x.EcNewWarehouse == entity.EcNewWarehouse);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_bukan_unique)
                 {
-                    throw new TaktBusinessException("设变部管执行的EcDetailId、EcFinishedGoods、EcNewMaterialCode、EcNewWarehouse已存在");
+                    throw new TaktBusinessException("设变部管执行的EcDetailId、EcRootMaterialCode、EcNewMaterialCode、EcNewWarehouse已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {

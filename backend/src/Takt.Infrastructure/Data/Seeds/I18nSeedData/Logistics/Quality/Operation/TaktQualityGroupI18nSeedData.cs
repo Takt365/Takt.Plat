@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktQualityGroupI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktQualityGroupI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualitygroup._self
             new TranslationSeedItem("entity.qualitygroup._self", "zh-HK", "质量组主数据信息_hk", "实体名称"),
 
-            // entity.qualitygroup.inspectioncategory
-            new TranslationSeedItem("entity.qualitygroup.inspectioncategory", "en-US", "检查类别_us", "检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）"),
-            // entity.qualitygroup.inspectioncategory
-            new TranslationSeedItem("entity.qualitygroup.inspectioncategory", "ja-JP", "检查类别_jp", "检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）"),
-            // entity.qualitygroup.inspectioncategory
-            new TranslationSeedItem("entity.qualitygroup.inspectioncategory", "zh-CN", "检查类别", "检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）"),
-            // entity.qualitygroup.inspectioncategory
-            new TranslationSeedItem("entity.qualitygroup.inspectioncategory", "zh-HK", "检查类别_hk", "检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）"),
-
             // entity.qualitygroup.code
             new TranslationSeedItem("entity.qualitygroup.code", "en-US", "质量组编码_us", "质量组编码（3）"),
             // entity.qualitygroup.code
@@ -125,6 +116,15 @@ public class TaktQualityGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualitygroup.description", "zh-CN", "质量组描述", "质量组描述"),
             // entity.qualitygroup.description
             new TranslationSeedItem("entity.qualitygroup.description", "zh-HK", "质量组描述_hk", "质量组描述"),
+
+            // entity.qualitygroup.category
+            new TranslationSeedItem("entity.qualitygroup.category", "en-US", "质量组类别_us", "质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）"),
+            // entity.qualitygroup.category
+            new TranslationSeedItem("entity.qualitygroup.category", "ja-JP", "质量组类别_jp", "质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）"),
+            // entity.qualitygroup.category
+            new TranslationSeedItem("entity.qualitygroup.category", "zh-CN", "质量组类别", "质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）"),
+            // entity.qualitygroup.category
+            new TranslationSeedItem("entity.qualitygroup.category", "zh-HK", "质量组类别_hk", "质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）"),
 
             // entity.qualitygroup.contactphone
             new TranslationSeedItem("entity.qualitygroup.contactphone", "en-US", "联系电话_us", "联系电话"),

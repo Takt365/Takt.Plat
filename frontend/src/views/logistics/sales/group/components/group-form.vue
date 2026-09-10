@@ -96,6 +96,18 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('salesGroupCategory')"
+                name="salesGroupCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesGroupCategory"
+                  dict-type="logistics_sales_sales_group_category"
+                  :placeholder="pi.ph('salesGroupCategory')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('contactPhone')"
                 name="contactPhone"
               >
@@ -304,6 +316,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  salesGroupCategory: 1,
   isBuiltIn: 0,
   groupStatus: 1
 }
@@ -371,6 +384,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
+  salesGroupCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesGroupCategory'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesGroupCategory'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   isBuiltIn: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -408,6 +434,16 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('salesGroupCategory' in payload) {
+    const rawsalesGroupCategory = payload.salesGroupCategory
+    if (rawsalesGroupCategory === undefined || rawsalesGroupCategory === null || rawsalesGroupCategory === '') {
+      delete payload.salesGroupCategory
+    } else {
+      const numsalesGroupCategory = typeof rawsalesGroupCategory === 'number' ? rawsalesGroupCategory : Number(rawsalesGroupCategory)
+      if (Number.isFinite(numsalesGroupCategory)) payload.salesGroupCategory = numsalesGroupCategory
+      else delete payload.salesGroupCategory
+    }
+  }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
     if (rawisBuiltIn === undefined || rawisBuiltIn === null || rawisBuiltIn === '') {

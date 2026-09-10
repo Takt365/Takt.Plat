@@ -2,38 +2,37 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-kanban -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：设变实施跟踪看板：执行路径、当前卡点部门、品管课正式完成判定 -->
+<!-- 功能描述：设变实施跟踪看板：执行路径、当前卡点部门、实施状态筛选 -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="p-4">
-    <TaktQueryBar v-model="queryKeyword" :placeholder="t('common.page.form.placeholder.search')" :loading="loading" @search="handleSearch" @reset="handleReset" />
-    <div class="mb-3 flex flex-wrap items-center gap-3">
-      <a-select
-        v-model:value="filterCurrentDeptCode"
-        allow-clear
-        class="min-w-[140px]"
-        :placeholder="execI18n.label('deptCode')"
-        :options="deptFilterOptions"
-        @change="handleFilterChange"
-      />
-      <a-select
-        v-model:value="filterImplementationStatus"
-        allow-clear
-        class="min-w-[140px]"
-        :placeholder="t(`${localePrefix}.filter.implementationStatus`)"
-        :options="statusFilterOptions"
-        @change="handleFilterChange"
-      />
-      <a-checkbox v-model:checked="onlyNotOfficiallyCompleted" @change="handleFilterChange">
-        {{ t(`${localePrefix}.filter.onlyNotOfficiallyCompleted`) }}
-      </a-checkbox>
-      <a-typography-text type="secondary" class="text-xs">
-        {{ t(`${localePrefix}.hint.officialCompletion`) }}
-      </a-typography-text>
-    </div>
+    <TaktQueryBar
+      v-model="queryKeyword"
+      :placeholder="t('common.page.form.placeholder.search')"
+      :loading="loading"
+      @search="handleSearch"
+      @reset="handleReset"
+    >
+      <template #fields>
+        <a-select
+          v-model:value="filterCurrentDeptCode"
+          allow-clear
+          :placeholder="execI18n.label('deptCode')"
+          :options="deptFilterOptions"
+          @change="handleFilterChange"
+        />
+        <a-select
+          v-model:value="filterImplementationStatus"
+          allow-clear
+          :placeholder="t(`${localePrefix}.filter.implementationStatus`)"
+          :options="statusFilterOptions"
+          @change="handleFilterChange"
+        />
+      </template>
+    </TaktQueryBar>
     <TaktToolsBar
       :show-create="false"
       :show-update="false"
@@ -117,8 +116,6 @@ const queryKeyword = ref('');
 const filterCurrentDeptCode = ref<string | undefined>(undefined);
 /** 实施状态筛选 */
 const filterImplementationStatus = ref<number | undefined>(undefined);
-/** 仅未正式完成 */
-const onlyNotOfficiallyCompleted = ref(true);
 /** 选中行 keys */
 const selectedRowKeys = ref<(string | number)[]>([]);
 /** 选中行 */
@@ -224,7 +221,6 @@ function buildQueryParams() {
     keyWords: queryKeyword.value || undefined,
     currentDeptCode: filterCurrentDeptCode.value || undefined,
     implementationStatus: filterImplementationStatus.value,
-    onlyNotOfficiallyCompleted: onlyNotOfficiallyCompleted.value ? 1 : undefined,
   };
 }
 
@@ -251,7 +247,6 @@ function handleReset() {
   queryKeyword.value = '';
   filterCurrentDeptCode.value = undefined;
   filterImplementationStatus.value = undefined;
-  onlyNotOfficiallyCompleted.value = true;
   currentPage.value = 1;
   loadData();
 }

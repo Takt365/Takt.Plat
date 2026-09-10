@@ -57,6 +57,16 @@ public class TaktEcKoubaiDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
+    /// </summary>
+    public int EcScope { get; set; }
+
+    /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
     /// </summary>
     public string? EcNewMaterialCode { get; set; } = string.Empty;
@@ -310,6 +320,16 @@ public class TaktEcKoubaiCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
+    /// </summary>
+    public int EcScope { get; set; }
+
+    /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
     /// </summary>
     public string? EcNewMaterialCode { get; set; } = string.Empty;
@@ -424,14 +444,14 @@ public class TaktEcKoubaiDiscontinuedStatusDto
     public long EcKoubaiId { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+    /// 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
     /// </summary>
     [Required(ErrorMessage = "停产状态不能为空")]
     public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 }
 
 /// <summary>
@@ -737,6 +757,16 @@ public class TaktEcKoubaiExportDto
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
+
+    /// <summary>
+    /// 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// </summary>
+    public string DiscontinuedStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
+    /// </summary>
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）

@@ -164,8 +164,8 @@ function filterRows(rows: EcDetail[]): EcDetail[] {
     const bag = [
       row.ecCode,
       row.ecModelCode,
-      row.ecFinishedGoods,
-      row.ecFinishedGoodsDescription,
+      row.ecRootMaterialCode,
+      row.ecRootMaterialDescription,
       row.ecParentMaterialCode,
       row.ecNewMaterialCode,
       row.ecOldMaterialCode,

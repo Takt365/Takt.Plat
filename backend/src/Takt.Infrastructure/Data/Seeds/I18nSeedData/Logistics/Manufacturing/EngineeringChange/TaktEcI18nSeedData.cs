@@ -153,14 +153,14 @@ public class TaktEcI18nSeedData : ITaktSeedDataCoordinator
             // entity.ec.lossamount
             new TranslationSeedItem("entity.ec.lossamount", "zh-HK", "损失金额_hk", "损失金额"),
 
-            // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "en-US", "区分_us", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
-            // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
-            // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "zh-CN", "区分", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
-            // entity.ec.distinction
-            new TranslationSeedItem("entity.ec.distinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ec.scope
+            new TranslationSeedItem("entity.ec.scope", "en-US", "Scope", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ec.scope
+            new TranslationSeedItem("entity.ec.scope", "ja-JP", "実施範囲", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ec.scope
+            new TranslationSeedItem("entity.ec.scope", "zh-CN", "实施范围", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ec.scope
+            new TranslationSeedItem("entity.ec.scope", "zh-HK", "實施範圍", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
 
             // entity.ec.effectivedate
             new TranslationSeedItem("entity.ec.effectivedate", "en-US", "生效日期_us", "生效日期"),

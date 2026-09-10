@@ -79,9 +79,9 @@
             @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'defectCategory'">
+        <template v-else-if="column.key === 'defectGroupCategory'">
           <TaktDictTag
-            :value="getDefectGroupDictValue(record, 'defectCategory')"
+            :value="getDefectGroupDictValue(record, 'defectGroupCategory')"
             dict-type="logistics_manufacturing_defect_group_category"
           />
         </template>
@@ -152,16 +152,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('defectCategory')">
-      <a-form-item :label="pi.queryLabel('defectCategory')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.defectCategory"
-          dict-type="logistics_manufacturing_defect_group_category"
-          :placeholder="pi.queryPh('defectCategory', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('defectGroupCode')">
       <a-form-item :label="pi.queryLabel('defectGroupCode')">
         <a-input
@@ -179,7 +169,7 @@
           v-model:value="advancedQueryForm.defectGroupName"
           :placeholder="pi.queryPh('defectGroupName', 'required')"
           show-count
-          :maxlength="100"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -190,6 +180,16 @@
           v-model:value="advancedQueryForm.defectGroupDescription"
           :placeholder="pi.queryPh('defectGroupDescription', 'optional')"
           :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('defectGroupCategory')">
+      <a-form-item :label="pi.queryLabel('defectGroupCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.defectGroupCategory"
+          dict-type="logistics_manufacturing_defect_group_category"
+          :placeholder="pi.queryPh('defectGroupCategory', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -429,7 +429,7 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
-  if (form.defectCategory !== undefined && form.defectCategory !== null) {
+  if (form.defectGroupCategory !== undefined && form.defectGroupCategory !== null) {
     return true
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
@@ -452,7 +452,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    defectCategory: undefined as number | undefined,
+    defectGroupCategory: undefined as number | undefined,
     isBuiltIn: undefined as number | undefined,
     groupStatus: undefined as number | undefined,  }
 }
@@ -506,8 +506,8 @@ function buildListQuery(overrides?: Partial<DefectGroupQuery>): DefectGroupQuery
   for (const key of DEFECTGROUP_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.defectCategory !== undefined && form.defectCategory !== null) {
-    query.defectCategory = form.defectCategory
+  if (form.defectGroupCategory !== undefined && form.defectGroupCategory !== null) {
+    query.defectGroupCategory = form.defectGroupCategory
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn

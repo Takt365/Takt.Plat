@@ -54,23 +54,23 @@ export interface EcBukan extends CompanyDtoBase {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -106,6 +106,16 @@ export interface EcBukan extends CompanyDtoBase {
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）
@@ -183,23 +193,23 @@ export interface EcBukanQuery extends TaktPagedQuery {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -331,23 +341,23 @@ export interface EcBukanCreate {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -383,6 +393,16 @@ export interface EcBukanCreate {
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）
@@ -448,9 +468,9 @@ export interface EcBukanStatus {
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
 }
 
@@ -465,13 +485,13 @@ export interface EcBukanDiscontinuedStatus {
    */
   ecBukanId: string;
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   * 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 }
 
 /**
@@ -540,23 +560,23 @@ export interface EcBukanTemplate {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -673,23 +693,23 @@ export interface EcBukanImport {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -806,23 +826,23 @@ export interface EcBukanExport {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -858,6 +878,16 @@ export interface EcBukanExport {
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）

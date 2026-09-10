@@ -128,7 +128,7 @@ const props = defineProps<{
   /** 设变单号 */
   ecCode?: string
   /** 区分 */
-  ecDistinction?: number
+  ecScope?: number
   /** 变更状态 */
   changeStatus?: number
   /** 设变状态 */
@@ -456,7 +456,7 @@ function buildIssueQuery() {
     plantCode: plant,
     ecCode: props.ecCode?.trim() || undefined,
     deptCode: props.deptCode?.trim() || undefined,
-    ecDistinction: props.ecDistinction,
+    ecScope: props.ecScope,
     changeStatus: props.changeStatus,
     ecStatus: props.ecStatus,
     trendFilter: props.trendFilter || undefined,

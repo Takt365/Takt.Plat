@@ -64,9 +64,14 @@ export interface EcUkeken extends CompanyDtoBase {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection: number;
+
+  /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
 
   /**
    * 部门编码（TaktDept.DeptCode；本表固定课别）
@@ -77,6 +82,11 @@ export interface EcUkeken extends CompanyDtoBase {
    * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
    */
   deptName?: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
 
   /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
@@ -169,7 +179,7 @@ export interface EcUkekenQuery extends TaktPagedQuery {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection?: number;
 
@@ -278,6 +288,16 @@ export interface EcUkekenCreate {
   lineNumber: number;
 
   /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
+
+  /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
   ecNewMaterialCode?: string;
@@ -293,7 +313,7 @@ export interface EcUkekenCreate {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection: number;
 
@@ -370,13 +390,13 @@ export interface EcUkekenDiscontinuedStatus {
    */
   ecUkekenId: string;
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   * 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 }
 
 /**
@@ -455,7 +475,7 @@ export interface EcUkekenTemplate {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection?: number;
 
@@ -564,7 +584,7 @@ export interface EcUkekenImport {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection?: number;
 
@@ -658,6 +678,16 @@ export interface EcUkekenExport {
   lineNumber: number;
 
   /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
+
+  /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
   ecNewMaterialCode?: string;
@@ -673,7 +703,7 @@ export interface EcUkekenExport {
   ecNewWarehouse?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
+   * 新品检验（字典 sys_yes_no；0=否 1=是；冗余：来自 TaktEcDetail.EcNewRequiresInspection）
    */
   ecNewRequiresInspection: number;
 

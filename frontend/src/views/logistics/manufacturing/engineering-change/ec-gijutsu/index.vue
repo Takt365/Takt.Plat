@@ -69,8 +69,8 @@
         <template v-if="column.key === 'changeStatus'">
           <TaktDictTag dict-type="logistics_manufacturing_ec_status" :value="getEcField(record, 'changeStatus')" />
         </template>
-        <template v-else-if="column.key === 'ecDistinction'">
-          <TaktDictTag dict-type="logistics_manufacturing_ec_distinction_category" :value="getEcField(record, 'ecDistinction')" />
+        <template v-else-if="column.key === 'ecScope'">
+          <TaktDictTag dict-type="logistics_manufacturing_ec_scope_category" :value="getEcField(record, 'ecScope')" />
         </template>
         <template v-else-if="column.key === 'ecStatus'">
           <TaktDictTag dict-type="logistics_manufacturing_ec_gijutsu_status" :value="getEcField(record, 'ecStatus')" />
@@ -207,12 +207,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecDistinction')">
-      <a-form-item :label="pi.queryLabel('ecDistinction')">
+      <div v-show="isFieldVisible('ecScope')">
+      <a-form-item :label="pi.queryLabel('ecScope')">
         <TaktSelect
-          v-model:value="advancedQueryForm.ecDistinction"
-          dict-type="logistics_manufacturing_ec_distinction_category"
-          :placeholder="pi.queryPh('ecDistinction', 'select')"
+          v-model:value="advancedQueryForm.ecScope"
+          dict-type="logistics_manufacturing_ec_scope_category"
+          :placeholder="pi.queryPh('ecScope', 'select')"
           allow-clear
           class="w-full"
         />
@@ -372,7 +372,7 @@
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu
  */
 import { ref, computed, onMounted } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
@@ -387,7 +387,7 @@ import {
   ECGIJUTSU_QUERY_FIELDS,
   ECGIJUTSU_SELF_I18N_KEY,
 } from './composables/use-ec-gijutsu-i18n'
-import { getEcGijutsuList, getEcGijutsuById, createEcGijutsu, updateEcGijutsu, deleteEcGijutsuById, deleteEcGijutsuBatch, getEcGijutsuTemplate, importEcGijutsu, exportEcGijutsu, updateEcGijutsuStatus } from '@/api/logistics/manufacturing/engineering-change/ec-gijutsu'
+import { getEcGijutsuList, getEcGijutsuById, createEcGijutsu, updateEcGijutsu, getEcGijutsuTemplate, importEcGijutsu, exportEcGijutsu, updateEcGijutsuStatus } from '@/api/logistics/manufacturing/engineering-change/ec-gijutsu'
 import { getEcGroupOptions } from '@/api/logistics/manufacturing/engineering-change/ec-group'
 import type { EcGijutsu, EcGijutsuFormData, EcGijutsuQuery } from '@/types/logistics/manufacturing/engineering-change/ec-gijutsu'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -397,7 +397,7 @@ import {
   EC_GIJUTSU_TABLE_NAME,
   useEcGijutsuPersistSignalR,
 } from '@/composables/use-ec-gijutsu-persist-signalr'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiQuestionLine } from '@remixicon/vue'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useEcGijutsuI18n()
@@ -460,7 +460,7 @@ function createEmptyAdvancedQueryForm() {
     ...form,
     changeStatus: undefined as number | undefined,
     ecLossAmount: undefined as number | undefined,
-    ecDistinction: undefined as number | undefined,
+    ecScope: undefined as number | undefined,
     ecStatus: undefined as number | undefined,
   }
 }
@@ -486,8 +486,6 @@ const visibleColumnKeys = ref<string[]>([])
 const entityIdName = 'ecGijutsuId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideEcMasterContext()
@@ -524,8 +522,8 @@ function buildListQuery(overrides?: Partial<EcGijutsuQuery>): EcGijutsuQuery {
   if (form.ecLossAmount !== undefined && form.ecLossAmount !== null) {
     query.ecLossAmount = form.ecLossAmount
   }
-  if (form.ecDistinction !== undefined && form.ecDistinction !== null) {
-    query.ecDistinction = form.ecDistinction
+  if (form.ecScope !== undefined && form.ecScope !== null) {
+    query.ecScope = form.ecScope
   }
   if (form.ecStatus !== undefined && form.ecStatus !== null) {
     query.ecStatus = form.ecStatus
@@ -679,9 +677,9 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcField(record, 'ecLossAmount') ?? ''
   },
   {
-    title: pi.label('ecDistinction'),
-    dataIndex: 'ecDistinction',
-    key: 'ecDistinction',
+    title: pi.label('ecScope'),
+    dataIndex: 'ecScope',
+    key: 'ecScope',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -704,6 +702,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   CreateActionColumn({
+    width: 80,
     actions: [
       {
         key: 'update',
@@ -713,14 +712,6 @@ const columns = computed<TableColumnsType>(() => [
         permission: 'logistics:manufacturing:engineering:change:gijutsu:update',
         onClick: (record: EcGijutsu) => handleEdit(record)
       },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
-        onClick: (record: EcGijutsu) => handleDeleteOne(record)
-      }
     ]
   })
 ])
@@ -737,7 +728,7 @@ const getEcField = (record: any, field: string): any => record?.[field]
 /** 设变组编码 → 名称（EcLeader 列表展示） */
 const ecGroupLabelByCode = ref<Record<string, string>>({})
 
-/** 预加载设变组选项，供负责人列编码转名称 */
+/** 预加载设变组选项，供设变担当列编码转名称 */
 async function loadEcGroupLabelMap() {
   try {
     const list = await getEcGroupOptions()
@@ -754,7 +745,7 @@ async function loadEcGroupLabelMap() {
 }
 
 /**
- * 格式化负责人列：设变组编码显示设变组名称，无映射时回退编码
+ * 格式化设变担当列：设变组编码显示设变组名称，无映射时回退编码
  * @param record 行数据
  * @returns 展示文案
  */
@@ -843,7 +834,7 @@ function handleCreate() {
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
+/** 打开编辑弹窗（主表 + 附件/通知；明细由右侧面板分页查询） */
 async function handleEdit(record: EcGijutsu) {
   formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   sourceImportMode.value = false
@@ -1002,46 +993,6 @@ async function handleExport() {
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EcGijutsu) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteEcGijutsuById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
-}
-/** 批量删除选中行 */
-async function handleDelete() {
-  if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteEcGijutsuBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
-}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true

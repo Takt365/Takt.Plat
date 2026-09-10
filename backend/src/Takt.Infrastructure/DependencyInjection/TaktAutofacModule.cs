@@ -125,7 +125,7 @@ public class TaktAutofacModule : Autofac.Module
             .InstancePerLifetimeScope();
         builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcGijutsuStatusSynchronizer>()
             .InstancePerLifetimeScope();
-        builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcDistinctionExecOrchestrator>()
+        builder.RegisterType<Takt.Application.Services.Logistics.Manufacturing.EngineeringChange.TaktEcScopeExecOrchestrator>()
             .InstancePerLifetimeScope();
 
         builder.RegisterType<Takt.Application.Services.Logistics.Sales.TaktSalesPriceTrendMonthlyAnalysisBuilder>()

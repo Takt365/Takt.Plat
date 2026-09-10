@@ -21,13 +21,13 @@ export default {
       loadToForm: '加载到表单',
       plantFromCompany: '公司 {company} → 工厂 {plant}',
       companyRequired: '请先选择公司后再录入来源设变',
-      formTitle: '来源设变导入（请填写负责人、管理区分并上传附件）',
+      formTitle: '来源设变导入（请填写设变担当、实施范围并上传附件）',
       attachmentRequired: '请至少添加一条附件并上传文件',
       attachmentUploadRequired: '第 {row} 行附件尚未上传文件',
       importSelected: '导入选中（{count}）',
       importSuccess: '已成功导入 {count} 条设变',
       importPartial: '导入完成：成功 {success} 条，失败 {fail} 条',
-      detailsDeferred: '明细共 {count} 行，已改由服务端落库（不经浏览器回传），请填写负责人与管理区分后提交',
+      detailsDeferred: '明细共 {count} 行，已改由服务端落库（不经浏览器回传），请填写设变担当与实施范围后提交',
     },
     attachment: {
       docCode: {

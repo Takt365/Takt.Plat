@@ -62,9 +62,9 @@ export interface EcLegacyProduct extends CompanyDtoBase {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction）

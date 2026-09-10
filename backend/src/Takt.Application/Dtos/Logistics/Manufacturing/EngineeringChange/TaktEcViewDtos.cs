@@ -101,9 +101,9 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     /// </summary>
     public string? EcLeader { get; set; }
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
     /// <summary>
     /// 预定批次
     /// </summary>
@@ -181,9 +181,9 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     /// </summary>
     public string? SamplingNo { get; set; }
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
     /// <summary>
     /// 是否更新 SOP（0=否 1=是）
     /// </summary>
@@ -270,9 +270,9 @@ public class TaktEcDeptViewUpdateDto
     /// </summary>
     public string? EcLeader { get; set; }
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
     /// <summary>
     /// 预定批次
     /// </summary>
@@ -350,9 +350,9 @@ public class TaktEcDeptViewUpdateDto
     /// </summary>
     public string? SamplingNo { get; set; }
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
     /// <summary>
     /// 是否更新 SOP
     /// </summary>
@@ -419,9 +419,9 @@ public class TaktEcDeptViewTemplateDto
     /// </summary>
     public string? EcLeader { get; set; }
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
     /// <summary>
     /// 预定批次
     /// </summary>
@@ -499,9 +499,9 @@ public class TaktEcDeptViewTemplateDto
     /// </summary>
     public string? SamplingNo { get; set; }
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
     /// <summary>
     /// 是否更新 SOP
     /// </summary>
@@ -658,10 +658,6 @@ public class TaktEcKanbanQueryDto : TaktPagedQuery
     /// 实施路径状态（0 未开始 1 实施中 2 正式完成 3 全部完成）
     /// </summary>
     public int? ImplementationStatus { get; set; }
-    /// <summary>
-    /// 仅未正式完成（品管课未全部实施）
-    /// </summary>
-    public int? OnlyNotOfficiallyCompleted { get; set; }
 
     /// <summary>
     /// EcCode
@@ -721,9 +717,9 @@ public class TaktEcBatchDto : TaktCompanyDtoBase
     /// </summary>
     public string? ProductionBatch { get; set; }
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
     /// <summary>
     /// 生产日期
     /// </summary>
@@ -783,9 +779,9 @@ public class TaktEcBatchUpdateDto
     /// </summary>
     public string? ProductionBatch { get; set; }
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
     /// <summary>
     /// 生产日期
     /// </summary>
@@ -839,7 +835,7 @@ public class TaktEcKakuninDto : TaktCompanyDtoBase
     /// </summary>
     public string? EcOldPurchaseType { get; set; }
     /// <summary>
-    /// 旧品是否需检验（0=否 1=是）
+    /// 旧品检验（0=否 1=是）
     /// </summary>
     public int EcOldRequiresInspection { get; set; }
     /// <summary>
@@ -847,7 +843,7 @@ public class TaktEcKakuninDto : TaktCompanyDtoBase
     /// </summary>
     public string? EcNewPurchaseType { get; set; }
     /// <summary>
-    /// 新品是否需检验（0=否 1=是）
+    /// 新品检验（0=否 1=是）
     /// </summary>
     public int EcNewRequiresInspection { get; set; }
 }
@@ -904,7 +900,7 @@ public class TaktEcKakuninUpdateDto
     /// </summary>
     public string? EcOldPurchaseType { get; set; }
     /// <summary>
-    /// 旧品是否需检验（0=否 1=是）
+    /// 旧品检验（0=否 1=是）
     /// </summary>
     public int EcOldRequiresInspection { get; set; }
     /// <summary>
@@ -912,7 +908,7 @@ public class TaktEcKakuninUpdateDto
     /// </summary>
     public string? EcNewPurchaseType { get; set; }
     /// <summary>
-    /// 新品是否需检验（0=否 1=是）
+    /// 新品检验（0=否 1=是）
     /// </summary>
     public int EcNewRequiresInspection { get; set; }
 }
@@ -968,9 +964,9 @@ public class TaktEcLegacyProductDto : TaktCompanyDtoBase
     /// </summary>
     public string? EcIsCompatible { get; set; }
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; }
+    public string? Ec2ndVendor { get; set; }
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>

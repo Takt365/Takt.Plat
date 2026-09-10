@@ -22,7 +22,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 internal static class TaktEcUkekenQueryHelper
 {
     /// <summary>
-    /// 新品是否需检验为 1，且同设变单号+新物料仅保留最大 Id 一行
+    /// 新品检验为 1，且同设变单号+新物料仅保留最大 Id 一行
     /// </summary>
     /// <returns>明细过滤表达式</returns>
     internal static Expression<Func<TaktEcDetail, bool>> VisibleDetailExpression()
@@ -45,28 +45,22 @@ internal static class TaktEcUkekenQueryHelper
     }
 
     /// <summary>
-    /// 受检执行行对应可见明细（单层表达式，供 TaktEcUkeken 列表使用）
+    /// 受检执行列表可见：本表自去重（需检验=1，同设变+新物料保留最大 EcDetailId）
     /// </summary>
     /// <returns>执行表过滤表达式</returns>
     internal static Expression<Func<TaktEcUkeken, bool>> VisibleExecExpression()
     {
-        return x => SqlFunc.Subqueryable<TaktEcDetail>()
-            .Where(d =>
-                d.Id == x.EcDetailId
-                && d.IsDeleted == 0
-                && d.IsObsolete == 0
-                && d.EcNewRequiresInspection == 1
-                && !SqlFunc.Subqueryable<TaktEcDetail>()
-                    .Where(s =>
-                        s.TenantCode == d.TenantCode
-                        && s.CompanyCode == d.CompanyCode
-                        && s.IsDeleted == 0
-                        && s.IsObsolete == 0
-                        && s.EcCode == d.EcCode
-                        && s.EcNewMaterialCode == d.EcNewMaterialCode
-                        && s.EcNewRequiresInspection == 1
-                        && s.Id > d.Id)
-                    .Any())
-            .Any();
+        return x => x.EcNewRequiresInspection == 1
+            && !SqlFunc.Subqueryable<TaktEcUkeken>()
+                .Where(s =>
+                    s.TenantCode == x.TenantCode
+                    && s.CompanyCode == x.CompanyCode
+                    && s.IsDeleted == 0
+                    && s.IsObsolete == 0
+                    && s.EcCode == x.EcCode
+                    && s.EcNewMaterialCode == x.EcNewMaterialCode
+                    && s.EcNewRequiresInspection == 1
+                    && s.EcDetailId > x.EcDetailId)
+                .Any();
     }
 }

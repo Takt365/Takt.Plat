@@ -33,7 +33,7 @@ export interface EcDeptView extends CompanyDtoBase {
   entryDate?: string;
   /** 担当（EcLeader） */
   ecLeader?: string;
-  scheduledProductionDate?: string;
+  scheduledDate?: string;
   scheduledBatch?: string;
   poRemainder?: string;
   balance?: string;
@@ -54,8 +54,8 @@ export interface EcDeptView extends CompanyDtoBase {
   implementationBatch?: string;
   inspectionBatch?: string;
   samplingCode?: string;
-  /** 确认日期（制技） */
-  confirmationDate?: string;
+  /** SOP日期（制技） */
+  sopDate?: string;
   isSopUpdated: number;
 }
 
@@ -75,7 +75,7 @@ export interface EcDeptViewUpdate {
   entryDate?: string;
   /** 担当（EcLeader） */
   ecLeader?: string;
-  scheduledProductionDate?: string;
+  scheduledDate?: string;
   scheduledBatch?: string;
   poRemainder?: string;
   balance?: string;
@@ -96,8 +96,8 @@ export interface EcDeptViewUpdate {
   implementationBatch?: string;
   inspectionBatch?: string;
   samplingCode?: string;
-  /** 确认日期（制技） */
-  confirmationDate?: string;
+  /** SOP日期（制技） */
+  sopDate?: string;
   isSopUpdated: number;
   remark?: string;
 }

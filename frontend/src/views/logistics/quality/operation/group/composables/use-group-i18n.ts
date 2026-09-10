@@ -21,10 +21,10 @@ export const QUALITYGROUP_SELF_I18N_KEY = buildEntitySelfI18nKey(QUALITYGROUP_EN
 /** 列表业务列（不含主键） */
 export const QUALITYGROUP_LIST_FIELDS = [
   'plantCode',
-  'inspectionCategory',
   'qualityGroupCode',
   'qualityGroupName',
   'qualityGroupDescription',
+  'qualityGroupCategory',
   'contactPhone',
   'contactEmail',
   'isBuiltIn',
@@ -37,7 +37,7 @@ export const QUALITYGROUP_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   plantCode: 'select',
-  inspectionCategory: 'select',
+  qualityGroupCategory: 'select',
   qualityGroupCode: 'required',
   qualityGroupName: 'required',
   qualityGroupDescription: 'optional',
@@ -68,12 +68,12 @@ export const QUALITYGROUP_QUERY_STRING_FIELDS = [
 
 export type QualityGroupQueryField =
   | (typeof QUALITYGROUP_QUERY_STRING_FIELDS)[number]
-  | 'inspectionCategory' | 'isBuiltIn' | 'groupStatus'
+  | 'qualityGroupCategory' | 'isBuiltIn' | 'groupStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const QUALITYGROUP_QUERY_FIELDS: readonly QualityGroupQueryField[] = [
   ...QUALITYGROUP_QUERY_STRING_FIELDS,
-  'inspectionCategory',
+  'qualityGroupCategory',
   'isBuiltIn',
   'groupStatus',
 ]

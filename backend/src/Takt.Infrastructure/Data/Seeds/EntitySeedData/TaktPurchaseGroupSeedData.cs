@@ -157,6 +157,7 @@ public class TaktPurchaseGroupSeedData : ITaktSeedDataCoordinator
                 PurchaseGroupCode = seed.PurchaseGroupCode,
                 PurchaseGroupName = seed.PurchaseGroupName,
                 PurchaseGroupDescription = seed.PurchaseGroupDescription,
+                PurchaseGroupCategory = 1,
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 GroupStatus = StatusEnabled,
@@ -174,6 +175,11 @@ public class TaktPurchaseGroupSeedData : ITaktSeedDataCoordinator
         if (group.PurchaseGroupDescription != seed.PurchaseGroupDescription)
         {
             group.PurchaseGroupDescription = seed.PurchaseGroupDescription;
+            needUpdate = true;
+        }
+        if (group.PurchaseGroupCategory != 1)
+        {
+            group.PurchaseGroupCategory = 1;
             needUpdate = true;
         }
         if (group.SortOrder != seed.SortOrder)

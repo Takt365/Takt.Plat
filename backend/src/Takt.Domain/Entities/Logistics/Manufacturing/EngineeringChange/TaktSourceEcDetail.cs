@@ -21,7 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_source_detail", "设变来源子表")]
 [SugarIndex("ix_ec_source_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_source_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, nameof(SourceFinishedGoods), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_source_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, nameof(SourceRootMaterialCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_ec_source_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSourceEcDetail : TaktCompanyEntityBase
@@ -46,10 +46,10 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 完成品
+    /// 根物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "source_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string SourceFinishedGoods { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "source_root_material_code", ColumnDescription = "根物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -118,10 +118,10 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     public string? SourceCompatibility { get; set; }
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    [SugarColumn(ColumnName = "source_distinction", ColumnDescription = "区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceDistinction { get; set; }
+    [SugarColumn(ColumnName = "source_2nd_vendor", ColumnDescription = "第二供应商", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? Source2ndVendor { get; set; }
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）

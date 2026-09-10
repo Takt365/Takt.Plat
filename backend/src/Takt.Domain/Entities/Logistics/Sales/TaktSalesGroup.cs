@@ -34,7 +34,7 @@ public class TaktSalesGroup : TaktCompanyEntityBase
     /// <summary>
     /// 销售组名称
     /// </summary>
-    [SugarColumn(ColumnName = "sales_group_name", ColumnDescription = "销售组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "sales_group_name", ColumnDescription = "销售组名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string SalesGroupName { get; set; } = string.Empty;
 
     /// <summary>
@@ -42,6 +42,12 @@ public class TaktSalesGroup : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sales_group_description", ColumnDescription = "销售组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? SalesGroupDescription { get; set; }
+
+    /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_group_category", ColumnDescription = "销售组类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int SalesGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

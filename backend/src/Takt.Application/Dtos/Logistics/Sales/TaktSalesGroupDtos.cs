@@ -51,6 +51,11 @@ public class TaktSalesGroupDto : TaktCompanyDtoBase
     public string? SalesGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int SalesGroupCategory { get; set; } = 1;
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -121,6 +126,11 @@ public class TaktSalesGroupQueryDto : TaktPagedQuery
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int? SalesGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -213,6 +223,11 @@ public class TaktSalesGroupCreateDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int SalesGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话
@@ -383,6 +398,11 @@ public class TaktSalesGroupTemplateDto
     public string? SalesGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int? SalesGroupCategory { get; set; }
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -453,6 +473,11 @@ public class TaktSalesGroupImportDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int? SalesGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -531,6 +556,11 @@ public class TaktSalesGroupExportDto
     /// 销售组描述
     /// </summary>
     public string? SalesGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+    /// </summary>
+    public int SalesGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

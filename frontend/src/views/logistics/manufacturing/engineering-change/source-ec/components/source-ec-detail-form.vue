@@ -66,12 +66,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceFinishedGoods')"
-                name="sourceFinishedGoods"
+                :label="pi.label('sourceRootMaterialCode')"
+                name="sourceRootMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.sourceFinishedGoods"
-                  :placeholder="pi.ph('sourceFinishedGoods')"
+                  v-model:value="formState.sourceRootMaterialCode"
+                  :placeholder="pi.ph('sourceRootMaterialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -243,13 +243,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sourceDistinction')"
-                name="sourceDistinction"
+                :label="pi.label('source2ndVendor')"
+                name="source2ndVendor"
               >
                 <TaktSelect
-                  v-model:value="formState.sourceDistinction"
-                  dict-type="logistics_manufacturing_ec_source_distinction"
-                  :placeholder="pi.ph('sourceDistinction')"
+                  v-model:value="formState.source2ndVendor"
+                  dict-type="logistics_manufacturing_ec_2nd_vendor"
+                  :placeholder="pi.ph('source2ndVendor')"
                 />
               </a-form-item>
             </a-col>
@@ -400,7 +400,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","sourceFinishedGoods","sourceParentMaterialCode","sourceOldMaterialCode","sourceOldMaterialDescription","sourceOldUsageQuantity","sourceOldItemPosition","sourceNewMaterialCode","sourceNewMaterialDescription","sourceNewUsageQuantity","sourceNewItemPosition","sourceBomCode","sourceCompatibility","sourceDistinction","sourceInstruction","sourceOldPartDisposition","sourceBomEffectiveDate","isObsolete"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","sourceRootMaterialCode","sourceParentMaterialCode","sourceOldMaterialCode","sourceOldMaterialDescription","sourceOldUsageQuantity","sourceOldItemPosition","sourceNewMaterialCode","sourceNewMaterialDescription","sourceNewUsageQuantity","sourceNewItemPosition","sourceBomCode","sourceCompatibility","source2ndVendor","sourceInstruction","sourceOldPartDisposition","sourceBomEffectiveDate","isObsolete"]
 
 
 
@@ -488,10 +488,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  sourceFinishedGoods: [
+  sourceRootMaterialCode: [
     {
       required: true,
-      message: pi.ph('sourceFinishedGoods'),
+      message: pi.ph('sourceRootMaterialCode'),
       trigger: 'blur'
     }
   ],

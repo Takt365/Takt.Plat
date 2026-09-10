@@ -70,9 +70,9 @@ public class TaktEcSmtDto : TaktCompanyDtoBase
     /// </summary>
     public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -110,6 +110,16 @@ public class TaktEcSmtDto : TaktCompanyDtoBase
     public int IsImplemented { get; set; } = 0;
 
     /// <summary>
+    /// 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+    /// </summary>
+    public DateTime? ScheduledDate { get; set; }
+
+    /// <summary>
+    /// 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+    /// </summary>
+    public string? ScheduledBatch { get; set; } = string.Empty;
+
+    /// <summary>
     /// 执行内容（各部门通用）
     /// </summary>
     public string? ExecContent { get; set; } = string.Empty;
@@ -130,14 +140,14 @@ public class TaktEcSmtDto : TaktCompanyDtoBase
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
 
     /// <summary>
@@ -204,14 +214,14 @@ public class TaktEcSmtQueryDto : TaktPagedQuery
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
@@ -370,9 +380,9 @@ public class TaktEcSmtCreateDto
     [Required(ErrorMessage = "停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）不能为空")]
     public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -411,6 +421,16 @@ public class TaktEcSmtCreateDto
     public int IsImplemented { get; set; } = 0;
 
     /// <summary>
+    /// 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+    /// </summary>
+    public DateTime? ScheduledDate { get; set; }
+
+    /// <summary>
+    /// 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+    /// </summary>
+    public string? ScheduledBatch { get; set; } = string.Empty;
+
+    /// <summary>
     /// 执行内容（各部门通用）
     /// </summary>
     public string? ExecContent { get; set; } = string.Empty;
@@ -432,14 +452,14 @@ public class TaktEcSmtCreateDto
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
 
     /// <summary>
@@ -502,9 +522,9 @@ public class TaktEcSmtStatusDto
     [Required(ErrorMessage = "停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）不能为空")]
     public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 }
 
 // ========================================
@@ -525,14 +545,14 @@ public class TaktEcSmtDiscontinuedStatusDto
     public long EcSmtId { get; set; }
 
     /// <summary>
-    /// 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+    /// 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
     /// </summary>
     [Required(ErrorMessage = "停产状态不能为空")]
     public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 }
 
 /// <summary>
@@ -605,14 +625,14 @@ public class TaktEcSmtTemplateDto
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
@@ -743,14 +763,14 @@ public class TaktEcSmtImportDto
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码（冗余：来自 TaktEcDetail.EcParentMaterialCode）
@@ -895,9 +915,9 @@ public class TaktEcSmtExportDto
     /// </summary>
     public string DiscontinuedStatus { get; set; } = string.Empty;
     /// <summary>
-    /// 区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
@@ -935,6 +955,16 @@ public class TaktEcSmtExportDto
     public int IsImplemented { get; set; } = 0;
 
     /// <summary>
+    /// 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+    /// </summary>
+    public DateTime? ScheduledDate { get; set; }
+
+    /// <summary>
+    /// 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+    /// </summary>
+    public string? ScheduledBatch { get; set; } = string.Empty;
+
+    /// <summary>
     /// 执行内容（各部门通用）
     /// </summary>
     public string? ExecContent { get; set; } = string.Empty;
@@ -955,14 +985,14 @@ public class TaktEcSmtExportDto
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
 
     /// <summary>

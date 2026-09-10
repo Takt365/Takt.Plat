@@ -34,7 +34,7 @@ public class TaktEcGroup : TaktCompanyEntityBase
     /// <summary>
     /// 设变组名称
     /// </summary>
-    [SugarColumn(ColumnName = "ec_group_name", ColumnDescription = "设变组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_group_name", ColumnDescription = "设变组名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string EcGroupName { get; set; } = string.Empty;
 
     /// <summary>
@@ -42,6 +42,12 @@ public class TaktEcGroup : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "ec_group_description", ColumnDescription = "设变组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? EcGroupDescription { get; set; }
+
+    /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_group_category", ColumnDescription = "设变组类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int EcGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

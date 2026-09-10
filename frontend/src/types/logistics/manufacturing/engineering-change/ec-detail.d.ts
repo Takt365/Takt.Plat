@@ -57,14 +57,14 @@ export interface EcDetail extends CompanyDtoBase {
   ecModelCode: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -81,9 +81,9 @@ export interface EcDetail extends CompanyDtoBase {
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 旧物料编码
@@ -106,7 +106,7 @@ export interface EcDetail extends CompanyDtoBase {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -121,7 +121,7 @@ export interface EcDetail extends CompanyDtoBase {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection: number;
 
@@ -146,7 +146,7 @@ export interface EcDetail extends CompanyDtoBase {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -161,7 +161,7 @@ export interface EcDetail extends CompanyDtoBase {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection: number;
 
@@ -176,9 +176,9 @@ export interface EcDetail extends CompanyDtoBase {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -251,14 +251,14 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecModelCode?: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -275,9 +275,9 @@ export interface EcDetailQuery extends TaktPagedQuery {
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 旧物料编码
@@ -300,7 +300,7 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -315,7 +315,7 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection?: number;
 
@@ -340,7 +340,7 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -355,7 +355,7 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection?: number;
 
@@ -375,9 +375,9 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -469,14 +469,14 @@ export interface EcDetailCreate {
   ecModelCode: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -493,9 +493,9 @@ export interface EcDetailCreate {
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 旧物料编码
@@ -518,7 +518,7 @@ export interface EcDetailCreate {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -533,7 +533,7 @@ export interface EcDetailCreate {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection: number;
 
@@ -558,7 +558,7 @@ export interface EcDetailCreate {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -573,7 +573,7 @@ export interface EcDetailCreate {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection: number;
 
@@ -588,9 +588,9 @@ export interface EcDetailCreate {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -706,14 +706,14 @@ export interface EcDetailTemplate {
   ecModelCode?: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -730,9 +730,9 @@ export interface EcDetailTemplate {
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 旧物料编码
@@ -755,7 +755,7 @@ export interface EcDetailTemplate {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -770,7 +770,7 @@ export interface EcDetailTemplate {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection?: number;
 
@@ -795,7 +795,7 @@ export interface EcDetailTemplate {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -810,7 +810,7 @@ export interface EcDetailTemplate {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection?: number;
 
@@ -825,9 +825,9 @@ export interface EcDetailTemplate {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -909,14 +909,14 @@ export interface EcDetailImport {
   ecModelCode?: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -933,9 +933,9 @@ export interface EcDetailImport {
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 旧物料编码
@@ -958,7 +958,7 @@ export interface EcDetailImport {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -973,7 +973,7 @@ export interface EcDetailImport {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection?: number;
 
@@ -998,7 +998,7 @@ export interface EcDetailImport {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -1013,7 +1013,7 @@ export interface EcDetailImport {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection?: number;
 
@@ -1028,9 +1028,9 @@ export interface EcDetailImport {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -1112,14 +1112,14 @@ export interface EcDetailExport {
   ecModelCode: string;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品物料描述
+   * 根物料编码物料描述
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 上阶物料编码
@@ -1136,9 +1136,9 @@ export interface EcDetailExport {
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 旧物料编码
@@ -1161,7 +1161,7 @@ export interface EcDetailExport {
   ecOldItemPosition?: string;
 
   /**
-   * 旧在库数量
+   * 旧品在库
    */
   ecOldStock?: number;
 
@@ -1176,7 +1176,7 @@ export interface EcDetailExport {
   ecOldPurchaseType?: string;
 
   /**
-   * 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 旧品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecOldRequiresInspection: number;
 
@@ -1201,7 +1201,7 @@ export interface EcDetailExport {
   ecNewItemPosition?: string;
 
   /**
-   * 新在库数量
+   * 新品在库
    */
   ecNewStock?: number;
 
@@ -1216,7 +1216,7 @@ export interface EcDetailExport {
   ecNewPurchaseType?: string;
 
   /**
-   * 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+   * 新品检验（字典 sys_yes_no；0=否 1=是）
    */
   ecNewRequiresInspection: number;
 
@@ -1231,9 +1231,9 @@ export interface EcDetailExport {
   ecIsCompatible?: string;
 
   /**
-   * 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  ecSecondDistinction?: string;
+  ec2ndVendor?: string;
 
   /**
    * 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）

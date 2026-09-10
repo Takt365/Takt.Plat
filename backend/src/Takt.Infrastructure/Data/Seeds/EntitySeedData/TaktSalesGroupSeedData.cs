@@ -157,6 +157,7 @@ public class TaktSalesGroupSeedData : ITaktSeedDataCoordinator
                 SalesGroupCode = seed.SalesGroupCode,
                 SalesGroupName = seed.SalesGroupName,
                 SalesGroupDescription = seed.SalesGroupDescription,
+                SalesGroupCategory = 1,
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 GroupStatus = StatusEnabled,
@@ -174,6 +175,11 @@ public class TaktSalesGroupSeedData : ITaktSeedDataCoordinator
         if (group.SalesGroupDescription != seed.SalesGroupDescription)
         {
             group.SalesGroupDescription = seed.SalesGroupDescription;
+            needUpdate = true;
+        }
+        if (group.SalesGroupCategory != 1)
+        {
+            group.SalesGroupCategory = 1;
             needUpdate = true;
         }
         if (group.SortOrder != seed.SortOrder)

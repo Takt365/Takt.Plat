@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -136,13 +136,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-HK", "设变内容_hk", "设变内容（富文本 HTML）"),
 
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "设变担当_us", "设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "设变担当_jp", "设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "设变担当", "设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "设变担当_hk", "设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）"),
 
             // entity.ecgijutsu.eclossamount
             new TranslationSeedItem("entity.ecgijutsu.eclossamount", "en-US", "损失金额_us", "损失金额"),
@@ -153,14 +153,14 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecgijutsu.eclossamount
             new TranslationSeedItem("entity.ecgijutsu.eclossamount", "zh-HK", "损失金额_hk", "损失金额"),
 
-            // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "en-US", "区分_us", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
-            // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "ja-JP", "区分_jp", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
-            // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-CN", "区分", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
-            // entity.ecgijutsu.ecdistinction
-            new TranslationSeedItem("entity.ecgijutsu.ecdistinction", "zh-HK", "区分_hk", "区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术；执行内容一律写「管理区分-全仕向/部管/内部/技术」）"),
+            // entity.ecgijutsu.ecscope
+            new TranslationSeedItem("entity.ecgijutsu.ecscope", "en-US", "实施范围_us", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecscope
+            new TranslationSeedItem("entity.ecgijutsu.ecscope", "ja-JP", "实施范围_jp", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecscope
+            new TranslationSeedItem("entity.ecgijutsu.ecscope", "zh-CN", "实施范围", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
+            // entity.ecgijutsu.ecscope
+            new TranslationSeedItem("entity.ecgijutsu.ecscope", "zh-HK", "实施范围_hk", "实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）"),
 
             // entity.ecgijutsu.ecentrydate
             new TranslationSeedItem("entity.ecgijutsu.ecentrydate", "en-US", "录入日期_us", "录入日期"),

@@ -54,23 +54,23 @@ export interface EcHinkan extends CompanyDtoBase {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）
@@ -78,9 +78,24 @@ export interface EcHinkan extends CompanyDtoBase {
   deptCode: string;
 
   /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
+
+  /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定生产日期（冗余生管；只读）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余生管；只读）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）
@@ -113,7 +128,7 @@ export interface EcHinkan extends CompanyDtoBase {
   isObsolete: number;
 
   /**
-   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcFinishedGoods）
+   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcRootMaterialCode）
    */
   ecDetails?: EcDetail[];
 
@@ -168,23 +183,23 @@ export interface EcHinkanQuery extends TaktPagedQuery {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）
@@ -301,23 +316,23 @@ export interface EcHinkanCreate {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）
@@ -397,13 +412,13 @@ export interface EcHinkanDiscontinuedStatus {
    */
   ecHinkanId: string;
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   * 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 }
 
 /**
@@ -472,23 +487,23 @@ export interface EcHinkanTemplate {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）
@@ -590,23 +605,23 @@ export interface EcHinkanImport {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）
@@ -708,23 +723,23 @@ export interface EcHinkanExport {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0820）

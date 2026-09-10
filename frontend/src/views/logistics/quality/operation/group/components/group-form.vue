@@ -153,7 +153,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  inspectionCategory: 0,
+  qualityGroupCategory: 0,
   isBuiltIn: 0,
   groupStatus: 1
 }
@@ -214,14 +214,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  inspectionCategory: [{
+  qualityGroupCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('inspectionCategory'))
+        return Promise.reject(pi.ph('qualityGroupCategory'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('inspectionCategory'))
+        return Promise.reject(pi.ph('qualityGroupCategory'))
       }
       return Promise.resolve()
     },
@@ -278,9 +278,9 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('inspectionCategory' in payload) {
-    const rawinspectionCategory = payload.inspectionCategory
-    payload.inspectionCategory = typeof rawinspectionCategory === 'number' ? rawinspectionCategory : Number(rawinspectionCategory)
+  if ('qualityGroupCategory' in payload) {
+    const rawqualityGroupCategory = payload.qualityGroupCategory
+    payload.qualityGroupCategory = typeof rawqualityGroupCategory === 'number' ? rawqualityGroupCategory : Number(rawqualityGroupCategory)
   }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn

@@ -65,10 +65,10 @@
             :value="legacyProductDictCellValue(record, 'discontinuedStatus', text)"
           />
         </template>
-        <template v-else-if="isLegacyProductColumn(column, 'ecSecondDistinction')">
+        <template v-else-if="isLegacyProductColumn(column, 'ec2ndVendor')">
           <TaktDictTag
-            dict-type="logistics_manufacturing_ec_source_distinction"
-            :value="legacyProductDictCellValue(record, 'ecSecondDistinction', text)"
+            dict-type="logistics_manufacturing_ec_2nd_vendor"
+            :value="legacyProductDictCellValue(record, 'ec2ndVendor', text)"
           />
         </template>
         <template v-else-if="isLegacyProductColumn(column, 'ecInstruction')">

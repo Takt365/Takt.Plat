@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGroupValidators.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcGroup 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcGroup 生成，请按需审阅）
 // 
@@ -46,7 +46,7 @@ public class TaktEcGroupCreateValidator : AbstractValidator<TaktEcGroupCreateDto
             .MaximumLength(3).WithMessage("设变组编码长度不能超过3个字符");
         RuleFor(x => x.EcGroupName)
             .NotEmpty().WithMessage("设变组名称不能为空")
-            .MaximumLength(100).WithMessage("设变组名称长度不能超过100个字符");
+            .MaximumLength(80).WithMessage("设变组名称长度不能超过80个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -87,7 +87,7 @@ public class TaktEcGroupUpdateValidator : AbstractValidator<TaktEcGroupUpdateDto
             .MaximumLength(3).WithMessage("设变组编码长度不能超过3个字符");
         RuleFor(x => x.EcGroupName)
             .NotEmpty().WithMessage("设变组名称不能为空")
-            .MaximumLength(100).WithMessage("设变组名称长度不能超过100个字符");
+            .MaximumLength(80).WithMessage("设变组名称长度不能超过80个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -122,7 +122,7 @@ public class TaktEcGroupImportValidator : AbstractValidator<TaktEcGroupImportDto
             .MaximumLength(3).WithMessage("设变组编码长度不能超过3个字符");
         RuleFor(x => x.EcGroupName)
             .NotEmpty().WithMessage("设变组名称不能为空")
-            .MaximumLength(100).WithMessage("设变组名称长度不能超过100个字符");
+            .MaximumLength(80).WithMessage("设变组名称长度不能超过80个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

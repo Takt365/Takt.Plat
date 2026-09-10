@@ -131,11 +131,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceFinishedGoods')">
-      <a-form-item :label="pi.queryLabel('sourceFinishedGoods')">
+      <div v-show="isFieldVisible('sourceRootMaterialCode')">
+      <a-form-item :label="pi.queryLabel('sourceRootMaterialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceFinishedGoods"
-          :placeholder="pi.queryPh('sourceFinishedGoods', 'required')"
+          v-model:value="advancedQueryForm.sourceRootMaterialCode"
+          :placeholder="pi.queryPh('sourceRootMaterialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -258,12 +258,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceDistinction')">
-      <a-form-item :label="pi.queryLabel('sourceDistinction')">
+      <div v-show="isFieldVisible('source2ndVendor')">
+      <a-form-item :label="pi.queryLabel('source2ndVendor')">
         <TaktSelect
-          v-model:value="advancedQueryForm.sourceDistinction"
-          dict-type="logistics_manufacturing_ec_source_distinction"
-          :placeholder="pi.queryPh('sourceDistinction', 'select')"
+          v-model:value="advancedQueryForm.source2ndVendor"
+          dict-type="logistics_manufacturing_ec_2nd_vendor"
+          :placeholder="pi.queryPh('source2ndVendor', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -632,14 +632,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSourceEcDetailField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('sourceFinishedGoods'),
-    dataIndex: 'sourceFinishedGoods',
-    key: 'sourceFinishedGoods',
+    title: pi.label('sourceRootMaterialCode'),
+    dataIndex: 'sourceRootMaterialCode',
+    key: 'sourceRootMaterialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceFinishedGoods') ?? ''),
+      String(getSourceEcDetailField(record, 'sourceRootMaterialCode') ?? ''),
   },
   {
     title: pi.label('sourceParentMaterialCode'),
@@ -752,14 +752,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSourceEcDetailField(record, 'sourceCompatibility') ?? ''),
   },
   {
-    title: pi.label('sourceDistinction'),
-    dataIndex: 'sourceDistinction',
-    key: 'sourceDistinction',
+    title: pi.label('source2ndVendor'),
+    dataIndex: 'source2ndVendor',
+    key: 'source2ndVendor',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SourceEcDetail }) =>
-      String(getSourceEcDetailField(record, 'sourceDistinction') ?? ''),
+      String(getSourceEcDetailField(record, 'source2ndVendor') ?? ''),
   },
   {
     title: pi.label('sourceInstruction'),

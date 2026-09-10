@@ -24,8 +24,10 @@ export const TaktEcDeptCodes = {
   Iqc: 'D0810',
   /** 部管课 D0430 */
   Mc: 'D0430',
-  /** 制造2课-间接 D0626 */
-  Pcba: 'D0626',
+  /** 制造2课-物料 / SMT D0625 */
+  Smt: 'D0625',
+  /** 制造2课 D0620（看板「制二」桶；TaktEcSeizounika） */
+  Pcba: 'D0620',
   /** 制造1课 D0610 */
   Assy: 'D0610',
   /** 品管课 D0820 */

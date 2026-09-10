@@ -412,6 +412,11 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
             var purchaseGroupDescription = queryDto.PurchaseGroupDescription;
             exp = exp.And(x => x.PurchaseGroupDescription != null && x.PurchaseGroupDescription.Contains(purchaseGroupDescription));
         }
+        if (queryDto?.PurchaseGroupCategory.HasValue == true)
+        {
+            var purchaseGroupCategory = queryDto.PurchaseGroupCategory.Value;
+            exp = exp.And(x => x.PurchaseGroupCategory == purchaseGroupCategory);
+        }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {

@@ -126,42 +126,42 @@ public class TaktEcSeikanI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseikan.ecmodelcode
             new TranslationSeedItem("entity.ecseikan.ecmodelcode", "zh-HK", "機種編碼_hk", "机种编码（冗余：来自 TaktEcDetail.EcModelCode）"),
 
-            // entity.ecseikan.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoods", "en-US", "完成品_us", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseikan.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoods", "ja-JP", "完成品_jp", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseikan.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoods", "zh-CN", "完成品", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseikan.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoods", "zh-HK", "完成品_hk", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
+            // entity.ecseikan.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialcode", "en-US", "根物料编码_us", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseikan.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialcode", "ja-JP", "根物料编码_jp", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseikan.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialcode", "zh-CN", "根物料编码", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseikan.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialcode", "zh-HK", "根物料编码_hk", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
 
-            // entity.ecseikan.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoodsdescription", "en-US", "完成品描述_us", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseikan.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoodsdescription", "ja-JP", "完成品描述_jp", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseikan.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoodsdescription", "zh-CN", "完成品描述", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseikan.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseikan.ecfinishedgoodsdescription", "zh-HK", "完成品描述_hk", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
+            // entity.ecseikan.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialdescription", "en-US", "根物料描述_us", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseikan.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialdescription", "ja-JP", "根物料描述_jp", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseikan.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialdescription", "zh-CN", "根物料描述", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseikan.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseikan.ecrootmaterialdescription", "zh-HK", "根物料描述_hk", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
 
             // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "en-US", "完成品EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "en-US", "根物料EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "ja-JP", "完成品EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "ja-JP", "根物料EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-CN", "完成品EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-CN", "根物料EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseikan.discontinuedstatus
-            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-HK", "完成品EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseikan.discontinuedstatus", "zh-HK", "根物料EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
 
             
-            // entity.ecseikan.ecdistinction
-            new TranslationSeedItem("entity.ecseikan.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseikan.ecdistinction
-            new TranslationSeedItem("entity.ecseikan.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseikan.ecdistinction
-            new TranslationSeedItem("entity.ecseikan.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseikan.ecdistinction
-            new TranslationSeedItem("entity.ecseikan.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseikan.ecscope
+            new TranslationSeedItem("entity.ecseikan.ecscope", "en-US", "Scope", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseikan.ecscope
+            new TranslationSeedItem("entity.ecseikan.ecscope", "ja-JP", "実施範囲", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseikan.ecscope
+            new TranslationSeedItem("entity.ecseikan.ecscope", "zh-CN", "实施范围", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseikan.ecscope
+            new TranslationSeedItem("entity.ecseikan.ecscope", "zh-HK", "實施範圍", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
 // entity.ecseikan.deptcode
             new TranslationSeedItem("entity.ecseikan.deptcode", "en-US", "部门编码_us", "部门编码（TaktDept.DeptCode，5 位，如 D0420）"),
             // entity.ecseikan.deptcode
@@ -189,14 +189,14 @@ public class TaktEcSeikanI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseikan.execcontent
             new TranslationSeedItem("entity.ecseikan.execcontent", "zh-HK", "执行内容_hk", "执行内容（各部门通用）"),
 
-            // entity.ecseikan.scheduledproductiondate
-            new TranslationSeedItem("entity.ecseikan.scheduledproductiondate", "en-US", "预计生产日期_us", "预计生产日期"),
-            // entity.ecseikan.scheduledproductiondate
-            new TranslationSeedItem("entity.ecseikan.scheduledproductiondate", "ja-JP", "预计生产日期_jp", "预计生产日期"),
-            // entity.ecseikan.scheduledproductiondate
-            new TranslationSeedItem("entity.ecseikan.scheduledproductiondate", "zh-CN", "预计生产日期", "预计生产日期"),
-            // entity.ecseikan.scheduledproductiondate
-            new TranslationSeedItem("entity.ecseikan.scheduledproductiondate", "zh-HK", "预计生产日期_hk", "预计生产日期"),
+            // entity.ecseikan.scheduleddate
+            new TranslationSeedItem("entity.ecseikan.scheduleddate", "en-US", "预定日期_us", "预定日期"),
+            // entity.ecseikan.scheduleddate
+            new TranslationSeedItem("entity.ecseikan.scheduleddate", "ja-JP", "预定日期_jp", "预定日期"),
+            // entity.ecseikan.scheduleddate
+            new TranslationSeedItem("entity.ecseikan.scheduleddate", "zh-CN", "预定日期", "预定日期"),
+            // entity.ecseikan.scheduleddate
+            new TranslationSeedItem("entity.ecseikan.scheduleddate", "zh-HK", "预定日期_hk", "预定日期"),
 
             // entity.ecseikan.scheduledbatch
             new TranslationSeedItem("entity.ecseikan.scheduledbatch", "en-US", "预定批次_us", "预定批次"),

@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
-// 文件名称：TaktEcDistinctionExecApplyResult.cs
+// 文件名称：TaktEcScopeExecApplyResult.cs
 // 创建时间：2026-09-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变区分派生各部门执行行结果（含部门写入条数摘要）
+// 功能描述：设变实施范围派生各部门执行行结果（含部门写入条数摘要）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -36,14 +36,14 @@ public sealed class TaktEcDeptExecCountItem
 }
 
 /// <summary>
-/// 设变区分 → 部门执行行编排结果
+/// 设变实施范围 → 部门执行行编排结果
 /// </summary>
-public sealed class TaktEcDistinctionExecApplyResult
+public sealed class TaktEcScopeExecApplyResult
 {
     /// <summary>
     /// 空结果
     /// </summary>
-    public static TaktEcDistinctionExecApplyResult Empty { get; } = new()
+    public static TaktEcScopeExecApplyResult Empty { get; } = new()
     {
         Items = Array.Empty<TaktEcDeptExecCountItem>(),
     };
@@ -81,7 +81,7 @@ public sealed class TaktEcDistinctionExecApplyResult
     /// </summary>
     /// <param name="counts">部门编码 → 条数</param>
     /// <returns>结果</returns>
-    public static TaktEcDistinctionExecApplyResult FromCounts(IReadOnlyDictionary<string, int> counts)
+    public static TaktEcScopeExecApplyResult FromCounts(IReadOnlyDictionary<string, int> counts)
     {
         ArgumentNullException.ThrowIfNull(counts);
         var items = counts
@@ -93,6 +93,6 @@ public sealed class TaktEcDistinctionExecApplyResult
                 SavedCount = kv.Value,
             })
             .ToList();
-        return new TaktEcDistinctionExecApplyResult { Items = items };
+        return new TaktEcScopeExecApplyResult { Items = items };
     }
 }

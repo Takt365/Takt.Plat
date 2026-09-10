@@ -91,18 +91,18 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
     /// <summary>
     /// 获取质量组主数据选项列表
     /// </summary>
-    /// <param name="inspectionCategory">检查类别（字典 logistics_quality_group_inspection_category；为空则返回全部启用组）</param>
+    /// <param name="qualityGroupCategory">质量组类别（字典 logistics_quality_group_category；为空则返回全部启用组）</param>
     /// <param name="plantCode">工厂代码（可选，用于按工厂过滤）</param>
     /// <param name="keyword">搜索关键字（可选，模糊匹配）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetQualityGroupOptionsAsync(string? plantCode = null, string? keyword = null, int? inspectionCategory = null)
+    public async Task<List<TaktSelectOption>> GetQualityGroupOptionsAsync(string? plantCode = null, string? keyword = null, int? qualityGroupCategory = null)
     {
         EnsureThreeLayerContext();
         var list = await _qualityGroupRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.GroupStatus == 1
-                && (!inspectionCategory.HasValue || x.InspectionCategory == inspectionCategory.Value),
+                && (!qualityGroupCategory.HasValue || x.QualityGroupCategory == qualityGroupCategory.Value),
             x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
@@ -126,11 +126,11 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
         var isUnique_ix_takt_logistics_quality_operation_quality_group_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityGroupRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InspectionCategory == entity.InspectionCategory
+                && x.QualityGroupCategory == entity.QualityGroupCategory
                 && x.QualityGroupCode == entity.QualityGroupCode);
         if (!isUnique_ix_takt_logistics_quality_operation_quality_group_unique)
         {
-            throw new TaktBusinessException("质量组主数据的PlantCode、InspectionCategory、QualityGroupCode已存在");
+            throw new TaktBusinessException("质量组主数据的PlantCode、QualityGroupCategory、QualityGroupCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -162,12 +162,12 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
         var isUnique_ix_takt_logistics_quality_operation_quality_group_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityGroupRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InspectionCategory == entity.InspectionCategory
+                && x.QualityGroupCategory == entity.QualityGroupCategory
                 && x.QualityGroupCode == entity.QualityGroupCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_operation_quality_group_unique)
         {
-            throw new TaktBusinessException("质量组主数据的PlantCode、InspectionCategory、QualityGroupCode已存在");
+            throw new TaktBusinessException("质量组主数据的PlantCode、QualityGroupCategory、QualityGroupCode已存在");
         }
         await _qualityGroupRepository.UpdateAsync(entity);
         return await GetQualityGroupByIdAsync(id) ?? throw new TaktBusinessException("质量组主数据不存在");
@@ -293,19 +293,19 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
             {
                 var entity = rows[i].Adapt<TaktQualityGroup>();
                 entity.IsBuiltIn = 0;
-                var importKey = $"{entity.PlantCode}|{entity.InspectionCategory}|{entity.QualityGroupCode}";
+                var importKey = $"{entity.PlantCode}|{entity.QualityGroupCategory}|{entity.QualityGroupCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、InspectionCategory、QualityGroupCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、QualityGroupCategory、QualityGroupCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_operation_quality_group_unique = await _uniqueValidator.IsUniqueAsync(
                     _qualityGroupRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.InspectionCategory == entity.InspectionCategory
+                        && x.QualityGroupCategory == entity.QualityGroupCategory
                         && x.QualityGroupCode == entity.QualityGroupCode);
                 if (!isUnique_ix_takt_logistics_quality_operation_quality_group_unique)
                 {
-                    throw new TaktBusinessException("质量组主数据的PlantCode、InspectionCategory、QualityGroupCode已存在");
+                    throw new TaktBusinessException("质量组主数据的PlantCode、QualityGroupCategory、QualityGroupCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -369,7 +369,7 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.InspectionCategory).Contains(keywords)
+                || SqlFunc.ToString(x.QualityGroupCategory).Contains(keywords)
                 || (x.QualityGroupCode != null && x.QualityGroupCode.Contains(keywords))
                 || (x.QualityGroupName != null && x.QualityGroupName.Contains(keywords))
                 || (x.QualityGroupDescription != null && x.QualityGroupDescription.Contains(keywords))
@@ -390,9 +390,9 @@ public class TaktQualityGroupService : TaktServiceBase, ITaktQualityGroupService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (queryDto?.InspectionCategory.HasValue == true)
+        if (queryDto?.QualityGroupCategory.HasValue == true)
         {
-            exp = exp.And(x => x.InspectionCategory == queryDto.InspectionCategory);
+            exp = exp.And(x => x.QualityGroupCategory == queryDto.QualityGroupCategory);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.QualityGroupCode))

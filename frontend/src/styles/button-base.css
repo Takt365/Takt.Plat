@@ -31,7 +31,7 @@
 }
 
 /* @takt-generated variants-begin */
-/* 共 141 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
+/* 共 143 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
 
 /* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
 .takt-button-query {
@@ -323,6 +323,22 @@
 
 /* enable · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
 .takt-button-enable {
+  --takt-btn-bg: var(--takt-cn-lvse);
+  --takt-btn-border: var(--takt-cn-lvse);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-lvse);
+}
+
+/* discontinue · 停产 · var(--takt-cn-zhusha) · fg var(--takt-btn-fg-solid) */
+.takt-button-discontinue {
+  --takt-btn-bg: var(--takt-cn-zhusha);
+  --takt-btn-border: var(--takt-cn-zhusha);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-zhusha);
+}
+
+/* inproduction · 在产 · var(--takt-cn-lvse) · fg var(--takt-btn-fg-solid) */
+.takt-button-inproduction {
   --takt-btn-bg: var(--takt-cn-lvse);
   --takt-btn-border: var(--takt-cn-lvse);
   --takt-btn-fg: var(--takt-btn-fg-solid);

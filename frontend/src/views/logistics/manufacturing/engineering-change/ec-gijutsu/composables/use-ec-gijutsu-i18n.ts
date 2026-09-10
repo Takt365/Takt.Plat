@@ -27,7 +27,7 @@ export const ECGIJUTSU_LIST_FIELDS = [
   'ecContent',
   'ecLeader',
   'ecLossAmount',
-  'ecDistinction',
+  'ecScope',
   'ecEntryDate',
   'ecStatus',
 ] as const
@@ -45,7 +45,7 @@ export const ECGIJUTSU_PLACEHOLDER = {
   ecContent: 'optional',
   ecLeader: 'select',
   ecLossAmount: 'select',
-  ecDistinction: 'select',
+  ecScope: 'select',
   ecEntryDate: 'select',
   ecStatus: 'select',
   extField: 'optional',
@@ -74,7 +74,7 @@ export const ECGIJUTSU_QUERY_STRING_FIELDS = [
 
 export type EcGijutsuQueryField =
   | (typeof ECGIJUTSU_QUERY_STRING_FIELDS)[number]
-  | 'changeStatus' | 'ecLossAmount' | 'ecDistinction' | 'ecStatus'
+  | 'changeStatus' | 'ecLossAmount' | 'ecScope' | 'ecStatus'
 
 /** 高级查询抽屉全部字段（含数值；顺序与查询抽屉表单项一致） */
 export const ECGIJUTSU_QUERY_FIELDS: readonly EcGijutsuQueryField[] = [
@@ -87,7 +87,7 @@ export const ECGIJUTSU_QUERY_FIELDS: readonly EcGijutsuQueryField[] = [
   'ecContent',
   'ecLeader',
   'ecLossAmount',
-  'ecDistinction',
+  'ecScope',
   'ecEntryDateStart',
   'ecEntryDateEnd',
   'ecStatus',

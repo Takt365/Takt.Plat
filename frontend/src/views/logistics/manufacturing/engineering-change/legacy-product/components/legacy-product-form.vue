@@ -101,11 +101,11 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item :label="pi.label('ecSecondDistinction')" name="ecSecondDistinction">
+              <a-form-item :label="pi.label('ec2ndVendor')" name="ec2ndVendor">
                 <TaktSelect
-                  v-model:value="formState.ecSecondDistinction"
-                  dict-type="logistics_manufacturing_ec_source_distinction"
-                  :placeholder="pi.ph('ecSecondDistinction')"
+                  v-model:value="formState.ec2ndVendor"
+                  dict-type="logistics_manufacturing_ec_2nd_vendor"
+                  :placeholder="pi.ph('ec2ndVendor')"
                   disabled
                   allow-clear
                 />
@@ -223,7 +223,7 @@ const formFields = [
   'ecOldMaterialDescription',
   'ecOldUsageQuantity',
   'ecIsCompatible',
-  'ecSecondDistinction',
+  'ec2ndVendor',
   'ecInstruction',
   'ecOldPartDisposition',
   'ecNewMaterialCode',
@@ -262,7 +262,7 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
 }
 
 const LEGACY_PRODUCT_DICT_FIELDS = [
-  { field: 'ecSecondDistinction', dictType: 'logistics_manufacturing_ec_source_distinction' },
+  { field: 'ec2ndVendor', dictType: 'logistics_manufacturing_ec_2nd_vendor' },
   { field: 'ecInstruction', dictType: 'logistics_manufacturing_ec_source_instruction' },
   { field: 'ecOldPartDisposition', dictType: 'logistics_manufacturing_ec_old_part_disposition' },
   { field: 'oldProductHandling', dictType: 'logistics_manufacturing_ec_old_part_disposition' },

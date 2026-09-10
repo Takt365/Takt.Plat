@@ -240,7 +240,7 @@ public class TaktEcUkekenService : TaktServiceBase, ITaktEcUkekenService
             throw new TaktBusinessException("设变受检执行不存在");
         }
         var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
-            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            ? TaktEcScopeConstants.PlannedMaterialStatus
             : dto.DiscontinuedStatus.Trim();
         await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
         return await GetEcUkekenByIdAsync(dto.EcUkekenId) ?? throw new TaktBusinessException("设变受检执行不存在");

@@ -34,15 +34,18 @@ internal static class TaktEcDeptExecRedundantBinder
         {
             case TaktEcKoubai koubai:
                 ApplyIdentity(koubai, detail, lineNumberForCreate);
-                ApplyEcDistinction(koubai, detail);
+                ApplyEcScope(koubai, detail);
+                koubai.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 koubai.EcNewMaterialCode = detail.EcNewMaterialCode ?? string.Empty;
                 koubai.EcNewMaterialDescription = detail.EcNewMaterialDescription ?? string.Empty;
                 koubai.EcNewWarehouse = detail.EcNewWarehouse ?? string.Empty;
                 koubai.EcNewPurchaseType = detail.EcNewPurchaseType ?? string.Empty;
+                koubai.EcOldPartDisposition = detail.EcOldPartDisposition;
                 break;
             case TaktEcUkeken ukeken:
                 ApplyIdentity(ukeken, detail, lineNumberForCreate);
-                ApplyEcDistinction(ukeken, detail);
+                ApplyEcScope(ukeken, detail);
+                ukeken.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 ukeken.EcNewMaterialCode = detail.EcNewMaterialCode ?? string.Empty;
                 ukeken.EcNewMaterialDescription = detail.EcNewMaterialDescription ?? string.Empty;
                 ukeken.EcNewWarehouse = detail.EcNewWarehouse ?? string.Empty;
@@ -50,19 +53,19 @@ internal static class TaktEcDeptExecRedundantBinder
                 break;
             case TaktEcBukan bukan:
                 ApplyIdentity(bukan, detail, lineNumberForCreate);
-                ApplyEcDistinction(bukan, detail);
+                ApplyEcScope(bukan, detail);
                 bukan.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 bukan.EcNewMaterialCode = detail.EcNewMaterialCode ?? string.Empty;
                 bukan.EcNewMaterialDescription = detail.EcNewMaterialDescription ?? string.Empty;
                 bukan.EcNewPurchaseType = detail.EcNewPurchaseType ?? string.Empty;
                 bukan.EcNewWarehouse = detail.EcNewWarehouse ?? string.Empty;
                 bukan.EcModelCode = detail.EcModelCode ?? string.Empty;
-                bukan.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                bukan.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                bukan.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                bukan.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             case TaktEcSmt smt:
                 ApplyIdentity(smt, detail, lineNumberForCreate);
-                ApplyEcDistinction(smt, detail);
+                ApplyEcScope(smt, detail);
                 smt.EcParentMaterialCode = detail.EcParentMaterialCode ?? string.Empty;
                 smt.EcParentMaterialDescription = detail.EcParentMaterialDescription ?? string.Empty;
                 smt.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
@@ -71,50 +74,51 @@ internal static class TaktEcDeptExecRedundantBinder
                 smt.EcNewPurchaseType = detail.EcNewPurchaseType ?? string.Empty;
                 smt.EcNewWarehouse = detail.EcNewWarehouse ?? string.Empty;
                 smt.EcModelCode = detail.EcModelCode ?? string.Empty;
-                smt.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                smt.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                smt.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                smt.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             case TaktEcSeizounika seizounika:
                 ApplyIdentity(seizounika, detail, lineNumberForCreate);
-                ApplyEcDistinction(seizounika, detail);
+                ApplyEcScope(seizounika, detail);
                 seizounika.EcParentMaterialCode = detail.EcParentMaterialCode ?? string.Empty;
                 seizounika.EcParentMaterialDescription = detail.EcParentMaterialDescription ?? string.Empty;
                 seizounika.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 seizounika.EcModelCode = detail.EcModelCode ?? string.Empty;
-                seizounika.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                seizounika.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                seizounika.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                seizounika.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             case TaktEcSeikan seikan:
                 ApplyIdentity(seikan, detail, lineNumberForCreate);
-                ApplyEcDistinction(seikan, detail);
+                ApplyEcScope(seikan, detail);
                 seikan.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 seikan.EcModelCode = detail.EcModelCode ?? string.Empty;
-                seikan.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                seikan.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                seikan.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                seikan.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
+                seikan.EcOldPartDisposition = detail.EcOldPartDisposition;
                 break;
             case TaktEcSeizouikka seizouikka:
                 ApplyIdentity(seizouikka, detail, lineNumberForCreate);
-                ApplyEcDistinction(seizouikka, detail);
+                ApplyEcScope(seizouikka, detail);
                 seizouikka.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 seizouikka.EcModelCode = detail.EcModelCode ?? string.Empty;
-                seizouikka.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                seizouikka.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                seizouikka.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                seizouikka.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             case TaktEcHinkan hinkan:
                 ApplyIdentity(hinkan, detail, lineNumberForCreate);
-                ApplyEcDistinction(hinkan, detail);
+                ApplyEcScope(hinkan, detail);
                 hinkan.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 hinkan.EcModelCode = detail.EcModelCode ?? string.Empty;
-                hinkan.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                hinkan.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                hinkan.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                hinkan.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             case TaktEcSeizougijutsu seizougijutsu:
                 ApplyIdentity(seizougijutsu, detail, lineNumberForCreate);
-                ApplyEcDistinction(seizougijutsu, detail);
+                ApplyEcScope(seizougijutsu, detail);
                 seizougijutsu.DiscontinuedStatus = detail.DiscontinuedStatus ?? string.Empty;
                 seizougijutsu.EcModelCode = detail.EcModelCode ?? string.Empty;
-                seizougijutsu.EcFinishedGoods = detail.EcFinishedGoods ?? string.Empty;
-                seizougijutsu.EcFinishedGoodsDescription = detail.EcFinishedGoodsDescription ?? string.Empty;
+                seizougijutsu.EcRootMaterialCode = detail.EcRootMaterialCode ?? string.Empty;
+                seizougijutsu.EcRootMaterialDescription = detail.EcRootMaterialDescription ?? string.Empty;
                 break;
             default:
                 if (exec is ITaktEcDeptExecEntity identity)
@@ -142,40 +146,40 @@ internal static class TaktEcDeptExecRedundantBinder
     }
 
     /// <summary>
-    /// 同步明细冗余区分（各执行部门 EcDistinction）
+    /// 同步明细冗余区分（各执行部门 EcScope）
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <param name="detail">设变明细</param>
-    private static void ApplyEcDistinction(object exec, TaktEcDetail detail)
+    private static void ApplyEcScope(object exec, TaktEcDetail detail)
     {
         switch (exec)
         {
             case TaktEcKoubai koubai:
-                koubai.EcDistinction = detail.EcDistinction;
+                koubai.EcScope = detail.EcScope;
                 break;
             case TaktEcUkeken ukeken:
-                ukeken.EcDistinction = detail.EcDistinction;
+                ukeken.EcScope = detail.EcScope;
                 break;
             case TaktEcBukan bukan:
-                bukan.EcDistinction = detail.EcDistinction;
+                bukan.EcScope = detail.EcScope;
                 break;
             case TaktEcSmt smt:
-                smt.EcDistinction = detail.EcDistinction;
+                smt.EcScope = detail.EcScope;
                 break;
             case TaktEcSeizounika seizounika:
-                seizounika.EcDistinction = detail.EcDistinction;
+                seizounika.EcScope = detail.EcScope;
                 break;
             case TaktEcSeikan seikan:
-                seikan.EcDistinction = detail.EcDistinction;
+                seikan.EcScope = detail.EcScope;
                 break;
             case TaktEcSeizouikka seizouikka:
-                seizouikka.EcDistinction = detail.EcDistinction;
+                seizouikka.EcScope = detail.EcScope;
                 break;
             case TaktEcHinkan hinkan:
-                hinkan.EcDistinction = detail.EcDistinction;
+                hinkan.EcScope = detail.EcScope;
                 break;
             case TaktEcSeizougijutsu seizougijutsu:
-                seizougijutsu.EcDistinction = detail.EcDistinction;
+                seizougijutsu.EcScope = detail.EcScope;
                 break;
         }
     }

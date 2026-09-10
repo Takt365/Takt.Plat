@@ -116,7 +116,7 @@ public class TaktEcExecDeptAccess
     public ITaktCompanyRepository<TaktEcSeizounika> SeizounikaRepository => _seizounikaRepository;
 
     /// <summary>
-    /// PCBA（F+C003）仓储
+    /// PCBA/SMT（F+C003，DeptCode=D0625）仓储
     /// </summary>
     public ITaktCompanyRepository<TaktEcSmt> SmtRepository => _smtRepository;
 
@@ -136,6 +136,7 @@ public class TaktEcExecDeptAccess
             TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Smt => ToBaseRow(await _smtRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Pcba => await FirstSmtBaseByEcCodeAsync(ecCode),
             TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
@@ -159,6 +160,7 @@ public class TaktEcExecDeptAccess
             TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
             TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
             TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Smt => ToBaseRow(await _smtRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
             TaktEcDeptCodes.Pcba => await FirstSmtBaseByDetailIdAsync(ecDetailId),
             TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
             TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcDetailId == ecDetailId && x.IsDeleted == 0)),
@@ -168,7 +170,96 @@ public class TaktEcExecDeptAccess
     }
 
     /// <summary>
-    /// 按明细 ID 列表聚合全部部门执行行（公共字段）
+    /// IN 分批上限（避免 SqlSugar 展开超大 Contains 导致 SQL Server「查询处理器用尽内部资源」）
+    /// </summary>
+    private const int EcDetailIdInBatchSize = 500;
+
+    /// <summary>
+    /// 按设变单号聚合全部部门执行行（公共字段；等式条件，适合十万级明细）
+    /// </summary>
+    /// <param name="ecCode">设变单号</param>
+    /// <returns>执行行列表</returns>
+    public async Task<List<TaktEcExecBaseRow>> ListBaseByEcCodeAsync(string ecCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
+        var code = ecCode.Trim();
+        var rows = new List<TaktEcExecBaseRow>();
+        rows.AddRange((await _pmcRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _mpRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _iqcRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _mcRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _smtRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _seizounikaRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _assyRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _qaRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        rows.AddRange((await _teRepository.GetListAsync(x => x.EcCode == code && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
+        return rows;
+    }
+
+    /// <summary>
+    /// 设变单号下是否存在任一部门已输入（实施=是或执行内容非空）；仅查首行，不拉全表
+    /// </summary>
+    /// <param name="ecCode">设变单号</param>
+    /// <returns>存在已输入行时 true</returns>
+    public async Task<bool> ExistsAnyDeptInputByEcCodeAsync(string ecCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
+        var code = ecCode.Trim();
+        if (await _pmcRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _mpRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _iqcRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _mcRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _smtRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _seizounikaRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _assyRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        if (await _qaRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null)
+        {
+            return true;
+        }
+        return await _teRepository.FirstAsync(x =>
+                x.EcCode == code && x.IsDeleted == 0 && x.IsObsolete == 0
+                && (x.IsImplemented == 1 || (x.ExecContent != null && x.ExecContent != ""))) != null;
+    }
+
+    /// <summary>
+    /// 按明细 ID 列表聚合全部部门执行行（公共字段；超大批次分片 IN，避免查询计划资源耗尽）
     /// </summary>
     /// <param name="detailIds">明细 ID 列表</param>
     /// <returns>执行行列表</returns>
@@ -178,6 +269,27 @@ public class TaktEcExecDeptAccess
         {
             return [];
         }
+        if (detailIds.Count <= EcDetailIdInBatchSize)
+        {
+            return await ListBaseByEcDetailIdsChunkAsync(detailIds);
+        }
+        var rows = new List<TaktEcExecBaseRow>();
+        for (var offset = 0; offset < detailIds.Count; offset = checked(offset + EcDetailIdInBatchSize))
+        {
+            var take = Math.Min(EcDetailIdInBatchSize, detailIds.Count - offset);
+            var chunk = detailIds.Skip(offset).Take(take).ToList();
+            rows.AddRange(await ListBaseByEcDetailIdsChunkAsync(chunk));
+        }
+        return rows;
+    }
+
+    /// <summary>
+    /// 单批明细 ID 聚合部门执行行
+    /// </summary>
+    /// <param name="detailIds">单批明细 ID（建议 ≤ EcDetailIdInBatchSize）</param>
+    /// <returns>执行行列表</returns>
+    private async Task<List<TaktEcExecBaseRow>> ListBaseByEcDetailIdsChunkAsync(IReadOnlyList<long> detailIds)
+    {
         var rows = new List<TaktEcExecBaseRow>();
         rows.AddRange((await _pmcRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
         rows.AddRange((await _mpRepository.GetListAsync(x => detailIds.Contains(x.EcDetailId) && x.IsDeleted == 0)).Select(ToBaseRow).Where(x => x != null)!);
@@ -255,6 +367,9 @@ public class TaktEcExecDeptAccess
                 x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Mc => _mcRepository.GetMaxIntAsync(
+                x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
+                x => x.LineNumber),
+            TaktEcDeptCodes.Smt => _smtRepository.GetMaxIntAsync(
                 x => x.TenantCode == tenantCode && x.CompanyCode == companyCode && x.EcDetailId == ecDetailId,
                 x => x.LineNumber),
             TaktEcDeptCodes.Pcba => GetMaxLineNumberForPcbaAsync(ecDetailId, tenantCode, companyCode),

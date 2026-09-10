@@ -472,7 +472,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     }
 
     /// <summary>
-    /// 构建设变主表范围筛选（工厂 + 可选区分/状态）
+    /// 构建设变主表范围筛选（工厂 + 可选实施范围/状态）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="queryDto">查询 DTO</param>
@@ -486,10 +486,10 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plantCode);
-        if (queryDto.EcDistinction.HasValue)
+        if (queryDto.EcScope.HasValue)
         {
-            var distinction = queryDto.EcDistinction.Value;
-            exp = exp.And(x => x.EcDistinction == distinction);
+            var ecScope = queryDto.EcScope.Value;
+            exp = exp.And(x => x.EcScope == ecScope);
         }
         if (queryDto.ChangeStatus.HasValue)
         {

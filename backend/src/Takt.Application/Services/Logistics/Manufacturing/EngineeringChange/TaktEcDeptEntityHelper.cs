@@ -46,20 +46,24 @@ public static class TaktEcDeptEntityHelper
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
         if (deptCode == TaktEcDeptCodes.Pcba)
         {
-            var pcbaRows = deptList.Where(x => GetDeptCode(x) == deptCode).ToList();
-            var activeElectronic = pcbaRows.OfType<TaktEcSmt>().FirstOrDefault(x => x.IsObsolete == 0);
+            // 看板「制二」桶：SMT(D0625) 与 制造2课(D0620/Seizounika) 按表类型择优，不依赖行上 DeptCode 字面量
+            var activeElectronic = deptList.OfType<TaktEcSmt>().FirstOrDefault(x => x.IsObsolete == 0);
             if (activeElectronic != null)
             {
                 return activeElectronic;
             }
-            var activeSeizounika = pcbaRows.OfType<TaktEcSeizounika>().FirstOrDefault(x => x.IsObsolete == 0);
+            var activeSeizounika = deptList.OfType<TaktEcSeizounika>().FirstOrDefault(x => x.IsObsolete == 0);
             if (activeSeizounika != null)
             {
                 return activeSeizounika;
             }
-            return pcbaRows.OfType<TaktEcSmt>().FirstOrDefault()
-                ?? pcbaRows.OfType<TaktEcSeizounika>().FirstOrDefault()
-                ?? pcbaRows.FirstOrDefault();
+            return (object?)deptList.OfType<TaktEcSmt>().FirstOrDefault()
+                ?? deptList.OfType<TaktEcSeizounika>().FirstOrDefault();
+        }
+        if (deptCode == TaktEcDeptCodes.Smt)
+        {
+            return deptList.OfType<TaktEcSmt>().FirstOrDefault(x => x.IsObsolete == 0)
+                ?? deptList.OfType<TaktEcSmt>().FirstOrDefault();
         }
         return deptList.FirstOrDefault(x => GetDeptCode(x) == deptCode);
     }
@@ -85,19 +89,27 @@ public static class TaktEcDeptEntityHelper
     /// <param name="isImplemented">是否实施</param>
     public static void SetIsImplemented(object exec, int isImplemented)
     {
+        if (exec is TaktEcSeizougijutsu)
+        {
+            return;
+        }
         AsExec(exec).IsImplemented = isImplemented;
     }
 
     /// <summary>
-    /// 写入执行内容（仅当目标为空或强制覆盖时；短文案规范为「管理区分-…」）
+    /// 写入执行内容（仅当目标为空或强制覆盖时；短文案规范为「实施范围-…」）
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <param name="content">执行内容</param>
     /// <param name="overwrite">是否覆盖已有内容</param>
     public static void SetExecContent(object exec, string? content, bool overwrite = false)
     {
+        if (exec is TaktEcSeizougijutsu)
+        {
+            return;
+        }
         var entity = AsExec(exec);
-        var normalized = TaktEcDistinctionConstants.NormalizeLegacyAutoExecContent(content);
+        var normalized = TaktEcScopeConstants.NormalizeLegacyAutoExecContent(content);
         if (overwrite || string.IsNullOrWhiteSpace(entity.ExecContent))
         {
             entity.ExecContent = normalized;
@@ -109,7 +121,8 @@ public static class TaktEcDeptEntityHelper
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>执行内容</returns>
-    public static string? GetExecContent(object exec) => AsExec(exec).ExecContent;
+    public static string? GetExecContent(object exec) =>
+        exec is TaktEcSeizougijutsu ? null : AsExec(exec).ExecContent;
 
     /// <summary>
     /// 读取是否作废
@@ -119,7 +132,7 @@ public static class TaktEcDeptEntityHelper
     public static int GetIsObsolete(object exec) => AsExec(exec).IsObsolete;
 
     /// <summary>
-    /// 部门执行行是否已有输入（实施=是，或执行内容非空）
+    /// 部门执行行是否已有输入（实施=是，或执行内容非空；制技以担当/SOP日期/更新SOP为准）
     /// </summary>
     /// <param name="exec">部门执行实体</param>
     /// <returns>是否有输入</returns>
@@ -128,6 +141,13 @@ public static class TaktEcDeptEntityHelper
         if (GetIsObsolete(exec) == 1)
         {
             return false;
+        }
+        if (exec is TaktEcSeizougijutsu te)
+        {
+            return te.SopDate.HasValue
+                || te.IsSopUpdated == 1
+                || !string.IsNullOrWhiteSpace(te.TechLeader)
+                || !string.IsNullOrWhiteSpace(te.SopLeader);
         }
         if (GetIsImplemented(exec) == 1)
         {
@@ -144,7 +164,7 @@ public static class TaktEcDeptEntityHelper
     public static DateTime? ResolveTransposedCompletedDate(object exec)
     {
         var deptCode = GetDeptCode(exec);
-        DateTime? scheduledProductionDate = null;
+        DateTime? scheduledDate = null;
         DateTime? purchaseOrderIssueDate = null;
         DateTime? inspectionDate = null;
         DateTime? outboundDate = null;
@@ -154,7 +174,7 @@ public static class TaktEcDeptEntityHelper
         switch (exec)
         {
             case TaktEcSeikan e:
-                scheduledProductionDate = e.ScheduledProductionDate;
+                scheduledDate = e.ScheduledDate;
                 updatedAt = e.UpdatedAt;
                 createdAt = e.CreatedAt;
                 break;
@@ -200,7 +220,7 @@ public static class TaktEcDeptEntityHelper
         }
         return TaktEcExecTransposedHelper.ResolveCompletedDate(
             deptCode,
-            scheduledProductionDate,
+            scheduledDate,
             purchaseOrderIssueDate,
             inspectionDate,
             outboundDate,

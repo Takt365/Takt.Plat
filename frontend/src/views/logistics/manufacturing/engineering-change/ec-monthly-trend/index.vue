@@ -13,7 +13,7 @@
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
       v-model:ec-code="ecCode"
-      v-model:ec-distinction="ecDistinction"
+      v-model:ec-scope="ecScope"
       v-model:change-status="changeStatus"
       v-model:ec-status="ecStatus"
       v-model:dept-code="deptCode"
@@ -64,7 +64,7 @@
       :plant-code="plantCode"
       :period-range="periodRange"
       :ec-code="ecCode"
-      :ec-distinction="ecDistinction"
+      :ec-scope="ecScope"
       :change-status="changeStatus"
       :ec-status="ecStatus"
       :dept-code="deptCode"
@@ -105,7 +105,7 @@ const periodRange = ref<[string, string] | null>(null)
 /** 设变单号 */
 const ecCode = ref<string | undefined>()
 /** 区分 */
-const ecDistinction = ref<number | undefined>()
+const ecScope = ref<number | undefined>()
 /** 变更状态 */
 const changeStatus = ref<number | undefined>()
 /** 设变状态 */
@@ -200,7 +200,7 @@ function clearPlantCascade() {
 /** 重置 */
 function handleReset() {
   clearPlantCascade()
-  ecDistinction.value = undefined
+  ecScope.value = undefined
   changeStatus.value = undefined
   ecStatus.value = undefined
   applyDefaultPeriodRange()

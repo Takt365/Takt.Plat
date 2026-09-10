@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDefectGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktDefectGroupI18nSeedData : ITaktSeedDataCoordinator
             // entity.defectgroup._self
             new TranslationSeedItem("entity.defectgroup._self", "zh-HK", "不良组主数据信息_hk", "实体名称"),
 
-            // entity.defectgroup.defectcategory
-            new TranslationSeedItem("entity.defectgroup.defectcategory", "en-US", "不良类别_us", "不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
-            // entity.defectgroup.defectcategory
-            new TranslationSeedItem("entity.defectgroup.defectcategory", "ja-JP", "不良类别_jp", "不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
-            // entity.defectgroup.defectcategory
-            new TranslationSeedItem("entity.defectgroup.defectcategory", "zh-CN", "不良类别", "不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
-            // entity.defectgroup.defectcategory
-            new TranslationSeedItem("entity.defectgroup.defectcategory", "zh-HK", "不良类别_hk", "不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
-
             // entity.defectgroup.code
             new TranslationSeedItem("entity.defectgroup.code", "en-US", "不良组编码_us", "不良组编码（3）"),
             // entity.defectgroup.code
@@ -125,6 +116,15 @@ public class TaktDefectGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.defectgroup.description", "zh-CN", "不良组描述", "不良组描述"),
             // entity.defectgroup.description
             new TranslationSeedItem("entity.defectgroup.description", "zh-HK", "不良组描述_hk", "不良组描述"),
+
+            // entity.defectgroup.category
+            new TranslationSeedItem("entity.defectgroup.category", "en-US", "不良组类别_us", "不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
+            // entity.defectgroup.category
+            new TranslationSeedItem("entity.defectgroup.category", "ja-JP", "不良组类别_jp", "不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
+            // entity.defectgroup.category
+            new TranslationSeedItem("entity.defectgroup.category", "zh-CN", "不良组类别", "不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
+            // entity.defectgroup.category
+            new TranslationSeedItem("entity.defectgroup.category", "zh-HK", "不良组类别_hk", "不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),
 
             // entity.defectgroup.contactphone
             new TranslationSeedItem("entity.defectgroup.contactphone", "en-US", "联系电话_us", "联系电话"),

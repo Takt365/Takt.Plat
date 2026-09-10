@@ -179,7 +179,7 @@ function deptFieldTitle(deptCode: string, fieldLabel: string): string {
 function stageColumnTitle(stageCode: string, kind: 'date' | 'batch'): string {
   const map: Record<string, { date: string; batch: string }> = {
     [TaktEcBatchStageCodes.Scheduled]: {
-      date: deptFieldTitle(TaktEcDeptCodes.Pmc, seikan.label('scheduledProductionDate')),
+      date: deptFieldTitle(TaktEcDeptCodes.Pmc, seikan.label('scheduledDate')),
       batch: deptFieldTitle(TaktEcDeptCodes.Pmc, seikan.label('scheduledBatch')),
     },
     [TaktEcBatchStageCodes.Outbound]: {

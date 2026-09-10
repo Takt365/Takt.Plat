@@ -48,9 +48,9 @@ public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
     public string? DeptCode { get; set; }
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_distinction_category；可选，按主表过滤）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；可选，按主表过滤）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 变更状态（字典 logistics_manufacturing_ec_status；可选，按主表过滤）

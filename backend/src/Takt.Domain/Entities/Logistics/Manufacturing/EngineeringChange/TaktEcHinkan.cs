@@ -4,7 +4,7 @@
 // 文件名称：TaktEcHinkan.cs
 // 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变品管课部门执行表（按设变明细ID+完成品唯一）
+// 功能描述：设变品管课部门执行表（按设变明细ID+根物料编码唯一）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,13 +17,13 @@ using Takt.Domain.Interfaces;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变品管课（D0820）部门执行表（按设变明细 + 完成品唯一）
+/// 设变品管课（D0820）部门执行表（按设变明细 + 根物料编码唯一）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_hinkan", "设变品管执行表")]
 [SugarIndex("ix_ec_hinkan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_hinkan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcDetailId), OrderByType.Asc, nameof(EcFinishedGoods), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_hinkan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcDetailId), OrderByType.Asc, nameof(EcRootMaterialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_hinkan_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
+public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity, ITaktEcExecModelRootMaterialRow
 {
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -46,16 +46,26 @@ public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     [SugarColumn(ColumnName = "ec_model_code", ColumnDescription = "机种编码", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcModelCode { get; set; } = string.Empty;
     /// <summary>
-    /// 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+    /// 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcFinishedGoods { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_root_material_code", ColumnDescription = "根物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否实施（0=否 1=是，字典 sys_yes_no）
     /// </summary>
     [SugarColumn(ColumnName = "is_implemented", ColumnDescription = "实施", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsImplemented { get; set; } = 0;
+    /// <summary>
+    /// 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+    /// </summary>
+    [SugarColumn(ColumnName = "scheduled_date", ColumnDescription = "预定日期", ColumnDataType = "date", IsNullable = true)]
+    public DateTime? ScheduledDate { get; set; }
+    /// <summary>
+    /// 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+    /// </summary>
+    [SugarColumn(ColumnName = "scheduled_batch", ColumnDescription = "预定批次", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? ScheduledBatch { get; set; }
     /// <summary>
     /// 执行内容（各部门通用）
     /// </summary>
@@ -82,10 +92,10 @@ public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     [SugarColumn(ColumnName = "sampling_code", ColumnDescription = "抽样号码", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? SamplingCode { get; set; }
     /// <summary>
-    /// 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+    /// 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_finished_goods_description", ColumnDescription = "完成品描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcFinishedGoodsDescription { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_root_material_description", ColumnDescription = "根物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码（TaktDept.DeptCode；本表固定课别）
@@ -99,16 +109,10 @@ public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 管理区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_distinction", ColumnDescription = "管理区分", ColumnDataType = "int", IsNullable = false)]
-    public int EcDistinction { get; set; }
-
-    /// <summary>
-    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsObsolete { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_scope", ColumnDescription = "实施范围", ColumnDataType = "int", IsNullable = false)]
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
@@ -116,6 +120,12 @@ public class TaktEcHinkan : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     [SugarColumn(ColumnName = "ec_detail_id", ColumnDescription = "设变明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变明细（数据主从：本表由明细派生；多对一，外键 EcDetailId → TaktEcDetail.Id）

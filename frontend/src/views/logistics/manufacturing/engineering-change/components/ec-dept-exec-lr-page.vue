@@ -119,12 +119,17 @@ import type { Component } from 'vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { message, Modal } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { RiEditLine, RiPlayCircleLine, RiStopCircleLine } from '@remixicon/vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useTaktContentModalWidth } from '@/composables/use-takt-content-modal-width'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import type { TaktPagedResult } from '@/types/common'
 import type { TaktEcExecCode } from '@/constants/logistics/ec-exec-codes'
 import { getEcDeptExecLineFields } from '@/constants/logistics/ec-dept-exec-line-fields'
+import {
+  EC_SCOPE_MATERIAL_CONTROL_UPDATE_SLUGS,
+  TaktEcScope,
+} from '@/constants/logistics/ec-scope'
 import { useEcExecSignalRGroup } from '@/composables/use-ec-dept-signalr-group'
 import { useEcDeptViewI18n } from '../composables/use-ec-dept-view-i18n'
 import {
@@ -163,7 +168,7 @@ const props = defineProps<{
   /**
    * 更新停产状态（Z0=在产 / ZQ=停产），并触发后端自动填充/清除
    * @param id 执行行主键
-   * @param discontinuedStatus 完成品物料状态
+   * @param discontinuedStatus 根物料停产状态
    */
   updateDiscontinuedStatus: (id: string, discontinuedStatus: string) => Promise<any>
   /** 导出执行行 */
@@ -225,32 +230,83 @@ function isYesNoField(field: string): boolean {
  * @returns {number} 列宽
  */
 function masterColumnWidth(field: string): number {
+  if (field === props.idField || (field.endsWith('Id') && field !== 'ecDetailId')) {
+    return 170
+  }
   if (field === 'execContent' || field === 'supplier') {
     return 180
   }
-  if (field === 'ecFinishedGoodsDescription' || field === 'ecParentMaterialDescription') {
+  if (field === 'ecRootMaterialDescription' || field === 'ecParentMaterialDescription' || field === 'deptName') {
     return 160
   }
   if (YES_NO_FIELDS.has(field) || field === 'productionTeam' || field === 'lineNumber' || field === 'deptCode') {
     return 100
   }
-  if (field.endsWith('Date') || field.endsWith('Code') || field.endsWith('Batch') || field === 'ecFinishedGoods') {
+  if (field.endsWith('Date') || field.endsWith('Code') || field.endsWith('Batch') || field === 'ecRootMaterialCode') {
     return 140
   }
   return 120
 }
 
 /**
- * 是否视为停产（非空且非 Z0；无停产列时以执行内容 EOL 兜底）
+ * 是否视为停产（各部门执行表 DiscontinuedStatus：非空且非 Z0）
  * @param record 主表行
  * @returns {boolean} 是否停产
  */
 function isEolRow(record: EcDeptExecMasterRow): boolean {
-  const status = String(record.discontinuedStatus ?? '').trim()
-  if (status) {
-    return status.toUpperCase() !== PLANNED_MATERIAL_STATUS
+  const status = String(record.discontinuedStatus ?? '').trim().toUpperCase()
+  return !!status && status !== PLANNED_MATERIAL_STATUS
+}
+
+/**
+ * 是否计划物料 Z0（可显示修改）：仅看执行表 DiscontinuedStatus；空视为 Z0
+ * @param record 主表行
+ * @returns {boolean} 是否 Z0 / 可填报状态
+ */
+function isZ0Row(record: EcDeptExecMasterRow): boolean {
+  const status = String(record.discontinuedStatus ?? '').trim().toUpperCase()
+  return !status || status === PLANNED_MATERIAL_STATUS
+}
+
+/**
+ * 是否允许更新填报（按实施范围 + Z0）
+ * - 技术/内部：各课均不可改
+ * - 部管：仅采购/生管/部管/SMT 且 Z0 可改；其余课不可改
+ * - 全仕向：各课 Z0 可改
+ * @param record 主表行
+ * @returns {boolean} 是否可更新
+ */
+function canUpdateRow(record: EcDeptExecMasterRow): boolean {
+  const scope = Number(record.ecScope ?? 0)
+  if (scope === TaktEcScope.Internal || scope === TaktEcScope.Technical) {
+    return false
   }
-  return String(record.execContent ?? '').trim().toUpperCase() === 'EOL'
+  if (scope === TaktEcScope.MaterialControl) {
+    if (!EC_SCOPE_MATERIAL_CONTROL_UPDATE_SLUGS.has(props.deptSlug)) {
+      return false
+    }
+    return isZ0Row(record)
+  }
+  return isZ0Row(record)
+}
+
+/**
+ * 是否显示停产/在产按钮
+ * - 技术/内部：完全不需要
+ * - 部管：仅采购/生管/部管/SMT；其余课完全不需要
+ * - 全仕向：需要
+ * @param record 主表行
+ * @returns {boolean} 是否显示停产/在产
+ */
+function canShowDiscontinuedActions(record: EcDeptExecMasterRow): boolean {
+  const scope = Number(record.ecScope ?? 0)
+  if (scope === TaktEcScope.Internal || scope === TaktEcScope.Technical) {
+    return false
+  }
+  if (scope === TaktEcScope.MaterialControl) {
+    return EC_SCOPE_MATERIAL_CONTROL_UPDATE_SLUGS.has(props.deptSlug)
+  }
+  return true
 }
 
 /**
@@ -277,6 +333,20 @@ function confirmDiscontinuedStatus(
       try {
         await props.updateDiscontinuedStatus(id, discontinuedStatus)
         message.success(t('common.feedback.updated', { target: t(props.menuI18nKey) }))
+        // 本地同步执行表 DiscontinuedStatus，驱动修改/停产/在产按钮显隐
+        dataSource.value = dataSource.value.map((row) => {
+          if (getMasterId(row) !== id) {
+            return row
+          }
+          return { ...row, discontinuedStatus }
+        })
+        if (selectedRowKeys.value.length === 1 && String(selectedRowKeys.value[0]) === id) {
+          const refreshed = dataSource.value.find((row) => getMasterId(row) === id)
+          if (refreshed) {
+            selectedRows.value = [refreshed]
+            syncMasterSelection(refreshed)
+          }
+        }
         await loadData()
         detailPanelRef.value?.reload?.()
       } finally {
@@ -286,26 +356,39 @@ function confirmDiscontinuedStatus(
   })
 }
 
-/** 主表列（部门执行实体字段 + 停产/在产操作） */
+/** 主表列（部门执行实体字段 + 停产/在产操作；数据列一律 ellipsis，禁止长文本撑高行） */
 const columns = computed<TableColumnsType>(() => {
   const fieldCols = getEcDeptExecLineFields(props.deptSlug).map((field) => ({
     title: pi.label(field),
     dataIndex: field,
     key: field,
     width: masterColumnWidth(field),
-    ellipsis: field === 'execContent',
+    ellipsis: true,
   }))
   fieldCols.push(
     CreateActionColumn<EcDeptExecMasterRow>({
-      width: 168,
+      width: 120,
       actions: [
+        {
+          key: 'update',
+          label: t('common.page.button.edit'),
+          shape: 'plain',
+          icon: RiEditLine,
+          buttonClass: 'takt-button-update',
+          permission: props.updatePermission,
+          visible: (record) => canUpdateRow(record),
+          onClick: (record) => {
+            void openEditForm(record)
+          },
+        },
         {
           key: 'discontinue',
           label: t('common.page.button.discontinue'),
           shape: 'plain',
-          buttonClass: 'takt-button-disable',
+          icon: RiStopCircleLine,
+          buttonClass: 'takt-button-discontinue',
           permission: props.updatePermission,
-          visible: (record) => !isEolRow(record),
+          visible: (record) => canShowDiscontinuedActions(record) && !isEolRow(record),
           onClick: (record) =>
             confirmDiscontinuedStatus(
               record,
@@ -317,9 +400,10 @@ const columns = computed<TableColumnsType>(() => {
           key: 'inproduction',
           label: t('common.page.button.inproduction'),
           shape: 'plain',
-          buttonClass: 'takt-button-enable',
+          icon: RiPlayCircleLine,
+          buttonClass: 'takt-button-inproduction',
           permission: props.updatePermission,
-          visible: (record) => isEolRow(record),
+          visible: (record) => canShowDiscontinuedActions(record) && isEolRow(record),
           onClick: (record) =>
             confirmDiscontinuedStatus(
               record,
@@ -344,8 +428,16 @@ const rowSelection = computed(() => ({
   },
 }))
 
-/** 更新按钮禁用 */
-const updateDisabled = computed(() => selectedRowKeys.value.length !== 1)
+/** 更新按钮禁用：须单选且当前行允许更新（以 dataSource 最新停产状态为准） */
+const updateDisabled = computed(() => {
+  if (selectedRowKeys.value.length !== 1) {
+    return true
+  }
+  const key = String(selectedRowKeys.value[0] ?? '')
+  const row =
+    dataSource.value.find((r) => getMasterId(r) === key) ?? selectedRows.value[0]
+  return !row || !canUpdateRow(row)
+})
 
 /**
  * 主表主键
@@ -394,11 +486,15 @@ async function loadData() {
     })
     dataSource.value = (res.data ?? []) as EcDeptExecMasterRow[]
     total.value = res.total ?? 0
-    const currentKey = selectedMasterKey.value
+    const currentKey = selectedMasterKey.value || String(selectedRowKeys.value[0] ?? '')
     if (currentKey) {
       const found = dataSource.value.find((row) => getMasterId(row) === currentKey)
       syncMasterSelection(found ?? null)
-      if (!found) {
+      // 停产/在产切换后须用新行刷新选中，否则工具栏更新显隐仍按旧 discontinuedStatus
+      if (found) {
+        selectedRowKeys.value = [currentKey]
+        selectedRows.value = [found]
+      } else {
         selectedRowKeys.value = []
         selectedRows.value = []
       }
@@ -448,22 +544,60 @@ function handleColumnKeysChange(keys: string[]) {
   visibleColumnKeys.value = keys
 }
 
-/** 列重置 */
-function handleColumnSettingReset() {
-  visibleColumnKeys.value = [
-    ...columns.value.map((c) => String(c.key)).filter((k) => k !== 'action'),
+/**
+ * 执行部门主表默认可见列：主键 ID、行号默认隐藏（列设置未勾选）；仅本页特例
+ * @returns {string[]} 默认可见列 key（含 action）
+ */
+function defaultVisibleMasterColumnKeys(): string[] {
+  const hidden = new Set([props.idField, 'lineNumber'])
+  return [
+    ...columns.value
+      .map((c) => String(c.key))
+      .filter((k) => k !== 'action' && !hidden.has(k)),
     'action',
   ]
 }
 
-/** 编辑 */
-function handleUpdate() {
-  const row = selectedRows.value[0]
-  if (!row) {
+/** 列重置（恢复默认：不含主键/行号） */
+function handleColumnSettingReset() {
+  visibleColumnKeys.value = defaultVisibleMasterColumnKeys()
+}
+
+/**
+ * 打开编辑：按主键 getById 拉全量（含 DeptName / 执行主键），与技术课编辑一致
+ * @param record 主表行
+ */
+async function openEditForm(record: EcDeptExecMasterRow) {
+  const key = getMasterId(record)
+  if (!key) {
+    message.error(t('common.feedback.failed'))
     return
   }
-  formData.value = { ...row }
-  formVisible.value = true
+  selectedRowKeys.value = [key]
+  selectedRows.value = [record]
+  syncMasterSelection(record)
+  loading.value = true
+  try {
+    const detail = await props.getMasterById(key)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 工具栏编辑 */
+function handleUpdate() {
+  if (selectedRowKeys.value.length !== 1) {
+    return
+  }
+  const key = String(selectedRowKeys.value[0] ?? '')
+  const row =
+    dataSource.value.find((r) => getMasterId(r) === key) ?? selectedRows.value[0]
+  if (!row || !canUpdateRow(row)) {
+    return
+  }
+  void openEditForm(row)
 }
 
 /** 提交 */
@@ -511,8 +645,8 @@ async function handleExport() {
 
 watch(
   () => getEcDeptExecLineFields(props.deptSlug).join(','),
-  (keyCsv) => {
-    visibleColumnKeys.value = [...keyCsv.split(',').filter(Boolean), 'action']
+  () => {
+    visibleColumnKeys.value = defaultVisibleMasterColumnKeys()
   },
   { immediate: true },
 )

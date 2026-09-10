@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdetail._self
             new TranslationSeedItem("entity.ecdetail._self", "zh-HK", "设变明细信息_hk", "实体名称"),
 
-            // entity.ecdetail.ecgijutsuid
-            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "en-US", "技术课主表ID_us", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
-            // entity.ecdetail.ecgijutsuid
-            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "ja-JP", "技术课主表ID_jp", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
-            // entity.ecdetail.ecgijutsuid
-            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-CN", "技术课主表ID", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
-            // entity.ecdetail.ecgijutsuid
-            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-HK", "技术课主表ID_hk", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.linenumber
+            new TranslationSeedItem("entity.ecdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            // entity.ecdetail.linenumber
+            new TranslationSeedItem("entity.ecdetail.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            // entity.ecdetail.linenumber
+            new TranslationSeedItem("entity.ecdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.ecdetail.linenumber
+            new TranslationSeedItem("entity.ecdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.ecdetail.eccode
             new TranslationSeedItem("entity.ecdetail.eccode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
@@ -107,15 +107,6 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.eccode", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
             // entity.ecdetail.eccode
             new TranslationSeedItem("entity.ecdetail.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
-
-            // entity.ecdetail.linenumber
-            new TranslationSeedItem("entity.ecdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
-            // entity.ecdetail.linenumber
-            new TranslationSeedItem("entity.ecdetail.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
-            // entity.ecdetail.linenumber
-            new TranslationSeedItem("entity.ecdetail.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
-            // entity.ecdetail.linenumber
-            new TranslationSeedItem("entity.ecdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.ecdetail.ecbomlinecode
             new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "en-US", "BOM行号_us", "BOM行号"),
@@ -127,31 +118,40 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "zh-HK", "BOM行号_hk", "BOM行号"),
 
             // entity.ecdetail.ecmodelcode
-            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "en-US", "机种编码_us", "机种编码"),
+            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "en-US", "机种编码_us", "机种编码（按根物料编码 EcRootMaterialCode 查询型号目的地回填）"),
             // entity.ecdetail.ecmodelcode
-            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "ja-JP", "机种编码_jp", "机种编码"),
+            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "ja-JP", "机种编码_jp", "机种编码（按根物料编码 EcRootMaterialCode 查询型号目的地回填）"),
             // entity.ecdetail.ecmodelcode
-            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "zh-CN", "机种编码", "机种编码"),
+            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "zh-CN", "机种编码", "机种编码（按根物料编码 EcRootMaterialCode 查询型号目的地回填）"),
             // entity.ecdetail.ecmodelcode
-            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "zh-HK", "机种编码_hk", "机种编码"),
+            new TranslationSeedItem("entity.ecdetail.ecmodelcode", "zh-HK", "机种编码_hk", "机种编码（按根物料编码 EcRootMaterialCode 查询型号目的地回填）"),
 
-            // entity.ecdetail.ecfinishedgoods
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoods", "en-US", "完成品_us", "完成品"),
-            // entity.ecdetail.ecfinishedgoods
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoods", "ja-JP", "完成品_jp", "完成品"),
-            // entity.ecdetail.ecfinishedgoods
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoods", "zh-CN", "完成品", "完成品"),
-            // entity.ecdetail.ecfinishedgoods
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoods", "zh-HK", "完成品_hk", "完成品"),
+            // entity.ecdetail.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialcode", "en-US", "根物料编码_us", "根物料编码"),
+            // entity.ecdetail.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialcode", "ja-JP", "根物料编码_jp", "根物料编码"),
+            // entity.ecdetail.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialcode", "zh-CN", "根物料编码", "根物料编码"),
+            // entity.ecdetail.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialcode", "zh-HK", "根物料编码_hk", "根物料编码"),
 
-            // entity.ecdetail.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoodsdescription", "en-US", "完成品描述_us", "完成品描述"),
-            // entity.ecdetail.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoodsdescription", "ja-JP", "完成品描述_jp", "完成品描述"),
-            // entity.ecdetail.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoodsdescription", "zh-CN", "完成品描述", "完成品描述"),
-            // entity.ecdetail.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecdetail.ecfinishedgoodsdescription", "zh-HK", "完成品描述_hk", "完成品描述"),
+            // entity.ecdetail.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialdescription", "en-US", "根物料描述_us", "根物料描述（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialdescription", "ja-JP", "根物料描述_jp", "根物料描述（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialdescription", "zh-CN", "根物料描述", "根物料描述（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecdetail.ecrootmaterialdescription", "zh-HK", "根物料描述_hk", "根物料描述（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+
+            // entity.ecdetail.discontinuedstatus
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "en-US", "停产状态_us", "停产状态（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.discontinuedstatus
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "ja-JP", "停产状态_jp", "停产状态（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.discontinuedstatus
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-CN", "停产状态", "停产状态（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
+            // entity.ecdetail.discontinuedstatus
+            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-HK", "停产状态_hk", "停产状态（按根物料编码 EcRootMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecparentmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecparentmaterialcode", "en-US", "上阶物料编码_us", "上阶物料编码"),
@@ -163,33 +163,15 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecparentmaterialcode", "zh-HK", "上阶物料编码_hk", "上阶物料编码"),
 
             // entity.ecdetail.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "en-US", "上阶物料描述_us", "上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）"),
+            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "en-US", "上阶物料描述_us", "上阶物料描述（按上阶物料编码 EcParentMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "ja-JP", "上阶物料描述_jp", "上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）"),
+            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "ja-JP", "上阶物料描述_jp", "上阶物料描述（按上阶物料编码 EcParentMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "zh-CN", "上阶物料描述", "上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）"),
+            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "zh-CN", "上阶物料描述", "上阶物料描述（按上阶物料编码 EcParentMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecparentmaterialdescription
-            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "zh-HK", "上阶物料描述_hk", "上阶物料描述（冗余：按 EcParentMaterialCode 取 TaktMaterialPlant.MaterialDescription 联动）"),
+            new TranslationSeedItem("entity.ecdetail.ecparentmaterialdescription", "zh-HK", "上阶物料描述_hk", "上阶物料描述（按上阶物料编码 EcParentMaterialCode 查询工厂物料回填）"),
 
-            // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "en-US", "停产状态_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "ja-JP", "停产状态_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-CN", "停产状态", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-            // entity.ecdetail.discontinuedstatus
-            new TranslationSeedItem("entity.ecdetail.discontinuedstatus", "zh-HK", "停产状态_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料）"),
-
-            
-            // entity.ecdetail.ecdistinction
-            new TranslationSeedItem("entity.ecdetail.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
-            // entity.ecdetail.ecdistinction
-            new TranslationSeedItem("entity.ecdetail.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
-            // entity.ecdetail.ecdistinction
-            new TranslationSeedItem("entity.ecdetail.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
-            // entity.ecdetail.ecdistinction
-            new TranslationSeedItem("entity.ecdetail.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcGijutsu.EcDistinction）"),
-// entity.ecdetail.ecoldmaterialcode
+            // entity.ecdetail.ecoldmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecoldmaterialcode", "en-US", "旧物料编码_us", "旧物料编码"),
             // entity.ecdetail.ecoldmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecoldmaterialcode", "ja-JP", "旧物料编码_jp", "旧物料编码"),
@@ -226,40 +208,40 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecolditemposition", "zh-HK", "旧位置_hk", "旧位置"),
 
             // entity.ecdetail.ecoldstock
-            new TranslationSeedItem("entity.ecdetail.ecoldstock", "en-US", "旧在库数量_us", "旧在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecoldstock", "en-US", "旧品在库_us", "旧品在库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldstock
-            new TranslationSeedItem("entity.ecdetail.ecoldstock", "ja-JP", "旧在库数量_jp", "旧在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecoldstock", "ja-JP", "旧品在库_jp", "旧品在库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldstock
-            new TranslationSeedItem("entity.ecdetail.ecoldstock", "zh-CN", "旧在库数量", "旧在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecoldstock", "zh-CN", "旧品在库", "旧品在库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldstock
-            new TranslationSeedItem("entity.ecdetail.ecoldstock", "zh-HK", "旧在库数量_hk", "旧在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecoldstock", "zh-HK", "旧品在库_hk", "旧品在库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecoldwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "en-US", "旧品仓库_us", "旧品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "en-US", "旧品仓库_us", "旧品仓库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "ja-JP", "旧品仓库_jp", "旧品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "ja-JP", "旧品仓库_jp", "旧品仓库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "zh-CN", "旧品仓库", "旧品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "zh-CN", "旧品仓库", "旧品仓库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "zh-HK", "旧品仓库_hk", "旧品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldwarehouse", "zh-HK", "旧品仓库_hk", "旧品仓库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecoldpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "en-US", "旧采购类型_us", "旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "en-US", "旧采购类型_us", "旧采购类型（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "ja-JP", "旧采购类型_jp", "旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "ja-JP", "旧采购类型_jp", "旧采购类型（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "zh-CN", "旧采购类型", "旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "zh-CN", "旧采购类型", "旧采购类型（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "zh-HK", "旧采购类型_hk", "旧采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpurchasetype", "zh-HK", "旧采购类型_hk", "旧采购类型（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecoldrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "en-US", "旧品是否需检验_us", "旧品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "en-US", "旧品检验_us", "旧品检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "ja-JP", "旧品是否需检验_jp", "旧品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "ja-JP", "旧品检验_jp", "旧品检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "zh-CN", "旧品是否需检验", "旧品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "zh-CN", "旧品检验", "旧品检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecoldrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "zh-HK", "旧品是否需检验_hk", "旧品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldrequiresinspection", "zh-HK", "旧品检验_hk", "旧品检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecnewmaterialcode
             new TranslationSeedItem("entity.ecdetail.ecnewmaterialcode", "en-US", "新物料编码_us", "新物料编码"),
@@ -298,40 +280,40 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecnewitemposition", "zh-HK", "新位置_hk", "新位置"),
 
             // entity.ecdetail.ecnewstock
-            new TranslationSeedItem("entity.ecdetail.ecnewstock", "en-US", "新在库数量_us", "新在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecnewstock", "en-US", "新品在库_us", "新品在库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewstock
-            new TranslationSeedItem("entity.ecdetail.ecnewstock", "ja-JP", "新在库数量_jp", "新在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecnewstock", "ja-JP", "新品在库_jp", "新品在库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewstock
-            new TranslationSeedItem("entity.ecdetail.ecnewstock", "zh-CN", "新在库数量", "新在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecnewstock", "zh-CN", "新品在库", "新品在库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewstock
-            new TranslationSeedItem("entity.ecdetail.ecnewstock", "zh-HK", "新在库数量_hk", "新在库数量"),
+            new TranslationSeedItem("entity.ecdetail.ecnewstock", "zh-HK", "新品在库_hk", "新品在库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecnewwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "en-US", "新品仓库_us", "新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "en-US", "新品仓库_us", "新品仓库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "ja-JP", "新品仓库_jp", "新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "ja-JP", "新品仓库_jp", "新品仓库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "zh-CN", "新品仓库", "新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "zh-CN", "新品仓库", "新品仓库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewwarehouse
-            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "zh-HK", "新品仓库_hk", "新品仓库（选项 TaktWarehouses/options；DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewwarehouse", "zh-HK", "新品仓库_hk", "新品仓库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecnewpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "en-US", "新采购类型_us", "新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "en-US", "新采购类型_us", "新采购类型（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "ja-JP", "新采购类型_jp", "新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "ja-JP", "新采购类型_jp", "新采购类型（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "zh-CN", "新采购类型", "新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "zh-CN", "新采购类型", "新采购类型（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewpurchasetype
-            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "zh-HK", "新采购类型_hk", "新采购类型（F=外部采购，E=自制生产；与 BOM 采购类型口径一致）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewpurchasetype", "zh-HK", "新采购类型_hk", "新采购类型（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecnewrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "en-US", "新品是否需检验_us", "新品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "en-US", "新品检验_us", "新品检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "ja-JP", "新品是否需检验_jp", "新品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "ja-JP", "新品检验_jp", "新品检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "zh-CN", "新品是否需检验", "新品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "zh-CN", "新品检验", "新品检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
             // entity.ecdetail.ecnewrequiresinspection
-            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "zh-HK", "新品是否需检验_hk", "新品是否需检验（字典 sys_yes_no；0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdetail.ecnewrequiresinspection", "zh-HK", "新品检验_hk", "新品检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）"),
 
             // entity.ecdetail.ecbomdate
             new TranslationSeedItem("entity.ecdetail.ecbomdate", "en-US", "BOM生效日期_us", "BOM生效日期"),
@@ -343,130 +325,148 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecbomdate", "zh-HK", "BOM生效日期_hk", "BOM生效日期"),
 
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "en-US", "兼容性_us", "兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "en-US", "兼容性_us", "兼容性"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "ja-JP", "兼容性_jp", "兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "ja-JP", "兼容性_jp", "兼容性"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-CN", "兼容性", "兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-CN", "兼容性", "兼容性"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-HK", "兼容性_hk", "兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-HK", "兼容性_hk", "兼容性"),
 
-            // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "en-US", "二级区分_us", "二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "ja-JP", "二级区分_jp", "二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-CN", "二级区分", "二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-HK", "二级区分_hk", "二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
+            // entity.ecdetail.ec2ndvendor
+            new TranslationSeedItem("entity.ecdetail.ec2ndvendor", "en-US", "第二供应商_us", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.ecdetail.ec2ndvendor
+            new TranslationSeedItem("entity.ecdetail.ec2ndvendor", "ja-JP", "第二供应商_jp", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.ecdetail.ec2ndvendor
+            new TranslationSeedItem("entity.ecdetail.ec2ndvendor", "zh-CN", "第二供应商", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.ecdetail.ec2ndvendor
+            new TranslationSeedItem("entity.ecdetail.ec2ndvendor", "zh-HK", "第二供应商_hk", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
 
             // entity.ecdetail.ecinstruction
-            new TranslationSeedItem("entity.ecdetail.ecinstruction", "en-US", "生产指令_us", "生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "en-US", "生产指令_us", "生产指令"),
             // entity.ecdetail.ecinstruction
-            new TranslationSeedItem("entity.ecdetail.ecinstruction", "ja-JP", "生产指令_jp", "生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "ja-JP", "生产指令_jp", "生产指令"),
             // entity.ecdetail.ecinstruction
-            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-CN", "生产指令", "生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-CN", "生产指令", "生产指令"),
             // entity.ecdetail.ecinstruction
-            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-HK", "生产指令_hk", "生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-HK", "生产指令_hk", "生产指令"),
 
             // entity.ecdetail.ecoldpartdisposition
-            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "en-US", "旧品处理_us", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "en-US", "旧品处理_us", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）"),
             // entity.ecdetail.ecoldpartdisposition
-            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "ja-JP", "旧品处理_jp", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "ja-JP", "旧品处理_jp", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）"),
             // entity.ecdetail.ecoldpartdisposition
-            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "zh-CN", "旧品处理", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "zh-CN", "旧品处理", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）"),
             // entity.ecdetail.ecoldpartdisposition
-            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "zh-HK", "旧品处理_hk", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+            new TranslationSeedItem("entity.ecdetail.ecoldpartdisposition", "zh-HK", "旧品处理_hk", "旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）"),
+
+            // entity.ecdetail.ecscope
+            new TranslationSeedItem("entity.ecdetail.ecscope", "en-US", "实施范围_us", "实施范围（冗余：来自 TaktEcGijutsu.EcScope）"),
+            // entity.ecdetail.ecscope
+            new TranslationSeedItem("entity.ecdetail.ecscope", "ja-JP", "实施范围_jp", "实施范围（冗余：来自 TaktEcGijutsu.EcScope）"),
+            // entity.ecdetail.ecscope
+            new TranslationSeedItem("entity.ecdetail.ecscope", "zh-CN", "实施范围", "实施范围（冗余：来自 TaktEcGijutsu.EcScope）"),
+            // entity.ecdetail.ecscope
+            new TranslationSeedItem("entity.ecdetail.ecscope", "zh-HK", "实施范围_hk", "实施范围（冗余：来自 TaktEcGijutsu.EcScope）"),
+
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "en-US", "技术课主表ID_us", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "ja-JP", "技术课主表ID_jp", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-CN", "技术课主表ID", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
+            // entity.ecdetail.ecgijutsuid
+            new TranslationSeedItem("entity.ecdetail.ecgijutsuid", "zh-HK", "技术课主表ID_hk", "技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）"),
 
             // entity.ecdetail.isobsolete
-            new TranslationSeedItem("entity.ecdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "en-US", "是否作废_us", "是否作废"),
             // entity.ecdetail.isobsolete
-            new TranslationSeedItem("entity.ecdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废"),
             // entity.ecdetail.isobsolete
-            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-CN", "是否作废", "是否作废"),
             // entity.ecdetail.isobsolete
-            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废"),
 
             // entity.ecdetail.ecseikans
-            new TranslationSeedItem("entity.ecdetail.ecseikans", "en-US", "生管执行行列表_us", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "en-US", "生管执行行列表_us", "生管执行行列表（数据主从；一对多；子表外键 TaktEcSeikan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseikans
-            new TranslationSeedItem("entity.ecdetail.ecseikans", "ja-JP", "生管执行行列表_jp", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "ja-JP", "生管执行行列表_jp", "生管执行行列表（数据主从；一对多；子表外键 TaktEcSeikan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseikans
-            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-CN", "生管执行行列表", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-CN", "生管执行行列表", "生管执行行列表（数据主从；一对多；子表外键 TaktEcSeikan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseikans
-            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-HK", "生管执行行列表_hk", "生管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseikans", "zh-HK", "生管执行行列表_hk", "生管执行行列表（数据主从；一对多；子表外键 TaktEcSeikan.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.eckoubais
-            new TranslationSeedItem("entity.ecdetail.eckoubais", "en-US", "采购执行行列表_us", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "en-US", "采购执行行列表_us", "采购执行行列表（数据主从；一对多；子表外键 TaktEcKoubai.EcDetailId → 本表 Id）"),
             // entity.ecdetail.eckoubais
-            new TranslationSeedItem("entity.ecdetail.eckoubais", "ja-JP", "采购执行行列表_jp", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "ja-JP", "采购执行行列表_jp", "采购执行行列表（数据主从；一对多；子表外键 TaktEcKoubai.EcDetailId → 本表 Id）"),
             // entity.ecdetail.eckoubais
-            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-CN", "采购执行行列表", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-CN", "采购执行行列表", "采购执行行列表（数据主从；一对多；子表外键 TaktEcKoubai.EcDetailId → 本表 Id）"),
             // entity.ecdetail.eckoubais
-            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-HK", "采购执行行列表_hk", "采购执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.eckoubais", "zh-HK", "采购执行行列表_hk", "采购执行行列表（数据主从；一对多；子表外键 TaktEcKoubai.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecukekens
-            new TranslationSeedItem("entity.ecdetail.ecukekens", "en-US", "受检执行行列表_us", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "en-US", "受检执行行列表_us", "受检执行行列表（数据主从；一对多；子表外键 TaktEcUkeken.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecukekens
-            new TranslationSeedItem("entity.ecdetail.ecukekens", "ja-JP", "受检执行行列表_jp", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "ja-JP", "受检执行行列表_jp", "受检执行行列表（数据主从；一对多；子表外键 TaktEcUkeken.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecukekens
-            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-CN", "受检执行行列表", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-CN", "受检执行行列表", "受检执行行列表（数据主从；一对多；子表外键 TaktEcUkeken.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecukekens
-            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-HK", "受检执行行列表_hk", "受检执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecukekens", "zh-HK", "受检执行行列表_hk", "受检执行行列表（数据主从；一对多；子表外键 TaktEcUkeken.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecbukans
-            new TranslationSeedItem("entity.ecdetail.ecbukans", "en-US", "部管执行行列表_us", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "en-US", "部管执行行列表_us", "部管执行行列表（数据主从；一对多；子表外键 TaktEcBukan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecbukans
-            new TranslationSeedItem("entity.ecdetail.ecbukans", "ja-JP", "部管执行行列表_jp", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "ja-JP", "部管执行行列表_jp", "部管执行行列表（数据主从；一对多；子表外键 TaktEcBukan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecbukans
-            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-CN", "部管执行行列表", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-CN", "部管执行行列表", "部管执行行列表（数据主从；一对多；子表外键 TaktEcBukan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecbukans
-            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-HK", "部管执行行列表_hk", "部管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecbukans", "zh-HK", "部管执行行列表_hk", "部管执行行列表（数据主从；一对多；子表外键 TaktEcBukan.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecseizounikas
-            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "en-US", "制二执行行列表_us", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "en-US", "制二执行行列表_us", "制二执行行列表（数据主从；一对多；子表外键 TaktEcSeizounika.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizounikas
-            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "ja-JP", "制二执行行列表_jp", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "ja-JP", "制二执行行列表_jp", "制二执行行列表（数据主从；一对多；子表外键 TaktEcSeizounika.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizounikas
-            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-CN", "制二执行行列表", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-CN", "制二执行行列表", "制二执行行列表（数据主从；一对多；子表外键 TaktEcSeizounika.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizounikas
-            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-HK", "制二执行行列表_hk", "制二执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizounikas", "zh-HK", "制二执行行列表_hk", "制二执行行列表（数据主从；一对多；子表外键 TaktEcSeizounika.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecsmts
-            new TranslationSeedItem("entity.ecdetail.ecsmts", "en-US", "SMT执行行列表_us", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "en-US", "SMT执行行列表_us", "SMT执行行列表（数据主从；一对多；子表外键 TaktEcSmt.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecsmts
-            new TranslationSeedItem("entity.ecdetail.ecsmts", "ja-JP", "SMT执行行列表_jp", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "ja-JP", "SMT执行行列表_jp", "SMT执行行列表（数据主从；一对多；子表外键 TaktEcSmt.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecsmts
-            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-CN", "SMT执行行列表", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-CN", "SMT执行行列表", "SMT执行行列表（数据主从；一对多；子表外键 TaktEcSmt.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecsmts
-            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-HK", "SMT执行行列表_hk", "SMT执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecsmts", "zh-HK", "SMT执行行列表_hk", "SMT执行行列表（数据主从；一对多；子表外键 TaktEcSmt.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecseizouikkas
-            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "en-US", "制一执行行列表_us", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "en-US", "制一执行行列表_us", "制一执行行列表（数据主从；一对多；子表外键 TaktEcSeizouikka.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizouikkas
-            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "ja-JP", "制一执行行列表_jp", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "ja-JP", "制一执行行列表_jp", "制一执行行列表（数据主从；一对多；子表外键 TaktEcSeizouikka.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizouikkas
-            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-CN", "制一执行行列表", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-CN", "制一执行行列表", "制一执行行列表（数据主从；一对多；子表外键 TaktEcSeizouikka.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizouikkas
-            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-HK", "制一执行行列表_hk", "制一执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizouikkas", "zh-HK", "制一执行行列表_hk", "制一执行行列表（数据主从；一对多；子表外键 TaktEcSeizouikka.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.echinkans
-            new TranslationSeedItem("entity.ecdetail.echinkans", "en-US", "品管执行行列表_us", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.echinkans", "en-US", "品管执行行列表_us", "品管执行行列表（数据主从；一对多；子表外键 TaktEcHinkan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.echinkans
-            new TranslationSeedItem("entity.ecdetail.echinkans", "ja-JP", "品管执行行列表_jp", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.echinkans", "ja-JP", "品管执行行列表_jp", "品管执行行列表（数据主从；一对多；子表外键 TaktEcHinkan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.echinkans
-            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-CN", "品管执行行列表", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-CN", "品管执行行列表", "品管执行行列表（数据主从；一对多；子表外键 TaktEcHinkan.EcDetailId → 本表 Id）"),
             // entity.ecdetail.echinkans
-            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-HK", "品管执行行列表_hk", "品管执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.echinkans", "zh-HK", "品管执行行列表_hk", "品管执行行列表（数据主从；一对多；子表外键 TaktEcHinkan.EcDetailId → 本表 Id）"),
 
             // entity.ecdetail.ecseizougijutsus
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "en-US", "制技执行行列表_us", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "en-US", "制技执行行列表_us", "制技执行行列表（数据主从；一对多；子表外键 TaktEcSeizougijutsu.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizougijutsus
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "ja-JP", "制技执行行列表_jp", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "ja-JP", "制技执行行列表_jp", "制技执行行列表（数据主从；一对多；子表外键 TaktEcSeizougijutsu.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizougijutsus
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-CN", "制技执行行列表", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-CN", "制技执行行列表", "制技执行行列表（数据主从；一对多；子表外键 TaktEcSeizougijutsu.EcDetailId → 本表 Id）"),
             // entity.ecdetail.ecseizougijutsus
-            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-HK", "制技执行行列表_hk", "制技执行行列表（数据主从；一对多；子表外键 EcDetailId）"),
+            new TranslationSeedItem("entity.ecdetail.ecseizougijutsus", "zh-HK", "制技执行行列表_hk", "制技执行行列表（数据主从；一对多；子表外键 TaktEcSeizougijutsu.EcDetailId → 本表 Id）"),
         };
     }
 

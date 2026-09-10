@@ -69,6 +69,7 @@ import { createLogger } from '@/utils/logger'
 import { TAKT_LARGE_DATA_AUTO_THRESHOLD } from '@/utils/takt-large-data'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { isEmptyFormFieldValue } from '@/utils/takt-dict-default'
+import { translateLocaleMessage } from '@/utils/takt-i18n-message'
 import { useI18n } from 'vue-i18n'
 
 const selectLogger = createLogger('takt-select')
@@ -432,15 +433,23 @@ function normalizeMultipleSelectValue(
   return aligned.length > 0 ? aligned : undefined
 }
 
-/** a-select 实际绑定值（多选时剔除无效项，避免空白 tag + ×） */
+/** a-select 实际绑定值（单选/多选均与 options 值类型对齐，避免 string/number 错配显示占位符） */
 const effectiveModelValue = computed(() => {
-  if (!props.multiple) {
+  if (props.multiple) {
+    return normalizeMultipleSelectValue(
+      props.modelValue,
+      options.value as ReadonlyArray<{ value?: string | number }>,
+    )
+  }
+  if (props.modelValue == null || props.modelValue === '') {
     return props.modelValue
   }
-  return normalizeMultipleSelectValue(
-    props.modelValue,
-    options.value as ReadonlyArray<{ value?: string | number }>,
-  )
+  const optionList = options.value as ReadonlyArray<{ value?: string | number }>
+  if (!optionList.length) {
+    return props.modelValue
+  }
+  const matched = optionList.find((opt) => String(opt.value) === String(props.modelValue))
+  return matched != null ? matched.value : props.modelValue
 })
 
 // 将后端数据转换为 Select 组件需要的格式
@@ -490,26 +499,29 @@ const options = computed(() => {
       valueField: dictValueField,
       labelField: dictLabelField
     }, props.cultureCode)
-    
-    // 根据 modelValue 的类型推断期望的值类型
-    let expectedValueType = inferValueType(props.modelValue)
-    
-    // 如果 modelValue 是 undefined/null，但所有字典选项的值都是数值字符串，则推断为 number 类型
-    if (expectedValueType === 'string' && props.modelValue == null) {
-      if (dictOptions.every((option: { label: string; value: string | number }) => isNumericValue(option.value))) {
-        expectedValueType = 'number'
-      }
-    }
+
+    // 仅当绑定值已是 number 时选项转 number；空值保持 string，避免先 number 后 string「请选择」
+    const expectedDictValueType: 'number' | 'string' =
+      typeof props.modelValue === 'number'
+      || (Array.isArray(props.modelValue) && typeof props.modelValue[0] === 'number')
+        ? 'number'
+        : 'string'
     
     return dictOptions.map((option: TaktDictSelectOption) => {
-      // sys_culture_code：DictLabel 即 NativeName（本族语+地区缩写），全球统一展示，不走 t(i18nKey)
-      const resolvedLabel = props.dictType === 'sys_culture_code'
-        ? String(option.dictLabel ?? option.label ?? '')
-        : (option.i18nKey?.trim() ? t(option.i18nKey) : String(option.label ?? option.dictLabel ?? ''))
+      // sys_culture_code：DictLabel 即 NativeName；其余 i18nKey 须走树解析（避免 t('….1') 被 vue-i18n 当数组下标）
+      let resolvedLabel = String(option.label ?? option.dictLabel ?? '')
+      if (props.dictType === 'sys_culture_code') {
+        resolvedLabel = String(option.dictLabel ?? option.label ?? '')
+      } else if (option.i18nKey?.trim()) {
+        const translated = translateLocaleMessage(option.i18nKey.trim())
+        if (translated && translated !== option.i18nKey.trim()) {
+          resolvedLabel = translated
+        }
+      }
       return {
         ...option,
         label: resolvedLabel,
-        value: convertValueType(option.value, expectedValueType, props.dictType || '')
+        value: convertValueType(option.value, expectedDictValueType, props.dictType || '')
       }
     })
   }

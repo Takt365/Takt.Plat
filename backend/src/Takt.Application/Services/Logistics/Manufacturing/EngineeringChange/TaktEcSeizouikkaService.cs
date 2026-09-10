@@ -131,10 +131,10 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         var isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique = await _uniqueValidator.IsUniqueAsync(
             _ecSeizouikkaRepository,
             x => x.EcDetailId == entity.EcDetailId
-                && x.EcFinishedGoods == entity.EcFinishedGoods);
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique)
         {
-            throw new TaktBusinessException("设变制一执行的EcDetailId、EcFinishedGoods已存在");
+            throw new TaktBusinessException("设变制一执行的EcDetailId、EcRootMaterialCode已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -150,7 +150,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
     }
 
     /// <summary>
-    /// 更新设变制一执行（同设变单号+机种+完成品的执行行一并写入可填字段）
+    /// 更新设变制一执行（同设变单号+机种+根物料编码的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变制一执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -166,14 +166,14 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
         var isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique = await _uniqueValidator.IsUniqueAsync(
             _ecSeizouikkaRepository,
             x => x.EcDetailId == entity.EcDetailId
-                && x.EcFinishedGoods == entity.EcFinishedGoods,
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique)
         {
-            throw new TaktBusinessException("设变制一执行的EcDetailId、EcFinishedGoods已存在");
+            throw new TaktBusinessException("设变制一执行的EcDetailId、EcRootMaterialCode已存在");
         }
         await _ecSeizouikkaRepository.UpdateAsync(entity);
-        await _ecExecPersistence.FanOutSeizouikkaFillableByEcModelAndFinishedGoodsAsync(entity);
+        await _ecExecPersistence.FanOutSeizouikkaFillableByEcModelAndRootMaterialAsync(entity);
         await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizouikkaByIdAsync(id) ?? throw new TaktBusinessException("设变制一执行不存在");
     }
@@ -238,7 +238,7 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
             throw new TaktBusinessException("设变制造一课执行不存在");
         }
         var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
-            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            ? TaktEcScopeConstants.PlannedMaterialStatus
             : dto.DiscontinuedStatus.Trim();
         await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
         return await GetEcSeizouikkaByIdAsync(dto.EcSeizouikkaId) ?? throw new TaktBusinessException("设变制造一课执行不存在");
@@ -302,18 +302,18 @@ public class TaktEcSeizouikkaService : TaktServiceBase, ITaktEcSeizouikkaService
             try
             {
                 var entity = rows[i].Adapt<TaktEcSeizouikka>();
-                var importKey = $"{entity.EcDetailId}|{entity.EcFinishedGoods}";
+                var importKey = $"{entity.EcDetailId}|{entity.EcRootMaterialCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcFinishedGoods）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcDetailId、EcRootMaterialCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecSeizouikkaRepository,
                     x => x.EcDetailId == entity.EcDetailId
-                        && x.EcFinishedGoods == entity.EcFinishedGoods);
+                        && x.EcRootMaterialCode == entity.EcRootMaterialCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_seizouikka_unique)
                 {
-                    throw new TaktBusinessException("设变制一执行的EcDetailId、EcFinishedGoods已存在");
+                    throw new TaktBusinessException("设变制一执行的EcDetailId、EcRootMaterialCode已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {

@@ -34,7 +34,7 @@ public class TaktMaterialGroup : TaktTenantCoreEntityBase
     /// <summary>
     /// 物料组名称（group_name）
     /// </summary>
-    [SugarColumn(ColumnName = "material_group_name", ColumnDescription = "物料组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_group_name", ColumnDescription = "物料组名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string MaterialGroupName { get; set; } = string.Empty;
 
     /// <summary>

@@ -65,14 +65,14 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -89,9 +89,9 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -114,7 +114,7 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -129,7 +129,7 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcOldRequiresInspection { get; set; } = 0;
 
@@ -154,7 +154,7 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -169,7 +169,7 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcNewRequiresInspection { get; set; } = 0;
 
@@ -184,9 +184,9 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -262,14 +262,14 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -286,9 +286,9 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -311,7 +311,7 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -326,7 +326,7 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcOldRequiresInspection { get; set; }
 
@@ -351,7 +351,7 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -366,7 +366,7 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcNewRequiresInspection { get; set; }
 
@@ -386,9 +386,9 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -483,14 +483,14 @@ public class TaktEcDetailCreateDto
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -507,9 +507,9 @@ public class TaktEcDetailCreateDto
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -532,7 +532,7 @@ public class TaktEcDetailCreateDto
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -547,7 +547,7 @@ public class TaktEcDetailCreateDto
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcOldRequiresInspection { get; set; } = 0;
 
@@ -572,7 +572,7 @@ public class TaktEcDetailCreateDto
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -587,7 +587,7 @@ public class TaktEcDetailCreateDto
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcNewRequiresInspection { get; set; } = 0;
 
@@ -602,9 +602,9 @@ public class TaktEcDetailCreateDto
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -732,14 +732,14 @@ public class TaktEcDetailTemplateDto
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -756,9 +756,9 @@ public class TaktEcDetailTemplateDto
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -781,7 +781,7 @@ public class TaktEcDetailTemplateDto
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -796,7 +796,7 @@ public class TaktEcDetailTemplateDto
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcOldRequiresInspection { get; set; }
 
@@ -821,7 +821,7 @@ public class TaktEcDetailTemplateDto
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -836,7 +836,7 @@ public class TaktEcDetailTemplateDto
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcNewRequiresInspection { get; set; }
 
@@ -851,9 +851,9 @@ public class TaktEcDetailTemplateDto
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -934,14 +934,14 @@ public class TaktEcDetailImportDto
     public string? EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -958,9 +958,9 @@ public class TaktEcDetailImportDto
     /// </summary>
     public string? DiscontinuedStatus { get; set; }
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -983,7 +983,7 @@ public class TaktEcDetailImportDto
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -998,7 +998,7 @@ public class TaktEcDetailImportDto
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcOldRequiresInspection { get; set; }
 
@@ -1023,7 +1023,7 @@ public class TaktEcDetailImportDto
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -1038,7 +1038,7 @@ public class TaktEcDetailImportDto
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int? EcNewRequiresInspection { get; set; }
 
@@ -1053,9 +1053,9 @@ public class TaktEcDetailImportDto
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -1142,14 +1142,14 @@ public class TaktEcDetailExportDto
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? EcFinishedGoods { get; set; } = string.Empty;
+    public string? EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品物料描述
+    /// 根物料编码物料描述
     /// </summary>
-    public string? EcFinishedGoodsDescription { get; set; } = string.Empty;
+    public string? EcRootMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -1166,9 +1166,9 @@ public class TaktEcDetailExportDto
     /// </summary>
     public string DiscontinuedStatus { get; set; } = "Z0";
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    public int EcDistinction { get; set; }
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 旧物料编码
@@ -1191,7 +1191,7 @@ public class TaktEcDetailExportDto
     public string? EcOldItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧在库数量
+    /// 旧品在库
     /// </summary>
     public decimal? EcOldStock { get; set; }
 
@@ -1206,7 +1206,7 @@ public class TaktEcDetailExportDto
     public string? EcOldPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 旧品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcOldRequiresInspection { get; set; } = 0;
 
@@ -1231,7 +1231,7 @@ public class TaktEcDetailExportDto
     public string? EcNewItemPosition { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新在库数量
+    /// 新品在库
     /// </summary>
     public decimal? EcNewStock { get; set; }
 
@@ -1246,7 +1246,7 @@ public class TaktEcDetailExportDto
     public string? EcNewPurchaseType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 新品是否需检验（字典 sys_yes_no；0=否 1=是）
+    /// 新品检验（字典 sys_yes_no；0=否 1=是）
     /// </summary>
     public int EcNewRequiresInspection { get; set; } = 0;
 
@@ -1261,9 +1261,9 @@ public class TaktEcDetailExportDto
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? EcSecondDistinction { get; set; } = string.Empty;
+    public string? Ec2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产指令（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）

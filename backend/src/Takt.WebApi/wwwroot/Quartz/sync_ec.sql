@@ -71,7 +71,7 @@ CREATE TABLE #source_detail (
   [source_ec_code] NVARCHAR(100),
   [line_number] INT NOT NULL DEFAULT 10,
   [source_old_material_code] NVARCHAR(100),
-  [source_finished_goods] NVARCHAR(500),
+  [source_root_material_code] NVARCHAR(500),
   [source_parent_material_code] NVARCHAR(500),
   [source_old_material_description] NVARCHAR(MAX),
   [source_old_usage_quantity] NVARCHAR(MAX),
@@ -82,7 +82,7 @@ CREATE TABLE #source_detail (
   [source_new_item_position] NVARCHAR(MAX),
   [source_bom_code] NVARCHAR(MAX),
   [source_compatibility] NVARCHAR(MAX),
-  [source_distinction] NVARCHAR(MAX),
+  [source_2nd_vendor] NVARCHAR(MAX),
   [source_instruction] NVARCHAR(MAX),
   [source_old_part_disposition] NVARCHAR(MAX),
   [source_bom_effective_date] DATE,
@@ -206,11 +206,11 @@ SET @progress_msg = N'QUARTZ_SYNC_PROGRESS|loadstart|0|0|0|0|detail';
 RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
 INSERT INTO #source_detail (
   [rn],[id],[source_ec_id],[source_ec_code],[source_old_material_code],
-  [source_finished_goods],[source_parent_material_code],[source_old_material_description],
+  [source_root_material_code],[source_parent_material_code],[source_old_material_description],
   [source_old_usage_quantity],[source_old_item_position],
   [source_new_material_code],[source_new_material_description],[source_new_usage_quantity],
   [source_new_item_position],[source_bom_code],
-  [source_compatibility],[source_distinction],[source_instruction],
+  [source_compatibility],[source_2nd_vendor],[source_instruction],
   [source_old_part_disposition],[source_bom_effective_date],[created_at]
 )
 SELECT
@@ -219,7 +219,7 @@ SELECT
   NULL,
   S.source_ec_code,
   S.source_old_material_code,
-  S.source_finished_goods,
+  S.source_root_material_code,
   S.source_parent_material_code,
   S.source_old_material_description,
   S.source_old_usage_quantity,
@@ -230,7 +230,7 @@ SELECT
   S.source_new_item_position,
   S.source_bom_code,
   S.source_compatibility,
-  S.source_distinction,
+  S.source_2nd_vendor,
   S.source_instruction,
   S.source_old_part_disposition,
   S.source_bom_effective_date,
@@ -239,7 +239,7 @@ FROM (
   SELECT
     LTRIM(RTRIM(Sub.[D_SAP_ZPABD_S001])) AS source_ec_code,
     ISNULL(Sub.[D_SAP_ZPABD_S004], N'') AS source_old_material_code,
-    ISNULL(Sub.[D_SAP_ZPABD_S002], N'') AS source_finished_goods,
+    ISNULL(Sub.[D_SAP_ZPABD_S002], N'') AS source_root_material_code,
     ISNULL(Sub.[D_SAP_ZPABD_S003], N'') AS source_parent_material_code,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S005] AS NVARCHAR(MAX)), N'') AS source_old_material_description,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S006] AS NVARCHAR(MAX)), N'') AS source_old_usage_quantity,
@@ -250,7 +250,7 @@ FROM (
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S011] AS NVARCHAR(MAX)), N'') AS source_new_item_position,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S012] AS NVARCHAR(MAX)), N'') AS source_bom_code,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S013] AS NVARCHAR(MAX)), N'') AS source_compatibility,
-    ISNULL(CAST(Sub.[D_SAP_ZPABD_S014] AS NVARCHAR(MAX)), N'') AS source_distinction,
+    ISNULL(CAST(Sub.[D_SAP_ZPABD_S014] AS NVARCHAR(MAX)), N'') AS source_2nd_vendor,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S015] AS NVARCHAR(MAX)), N'') AS source_instruction,
     ISNULL(CAST(Sub.[D_SAP_ZPABD_S016] AS NVARCHAR(MAX)), N'') AS source_old_part_disposition,
     TRY_CONVERT(DATE, NULLIF(LTRIM(RTRIM(Sub.[D_SAP_ZPABD_S017])), N''), 23) AS source_bom_effective_date,
@@ -608,7 +608,7 @@ DECLARE @detail_before_dedupe INT = (SELECT COUNT(*) FROM #source_detail);
     ROW_NUMBER() OVER (
       PARTITION BY
         [source_ec_id],
-        LTRIM(RTRIM(ISNULL([source_finished_goods], N''))),
+        LTRIM(RTRIM(ISNULL([source_root_material_code], N''))),
         LTRIM(RTRIM(ISNULL([source_parent_material_code], N''))),
         LTRIM(RTRIM(ISNULL([source_old_material_code], N''))),
         LTRIM(RTRIM(ISNULL([source_new_material_code], N''))),
@@ -648,12 +648,12 @@ RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
     X.[id],
     X.[line_number],
     X.[source_ec_id],
-    LTRIM(RTRIM(ISNULL(X.[source_finished_goods], N''))) AS [bk_finished_goods],
+    LTRIM(RTRIM(ISNULL(X.[source_root_material_code], N''))) AS [bk_root_material_code],
     HASHBYTES(
       N'SHA2_256',
       CONCAT(
         CAST(X.[source_ec_id] AS NVARCHAR(30)), N'|',
-        LEFT(LTRIM(RTRIM(ISNULL(X.[source_finished_goods], N''))), 400), N'|',
+        LEFT(LTRIM(RTRIM(ISNULL(X.[source_root_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(X.[source_parent_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(X.[source_old_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(X.[source_new_material_code], N''))), 400), N'|',
@@ -670,7 +670,7 @@ RAISERROR(@progress_msg, 10, 1) WITH NOWAIT;
           N'SHA2_256',
           CONCAT(
             CAST(X.[source_ec_id] AS NVARCHAR(30)), N'|',
-            LEFT(LTRIM(RTRIM(ISNULL(X.[source_finished_goods], N''))), 400), N'|',
+            LEFT(LTRIM(RTRIM(ISNULL(X.[source_root_material_code], N''))), 400), N'|',
             LEFT(LTRIM(RTRIM(ISNULL(X.[source_parent_material_code], N''))), 400), N'|',
             LEFT(LTRIM(RTRIM(ISNULL(X.[source_old_material_code], N''))), 400), N'|',
             LEFT(LTRIM(RTRIM(ISNULL(X.[source_new_material_code], N''))), 400), N'|',
@@ -691,7 +691,7 @@ SELECT
   [id],
   [line_number],
   [source_ec_id],
-  [bk_finished_goods],
+  [bk_root_material_code],
   [bk_hash]
 INTO #detail_idmap
 FROM target_bk
@@ -701,7 +701,7 @@ CREATE UNIQUE CLUSTERED INDEX [ix_detail_idmap_bk]
 ON #detail_idmap ([source_ec_id], [bk_hash]);
 
 CREATE NONCLUSTERED INDEX [ix_detail_idmap_fg_line]
-ON #detail_idmap ([source_ec_id], [bk_finished_goods], [line_number]);
+ON #detail_idmap ([source_ec_id], [bk_root_material_code], [line_number]);
 
 UPDATE S
 SET S.[id] = COALESCE(M.[id], S.[id]),
@@ -713,7 +713,7 @@ LEFT JOIN #detail_idmap M
       N'SHA2_256',
       CONCAT(
         CAST(S.[source_ec_id] AS NVARCHAR(30)), N'|',
-        LEFT(LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N''))), 400), N'|',
+        LEFT(LTRIM(RTRIM(ISNULL(S.[source_root_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(S.[source_parent_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(S.[source_old_material_code], N''))), 400), N'|',
         LEFT(LTRIM(RTRIM(ISNULL(S.[source_new_material_code], N''))), 400), N'|',
@@ -724,26 +724,26 @@ LEFT JOIN #detail_idmap M
       )
     );
 
--- 未命中：按唯一键 Tenant+Company+SourceEcId+SourceFinishedGoods 取 MAX(line_number) 后步长 10
+-- 未命中：按唯一键 Tenant+Company+SourceEcId+SourceRootMaterialCode 取 MAX(line_number) 后步长 10
 ;WITH occupied AS (
   SELECT
     [source_ec_id],
-    [bk_finished_goods],
+    [bk_root_material_code],
     ISNULL(MAX([line_number]), 0) AS [max_line]
   FROM #detail_idmap
-  GROUP BY [source_ec_id], [bk_finished_goods]
+  GROUP BY [source_ec_id], [bk_root_material_code]
 ),
 fresh AS (
   SELECT
     S.[id],
     ISNULL(O.[max_line], 0) + 10 * ROW_NUMBER() OVER (
-      PARTITION BY S.[source_ec_id], LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N'')))
+      PARTITION BY S.[source_ec_id], LTRIM(RTRIM(ISNULL(S.[source_root_material_code], N'')))
       ORDER BY S.[rn]
     ) AS [new_line]
   FROM #source_detail S
   LEFT JOIN occupied O
     ON O.[source_ec_id] = S.[source_ec_id]
-   AND O.[bk_finished_goods] = LTRIM(RTRIM(ISNULL(S.[source_finished_goods], N'')))
+   AND O.[bk_root_material_code] = LTRIM(RTRIM(ISNULL(S.[source_root_material_code], N'')))
   WHERE NOT EXISTS (
     SELECT 1
     FROM #detail_idmap M
@@ -796,7 +796,7 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[source_new_material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_new_material_description], N'')))
   OR ISNULL(T.[source_new_usage_quantity], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')), -1)
   OR LTRIM(RTRIM(ISNULL(T.[source_compatibility], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_compatibility], N'')))
-  OR LTRIM(RTRIM(ISNULL(T.[source_distinction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_distinction], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[source_2nd_vendor], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_2nd_vendor], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[source_instruction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_instruction], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[source_old_part_disposition], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_old_part_disposition], N'')))
   OR ISNULL(T.[created_at], @now) <> ISNULL(S.[created_at], @now)
@@ -807,7 +807,7 @@ WHEN MATCHED AND (
   T.[source_new_material_description]=S.[source_new_material_description],
   T.[source_new_usage_quantity]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')),
   T.[source_compatibility]=S.[source_compatibility],
-  T.[source_distinction]=S.[source_distinction],
+  T.[source_2nd_vendor]=S.[source_2nd_vendor],
   T.[source_instruction]=S.[source_instruction],
   T.[source_old_part_disposition]=S.[source_old_part_disposition],
   T.[created_at]=COALESCE(S.[created_at], T.[created_at]),
@@ -833,7 +833,7 @@ WHEN MATCHED AND (
       CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_new_material_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_new_material_description], N''))) THEN CONCAT(N',"source_new_material_description":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_new_material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_new_material_description], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
       CASE WHEN ISNULL(T.[source_new_usage_quantity], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')), -1) THEN CONCAT(N',"source_new_usage_quantity":{"o":', ISNULL(CONVERT(VARCHAR(40), T.[source_new_usage_quantity]), N'null'), N',"n":', ISNULL(CONVERT(VARCHAR(40), TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N''))), N'null'), N'}') ELSE N'' END,
       CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_compatibility], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_compatibility], N''))) THEN CONCAT(N',"source_compatibility":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_compatibility], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_compatibility], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
-      CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_distinction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_distinction], N''))) THEN CONCAT(N',"source_distinction":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_distinction], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_distinction], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
+      CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_2nd_vendor], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_2nd_vendor], N''))) THEN CONCAT(N',"source_2nd_vendor":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_2nd_vendor], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_2nd_vendor], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
       CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_instruction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_instruction], N''))) THEN CONCAT(N',"source_instruction":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_instruction], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_instruction], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
       CASE WHEN LTRIM(RTRIM(ISNULL(T.[source_old_part_disposition], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_old_part_disposition], N''))) THEN CONCAT(N',"source_old_part_disposition":{"o":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(T.[source_old_part_disposition], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'","n":"', REPLACE(REPLACE(ISNULL(LEFT(LTRIM(RTRIM(ISNULL(S.[source_old_part_disposition], N''))), 80), N''), N'\', N'\\'), N'"', N'\"'), N'"}') ELSE N'' END,
       CASE WHEN ISNULL(T.[created_at], @now) <> ISNULL(S.[created_at], @now) THEN CONCAT(N',"created_at":{"o":"', ISNULL(CONVERT(VARCHAR(19), T.[created_at], 126), N''), N'","n":"', ISNULL(CONVERT(VARCHAR(19), S.[created_at], 126), N''), N'"}') ELSE N'' END,
@@ -843,26 +843,26 @@ WHEN MATCHED AND (
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[source_ec_id],[source_ec_code],[line_number],
-    [source_finished_goods],[source_parent_material_code],
+    [source_root_material_code],[source_parent_material_code],
     [source_old_material_code],[source_old_material_description],[source_old_usage_quantity],
     [source_old_item_position],[source_new_material_code],
     [source_new_material_description],[source_new_usage_quantity],
     [source_new_item_position],[source_bom_code],
-    [source_compatibility],[source_distinction],
+    [source_compatibility],[source_2nd_vendor],
     [source_instruction],[source_old_part_disposition],
     [source_bom_effective_date],[tenant_code],[company_code],[plant_code],[culture_code],
     [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
   )
   VALUES (
     S.[id],S.[source_ec_id],S.[source_ec_code],S.[line_number],
-    S.[source_finished_goods],S.[source_parent_material_code],
+    S.[source_root_material_code],S.[source_parent_material_code],
     S.[source_old_material_code],S.[source_old_material_description],
     TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_old_usage_quantity] AS NVARCHAR(40)))), N'')),
     S.[source_old_item_position],S.[source_new_material_code],
     S.[source_new_material_description],
     TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_new_usage_quantity] AS NVARCHAR(40)))), N'')),
     S.[source_new_item_position],S.[source_bom_code],
-    S.[source_compatibility],S.[source_distinction],
+    S.[source_compatibility],S.[source_2nd_vendor],
     S.[source_instruction],S.[source_old_part_disposition],
     S.[source_bom_effective_date],@tenant_code,@company_code,@plant_code,@culture_code,
     @sync_user_id,COALESCE(S.[created_at], @now),@sync_user_id,@now,0

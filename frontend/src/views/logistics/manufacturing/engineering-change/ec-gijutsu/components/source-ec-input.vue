@@ -420,7 +420,7 @@ async function handleLoadToForm(): Promise<void> {
       ...draft,
       plantCode: draft.plantCode ?? mappedPlantCode.value,
       ecLeader: draft.ecLeader ?? '',
-      ecDistinction: draft.ecDistinction === 0 ? undefined : draft.ecDistinction,
+      ecScope: draft.ecScope === 0 ? undefined : draft.ecScope,
       ecEntryDate: formatLocalTodayYmd(),
       ecDetails: draft.ecDetails ?? [],
       attachments: [],

@@ -407,10 +407,10 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
                 childDto.CultureCode = entity.CultureCode;
                 childDto.PlantCode = entity.PlantCode;
                 childDto.SourceEcCode = entity.SourceEcCode;
-                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.SourceFinishedGoods}|{childDto.LineNumber}";
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.SourceRootMaterialCode}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
-                    throw new TaktBusinessException("设变来源子第{i + 1}项与本次提交的其他项重复（CompanyCode、SourceEcId、SourceFinishedGoods、LineNumber）");
+                    throw new TaktBusinessException("设变来源子第{i + 1}项与本次提交的其他项重复（CompanyCode、SourceEcId、SourceRootMaterialCode、LineNumber）");
                 }
                 if (childDto.SourceEcDetailId > 0)
                 {
@@ -424,17 +424,17 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
                     }
                     submittedIds.Add(childDto.SourceEcDetailId);
                     var updateSourceEcId = entity.Id;
-                    var updateFinishedGoods = childDto.SourceFinishedGoods ?? string.Empty;
+                    var updateRootMaterial = childDto.SourceRootMaterialCode ?? string.Empty;
                     var updateLineNumber = childDto.LineNumber;
                     var isUniqueUpdate_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _sourceEcDetailRepository,
                         x => x.SourceEcId == updateSourceEcId
-                            && x.SourceFinishedGoods == updateFinishedGoods
+                            && x.SourceRootMaterialCode == updateRootMaterial
                             && x.LineNumber == updateLineNumber,
                         childDto.SourceEcDetailId);
                     if (!isUniqueUpdate_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
                     {
-                        throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
+                        throw new TaktBusinessException("设变来源子的SourceEcId、SourceRootMaterialCode、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.SourceEcDetailId;
@@ -445,16 +445,16 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
                 else
                 {
                     var createSourceEcId = entity.Id;
-                    var createFinishedGoods = childDto.SourceFinishedGoods ?? string.Empty;
+                    var createRootMaterial = childDto.SourceRootMaterialCode ?? string.Empty;
                     var createLineNumber = childDto.LineNumber;
                     var isUniqueCreate_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _sourceEcDetailRepository,
                         x => x.SourceEcId == createSourceEcId
-                            && x.SourceFinishedGoods == createFinishedGoods
+                            && x.SourceRootMaterialCode == createRootMaterial
                             && x.LineNumber == createLineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
                     {
-                        throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
+                        throw new TaktBusinessException("设变来源子的SourceEcId、SourceRootMaterialCode、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktSourceEcDetail>();
                     child.Id = 0;
@@ -475,17 +475,17 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
                 if (needLine.Count > 0)
                 {
                     var businessCode = !string.IsNullOrWhiteSpace(entity.SourceEcCode) ? entity.SourceEcCode : entity.Id.ToString();
-                    foreach (var grp in needLine.GroupBy(c => c.SourceFinishedGoods ?? string.Empty, StringComparer.Ordinal))
+                    foreach (var grp in needLine.GroupBy(c => c.SourceRootMaterialCode ?? string.Empty, StringComparer.Ordinal))
                     {
                         var fg = grp.Key;
                         var maxLine = existingList
-                            .Where(x => string.Equals(x.SourceFinishedGoods ?? string.Empty, fg, StringComparison.Ordinal))
+                            .Where(x => string.Equals(x.SourceRootMaterialCode ?? string.Empty, fg, StringComparison.Ordinal))
                             .Select(x => x.LineNumber)
                             .DefaultIfEmpty(0)
                             .Max();
                         var assignedInCreate = toCreate
                             .Where(c => c.LineNumber > 0
-                                && string.Equals(c.SourceFinishedGoods ?? string.Empty, fg, StringComparison.Ordinal))
+                                && string.Equals(c.SourceRootMaterialCode ?? string.Empty, fg, StringComparison.Ordinal))
                             .Select(c => c.LineNumber)
                             .DefaultIfEmpty(0)
                             .Max();

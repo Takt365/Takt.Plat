@@ -64,7 +64,7 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 
@@ -89,9 +89,9 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -189,12 +189,12 @@ public class TaktEcExecDto : TaktCompanyDtoBase
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int IsSopUpdated { get; set; } = 0;
 
@@ -248,7 +248,7 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -278,14 +278,14 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期（范围查询-开始）
+    /// 预定日期（范围查询-开始）
     /// </summary>
-    public DateTime? ScheduledProductionDateStart { get; set; }
+    public DateTime? ScheduledDateStart { get; set; }
 
     /// <summary>
-    /// 预计生产日期（范围查询-结束）
+    /// 预定日期（范围查询-结束）
     /// </summary>
-    public DateTime? ScheduledProductionDateEnd { get; set; }
+    public DateTime? ScheduledDateEnd { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -408,17 +408,17 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期（范围查询-开始）
+    /// SOP日期（范围查询-开始）
     /// </summary>
-    public DateTime? ConfirmationDateStart { get; set; }
+    public DateTime? SopDateStart { get; set; }
 
     /// <summary>
-    /// 确认日期（范围查询-结束）
+    /// SOP日期（范围查询-结束）
     /// </summary>
-    public DateTime? ConfirmationDateEnd { get; set; }
+    public DateTime? SopDateEnd { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int? IsSopUpdated { get; set; }
 
@@ -486,7 +486,7 @@ public class TaktEcExecCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     [Required(ErrorMessage = "部门编码。顺序严格为：Eng=技术, Pmc=生管, Mp=采购, Iqc=受检, Mc=部管, Pcba=制二, Assy=制一, Qa=品管, Te=制技。不能为空")]
     public string DeptCode { get; set; } = string.Empty;
@@ -512,9 +512,9 @@ public class TaktEcExecCreateDto
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -612,12 +612,12 @@ public class TaktEcExecCreateDto
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int IsSopUpdated { get; set; } = 0;
 
@@ -695,7 +695,7 @@ public class TaktEcSeizougijutsumplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -720,9 +720,9 @@ public class TaktEcSeizougijutsumplateDto
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -820,17 +820,17 @@ public class TaktEcSeizougijutsumplateDto
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期（范围查询-开始）
+    /// SOP日期（范围查询-开始）
     /// </summary>
-    public DateTime? ConfirmationDateStart { get; set; }
+    public DateTime? SopDateStart { get; set; }
 
     /// <summary>
-    /// 确认日期（范围查询-结束）
+    /// SOP日期（范围查询-结束）
     /// </summary>
-    public DateTime? ConfirmationDateEnd { get; set; }
+    public DateTime? SopDateEnd { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int? IsSopUpdated { get; set; }
 
@@ -884,7 +884,7 @@ public class TaktEcExecImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -909,9 +909,9 @@ public class TaktEcExecImportDto
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -1009,17 +1009,17 @@ public class TaktEcExecImportDto
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期（范围查询-开始）
+    /// SOP日期（范围查询-开始）
     /// </summary>
-    public DateTime? ConfirmationDateStart { get; set; }
+    public DateTime? SopDateStart { get; set; }
 
     /// <summary>
-    /// 确认日期（范围查询-结束）
+    /// SOP日期（范围查询-结束）
     /// </summary>
-    public DateTime? ConfirmationDateEnd { get; set; }
+    public DateTime? SopDateEnd { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int? IsSopUpdated { get; set; }
 
@@ -1079,7 +1079,7 @@ public class TaktEcExecExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0626 制造2课-间接）
+    /// 部门编码（TaktDept.DeptCode，5 位；如 D0710 技术课、D0420 生管课、D0810 受检课、D0620 制造2课）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 
@@ -1104,9 +1104,9 @@ public class TaktEcExecExportDto
     public string? EcLeader { get; set; } = string.Empty;
 
     /// <summary>
-    /// 预计生产日期
+    /// 预定日期
     /// </summary>
-    public DateTime? ScheduledProductionDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
 
     /// <summary>
     /// 预定批次
@@ -1204,12 +1204,12 @@ public class TaktEcExecExportDto
     public string? SamplingNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 确认日期
+    /// SOP日期
     /// </summary>
-    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? SopDate { get; set; }
 
     /// <summary>
-    /// 是否更新SOP（0=否 1=是）
+    /// 更新SOP（0=否 1=是）
     /// </summary>
     public int IsSopUpdated { get; set; } = 0;
 
@@ -1280,7 +1280,7 @@ public class TaktEcExecTransposedDto
     /// </summary>
     public DateTime EcIssueDate { get; set; }
     /// <summary>
-    /// 技术担当/负责人（主表 EcLeader）
+    /// 设变EC担当/负责人（主表 EcLeader）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
     /// <summary>
@@ -1324,7 +1324,7 @@ public class TaktEcExecTransposedQueryDto : TaktPagedQuery
     /// </summary>
     public string? EcNewMaterialCode { get; set; }
     /// <summary>
-    /// 技术担当
+    /// 设变EC担当
     /// </summary>
     public string? EcLeader { get; set; }
     /// <summary>

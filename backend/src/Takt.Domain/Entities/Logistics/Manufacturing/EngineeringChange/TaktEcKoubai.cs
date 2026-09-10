@@ -32,6 +32,12 @@ public class TaktEcKoubai : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
+    /// 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=Z0/ZQ 等；冗余：来自 TaktEcDetail.DiscontinuedStatus）
+    /// </summary>
+    [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "停产状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string DiscontinuedStatus { get; set; } = string.Empty;
+
+    /// <summary>
     /// 设变单号（冗余：来自 TaktEcDetail.EcCode）
     /// </summary>
     [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
@@ -93,7 +99,7 @@ public class TaktEcKoubai : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     public string? PurchaseOrderCode { get; set; }
 
     /// <summary>
-    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+    /// 旧品处理（冗余：来自 TaktEcDetail.EcOldPartDisposition；字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "ec_old_part_disposition", ColumnDescription = "旧品处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcOldPartDisposition { get; set; }
@@ -111,16 +117,10 @@ public class TaktEcKoubai : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 管理区分（冗余：来自 TaktEcDetail.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcDetail.EcScope）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_distinction", ColumnDescription = "管理区分", ColumnDataType = "int", IsNullable = false)]
-    public int EcDistinction { get; set; }
-
-    /// <summary>
-    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
-    /// </summary>
-    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false)]
-    public int IsObsolete { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_scope", ColumnDescription = "实施范围", ColumnDataType = "int", IsNullable = false)]
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；去重组内代表/种子明细 Id；同组多明细按业务键 FanOut）
@@ -128,6 +128,12 @@ public class TaktEcKoubai : TaktCompanyEntityBase, ITaktEcDeptExecEntity
     [SugarColumn(ColumnName = "ec_detail_id", ColumnDescription = "设变明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false)]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变明细（数据主从：本表由明细派生；多对一，外键 EcDetailId → TaktEcDetail.Id）

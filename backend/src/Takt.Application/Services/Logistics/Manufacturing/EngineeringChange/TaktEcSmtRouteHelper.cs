@@ -4,7 +4,7 @@
 // 文件名称：TaktEcSmtRouteHelper.cs
 // 创建时间：2026-09-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：制造二课 D0626 双表路由（F+C003→Pcba；非 F→Seizounika；其余作废两侧）
+// 功能描述：制造二课双表路由（F+C003→SMT/D0625；非 F→Seizounika/D0620；其余作废两侧）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -35,7 +35,7 @@ internal enum TaktEcSmtRouteTarget
 }
 
 /// <summary>
-/// 制造二课 D0626 双表路由
+/// 制造二课双表路由（F+C003→SMT/D0625；非 F→Seizounika/D0620）
 /// </summary>
 internal static class TaktEcSmtRouteHelper
 {
@@ -47,11 +47,11 @@ internal static class TaktEcSmtRouteHelper
     public static TaktEcSmtRouteTarget Resolve(TaktEcDetail detail)
     {
         ArgumentNullException.ThrowIfNull(detail);
-        if (TaktEcDistinctionConstants.IsPcbaC003ExternalGroup(detail.EcNewPurchaseType, detail.EcNewWarehouse))
+        if (TaktEcScopeConstants.IsPcbaC003ExternalGroup(detail.EcNewPurchaseType, detail.EcNewWarehouse))
         {
             return TaktEcSmtRouteTarget.Smt;
         }
-        if (TaktEcDistinctionConstants.IsPcbaOtherPurchaseGroup(detail.EcNewPurchaseType))
+        if (TaktEcScopeConstants.IsPcbaOtherPurchaseGroup(detail.EcNewPurchaseType))
         {
             return TaktEcSmtRouteTarget.Seizounika;
         }
@@ -66,11 +66,11 @@ internal static class TaktEcSmtRouteHelper
     /// <returns>路由目标</returns>
     public static TaktEcSmtRouteTarget Resolve(string? purchaseType, string? newWarehouse)
     {
-        if (TaktEcDistinctionConstants.IsPcbaC003ExternalGroup(purchaseType, newWarehouse))
+        if (TaktEcScopeConstants.IsPcbaC003ExternalGroup(purchaseType, newWarehouse))
         {
             return TaktEcSmtRouteTarget.Smt;
         }
-        if (TaktEcDistinctionConstants.IsPcbaOtherPurchaseGroup(purchaseType))
+        if (TaktEcScopeConstants.IsPcbaOtherPurchaseGroup(purchaseType))
         {
             return TaktEcSmtRouteTarget.Seizounika;
         }

@@ -78,10 +78,10 @@
             @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'inspectionCategory'">
+        <template v-else-if="column.key === 'qualityGroupCategory'">
           <TaktDictTag
-            :value="getQualityGroupDictValue(record, 'inspectionCategory')"
-            dict-type="logistics_quality_group_inspection_category"
+            :value="getQualityGroupDictValue(record, 'qualityGroupCategory')"
+            dict-type="logistics_quality_group_category"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
@@ -141,16 +141,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inspectionCategory')">
-      <a-form-item :label="pi.queryLabel('inspectionCategory')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.inspectionCategory"
-          dict-type="logistics_quality_group_inspection_category"
-          :placeholder="pi.queryPh('inspectionCategory', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('qualityGroupCode')">
       <a-form-item :label="pi.queryLabel('qualityGroupCode')">
         <a-input
@@ -168,7 +158,7 @@
           v-model:value="advancedQueryForm.qualityGroupName"
           :placeholder="pi.queryPh('qualityGroupName', 'required')"
           show-count
-          :maxlength="100"
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
@@ -179,6 +169,16 @@
           v-model:value="advancedQueryForm.qualityGroupDescription"
           :placeholder="pi.queryPh('qualityGroupDescription', 'optional')"
           :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('qualityGroupCategory')">
+      <a-form-item :label="pi.queryLabel('qualityGroupCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.qualityGroupCategory"
+          dict-type="logistics_quality_group_category"
+          :placeholder="pi.queryPh('qualityGroupCategory', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -414,7 +414,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    inspectionCategory: undefined as number | undefined,
+    qualityGroupCategory: undefined as number | undefined,
     isBuiltIn: undefined as number | undefined,
     groupStatus: undefined as number | undefined,
   }
@@ -468,8 +468,8 @@ function buildListQuery(overrides?: Partial<QualityGroupQuery>): QualityGroupQue
   for (const key of QUALITYGROUP_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.inspectionCategory !== undefined && form.inspectionCategory !== null) {
-    query.inspectionCategory = form.inspectionCategory
+  if (form.qualityGroupCategory !== undefined && form.qualityGroupCategory !== null) {
+    query.qualityGroupCategory = form.qualityGroupCategory
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn

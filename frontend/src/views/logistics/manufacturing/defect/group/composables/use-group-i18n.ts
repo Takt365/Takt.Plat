@@ -20,10 +20,10 @@ export const DEFECTGROUP_SELF_I18N_KEY = buildEntitySelfI18nKey(DEFECTGROUP_ENTI
 
 /** 列表业务列（不含主键） */
 export const DEFECTGROUP_LIST_FIELDS = [
-  'defectCategory',
   'defectGroupCode',
   'defectGroupName',
   'defectGroupDescription',
+  'defectGroupCategory',
   'contactPhone',
   'contactEmail',
   'isBuiltIn',
@@ -36,7 +36,7 @@ export const DEFECTGROUP_PLACEHOLDER = {
   companyCode: 'optional',
   cultureCode: 'optional',
   plantCode: 'optional',
-  defectCategory: 'select',
+  defectGroupCategory: 'select',
   defectGroupCode: 'required',
   defectGroupName: 'required',
   defectGroupDescription: 'optional',
@@ -68,12 +68,12 @@ export const DEFECTGROUP_QUERY_STRING_FIELDS = [
 
 export type DefectGroupQueryField =
   | (typeof DEFECTGROUP_QUERY_STRING_FIELDS)[number]
-  | 'defectCategory' | 'isBuiltIn' | 'groupStatus'
+  | 'defectGroupCategory' | 'isBuiltIn' | 'groupStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const DEFECTGROUP_QUERY_FIELDS: readonly DefectGroupQueryField[] = [
   ...DEFECTGROUP_QUERY_STRING_FIELDS,
-  'defectCategory',
+  'defectGroupCategory',
   'isBuiltIn',
   'groupStatus',
 ]

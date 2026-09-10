@@ -62,11 +62,11 @@
           />
         </div>
         <div class="flex items-center gap-1">
-          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('ecDistinction') }}</span>
+          <span class="shrink-0 text-sm text-text-secondary whitespace-nowrap">{{ gi.label('ecScope') }}</span>
           <TaktSelect
-            v-model:value="ecDistinction"
-            dict-type="logistics_manufacturing_ec_distinction_category"
-            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--distinction"
+            v-model:value="ecScope"
+            dict-type="logistics_manufacturing_ec_scope_category"
+            class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--scope"
             allow-clear
             :placeholder="t('common.page.form.placeholder.selectonly')"
           />
@@ -139,8 +139,8 @@ const periodRange = defineModel<[string, string] | null>('periodRange')
 const deptCode = defineModel<string | undefined>('deptCode')
 /** 设变单号（第 3 级，可空；仅 issue Tab） */
 const ecCode = defineModel<string | undefined>('ecCode')
-/** 区分 */
-const ecDistinction = defineModel<number | undefined>('ecDistinction')
+/** 实施范围（EcScope） */
+const ecScope = defineModel<number | undefined>('ecScope')
 /** 变更状态 */
 const changeStatus = defineModel<number | undefined>('changeStatus')
 /** 设变状态 */
@@ -223,7 +223,7 @@ watch(
   min-width: 14rem;
 }
 
-.ec-monthly-trend-query-bar__control--distinction,
+.ec-monthly-trend-query-bar__control--scope,
 .ec-monthly-trend-query-bar__control--status,
 .ec-monthly-trend-query-bar__control--ec-status,
 .ec-monthly-trend-query-bar__control--dept,

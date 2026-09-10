@@ -122,22 +122,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecFinishedGoods')">
-      <a-form-item :label="pi.label('ecFinishedGoods')">
+      <div v-show="isFieldVisible('ecRootMaterialCode')">
+      <a-form-item :label="pi.label('ecRootMaterialCode')">
         <a-input
-          v-model:value="advancedQueryForm.ecFinishedGoods"
-          :placeholder="t('common.page.form.placeholder.required', { field: pi.label('ecFinishedGoods') })"
+          v-model:value="advancedQueryForm.ecRootMaterialCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: pi.label('ecRootMaterialCode') })"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecFinishedGoodsDescription')">
-      <a-form-item :label="pi.label('ecFinishedGoodsDescription')">
+      <div v-show="isFieldVisible('ecRootMaterialDescription')">
+      <a-form-item :label="pi.label('ecRootMaterialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.ecFinishedGoodsDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: pi.label('ecFinishedGoodsDescription') })"
+          v-model:value="advancedQueryForm.ecRootMaterialDescription"
+          :placeholder="t('common.page.form.placeholder.optional', { field: pi.label('ecRootMaterialDescription') })"
           show-count
           :maxlength="40"
           allow-clear
@@ -556,8 +556,8 @@ const advancedQueryForm = ref({
   ecCode: '',
   lineNumber: undefined as number | undefined,
   ecModelCode: '',
-  ecFinishedGoods: '',
-  ecFinishedGoodsDescription: '',
+  ecRootMaterialCode: '',
+  ecRootMaterialDescription: '',
   ecParentMaterialCode: '',
   ecParentMaterialDescription: '',
   ecOldMaterialCode: '',
@@ -591,8 +591,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'ecCode', label: pi.label('ecCode') },
   { key: 'lineNumber', label: pi.label('lineNumber') },
   { key: 'ecModelCode', label: pi.label('ecModelCode') },
-  { key: 'ecFinishedGoods', label: pi.label('ecFinishedGoods') },
-  { key: 'ecFinishedGoodsDescription', label: pi.label('ecFinishedGoodsDescription') },
+  { key: 'ecRootMaterialCode', label: pi.label('ecRootMaterialCode') },
+  { key: 'ecRootMaterialDescription', label: pi.label('ecRootMaterialDescription') },
   { key: 'ecParentMaterialCode', label: pi.label('ecParentMaterialCode') },
   { key: 'ecParentMaterialDescription', label: pi.label('ecParentMaterialDescription') },
   { key: 'discontinuedStatus', label: pi.label('discontinuedStatus') },
@@ -643,8 +643,8 @@ function handleAdvancedQueryReset() {
   ecCode: '',
   lineNumber: undefined as number | undefined,
   ecModelCode: '',
-  ecFinishedGoods: '',
-  ecFinishedGoodsDescription: '',
+  ecRootMaterialCode: '',
+  ecRootMaterialDescription: '',
   ecParentMaterialCode: '',
   ecParentMaterialDescription: '',
   ecOldMaterialCode: '',
@@ -776,8 +776,8 @@ function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
     query.lineNumber = form.lineNumber
   }
   assignTrimmed('ecModelCode', form.ecModelCode)
-  assignTrimmed('ecFinishedGoods', form.ecFinishedGoods)
-  assignTrimmed('ecFinishedGoodsDescription', form.ecFinishedGoodsDescription)
+  assignTrimmed('ecRootMaterialCode', form.ecRootMaterialCode)
+  assignTrimmed('ecRootMaterialDescription', form.ecRootMaterialDescription)
   assignTrimmed('ecParentMaterialCode', form.ecParentMaterialCode)
   assignTrimmed('ecParentMaterialDescription', form.ecParentMaterialDescription)
   assignTrimmed('discontinuedStatus', form.discontinuedStatus)

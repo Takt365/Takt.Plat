@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-form.vue -->
-<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecContent/ecStatus/remark 可编辑；来源导入时 ecEntryDate 只读且固定当天；明细 Tab 客户端分页，表高按弹出窗体 × 5/4 且不超过 Tab 剩余区（仅表格滚动、弹出窗体无滚动条）；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
+<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecScope/ecContent/ecStatus/remark 可编辑；来源导入时 ecEntryDate 只读且固定当天；明细 Tab 客户端分页，表高按弹出窗体 × 5/4 且不超过 Tab 剩余区（仅表格滚动、弹出窗体无滚动条）；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -156,13 +156,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="gi.label('ecDistinction')"
-                name="ecDistinction"
+                :label="gi.label('ecScope')"
+                name="ecScope"
               >
                 <TaktSelect
-                  v-model:value="formState.ecDistinction"
-                  dict-type="logistics_manufacturing_ec_distinction_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') })"
+                  v-model:value="formState.ecScope"
+                  dict-type="logistics_manufacturing_ec_scope_category"
+                  :placeholder="t('common.page.form.placeholder.select', { field: gi.label('ecScope') })"
                   allow-clear
                   :apply-dict-default="false"
                   class="w-full"
@@ -441,7 +441,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecScope","ecEntryDate","ecStatus","remark"]
 
 const childEcDetailRows = ref<Record<string, unknown>[]>([])
 /** 明细子表当前页 */
@@ -1256,14 +1256,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  ecDistinction: [{
+  ecScope: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecScope') }))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecDistinction') }))
+        return Promise.reject(t('common.page.form.placeholder.select', { field: gi.label('ecScope') }))
       }
       return Promise.resolve()
     },
@@ -1362,10 +1362,10 @@ function getValues(): Record<string, any> {
     const rawecStatus = payload.ecStatus
     payload.ecStatus = typeof rawecStatus === 'number' ? rawecStatus : Number(rawecStatus)
   }
-  if ('ecDistinction' in payload) {
-    const rawEcDistinction = payload.ecDistinction
-    const parsed = typeof rawEcDistinction === 'number' ? rawEcDistinction : Number(rawEcDistinction)
-    payload.ecDistinction = Number.isFinite(parsed) ? parsed : 0
+  if ('ecScope' in payload) {
+    const rawEcScope = payload.ecScope
+    const parsed = typeof rawEcScope === 'number' ? rawEcScope : Number(rawEcScope)
+    payload.ecScope = Number.isFinite(parsed) ? parsed : 0
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   if ('ecNo' in payload && payload.ecCode) delete payload.ecNo

@@ -72,7 +72,7 @@ export function createWarehouse(dto: WarehouseCreate): Promise<Warehouse> {
 }
 
 /**
- * 更新仓库主数据
+ * 更新品仓库主数据
  * @param {string} id 仓库主数据ID
  * @param {WarehouseUpdate} dto 更新DTO
  * @returns {Promise<Warehouse>} 仓库主数据DTO
@@ -111,7 +111,7 @@ export function deleteWarehouseBatch(ids: string[]): Promise<void> {
 }
 
 /**
- * 更新仓库主数据状态
+ * 更新品仓库主数据状态
  * @param {WarehouseStatus} dto 状态 DTO
  * @returns {Promise<Warehouse>} 仓库主数据DTO
  */
@@ -124,7 +124,7 @@ export function updateWarehouseStatus(dto: WarehouseStatus): Promise<Warehouse> 
 }
 
 /**
- * 更新仓库主数据排序
+ * 更新品仓库主数据排序
  * @param {WarehouseSort} dto 排序DTO
  * @returns {Promise<Warehouse>} 仓库主数据DTO
  */

@@ -443,6 +443,11 @@ public class TaktSalesGroupService : TaktServiceBase, ITaktSalesGroupService
             var salesGroupDescription = queryDto.SalesGroupDescription;
             exp = exp.And(x => x.SalesGroupDescription != null && x.SalesGroupDescription.Contains(salesGroupDescription));
         }
+        if (queryDto?.SalesGroupCategory.HasValue == true)
+        {
+            var salesGroupCategory = queryDto.SalesGroupCategory.Value;
+            exp = exp.And(x => x.SalesGroupCategory == salesGroupCategory);
+        }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {

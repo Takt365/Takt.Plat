@@ -14,7 +14,7 @@
     menu-i18n-key="menu.logistics.manufacturing.engineering.change.smt"
     id-field="ecSmtId"
     dept-slug="ecsmt"
-    :exec-code="TaktEcExecCodes.Pcba"
+    :exec-code="TaktEcExecCodes.Smt"
     :get-master-list="getEcSmtList"
     :get-master-by-id="getEcSmtById"
     :update-master="updateEcSmt"
@@ -36,7 +36,7 @@ import EcDeptViewForm from './components/ec-dept-view-form.vue'
 /**
  * 更新停产状态
  * @param id 执行行主键
- * @param discontinuedStatus 完成品物料状态
+ * @param discontinuedStatus 根物料停产状态
  */
 function handleUpdateDiscontinuedStatus(id: string, discontinuedStatus: string) {
   return updateEcSmtDiscontinuedStatus({

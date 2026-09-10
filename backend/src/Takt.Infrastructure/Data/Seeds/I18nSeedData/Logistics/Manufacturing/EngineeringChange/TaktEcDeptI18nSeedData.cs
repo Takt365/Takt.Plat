@@ -162,14 +162,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.ecleader
             new TranslationSeedItem("entity.ecdept.ecleader", "zh-HK", "担当_hk", "担当（EcLeader）"),
 
-            // entity.ecdept.scheduledproductiondate
-            new TranslationSeedItem("entity.ecdept.scheduledproductiondate", "en-US", "预计生产日期_us", "预计生产日期"),
-            // entity.ecdept.scheduledproductiondate
-            new TranslationSeedItem("entity.ecdept.scheduledproductiondate", "ja-JP", "预计生产日期_jp", "预计生产日期"),
-            // entity.ecdept.scheduledproductiondate
-            new TranslationSeedItem("entity.ecdept.scheduledproductiondate", "zh-CN", "预计生产日期", "预计生产日期"),
-            // entity.ecdept.scheduledproductiondate
-            new TranslationSeedItem("entity.ecdept.scheduledproductiondate", "zh-HK", "预计生产日期_hk", "预计生产日期"),
+            // entity.ecdept.scheduleddate
+            new TranslationSeedItem("entity.ecdept.scheduleddate", "en-US", "预定日期_us", "预定日期"),
+            // entity.ecdept.scheduleddate
+            new TranslationSeedItem("entity.ecdept.scheduleddate", "ja-JP", "预定日期_jp", "预定日期"),
+            // entity.ecdept.scheduleddate
+            new TranslationSeedItem("entity.ecdept.scheduleddate", "zh-CN", "预定日期", "预定日期"),
+            // entity.ecdept.scheduleddate
+            new TranslationSeedItem("entity.ecdept.scheduleddate", "zh-HK", "预定日期_hk", "预定日期"),
 
             // entity.ecdept.scheduledbatch
             new TranslationSeedItem("entity.ecdept.scheduledbatch", "en-US", "预定批次_us", "预定批次"),
@@ -342,23 +342,23 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.samplingCode
             new TranslationSeedItem("entity.ecdept.samplingCode", "zh-HK", "抽样号码_hk", "抽样号码"),
 
-            // entity.ecdept.confirmationdate
-            new TranslationSeedItem("entity.ecdept.confirmationdate", "en-US", "确认日期_us", "确认日期"),
-            // entity.ecdept.confirmationdate
-            new TranslationSeedItem("entity.ecdept.confirmationdate", "ja-JP", "确认日期_jp", "确认日期"),
-            // entity.ecdept.confirmationdate
-            new TranslationSeedItem("entity.ecdept.confirmationdate", "zh-CN", "确认日期", "确认日期"),
-            // entity.ecdept.confirmationdate
-            new TranslationSeedItem("entity.ecdept.confirmationdate", "zh-HK", "确认日期_hk", "确认日期"),
+            // entity.ecdept.sopdate
+            new TranslationSeedItem("entity.ecdept.sopdate", "en-US", "SOP日期_us", "SOP日期"),
+            // entity.ecdept.sopdate
+            new TranslationSeedItem("entity.ecdept.sopdate", "ja-JP", "SOP日期_jp", "SOP日期"),
+            // entity.ecdept.sopdate
+            new TranslationSeedItem("entity.ecdept.sopdate", "zh-CN", "SOP日期", "SOP日期"),
+            // entity.ecdept.sopdate
+            new TranslationSeedItem("entity.ecdept.sopdate", "zh-HK", "SOP日期_hk", "SOP日期"),
 
             // entity.ecdept.issopupdated
-            new TranslationSeedItem("entity.ecdept.issopupdated", "en-US", "是否更新SOP_us", "是否更新SOP（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.issopupdated", "en-US", "更新SOP_us", "更新SOP（0=否 1=是）"),
             // entity.ecdept.issopupdated
-            new TranslationSeedItem("entity.ecdept.issopupdated", "ja-JP", "是否更新SOP_jp", "是否更新SOP（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.issopupdated", "ja-JP", "更新SOP_jp", "更新SOP（0=否 1=是）"),
             // entity.ecdept.issopupdated
-            new TranslationSeedItem("entity.ecdept.issopupdated", "zh-CN", "是否更新SOP", "是否更新SOP（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.issopupdated", "zh-CN", "更新SOP", "更新SOP（0=否 1=是）"),
             // entity.ecdept.issopupdated
-            new TranslationSeedItem("entity.ecdept.issopupdated", "zh-HK", "是否更新SOP_hk", "是否更新SOP（0=否 1=是）"),
+            new TranslationSeedItem("entity.ecdept.issopupdated", "zh-HK", "更新SOP_hk", "更新SOP（0=否 1=是）"),
 
             // entity.ecdept.ecdetail
             new TranslationSeedItem("entity.ecdept.ecdetail", "en-US", "设变明细_us", "设变明细（多对一）"),

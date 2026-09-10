@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:查询栏组件；关键字输入框宽度=所在栏宽减去查询/重置按钮；可通过 #fields 插槽扩展条件
+功能描述:查询栏组件；默认关键字占满剩余宽；有 #fields 时关键字 50%，扩展条件+查询/重置共 50%
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -15,45 +15,47 @@
     class="takt-query-bar"
     :class="{ 'takt-query-bar--custom-fields': hasFieldsSlot }"
   >
-    <div class="takt-query-bar__fields">
-      <slot name="fields" />
-      <a-input
-        v-if="showKeyword"
-        v-model:value="keyword"
-        class="takt-query-bar__keyword"
-        :placeholder="placeholder ?? defaultPlaceholder"
-        :size="size"
-        :allow-clear="allowClear"
-        :max-length="maxLength"
-        @press-enter="handleSearch"
-        @change="handleChange"
-      >
-        <template #prefix>
-          <RiSearchLine class="takt-remix-icon" />
-        </template>
-      </a-input>
+    <a-input
+      v-if="showKeyword"
+      v-model:value="keyword"
+      class="takt-query-bar__keyword"
+      :placeholder="placeholder ?? defaultPlaceholder"
+      :size="size"
+      :allow-clear="allowClear"
+      :max-length="maxLength"
+      @press-enter="handleSearch"
+      @change="handleChange"
+    >
+      <template #prefix>
+        <RiSearchLine class="takt-remix-icon" />
+      </template>
+    </a-input>
+    <div class="takt-query-bar__trailing">
+      <div v-if="hasFieldsSlot" class="takt-query-bar__fields">
+        <slot name="fields" />
+      </div>
+      <a-space class="query-actions">
+        <a-button
+          class="takt-button-query"
+          :loading="loading"
+          @click="handleSearch"
+        >
+          <template #icon>
+            <RiSearchLine class="takt-remix-icon" />
+          </template>
+          {{ t('common.page.button.query') }}
+        </a-button>
+        <a-button
+          class="takt-button-reset"
+          @click="handleReset"
+        >
+          <template #icon>
+            <RiRefreshLine class="takt-remix-icon" />
+          </template>
+          {{ t('common.page.button.reset') }}
+        </a-button>
+      </a-space>
     </div>
-    <a-space class="query-actions">
-      <a-button
-        class="takt-button-query"
-        :loading="loading"
-        @click="handleSearch"
-      >
-        <template #icon>
-          <RiSearchLine class="takt-remix-icon" />
-        </template>
-        {{ t('common.page.button.query') }}
-      </a-button>
-      <a-button
-        class="takt-button-reset"
-        @click="handleReset"
-      >
-        <template #icon>
-          <RiRefreshLine class="takt-remix-icon" />
-        </template>
-        {{ t('common.page.button.reset') }}
-      </a-button>
-    </a-space>
   </div>
 </template>
 
@@ -146,7 +148,6 @@ defineExpose({
 </script>
 
 <style scoped>
-/* 整栏占满所在表区域；关键字 flex:1 = 栏宽 − 查询/重置按钮 */
 .takt-query-bar {
   margin: 4px;
   padding: 4px;
@@ -157,15 +158,6 @@ defineExpose({
   box-sizing: border-box;
 }
 
-.takt-query-bar__fields {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
-
 .takt-query-bar__keyword {
   flex: 1 1 auto;
   width: auto;
@@ -173,10 +165,41 @@ defineExpose({
   max-width: none;
 }
 
+.takt-query-bar__trailing {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.takt-query-bar__fields {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .takt-query-bar--custom-fields .takt-query-bar__keyword {
-  width: 16rem;
-  flex: 0 0 16rem;
-  max-width: none;
+  flex: 0 0 calc(50% - 4px);
+  width: calc(50% - 4px);
+  max-width: calc(50% - 4px);
+}
+
+.takt-query-bar--custom-fields .takt-query-bar__trailing {
+  flex: 0 0 calc(50% - 4px);
+  width: calc(50% - 4px);
+  max-width: calc(50% - 4px);
+}
+
+.takt-query-bar--custom-fields .takt-query-bar__fields > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.takt-query-bar--custom-fields .takt-query-bar__fields :deep(.ant-select) {
+  width: 100%;
 }
 
 :deep(.ant-input-affix-wrapper) {

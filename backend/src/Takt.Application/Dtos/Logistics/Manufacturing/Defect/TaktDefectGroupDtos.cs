@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 // ========================================
 
 /// <summary>
-/// 不良组主数据实体（公司级；按不良类别区分的不良业务组织分组）
+/// 不良组主数据实体（公司级；按不良组类别区分的不良业务组织分组）
 /// 对应前端 TaktDefectGroupDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -34,11 +34,6 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DefectGroupId { get; set; }
-
-    /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int DefectCategory { get; set; } = 0;
 
     /// <summary>
     /// 不良组编码（3）
@@ -54,6 +49,11 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int DefectGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话
@@ -113,11 +113,6 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int? DefectCategory { get; set; }
-
-    /// <summary>
     /// 不良组编码（3）
     /// </summary>
     public string? DefectGroupCode { get; set; } = string.Empty;
@@ -131,6 +126,11 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int? DefectGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -208,11 +208,6 @@ public class TaktDefectGroupCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int DefectCategory { get; set; } = 0;
-
-    /// <summary>
     /// 不良组编码（3）
     /// </summary>
     [Required(ErrorMessage = "不良组编码（3）不能为空")]
@@ -228,6 +223,11 @@ public class TaktDefectGroupCreateDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int DefectGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话
@@ -359,11 +359,6 @@ public class TaktDefectGroupTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int? DefectCategory { get; set; }
-
-    /// <summary>
     /// 不良组编码（3）
     /// </summary>
     public string? DefectGroupCode { get; set; } = string.Empty;
@@ -377,6 +372,11 @@ public class TaktDefectGroupTemplateDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int? DefectGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -436,11 +436,6 @@ public class TaktDefectGroupImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int? DefectCategory { get; set; }
-
-    /// <summary>
     /// 不良组编码（3）
     /// </summary>
     public string? DefectGroupCode { get; set; } = string.Empty;
@@ -454,6 +449,11 @@ public class TaktDefectGroupImportDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int? DefectGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -519,11 +519,6 @@ public class TaktDefectGroupExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    public int DefectCategory { get; set; } = 0;
-
-    /// <summary>
     /// 不良组编码（3）
     /// </summary>
     public string DefectGroupCode { get; set; } = string.Empty;
@@ -537,6 +532,11 @@ public class TaktDefectGroupExportDto
     /// 不良组描述
     /// </summary>
     public string? DefectGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    public int DefectGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话

@@ -124,12 +124,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('ecFinishedGoods')"
-                name="ecFinishedGoods"
+                :label="pi.label('ecRootMaterialCode')"
+                name="ecRootMaterialCode"
               >
                 <a-input
-                  v-model:value="formState.ecFinishedGoods"
-                  :placeholder="t('common.page.form.placeholder.required', { field: pi.label('ecFinishedGoods') })"
+                  v-model:value="formState.ecRootMaterialCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: pi.label('ecRootMaterialCode') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -138,12 +138,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('ecFinishedGoodsDescription')"
-                name="ecFinishedGoodsDescription"
+                :label="pi.label('ecRootMaterialDescription')"
+                name="ecRootMaterialDescription"
               >
                 <a-input
-                  v-model:value="formState.ecFinishedGoodsDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: pi.label('ecFinishedGoodsDescription') })"
+                  v-model:value="formState.ecRootMaterialDescription"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: pi.label('ecRootMaterialDescription') })"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -454,7 +454,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","ecCode","ecModelCode","ecFinishedGoods","ecFinishedGoodsDescription","discontinuedStatus","ecParentMaterialCode","ecParentMaterialDescription","ecOldMaterialCode","ecOldMaterialDescription","ecOldUsageQuantity","ecOldItemPosition","ecOldStock","ecOldWarehouse","ecOldPurchaseType","ecOldRequiresInspection","ecNewMaterialCode","ecNewMaterialDescription","ecNewUsageQuantity","ecNewItemPosition","ecNewStock","ecNewWarehouse","ecNewPurchaseType","ecNewRequiresInspection","ecBomDate"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","lineNumber","ecCode","ecModelCode","ecRootMaterialCode","ecRootMaterialDescription","discontinuedStatus","ecParentMaterialCode","ecParentMaterialDescription","ecOldMaterialCode","ecOldMaterialDescription","ecOldUsageQuantity","ecOldItemPosition","ecOldStock","ecOldWarehouse","ecOldPurchaseType","ecOldRequiresInspection","ecNewMaterialCode","ecNewMaterialDescription","ecNewUsageQuantity","ecNewItemPosition","ecNewStock","ecNewWarehouse","ecNewPurchaseType","ecNewRequiresInspection","ecBomDate"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

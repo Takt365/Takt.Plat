@@ -76,7 +76,7 @@ alwaysApply: false
 | 树表 | `GetXxxTreeAsync`、`GetXxxTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)`；**不**生成平铺 `GetXxxOptionsAsync` |
 | 转置 | `GetXxxTransposedListAsync`、`SaveXxxTransposedBatchAsync` |
 
-- **Options 标准签名（强制）**：平铺 `GetXxxOptionsAsync(string? plantCode = null, string? keyword = null)`；树形 `GetXxxTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)`。额外业务可选参数（如 `teamCategory`）排在二者之后。批量对齐：`node scripts/gen/normalize-options-async-plant-keyword.cjs`
+- **Options 标准签名（强制）**：平铺 `GetXxxOptionsAsync(string? plantCode = null, string? keyword = null)`；树形 `GetXxxTreeOptionsAsync(long parentId = 0, string? plantCode = null, string? keyword = null)`。额外业务可选参数（如 `teamCategory`）排在二者之后。
 - `SortOrder` / `LineNumber` ≤0 时经 `ITaktSortOrderGenerator` / `ITaktLineNumberGenerator` 自动生成
 
 ### 3.3 控制器（`generate-controllers-from-services.cjs`）

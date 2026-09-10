@@ -31,7 +31,7 @@ public static class TaktEcSourceEcMapper
     /// <param name="companyCode">公司代码</param>
     /// <param name="companyDefaultCulture">公司默认文化</param>
     /// <param name="materialsByCode">目标工厂物料字典（物料编码 → TaktMaterialPlant）；为空时不补全物料衍生字段</param>
-    /// <param name="modelCodeByFinishedGoods">完成品物料编码 → 机种编码（TaktModelDestination）；为空时 EcModelCode 回退来源主表 SourceModel</param>
+    /// <param name="modelCodeByRootMaterial">根物料编码 → 机种编码（TaktModelDestination）；为空时 EcModelCode 回退来源主表 SourceModel</param>
     /// <returns>设变创建 DTO</returns>
     public static TaktEcGijutsuCreateDto ToCreateDto(
         TaktSourceEc sourceEc,
@@ -41,7 +41,7 @@ public static class TaktEcSourceEcMapper
         string companyCode,
         string companyDefaultCulture,
         IReadOnlyDictionary<string, TaktMaterialPlant>? materialsByCode = null,
-        IReadOnlyDictionary<string, string>? modelCodeByFinishedGoods = null)
+        IReadOnlyDictionary<string, string>? modelCodeByRootMaterial = null)
     {
         ArgumentNullException.ThrowIfNull(sourceEc);
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
@@ -63,7 +63,7 @@ public static class TaktEcSourceEcMapper
             EcContent = sourceEc.SourceEcContent ?? string.Empty,
             EcLeader = string.Empty,
             EcLossAmount = 0,
-            EcDistinction = 1,
+            EcScope = 1,
             EcEntryDate = today,
             ChangeStatus = TaktEcSourceStatusMapper.MapToChangeStatusOrThrow(sourceEc.SourceStatus),
             EcStatus = 1,
@@ -77,7 +77,7 @@ public static class TaktEcSourceEcMapper
                 today,
                 fallbackModelCode,
                 materialsByCode,
-                modelCodeByFinishedGoods),
+                modelCodeByRootMaterial),
         };
         return createDto;
     }
@@ -94,7 +94,7 @@ public static class TaktEcSourceEcMapper
     /// <param name="defaultBomDate">BOM 生效日期缺省（来源行无 SourceBomEffectiveDate 时使用）</param>
     /// <param name="fallbackModelCode">型号目的地未命中时的机种回退（来源主表 SourceModel）</param>
     /// <param name="materialsByCode">目标工厂物料字典（物料编码 → TaktMaterialPlant）</param>
-    /// <param name="modelCodeByFinishedGoods">完成品物料编码 → 机种编码（TaktModelDestination）</param>
+    /// <param name="modelCodeByRootMaterial">根物料编码 → 机种编码（TaktModelDestination）</param>
     /// <returns>设变明细创建 DTO 列表</returns>
     public static List<TaktEcDetailCreateDto> MapDetailCreateDtos(
         IReadOnlyList<TaktSourceEcDetail> sourceDetails,
@@ -106,7 +106,7 @@ public static class TaktEcSourceEcMapper
         DateTime defaultBomDate,
         string fallbackModelCode,
         IReadOnlyDictionary<string, TaktMaterialPlant> materialsByCode,
-        IReadOnlyDictionary<string, string>? modelCodeByFinishedGoods = null)
+        IReadOnlyDictionary<string, string>? modelCodeByRootMaterial = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
@@ -132,7 +132,7 @@ public static class TaktEcSourceEcMapper
                 defaultBomDate,
                 fallbackModelCode,
                 detail.LineNumber > 0 ? detail.LineNumber : autoLineNumber);
-            TaktEcDetailMaterialPlantMapper.EnrichCreateDto(dto, materialsByCode, modelCodeByFinishedGoods);
+            TaktEcDetailMaterialPlantMapper.EnrichCreateDto(dto, materialsByCode, modelCodeByRootMaterial);
             result.Add(dto);
         }
         return result;
@@ -172,7 +172,7 @@ public static class TaktEcSourceEcMapper
             EcCode = ecCode,
             LineNumber = lineNumber,
             EcModelCode = fallbackModelCode,
-            EcFinishedGoods = detail.SourceFinishedGoods,
+            EcRootMaterialCode = detail.SourceRootMaterialCode,
             EcParentMaterialCode = detail.SourceParentMaterialCode,
             EcOldMaterialCode = detail.SourceOldMaterialCode,
             EcOldMaterialDescription = detail.SourceOldMaterialDescription,
@@ -184,7 +184,7 @@ public static class TaktEcSourceEcMapper
             EcNewItemPosition = detail.SourceNewItemPosition,
             EcBomLineCode = detail.SourceBomCode,
             EcIsCompatible = detail.SourceCompatibility,
-            EcSecondDistinction = detail.SourceDistinction,
+            Ec2ndVendor = detail.Source2ndVendor,
             EcInstruction = detail.SourceInstruction,
             EcOldPartDisposition = detail.SourceOldPartDisposition,
             EcBomDate = detail.SourceBomEffectiveDate ?? defaultBomDate,
@@ -204,7 +204,7 @@ public static class TaktEcSourceEcMapper
     /// <param name="entryDate">录入日期</param>
     /// <param name="fallbackModelCode">型号目的地未命中时的机种回退（来源主表 SourceModel）</param>
     /// <param name="materialsByCode">目标工厂物料字典</param>
-    /// <param name="modelCodeByFinishedGoods">完成品 → 机种</param>
+    /// <param name="modelCodeByRootMaterial">根物料编码 → 机种</param>
     /// <returns>设变明细创建 DTO 列表</returns>
     private static List<TaktEcDetailCreateDto> MapDetails(
         IReadOnlyList<TaktSourceEcDetail> sourceDetails,
@@ -216,7 +216,7 @@ public static class TaktEcSourceEcMapper
         DateTime entryDate,
         string fallbackModelCode,
         IReadOnlyDictionary<string, TaktMaterialPlant>? materialsByCode,
-        IReadOnlyDictionary<string, string>? modelCodeByFinishedGoods)
+        IReadOnlyDictionary<string, string>? modelCodeByRootMaterial)
     {
         return MapDetailCreateDtos(
             sourceDetails,
@@ -228,6 +228,6 @@ public static class TaktEcSourceEcMapper
             entryDate,
             fallbackModelCode,
             materialsByCode ?? new Dictionary<string, TaktMaterialPlant>(StringComparer.OrdinalIgnoreCase),
-            modelCodeByFinishedGoods);
+            modelCodeByRootMaterial);
     }
 }

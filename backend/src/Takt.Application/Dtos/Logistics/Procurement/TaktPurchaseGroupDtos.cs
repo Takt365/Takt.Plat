@@ -51,6 +51,11 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int PurchaseGroupCategory { get; set; } = 1;
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -121,6 +126,11 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int? PurchaseGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -214,6 +224,11 @@ public class TaktPurchaseGroupCreateDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int PurchaseGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话
@@ -360,6 +375,11 @@ public class TaktPurchaseGroupTemplateDto
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int? PurchaseGroupCategory { get; set; }
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -430,6 +450,11 @@ public class TaktPurchaseGroupImportDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int? PurchaseGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -503,6 +528,11 @@ public class TaktPurchaseGroupExportDto
     /// 采购组描述
     /// </summary>
     public string? PurchaseGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    public int PurchaseGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

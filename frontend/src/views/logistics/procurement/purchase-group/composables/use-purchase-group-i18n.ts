@@ -24,6 +24,7 @@ export const PURCHASEGROUP_LIST_FIELDS = [
   'purchaseGroupCode',
   'purchaseGroupName',
   'purchaseGroupDescription',
+  'purchaseGroupCategory',
   'contactPhone',
   'contactEmail',
   'isBuiltIn',
@@ -35,10 +36,12 @@ export const PURCHASEGROUP_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
   plantCode: 'select',
   purchaseGroupCode: 'required',
   purchaseGroupName: 'required',
   purchaseGroupDescription: 'optional',
+  purchaseGroupCategory: 'select',
   contactPhone: 'optional',
   contactEmail: 'optional',
   isBuiltIn: 'select',
@@ -66,11 +69,12 @@ export const PURCHASEGROUP_QUERY_STRING_FIELDS = [
 
 export type PurchaseGroupQueryField =
   | (typeof PURCHASEGROUP_QUERY_STRING_FIELDS)[number]
-  | 'isBuiltIn' | 'groupStatus'
+  | 'purchaseGroupCategory' | 'isBuiltIn' | 'groupStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEGROUP_QUERY_FIELDS: readonly PurchaseGroupQueryField[] = [
   ...PURCHASEGROUP_QUERY_STRING_FIELDS,
+  'purchaseGroupCategory',
   'isBuiltIn',
   'groupStatus',
 ]

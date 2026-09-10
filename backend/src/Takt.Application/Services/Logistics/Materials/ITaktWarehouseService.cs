@@ -51,7 +51,7 @@ public interface ITaktWarehouseService
     Task<TaktWarehouseDto> CreateWarehouseAsync(TaktWarehouseCreateDto dto);
 
     /// <summary>
-    /// 更新仓库主数据
+    /// 更新品仓库主数据
     /// </summary>
     /// <param name="id">仓库主数据ID</param>
     /// <param name="dto">更新DTO</param>
@@ -73,14 +73,14 @@ public interface ITaktWarehouseService
     Task DeleteWarehouseBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新仓库主数据状态
+    /// 更新品仓库主数据状态
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktWarehouseDto> UpdateWarehouseStatusAsync(TaktWarehouseStatusDto dto);
 
     /// <summary>
-    /// 更新仓库主数据排序
+    /// 更新品仓库主数据排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>DTO</returns>

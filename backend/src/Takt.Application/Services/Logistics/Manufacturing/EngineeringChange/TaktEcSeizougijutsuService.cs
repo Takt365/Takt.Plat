@@ -149,7 +149,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
     }
 
     /// <summary>
-    /// 更新设变制技执行（同设变单号+机种+完成品的执行行一并写入可填字段）
+    /// 更新设变制技执行（同设变单号+机种+根物料编码的执行行一并写入可填字段）
     /// </summary>
     /// <param name="id">设变制技执行ID</param>
     /// <param name="dto">更新DTO</param>
@@ -171,7 +171,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             throw new TaktBusinessException("设变制技执行的EcDetailId已存在");
         }
         await _ecSeizougijutsuRepository.UpdateAsync(entity);
-        await _ecExecPersistence.FanOutSeizougijutsuFillableByEcModelAndFinishedGoodsAsync(entity);
+        await _ecExecPersistence.FanOutSeizougijutsuFillableByEcModelAndRootMaterialAsync(entity);
         await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
         return await GetEcSeizougijutsuByIdAsync(id) ?? throw new TaktBusinessException("设变制技执行不存在");
     }
@@ -236,7 +236,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             throw new TaktBusinessException("设变制技执行不存在");
         }
         var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
-            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            ? TaktEcScopeConstants.PlannedMaterialStatus
             : dto.DiscontinuedStatus.Trim();
         await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
         return await GetEcSeizougijutsuByIdAsync(dto.EcSeizougijutsuId) ?? throw new TaktBusinessException("设变制技执行不存在");
@@ -389,13 +389,11 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
-                || SqlFunc.ToString(x.IsImplemented).Contains(keywords)
-                || (x.ExecContent != null && x.ExecContent.Contains(keywords))
                 || SqlFunc.ToString(x.IsSopUpdated).Contains(keywords)
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ConfirmationDate).Contains(keywords)
+                || SqlFunc.ToString(x.SopDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -420,15 +418,7 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             exp = exp.And(x => x.DeptCode != null && x.DeptCode.Contains(queryDto.DeptCode));
         }
 
-        if (queryDto?.IsImplemented.HasValue == true)
-        {
-            exp = exp.And(x => x.IsImplemented == queryDto.IsImplemented);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExecContent))
-        {
-            exp = exp.And(x => x.ExecContent != null && x.ExecContent.Contains(queryDto.ExecContent));
-        }
+        // IsImplemented / ExecContent 为实体 IsIgnore（制技不落库），不可参与 SQL 条件
 
         if (queryDto?.IsSopUpdated.HasValue == true)
         {
@@ -450,14 +440,14 @@ public class TaktEcSeizougijutsuService : TaktServiceBase, ITaktEcSeizougijutsuS
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
         }
 
-        if (queryDto?.ConfirmationDateStart.HasValue == true)
+        if (queryDto?.SopDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ConfirmationDate >= queryDto.ConfirmationDateStart);
+            exp = exp.And(x => x.SopDate >= queryDto.SopDateStart);
         }
 
-        if (queryDto?.ConfirmationDateEnd.HasValue == true)
+        if (queryDto?.SopDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ConfirmationDate <= queryDto.ConfirmationDateEnd);
+            exp = exp.And(x => x.SopDate <= queryDto.SopDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

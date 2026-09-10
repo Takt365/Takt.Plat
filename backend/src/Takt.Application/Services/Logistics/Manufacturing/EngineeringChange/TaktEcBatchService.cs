@@ -110,7 +110,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
         await UpsertPmcBatchFieldAsync(detail, pmc =>
         {
             pmc.ScheduledBatch = dto.ScheduledBatch;
-            pmc.ScheduledProductionDate = dto.ScheduledProductionDate;
+            pmc.ScheduledDate = dto.ScheduledDate;
         });
         await UpsertSmtBatchFieldsAsync(detail, dto.ProductionBatch, dto.ProductionDate);
         return await MapBatchRowAsync(detail);
@@ -154,7 +154,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
         if (pmc != null)
         {
             dto.ScheduledBatch = pmc.ScheduledBatch;
-            dto.ScheduledProductionDate = pmc.ScheduledProductionDate;
+            dto.ScheduledDate = pmc.ScheduledDate;
         }
         var route = TaktEcSmtRouteHelper.Resolve(detail);
         if (route == TaktEcSmtRouteTarget.Smt)
@@ -278,7 +278,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
             {
                 EcDetailId = detail.Id,
                 EcCode = detail.EcCode,
-                DeptCode = TaktEcDeptCodes.Pcba,
+                DeptCode = TaktEcDeptCodes.Smt,
             };
             var maxLine = await repo.GetMaxIntAsync(
                 x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcDetailId == detail.Id,

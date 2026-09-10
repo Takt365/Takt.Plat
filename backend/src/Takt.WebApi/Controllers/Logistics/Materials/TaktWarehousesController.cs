@@ -120,12 +120,12 @@ public class TaktWarehousesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新仓库主数据
+    /// 更新品仓库主数据
     /// </summary>
     /// <param name="id">仓库主数据ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>仓库主数据DTO</returns>
-    [TaktPermission("logistics:materials:warehouse:update", "更新仓库主数据")]
+    [TaktPermission("logistics:materials:warehouse:update", "更新品仓库主数据")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateWarehouseAsync(long id, [FromBody] TaktWarehouseUpdateDto dto)
     {
@@ -181,11 +181,11 @@ public class TaktWarehousesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新仓库主数据状态
+    /// 更新品仓库主数据状态
     /// </summary>
     /// <param name="dto">状态 DTO</param>
     /// <returns>仓库主数据DTO</returns>
-    [TaktPermission("logistics:materials:warehouse:update", "更新仓库主数据状态")]
+    [TaktPermission("logistics:materials:warehouse:update", "更新品仓库主数据状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateWarehouseStatusAsync([FromBody] TaktWarehouseStatusDto dto)
     {
@@ -201,11 +201,11 @@ public class TaktWarehousesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新仓库主数据排序
+    /// 更新品仓库主数据排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>仓库主数据DTO</returns>
-    [TaktPermission("logistics:materials:warehouse:update", "更新仓库主数据排序")]
+    [TaktPermission("logistics:materials:warehouse:update", "更新品仓库主数据排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateWarehouseSortAsync([FromBody] TaktWarehouseSortDto dto)
     {

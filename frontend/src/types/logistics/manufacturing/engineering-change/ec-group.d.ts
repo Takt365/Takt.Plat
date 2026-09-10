@@ -40,6 +40,11 @@ export interface EcGroup extends CompanyDtoBase {
   ecGroupDescription?: string;
 
   /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -102,6 +107,11 @@ export interface EcGroupQuery extends TaktPagedQuery {
    * 设变组描述
    */
   ecGroupDescription?: string;
+
+  /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory?: number;
 
   /**
    * 联系电话
@@ -193,6 +203,11 @@ export interface EcGroupCreate {
    * 设变组描述
    */
   ecGroupDescription?: string;
+
+  /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory: number;
 
   /**
    * 联系电话
@@ -313,6 +328,11 @@ export interface EcGroupTemplate {
   ecGroupDescription?: string;
 
   /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory?: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -389,6 +409,11 @@ export interface EcGroupImport {
   ecGroupDescription?: string;
 
   /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory?: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -455,6 +480,11 @@ export interface EcGroupExport {
    * 设变组描述
    */
   ecGroupDescription?: string;
+
+  /**
+   * 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+   */
+  ecGroupCategory: number;
 
   /**
    * 联系电话

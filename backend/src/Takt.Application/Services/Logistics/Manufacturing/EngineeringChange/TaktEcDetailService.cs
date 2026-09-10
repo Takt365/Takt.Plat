@@ -133,11 +133,11 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDetailRepository,
             x => x.EcGijutsuId == entity.EcGijutsuId
-                && x.EcFinishedGoods == entity.EcFinishedGoods
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode
                 && x.LineNumber == entity.LineNumber);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
         {
-            throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
+            throw new TaktBusinessException("设变明细的EcGijutsuId、EcRootMaterialCode、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -145,7 +145,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 x => x.TenantCode == CurrentTenantCode
                     && x.CompanyCode == CurrentCompanyCode
                     && x.EcGijutsuId == entity.EcGijutsuId
-                    && x.EcFinishedGoods == entity.EcFinishedGoods,
+                    && x.EcRootMaterialCode == entity.EcRootMaterialCode,
                 x => x.LineNumber);
             var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
@@ -168,7 +168,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             throw new TaktBusinessException("设变明细不存在");
         }
         var keepIsCompatible = entity.EcIsCompatible;
-        var keepSecondDistinction = entity.EcSecondDistinction;
+        var keep2ndVendor = entity.Ec2ndVendor;
         var keepInstruction = entity.EcInstruction;
         var keepOldPartDisposition = entity.EcOldPartDisposition;
         dto.Adapt(entity);
@@ -177,9 +177,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             entity.EcIsCompatible = keepIsCompatible;
         }
-        if (string.IsNullOrWhiteSpace(dto.EcSecondDistinction))
+        if (string.IsNullOrWhiteSpace(dto.Ec2ndVendor))
         {
-            entity.EcSecondDistinction = keepSecondDistinction;
+            entity.Ec2ndVendor = keep2ndVendor;
         }
         if (string.IsNullOrWhiteSpace(dto.EcInstruction))
         {
@@ -193,12 +193,12 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDetailRepository,
             x => x.EcGijutsuId == entity.EcGijutsuId
-                && x.EcFinishedGoods == entity.EcFinishedGoods
+                && x.EcRootMaterialCode == entity.EcRootMaterialCode
                 && x.LineNumber == entity.LineNumber,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
         {
-            throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
+            throw new TaktBusinessException("设变明细的EcGijutsuId、EcRootMaterialCode、LineNumber已存在");
         }
         await _ecDetailRepository.UpdateAsync(entity);
         return await GetEcDetailByIdAsync(id) ?? throw new TaktBusinessException("设变明细不存在");
@@ -305,19 +305,19 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 var entity = rows[i].Adapt<TaktEcDetail>();
                 var importDto = rows[i].Adapt<TaktEcDetailCreateDto>();
                 await StampEcDetailEcGijutsuAsync(entity, importDto);
-                var importKey = $"{entity.EcGijutsuId}|{entity.EcFinishedGoods}|{entity.LineNumber}";
+                var importKey = $"{entity.EcGijutsuId}|{entity.EcRootMaterialCode}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcGijutsuId、EcFinishedGoods、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcGijutsuId、EcRootMaterialCode、LineNumber）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecDetailRepository,
                     x => x.EcGijutsuId == entity.EcGijutsuId
-                        && x.EcFinishedGoods == entity.EcFinishedGoods
+                        && x.EcRootMaterialCode == entity.EcRootMaterialCode
                         && x.LineNumber == entity.LineNumber);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique)
                 {
-                    throw new TaktBusinessException("设变明细的EcGijutsuId、EcFinishedGoods、LineNumber已存在");
+                    throw new TaktBusinessException("设变明细的EcGijutsuId、EcRootMaterialCode、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -325,7 +325,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                         x => x.TenantCode == CurrentTenantCode
                             && x.CompanyCode == CurrentCompanyCode
                             && x.EcGijutsuId == entity.EcGijutsuId
-                            && x.EcFinishedGoods == entity.EcFinishedGoods,
+                            && x.EcRootMaterialCode == entity.EcRootMaterialCode,
                         x => x.LineNumber);
                     var businessCode = !string.IsNullOrWhiteSpace(entity.EcCode) ? entity.EcCode : entity.EcGijutsuId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
@@ -415,7 +415,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         }
         // 冗余：始终由主表带入，禁止客户端默认值
         entity.EcCode = master.EcCode;
-        entity.EcDistinction = master.EcDistinction;
+        entity.EcScope = master.EcScope;
     }
     // ========================================
     // 查询表达式
@@ -448,8 +448,8 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcBomLineCode != null && x.EcBomLineCode.Contains(keywords))
                 || (x.EcModelCode != null && x.EcModelCode.Contains(keywords))
-                || (x.EcFinishedGoods != null && x.EcFinishedGoods.Contains(keywords))
-                || (x.EcFinishedGoodsDescription != null && x.EcFinishedGoodsDescription.Contains(keywords))
+                || (x.EcRootMaterialCode != null && x.EcRootMaterialCode.Contains(keywords))
+                || (x.EcRootMaterialDescription != null && x.EcRootMaterialDescription.Contains(keywords))
                 || (x.EcParentMaterialCode != null && x.EcParentMaterialCode.Contains(keywords))
                 || (x.EcParentMaterialDescription != null && x.EcParentMaterialDescription.Contains(keywords))
                 || (x.EcOldMaterialCode != null && x.EcOldMaterialCode.Contains(keywords))
@@ -461,7 +461,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 || (x.EcNewItemPosition != null && x.EcNewItemPosition.Contains(keywords))
                 || (x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(keywords))
                 || (x.EcIsCompatible != null && x.EcIsCompatible.Contains(keywords))
-                || (x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(keywords))
+                || (x.Ec2ndVendor != null && x.Ec2ndVendor.Contains(keywords))
                 || (x.EcInstruction != null && x.EcInstruction.Contains(keywords))
                 || (x.EcOldPartDisposition != null && x.EcOldPartDisposition.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -511,16 +511,16 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcModelCode != null && x.EcModelCode.Contains(ecModelCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EcFinishedGoods))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcRootMaterialCode))
         {
-            var ecFinishedGoods = queryDto.EcFinishedGoods;
-            exp = exp.And(x => x.EcFinishedGoods != null && x.EcFinishedGoods.Contains(ecFinishedGoods));
+            var ecRootMaterialCode = queryDto.EcRootMaterialCode;
+            exp = exp.And(x => x.EcRootMaterialCode != null && x.EcRootMaterialCode.Contains(ecRootMaterialCode));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EcFinishedGoodsDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EcRootMaterialDescription))
         {
-            var ecFinishedGoodsDescription = queryDto.EcFinishedGoodsDescription;
-            exp = exp.And(x => x.EcFinishedGoodsDescription != null && x.EcFinishedGoodsDescription.Contains(ecFinishedGoodsDescription));
+            var ecRootMaterialDescription = queryDto.EcRootMaterialDescription;
+            exp = exp.And(x => x.EcRootMaterialDescription != null && x.EcRootMaterialDescription.Contains(ecRootMaterialDescription));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EcParentMaterialCode))
@@ -643,10 +643,10 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcIsCompatible != null && x.EcIsCompatible.Contains(ecIsCompatible));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.EcSecondDistinction))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Ec2ndVendor))
         {
-            var ecSecondDistinction = queryDto.EcSecondDistinction;
-            exp = exp.And(x => x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(ecSecondDistinction));
+            var ec2ndVendor = queryDto.Ec2ndVendor;
+            exp = exp.And(x => x.Ec2ndVendor != null && x.Ec2ndVendor.Contains(ec2ndVendor));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.EcInstruction))
@@ -743,11 +743,11 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EcFinishedGoods))
+        if (!string.IsNullOrWhiteSpace(queryDto.EcRootMaterialCode))
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EcFinishedGoodsDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto.EcRootMaterialDescription))
         {
             return true;
         }
@@ -831,7 +831,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.EcSecondDistinction))
+        if (!string.IsNullOrWhiteSpace(queryDto.Ec2ndVendor))
         {
             return true;
         }

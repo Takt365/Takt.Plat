@@ -4,7 +4,7 @@
 // 文件名称：TaktDefectGroup.cs
 // 创建时间：2026-07-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：不良组主数据实体，按不良类别（Assy/Inspection/Repair）定义不良业务组织分组
+// 功能描述：不良组主数据实体，按不良组类别（Assy/Inspection/Repair）定义不良业务组织分组
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,22 +16,16 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 
 /// <summary>
-/// 不良组主数据实体（公司级；按不良类别区分的不良业务组织分组）
+/// 不良组主数据实体（公司级；按不良组类别区分的不良业务组织分组）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_defect_group", "不良组主数据表")]
 [SugarIndex("ix_defect_group_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_defect_group_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_group_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(DefectCategory), OrderByType.Asc, nameof(DefectGroupCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_group_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(DefectGroupCategory), OrderByType.Asc, nameof(DefectGroupCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_defect_group_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_group_defect_category", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DefectCategory), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_group_defect_group_category", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DefectGroupCategory), OrderByType.Asc, false)]
 public class TaktDefectGroup : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-    /// </summary>
-    [SugarColumn(ColumnName = "defect_category", ColumnDescription = "不良类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int DefectCategory { get; set; } = 0;
-
     /// <summary>
     /// 不良组编码（3）
     /// </summary>
@@ -41,7 +35,7 @@ public class TaktDefectGroup : TaktCompanyEntityBase
     /// <summary>
     /// 不良组名称
     /// </summary>
-    [SugarColumn(ColumnName = "defect_group_name", ColumnDescription = "不良组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "defect_group_name", ColumnDescription = "不良组名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string DefectGroupName { get; set; } = string.Empty;
 
     /// <summary>
@@ -49,6 +43,12 @@ public class TaktDefectGroup : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "defect_group_description", ColumnDescription = "不良组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? DefectGroupDescription { get; set; }
+
+    /// <summary>
+    /// 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+    /// </summary>
+    [SugarColumn(ColumnName = "defect_group_category", ColumnDescription = "不良组类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int DefectGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话

@@ -27,18 +27,174 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseGroupCode')"
+                name="purchaseGroupCode"
+              >
+                <a-input
+                  v-model:value="formState.purchaseGroupCode"
+                  :placeholder="pi.ph('purchaseGroupCode')"
+                  show-count
+                  :maxlength="3"
+                  allow-clear
+                  :disabled="!!formData?.purchaseGroupId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseGroupName')"
+                name="purchaseGroupName"
+              >
+                <a-input
+                  v-model:value="formState.purchaseGroupName"
+                  :placeholder="pi.ph('purchaseGroupName')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('purchaseGroupDescription')"
+                name="purchaseGroupDescription"
+              >
+                <a-textarea
+                  v-model:value="formState.purchaseGroupDescription"
+                  :placeholder="pi.ph('purchaseGroupDescription')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseGroupCategory')"
+                name="purchaseGroupCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.purchaseGroupCategory"
+                  dict-type="logistics_procurement_purchase_group_category"
+                  :placeholder="pi.ph('purchaseGroupCategory')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contactPhone')"
+                name="contactPhone"
+              >
+                <a-input
+                  v-model:value="formState.contactPhone"
+                  :placeholder="pi.ph('contactPhone')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contactEmail')"
+                name="contactEmail"
+              >
+                <a-input
+                  v-model:value="formState.contactEmail"
+                  :placeholder="pi.ph('contactEmail')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isBuiltIn')"
+                name="isBuiltIn"
+              >
+                <TaktSelect
+                  v-model:value="formState.isBuiltIn"
+                  dict-type="sys_yes_no"
+                  :placeholder="pi.ph('isBuiltIn')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('groupStatus')"
+                name="groupStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.groupStatus"
+                  dict-type="sys_normal_disable"
+                  :placeholder="pi.ph('groupStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -111,11 +267,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -130,14 +286,17 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
-    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+    const nextPlant = tenantStore.currentCompanyRelatedPlant || ''
+    if (nextPlant) {
+      target.plantCode = nextPlant
+    }
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -157,6 +316,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  purchaseGroupCategory: 1,
   isBuiltIn: 0,
   groupStatus: 1
 }
@@ -200,7 +360,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.purchaseGroupId) {
       applyScopeDefaults(formState, true)
@@ -210,13 +370,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   purchaseGroupCode: [
     {
       required: true,
@@ -231,6 +384,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
+  purchaseGroupCategory: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('purchaseGroupCategory'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('purchaseGroupCategory'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   isBuiltIn: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -268,15 +434,45 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('purchaseGroupCategory' in payload) {
+    const rawpurchaseGroupCategory = payload.purchaseGroupCategory
+    if (rawpurchaseGroupCategory === undefined || rawpurchaseGroupCategory === null || rawpurchaseGroupCategory === '') {
+      delete payload.purchaseGroupCategory
+    } else {
+      const numpurchaseGroupCategory = typeof rawpurchaseGroupCategory === 'number' ? rawpurchaseGroupCategory : Number(rawpurchaseGroupCategory)
+      if (Number.isFinite(numpurchaseGroupCategory)) payload.purchaseGroupCategory = numpurchaseGroupCategory
+      else delete payload.purchaseGroupCategory
+    }
+  }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
-    payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+    if (rawisBuiltIn === undefined || rawisBuiltIn === null || rawisBuiltIn === '') {
+      delete payload.isBuiltIn
+    } else {
+      const numisBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+      if (Number.isFinite(numisBuiltIn)) payload.isBuiltIn = numisBuiltIn
+      else delete payload.isBuiltIn
+    }
   }
   if ('groupStatus' in payload) {
     const rawgroupStatus = payload.groupStatus
-    payload.groupStatus = typeof rawgroupStatus === 'number' ? rawgroupStatus : Number(rawgroupStatus)
+    if (rawgroupStatus === undefined || rawgroupStatus === null || rawgroupStatus === '') {
+      delete payload.groupStatus
+    } else {
+      const numgroupStatus = typeof rawgroupStatus === 'number' ? rawgroupStatus : Number(rawgroupStatus)
+      if (Number.isFinite(numgroupStatus)) payload.groupStatus = numgroupStatus
+      else delete payload.groupStatus
+    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
+  if (!payload.plantCode) {
+    // 只读工厂：未注入时勿提交空串触发 FluentValidation
+    const scopedPlant = (typeof tenantStore !== 'undefined' && tenantStore.currentCompanyRelatedPlant) || ''
+    if (scopedPlant) payload.plantCode = scopedPlant
+  }
+  if (props.formData?.purchaseGroupId) {
+    payload.purchaseGroupId = props.formData.purchaseGroupId
+  }
   return payload
 }
 

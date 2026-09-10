@@ -133,11 +133,11 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcDetailRepository,
             x => x.SourceEcId == entity.SourceEcId
-                && x.SourceFinishedGoods == entity.SourceFinishedGoods
+                && x.SourceRootMaterialCode == entity.SourceRootMaterialCode
                 && x.LineNumber == entity.LineNumber);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
         {
-            throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
+            throw new TaktBusinessException("设变来源子的SourceEcId、SourceRootMaterialCode、LineNumber已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -145,7 +145,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 x => x.TenantCode == CurrentTenantCode
                     && x.CompanyCode == CurrentCompanyCode
                     && x.SourceEcId == entity.SourceEcId
-                    && x.SourceFinishedGoods == entity.SourceFinishedGoods,
+                    && x.SourceRootMaterialCode == entity.SourceRootMaterialCode,
                 x => x.LineNumber);
             var businessCode = !string.IsNullOrWhiteSpace(entity.SourceEcCode) ? entity.SourceEcCode : entity.SourceEcId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
@@ -172,12 +172,12 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcDetailRepository,
             x => x.SourceEcId == entity.SourceEcId
-                && x.SourceFinishedGoods == entity.SourceFinishedGoods
+                && x.SourceRootMaterialCode == entity.SourceRootMaterialCode
                 && x.LineNumber == entity.LineNumber,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
         {
-            throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
+            throw new TaktBusinessException("设变来源子的SourceEcId、SourceRootMaterialCode、LineNumber已存在");
         }
         await _sourceEcDetailRepository.UpdateAsync(entity);
         return await GetSourceEcDetailByIdAsync(id) ?? throw new TaktBusinessException("设变来源子不存在");
@@ -284,19 +284,19 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 var entity = rows[i].Adapt<TaktSourceEcDetail>();
                 var importDto = rows[i].Adapt<TaktSourceEcDetailCreateDto>();
                 await StampSourceEcDetailSourceEcAsync(entity, importDto);
-                var importKey = $"{entity.SourceEcId}|{entity.SourceFinishedGoods}|{entity.LineNumber}";
+                var importKey = $"{entity.SourceEcId}|{entity.SourceRootMaterialCode}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcId、SourceFinishedGoods、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcId、SourceRootMaterialCode、LineNumber）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _sourceEcDetailRepository,
                     x => x.SourceEcId == entity.SourceEcId
-                        && x.SourceFinishedGoods == entity.SourceFinishedGoods
+                        && x.SourceRootMaterialCode == entity.SourceRootMaterialCode
                         && x.LineNumber == entity.LineNumber);
                 if (!isUnique_ix_takt_logistics_manufacturing_ec_source_detail_line_unique)
                 {
-                    throw new TaktBusinessException("设变来源子的SourceEcId、SourceFinishedGoods、LineNumber已存在");
+                    throw new TaktBusinessException("设变来源子的SourceEcId、SourceRootMaterialCode、LineNumber已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -304,7 +304,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                         x => x.TenantCode == CurrentTenantCode
                             && x.CompanyCode == CurrentCompanyCode
                             && x.SourceEcId == entity.SourceEcId
-                            && x.SourceFinishedGoods == entity.SourceFinishedGoods,
+                            && x.SourceRootMaterialCode == entity.SourceRootMaterialCode,
                         x => x.LineNumber);
                     var businessCode = !string.IsNullOrWhiteSpace(entity.SourceEcCode) ? entity.SourceEcCode : entity.SourceEcId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
@@ -426,7 +426,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SourceEcCode != null && x.SourceEcCode.Contains(keywords))
-                || (x.SourceFinishedGoods != null && x.SourceFinishedGoods.Contains(keywords))
+                || (x.SourceRootMaterialCode != null && x.SourceRootMaterialCode.Contains(keywords))
                 || (x.SourceParentMaterialCode != null && x.SourceParentMaterialCode.Contains(keywords))
                 || (x.SourceOldMaterialCode != null && x.SourceOldMaterialCode.Contains(keywords))
                 || (x.SourceOldMaterialDescription != null && x.SourceOldMaterialDescription.Contains(keywords))
@@ -436,7 +436,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 || (x.SourceNewItemPosition != null && x.SourceNewItemPosition.Contains(keywords))
                 || (x.SourceBomCode != null && x.SourceBomCode.Contains(keywords))
                 || (x.SourceCompatibility != null && x.SourceCompatibility.Contains(keywords))
-                || (x.SourceDistinction != null && x.SourceDistinction.Contains(keywords))
+                || (x.Source2ndVendor != null && x.Source2ndVendor.Contains(keywords))
                 || (x.SourceInstruction != null && x.SourceInstruction.Contains(keywords))
                 || (x.SourceOldPartDisposition != null && x.SourceOldPartDisposition.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -474,10 +474,10 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceFinishedGoods))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceRootMaterialCode))
         {
-            var sourceFinishedGoods = queryDto.SourceFinishedGoods;
-            exp = exp.And(x => x.SourceFinishedGoods != null && x.SourceFinishedGoods.Contains(sourceFinishedGoods));
+            var sourceRootMaterialCode = queryDto.SourceRootMaterialCode;
+            exp = exp.And(x => x.SourceRootMaterialCode != null && x.SourceRootMaterialCode.Contains(sourceRootMaterialCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SourceParentMaterialCode))
@@ -546,10 +546,10 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceCompatibility != null && x.SourceCompatibility.Contains(sourceCompatibility));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SourceDistinction))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Source2ndVendor))
         {
-            var sourceDistinction = queryDto.SourceDistinction;
-            exp = exp.And(x => x.SourceDistinction != null && x.SourceDistinction.Contains(sourceDistinction));
+            var source2ndVendor = queryDto.Source2ndVendor;
+            exp = exp.And(x => x.Source2ndVendor != null && x.Source2ndVendor.Contains(source2ndVendor));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.SourceInstruction))
@@ -638,7 +638,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceFinishedGoods))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceRootMaterialCode))
         {
             return true;
         }
@@ -686,7 +686,7 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceDistinction))
+        if (!string.IsNullOrWhiteSpace(queryDto.Source2ndVendor))
         {
             return true;
         }

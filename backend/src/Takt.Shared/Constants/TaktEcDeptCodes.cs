@@ -39,9 +39,13 @@ public static class TaktEcDeptCodes
     /// </summary>
     public const string Mc = "D0430";
     /// <summary>
-    /// 制造2课-间接（D0626）
+    /// 制造2课-物料 / SMT（D0625；TaktEcSmt，F+C003）
     /// </summary>
-    public const string Pcba = "D0626";
+    public const string Smt = "D0625";
+    /// <summary>
+    /// 制造2课（D0620；TaktEcSeizounika 非 F；看板/派生「制二」桶）
+    /// </summary>
+    public const string Pcba = "D0620";
     /// <summary>
     /// 制二课非F（TaktEcSeizounika）左栏主表过滤键；非组织 DeptCode，仅 GetEcDetailMasterListAsync
     /// </summary>
@@ -102,7 +106,8 @@ public static class TaktEcDeptCodes
             Mp => "采购课",
             Iqc => "受检课",
             Mc => "部管课",
-            Pcba => "制造二课",
+            Smt => "制造2课-物料",
+            Pcba => "制造2课",
             Assy => "制造一课",
             Qa => "品管课",
             Te => "制造技术课",

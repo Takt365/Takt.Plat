@@ -21,7 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_detail", "设变明细表")]
 [SugarIndex("ix_ec_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcGijutsuId), OrderByType.Asc, nameof(EcFinishedGoods), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcGijutsuId), OrderByType.Asc, nameof(EcRootMaterialCode), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_detail_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktEcDetail : TaktCompanyEntityBase
 {
@@ -44,25 +44,25 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcBomLineCode { get; set; }
 
     /// <summary>
-    /// 机种编码（按完成品 EcFinishedGoods 查询型号目的地回填）
+    /// 机种编码（按根物料编码 EcRootMaterialCode 查询型号目的地回填）
     /// </summary>
     [SugarColumn(ColumnName = "ec_model_code", ColumnDescription = "机种编码", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品
+    /// 根物料编码
     /// </summary>
-    [SugarColumn(ColumnName = "ec_finished_goods", ColumnDescription = "完成品", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcFinishedGoods { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_root_material_code", ColumnDescription = "根物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 完成品描述（按完成品 EcFinishedGoods 查询工厂物料回填）
+    /// 根物料描述（按根物料编码 EcRootMaterialCode 查询工厂物料回填）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_finished_goods_description", ColumnDescription = "完成品描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcFinishedGoodsDescription { get; set; }
+    [SugarColumn(ColumnName = "ec_root_material_description", ColumnDescription = "根物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcRootMaterialDescription { get; set; }
 
     /// <summary>
-    /// 停产状态（按完成品 EcFinishedGoods 查询工厂物料回填）
+    /// 停产状态（按根物料编码 EcRootMaterialCode 查询工厂物料回填）
     /// </summary>
     [SugarColumn(ColumnName = "discontinued_status", ColumnDescription = "停产状态", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "Z0")]
     public string DiscontinuedStatus { get; set; } = "Z0";
@@ -104,9 +104,9 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcOldItemPosition { get; set; }
 
     /// <summary>
-    /// 旧在库数量（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）
+    /// 旧品在库（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_old_stock", ColumnDescription = "旧在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_old_stock", ColumnDescription = "旧品在库", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
     public decimal? EcOldStock { get; set; }
 
     /// <summary>
@@ -122,9 +122,9 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcOldPurchaseType { get; set; }
 
     /// <summary>
-    /// 旧品是否需检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）
+    /// 旧品检验（按旧物料编码 EcOldMaterialCode 查询工厂物料回填）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_old_requires_inspection", ColumnDescription = "旧品是否需检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "ec_old_requires_inspection", ColumnDescription = "旧品检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EcOldRequiresInspection { get; set; } = 0;
 
     /// <summary>
@@ -152,9 +152,9 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcNewItemPosition { get; set; }
 
     /// <summary>
-    /// 新在库数量（按新物料编码 EcNewMaterialCode 查询工厂物料回填）
+    /// 新品在库（按新物料编码 EcNewMaterialCode 查询工厂物料回填）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_new_stock", ColumnDescription = "新在库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_new_stock", ColumnDescription = "新品在库", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = true)]
     public decimal? EcNewStock { get; set; }
 
     /// <summary>
@@ -170,9 +170,9 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcNewPurchaseType { get; set; }
 
     /// <summary>
-    /// 新品是否需检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）
+    /// 新品检验（按新物料编码 EcNewMaterialCode 查询工厂物料回填）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_new_requires_inspection", ColumnDescription = "新品是否需检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "ec_new_requires_inspection", ColumnDescription = "新品检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EcNewRequiresInspection { get; set; } = 0;
 
     /// <summary>
@@ -188,10 +188,10 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcIsCompatible { get; set; }
 
     /// <summary>
-    /// 二级区分
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_second_distinction", ColumnDescription = "二级区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcSecondDistinction { get; set; }
+    [SugarColumn(ColumnName = "ec_2nd_vendor", ColumnDescription = "第二供应商", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? Ec2ndVendor { get; set; }
 
     /// <summary>
     /// 生产指令
@@ -200,22 +200,16 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcInstruction { get; set; }
 
     /// <summary>
-    /// 旧品处理
+    /// 旧品处理（字典 logistics_manufacturing_ec_old_part_disposition；1=转用 2=废弃 3=返工 4=消耗 5=无处理 9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "ec_old_part_disposition", ColumnDescription = "旧品处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcOldPartDisposition { get; set; }
 
     /// <summary>
-    /// 区分（冗余：来自 TaktEcGijutsu.EcDistinction）
+    /// 实施范围（冗余：来自 TaktEcGijutsu.EcScope）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_distinction", ColumnDescription = "区分", ColumnDataType = "int", IsNullable = false)]
-    public int EcDistinction { get; set; }
-
-    /// <summary>
-    /// 是否作废
-    /// </summary>
-    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int IsObsolete { get; set; } = 0;
+    [SugarColumn(ColumnName = "ec_scope", ColumnDescription = "实施范围", ColumnDataType = "int", IsNullable = false)]
+    public int EcScope { get; set; }
 
     /// <summary>
     /// 技术课主表 ID（TaktEcGijutsu 主键；序列化为 string 避免 Javascript 精度问题）
@@ -223,6 +217,12 @@ public class TaktEcDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcGijutsuId { get; set; }
+
+    /// <summary>
+    /// 是否作废
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 生管执行行列表（数据主从；一对多；子表外键 TaktEcSeikan.EcDetailId → 本表 Id）

@@ -58,10 +58,20 @@ public class TaktEcGijutsuStatusSynchronizer
         {
             return;
         }
+        // 新建/刚派生后通常无部门输入：EXISTS 快路径，避免超大 IN / 全量拉明细与执行行
+        if (!await _ecExecDeptAccess.ExistsAnyDeptInputByEcCodeAsync(normalized))
+        {
+            if (gijutsu.EcStatus == TaktEcGijutsuStatusConstants.Issued)
+            {
+                return;
+            }
+            gijutsu.EcStatus = TaktEcGijutsuStatusConstants.Issued;
+            await _ecGijutsuRepository.UpdateAsync(gijutsu);
+            return;
+        }
         var details = await _ecDetailRepository.GetListAsync(x =>
             x.EcCode == normalized && x.IsObsolete == 0);
-        var detailIds = details.Select(x => x.Id).ToList();
-        var execRows = await _ecExecDeptAccess.ListBaseByEcDetailIdsAsync(detailIds);
+        var execRows = await _ecExecDeptAccess.ListBaseByEcCodeAsync(normalized);
         var computed = ComputeEcStatus(details, execRows);
         if (gijutsu.EcStatus == computed)
         {

@@ -114,13 +114,23 @@ public sealed class TaktPermissionFilter : IAsyncAuthorizationFilter
 
         if (!hasPermission)
         {
+            var requiredCode = permissionAttribute.PermissionCode?.Trim() ?? string.Empty;
+            TaktLogger.Warning(
+                "功能权限校验失败: UserId={UserId}, Tenant={TenantCode}, RequiredPermission={PermissionCode}, DisplayName={DisplayName}, Path={Path}",
+                _userContext.UserId.Value,
+                tenantCode,
+                requiredCode,
+                permissionAttribute.DisplayName,
+                context.HttpContext.Request.Path.Value);
+
+            // 错误文案同时带 DisplayName 与权限码，便于对照菜单/角色是否真有该码
+            var deniedMessage = _localizationService.Translate(
+                TaktValidationI18nKeys.PermissionDeniedWithAction,
+                culture: null,
+                $"{permissionAttribute.DisplayName} [{requiredCode}]");
+
             context.Result = new ObjectResult(
-                TaktApiResult.Fail(
-                    _localizationService.Translate(
-                        TaktValidationI18nKeys.PermissionDeniedWithAction,
-                        culture: null,
-                        permissionAttribute.DisplayName),
-                    TaktResultCode.Forbidden))
+                TaktApiResult.Fail(deniedMessage, TaktResultCode.Forbidden))
             {
                 StatusCode = StatusCodes.Status403Forbidden
             };

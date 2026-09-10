@@ -21,14 +21,14 @@ export default {
       loadToForm: 'フォームへ読込',
       plantFromCompany: '会社 {company} → 工場 {plant}',
       companyRequired: '会社を選択してからソース設変を取込んでください',
-      formTitle: 'ソース設変取込（担当者・管理区分・添付を入力して保存）',
+      formTitle: 'ソース設変取込（設変担当・実施範囲・添付を入力して保存）',
       attachmentRequired: '添付を1件以上追加し、ファイルをアップロードしてください',
       attachmentUploadRequired: '{row} 行目：添付ファイルが未アップロードです',
       importSelected: '選択取込（{count}）',
       importSuccess: '{count} 件の設変を取込しました',
       importPartial: '取込完了：成功 {success} 件、失敗 {fail} 件',
       detailsDeferred:
-        '明細は {count} 行あり、サーバー側で登録します（ブラウザからは送信しません）。担当者・区分を入力して送信してください。',
+        '明細は {count} 行あり、サーバー側で登録します（ブラウザからは送信しません）。設変担当・実施範囲を入力して送信してください。',
     },
     attachment: {
       docCode: {

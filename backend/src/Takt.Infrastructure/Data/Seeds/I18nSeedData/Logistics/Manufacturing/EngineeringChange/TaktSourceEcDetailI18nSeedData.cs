@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -117,14 +117,14 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail.linenumber
             new TranslationSeedItem("entity.sourceecdetail.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
 
-            // entity.sourceecdetail.sourcefinishedgoods
-            new TranslationSeedItem("entity.sourceecdetail.sourcefinishedgoods", "en-US", "完成品_us", "完成品"),
-            // entity.sourceecdetail.sourcefinishedgoods
-            new TranslationSeedItem("entity.sourceecdetail.sourcefinishedgoods", "ja-JP", "完成品_jp", "完成品"),
-            // entity.sourceecdetail.sourcefinishedgoods
-            new TranslationSeedItem("entity.sourceecdetail.sourcefinishedgoods", "zh-CN", "完成品", "完成品"),
-            // entity.sourceecdetail.sourcefinishedgoods
-            new TranslationSeedItem("entity.sourceecdetail.sourcefinishedgoods", "zh-HK", "完成品_hk", "完成品"),
+            // entity.sourceecdetail.sourcerootmaterialcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcerootmaterialcode", "en-US", "根物料编码_us", "根物料编码"),
+            // entity.sourceecdetail.sourcerootmaterialcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcerootmaterialcode", "ja-JP", "根物料编码_jp", "根物料编码"),
+            // entity.sourceecdetail.sourcerootmaterialcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcerootmaterialcode", "zh-CN", "根物料编码", "根物料编码"),
+            // entity.sourceecdetail.sourcerootmaterialcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcerootmaterialcode", "zh-HK", "根物料编码_hk", "根物料编码"),
 
             // entity.sourceecdetail.sourceparentmaterialcode
             new TranslationSeedItem("entity.sourceecdetail.sourceparentmaterialcode", "en-US", "上阶物料编码_us", "上阶物料编码"),
@@ -225,14 +225,14 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail.sourcecompatibility
             new TranslationSeedItem("entity.sourceecdetail.sourcecompatibility", "zh-HK", "兼容性_hk", "兼容性（两位码第1位 A=有 B=→ C=← D=无；第2位 1～9=同时变更 *=无同时变更）"),
 
-            // entity.sourceecdetail.sourcedistinction
-            new TranslationSeedItem("entity.sourceecdetail.sourcedistinction", "en-US", "区分_us", "区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.sourceecdetail.sourcedistinction
-            new TranslationSeedItem("entity.sourceecdetail.sourcedistinction", "ja-JP", "区分_jp", "区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.sourceecdetail.sourcedistinction
-            new TranslationSeedItem("entity.sourceecdetail.sourcedistinction", "zh-CN", "区分", "区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
-            // entity.sourceecdetail.sourcedistinction
-            new TranslationSeedItem("entity.sourceecdetail.sourcedistinction", "zh-HK", "区分_hk", "区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）"),
+            // entity.sourceecdetail.source2ndvendor
+            new TranslationSeedItem("entity.sourceecdetail.source2ndvendor", "en-US", "第二供应商_us", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.sourceecdetail.source2ndvendor
+            new TranslationSeedItem("entity.sourceecdetail.source2ndvendor", "ja-JP", "第二供应商_jp", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.sourceecdetail.source2ndvendor
+            new TranslationSeedItem("entity.sourceecdetail.source2ndvendor", "zh-CN", "第二供应商", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
+            // entity.sourceecdetail.source2ndvendor
+            new TranslationSeedItem("entity.sourceecdetail.source2ndvendor", "zh-HK", "第二供应商_hk", "第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）"),
 
             // entity.sourceecdetail.sourceinstruction
             new TranslationSeedItem("entity.sourceecdetail.sourceinstruction", "en-US", "安排指示_us", "安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),

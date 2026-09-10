@@ -183,8 +183,7 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
             return false;
         }
         return !string.IsNullOrEmpty(queryDto.CurrentDeptCode)
-            || queryDto.ImplementationStatus.HasValue
-            || queryDto.OnlyNotOfficiallyCompleted == 1;
+            || queryDto.ImplementationStatus.HasValue;
     }
 
     /// <summary>
@@ -206,10 +205,6 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
         if (queryDto.ImplementationStatus.HasValue)
         {
             filtered = filtered.Where(x => x.ImplementationStatus == queryDto.ImplementationStatus.Value);
-        }
-        if (queryDto.OnlyNotOfficiallyCompleted == 1)
-        {
-            filtered = filtered.Where(x => x.IsOfficiallyCompleted != 1);
         }
         return filtered.ToList();
     }

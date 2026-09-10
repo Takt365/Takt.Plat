@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
-// 文件名称：TaktEcDistinctionExecOrchestrator.cs
+// 文件名称：TaktEcScopeExecOrchestrator.cs
 // 创建时间：2026-08-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：技术课保存后按管理区分生成各部门执行行（唯一编排入口）
+// 功能描述：技术课保存/源导入后按实施范围与停产状态派生各部门执行内容（EOL 优先）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,9 +18,10 @@ using Takt.Shared.Helpers;
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变区分 → 部门执行行编排（新增/更新/来源导入共用这一条链路）
+/// 设变实施范围 → 部门执行行编排（新增/更新/来源导入共用）。
+/// 规则：停产≠Z0→「实施范围-{范围}-EOL」；全仕向空白待填；内部/技术→「实施范围-内部/技术」；部管时生管/采购/受检/部管/制二空白，其余→「实施范围-部管」。
 /// </summary>
-public class TaktEcDistinctionExecOrchestrator
+public class TaktEcScopeExecOrchestrator
 {
     private readonly TaktEcExecPersistence _ecExecPersistence;
 
@@ -28,30 +29,30 @@ public class TaktEcDistinctionExecOrchestrator
     /// 构造函数
     /// </summary>
     /// <param name="ecExecPersistence">部门执行持久化</param>
-    public TaktEcDistinctionExecOrchestrator(TaktEcExecPersistence ecExecPersistence)
+    public TaktEcScopeExecOrchestrator(TaktEcExecPersistence ecExecPersistence)
     {
         _ecExecPersistence = ecExecPersistence;
     }
 
     /// <summary>
-    /// 按主表区分与明细生成或刷新各部门执行行（按部门批量落库）。
+    /// 按主表实施范围与明细生成或刷新各部门执行行（按部门批量落库）。
     /// </summary>
     /// <param name="gijutsu">设变技术课主</param>
     /// <param name="details">设变明细（通常已过滤作废）</param>
     /// <returns>各部门写入统计（供日志与完成通知）</returns>
-    public async Task<TaktEcDistinctionExecApplyResult> ApplyAsync(
+    public async Task<TaktEcScopeExecApplyResult> ApplyAsync(
         TaktEcGijutsu gijutsu,
         IReadOnlyList<TaktEcDetail> details)
     {
         ArgumentNullException.ThrowIfNull(gijutsu);
         if (details == null || details.Count == 0)
         {
-            return TaktEcDistinctionExecApplyResult.Empty;
+            return TaktEcScopeExecApplyResult.Empty;
         }
         var active = details.Where(x => x.IsObsolete == 0).ToList();
         if (active.Count == 0)
         {
-            return TaktEcDistinctionExecApplyResult.Empty;
+            return TaktEcScopeExecApplyResult.Empty;
         }
 
         var ecCode = gijutsu.EcCode?.Trim() ?? string.Empty;
@@ -85,8 +86,8 @@ public class TaktEcDistinctionExecOrchestrator
             var batch = await _ecExecPersistence.UpsertDeptExecBatchWithFillModeAsync(
                 active,
                 deptCode,
-                detail => ShouldAutoCompleteExec(gijutsu.EcDistinction, deptCode, detail),
-                gijutsu.EcDistinction);
+                detail => ShouldAutoCompleteExec(gijutsu.EcScope, deptCode, detail),
+                gijutsu.EcScope);
             deptSw.Stop();
 
             grandCompleted += batch.SavedCount;
@@ -107,7 +108,7 @@ public class TaktEcDistinctionExecOrchestrator
         }
         totalSw.Stop();
 
-        var result = TaktEcDistinctionExecApplyResult.FromCounts(counts);
+        var result = TaktEcScopeExecApplyResult.FromCounts(counts);
         TaktLogger.Information(
             "[EcGijutsuPersist] 各部门执行行派生结束 EcCode={EcCode} 需要合计(明细×部门)={NeedTotal} 完成合计={Completed} 跳过合计={Skipped} 耗时={ElapsedMs}ms Summary={Summary}",
             ecCode,
@@ -120,44 +121,33 @@ public class TaktEcDistinctionExecOrchestrator
     }
 
     /// <summary>
-    /// 该部门执行行是否按区分自动填完（false=待人工填写）
+    /// 该部门执行行是否自动填完（false=待人工填写执行内容）
     /// </summary>
-    /// <param name="ecDistinction">管理区分</param>
+    /// <param name="ecScope">实施范围</param>
     /// <param name="deptCode">部门编码</param>
     /// <param name="detail">设变明细</param>
     /// <returns>是否自动填完</returns>
-    private static bool ShouldAutoCompleteExec(int ecDistinction, string deptCode, TaktEcDetail detail)
+    private static bool ShouldAutoCompleteExec(int ecScope, string deptCode, TaktEcDetail detail)
     {
-        if (ecDistinction == TaktEcDistinctionConstants.Internal
-            || ecDistinction == TaktEcDistinctionConstants.Technical)
+        // 全仕向：执行内容一律空白，各部门人工填写
+        if (ecScope == TaktEcScopeConstants.AllDestination)
+        {
+            return false;
+        }
+        // 内部/技术：各部门自动写「实施范围-内部/技术」
+        if (ecScope == TaktEcScopeConstants.Internal
+            || ecScope == TaktEcScopeConstants.Technical)
         {
             return true;
         }
-        if (ecDistinction == TaktEcDistinctionConstants.MaterialControl)
+        // 部管：生管/采购/受检/部管/制二以外自动写「实施范围-部管」
+        if (ecScope == TaktEcScopeConstants.MaterialControl)
         {
-            return !TaktEcDistinctionConstants.IsMaterialControlNeedFillDept(
+            return !TaktEcScopeConstants.IsMaterialControlNeedFillDept(
                 deptCode,
                 detail.EcNewPurchaseType,
                 detail.EcNewWarehouse);
         }
-        if (ecDistinction != TaktEcDistinctionConstants.AllDestination)
-        {
-            return true;
-        }
-        var purchaseTypeF = TaktEcDistinctionConstants.IsExternalPurchaseType(detail.EcNewPurchaseType);
-        var requiresInspection = detail.EcNewRequiresInspection == 1;
-        var bukanNeedFill = TaktEcDistinctionConstants.IsBukanVisible(
-            detail.EcNewPurchaseType,
-            detail.EcNewWarehouse);
-        var needFill = deptCode switch
-        {
-            TaktEcDeptCodes.Mp => purchaseTypeF,
-            TaktEcDeptCodes.Iqc => purchaseTypeF,
-            TaktEcDeptCodes.Mc => bukanNeedFill,
-            TaktEcDeptCodes.Qa => requiresInspection,
-            TaktEcDeptCodes.Pcba => true,
-            _ => false
-        };
-        return !needFill;
+        return false;
     }
 }

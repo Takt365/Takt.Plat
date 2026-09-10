@@ -51,6 +51,11 @@ public class TaktEcGroupDto : TaktCompanyDtoBase
     public string? EcGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -121,6 +126,11 @@ public class TaktEcGroupQueryDto : TaktPagedQuery
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话
@@ -214,6 +224,11 @@ public class TaktEcGroupCreateDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话
@@ -360,6 +375,11 @@ public class TaktEcGroupTemplateDto
     public string? EcGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     public string? ContactPhone { get; set; } = string.Empty;
@@ -430,6 +450,11 @@ public class TaktEcGroupImportDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话
@@ -503,6 +528,11 @@ public class TaktEcGroupExportDto
     /// 设变组描述
     /// </summary>
     public string? EcGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变组类别（字典 logistics_manufacturing_ec_group_category；1=设变EC担当 2=SOP担当）
+    /// </summary>
+    public int EcGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

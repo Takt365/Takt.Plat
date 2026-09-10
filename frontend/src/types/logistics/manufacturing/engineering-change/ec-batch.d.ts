@@ -12,7 +12,7 @@
 import type { CompanyDtoBase, TaktPagedQuery } from '@/types/common';
 
 export interface EcBatch extends CompanyDtoBase {
-  ecDetailId: string; ecCode: string; lineNumber: number; ecModelCode: string; ecNewMaterialCode?: string; scheduledBatch?: string; productionBatch?: string; scheduledProductionDate?: string; productionDate?: string;
+  ecDetailId: string; ecCode: string; lineNumber: number; ecModelCode: string; ecNewMaterialCode?: string; scheduledBatch?: string; productionBatch?: string; scheduledDate?: string; productionDate?: string;
 }
 
 export interface EcBatchQuery extends TaktPagedQuery {
@@ -23,5 +23,5 @@ export interface EcBatchQuery extends TaktPagedQuery {
 
 export interface EcBatchUpdate {
   ecDetailId: string;
-  scheduledBatch?: string; productionBatch?: string; scheduledProductionDate?: string; productionDate?: string;
+  scheduledBatch?: string; productionBatch?: string; scheduledDate?: string; productionDate?: string;
 }

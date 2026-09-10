@@ -20,7 +20,7 @@
       <a-col :span="12"><a-form-item :label="pi.label('ecModelCode')"><a-input v-model:value="formState.ecModelCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="seikan.label('scheduledBatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="nika.label('productionBatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
-      <a-col :span="12"><a-form-item :label="seikan.label('scheduledProductionDate')"><a-date-picker v-model:value="formState.scheduledProductionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="seikan.label('scheduledDate')"><a-date-picker v-model:value="formState.scheduledDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="ikka.label('productionDate')"><a-date-picker v-model:value="formState.productionDate" value-format="YYYY-MM-DD" class="w-full" /></a-form-item></a-col>
     </a-row>
   </a-form>
@@ -51,7 +51,7 @@ watch(() => props.formData, (val) => {
     ecModelCode: val.ecModelCode,
     scheduledBatch: val.scheduledBatch ?? '',
     productionBatch: val.productionBatch ?? '',
-    scheduledProductionDate: val.scheduledProductionDate,
+    scheduledDate: val.scheduledDate,
     productionDate: val.productionDate,
   });
 }, { immediate: true });

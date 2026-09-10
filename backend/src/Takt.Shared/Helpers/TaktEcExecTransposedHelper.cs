@@ -74,7 +74,7 @@ public static class TaktEcExecTransposedHelper
     /// 按部门编码解析业务完成日期
     /// </summary>
     /// <param name="deptCode">部门编码</param>
-    /// <param name="scheduledProductionDate">预计生产日期（生管）</param>
+    /// <param name="scheduledDate">预定日期（生管）</param>
     /// <param name="purchaseOrderIssueDate">采购订单发行日期（采购）</param>
     /// <param name="inspectionDate">检验日期（受检/品管）</param>
     /// <param name="outboundDate">出库日期（部管）</param>
@@ -84,7 +84,7 @@ public static class TaktEcExecTransposedHelper
     /// <returns>完成日期</returns>
     public static DateTime? ResolveCompletedDate(
         string deptCode,
-        DateTime? scheduledProductionDate,
+        DateTime? scheduledDate,
         DateTime? purchaseOrderIssueDate,
         DateTime? inspectionDate,
         DateTime? outboundDate,
@@ -95,7 +95,7 @@ public static class TaktEcExecTransposedHelper
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
         DateTime? primary = deptCode switch
         {
-            _ when deptCode == TaktEcDeptCodes.Pmc => scheduledProductionDate,
+            _ when deptCode == TaktEcDeptCodes.Pmc => scheduledDate,
             _ when deptCode == TaktEcDeptCodes.Mp => purchaseOrderIssueDate,
             _ when deptCode == TaktEcDeptCodes.Iqc => inspectionDate,
             _ when deptCode == TaktEcDeptCodes.Mc => outboundDate,

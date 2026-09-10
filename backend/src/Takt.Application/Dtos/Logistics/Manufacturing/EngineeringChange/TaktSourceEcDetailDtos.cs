@@ -57,9 +57,9 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string SourceFinishedGoods { get; set; } = string.Empty;
+    public string SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -117,9 +117,9 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -196,9 +196,9 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? SourceFinishedGoods { get; set; } = string.Empty;
+    public string? SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -256,9 +256,9 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -352,10 +352,10 @@ public class TaktSourceEcDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    [Required(ErrorMessage = "完成品物料编码不能为空")]
-    public string SourceFinishedGoods { get; set; } = string.Empty;
+    [Required(ErrorMessage = "根物料编码不能为空")]
+    public string SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -414,9 +414,9 @@ public class TaktSourceEcDetailCreateDto
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -539,9 +539,9 @@ public class TaktSourceEcDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? SourceFinishedGoods { get; set; } = string.Empty;
+    public string? SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -599,9 +599,9 @@ public class TaktSourceEcDetailTemplateDto
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -677,9 +677,9 @@ public class TaktSourceEcDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string? SourceFinishedGoods { get; set; } = string.Empty;
+    public string? SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -737,9 +737,9 @@ public class TaktSourceEcDetailImportDto
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -821,9 +821,9 @@ public class TaktSourceEcDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 完成品物料编码
+    /// 根物料编码
     /// </summary>
-    public string SourceFinishedGoods { get; set; } = string.Empty;
+    public string SourceRootMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 上阶物料编码
@@ -881,9 +881,9 @@ public class TaktSourceEcDetailExportDto
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+    /// 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有 2=优先 3=无）
     /// </summary>
-    public string? SourceDistinction { get; set; } = string.Empty;
+    public string? Source2ndVendor { get; set; } = string.Empty;
 
     /// <summary>
     /// 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）

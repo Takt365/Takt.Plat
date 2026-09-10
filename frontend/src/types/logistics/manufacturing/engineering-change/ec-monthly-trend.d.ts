@@ -29,8 +29,8 @@ export interface EcMonthlyTrendQuery extends TaktPagedQuery {
   ecCode?: string;
   /** 责任部门编码 */
   deptCode?: string;
-  /** 区分（字典 logistics_manufacturing_ec_distinction_category） */
-  ecDistinction?: number;
+  /** 实施范围（字典 logistics_manufacturing_ec_scope_category） */
+  ecScope?: number;
   /** 变更状态（字典 logistics_manufacturing_ec_status） */
   changeStatus?: number;
   /** 设变状态（字典 logistics_manufacturing_ec_gijutsu_status） */

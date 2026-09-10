@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 不良组主数据实体（公司级；按不良类别区分的不良业务组织分组）
+ * 不良组主数据实体（公司级；按不良组类别区分的不良业务组织分组）
  * 对应前端 TaktDefectGroupDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 DefectGroup
@@ -27,11 +27,6 @@ export interface DefectGroup extends CompanyDtoBase {
    * DefectGroupID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   defectGroupId: string;
-
-  /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-   */
-  defectCategory: number;
 
   /**
    * 不良组编码（3）
@@ -47,6 +42,11 @@ export interface DefectGroup extends CompanyDtoBase {
    * 不良组描述
    */
   defectGroupDescription?: string;
+
+  /**
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   */
+  defectGroupCategory: number;
 
   /**
    * 联系电话
@@ -103,9 +103,9 @@ export interface DefectGroupQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
    */
-  defectCategory?: number;
+  defectGroupCategory?: number;
 
   /**
    * 不良组编码（3）
@@ -196,11 +196,6 @@ export interface DefectGroupCreate {
   plantCode: string;
 
   /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-   */
-  defectCategory: number;
-
-  /**
    * 不良组编码（3）
    */
   defectGroupCode: string;
@@ -214,6 +209,11 @@ export interface DefectGroupCreate {
    * 不良组描述
    */
   defectGroupDescription?: string;
+
+  /**
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   */
+  defectGroupCategory: number;
 
   /**
    * 联系电话
@@ -324,9 +324,9 @@ export interface DefectGroupTemplate {
   plantCode?: string;
 
   /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
    */
-  defectCategory?: number;
+  defectGroupCategory?: number;
 
   /**
    * 不良组编码（3）
@@ -402,9 +402,9 @@ export interface DefectGroupImport {
   plantCode?: string;
 
   /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
    */
-  defectCategory?: number;
+  defectGroupCategory?: number;
 
   /**
    * 不良组编码（3）
@@ -480,11 +480,6 @@ export interface DefectGroupExport {
   cultureCode: string;
 
   /**
-   * 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
-   */
-  defectCategory: number;
-
-  /**
    * 不良组编码（3）
    */
   defectGroupCode: string;
@@ -498,6 +493,11 @@ export interface DefectGroupExport {
    * 不良组描述
    */
   defectGroupDescription?: string;
+
+  /**
+   * 不良组类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
+   */
+  defectGroupCategory: number;
 
   /**
    * 联系电话

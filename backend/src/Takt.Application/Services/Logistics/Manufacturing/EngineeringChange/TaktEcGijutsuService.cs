@@ -44,8 +44,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktCompanyRepository<TaktDept> _deptRepository;
     private readonly TaktEcExecPersistence _ecExecPersistence;
-    private readonly TaktEcDistinctionExecOrchestrator _ecDistinctionExecOrchestrator;
-    private readonly TaktEcGijutsuStatusSynchronizer _ecGijutsuStatusSynchronizer;
+    private readonly TaktEcScopeExecOrchestrator _ecScopeExecOrchestrator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
     private readonly IConfiguration _configuration;
@@ -63,8 +62,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     /// <param name="modelDestinationRepository">型号目的地仓储</param>
     /// <param name="deptRepository">部门仓储</param>
     /// <param name="ecExecPersistence">设变部门执行持久化</param>
-    /// <param name="ecDistinctionExecOrchestrator">设变区分执行编排</param>
-    /// <param name="ecGijutsuStatusSynchronizer">设变技术课状态同步</param>
+    /// <param name="ecScopeExecOrchestrator">设变实施范围执行编排</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="configuration">应用配置</param>
@@ -81,8 +79,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
         ITaktCompanyRepository<TaktDept> deptRepository,
         TaktEcExecPersistence ecExecPersistence,
-        TaktEcDistinctionExecOrchestrator ecDistinctionExecOrchestrator,
-        TaktEcGijutsuStatusSynchronizer ecGijutsuStatusSynchronizer,
+        TaktEcScopeExecOrchestrator ecScopeExecOrchestrator,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         IConfiguration configuration,
@@ -100,8 +97,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         _modelDestinationRepository = modelDestinationRepository;
         _deptRepository = deptRepository;
         _ecExecPersistence = ecExecPersistence;
-        _ecDistinctionExecOrchestrator = ecDistinctionExecOrchestrator;
-        _ecGijutsuStatusSynchronizer = ecGijutsuStatusSynchronizer;
+        _ecScopeExecOrchestrator = ecScopeExecOrchestrator;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
         _configuration = configuration;
@@ -185,7 +181,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             "[EcGijutsuPersist] 子表（明细/附件）已落库 EcCode={EcCode}",
             entity.EcCode);
         var notificationDate = dto.EcEntryDate != default ? dto.EcEntryDate : DateTime.Today;
-        var applyResult = await ApplyDistinctionExecAndMaybeNotifyAsync(entity, createNotificationIfMissing: true, notificationDate);
+        var applyResult = await ApplyScopeExecAndMaybeNotifyAsync(entity, createNotificationIfMissing: true, notificationDate);
         var result = await GetEcGijutsuByIdAsync(entity.Id) ?? entity.Adapt<TaktEcGijutsuDto>();
         result.PersistDeptExecSummary = applyResult.FormatSummary();
         return result;
@@ -238,7 +234,10 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         TaktLogger.Information(
             "[EcGijutsuPersist] 子表（明细/附件）已更新 EcCode={EcCode}",
             entity.EcCode);
-        var applyResult = await ApplyDistinctionExecAndMaybeNotifyAsync(entity, createNotificationIfMissing: false);
+        // 未提交明细载荷：不重跑部门派生（明细由右侧分页 CRUD 维护；避免十万行重复 Upsert）
+        var applyResult = dto.EcDetails is { Count: > 0 }
+            ? await ApplyScopeExecAndMaybeNotifyAsync(entity, createNotificationIfMissing: false)
+            : TaktEcScopeExecApplyResult.Empty;
         var result = await GetEcGijutsuByIdAsync(id) ?? throw new TaktBusinessException("设变技术课主不存在");
         result.PersistDeptExecSummary = applyResult.FormatSummary();
         return result;
@@ -423,7 +422,8 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     // ========================================
 
     /// <summary>
-    /// 填充设变技术课主详情（加载 OneToMany 子表：设变明细、设变附件、工程变更通知单）
+    /// 填充设变技术课主详情：仅附件与通知。
+    /// 设变明细不在此灌入（可数十万行）；由主从表右侧 TaktEcDetails/list 按主表 Id 分页查询。
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -434,19 +434,17 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         {
             return;
         }
-        // 设变明细 → dto.EcDetails
-        var ecdetails = await _ecDetailRepository.GetListAsync(x => x.EcGijutsuId == entity.Id);
-        dto.EcDetails = ecdetails.Adapt<List<TaktEcDetailDto>>();
-        // 设变附件 → dto.Attachments
+        // 明细走独立分页 API，禁止 GetById 全量拉 EcDetails
+        dto.EcDetails = [];
         var attachments = await _ecAttachmentRepository.GetListAsync(x => x.EcGijutsuId == entity.Id);
         dto.Attachments = attachments.Adapt<List<TaktEcAttachmentDto>>();
-        // 工程变更通知单 → dto.Notifications
         var notifications = await _ecNotificationRepository.GetListAsync(x => x.EcGijutsuId == entity.Id);
         dto.Notifications = notifications.Adapt<List<TaktEcNotificationDto>>();
     }
 
     /// <summary>
-    /// 保存设变技术课主子表级联（设变明细、设变附件、工程变更通知单；Create/Update 后按主表 Id 先删后插）
+    /// 保存设变技术课主子表级联（设变明细、设变附件、工程变更通知单）。
+    /// 明细：仅当提交非空 EcDetails 时先删后插；空载荷保留库内已有明细（视图内明细由独立 CRUD 维护）。
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -457,14 +455,10 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             "[EcGijutsuPersist] 开始保存子表 EcCode={EcCode} DetailCount={DetailCount}",
             entity.EcCode,
             dto.EcDetails?.Count ?? 0);
-        await DeleteDeptExecRowsForEcAsync(entity);
-        // 设变明细（EcDetails）
-        if (dto.EcDetails is not { Count: > 0 })
+        // 设变明细（EcDetails）：有载荷才覆盖；空=不碰已有（避免编辑主表时误删十万行）
+        if (dto.EcDetails is { Count: > 0 })
         {
-            await _ecDetailRepository.DeleteAsync(x => x.EcGijutsuId == entity.Id);
-        }
-        else
-        {
+            await DeleteDeptExecRowsForEcAsync(entity);
             TaktLogger.Information(
                 "[EcGijutsuPersist] 明细 DTO→实体映射开始 Count={Count} EcCode={EcCode}",
                 dto.EcDetails.Count,
@@ -473,8 +467,8 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             foreach (var child in ecdetails)
             {
                 child.EcGijutsuId = entity.Id;
-                // 冗余回填：主表 TaktEcGijutsu.EcDistinction → 明细
-                child.EcDistinction = entity.EcDistinction;
+                // 冗余回填：主表 TaktEcGijutsu.EcScope → 明细
+                child.EcScope = entity.EcScope;
                 if (string.IsNullOrWhiteSpace(child.EcCode))
                 {
                     child.EcCode = entity.EcCode;
@@ -496,18 +490,18 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                     ecdetailsNeedLine.Count,
                     entity.EcCode);
                 var businessCode = entity.Id.ToString();
-                foreach (var grp in ecdetailsNeedLine.GroupBy(c => c.EcFinishedGoods ?? string.Empty, StringComparer.Ordinal))
+                foreach (var grp in ecdetailsNeedLine.GroupBy(c => c.EcRootMaterialCode ?? string.Empty, StringComparer.Ordinal))
                 {
                     var fg = grp.Key;
                     var maxLine = await _ecDetailRepository.GetMaxIntAsync(
                         x => x.TenantCode == CurrentTenantCode
                             && x.CompanyCode == CurrentCompanyCode
                             && x.EcGijutsuId == entity.Id
-                            && x.EcFinishedGoods == fg,
+                            && x.EcRootMaterialCode == fg,
                         x => x.LineNumber);
                     var assignedInBatch = ecdetails
                         .Where(c => c.LineNumber > 0
-                            && string.Equals(c.EcFinishedGoods ?? string.Empty, fg, StringComparison.Ordinal))
+                            && string.Equals(c.EcRootMaterialCode ?? string.Empty, fg, StringComparison.Ordinal))
                         .Select(c => c.LineNumber)
                         .DefaultIfEmpty(0)
                         .Max();
@@ -523,16 +517,22 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             var seenKeys = new HashSet<string>(StringComparer.Ordinal);
             for (var i = 0; i < ecdetails.Count; i++)
             {
-                var key = $"{ecdetails[i].CompanyCode}|{ecdetails[i].EcGijutsuId}|{ecdetails[i].EcFinishedGoods}|{ecdetails[i].LineNumber}";
+                var key = $"{ecdetails[i].CompanyCode}|{ecdetails[i].EcGijutsuId}|{ecdetails[i].EcRootMaterialCode}|{ecdetails[i].LineNumber}";
                 if (!seenKeys.Add(key))
                 {
-                    throw new TaktBusinessException($"设变明细第{i + 1}项与本次提交的其他项重复（CompanyCode、EcGijutsuId、EcFinishedGoods、LineNumber）");
+                    throw new TaktBusinessException($"设变明细第{i + 1}项与本次提交的其他项重复（CompanyCode、EcGijutsuId、EcRootMaterialCode、LineNumber）");
                 }
             }
             await _ecDetailRepository.DeleteAsync(x => x.EcGijutsuId == entity.Id);
             // 刚按 EcGijutsuId 整表删除后，内存去重已足够；禁止再逐行 IsUniqueAsync（10 万行会拖死）
             // 分批 CreateRange：底层 InsertEntitiesAsync 亦按 500 行切分；此处按批打进度日志
             await CreateEcDetailsInBatchesAsync(entity.EcCode, ecdetails);
+        }
+        else
+        {
+            TaktLogger.Information(
+                "[EcGijutsuPersist] 明细载荷为空，保留库内已有明细 EcCode={EcCode}",
+                entity.EcCode);
         }
         // 设变附件（Attachments）
         if (dto.Attachments is not { Count: > 0 })
@@ -830,7 +830,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     }
 
     /// <summary>
-    /// 从来源设变构建创建草稿 DTO（不落库；负责人与管理区分须在前端 ec-form 填写后再 create）
+    /// 从来源设变构建创建草稿 DTO（不落库；设变担当与实施范围须在前端 ec-form 填写后再 create）
     /// </summary>
     /// <param name="dto">草稿请求 DTO</param>
     /// <returns>创建 DTO</returns>
@@ -872,7 +872,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 ResolveSourceInputCultureCode(dto.CompanyDefaultCulture, dto.CultureCode),
                 DateTime.Today);
             headerOnly.EcLeader = string.Empty;
-            headerOnly.EcDistinction = 0;
+            headerOnly.EcScope = 0;
             headerOnly.EcDetails = [];
             headerOnly.SourceEcId = sourceEc.Id.ToString(CultureInfo.InvariantCulture);
             headerOnly.DetailsDeferred = true;
@@ -891,7 +891,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             ResolveSourceInputCultureCode(dto.CompanyDefaultCulture, dto.CultureCode),
             DateTime.Today);
         createDto.EcLeader = string.Empty;
-        createDto.EcDistinction = 0;
+        createDto.EcScope = 0;
         createDto.SourceEcId = sourceEc.Id.ToString(CultureInfo.InvariantCulture);
         return createDto;
     }
@@ -1012,7 +1012,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     }
 
     /// <summary>
-    /// 将来源设变主从映射为设变技术课创建 DTO（SourceTcjOwner 不写入 EcLeader，须导入后手工指定负责人）
+    /// 将来源设变主从映射为设变技术课创建 DTO（SourceTcjOwner 不写入 EcLeader，须导入后手工指定设变担当）
     /// </summary>
     /// <param name="sourceEc">来源设变主</param>
     /// <param name="sourceDetails">来源设变明细</param>
@@ -1029,17 +1029,17 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     {
         var ecCode = sourceEc.SourceEcCode ?? string.Empty;
         var materialCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var finishedGoodsCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var rootMaterialCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var detail in sourceDetails)
         {
-            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceFinishedGoods, materialCodes);
-            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceFinishedGoods, finishedGoodsCodes);
+            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceRootMaterialCode, materialCodes);
+            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceRootMaterialCode, rootMaterialCodes);
             TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceParentMaterialCode, materialCodes);
             TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceOldMaterialCode, materialCodes);
             TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceNewMaterialCode, materialCodes);
         }
         var materialsByCode = await LoadMaterialPlantsByCodesAsync(plantCode, materialCodes);
-        var modelCodeByFinishedGoods = await LoadModelCodesByMaterialCodesAsync(finishedGoodsCodes);
+        var modelCodeByRootMaterial = await LoadModelCodesByMaterialCodesAsync(rootMaterialCodes);
         var fallbackModelCode = sourceEc.SourceModel?.Trim() ?? string.Empty;
         var cultureCode = companyDefaultCulture ?? string.Empty;
         var ecDetails = TaktEcSourceEcMapper.MapDetailCreateDtos(
@@ -1052,7 +1052,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             sourceEc.SourceIssueDate,
             fallbackModelCode,
             materialsByCode,
-            modelCodeByFinishedGoods);
+            modelCodeByRootMaterial);
         return new TaktEcGijutsuCreateDto
         {
             TenantCode = CurrentTenantCode,
@@ -1066,7 +1066,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             EcContent = sourceEc.SourceEcContent,
             EcLeader = string.Empty,
             EcLossAmount = sourceEc.SourceUnitCost + sourceEc.SourceMoldModificationCost,
-            EcDistinction = 4,
+            EcScope = 4,
             EcEntryDate = entryDate,
             EcStatus = 1,
             EcDetails = ecDetails,
@@ -1134,13 +1134,13 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     }
 
     /// <summary>
-    /// 按 EcDistinction 生成部门执行行；可选创建通知
+    /// 按 EcScope 生成部门执行行；可选创建通知
     /// </summary>
     /// <param name="entity">设变主表</param>
     /// <param name="createNotificationIfMissing">无通知时是否创建</param>
     /// <param name="notificationDate">通知日期</param>
     /// <returns>派生结果（含各部门条数）</returns>
-    private async Task<TaktEcDistinctionExecApplyResult> ApplyDistinctionExecAndMaybeNotifyAsync(
+    private async Task<TaktEcScopeExecApplyResult> ApplyScopeExecAndMaybeNotifyAsync(
         TaktEcGijutsu entity,
         bool createNotificationIfMissing,
         DateTime? notificationDate = null)
@@ -1162,13 +1162,14 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             TaktLogger.Information(
                 "[EcGijutsuPersist] 无明细，跳过部门执行派生 EcCode={EcCode}",
                 entity.EcCode);
-            return TaktEcDistinctionExecApplyResult.Empty;
+            return TaktEcScopeExecApplyResult.Empty;
         }
-        var applyResult = await _ecDistinctionExecOrchestrator.ApplyAsync(entity, details);
-        await _ecGijutsuStatusSynchronizer.RefreshByEcCodeAsync(entity.EcCode);
+        var applyResult = await _ecScopeExecOrchestrator.ApplyAsync(entity, details);
+        // 技术课视图导入/保存：派生结束后不按部门子表重算 EcStatus（Create 已写发行；Update 保留原状态）
         TaktLogger.Information(
-            "[EcGijutsuPersist] 主表状态已统一刷新 EcCode={EcCode}",
-            entity.EcCode);
+            "[EcGijutsuPersist] 部门执行派生结束（跳过子表状态同步） EcCode={EcCode} EcStatus={EcStatus}",
+            entity.EcCode,
+            entity.EcStatus);
         var deptCodes = applyResult.DeptCodes;
         if (!createNotificationIfMissing || deptCodes.Count == 0)
         {
@@ -1295,9 +1296,9 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     }
 
     /// <summary>
-    /// 按完成品物料编码批量加载机种编码（TaktModelDestination；同物料取 SortOrder 最小）
+    /// 按根物料编码批量加载机种编码（TaktModelDestination；同物料取 SortOrder 最小）
     /// </summary>
-    /// <param name="materialCodes">完成品物料编码集合</param>
+    /// <param name="materialCodes">根物料编码集合</param>
     /// <returns>物料编码 → 机种编码</returns>
     private async Task<Dictionary<string, string>> LoadModelCodesByMaterialCodesAsync(
         IReadOnlySet<string> materialCodes)
@@ -1396,7 +1397,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 || (x.EcContent != null && x.EcContent.Contains(keywords))
                 || (x.EcLeader != null && x.EcLeader.Contains(keywords))
                 || SqlFunc.ToString(x.EcLossAmount).Contains(keywords)
-                || SqlFunc.ToString(x.EcDistinction).Contains(keywords)
+                || SqlFunc.ToString(x.EcScope).Contains(keywords)
                 || SqlFunc.ToString(x.EcStatus).Contains(keywords)
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -1442,9 +1443,9 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             exp = exp.And(x => x.EcLossAmount == queryDto.EcLossAmount);
         }
 
-        if (queryDto?.EcDistinction.HasValue == true)
+        if (queryDto?.EcScope.HasValue == true)
         {
-            exp = exp.And(x => x.EcDistinction == queryDto.EcDistinction);
+            exp = exp.And(x => x.EcScope == queryDto.EcScope);
         }
 
         if (queryDto?.EcStatus.HasValue == true)

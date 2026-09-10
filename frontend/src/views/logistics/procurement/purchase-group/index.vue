@@ -79,6 +79,12 @@
             @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'purchaseGroupCategory'">
+          <TaktDictTag
+            :value="getPurchaseGroupDictValue(record, 'purchaseGroupCategory')"
+            dict-type="logistics_procurement_purchase_group_category"
+          />
+        </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getPurchaseGroupDictValue(record, 'isBuiltIn')"
@@ -164,6 +170,16 @@
           v-model:value="advancedQueryForm.purchaseGroupDescription"
           :placeholder="pi.queryPh('purchaseGroupDescription', 'optional')"
           :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseGroupCategory')">
+      <a-form-item :label="pi.queryLabel('purchaseGroupCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.purchaseGroupCategory"
+          dict-type="logistics_procurement_purchase_group_category"
+          :placeholder="pi.queryPh('purchaseGroupCategory', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -403,6 +419,9 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
+  if (form.purchaseGroupCategory !== undefined && form.purchaseGroupCategory !== null) {
+    return true
+  }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     return true
   }
@@ -423,6 +442,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
+    purchaseGroupCategory: undefined as number | undefined,
     isBuiltIn: undefined as number | undefined,
     groupStatus: undefined as number | undefined,  }
 }
@@ -474,6 +494,9 @@ function buildListQuery(overrides?: Partial<PurchaseGroupQuery>): PurchaseGroupQ
   }
   for (const key of PURCHASEGROUP_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  if (form.purchaseGroupCategory !== undefined && form.purchaseGroupCategory !== null) {
+    query.purchaseGroupCategory = form.purchaseGroupCategory
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn

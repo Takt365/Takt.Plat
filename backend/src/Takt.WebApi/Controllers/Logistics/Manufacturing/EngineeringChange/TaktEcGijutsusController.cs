@@ -128,7 +128,7 @@ public class TaktEcGijutsusController : TaktControllerBase
     }
 
     /// <summary>
-    /// 从来源设变构建创建草稿（不落库，供 ec-form 补全负责人/管理区分/附件后 create）
+    /// 从来源设变构建创建草稿（不落库，供 ec-form 补全设变担当/实施范围/附件后 create）
     /// </summary>
     /// <param name="dto">草稿请求 DTO</param>
     /// <returns>创建 DTO</returns>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单导航国际化翻译种子（menu.* 键，与 TaktMenuLevel1~4SeedData I18nKey 对齐）
 // 
@@ -1082,6 +1082,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.bom._self
             ("menu.logistics.manufacturing.bom._self", "zh-HK", "BOM管理_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "en-US", "工程设变_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "ja-JP", "工程设变_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-CN", "工程设变", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change._self
+            ("menu.logistics.manufacturing.engineering.change._self", "zh-HK", "工程设变_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.mds._self
             ("menu.logistics.manufacturing.mds._self", "en-US", "MDS计划_us", "菜单导航"),
             // menu.logistics.manufacturing.mds._self
@@ -1118,15 +1127,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.aps._self
             ("menu.logistics.manufacturing.aps._self", "zh-HK", "APS排程_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "en-US", "工程设变_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "ja-JP", "工程设变_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "zh-CN", "工程设变", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change._self
-            ("menu.logistics.manufacturing.engineering.change._self", "zh-HK", "工程设变_hk", "菜单导航"),
-
             // menu.logistics.manufacturing.output._self
             ("menu.logistics.manufacturing.output._self", "en-US", "OPH管理_us", "菜单导航"),
             // menu.logistics.manufacturing.output._self
@@ -1135,15 +1135,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.output._self", "zh-CN", "OPH管理", "菜单导航"),
             // menu.logistics.manufacturing.output._self
             ("menu.logistics.manufacturing.output._self", "zh-HK", "OPH管理_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.labor.hour._self
-            ("menu.logistics.manufacturing.labor.hour._self", "en-US", "OPH工数_us", "菜单导航"),
-            // menu.logistics.manufacturing.labor.hour._self
-            ("menu.logistics.manufacturing.labor.hour._self", "ja-JP", "OPH工数_jp", "菜单导航"),
-            // menu.logistics.manufacturing.labor.hour._self
-            ("menu.logistics.manufacturing.labor.hour._self", "zh-CN", "OPH工数", "菜单导航"),
-            // menu.logistics.manufacturing.labor.hour._self
-            ("menu.logistics.manufacturing.labor.hour._self", "zh-HK", "OPH工数_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.defect._self
             ("menu.logistics.manufacturing.defect._self", "en-US", "生产不良_us", "菜单导航"),
@@ -1154,6 +1145,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.defect._self
             ("menu.logistics.manufacturing.defect._self", "zh-HK", "生产不良_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "en-US", "OPH工数_us", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "ja-JP", "OPH工数_jp", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "zh-CN", "OPH工数", "菜单导航"),
+            // menu.logistics.manufacturing.labor.hour._self
+            ("menu.logistics.manufacturing.labor.hour._self", "zh-HK", "OPH工数_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.sop._self
             ("menu.logistics.manufacturing.sop._self", "en-US", "SOP管理_us", "菜单导航"),
             // menu.logistics.manufacturing.sop._self
@@ -1162,15 +1162,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.sop._self", "zh-CN", "SOP管理", "菜单导航"),
             // menu.logistics.manufacturing.sop._self
             ("menu.logistics.manufacturing.sop._self", "zh-HK", "SOP管理_hk", "菜单导航"),
-
-            // menu.logistics.quality.cost._self
-            ("menu.logistics.quality.cost._self", "en-US", "品质成本_us", "菜单导航"),
-            // menu.logistics.quality.cost._self
-            ("menu.logistics.quality.cost._self", "ja-JP", "品质成本_jp", "菜单导航"),
-            // menu.logistics.quality.cost._self
-            ("menu.logistics.quality.cost._self", "zh-CN", "品质成本", "菜单导航"),
-            // menu.logistics.quality.cost._self
-            ("menu.logistics.quality.cost._self", "zh-HK", "品质成本_hk", "菜单导航"),
 
             // menu.logistics.quality.operation._self
             ("menu.logistics.quality.operation._self", "en-US", "质量业务_us", "菜单导航"),
@@ -1190,14 +1181,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.quality.complaint._self
             ("menu.logistics.quality.complaint._self", "zh-HK", "客诉管理_hk", "菜单导航"),
 
-            // menu.logistics.customer.service.request
-            ("menu.logistics.customer.service.request", "en-US", "服务请求_us", "菜单导航"),
-            // menu.logistics.customer.service.request
-            ("menu.logistics.customer.service.request", "ja-JP", "服务请求_jp", "菜单导航"),
-            // menu.logistics.customer.service.request
-            ("menu.logistics.customer.service.request", "zh-CN", "服务请求", "菜单导航"),
-            // menu.logistics.customer.service.request
-            ("menu.logistics.customer.service.request", "zh-HK", "服务请求_hk", "菜单导航"),
+            // menu.logistics.quality.cost._self
+            ("menu.logistics.quality.cost._self", "en-US", "品质成本_us", "菜单导航"),
+            // menu.logistics.quality.cost._self
+            ("menu.logistics.quality.cost._self", "ja-JP", "品质成本_jp", "菜单导航"),
+            // menu.logistics.quality.cost._self
+            ("menu.logistics.quality.cost._self", "zh-CN", "品质成本", "菜单导航"),
+            // menu.logistics.quality.cost._self
+            ("menu.logistics.quality.cost._self", "zh-HK", "品质成本_hk", "菜单导航"),
 
             // menu.logistics.customer.service.contract
             ("menu.logistics.customer.service.contract", "en-US", "服务合同_us", "菜单导航"),
@@ -1217,6 +1208,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.customer.service.order
             ("menu.logistics.customer.service.order", "zh-HK", "服务订单_hk", "菜单导航"),
 
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "en-US", "服务请求_us", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "ja-JP", "服务请求_jp", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "zh-CN", "服务请求", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "zh-HK", "服务请求_hk", "菜单导航"),
+
             // menu.logistics.customer.service.ticket
             ("menu.logistics.customer.service.ticket", "en-US", "服务工单_us", "菜单导航"),
             // menu.logistics.customer.service.ticket
@@ -1235,15 +1235,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.maintenance.equipment
             ("menu.logistics.maintenance.equipment", "zh-HK", "设备信息_hk", "菜单导航"),
 
-            // menu.logistics.maintenance.notification
-            ("menu.logistics.maintenance.notification", "en-US", "维护通知_us", "菜单导航"),
-            // menu.logistics.maintenance.notification
-            ("menu.logistics.maintenance.notification", "ja-JP", "维护通知_jp", "菜单导航"),
-            // menu.logistics.maintenance.notification
-            ("menu.logistics.maintenance.notification", "zh-CN", "维护通知", "菜单导航"),
-            // menu.logistics.maintenance.notification
-            ("menu.logistics.maintenance.notification", "zh-HK", "维护通知_hk", "菜单导航"),
-
             // menu.logistics.maintenance.workorder
             ("menu.logistics.maintenance.workorder", "en-US", "维护工单_us", "菜单导航"),
             // menu.logistics.maintenance.workorder
@@ -1261,6 +1252,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.maintenance.history", "zh-CN", "维护履历", "菜单导航"),
             // menu.logistics.maintenance.history
             ("menu.logistics.maintenance.history", "zh-HK", "维护履历_hk", "菜单导航"),
+
+            // menu.logistics.maintenance.notification
+            ("menu.logistics.maintenance.notification", "en-US", "维护通知_us", "菜单导航"),
+            // menu.logistics.maintenance.notification
+            ("menu.logistics.maintenance.notification", "ja-JP", "维护通知_jp", "菜单导航"),
+            // menu.logistics.maintenance.notification
+            ("menu.logistics.maintenance.notification", "zh-CN", "维护通知", "菜单导航"),
+            // menu.logistics.maintenance.notification
+            ("menu.logistics.maintenance.notification", "zh-HK", "维护通知_hk", "菜单导航"),
 
             // menu.logistics.sales.customer
             ("menu.logistics.sales.customer", "en-US", "客户信息_us", "菜单导航"),
@@ -2252,15 +2252,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.aps.production.order
             ("menu.logistics.manufacturing.aps.production.order", "zh-HK", "生产工单_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.engineering.change.ec.group
-            ("menu.logistics.manufacturing.engineering.change.ec.group", "en-US", "设变组_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.ec.group
-            ("menu.logistics.manufacturing.engineering.change.ec.group", "ja-JP", "设变组_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.ec.group
-            ("menu.logistics.manufacturing.engineering.change.ec.group", "zh-CN", "设变组", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.ec.group
-            ("menu.logistics.manufacturing.engineering.change.ec.group", "zh-HK", "设变组_hk", "菜单导航"),
-
             // menu.logistics.manufacturing.engineering.change.kanban
             ("menu.logistics.manufacturing.engineering.change.kanban", "en-US", "设变看板_us", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.kanban
@@ -2296,15 +2287,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.engineering.change.gijutsu", "zh-CN", "技术部门", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.gijutsu
             ("menu.logistics.manufacturing.engineering.change.gijutsu", "zh-HK", "技术部门_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.engineering.change.notification
-            ("menu.logistics.manufacturing.engineering.change.notification", "en-US", "设变通知_us", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.notification
-            ("menu.logistics.manufacturing.engineering.change.notification", "ja-JP", "设变通知_jp", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.notification
-            ("menu.logistics.manufacturing.engineering.change.notification", "zh-CN", "设变通知", "菜单导航"),
-            // menu.logistics.manufacturing.engineering.change.notification
-            ("menu.logistics.manufacturing.engineering.change.notification", "zh-HK", "设变通知_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.engineering.change.koubai
             ("menu.logistics.manufacturing.engineering.change.koubai", "en-US", "采购部门_us", "菜单导航"),
@@ -2343,13 +2325,13 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.engineering.change.bukan", "zh-HK", "部管部门_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.engineering.change.smt
-            ("menu.logistics.manufacturing.engineering.change.smt", "en-US", "SMT Warehouse_us", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change.smt", "en-US", "SMT仓库_us", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.smt
-            ("menu.logistics.manufacturing.engineering.change.smt", "ja-JP", "SMT倉庫_jp", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change.smt", "ja-JP", "SMT仓库_jp", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.smt
             ("menu.logistics.manufacturing.engineering.change.smt", "zh-CN", "SMT仓库", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.smt
-            ("menu.logistics.manufacturing.engineering.change.smt", "zh-HK", "SMT倉庫_hk", "菜单导航"),
+            ("menu.logistics.manufacturing.engineering.change.smt", "zh-HK", "SMT仓库_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.engineering.change.seizounika
             ("menu.logistics.manufacturing.engineering.change.seizounika", "en-US", "制造二课_us", "菜单导航"),
@@ -2387,6 +2369,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.engineering.change.seizougijutsu
             ("menu.logistics.manufacturing.engineering.change.seizougijutsu", "zh-HK", "制造技术课_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.engineering.change.notification
+            ("menu.logistics.manufacturing.engineering.change.notification", "en-US", "设变通知_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.notification
+            ("menu.logistics.manufacturing.engineering.change.notification", "ja-JP", "设变通知_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.notification
+            ("menu.logistics.manufacturing.engineering.change.notification", "zh-CN", "设变通知", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.notification
+            ("menu.logistics.manufacturing.engineering.change.notification", "zh-HK", "设变通知_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.engineering.change.legacy.product
             ("menu.logistics.manufacturing.engineering.change.legacy.product", "en-US", "旧品管制_us", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.legacy.product
@@ -2413,6 +2404,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.engineering.change.monthly.trend", "zh-CN", "月设变推移", "菜单导航"),
             // menu.logistics.manufacturing.engineering.change.monthly.trend
             ("menu.logistics.manufacturing.engineering.change.monthly.trend", "zh-HK", "月设变推移_hk", "菜单导航"),
+
+            // menu.logistics.manufacturing.engineering.change.ec.group
+            ("menu.logistics.manufacturing.engineering.change.ec.group", "en-US", "设变组_us", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.group
+            ("menu.logistics.manufacturing.engineering.change.ec.group", "ja-JP", "设变组_jp", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.group
+            ("menu.logistics.manufacturing.engineering.change.ec.group", "zh-CN", "设变组", "菜单导航"),
+            // menu.logistics.manufacturing.engineering.change.ec.group
+            ("menu.logistics.manufacturing.engineering.change.ec.group", "zh-HK", "设变组_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.output.pcba
             ("menu.logistics.manufacturing.output.pcba", "en-US", "PCBA日报_us", "菜单导航"),

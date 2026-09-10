@@ -470,13 +470,27 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
 
         var menuIdList = menuIds?.Distinct().ToList() ?? [];
 
-        // 【查询】校验菜单主数据是否全部存在
+        // 【查询】校验菜单主数据是否全部存在；页面菜单自动并入其子按钮，避免只勾页面导致 API 按钮权限丢失
         if (menuIdList.Count > 0)
         {
             var menus = await _menuRepository.GetListAsync(m => menuIdList.Contains(m.Id));
             if (menus.Count != menuIdList.Count)
             {
                 ThrowBusinessException("部分菜单不存在或不可用");
+            }
+
+            var pageIds = menus.Where(m => m.MenuType == 1).Select(m => m.Id).ToList();
+            if (pageIds.Count > 0)
+            {
+                var buttonIds = await _menuRepository.GetListAsync(m =>
+                    m.MenuType == 2 && pageIds.Contains(m.ParentId));
+                foreach (var buttonId in buttonIds.Select(b => b.Id))
+                {
+                    if (!menuIdList.Contains(buttonId))
+                    {
+                        menuIdList.Add(buttonId);
+                    }
+                }
             }
         }
 
@@ -979,7 +993,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
     #region 私有辅助方法
 
     /// <summary>
-    /// 【分配】全量覆盖租户级关联（统一三步：【查询】→【删除】→【新增】）
+    /// 【分配】全量覆盖租户级关联（物理删除旧行再插入，避免软删行仍占用 ix_*_unique）
     /// </summary>
     /// <typeparam name="TEntity">租户级关联实体</typeparam>
     /// <param name="repository">关联仓储</param>
@@ -994,11 +1008,9 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         string logContext)
         where TEntity : TaktTenantCoreEntityBase, new()
     {
-        // 【查询】按作用域获取当前未删除的旧关联
-        var existing = await repository.GetListAsync(scopePredicate);
-
-        // 【删除】对查询到的旧关联逐条软删除（IsDeleted=1）
-        await SoftDeleteTenantAssociationRowsAsync(repository, existing, logContext);
+        // 关联表含唯一索引（Tenant+外键组合）；软删后再插会撞唯一约束，故物理删除作用域内全部行（含已软删）
+        var deleted = await repository.DeletePhysicallyAsync(scopePredicate);
+        LogInformation("【删除】已物理删除旧关联 {Count} 条: {LogContext}", deleted, logContext);
 
         if (newEntities.Count == 0)
         {
@@ -1006,7 +1018,6 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
             return;
         }
 
-        // 【新增】批量插入新关联
         await repository.CreateRangeAsync(newEntities);
         LogInformation("【新增】关联 {Count} 条: {LogContext}", newEntities.Count, logContext);
     }

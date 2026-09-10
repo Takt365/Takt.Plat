@@ -24,6 +24,7 @@ export const ECGROUP_LIST_FIELDS = [
   'ecGroupCode',
   'ecGroupName',
   'ecGroupDescription',
+  'ecGroupCategory',
   'contactPhone',
   'contactEmail',
   'isBuiltIn',
@@ -39,6 +40,7 @@ export const ECGROUP_PLACEHOLDER = {
   ecGroupCode: 'required',
   ecGroupName: 'required',
   ecGroupDescription: 'optional',
+  ecGroupCategory: 'select',
   contactPhone: 'optional',
   contactEmail: 'optional',
   isBuiltIn: 'select',
@@ -66,11 +68,12 @@ export const ECGROUP_QUERY_STRING_FIELDS = [
 
 export type EcGroupQueryField =
   | (typeof ECGROUP_QUERY_STRING_FIELDS)[number]
-  | 'isBuiltIn' | 'groupStatus'
+  | 'ecGroupCategory' | 'isBuiltIn' | 'groupStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const ECGROUP_QUERY_FIELDS: readonly EcGroupQueryField[] = [
   ...ECGROUP_QUERY_STRING_FIELDS,
+  'ecGroupCategory',
   'isBuiltIn',
   'groupStatus',
 ]

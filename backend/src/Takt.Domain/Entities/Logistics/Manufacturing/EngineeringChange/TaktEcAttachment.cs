@@ -23,13 +23,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcAttachment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）
-    /// </summary>
-    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EcGijutsuId { get; set; }
-
-    /// <summary>
     /// 设变单号（冗余字段,便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
@@ -64,6 +57,13 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 技术课主表 ID（TaktEcGijutsu 主键；与 DocCode、LineNumber 组成唯一键）
+    /// </summary>
+    [SugarColumn(ColumnName = "ec_gijutsu_id", ColumnDescription = "技术课主表ID", ColumnDataType = "bigint", IsNullable = false)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcGijutsuId { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no；0=否 1=是；编辑移除子行时标记作废）

@@ -163,7 +163,9 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
         {
             throw new TaktBusinessException("设变采购执行不存在");
         }
+        var keepOldPartDisposition = entity.EcOldPartDisposition;
         dto.Adapt(entity);
+        entity.EcOldPartDisposition = keepOldPartDisposition;
         var isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique = await _uniqueValidator.IsUniqueAsync(
             _ecKoubaiRepository,
             x => x.EcDetailId == entity.EcDetailId
@@ -240,7 +242,7 @@ public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
             throw new TaktBusinessException("设变采购执行不存在");
         }
         var status = string.IsNullOrWhiteSpace(dto.DiscontinuedStatus)
-            ? TaktEcDistinctionConstants.PlannedMaterialStatus
+            ? TaktEcScopeConstants.PlannedMaterialStatus
             : dto.DiscontinuedStatus.Trim();
         await _ecExecPersistence.ApplyDiscontinuedStatusForDetailAsync(entity.EcDetailId, status);
         return await GetEcKoubaiByIdAsync(dto.EcKoubaiId) ?? throw new TaktBusinessException("设变采购执行不存在");

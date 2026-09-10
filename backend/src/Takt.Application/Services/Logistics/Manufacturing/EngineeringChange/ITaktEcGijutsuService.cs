@@ -147,7 +147,7 @@ public interface ITaktEcGijutsuService
     Task<TaktEcGijutsuImportFromSourceResultDto> ImportEcGijutsuFromSourceAsync(TaktEcGijutsuImportFromSourceDto dto);
 
     /// <summary>
-    /// 从来源设变构建创建草稿 DTO（不落库；EcLeader、EcDistinction 留空供前端填写）
+    /// 从来源设变构建创建草稿 DTO（不落库；EcLeader、EcScope 留空供前端填写）
     /// </summary>
     /// <param name="dto">草稿请求 DTO</param>
     /// <returns>与 Create 接口一致的创建 DTO</returns>

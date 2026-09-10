@@ -552,13 +552,13 @@
           allow-clear
         />
       </template>
-      <template #cell-sourceDistinction="{ record }">
+      <template #cell-source2ndVendor="{ record }">
         <TaktSelect
-          v-model:value="record.sourceDistinction"
-          dict-type="logistics_manufacturing_ec_source_distinction"
+          v-model:value="record.source2ndVendor"
+          dict-type="logistics_manufacturing_ec_2nd_vendor"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="sourceEcDetailPi.ph('sourceDistinction')"
+          :placeholder="sourceEcDetailPi.ph('source2ndVendor')"
           :disabled="loading"
           allow-clear
         />
@@ -699,8 +699,8 @@ const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'sourceFinishedGoods',
-    title: sourceEcDetailPi.label('sourceFinishedGoods'),
+    key: 'sourceRootMaterialCode',
+    title: sourceEcDetailPi.label('sourceRootMaterialCode'),
     editor: 'input',
     width: 140,
   },
@@ -769,8 +769,8 @@ const sourceEcDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140, allowClear: true, placeholder: sourceEcDetailPi.ph('sourceCompatibility'),
   },
   {
-    key: 'sourceDistinction',
-    title: sourceEcDetailPi.label('sourceDistinction'),
+    key: 'source2ndVendor',
+    title: sourceEcDetailPi.label('source2ndVendor'),
     width: 140,
   },
   {
@@ -806,7 +806,7 @@ function syncChildRowsFromFormData(val: Partial<SourceEcCreate & { sourceEcId?: 
 function createDefaultSourceEcDetailRow(): Record<string, unknown> {
   return {
     lineNumber: allocateNextSourceEcDetailLineNumber(),
-    sourceFinishedGoods: '',
+    sourceRootMaterialCode: '',
     sourceParentMaterialCode: '',
     sourceOldMaterialCode: '',
     sourceOldMaterialDescription: '',
@@ -818,7 +818,7 @@ function createDefaultSourceEcDetailRow(): Record<string, unknown> {
     sourceNewItemPosition: '',
     sourceBomCode: '',
     sourceCompatibility: '',
-    sourceDistinction: '',
+    source2ndVendor: '',
     sourceInstruction: '',
     sourceOldPartDisposition: '',
     sourceBomEffectiveDate: '',

@@ -1,10 +1,10 @@
 // ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Constants
-// 文件名称：TaktEcDistinctionConstants.cs
+// 文件名称：TaktEcScopeConstants.cs
 // 创建时间：2026-08-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变区分 logistics_manufacturing_ec_distinction_category 与执行生成判定常量
+// 功能描述：设变实施范围 logistics_manufacturing_ec_scope_category 与执行生成判定常量
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,9 +13,10 @@
 namespace Takt.Shared.Constants;
 
 /// <summary>
-/// 设变管理区分（字典 logistics_manufacturing_ec_distinction_category）及部门执行生成判定常量
+/// 设变实施范围（字典 logistics_manufacturing_ec_scope_category）及部门执行生成判定常量。
+/// 执行内容：停产≠Z0→「实施范围-{范围}-EOL」；全仕向空白；内部/技术自动「实施范围-内部/技术」；部管时生管/采购/受检/部管/制二待填，其余「实施范围-部管」。
 /// </summary>
-public static class TaktEcDistinctionConstants
+public static class TaktEcScopeConstants
 {
     /// <summary>
     /// 全仕向
@@ -43,7 +44,7 @@ public static class TaktEcDistinctionConstants
     public const string PurchaseTypeExternal = "F";
 
     /// <summary>
-    /// 新品仓库：原料电子保税仓等（区分部管时走制造二课门禁）
+    /// 新品仓库：原料电子保税仓等（实施范围=部管时走制造二课门禁）
     /// </summary>
     public const string NewWarehousePcbaGate = "C003";
 
@@ -53,39 +54,86 @@ public static class TaktEcDistinctionConstants
     public const string PlannedMaterialStatus = "Z0";
 
     /// <summary>
-    /// 停产操作默认写入的完成品物料状态（字典 logistics_materials_material_discontinued_status；生产结束）
+    /// 停产操作默认写入的根物料停产状态（字典 logistics_materials_material_discontinued_status；生产结束）
     /// </summary>
     public const string EolMaterialStatus = "ZQ";
 
     /// <summary>
-    /// 区分=全仕向时，无需人工填写部门的执行内容
+    /// 执行内容标准前缀（统一口径；历史「管理区分-」读入时替换为此前缀）
     /// </summary>
-    public const string AllDestinationExecContent = "管理区分-全仕向";
+    public const string ExecContentPrefix = "实施范围-";
 
     /// <summary>
-    /// 区分=部管时，非采购/受检/部管/制二课的执行内容
+    /// 历史执行内容前缀（仅识别/规范用，不得再写入）
     /// </summary>
-    public const string MaterialControlExecContent = "管理区分-部管";
+    public const string LegacyExecContentPrefix = "管理区分-";
 
     /// <summary>
-    /// 区分=内部时各部门执行内容（不做采购类型等条件判断）
+    /// 历史误写「实施范围-全仕向」（全仕向须空白由各部门填写；仅用于识别可覆盖旧值）
     /// </summary>
-    public const string InternalExecContent = "管理区分-内部";
+    public const string AllDestinationExecContent = ExecContentPrefix + "全仕向";
 
     /// <summary>
-    /// 区分=技术时各部门执行内容（不做采购类型等条件判断）
+    /// 实施范围=部管时，非生管/采购/受检/部管/制二课的自动执行内容
     /// </summary>
-    public const string TechnicalExecContent = "管理区分-技术";
+    public const string MaterialControlExecContent = ExecContentPrefix + "部管";
 
     /// <summary>
-    /// 历史自动完成文案；再生成时替换为区分文案
+    /// 实施范围=内部时各部门自动执行内容
+    /// </summary>
+    public const string InternalExecContent = ExecContentPrefix + "内部";
+
+    /// <summary>
+    /// 实施范围=技术时各部门自动执行内容
+    /// </summary>
+    public const string TechnicalExecContent = ExecContentPrefix + "技术";
+
+    /// <summary>
+    /// 历史自动完成文案；再生成时替换为实施范围文案
     /// </summary>
     public const string AutoCompletedExecContent = "系统自动完成";
 
     /// <summary>
-    /// 停产状态≠Z0 时自动填充的执行内容（各部门可人工清空以恢复）
+    /// 停产状态≠Z0 时执行内容后缀（完整文案为「实施范围-{范围}-EOL」）
     /// </summary>
     public const string EolExecContent = "EOL";
+
+    /// <summary>
+    /// 按实施范围生成停产执行内容（实施范围-全仕向/部管/内部/技术-EOL）
+    /// </summary>
+    /// <param name="ecScope">设变实施范围</param>
+    /// <returns>带实施范围前缀的 EOL 文案</returns>
+    public static string ResolveEolExecContent(int ecScope)
+    {
+        var scopeLabel = ecScope switch
+        {
+            AllDestination => AllDestinationExecContent,
+            MaterialControl => MaterialControlExecContent,
+            Internal => InternalExecContent,
+            Technical => TechnicalExecContent,
+            _ => TechnicalExecContent
+        };
+        return $"{scopeLabel}-{EolExecContent}";
+    }
+
+    /// <summary>
+    /// 是否为停产自动文案（含历史裸「EOL」、以及「实施范围-*-EOL」/历史「管理区分-*-EOL」）
+    /// </summary>
+    /// <param name="content">执行内容</param>
+    /// <returns>是否 EOL 类文案</returns>
+    public static bool IsEolExecContent(string? content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return false;
+        }
+        var value = ReplaceLegacyExecContentPrefix(content.Trim());
+        if (string.Equals(value, EolExecContent, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+        return value.EndsWith($"-{EolExecContent}", StringComparison.OrdinalIgnoreCase);
+    }
 
     /// <summary>
     /// 新物料编码是否有效（空或占位「0」视为无新物料；采购/受检/部管不得因此生成执行行）
@@ -196,24 +244,24 @@ public static class TaktEcDistinctionConstants
     }
 
     /// <summary>
-    /// 按区分得到自动填写的执行内容（管理区分-全仕向/部管/内部/技术）
+    /// 按实施范围解析自动执行内容：内部/技术→「实施范围-内部/技术」；部管→「实施范围-部管」（仅非待填部门使用）；全仕向→空（各部门人工填写）
     /// </summary>
-    /// <param name="ecDistinction">设变区分</param>
-    /// <returns>自动填写文案</returns>
-    public static string ResolveAutoExecContent(int ecDistinction)
+    /// <param name="ecScope">设变实施范围</param>
+    /// <returns>自动填写文案；全仕向返回空串</returns>
+    public static string ResolveAutoExecContent(int ecScope)
     {
-        return ecDistinction switch
+        return ecScope switch
         {
-            AllDestination => AllDestinationExecContent,
+            AllDestination => string.Empty,
             MaterialControl => MaterialControlExecContent,
             Internal => InternalExecContent,
             Technical => TechnicalExecContent,
-            _ => TechnicalExecContent
+            _ => string.Empty
         };
     }
 
     /// <summary>
-    /// 将历史短文案规范为「管理区分-…」（落库唯一口径）
+    /// 将历史短文案与「管理区分-」前缀规范为当前口径（前缀→「实施范围-」；全仕向→空；内部/技术/部管→标准文案）
     /// </summary>
     /// <param name="content">执行内容</param>
     /// <returns>规范后的执行内容</returns>
@@ -223,56 +271,74 @@ public static class TaktEcDistinctionConstants
         {
             return content;
         }
-        var value = content.Trim();
+        var value = ReplaceLegacyExecContentPrefix(content.Trim());
         return value switch
         {
-            "全仕向" => AllDestinationExecContent,
-            "部管" or "部管为止" => MaterialControlExecContent,
-            "内部" or "内部管理" => InternalExecContent,
-            "技术" or "技术为止" => TechnicalExecContent,
-            _ => content
+            "全仕向" or AllDestinationExecContent => string.Empty,
+            "部管" or "部管为止" or MaterialControlExecContent => MaterialControlExecContent,
+            "内部" or "内部管理" or InternalExecContent => InternalExecContent,
+            "技术" or "技术为止" or TechnicalExecContent => TechnicalExecContent,
+            _ => value
         };
     }
 
     /// <summary>
-    /// 区分=部管时，采购/受检/部管/制二课是否需按条件人工填写
+    /// 历史前缀「管理区分-」统一替换为「实施范围-」（无此前缀则原样返回）
+    /// </summary>
+    /// <param name="content">已 Trim 的执行内容</param>
+    /// <returns>前缀规范后的文案</returns>
+    public static string ReplaceLegacyExecContentPrefix(string content)
+    {
+        ArgumentNullException.ThrowIfNull(content);
+        if (content.StartsWith(LegacyExecContentPrefix, StringComparison.Ordinal))
+        {
+            return ExecContentPrefix + content[LegacyExecContentPrefix.Length..];
+        }
+        return content;
+    }
+
+    /// <summary>
+    /// 实施范围=部管时，须人工填写执行内容的部门（生管/采购/受检/部管/制二SMT）；其余部门自动写「实施范围-部管」
     /// </summary>
     /// <param name="deptCode">部门编码</param>
-    /// <param name="purchaseType">新采购类型</param>
-    /// <param name="newWarehouse">新品仓库</param>
+    /// <param name="purchaseType">新采购类型（保留参数；部管待填名单不再按此过滤）</param>
+    /// <param name="newWarehouse">新品仓库（保留参数；部管待填名单不再按此过滤）</param>
     /// <returns>是否待填</returns>
     public static bool IsMaterialControlNeedFillDept(
         string? deptCode,
-        string? purchaseType,
-        string? newWarehouse)
+        string? purchaseType = null,
+        string? newWarehouse = null)
     {
+        _ = purchaseType;
+        _ = newWarehouse;
         if (string.IsNullOrWhiteSpace(deptCode))
         {
             return false;
         }
         return deptCode switch
         {
-            TaktEcDeptCodes.Mp => IsExternalPurchaseType(purchaseType),
-            TaktEcDeptCodes.Iqc => IsExternalPurchaseType(purchaseType),
-            TaktEcDeptCodes.Mc => IsBukanVisible(purchaseType, newWarehouse),
-            TaktEcDeptCodes.Pcba => IsPcbaC003ExternalGroup(purchaseType, newWarehouse)
-                || IsPcbaOtherPurchaseGroup(purchaseType),
+            TaktEcDeptCodes.Pmc => true,
+            TaktEcDeptCodes.Mp => true,
+            TaktEcDeptCodes.Iqc => true,
+            TaktEcDeptCodes.Mc => true,
+            TaktEcDeptCodes.Pcba => true,
             _ => false
         };
     }
 
     /// <summary>
-    /// 是否为系统按区分/历史规则写入的执行内容（可被再生成覆盖）
+    /// 是否为系统按实施范围/历史规则写入的执行内容（可被再生成覆盖）。
+    /// 含历史「管理区分-」前缀（先规范为「实施范围-」再判定）。
     /// </summary>
     /// <param name="content">执行内容</param>
     /// <returns>是否为自动生成文案</returns>
-    public static bool IsDistinctionGeneratedExecContent(string? content)
+    public static bool IsScopeGeneratedExecContent(string? content)
     {
         if (string.IsNullOrWhiteSpace(content))
         {
             return true;
         }
-        var value = content.Trim();
+        var value = ReplaceLegacyExecContentPrefix(content.Trim());
         return string.Equals(value, AutoCompletedExecContent, StringComparison.Ordinal)
             || string.Equals(value, AllDestinationExecContent, StringComparison.Ordinal)
             || string.Equals(value, MaterialControlExecContent, StringComparison.Ordinal)
@@ -288,6 +354,6 @@ public static class TaktEcDistinctionConstants
             || string.Equals(value, TaktEcKoubaiConstants.NotPurchasingRelatedExecContent, StringComparison.Ordinal)
             || string.Equals(value, TaktEcUkekenConstants.NotRelatedToIqcExecContent, StringComparison.Ordinal)
             || string.Equals(value, TaktEcBukanConstants.NotRelatedToMaterialControlExecContent, StringComparison.Ordinal)
-            || string.Equals(value, EolExecContent, StringComparison.OrdinalIgnoreCase);
+            || IsEolExecContent(value);
     }
 }

@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Quality.Operation;
 // ========================================
 
 /// <summary>
-/// 质量组主数据实体（公司级；按检查类别区分的质量业务组织分组）
+/// 质量组主数据实体（公司级；按质量组类别区分的质量业务组织分组）
 /// 对应前端 TaktQualityGroupDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -34,11 +34,6 @@ public class TaktQualityGroupDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityGroupId { get; set; }
-
-    /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int InspectionCategory { get; set; } = 0;
 
     /// <summary>
     /// 质量组编码（3）
@@ -54,6 +49,11 @@ public class TaktQualityGroupDto : TaktCompanyDtoBase
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int QualityGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话
@@ -113,11 +113,6 @@ public class TaktQualityGroupQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int? InspectionCategory { get; set; }
-
-    /// <summary>
     /// 质量组编码（3）
     /// </summary>
     public string? QualityGroupCode { get; set; } = string.Empty;
@@ -131,6 +126,11 @@ public class TaktQualityGroupQueryDto : TaktPagedQuery
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int? QualityGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -209,11 +209,6 @@ public class TaktQualityGroupCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int InspectionCategory { get; set; } = 0;
-
-    /// <summary>
     /// 质量组编码（3）
     /// </summary>
     [Required(ErrorMessage = "质量组编码（3）不能为空")]
@@ -229,6 +224,11 @@ public class TaktQualityGroupCreateDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int QualityGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话
@@ -360,11 +360,6 @@ public class TaktQualityGroupTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int? InspectionCategory { get; set; }
-
-    /// <summary>
     /// 质量组编码（3）
     /// </summary>
     public string? QualityGroupCode { get; set; } = string.Empty;
@@ -378,6 +373,11 @@ public class TaktQualityGroupTemplateDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int? QualityGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -437,11 +437,6 @@ public class TaktQualityGroupImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int? InspectionCategory { get; set; }
-
-    /// <summary>
     /// 质量组编码（3）
     /// </summary>
     public string? QualityGroupCode { get; set; } = string.Empty;
@@ -455,6 +450,11 @@ public class TaktQualityGroupImportDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int? QualityGroupCategory { get; set; }
 
     /// <summary>
     /// 联系电话
@@ -515,11 +515,6 @@ public class TaktQualityGroupExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-    /// </summary>
-    public int InspectionCategory { get; set; } = 0;
-
-    /// <summary>
     /// 质量组编码（3）
     /// </summary>
     public string QualityGroupCode { get; set; } = string.Empty;
@@ -533,6 +528,11 @@ public class TaktQualityGroupExportDto
     /// 质量组描述
     /// </summary>
     public string? QualityGroupDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+    /// </summary>
+    public int QualityGroupCategory { get; set; } = 0;
 
     /// <summary>
     /// 联系电话

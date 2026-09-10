@@ -79,6 +79,12 @@
             @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'salesGroupCategory'">
+          <TaktDictTag
+            :value="getSalesGroupDictValue(record, 'salesGroupCategory')"
+            dict-type="logistics_sales_sales_group_category"
+          />
+        </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
             :value="getSalesGroupDictValue(record, 'isBuiltIn')"
@@ -174,6 +180,16 @@
           v-model:value="advancedQueryForm.salesGroupDescription"
           :placeholder="pi.queryPh('salesGroupDescription', 'optional')"
           :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesGroupCategory')">
+      <a-form-item :label="pi.queryLabel('salesGroupCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesGroupCategory"
+          dict-type="logistics_sales_sales_group_category"
+          :placeholder="pi.queryPh('salesGroupCategory', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -413,6 +429,9 @@ function hasAnyListQueryFilter(): boolean {
       return true
     }
   }
+  if (form.salesGroupCategory !== undefined && form.salesGroupCategory !== null) {
+    return true
+  }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     return true
   }
@@ -433,6 +452,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
+    salesGroupCategory: undefined as number | undefined,
     isBuiltIn: undefined as number | undefined,
     groupStatus: undefined as number | undefined,  }
 }
@@ -485,6 +505,9 @@ function buildListQuery(overrides?: Partial<SalesGroupQuery>): SalesGroupQuery {
   }
   for (const key of SALESGROUP_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  if (form.salesGroupCategory !== undefined && form.salesGroupCategory !== null) {
+    query.salesGroupCategory = form.salesGroupCategory
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn

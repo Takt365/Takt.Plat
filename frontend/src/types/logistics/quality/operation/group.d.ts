@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 质量组主数据实体（公司级；按检查类别区分的质量业务组织分组）
+ * 质量组主数据实体（公司级；按质量组类别区分的质量业务组织分组）
  * 对应前端 TaktQualityGroupDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 QualityGroup
@@ -34,11 +34,6 @@ export interface QualityGroup extends CompanyDtoBase {
   plantCode: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-   */
-  inspectionCategory: number;
-
-  /**
    * 质量组编码（3）
    */
   qualityGroupCode: string;
@@ -52,6 +47,11 @@ export interface QualityGroup extends CompanyDtoBase {
    * 质量组描述
    */
   qualityGroupDescription?: string;
+
+  /**
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+   */
+  qualityGroupCategory: number;
 
   /**
    * 联系电话
@@ -103,9 +103,9 @@ export interface QualityGroupQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
    */
-  inspectionCategory?: number;
+  qualityGroupCategory?: number;
 
   /**
    * 质量组编码（3）
@@ -199,11 +199,6 @@ export interface QualityGroupCreate {
   plantCode: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-   */
-  inspectionCategory: number;
-
-  /**
    * 质量组编码（3）
    */
   qualityGroupCode: string;
@@ -217,6 +212,11 @@ export interface QualityGroupCreate {
    * 质量组描述
    */
   qualityGroupDescription?: string;
+
+  /**
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+   */
+  qualityGroupCategory: number;
 
   /**
    * 联系电话
@@ -322,9 +322,9 @@ export interface QualityGroupTemplate {
   plantCode?: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
    */
-  inspectionCategory?: number;
+  qualityGroupCategory?: number;
 
   /**
    * 质量组编码（3）
@@ -403,9 +403,9 @@ export interface QualityGroupImport {
   plantCode?: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
    */
-  inspectionCategory?: number;
+  qualityGroupCategory?: number;
 
   /**
    * 质量组编码（3）
@@ -476,11 +476,6 @@ export interface QualityGroupExport {
   plantCode: string;
 
   /**
-   * 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
-   */
-  inspectionCategory: number;
-
-  /**
    * 质量组编码（3）
    */
   qualityGroupCode: string;
@@ -494,6 +489,11 @@ export interface QualityGroupExport {
    * 质量组描述
    */
   qualityGroupDescription?: string;
+
+  /**
+   * 质量组类别（字典 logistics_quality_group_category；0=IQC，1=QA，2=IPQC）
+   */
+  qualityGroupCategory: number;
 
   /**
    * 联系电话

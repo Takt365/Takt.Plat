@@ -31,7 +31,7 @@ export const ECLEGACYPRODUCT_LIST_FIELDS = [
   'ecOldMaterialDescription',
   'ecOldUsageQuantity',
   'ecIsCompatible',
-  'ecSecondDistinction',
+  'ec2ndVendor',
   'ecInstruction',
   'ecOldPartDisposition',
   'ecNewMaterialCode',
@@ -39,7 +39,7 @@ export const ECLEGACYPRODUCT_LIST_FIELDS = [
   'discontinuedStatus',
 ] as const
 
-/** 列表默认可见列（须显式传入，否则 TaktSingleTable 默认仅 8 列，会裁掉二级区分等） */
+/** 列表默认可见列（须显式传入，否则 TaktSingleTable 默认仅 8 列，会裁掉第二供应商等） */
 export const ECLEGACYPRODUCT_DEFAULT_VISIBLE_COLUMN_KEYS = [
   ...ECLEGACYPRODUCT_LIST_FIELDS,
   'action',
@@ -58,7 +58,7 @@ export const ECLEGACYPRODUCT_PLACEHOLDER = {
   ecOldMaterialDescription: 'optional',
   ecOldUsageQuantity: 'optional',
   ecIsCompatible: 'optional',
-  ecSecondDistinction: 'select',
+  ec2ndVendor: 'select',
   ecInstruction: 'select',
   ecOldPartDisposition: 'select',
   ecNewMaterialCode: 'optional',

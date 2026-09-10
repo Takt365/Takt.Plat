@@ -32,17 +32,17 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 检查类别：IQC
     /// </summary>
-    private const int InspectionCategoryIqc = 0;
+    private const int QualityGroupCategoryIqc = 0;
 
     /// <summary>
     /// 检查类别：QA
     /// </summary>
-    private const int InspectionCategoryQa = 1;
+    private const int QualityGroupCategoryQa = 1;
 
     /// <summary>
     /// 检查类别：IPQC
     /// </summary>
-    private const int InspectionCategoryIpqc = 2;
+    private const int QualityGroupCategoryIpqc = 2;
 
     /// <summary>
     /// 执行顺序（销售组种子之后）
@@ -128,7 +128,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 标准质量组目录（PlantCode + InspectionCategory + QualityGroupCode 唯一；每类别各 01/02）
+    /// 标准质量组目录（PlantCode + QualityGroupCategory + QualityGroupCode 唯一；每类别各 01/02）
     /// </summary>
     /// <param name="plantCode">工厂编码</param>
     /// <returns>质量组种子项列表</returns>
@@ -138,14 +138,14 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
         return
         [
             // IQC
-            new QualityGroupSeedItem(plantCode, InspectionCategoryIqc, $"{codePrefix}01", "张三", null, 1),
-            new QualityGroupSeedItem(plantCode, InspectionCategoryIqc, $"{codePrefix}02", "李四", null, 2),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryIqc, $"{codePrefix}01", "张三", null, 1),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryIqc, $"{codePrefix}02", "李四", null, 2),
             // QA
-            new QualityGroupSeedItem(plantCode, InspectionCategoryQa, $"{codePrefix}01", "张三", null, 1),
-            new QualityGroupSeedItem(plantCode, InspectionCategoryQa, $"{codePrefix}02", "李四", null, 2),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryQa, $"{codePrefix}01", "张三", null, 1),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryQa, $"{codePrefix}02", "李四", null, 2),
             // IPQC
-            new QualityGroupSeedItem(plantCode, InspectionCategoryIpqc, $"{codePrefix}01", "张三", null, 1),
-            new QualityGroupSeedItem(plantCode, InspectionCategoryIpqc, $"{codePrefix}02", "李四", null, 2),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryIpqc, $"{codePrefix}01", "张三", null, 1),
+            new QualityGroupSeedItem(plantCode, QualityGroupCategoryIpqc, $"{codePrefix}02", "李四", null, 2),
         ];
     }
 
@@ -168,7 +168,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
             g.TenantCode == tenantCode
             && g.CompanyCode == companyCode
             && g.PlantCode == seed.PlantCode
-            && g.InspectionCategory == seed.InspectionCategory
+            && g.QualityGroupCategory == seed.QualityGroupCategory
             && g.QualityGroupCode == seed.QualityGroupCode);
         if (group == null)
         {
@@ -177,7 +177,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 PlantCode = seed.PlantCode,
-                InspectionCategory = seed.InspectionCategory,
+                QualityGroupCategory = seed.QualityGroupCategory,
                 QualityGroupCode = seed.QualityGroupCode,
                 QualityGroupName = seed.QualityGroupName,
                 QualityGroupDescription = seed.QualityGroupDescription,
@@ -227,14 +227,14 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
     /// 质量组种子项
     /// </summary>
     /// <param name="PlantCode">工厂编码</param>
-    /// <param name="InspectionCategory">检查类别</param>
+    /// <param name="QualityGroupCategory">质量组类别</param>
     /// <param name="QualityGroupCode">质量组编码</param>
     /// <param name="QualityGroupName">质量组名称</param>
     /// <param name="QualityGroupDescription">质量组描述</param>
     /// <param name="SortOrder">排序号</param>
     private sealed record QualityGroupSeedItem(
         string PlantCode,
-        int InspectionCategory,
+        int QualityGroupCategory,
         string QualityGroupCode,
         string QualityGroupName,
         string? QualityGroupDescription,

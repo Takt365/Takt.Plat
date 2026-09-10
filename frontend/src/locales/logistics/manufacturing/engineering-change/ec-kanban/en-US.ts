@@ -14,7 +14,6 @@ export default {
   page: {
     filter: {
       implementationStatus: 'Implementation status',
-      onlyNotOfficiallyCompleted: 'Not officially completed only',
     },
     column: {
       detailCount: 'Detail lines',
@@ -27,9 +26,6 @@ export default {
       inProgress: 'In progress',
       officiallyCompleted: 'Officially completed',
       fullyCompleted: 'Fully completed',
-    },
-    hint: {
-      officialCompletion: 'EC is officially complete when QA has implemented all detail lines',
     },
   },
 };

@@ -34,7 +34,7 @@ public static class TaktEcDeptViewMapper
                 dto.IsImplemented = pmc.IsImplemented;
                 dto.Content = pmc.ExecContent;
                 dto.Remark = pmc.Remark;
-                dto.ScheduledProductionDate = pmc.ScheduledProductionDate;
+                dto.ScheduledDate = pmc.ScheduledDate;
                 dto.ScheduledBatch = pmc.ScheduledBatch;
                 dto.PoRemainder = pmc.PoRemainder;
                 dto.Balance = pmc.Balance;
@@ -107,7 +107,7 @@ public static class TaktEcDeptViewMapper
                 dto.IsImplemented = te.IsImplemented;
                 dto.Content = te.ExecContent;
                 dto.Remark = te.Remark;
-                dto.ConfirmationDate = te.ConfirmationDate;
+                dto.SopDate = te.SopDate;
                 dto.IsSopUpdated = te.IsSopUpdated;
                 break;
         }
@@ -133,7 +133,7 @@ public static class TaktEcDeptViewMapper
         if (row.Content != null) dto.Content = row.Content;
         if (row.EntryDate.HasValue) dto.EntryDate = row.EntryDate;
         if (row.EcLeader != null) dto.EcLeader = row.EcLeader;
-        if (row.ScheduledProductionDate.HasValue) dto.ScheduledProductionDate = row.ScheduledProductionDate;
+        if (row.ScheduledDate.HasValue) dto.ScheduledDate = row.ScheduledDate;
         if (row.ScheduledBatch != null) dto.ScheduledBatch = row.ScheduledBatch;
         if (row.PoRemainder != null) dto.PoRemainder = row.PoRemainder;
         if (row.Balance != null) dto.Balance = row.Balance;
@@ -153,7 +153,7 @@ public static class TaktEcDeptViewMapper
         if (row.ImplementationBatch != null) dto.ImplementationBatch = row.ImplementationBatch;
         if (row.InspectionBatch != null) dto.InspectionBatch = row.InspectionBatch;
         if (row.SamplingCode != null) dto.SamplingCode = row.SamplingCode;
-        if (row.ConfirmationDate.HasValue) dto.ConfirmationDate = row.ConfirmationDate;
+        if (row.SopDate.HasValue) dto.SopDate = row.SopDate;
         if (row.IsSopUpdated.HasValue) dto.IsSopUpdated = row.IsSopUpdated.Value;
         if (row.Remark != null) dto.Remark = row.Remark;
         return dto;
@@ -174,7 +174,7 @@ public static class TaktEcDeptViewMapper
                 dto.IsImplemented = pmc.IsImplemented;
                 dto.Content = pmc.ExecContent;
                 dto.Remark = pmc.Remark;
-                dto.ScheduledProductionDate = pmc.ScheduledProductionDate;
+                dto.ScheduledDate = pmc.ScheduledDate;
                 dto.ScheduledBatch = pmc.ScheduledBatch;
                 dto.PoRemainder = pmc.PoRemainder;
                 dto.Balance = pmc.Balance;
@@ -247,7 +247,7 @@ public static class TaktEcDeptViewMapper
                 dto.IsImplemented = te.IsImplemented;
                 dto.Content = te.ExecContent;
                 dto.Remark = te.Remark;
-                dto.ConfirmationDate = te.ConfirmationDate;
+                dto.SopDate = te.SopDate;
                 dto.IsSopUpdated = te.IsSopUpdated;
                 break;
         }

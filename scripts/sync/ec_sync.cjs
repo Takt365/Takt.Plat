@@ -67,7 +67,7 @@ CREATE TABLE #source_main (source_ec_no NVARCHAR(100));
 CREATE TABLE #source_detail (
   source_ec_no NVARCHAR(100),
   legacy_part_no NVARCHAR(100),
-  source_finished_goods NVARCHAR(500),
+  source_root_material_code NVARCHAR(500),
   source_parent_material_code NVARCHAR(500),
   source_old_material_description NVARCHAR(MAX),
   source_old_usage_quantity NVARCHAR(MAX),
@@ -78,7 +78,7 @@ CREATE TABLE #source_detail (
   source_new_item_position NVARCHAR(MAX),
   source_bom_code NVARCHAR(MAX),
   source_compatibility NVARCHAR(MAX),
-  source_distinction NVARCHAR(MAX),
+  source_2nd_vendor NVARCHAR(MAX),
   source_instruction NVARCHAR(MAX),
   source_old_part_disposition NVARCHAR(MAX),
   source_bom_effective_date DATE,
@@ -151,12 +151,12 @@ WHERE NOT EXISTS (
 
 INSERT INTO #source_detail (
   source_ec_no, legacy_part_no,
-  source_finished_goods, source_parent_material_code,
+  source_root_material_code, source_parent_material_code,
   source_old_material_description, source_old_usage_quantity,
   source_old_item_position, source_new_material_code,
   source_new_material_description, source_new_usage_quantity,
   source_new_item_position, source_bom_code,
-  source_compatibility, source_distinction,
+  source_compatibility, source_2nd_vendor,
   source_instruction, source_old_part_disposition,
   source_bom_effective_date, created_at
 )
@@ -185,12 +185,12 @@ INNER JOIN #source_main SM
 WHERE LTRIM(RTRIM(S.[D_SAP_ZPABD_S001])) <> '';
 
 INSERT INTO [takt_logistics_manufacturing_ec_source_detail]
-([id],[source_ec_id],[source_finished_goods],[source_parent_material_code],
+([id],[source_ec_id],[source_root_material_code],[source_parent_material_code],
  [source_old_material_code],[source_old_material_description],[source_old_usage_quantity],
  [source_old_item_position],[source_new_material_code],
  [source_new_material_description],[source_new_usage_quantity],
  [source_new_item_position],[source_bom_code],
- [source_compatibility],[source_distinction],
+ [source_compatibility],[source_2nd_vendor],
  [source_instruction],[source_old_part_disposition],
  [source_bom_effective_date],[tenant_code],[company_code],
  [created_by],[created_at],[updated_by],[updated_at],[is_deleted])
@@ -198,7 +198,7 @@ OUTPUT INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_old_material_cod
 SELECT
   CAST((DATEDIFF_BIG(MICROSECOND, '1970-01-01', GETDATE()) * 1000 + ROW_NUMBER() OVER (ORDER BY D.source_ec_no, D.legacy_part_no)) AS BIGINT),
   M.[id],
-  D.source_finished_goods,
+  D.source_root_material_code,
   D.source_parent_material_code,
   D.legacy_part_no,
   D.source_old_material_description,
@@ -210,7 +210,7 @@ SELECT
   D.source_new_item_position,
   D.source_bom_code,
   D.source_compatibility,
-  D.source_distinction,
+  D.source_2nd_vendor,
   D.source_instruction,
   D.source_old_part_disposition,
   D.source_bom_effective_date,

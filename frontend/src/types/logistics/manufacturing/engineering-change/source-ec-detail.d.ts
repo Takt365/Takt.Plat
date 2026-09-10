@@ -49,9 +49,9 @@ export interface SourceEcDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods: string;
+  sourceRootMaterialCode: string;
 
   /**
    * 上阶物料编码
@@ -109,9 +109,9 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -184,9 +184,9 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods?: string;
+  sourceRootMaterialCode?: string;
 
   /**
    * 上阶物料编码
@@ -244,9 +244,9 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -338,9 +338,9 @@ export interface SourceEcDetailCreate {
   lineNumber: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods: string;
+  sourceRootMaterialCode: string;
 
   /**
    * 上阶物料编码
@@ -398,9 +398,9 @@ export interface SourceEcDetailCreate {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -511,9 +511,9 @@ export interface SourceEcDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods?: string;
+  sourceRootMaterialCode?: string;
 
   /**
    * 上阶物料编码
@@ -571,9 +571,9 @@ export interface SourceEcDetailTemplate {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -650,9 +650,9 @@ export interface SourceEcDetailImport {
   lineNumber?: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods?: string;
+  sourceRootMaterialCode?: string;
 
   /**
    * 上阶物料编码
@@ -710,9 +710,9 @@ export interface SourceEcDetailImport {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
@@ -789,9 +789,9 @@ export interface SourceEcDetailExport {
   lineNumber: number;
 
   /**
-   * 完成品物料编码
+   * 根物料编码
    */
-  sourceFinishedGoods: string;
+  sourceRootMaterialCode: string;
 
   /**
    * 上阶物料编码
@@ -849,9 +849,9 @@ export interface SourceEcDetailExport {
   sourceCompatibility?: string;
 
   /**
-   * 区分（字典 logistics_manufacturing_ec_source_distinction；1=有，2=优先，3=无）
+   * 第二供应商（字典 logistics_manufacturing_ec_2nd_vendor；1=有，2=优先，3=无）
    */
-  sourceDistinction?: string;
+  source2ndVendor?: string;
 
   /**
    * 安排指示（字典 logistics_manufacturing_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）

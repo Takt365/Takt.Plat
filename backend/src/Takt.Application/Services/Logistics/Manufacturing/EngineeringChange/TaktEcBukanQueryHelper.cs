@@ -28,8 +28,8 @@ internal static class TaktEcBukanQueryHelper
     /// <returns>明细过滤表达式</returns>
     internal static Expression<Func<TaktEcDetail, bool>> VisibleDetailExpression()
     {
-        var purchaseTypeF = TaktEcDistinctionConstants.PurchaseTypeExternal;
-        var warehouseC003 = TaktEcDistinctionConstants.NewWarehousePcbaGate;
+        var purchaseTypeF = TaktEcScopeConstants.PurchaseTypeExternal;
+        var warehouseC003 = TaktEcScopeConstants.NewWarehousePcbaGate;
         var exp = Expressionable.Create<TaktEcDetail>();
         exp = exp.And(x => x.EcNewPurchaseType == purchaseTypeF);
         exp = exp.And(x => x.EcNewWarehouse == null || x.EcNewWarehouse != warehouseC003);
@@ -51,33 +51,27 @@ internal static class TaktEcBukanQueryHelper
     }
 
     /// <summary>
-    /// 部管执行行对应可见明细（单层表达式，供 TaktEcBukan 列表使用）
+    /// 部管执行列表可见：本表自去重（F 且非 C003，同设变+机种+新物料保留最大 EcDetailId）
     /// </summary>
     /// <returns>执行表过滤表达式</returns>
     internal static Expression<Func<TaktEcBukan, bool>> VisibleExecExpression()
     {
-        var purchaseTypeF = TaktEcDistinctionConstants.PurchaseTypeExternal;
-        var warehouseC003 = TaktEcDistinctionConstants.NewWarehousePcbaGate;
-        return x => SqlFunc.Subqueryable<TaktEcDetail>()
-            .Where(d =>
-                d.Id == x.EcDetailId
-                && d.IsDeleted == 0
-                && d.IsObsolete == 0
-                && d.EcNewPurchaseType == purchaseTypeF
-                && (d.EcNewWarehouse == null || d.EcNewWarehouse != warehouseC003)
-                && !SqlFunc.Subqueryable<TaktEcDetail>()
-                    .Where(s =>
-                        s.TenantCode == d.TenantCode
-                        && s.CompanyCode == d.CompanyCode
-                        && s.IsDeleted == 0
-                        && s.IsObsolete == 0
-                        && s.EcCode == d.EcCode
-                        && s.EcModelCode == d.EcModelCode
-                        && s.EcNewMaterialCode == d.EcNewMaterialCode
-                        && s.EcNewPurchaseType == purchaseTypeF
-                        && (s.EcNewWarehouse == null || s.EcNewWarehouse != warehouseC003)
-                        && s.Id > d.Id)
-                    .Any())
-            .Any();
+        var purchaseTypeF = TaktEcScopeConstants.PurchaseTypeExternal;
+        var warehouseC003 = TaktEcScopeConstants.NewWarehousePcbaGate;
+        return x => x.EcNewPurchaseType == purchaseTypeF
+            && (x.EcNewWarehouse == null || x.EcNewWarehouse != warehouseC003)
+            && !SqlFunc.Subqueryable<TaktEcBukan>()
+                .Where(s =>
+                    s.TenantCode == x.TenantCode
+                    && s.CompanyCode == x.CompanyCode
+                    && s.IsDeleted == 0
+                    && s.IsObsolete == 0
+                    && s.EcCode == x.EcCode
+                    && s.EcModelCode == x.EcModelCode
+                    && s.EcNewMaterialCode == x.EcNewMaterialCode
+                    && s.EcNewPurchaseType == purchaseTypeF
+                    && (s.EcNewWarehouse == null || s.EcNewWarehouse != warehouseC003)
+                    && s.EcDetailId > x.EcDetailId)
+                .Any();
     }
 }

@@ -44,6 +44,11 @@ export interface SalesGroup extends CompanyDtoBase {
   salesGroupDescription?: string;
 
   /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -111,6 +116,11 @@ export interface SalesGroupQuery extends TaktPagedQuery {
    * 销售组描述
    */
   salesGroupDescription?: string;
+
+  /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory?: number;
 
   /**
    * 联系电话
@@ -199,6 +209,11 @@ export interface SalesGroupCreate {
    * 销售组描述
    */
   salesGroupDescription?: string;
+
+  /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory: number;
 
   /**
    * 联系电话
@@ -342,6 +357,11 @@ export interface SalesGroupTemplate {
   salesGroupDescription?: string;
 
   /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory?: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -415,6 +435,11 @@ export interface SalesGroupImport {
   salesGroupDescription?: string;
 
   /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory?: number;
+
+  /**
    * 联系电话
    */
   contactPhone?: string;
@@ -486,6 +511,11 @@ export interface SalesGroupExport {
    * 销售组描述
    */
   salesGroupDescription?: string;
+
+  /**
+   * 销售组类别（字典 logistics_sales_sales_group_category；1=通用）
+   */
+  salesGroupCategory: number;
 
   /**
    * 联系电话

@@ -14,7 +14,6 @@ export default {
   page: {
     filter: {
       implementationStatus: '實施狀態',
-      onlyNotOfficiallyCompleted: '僅未正式完成',
     },
     column: {
       detailCount: '明細數',
@@ -27,9 +26,6 @@ export default {
       inProgress: '實施中',
       officiallyCompleted: '正式完成',
       fullyCompleted: '全部完成',
-    },
-    hint: {
-      officialCompletion: '品管課全部明細已實施後，設變視為正式完成',
     },
   },
 };

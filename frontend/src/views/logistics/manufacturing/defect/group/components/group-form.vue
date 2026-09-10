@@ -55,18 +55,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('defectCategory')"
-                name="defectCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.defectCategory"
-                  dict-type="logistics_manufacturing_defect_group_category"
-                  :placeholder="pi.ph('defectCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="pi.label('defectGroupCode')"
                 name="defectGroupCode"
               >
@@ -89,7 +77,7 @@
                   v-model:value="formState.defectGroupName"
                   :placeholder="pi.ph('defectGroupName')"
                   show-count
-                  :maxlength="100"
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
@@ -103,6 +91,18 @@
                   v-model:value="formState.defectGroupDescription"
                   :placeholder="pi.ph('defectGroupDescription')"
                   :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectGroupCategory')"
+                name="defectGroupCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectGroupCategory"
+                  dict-type="logistics_manufacturing_defect_group_category"
+                  :placeholder="pi.ph('defectGroupCategory')"
                 />
               </a-form-item>
             </a-col>
@@ -323,7 +323,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  defectCategory: 0,
+  defectGroupCategory: 0,
   isBuiltIn: 0,
   groupStatus: 1
 }
@@ -377,14 +377,14 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  defectCategory: [{
+  defectGroupCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('defectCategory'))
+        return Promise.reject(pi.ph('defectGroupCategory'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('defectCategory'))
+        return Promise.reject(pi.ph('defectGroupCategory'))
       }
       return Promise.resolve()
     },
@@ -441,9 +441,9 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('defectCategory' in payload) {
-    const rawdefectCategory = payload.defectCategory
-    payload.defectCategory = typeof rawdefectCategory === 'number' ? rawdefectCategory : Number(rawdefectCategory)
+  if ('defectGroupCategory' in payload) {
+    const rawdefectGroupCategory = payload.defectGroupCategory
+    payload.defectGroupCategory = typeof rawdefectGroupCategory === 'number' ? rawdefectGroupCategory : Number(rawdefectGroupCategory)
   }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn

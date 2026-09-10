@@ -644,13 +644,34 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             return true;
         }
 
+        // 超级管理员：角色种子 AssignAll，校验侧直接放行，避免 RoleMenu/缓存不一致导致顶栏统计 403
+        var roleCodes = await GetUserRoleCodesAsync(userId, tenantCode);
+        if (roleCodes.Any(r => string.Equals(r, "ROLE_SUPER_ADMIN", StringComparison.OrdinalIgnoreCase)))
+        {
+            return true;
+        }
+
         var codes = await GetUserPermissionCodesAsync(userId, tenantCode);
         var normalizedRequired = NormalizePermissionCodeForMatch(permissionCode);
-        return codes.Any(c =>
+        var allowed = codes.Any(c =>
             string.Equals(
                 NormalizePermissionCodeForMatch(c),
                 normalizedRequired,
                 StringComparison.OrdinalIgnoreCase));
+
+        if (!allowed)
+        {
+            var (sample, total) = TaktLogFormatter.SampleForLog(codes, AuthLogSampleSize);
+            TaktLogger.Warning(
+                "HasUserPermission 未命中: UserId={UserId}, Tenant={TenantCode}, Required={Required}, CodeCount={CodeCount}, Sample={Sample}",
+                userId,
+                tenantCode,
+                normalizedRequired,
+                total,
+                sample);
+        }
+
+        return allowed;
     }
 
     /// <summary>
@@ -688,8 +709,14 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     }
 
     /// <summary>
-    /// 获取用户功能权限码列表（带缓存，来源于可访问菜单的 Permission 字段）
+    /// 获取用户功能权限码列表（带缓存）
     /// </summary>
+    /// <remarks>
+    /// 来源：角色已分配菜单的 Permission。
+    /// 若仅分配了页面菜单（MenuType=1）而未勾选其子按钮（MenuType=2），
+    /// 仍自动并入该页面下启用按钮的 Permission（如 foundation:message:list → unread/query/read），
+    /// 避免顶栏未读/统计等接口因缺按钮 RoleMenu 而 403。
+    /// </remarks>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
     /// <returns>权限码列表</returns>
@@ -702,12 +729,38 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             cacheKey,
             async () =>
             {
-                var menus = await GetAccessibleMenusAsync(userId, tenantCode);
-                return menus
-                    .Where(m => !string.IsNullOrWhiteSpace(m.Permission))
-                    .Select(m => m.Permission.Trim())
-                    .Distinct(StringComparer.OrdinalIgnoreCase)
-                    .ToList();
+                var accessibleMenus = await GetAccessibleMenusAsync(userId, tenantCode);
+                var codes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (var menu in accessibleMenus)
+                {
+                    if (!string.IsNullOrWhiteSpace(menu.Permission))
+                    {
+                        codes.Add(menu.Permission.Trim());
+                    }
+                }
+
+                // 页面菜单已授权时，并入其子按钮权限码（RoleMenu 常只勾页面、未勾按钮）
+                var accessiblePageIds = accessibleMenus
+                    .Where(m => m.MenuType == 1)
+                    .Select(m => m.Id)
+                    .ToHashSet();
+                if (accessiblePageIds.Count > 0)
+                {
+                    var buttonMenus = await _menuRepository.GetListAsync(m =>
+                        m.TenantCode == tenantCode
+                        && m.MenuStatus == 1
+                        && m.MenuType == 2
+                        && accessiblePageIds.Contains(m.ParentId));
+                    foreach (var button in buttonMenus)
+                    {
+                        if (!string.IsNullOrWhiteSpace(button.Permission))
+                        {
+                            codes.Add(button.Permission.Trim());
+                        }
+                    }
+                }
+
+                return codes.ToList();
             },
             expiration);
     }
@@ -773,6 +826,8 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             });
 
         var permissionsStopwatch = Stopwatch.StartNew();
+        // 拉资料时强制刷新权限缓存，避免旧缓存与 RoleMenu 不一致导致顶栏 statistics 403
+        await _cacheService.RemoveAsync($"takt:perm-codes:{tenantCode}:{userId}");
         var permissions = await GetUserPermissionCodesAsync(userId, tenantCode);
         var roles = await GetUserRoleCodesAsync(userId, tenantCode);
         var (permissionSample, permissionTotal) = TaktLogFormatter.SampleForLog(permissions, AuthLogSampleSize);

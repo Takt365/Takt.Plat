@@ -122,8 +122,8 @@ public class TaktEcGroupSeedData : ITaktSeedDataCoordinator
         var codePrefix = plantCode[0];
         return
         [
-            new EcGroupSeedItem(plantCode, $"{codePrefix}01", "张三", null, 1),
-            new EcGroupSeedItem(plantCode, $"{codePrefix}02", "李四", null, 2),
+            new EcGroupSeedItem(plantCode, $"{codePrefix}01", "张三", null, 1, 1),
+            new EcGroupSeedItem(plantCode, $"{codePrefix}02", "李四", null, 2, 2),
         ];
     }
 
@@ -157,6 +157,7 @@ public class TaktEcGroupSeedData : ITaktSeedDataCoordinator
                 EcGroupCode = seed.EcGroupCode,
                 EcGroupName = seed.EcGroupName,
                 EcGroupDescription = seed.EcGroupDescription,
+                EcGroupCategory = seed.EcGroupCategory,
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 GroupStatus = StatusEnabled,
@@ -174,6 +175,11 @@ public class TaktEcGroupSeedData : ITaktSeedDataCoordinator
         if (group.EcGroupDescription != seed.EcGroupDescription)
         {
             group.EcGroupDescription = seed.EcGroupDescription;
+            needUpdate = true;
+        }
+        if (group.EcGroupCategory != seed.EcGroupCategory)
+        {
+            group.EcGroupCategory = seed.EcGroupCategory;
             needUpdate = true;
         }
         if (group.SortOrder != seed.SortOrder)
@@ -206,11 +212,13 @@ public class TaktEcGroupSeedData : ITaktSeedDataCoordinator
     /// <param name="EcGroupCode">设变组编码</param>
     /// <param name="EcGroupName">设变组名称</param>
     /// <param name="EcGroupDescription">设变组描述</param>
+    /// <param name="EcGroupCategory">设变组类别（1=设变EC担当 2=SOP担当）</param>
     /// <param name="SortOrder">排序号</param>
     private sealed record EcGroupSeedItem(
         string PlantCode,
         string EcGroupCode,
         string EcGroupName,
         string? EcGroupDescription,
+        int EcGroupCategory,
         int SortOrder);
 }

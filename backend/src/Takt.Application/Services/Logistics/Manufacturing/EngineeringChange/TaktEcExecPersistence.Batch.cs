@@ -34,13 +34,13 @@ public partial class TaktEcExecPersistence
     /// <param name="details">同一设变下未作废明细</param>
     /// <param name="deptCode">部门编码</param>
     /// <param name="shouldAutoComplete">是否自动填完（按明细）</param>
-    /// <param name="ecDistinction">设变区分</param>
+    /// <param name="ecScope">设变实施范围</param>
     /// <returns>写入/跳过条数</returns>
     public async Task<TaktEcDeptExecBatchResult> UpsertDeptExecBatchWithFillModeAsync(
         IReadOnlyList<TaktEcDetail> details,
         string deptCode,
         Func<TaktEcDetail, bool> shouldAutoComplete,
-        int ecDistinction)
+        int ecScope)
     {
         ArgumentNullException.ThrowIfNull(details);
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
@@ -51,9 +51,9 @@ public partial class TaktEcExecPersistence
         }
         if (deptCode == TaktEcDeptCodes.Pcba)
         {
-            return await UpsertPcbaDeptExecBatchWithFillModeAsync(details, shouldAutoComplete, ecDistinction);
+            return await UpsertPcbaDeptExecBatchWithFillModeAsync(details, shouldAutoComplete, ecScope);
         }
-        return await UpsertTypedDeptExecBatchWithFillModeAsync(details, deptCode, shouldAutoComplete, ecDistinction);
+        return await UpsertTypedDeptExecBatchWithFillModeAsync(details, deptCode, shouldAutoComplete, ecScope);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public partial class TaktEcExecPersistence
         IReadOnlyList<TaktEcDetail> details,
         string deptCode,
         Func<TaktEcDetail, bool> shouldAutoComplete,
-        int ecDistinction)
+        int ecScope)
     {
         var ecCode = details
             .Select(x => x.EcCode?.Trim())
@@ -85,8 +85,8 @@ public partial class TaktEcExecPersistence
                 details.Count,
                 skipByDedup.Count);
         }
-        var applyNotRelatedAuto = ecDistinction == TaktEcDistinctionConstants.AllDestination
-            || ecDistinction == TaktEcDistinctionConstants.MaterialControl;
+        var applyNotRelatedAuto = ecScope == TaktEcScopeConstants.AllDestination
+            || ecScope == TaktEcScopeConstants.MaterialControl;
         var deptName = await ResolveDeptNameAsync(deptCode);
         var toCreate = new List<object>();
         var toUpdate = new List<object>();
@@ -95,8 +95,8 @@ public partial class TaktEcExecPersistence
         foreach (var detail in details)
         {
             existingByDetailId.TryGetValue(detail.Id, out var existing);
-            if (TaktEcDistinctionConstants.IsNewMaterialDependentDept(deptCode)
-                && !TaktEcDistinctionConstants.HasEffectiveNewMaterialCode(detail.EcNewMaterialCode))
+            if (TaktEcScopeConstants.IsNewMaterialDependentDept(deptCode)
+                && !TaktEcScopeConstants.HasEffectiveNewMaterialCode(detail.EcNewMaterialCode))
             {
                 if (TryMarkObsolete(existing))
                 {
@@ -106,7 +106,7 @@ public partial class TaktEcExecPersistence
                 continue;
             }
             // 采购/受检/部管：非列表可见条件不落库（与 QueryHelper 一致；禁止对非可见明细灌满执行表）
-            if (TaktEcDistinctionConstants.IsNewMaterialDependentDept(deptCode)
+            if (TaktEcScopeConstants.IsNewMaterialDependentDept(deptCode)
                 && !IsNewMaterialDeptListVisible(detail, deptCode))
             {
                 if (TryMarkObsolete(existing))
@@ -133,12 +133,9 @@ public partial class TaktEcExecPersistence
             {
                 deptExec.IsObsolete = 0;
             }
-            ApplyDistinctionFillMode(exec, isNew, shouldAutoComplete(detail), ecDistinction, detail);
+            ApplyScopeFillMode(exec, isNew, shouldAutoComplete(detail), ecScope, detail);
             var filledContent = TaktEcDeptEntityHelper.GetExecContent(exec);
-            var isEolFilled = string.Equals(
-                filledContent,
-                TaktEcDistinctionConstants.EolExecContent,
-                StringComparison.Ordinal);
+            var isEolFilled = TaktEcScopeConstants.IsEolExecContent(filledContent);
             if (!isEolFilled && applyNotRelatedAuto)
             {
                 TaktEcExecNotRelated.TryAfterFill(exec, detail);
@@ -169,7 +166,7 @@ public partial class TaktEcExecPersistence
     private async Task<TaktEcDeptExecBatchResult> UpsertPcbaDeptExecBatchWithFillModeAsync(
         IReadOnlyList<TaktEcDetail> details,
         Func<TaktEcDetail, bool> shouldAutoComplete,
-        int ecDistinction)
+        int ecScope)
     {
         var ecCode = details
             .Select(x => x.EcCode?.Trim())
@@ -207,9 +204,10 @@ public partial class TaktEcExecPersistence
         }
         var skipSmt = BuildPcbaSmtSkipDetailIds(details);
         var skipSeizounika = BuildPcbaSeizounikaSkipDetailIds(details);
-        var applyNotRelatedAuto = ecDistinction == TaktEcDistinctionConstants.AllDestination
-            || ecDistinction == TaktEcDistinctionConstants.MaterialControl;
-        var deptName = await ResolveDeptNameAsync(TaktEcDeptCodes.Pcba);
+        var applyNotRelatedAuto = ecScope == TaktEcScopeConstants.AllDestination
+            || ecScope == TaktEcScopeConstants.MaterialControl;
+        var smtDeptName = await ResolveDeptNameAsync(TaktEcDeptCodes.Smt);
+        var seizounikaDeptName = await ResolveDeptNameAsync(TaktEcDeptCodes.Pcba);
         var smtCreate = new List<TaktEcSmt>();
         var smtUpdate = new List<TaktEcSmt>();
         var seizounikaCreate = new List<TaktEcSeizounika>();
@@ -236,7 +234,7 @@ public partial class TaktEcExecPersistence
             }
             if (route == TaktEcSmtRouteTarget.Smt)
             {
-                if (!TaktEcDistinctionConstants.HasEffectiveNewMaterialCode(detail.EcNewMaterialCode)
+                if (!TaktEcScopeConstants.HasEffectiveNewMaterialCode(detail.EcNewMaterialCode)
                     || skipSmt.Contains(detail.Id))
                 {
                     if (TryMarkObsolete(smtRow))
@@ -262,12 +260,12 @@ public partial class TaktEcExecPersistence
                     smtRow,
                     lineNumber,
                     applyNotRelatedAuto: false);
-                EnsureDeptName(exec, deptName);
+                EnsureDeptName(exec, smtDeptName);
                 if (exec.IsObsolete == 1)
                 {
                     exec.IsObsolete = 0;
                 }
-                ApplyDistinctionFillMode(exec, isNew, shouldAutoComplete(detail), ecDistinction, detail);
+                ApplyScopeFillMode(exec, isNew, shouldAutoComplete(detail), ecScope, detail);
                 ApplyPostFillNotRelated(exec, detail, applyNotRelatedAuto);
                 NormalizeExecContent(exec);
                 if (isNew)
@@ -307,12 +305,12 @@ public partial class TaktEcExecPersistence
                     seizounikaRow,
                     lineNumber,
                     applyNotRelatedAuto: false);
-                EnsureDeptName(exec, deptName);
+                EnsureDeptName(exec, seizounikaDeptName);
                 if (exec.IsObsolete == 1)
                 {
                     exec.IsObsolete = 0;
                 }
-                ApplyDistinctionFillMode(exec, isNew, shouldAutoComplete(detail), ecDistinction, detail);
+                ApplyScopeFillMode(exec, isNew, shouldAutoComplete(detail), ecScope, detail);
                 ApplyPostFillNotRelated(exec, detail, applyNotRelatedAuto);
                 NormalizeExecContent(exec);
                 if (isNew)
@@ -358,10 +356,7 @@ public partial class TaktEcExecPersistence
             return;
         }
         var filledContent = TaktEcDeptEntityHelper.GetExecContent(exec);
-        var isEolFilled = string.Equals(
-            filledContent,
-            TaktEcDistinctionConstants.EolExecContent,
-            StringComparison.Ordinal);
+        var isEolFilled = TaktEcScopeConstants.IsEolExecContent(filledContent);
         if (!isEolFilled)
         {
             TaktEcExecNotRelated.TryAfterFill(exec, detail);
@@ -455,9 +450,9 @@ public partial class TaktEcExecPersistence
     {
         return deptCode switch
         {
-            TaktEcDeptCodes.Mp => TaktEcDistinctionConstants.IsExternalPurchaseType(detail.EcNewPurchaseType),
+            TaktEcDeptCodes.Mp => TaktEcScopeConstants.IsExternalPurchaseType(detail.EcNewPurchaseType),
             TaktEcDeptCodes.Iqc => detail.EcNewRequiresInspection == 1,
-            TaktEcDeptCodes.Mc => TaktEcDistinctionConstants.IsBukanVisible(
+            TaktEcDeptCodes.Mc => TaktEcScopeConstants.IsBukanVisible(
                 detail.EcNewPurchaseType,
                 detail.EcNewWarehouse),
             _ => true
@@ -472,7 +467,7 @@ public partial class TaktEcExecPersistence
         return deptCode switch
         {
             TaktEcDeptCodes.Pmc or TaktEcDeptCodes.Assy or TaktEcDeptCodes.Qa or TaktEcDeptCodes.Te
-                => BuildModelFinishedGoodsSkipDetailIds(details),
+                => BuildModelRootMaterialSkipDetailIds(details),
             TaktEcDeptCodes.Mp => BuildKoubaiSkipDetailIds(details),
             TaktEcDeptCodes.Iqc => BuildUkekenSkipDetailIds(details),
             TaktEcDeptCodes.Mc => BuildBukanSkipDetailIds(details),
@@ -481,16 +476,16 @@ public partial class TaktEcExecPersistence
     }
 
     /// <summary>
-    /// 生管/制一/品管/制技：设变+机种+完成品去重，非最大 Id 跳过
+    /// 生管/制一/品管/制技：设变+机种+根物料编码去重，非最大 Id 跳过
     /// </summary>
-    private static HashSet<long> BuildModelFinishedGoodsSkipDetailIds(IReadOnlyList<TaktEcDetail> details)
+    private static HashSet<long> BuildModelRootMaterialSkipDetailIds(IReadOnlyList<TaktEcDetail> details)
     {
         var skip = new HashSet<long>();
         var visible = details.Where(d => d.IsObsolete == 0);
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Model: d.EcModelCode ?? string.Empty,
-            Finished: d.EcFinishedGoods ?? string.Empty)))
+            Finished: d.EcRootMaterialCode ?? string.Empty)))
         {
             var maxId = group.Max(x => x.Id);
             foreach (var d in group)
@@ -511,8 +506,8 @@ public partial class TaktEcExecPersistence
     {
         var skip = new HashSet<long>();
         var visible = details.Where(d =>
-            TaktEcDistinctionConstants.IsExternalPurchaseType(d.EcNewPurchaseType)
-            && TaktEcDistinctionConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
+            TaktEcScopeConstants.IsExternalPurchaseType(d.EcNewPurchaseType)
+            && TaktEcScopeConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Material: d.EcNewMaterialCode ?? string.Empty)))
@@ -537,7 +532,7 @@ public partial class TaktEcExecPersistence
         var skip = new HashSet<long>();
         var visible = details.Where(d =>
             d.EcNewRequiresInspection == 1
-            && TaktEcDistinctionConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
+            && TaktEcScopeConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Material: d.EcNewMaterialCode ?? string.Empty)))
@@ -561,8 +556,8 @@ public partial class TaktEcExecPersistence
     {
         var skip = new HashSet<long>();
         var visible = details.Where(d =>
-            TaktEcDistinctionConstants.IsBukanVisible(d.EcNewPurchaseType, d.EcNewWarehouse)
-            && TaktEcDistinctionConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
+            TaktEcScopeConstants.IsBukanVisible(d.EcNewPurchaseType, d.EcNewWarehouse)
+            && TaktEcScopeConstants.HasEffectiveNewMaterialCode(d.EcNewMaterialCode));
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Model: d.EcModelCode ?? string.Empty,
@@ -587,7 +582,7 @@ public partial class TaktEcExecPersistence
     {
         var skip = new HashSet<long>();
         var visible = details.Where(d =>
-            TaktEcDistinctionConstants.IsPcbaC003ExternalGroup(d.EcNewPurchaseType, d.EcNewWarehouse));
+            TaktEcScopeConstants.IsPcbaC003ExternalGroup(d.EcNewPurchaseType, d.EcNewWarehouse));
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Parent: d.EcParentMaterialCode ?? string.Empty)))
@@ -611,11 +606,11 @@ public partial class TaktEcExecPersistence
     {
         var skip = new HashSet<long>();
         var visible = details.Where(d =>
-            TaktEcDistinctionConstants.IsPcbaOtherPurchaseGroup(d.EcNewPurchaseType));
+            TaktEcScopeConstants.IsPcbaOtherPurchaseGroup(d.EcNewPurchaseType));
         foreach (var group in visible.GroupBy(d => (
             EcCode: d.EcCode ?? string.Empty,
             Model: d.EcModelCode ?? string.Empty,
-            Finished: d.EcFinishedGoods ?? string.Empty)))
+            Finished: d.EcRootMaterialCode ?? string.Empty)))
         {
             var maxId = group.Max(x => x.Id);
             foreach (var d in group)

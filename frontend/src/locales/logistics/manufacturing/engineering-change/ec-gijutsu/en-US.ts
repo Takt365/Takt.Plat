@@ -21,14 +21,14 @@ export default {
       loadToForm: 'Load to Form',
       plantFromCompany: 'Company {company} → Plant {plant}',
       companyRequired: 'Select a company before importing source EC',
-      formTitle: 'Import from Source EC (fill leader, category, upload attachments)',
+      formTitle: 'Import from Source EC (fill EC assignee, implementation scope, upload attachments)',
       attachmentRequired: 'Add at least one attachment and upload the file',
       attachmentUploadRequired: 'Row {row}: attachment file not uploaded',
       importSelected: 'Import Selected ({count})',
       importSuccess: 'Successfully imported {count} EC record(s)',
       importPartial: 'Import finished: {success} succeeded, {fail} failed',
       detailsDeferred:
-        '{count} detail rows will be persisted on the server (not posted from the browser). Fill leader and distinction, then submit.',
+        '{count} detail rows will be persisted on the server (not posted from the browser). Fill EC assignee and implementation scope, then submit.',
     },
     attachment: {
       docCode: {

@@ -34,7 +34,7 @@ public class TaktPurchaseGroup : TaktCompanyEntityBase
     /// <summary>
     /// 采购组名称
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_group_name", ColumnDescription = "采购组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnName = "purchase_group_name", ColumnDescription = "采购组名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string PurchaseGroupName { get; set; } = string.Empty;
 
     /// <summary>
@@ -42,6 +42,12 @@ public class TaktPurchaseGroup : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group_description", ColumnDescription = "采购组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? PurchaseGroupDescription { get; set; }
+
+    /// <summary>
+    /// 采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_group_category", ColumnDescription = "采购组类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int PurchaseGroupCategory { get; set; } = 1;
 
     /// <summary>
     /// 联系电话

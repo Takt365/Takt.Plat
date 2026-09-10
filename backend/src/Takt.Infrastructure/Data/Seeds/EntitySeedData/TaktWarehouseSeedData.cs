@@ -158,7 +158,7 @@ public class TaktWarehouseSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 创建或更新仓库主数据
+    /// 创建或更新品仓库主数据
     /// </summary>
     /// <param name="repository">仓库种子仓储</param>
     /// <param name="tenantCode">租户编码</param>

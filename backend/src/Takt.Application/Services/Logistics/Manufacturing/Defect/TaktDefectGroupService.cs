@@ -128,11 +128,11 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
         var isUnique_ix_takt_logistics_manufacturing_defect_group_unique = await _uniqueValidator.IsUniqueAsync(
             _defectGroupRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.DefectCategory == entity.DefectCategory
+                && x.DefectGroupCategory == entity.DefectGroupCategory
                 && x.DefectGroupCode == entity.DefectGroupCode);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_group_unique)
         {
-            throw new TaktBusinessException("不良组主数据的PlantCode、DefectCategory、DefectGroupCode已存在");
+            throw new TaktBusinessException("不良组主数据的PlantCode、DefectGroupCategory、DefectGroupCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -164,12 +164,12 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
         var isUnique_ix_takt_logistics_manufacturing_defect_group_unique = await _uniqueValidator.IsUniqueAsync(
             _defectGroupRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.DefectCategory == entity.DefectCategory
+                && x.DefectGroupCategory == entity.DefectGroupCategory
                 && x.DefectGroupCode == entity.DefectGroupCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_group_unique)
         {
-            throw new TaktBusinessException("不良组主数据的PlantCode、DefectCategory、DefectGroupCode已存在");
+            throw new TaktBusinessException("不良组主数据的PlantCode、DefectGroupCategory、DefectGroupCode已存在");
         }
         await _defectGroupRepository.UpdateAsync(entity);
         return await GetDefectGroupByIdAsync(id) ?? throw new TaktBusinessException("不良组主数据不存在");
@@ -295,19 +295,19 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
             {
                 var entity = rows[i].Adapt<TaktDefectGroup>();
                 entity.IsBuiltIn = 0;
-                var importKey = $"{entity.PlantCode}|{entity.DefectCategory}|{entity.DefectGroupCode}";
+                var importKey = $"{entity.PlantCode}|{entity.DefectGroupCategory}|{entity.DefectGroupCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、DefectCategory、DefectGroupCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、DefectGroupCategory、DefectGroupCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_defect_group_unique = await _uniqueValidator.IsUniqueAsync(
                     _defectGroupRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.DefectCategory == entity.DefectCategory
+                        && x.DefectGroupCategory == entity.DefectGroupCategory
                         && x.DefectGroupCode == entity.DefectGroupCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_defect_group_unique)
                 {
-                    throw new TaktBusinessException("不良组主数据的PlantCode、DefectCategory、DefectGroupCode已存在");
+                    throw new TaktBusinessException("不良组主数据的PlantCode、DefectGroupCategory、DefectGroupCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -402,10 +402,10 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (queryDto?.DefectCategory.HasValue == true)
+        if (queryDto?.DefectGroupCategory.HasValue == true)
         {
-            var defectCategory = queryDto.DefectCategory.Value;
-            exp = exp.And(x => x.DefectCategory == defectCategory);
+            var defectGroupCategory = queryDto.DefectGroupCategory.Value;
+            exp = exp.And(x => x.DefectGroupCategory == defectGroupCategory);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.DefectGroupCode))
@@ -506,7 +506,7 @@ public class TaktDefectGroupService : TaktServiceBase, ITaktDefectGroupService
         {
             return true;
         }
-        if (queryDto.DefectCategory.HasValue)
+        if (queryDto.DefectGroupCategory.HasValue)
         {
             return true;
         }

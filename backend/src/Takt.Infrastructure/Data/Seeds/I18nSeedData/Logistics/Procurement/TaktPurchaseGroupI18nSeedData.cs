@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupI18nSeedData.cs
-// 创建时间：2026-09-08
+// 创建时间：2026-09-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -116,6 +116,15 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasegroup.description", "zh-CN", "采购组描述", "采购组描述"),
             // entity.purchasegroup.description
             new TranslationSeedItem("entity.purchasegroup.description", "zh-HK", "采购组描述_hk", "采购组描述"),
+
+            // entity.purchasegroup.category
+            new TranslationSeedItem("entity.purchasegroup.category", "en-US", "采购组类别_us", "采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）"),
+            // entity.purchasegroup.category
+            new TranslationSeedItem("entity.purchasegroup.category", "ja-JP", "采购组类别_jp", "采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）"),
+            // entity.purchasegroup.category
+            new TranslationSeedItem("entity.purchasegroup.category", "zh-CN", "采购组类别", "采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）"),
+            // entity.purchasegroup.category
+            new TranslationSeedItem("entity.purchasegroup.category", "zh-HK", "采购组类别_hk", "采购组类别（字典 logistics_procurement_purchase_group_category；1=通用）"),
 
             // entity.purchasegroup.contactphone
             new TranslationSeedItem("entity.purchasegroup.contactphone", "en-US", "联系电话_us", "联系电话"),

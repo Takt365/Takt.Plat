@@ -14,7 +14,6 @@ export default {
   page: {
     filter: {
       implementationStatus: '实施状态',
-      onlyNotOfficiallyCompleted: '仅未正式完成',
     },
     column: {
       detailCount: '明细数',
@@ -27,9 +26,6 @@ export default {
       inProgress: '实施中',
       officiallyCompleted: '正式完成',
       fullyCompleted: '全部完成',
-    },
-    hint: {
-      officialCompletion: '品管课全部明细已实施后，设变视为正式完成',
     },
   },
 };

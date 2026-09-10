@@ -126,6 +126,15 @@ public class TaktEcExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecexec.deptcode
             new TranslationSeedItem("entity.ecexec.deptcode", "zh-HK", "部门编码_hk", "部门编码（TaktDept.DeptCode，5 位，如 D0710、D0810）"),
 
+            // entity.ecexec.deptname
+            new TranslationSeedItem("entity.ecexec.deptname", "en-US", "部门名称_us", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexec.deptname
+            new TranslationSeedItem("entity.ecexec.deptname", "ja-JP", "部门名称_jp", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexec.deptname
+            new TranslationSeedItem("entity.ecexec.deptname", "zh-CN", "部门名称", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+            // entity.ecexec.deptname
+            new TranslationSeedItem("entity.ecexec.deptname", "zh-HK", "部门名称_hk", "部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）"),
+
             // entity.ecexec.isimplemented
             new TranslationSeedItem("entity.ecexec.isimplemented", "en-US", "实施_us", "是否实施（0=否 1=是，字典 sys_yes_no）"),
             // entity.ecexec.isimplemented

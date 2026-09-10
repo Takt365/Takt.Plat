@@ -49,6 +49,16 @@ export interface EcKoubai extends CompanyDtoBase {
   lineNumber: number;
 
   /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
+
+  /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
   ecNewMaterialCode?: string;
@@ -298,6 +308,16 @@ export interface EcKoubaiCreate {
   lineNumber: number;
 
   /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
+
+  /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）
    */
   ecNewMaterialCode?: string;
@@ -400,13 +420,13 @@ export interface EcKoubaiDiscontinuedStatus {
    */
   ecKoubaiId: string;
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   * 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 }
 
 /**
@@ -706,6 +726,16 @@ export interface EcKoubaiExport {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
+
+  /**
+   * 停产状态（冗余：来自 TaktEcDetail.DiscontinuedStatus）
+   */
+  discontinuedStatus: string;
+
+  /**
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
+   */
+  ecScope: number;
 
   /**
    * 新物料编码（冗余：来自 TaktEcDetail.EcNewMaterialCode）

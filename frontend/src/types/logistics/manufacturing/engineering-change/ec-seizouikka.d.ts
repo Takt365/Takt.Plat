@@ -54,23 +54,23 @@ export interface EcSeizouikka extends CompanyDtoBase {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -78,9 +78,24 @@ export interface EcSeizouikka extends CompanyDtoBase {
   deptCode: string;
 
   /**
+   * 部门名称（冗余：按 DeptCode 取 TaktDept.DeptName1 联动）
+   */
+  deptName?: string;
+
+  /**
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）
@@ -108,7 +123,7 @@ export interface EcSeizouikka extends CompanyDtoBase {
   isObsolete: number;
 
   /**
-   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcFinishedGoods）
+   * 设变明细列表（视图主从：执行表为主；一对多；业务键 EcCode + EcModelCode + EcRootMaterialCode）
    */
   ecDetails?: EcDetail[];
 
@@ -163,23 +178,23 @@ export interface EcSeizouikkaQuery extends TaktPagedQuery {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -291,23 +306,23 @@ export interface EcSeizouikkaCreate {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -318,6 +333,16 @@ export interface EcSeizouikkaCreate {
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）
@@ -382,13 +407,13 @@ export interface EcSeizouikkaDiscontinuedStatus {
    */
   ecSeizouikkaId: string;
   /**
-   * 完成品物料状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
+   * 根物料停产状态（字典 logistics_materials_material_discontinued_status；Z0=在产；停产按钮默认 ZQ）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 }
 
 /**
@@ -457,23 +482,23 @@ export interface EcSeizouikkaTemplate {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -570,23 +595,23 @@ export interface EcSeizouikkaImport {
   ecModelCode?: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus?: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction?: number;
+  ecScope?: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -683,23 +708,23 @@ export interface EcSeizouikkaExport {
   ecModelCode: string;
 
   /**
-   * 完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）
+   * 根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）
    */
-  ecFinishedGoods?: string;
+  ecRootMaterialCode?: string;
 
   /**
-   * 完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）
+   * 根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）
    */
-  ecFinishedGoodsDescription?: string;
+  ecRootMaterialDescription?: string;
 
   /**
    * 停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）
    */
   discontinuedStatus: string;
   /**
-   * 区分（冗余：来自 TaktEcDetail.EcDistinction）
+   * 实施范围（冗余：来自 TaktEcDetail.EcScope）
    */
-  ecDistinction: number;
+  ecScope: number;
 
   /**
    * 部门编码（TaktDept.DeptCode，5 位，如 D0610）
@@ -710,6 +735,16 @@ export interface EcSeizouikkaExport {
    * 是否实施（0=否 1=是，字典 sys_yes_no）
    */
   isImplemented: number;
+
+  /**
+   * 预定日期（冗余：来自 TaktEcSeikan.ScheduledDate）
+   */
+  scheduledDate?: string;
+
+  /**
+   * 预定批次（冗余：来自 TaktEcSeikan.ScheduledBatch）
+   */
+  scheduledBatch?: string;
 
   /**
    * 执行内容（各部门通用）

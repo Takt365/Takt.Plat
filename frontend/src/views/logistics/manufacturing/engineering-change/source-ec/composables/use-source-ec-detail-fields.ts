@@ -21,7 +21,7 @@ export const SOURCE_EC_DETAIL_ACTION_COLUMN_KEY = 'action'
 
 /** 设变来源子表业务字段（与 SourceEcDetail 实体字段一致，不含 id / 外键 / 导航） */
 export const SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS = [
-  'sourceFinishedGoods',
+  'sourceRootMaterialCode',
   'sourceParentMaterialCode',
   'sourceOldMaterialCode',
   'sourceOldMaterialDescription',
@@ -33,7 +33,7 @@ export const SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS = [
   'sourceNewItemPosition',
   'sourceBomCode',
   'SourceCompatibility',
-  'sourceDistinction',
+  'source2ndVendor',
   'SourceInstruction',
   'sourceOldPartDisposition',
   'sourceBomEffectiveDate',
@@ -47,8 +47,8 @@ export const SOURCE_EC_OLD_PART_DISPOSITION_DICT_TYPE = 'logistics_manufacturing
 /** 安排指示字典类型 */
 export const SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE = 'logistics_manufacturing_ec_source_instruction'
 
-/** 第二供应商区分字典类型 */
-export const SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE = 'logistics_manufacturing_ec_source_distinction'
+/** 第二供应商字典类型 */
+export const SOURCE_EC_2ND_VENDOR_DICT_TYPE = 'logistics_manufacturing_ec_2nd_vendor'
 
 type TranslateFn = (key: string, ...args: unknown[]) => string
 
@@ -63,7 +63,7 @@ interface SourceEcDetailFieldMeta {
 
 /** 子表业务字段 UI 元数据（列宽 / 编辑器 / 长度与后端实体一致） */
 export const SOURCE_EC_DETAIL_FIELD_META: readonly SourceEcDetailFieldMeta[] = [
-  { key: 'sourceFinishedGoods', editor: 'input', width: 120, required: true, maxLength: 20 },
+  { key: 'sourceRootMaterialCode', editor: 'input', width: 120, required: true, maxLength: 20 },
   { key: 'sourceParentMaterialCode', editor: 'input', width: 120, required: true, maxLength: 20 },
   { key: 'sourceOldMaterialCode', editor: 'input', width: 120, maxLength: 20 },
   { key: 'sourceOldMaterialDescription', editor: 'input', width: 120, maxLength: 40 },
@@ -75,7 +75,7 @@ export const SOURCE_EC_DETAIL_FIELD_META: readonly SourceEcDetailFieldMeta[] = [
   { key: 'sourceNewItemPosition', editor: 'input', width: 140, maxLength: 40 },
   { key: 'sourceBomCode', editor: 'input', width: 100, maxLength: 4 },
   { key: 'SourceCompatibility', editor: 'input', width: 100, maxLength: 4 },
-  { key: 'sourceDistinction', editor: 'input', width: 100, maxLength: 4 },
+  { key: 'source2ndVendor', editor: 'input', width: 100, maxLength: 4 },
   { key: 'SourceInstruction', editor: 'input', width: 120, maxLength: 4 },
   { key: 'sourceOldPartDisposition', editor: 'input', width: 120, maxLength: 4 },
   { key: 'sourceBomEffectiveDate', editor: 'datePicker', width: 120, valueFormat: 'YYYY-MM-DD' },
@@ -143,10 +143,10 @@ export function buildSourceEcDetailListBusinessColumns(
           dictType: SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE,
           value: getField(record, meta.key),
         })
-    } else if (meta.key === 'sourceDistinction') {
+    } else if (meta.key === 'source2ndVendor') {
       column.customRender = ({ record }: { record: SourceEcDetail }) =>
         h(TaktDictTag, {
-          dictType: SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE,
+          dictType: SOURCE_EC_2ND_VENDOR_DICT_TYPE,
           value: getField(record, meta.key),
         })
     } else {
@@ -193,7 +193,7 @@ export function buildSourceEcDetailEditableColumns(
  */
 export function createEmptySourceEcDetailRow(): Record<string, unknown> {
   return {
-    sourceFinishedGoods: '',
+    sourceRootMaterialCode: '',
     sourceParentMaterialCode: '',
     sourceOldMaterialCode: '',
     sourceOldMaterialDescription: '',
@@ -205,7 +205,7 @@ export function createEmptySourceEcDetailRow(): Record<string, unknown> {
     sourceNewItemPosition: '',
     sourceBomCode: '',
     SourceCompatibility: '',
-    sourceDistinction: '',
+    source2ndVendor: '',
     SourceInstruction: '',
     sourceOldPartDisposition: '',
     sourceBomEffectiveDate: '',

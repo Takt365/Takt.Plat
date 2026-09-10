@@ -44,6 +44,4 @@ export interface EcKanbanQuery extends TaktPagedQuery {
   currentDeptCode?: string;
   /** 实施路径状态 */
   implementationStatus?: number;
-  /** 仅未正式完成 1 */
-  onlyNotOfficiallyCompleted?: number;
 }

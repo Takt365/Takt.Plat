@@ -126,42 +126,42 @@ public class TaktEcSeizouikkaI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseizouikka.ecmodelcode
             new TranslationSeedItem("entity.ecseizouikka.ecmodelcode", "zh-HK", "機種編碼_hk", "机种编码（冗余：来自 TaktEcDetail.EcModelCode）"),
 
-            // entity.ecseizouikka.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoods", "en-US", "完成品_us", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseizouikka.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoods", "ja-JP", "完成品_jp", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseizouikka.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoods", "zh-CN", "完成品", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
-            // entity.ecseizouikka.ecfinishedgoods
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoods", "zh-HK", "完成品_hk", "完成品（冗余：来自 TaktEcDetail.EcFinishedGoods）"),
+            // entity.ecseizouikka.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialcode", "en-US", "根物料编码_us", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseizouikka.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialcode", "ja-JP", "根物料编码_jp", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseizouikka.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialcode", "zh-CN", "根物料编码", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
+            // entity.ecseizouikka.ecrootmaterialcode
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialcode", "zh-HK", "根物料编码_hk", "根物料编码（冗余：来自 TaktEcDetail.EcRootMaterialCode）"),
 
-            // entity.ecseizouikka.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoodsdescription", "en-US", "完成品描述_us", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseizouikka.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoodsdescription", "ja-JP", "完成品描述_jp", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseizouikka.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoodsdescription", "zh-CN", "完成品描述", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
-            // entity.ecseizouikka.ecfinishedgoodsdescription
-            new TranslationSeedItem("entity.ecseizouikka.ecfinishedgoodsdescription", "zh-HK", "完成品描述_hk", "完成品描述（冗余：来自 TaktEcDetail.EcFinishedGoodsDescription）"),
+            // entity.ecseizouikka.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialdescription", "en-US", "根物料描述_us", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseizouikka.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialdescription", "ja-JP", "根物料描述_jp", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseizouikka.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialdescription", "zh-CN", "根物料描述", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
+            // entity.ecseizouikka.ecrootmaterialdescription
+            new TranslationSeedItem("entity.ecseizouikka.ecrootmaterialdescription", "zh-HK", "根物料描述_hk", "根物料描述（冗余：来自 TaktEcDetail.EcRootMaterialDescription）"),
 
             // entity.ecseizouikka.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "en-US", "完成品EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "en-US", "根物料EOL_us", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseizouikka.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "ja-JP", "完成品EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "ja-JP", "根物料EOL_jp", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseizouikka.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "zh-CN", "完成品EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "zh-CN", "根物料EOL", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
             // entity.ecseizouikka.discontinuedstatus
-            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "zh-HK", "完成品EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
+            new TranslationSeedItem("entity.ecseizouikka.discontinuedstatus", "zh-HK", "根物料EOL_hk", "停产状态（字典 logistics_materials_material_discontinued_status；DictValue=01/Z0 等；默认 Z0=计划物料；冗余：来自 TaktEcDetail.DiscontinuedStatus）"),
 
             
-            // entity.ecseizouikka.ecdistinction
-            new TranslationSeedItem("entity.ecseizouikka.ecdistinction", "en-US", "区分_us", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseizouikka.ecdistinction
-            new TranslationSeedItem("entity.ecseizouikka.ecdistinction", "ja-JP", "区分_jp", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseizouikka.ecdistinction
-            new TranslationSeedItem("entity.ecseizouikka.ecdistinction", "zh-CN", "区分", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
-            // entity.ecseizouikka.ecdistinction
-            new TranslationSeedItem("entity.ecseizouikka.ecdistinction", "zh-HK", "区分_hk", "区分（冗余：来自 TaktEcDetail.EcDistinction）"),
+            // entity.ecseizouikka.ecscope
+            new TranslationSeedItem("entity.ecseizouikka.ecscope", "en-US", "Scope", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseizouikka.ecscope
+            new TranslationSeedItem("entity.ecseizouikka.ecscope", "ja-JP", "実施範囲", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseizouikka.ecscope
+            new TranslationSeedItem("entity.ecseizouikka.ecscope", "zh-CN", "实施范围", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
+            // entity.ecseizouikka.ecscope
+            new TranslationSeedItem("entity.ecseizouikka.ecscope", "zh-HK", "實施範圍", "实施范围（冗余：来自 TaktEcDetail.EcScope）"),
 // entity.ecseizouikka.deptcode
             new TranslationSeedItem("entity.ecseizouikka.deptcode", "en-US", "部门编码_us", "部门编码（TaktDept.DeptCode，5 位，如 D0610）"),
             // entity.ecseizouikka.deptcode

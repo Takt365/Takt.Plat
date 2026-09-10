@@ -67,7 +67,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public string? PersistDeptExecSummary { get; set; }
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 
@@ -77,9 +77,9 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int EcDistinction { get; set; } = 0;
+    public int EcScope { get; set; } = 0;
 
     /// <summary>
     /// 录入日期
@@ -172,7 +172,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -182,9 +182,9 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 录入日期（范围查询-开始）
@@ -280,9 +280,9 @@ public class TaktEcGijutsuCreateDto
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
-    [Required(ErrorMessage = "负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）不能为空")]
+    [Required(ErrorMessage = "设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）不能为空")]
     public string EcLeader { get; set; } = string.Empty;
 
     /// <summary>
@@ -291,9 +291,9 @@ public class TaktEcGijutsuCreateDto
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int EcDistinction { get; set; } = 0;
+    public int EcScope { get; set; } = 0;
 
     /// <summary>
     /// 录入日期
@@ -461,7 +461,7 @@ public class TaktEcGijutsuTemplateDto
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -471,9 +471,9 @@ public class TaktEcGijutsuTemplateDto
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 录入日期
@@ -563,7 +563,7 @@ public class TaktEcGijutsuImportDto
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -573,9 +573,9 @@ public class TaktEcGijutsuImportDto
     public decimal? EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int? EcDistinction { get; set; }
+    public int? EcScope { get; set; }
 
     /// <summary>
     /// 录入日期
@@ -671,7 +671,7 @@ public class TaktEcGijutsuExportDto
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
+    /// 设变担当（选项 TaktEcGroups/options；DictValue=EcGroupCode，DictLabel=EcGroupName）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 
@@ -681,9 +681,9 @@ public class TaktEcGijutsuExportDto
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别（字典 logistics_manufacturing_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
+    /// 实施范围（字典 logistics_manufacturing_ec_scope_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int EcDistinction { get; set; } = 0;
+    public int EcScope { get; set; } = 0;
 
     /// <summary>
     /// 录入日期

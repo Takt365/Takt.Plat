@@ -23,6 +23,7 @@ export const SALESGROUP_LIST_FIELDS = [
   'salesGroupCode',
   'salesGroupName',
   'salesGroupDescription',
+  'salesGroupCategory',
   'contactPhone',
   'contactEmail',
   'isBuiltIn',
@@ -38,6 +39,7 @@ export const SALESGROUP_PLACEHOLDER = {
   salesGroupCode: 'required',
   salesGroupName: 'required',
   salesGroupDescription: 'optional',
+  salesGroupCategory: 'select',
   contactPhone: 'optional',
   contactEmail: 'optional',
   isBuiltIn: 'select',
@@ -66,11 +68,12 @@ export const SALESGROUP_QUERY_STRING_FIELDS = [
 
 export type SalesGroupQueryField =
   | (typeof SALESGROUP_QUERY_STRING_FIELDS)[number]
-  | 'isBuiltIn' | 'groupStatus'
+  | 'salesGroupCategory' | 'isBuiltIn' | 'groupStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESGROUP_QUERY_FIELDS: readonly SalesGroupQueryField[] = [
   ...SALESGROUP_QUERY_STRING_FIELDS,
+  'salesGroupCategory',
   'isBuiltIn',
   'groupStatus',
 ]
